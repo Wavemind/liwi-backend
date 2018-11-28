@@ -1,25 +1,26 @@
-# SQLite version 3.x
-#   gem install sqlite3
-#
-#   Ensure the SQLite 3 gem is defined in your Gemfile
-#   gem 'sqlite3'
-#
-default: &default
-  adapter: sqlite3
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  timeout: 5000
-
 development:
-  <<: *default
-  database: db/development.sqlite3
+  adapter: mysql2
+  encoding: utf8
+  database: liwi-dev
+  pool: 5
+  username: root
+  password: root
+  socket: /var/run/mysqld/mysqld.sock
 
-# Warning: The database defined as "test" will be erased and
-# re-generated from your development database when you run "rake".
-# Do not set this db to the same as development or production.
 test:
-  <<: *default
-  database: db/test.sqlite3
+  adapter: mysql2
+  encoding: utf8
+  database: liwi-test
+  pool: 5
+  username: root
+  password: Galilee15
+  socket: /var/run/mysqld/mysqld.sock
 
 production:
-  <<: *default
-  database: db/production.sqlite3
+  adapter: mysql2
+  encoding: utf8
+  database: liwi
+  pool: 5
+  username: root
+  password: laJoconde14
+  socket: /var/run/mysqld/mysqld.sock
