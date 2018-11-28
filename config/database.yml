@@ -1,6 +1,7 @@
 development:
   adapter: mysql2
   encoding: utf8
+  reconnect: false
   database: liwi-dev
   pool: 5
   username: root
@@ -10,6 +11,7 @@ development:
 test:
   adapter: mysql2
   encoding: utf8
+  reconnect: false
   database: liwi-test
   pool: 5
   username: root
@@ -19,6 +21,7 @@ test:
 production:
   adapter: mysql2
   encoding: utf8
+  reconnect: false
   database: liwi
   pool: 5
   username: root
