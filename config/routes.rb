@@ -4,6 +4,6 @@ Rails.application.routes.draw do
 
   root to: 'dashboard#index'
 
-  resources :users, only: [:index, :new, :create, :edit, :update, :delete]
+  resources :users, only: [:index, :show, :new, :create, :edit, :update]
 
 end
