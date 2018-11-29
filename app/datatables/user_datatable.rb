@@ -16,6 +16,7 @@ class UserDatatable < AjaxDatatablesRails::ActiveRecord
       first_name: { source: 'User.first_name' },
       last_name: { source: 'User.last_name' },
       email: { source: 'User.email' },
+      deactivated: { source: 'User.deactivated' },
     }
   end
 
@@ -27,6 +28,7 @@ class UserDatatable < AjaxDatatablesRails::ActiveRecord
         first_name: record.first_name,
         last_name: record.last_name,
         email: record.email,
+        deactivated: record.display_deactivated.html_safe,
         DT_RowId: record.id,
         action: actions
       }

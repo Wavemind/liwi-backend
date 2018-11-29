@@ -31,6 +31,7 @@ jQuery(document).ready(function () {
       { "data": "first_name" },
       { "data": "last_name" },
       { "data": "email" },
+      { "data": "deactivated" },
       { "data": "action" },
     ]
     // pagingType is optional, if you want full pagination controls.
