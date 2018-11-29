@@ -20,7 +20,8 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
 
-    if User.invite!(user_params)
+    if @user.valid?
+      User.invite!(user_params)
       redirect_to users_url, notice: t('success_created')
     else
       render :new
@@ -46,7 +47,8 @@ class UsersController < ApplicationController
       :first_name,
       :last_name,
       :email,
-      :deactivated
+      :deactivated,
+      :role_id
     )
   end
 
