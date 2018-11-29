@@ -8,3 +8,5 @@ en:
   add: "Add"
   save: "Save"
   success: "Data was successfully created"
+  edit: "Edit"
+  show: "Show"

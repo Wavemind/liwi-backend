@@ -20,6 +20,8 @@ gem 'simple_form'
 gem 'cocoon'
 gem 'bootstrap', '~> 4.1.3'
 gem 'jquery-rails'
+gem 'jquery-datatables'
+gem 'ajax-datatables-rails'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
