@@ -16,7 +16,6 @@ class UserDatatable < AjaxDatatablesRails::ActiveRecord
       first_name: { source: 'User.first_name' },
       last_name: { source: 'User.last_name' },
       email: { source: 'User.email' },
-      action: { source: 'User.action' },
     }
   end
 
