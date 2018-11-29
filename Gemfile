@@ -16,6 +16,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 
 # Added
 gem 'devise'
+gem 'devise_invitable', '~> 1.7.0'
 gem 'simple_form'
 gem 'cocoon'
 gem 'bootstrap', '~> 4.1.3'
