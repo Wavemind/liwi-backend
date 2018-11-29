@@ -7,7 +7,7 @@ class User < ApplicationRecord
 
   validates :email, format: { with: /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i }
 
-  devise :database_authenticatable, :recoverable, :rememberable, :lockable
+  devise :invitable, :database_authenticatable, :recoverable, :rememberable, :lockable
 
   def full_name
     "#{first_name} #{last_name}"
