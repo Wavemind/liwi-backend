@@ -7,4 +7,7 @@ en:
   title: "Users"
   add: "Add"
   save: "Save"
-  success: "Data was successfully created"
+  success_created: "Data was successfully created"
+  success_updated: "Data was successfully updated"
+  edit: "Edit"
+  show: "Show"

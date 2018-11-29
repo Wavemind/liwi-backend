@@ -6,4 +6,10 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-User.create!(first_name: 'Quentin', last_name: 'Girard', email: 'admin@wavemind.ch', password: '123456', password_confirmation: '123456')
+# Role
+administrator = Role.create!(name: 'Administrator')
+student = Role.create!(name: 'Student')
+teacher = Role.create!(name: 'Teacher')
+
+# User
+User.create!(first_name: 'Quentin', last_name: 'Girard', email: 'admin@wavemind.ch', password: '123456', password_confirmation: '123456', role: administrator)
