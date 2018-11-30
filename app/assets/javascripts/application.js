@@ -31,6 +31,7 @@ jQuery(document).ready(function () {
       { "data": "first_name" },
       { "data": "last_name" },
       { "data": "email" },
+      { "data": "last_connection" },
       { "data": "deactivated" },
       { "data": "action" },
     ]

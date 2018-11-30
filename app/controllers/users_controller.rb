@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_user, only: [:show, :edit, :update]
+  before_action :set_user, only: [:show, :edit, :update, :activated, :deactivated]
 
   def index
     respond_to do |format|
@@ -33,6 +33,26 @@ class UsersController < ApplicationController
       redirect_to users_url, notice: t('success_updated')
     else
       render :edit
+    end
+  end
+
+  def activated
+    @user.deactivated = false
+
+    if @user.save
+      redirect_to users_url, notice: t('success_created')
+    else
+      redirect_to users_url, danger: t('update_fail')
+    end
+  end
+
+  def deactivated
+    @user.deactivated = true
+
+    if @user.save
+      redirect_to users_url, notice: t('success_created')
+    else
+      redirect_to users_url, danger: t('update_fail')
     end
   end
 

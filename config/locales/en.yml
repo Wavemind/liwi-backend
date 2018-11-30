@@ -12,6 +12,9 @@ en:
   success_updated: "Data was successfully updated"
   edit: "Edit"
   show: "Show"
+  update_fail: "Error will updating value"
+  activated: "Active"
+  deactivated: "Deactivate"
   roles:
     index:
       title: "Roles"
