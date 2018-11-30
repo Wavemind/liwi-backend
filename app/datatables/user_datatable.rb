@@ -35,14 +35,17 @@ class UserDatatable < AjaxDatatablesRails::ActiveRecord
         email: record.email,
         last_connection: datetime_format(record.last_sign_in_at),
         deactivated: record.display_deactivated.html_safe,
-        DT_RowId: record.id,
         action: actions
       }
     end
   end
 
   def get_raw_records
-    User.all
+    if params[:from].present?
+      User.joins(:group_users).where("group_users.group_id = #{params[:id]}")
+    else
+      User.all
+    end
   end
 
 end

@@ -22,3 +22,10 @@ en:
       title: "Add role"
     edit:
       title: "Edit role"
+  groups:
+    index:
+      title: "Groups"
+    new:
+      title: "Add group"
+    edit:
+      title: "Edit group"

@@ -35,8 +35,20 @@ jQuery(document).ready(function () {
       { "data": "deactivated" },
       { "data": "action" },
     ]
-    // pagingType is optional, if you want full pagination controls.
-    // Check dataTables documentation to learn more about
-    // available options.
+  });
+
+  $('#groups-datatable').dataTable({
+    "processing": true,
+    "info": false,
+    "bLengthChange": false,
+    "serverSide": true,
+    "ajax": $('#groups-datatable').data('source'),
+    "pagingType": "full_numbers",
+    "columns": [
+      { "data": "id" },
+      { "data": "name" },
+      { "data": "nb_people" },
+      { "data": "actions" },
+    ]
   });
 });
