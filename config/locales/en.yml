@@ -4,7 +4,18 @@ en:
       title: "Add user"
     edit:
       title: "Update user"
-  title: "Users"
+    index:
+      title: "Users"
   add: "Add"
   save: "Save"
-  success: "Data was successfully created"
+  success_created: "Data was successfully created"
+  success_updated: "Data was successfully updated"
+  edit: "Edit"
+  show: "Show"
+  roles:
+    index:
+      title: "Roles"
+    new:
+      title: "Add role"
+    edit:
+      title: "Edit role"

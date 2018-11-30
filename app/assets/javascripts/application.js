@@ -13,6 +13,29 @@
 //= require rails-ujs
 //= require activestorage
 //= require jquery3
+//= require datatables
 //= require popper
 //= require bootstrap-sprockets
 //= require_tree .
+
+jQuery(document).ready(function () {
+  $('#users-datatable').dataTable({
+    "processing": true,
+    "info": false,
+    "bLengthChange": false,
+    "serverSide": true,
+    "ajax": $('#users-datatable').data('source'),
+    "pagingType": "full_numbers",
+    "columns": [
+      { "data": "id" },
+      { "data": "first_name" },
+      { "data": "last_name" },
+      { "data": "email" },
+      { "data": "deactivated" },
+      { "data": "action" },
+    ]
+    // pagingType is optional, if you want full pagination controls.
+    // Check dataTables documentation to learn more about
+    // available options.
+  });
+});
