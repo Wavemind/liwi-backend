@@ -4,6 +4,7 @@ class UserDatatable < AjaxDatatablesRails::ActiveRecord
   def_delegator :@view, :link_to
   def_delegator :@view, :edit_user_url
   def_delegator :@view, :user_url
+  def_delegator :@view, :datetime_format
 
   def initialize(params, opts = {})
     @view = opts[:view_context]
@@ -16,6 +17,7 @@ class UserDatatable < AjaxDatatablesRails::ActiveRecord
       first_name: { source: 'User.first_name' },
       last_name: { source: 'User.last_name' },
       email: { source: 'User.email' },
+      last_connection: { source: 'User.last_sign_in_at' },
       deactivated: { source: 'User.deactivated' },
     }
   end
@@ -28,6 +30,7 @@ class UserDatatable < AjaxDatatablesRails::ActiveRecord
         first_name: record.first_name,
         last_name: record.last_name,
         email: record.email,
+        last_connection: datetime_format(record.last_sign_in_at),
         deactivated: record.display_deactivated.html_safe,
         DT_RowId: record.id,
         action: actions

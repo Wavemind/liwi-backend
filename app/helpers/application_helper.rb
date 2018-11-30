@@ -25,7 +25,7 @@ module ApplicationHelper
     if date.blank?
       '<em>Non défini</em>'.html_safe
     else
-      date.strftime('%d.%m.%Y à %H:%M')
+      date.strftime('%d.%m.%Y at %H:%M')
     end
   end
 
