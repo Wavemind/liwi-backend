@@ -15,7 +15,7 @@ module ApplicationHelper
 
   def date_format(date)
     if date.blank?
-      '<em>Non défini</em>'.html_safe
+      '<em>Not set</em>'.html_safe
     else
       date.strftime('%d.%m.%Y')
     end
@@ -23,7 +23,7 @@ module ApplicationHelper
 
   def datetime_format(date)
     if date.blank?
-      '<em>Non défini</em>'.html_safe
+      '<em>Not set</em>'.html_safe
     else
       date.strftime('%d.%m.%Y at %H:%M')
     end
@@ -31,7 +31,7 @@ module ApplicationHelper
 
   def time_format(date)
     if date.blank?
-      '<em>Non défini</em>'.html_safe
+      '<em>Not set</em>'.html_safe
     else
       date.strftime('%Hh')
     end

@@ -4,6 +4,8 @@ class UserDatatable < AjaxDatatablesRails::ActiveRecord
   def_delegator :@view, :link_to
   def_delegator :@view, :edit_user_url
   def_delegator :@view, :user_url
+  def_delegator :@view, :deactivated_users_url
+  def_delegator :@view, :activated_users_url
   def_delegator :@view, :datetime_format
 
   def initialize(params, opts = {})
@@ -24,7 +26,8 @@ class UserDatatable < AjaxDatatablesRails::ActiveRecord
 
   def data
     records.map do |record|
-      actions = link_to(I18n.t('show'), user_url(record), class: 'btn btn-outline-primary') + " " + link_to(I18n.t('edit'), edit_user_url(record), class: 'btn btn-outline-info')
+      actions = link_to(I18n.t('show'), user_url(record), class: 'btn btn-outline-primary') + " " + link_to(I18n.t('edit'), edit_user_url(record), class: 'btn btn-outline-info') + " "
+      actions += record.deactivated ? link_to(I18n.t('.activated'), activated_users_url(record), class: 'btn btn-outline-danger', method: :post) : link_to(I18n.t('.deactivated'), deactivated_users_url(record), class: 'btn btn-outline-danger', method: :post)
       {
         id: record.id,
         first_name: record.first_name,
