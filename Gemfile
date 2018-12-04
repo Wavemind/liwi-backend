@@ -24,6 +24,7 @@ gem 'jquery-rails'
 gem 'jquery-datatables'
 gem 'ajax-datatables-rails'
 gem 'rubocop-airbnb'
+gem 'devise_token_auth'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
