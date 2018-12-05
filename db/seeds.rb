@@ -4,4 +4,4 @@ student = Role.create!(name: 'Student')
 teacher = Role.create!(name: 'Teacher')
 
 # User
-User.create!(first_name: 'Quentin', last_name: 'Girard', email: 'admin@wavemind.ch', password: '123456', password_confirmation: '123456', role: administrator)
+User.create!(first_name: 'Quentin', provider: 'email', uid: 'admin.wavemind.ch', last_name: 'Girard', email: 'admin@wavemind.ch', password: '123456', password_confirmation: '123456', role: administrator)
