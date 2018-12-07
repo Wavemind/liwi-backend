@@ -29,6 +29,14 @@ en:
       title: "Add group"
     edit:
       title: "Edit group"
+    remove:
+      success_remove_user: "User was successfully removed from group"
+      error_remove_user: "An error occured when removing user from group"
+    add:
+      success_add_user: "User was successfully added to group"
+      error_add_user: "An error occured when adding user to group"
   devices:
     index:
       title: "Devices"
+  remove: "Remove user"
+  prompt: "Select"

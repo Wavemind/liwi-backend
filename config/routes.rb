@@ -7,6 +7,11 @@ Rails.application.routes.draw do
 
   resources :roles, only: [:index, :show, :new, :create, :edit, :update]
   resources :groups, only: [:index, :show, :new, :create, :edit, :update]
+
+  # Add / Remove user from group
+  delete 'groups/:group_id/users/:user_id/remove', to: 'groups#remove', as: 'remove_user_from_group'
+  post 'groups/:group_id/add', to: 'groups#add', as: 'add_user_to_group'
+
   resources :devices, only: [:index, :show] do
     collection do
       get 'map'

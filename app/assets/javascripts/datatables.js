@@ -19,9 +19,9 @@
 // require datatables/extensions/Select/dataTables.select
 
 //= require datatables/dataTables.bootstrap4
-//= require datatables/extensions/AutoFill/autoFill.bootstrap4
-//= require datatables/extensions/Buttons/buttons.bootstrap4
-//= require datatables/extensions/Responsive/responsive.bootstrap4
+// require datatables/extensions/AutoFill/autoFill.bootstrap4
+// require datatables/extensions/Buttons/buttons.bootstrap4
+// require datatables/extensions/Responsive/responsive.bootstrap4
 
 
 //Global setting and initializer
