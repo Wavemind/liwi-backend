@@ -1,0 +1,33 @@
+<h1>Details of <%= @device.name %></h1>
+
+<p>Reference number: <b><%= @device.reference_number %></b></p>
+<p>Brand: <b><%= @device.brand %></b></p>
+<p>Model: <b><%= @device.model %></b></p>
+<p>OS: <b><%= @device.os %></b></p>
+<p>OS version: <b><%= @device.os_version %></b></p>
+<p>Status: <b><%= @device.status %></b></p>
+
+<h2>Activities</h2>
+<ul class="list-group">
+  <% @device.activities.each do |activity| %>
+    <% if activity.user.present? %>
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col">User actions</div>
+          <div class="col"><%= activity.user.full_name %></div>
+          <div class="col"><%= datetime_format(activity.created_at) %></div>
+          <div class="col"><%= link_to "Position: #{activity.latitude},#{activity.longitude}", "https://maps.google.com/maps?q=#{activity.latitude},#{activity.longitude}", target: :blank %></div>
+        </div>
+      </li>
+    <% else %>
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col">Tablette connexion</div>
+          <div class="col"><%= datetime_format(activity.created_at) %></div>
+          <div class="col"><u><%= link_to "Position: #{activity.latitude},#{activity.longitude}", "https://maps.google.com/maps?q=#{activity.latitude},#{activity.longitude}", target: :blank %></u></div>
+        </div>
+      </li>
+    <% end %>
+
+  <% end %>
+</ul>
