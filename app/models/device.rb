@@ -13,6 +13,7 @@ class Device < ApplicationRecord
   validates_presence_of :os_version
   validates_presence_of :status
 
+  # Return last entry of current device with user attached
   def last_activity
     activities.last.as_json(include: [:user])
   end
