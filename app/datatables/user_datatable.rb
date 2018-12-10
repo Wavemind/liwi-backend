@@ -6,6 +6,7 @@ class UserDatatable < AjaxDatatablesRails::ActiveRecord
   def_delegator :@view, :user_url
   def_delegator :@view, :deactivated_users_url
   def_delegator :@view, :activated_users_url
+  def_delegator :@view, :group_remove_user_url
   def_delegator :@view, :datetime_format
 
   def initialize(params, opts = {})
@@ -27,7 +28,12 @@ class UserDatatable < AjaxDatatablesRails::ActiveRecord
   def data
     records.map do |record|
       actions = link_to(I18n.t('show'), user_url(record), class: 'btn btn-outline-primary') + " " + link_to(I18n.t('edit'), edit_user_url(record), class: 'btn btn-outline-info') + " "
-      actions += record.deactivated ? link_to(I18n.t('.activated'), activated_users_url(record), class: 'btn btn-outline-danger', method: :post) : link_to(I18n.t('.deactivated'), deactivated_users_url(record), class: 'btn btn-outline-danger', method: :post)
+      if params[:from].present?
+        actions += link_to(I18n.t('.remove'), group_remove_user_url(params[:id], record), class: 'btn btn-outline-danger', method: :delete, data: { confirm: 'Are you sure?' })
+      else
+        actions += record.deactivated ? link_to(I18n.t('.activated'), activated_users_url(record), class: 'btn btn-outline-danger', method: :post, data: { confirm: 'Are you sure?' }) : link_to(I18n.t('.deactivated'), deactivated_users_url(record), class: 'btn btn-outline-danger', method: :post, data: { confirm: 'Are you sure?' })
+      end
+
       {
         id: record.id,
         first_name: record.first_name,

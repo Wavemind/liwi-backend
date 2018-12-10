@@ -10,7 +10,7 @@ class GroupsController < ApplicationController
   end
 
   def show
-
+    @user = User.new
   end
 
   def new
@@ -35,6 +35,30 @@ class GroupsController < ApplicationController
     end
   end
 
+  def remove_user
+    @group = Group.find(params[:group_id])
+    user = User.find(params[:user_id])
+
+    if @group.users.delete(user)
+      redirect_to @group, notice: t('.success_remove_user')
+    else
+      redirect_to @group, danger: t('.error_remove_user')
+    end
+  end
+
+  def add_user
+    @group = Group.find(params[:group_id])
+    user = User.find(params[:user][:id])
+
+    @group.users << user
+
+    if @group.save
+      redirect_to @group, notice: t('.success_add_user')
+    else
+      redirect_to @group, danger: t('.error_add_user')
+    end
+  end
+
   private
 
   def set_group
@@ -44,6 +68,7 @@ class GroupsController < ApplicationController
   def group_params
     params.require(:group).permit(
       :name,
-      )
+      user_ids: []
+    )
   end
 end

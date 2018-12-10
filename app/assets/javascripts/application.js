@@ -16,39 +16,5 @@
 //= require datatables
 //= require popper
 //= require bootstrap-sprockets
+//= require moment
 //= require_tree .
-
-jQuery(document).ready(function () {
-  $('#users-datatable').dataTable({
-    "processing": true,
-    "info": false,
-    "bLengthChange": false,
-    "serverSide": true,
-    "ajax": $('#users-datatable').data('source'),
-    "pagingType": "full_numbers",
-    "columns": [
-      { "data": "id" },
-      { "data": "first_name" },
-      { "data": "last_name" },
-      { "data": "email" },
-      { "data": "last_connection" },
-      { "data": "deactivated" },
-      { "data": "action" },
-    ]
-  });
-
-  $('#groups-datatable').dataTable({
-    "processing": true,
-    "info": false,
-    "bLengthChange": false,
-    "serverSide": true,
-    "ajax": $('#groups-datatable').data('source'),
-    "pagingType": "full_numbers",
-    "columns": [
-      { "data": "id" },
-      { "data": "name" },
-      { "data": "nb_people" },
-      { "data": "actions" },
-    ]
-  });
-});

@@ -186,4 +186,17 @@ a.article:hover {
   }
 }
 
-@import "datatables";
+// Maps
+#map {
+  height: 800px;
+}
+
+td {
+  a {
+    text-decoration: underline;
+  }
+
+  a.btn {
+    text-decoration: none;
+  }
+}

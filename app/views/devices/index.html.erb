@@ -1,0 +1,17 @@
+<h1><%= t('.title') %></h1>
+
+<table class="table table-condensed table-hover" id="devices-datatable" data-source="<%= devices_url(format: :json) %>">
+  <thead>
+  <tr>
+    <th>Reference number</th>
+    <th>Name</th>
+    <th>Brand</th>
+    <th>Model</th>
+    <th>Last activity</th>
+    <th>Last user</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>

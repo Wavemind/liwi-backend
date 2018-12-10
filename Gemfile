@@ -26,6 +26,7 @@ gem 'ajax-datatables-rails'
 gem 'rubocop-airbnb'
 gem 'devise_token_auth'
 gem 'rack-cors', require: 'rack/cors'
+gem 'momentjs-rails'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
@@ -45,6 +46,8 @@ group :test do
   gem 'capybara', '>= 2.15'
   gem 'selenium-webdriver'
   gem 'chromedriver-helper'
+  gem 'simplecov', require: false
+  gem 'codacy-coverage', require: false
 end
 
 
