@@ -13,14 +13,8 @@ class Api::V1::ActivitiesController < ApplicationController
       device.status = 'active'
     end
 
-    activity = Activity.create(
-      longitude: activity_params[:longitude],
-      latitude: activity_params[:latitude],
-      timezone: activity_params[:timezone],
-      user_id: activity_params[:user_id],
-      version: activity_params[:version],
-      device_id: device.id
-    )
+    activity = Activity.new(activity_params)
+    activity.device = device
 
     if device.save && activity.save
       render json: :success

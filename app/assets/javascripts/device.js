@@ -1,10 +1,10 @@
 jQuery(document).ready(function () {
-  $('#devices-datatable').dataTable({
+  $("#devices-datatable").dataTable({
     "processing": true,
     "info": false,
     "bLengthChange": false,
     "serverSide": true,
-    "ajax": $('#devices-datatable').data('source'),
+    "ajax": $("#devices-datatable").data('source'),
     "pagingType": "full_numbers",
     "columns": [
       { "data": "reference_number" },
@@ -38,7 +38,7 @@ jQuery(document).ready(function () {
 
         var marker = new google.maps.Marker({
           position: latLng,
-          map: map,
+          map,
         });
 
         google.maps.event.addListener(marker, 'click', (function (marker, i) {

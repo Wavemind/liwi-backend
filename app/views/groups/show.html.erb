@@ -2,7 +2,7 @@
 
 <div class="row">
   <div class="col">
-    <%= simple_form_for @user, url: add_user_to_group_url(@group), method: :post do |f| %>
+    <%= simple_form_for @user, url: group_add_user_url(@group), method: :post do |f| %>
       <div class="row">
         <div class="col">
           <%= f.input :id, collection: User.where.not(id: GroupUser.where(group_id: @group.id).pluck(:user_id)), label_method: :full_name, label: false , prompt: t('prompt')%>

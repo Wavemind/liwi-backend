@@ -6,17 +6,18 @@ Rails.application.routes.draw do
   root to: 'dashboard#index'
 
   resources :roles, only: [:index, :show, :new, :create, :edit, :update]
-  resources :groups, only: [:index, :show, :new, :create, :edit, :update]
 
-  # Add / Remove user from group
-  delete 'groups/:group_id/users/:user_id/remove', to: 'groups#remove', as: 'remove_user_from_group'
-  post 'groups/:group_id/add', to: 'groups#add', as: 'add_user_to_group'
+  resources :groups, only: [:index, :show, :new, :create, :edit, :update] do
+    delete 'users/:user_id/remove_user', to: 'groups#remove_user', as: 'remove_user'
+    post 'add_user', to: 'groups#add_user', as: 'add_user'
+  end
 
   resources :devices, only: [:index, :show] do
     collection do
       get 'map'
     end
   end
+
   resources :users, only: [:index, :show, :new, :create, :edit, :update] do
     collection do
       post ':id/activated', to: 'users#activated', as: 'activated'

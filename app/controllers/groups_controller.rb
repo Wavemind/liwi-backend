@@ -35,7 +35,7 @@ class GroupsController < ApplicationController
     end
   end
 
-  def remove
+  def remove_user
     @group = Group.find(params[:group_id])
     user = User.find(params[:user_id])
 
@@ -46,7 +46,7 @@ class GroupsController < ApplicationController
     end
   end
 
-  def add
+  def add_user
     @group = Group.find(params[:group_id])
     user = User.find(params[:user][:id])
 

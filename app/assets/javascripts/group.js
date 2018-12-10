@@ -1,10 +1,10 @@
 jQuery(document).ready(function () {
-  $('#groups-datatable').dataTable({
+  $("#groups-datatable").dataTable({
     "processing": true,
     "info": false,
     "bLengthChange": false,
     "serverSide": true,
-    "ajax": $('#groups-datatable').data('source'),
+    "ajax": $("#groups-datatable").data('source'),
     "pagingType": "full_numbers",
     "columns": [
       { "data": "id" },
