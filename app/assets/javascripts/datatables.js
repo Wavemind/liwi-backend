@@ -51,7 +51,7 @@ $(document).on("turbolinks:load", function() {
 });
 
 // turbolinks cache fix
-$(document).on("turbolinks:before-cache" function() {
+$(document).on("turbolinks:before-cache", function() {
   var dataTable = $($.fn.dataTable.tables(true)).DataTable();
   if (dataTable !== null) {
     dataTable.clear();
