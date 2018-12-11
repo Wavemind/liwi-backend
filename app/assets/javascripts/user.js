@@ -4,7 +4,7 @@ jQuery(document).ready(function () {
     "info": false,
     "bLengthChange": false,
     "serverSide": true,
-    "ajax": $("#users-datatable").data('source'),
+    "ajax": $("#users-datatable").data("source"),
     "pagingType": "full_numbers",
     "columns": [
       { "data": "id" },

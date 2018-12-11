@@ -19,14 +19,14 @@ jQuery(document).ready(function () {
 
 
   var map;
-  map = new google.maps.Map(document.getElementById('map'), {
+  map = new google.maps.Map(document.getElementById("map"), {
     zoom: 4,
     center: new google.maps.LatLng(-4, 20.25),
-    mapTypeId: 'terrain',
+    mapTypeId: "terrain",
   });
 
   var url;
-  url = window.location.origin + '/devices/map';
+  url = window.location.origin + "/devices/map";
 
   $.get(url, function (data) {
 
@@ -41,23 +41,23 @@ jQuery(document).ready(function () {
           map,
         });
 
-        google.maps.event.addListener(marker, 'click', (function (marker, i) {
+        google.maps.event.addListener(marker, "click", (function (marker, i) {
           return function () {
             // close all the other infowindows that opened on load
-            google.maps.event.trigger(map, 'click');
+            google.maps.event.trigger(map, "click");
 
             var contentString = "";
 
             if (data[i].last_activity.user != null) {
-              contentString = moment(data[i].created_at).format('LLL') + '<br/>' + data[i].brand + ' ' + data[i].model + '<br/> <u>' + data[i].last_activity.user.first_name + ' ' + data[i].last_activity.user.last_name + '</u>';
+              contentString = moment(data[i].created_at).format("LLL") + "<br/>" + data[i].brand + " " + data[i].model + "<br/> <u>" + data[i].last_activity.user.first_name + " " + data[i].last_activity.user.last_name + "</u>";
             } else {
-              contentString = moment(data[i].created_at).format('LLL') + '<br/>' + data[i].brand + ' ' + data[i].model + '<br/> <u>Tablette connexion</u>';
+              contentString = moment(data[i].created_at).format("LLL") + "<br/>" + data[i].brand + " " + data[i].model + "<br/> <u>Tablette connexion</u>";
             }
 
 
             infowindow.setContent(contentString);
             infowindow.open(map, marker);
-          }
+          };
         })(marker, i));
 
       }
