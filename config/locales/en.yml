@@ -1,16 +1,5 @@
 en:
-  activated: "Active"
-  add: "Add"
-  algorithms:
-    index:
-      columns:
-        id: "ID"
-        name: "Name"
-        description: "Description"
-        version_count: "Amount of versions"
-        creator: "Creator"
-        actions: "Actions"
-      title: "Algorithms"
+  users:
     new:
       title: "Create a version of algorithm"
     edit:
