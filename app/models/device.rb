@@ -1,3 +1,4 @@
+# Manage devices (tablet)
 class Device < ApplicationRecord
 
   enum status: [:active, :inactive]
@@ -13,6 +14,8 @@ class Device < ApplicationRecord
   validates_presence_of :os_version
   validates_presence_of :status
 
+  # @params nil
+  # @return [JSON] last activity of a user
   # Return last entry of current device with user attached
   def last_activity
     activities.last.as_json(include: [:user])

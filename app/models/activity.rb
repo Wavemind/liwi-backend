@@ -1,3 +1,4 @@
+# Log all connection of tablet
 class Activity < ApplicationRecord
 
   belongs_to :device

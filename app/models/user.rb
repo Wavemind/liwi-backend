@@ -1,3 +1,4 @@
+# Manage user
 class User < ApplicationRecord
 
   devise :invitable, :database_authenticatable, :recoverable, :rememberable, :lockable, :trackable
@@ -16,11 +17,15 @@ class User < ApplicationRecord
 
   validates :email, format: { with: /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i }
 
+  # @params nil
+  # @return [String] contact first_name and last_name
   # Display full name
   def full_name
     "#{first_name} #{last_name}"
   end
 
+  # @params nil
+  # @return [String] add html badge
   # Display status of user's account
   def display_deactivated
     unless deactivated
@@ -30,12 +35,16 @@ class User < ApplicationRecord
     end
   end
 
+  # @params nil
+  # @return nil
   # Replace destroy by lock account
   def destroy
     update_attributes(deactivated: true) unless deactivated
   end
 
-  # Overrride devise authentification verification with deactivated method
+  # @params nil
+  # @return nil
+  # Override devise authentication verification with deactivated method
   def active_for_authentication?
     super && !deactivated
   end

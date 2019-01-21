@@ -36,6 +36,9 @@ class UsersController < ApplicationController
     end
   end
 
+  # @params id [Integer] id of user
+  # @return redirect to users#index with flash message
+  # Active user account
   def activated
     @user.deactivated = false
 
@@ -46,6 +49,9 @@ class UsersController < ApplicationController
     end
   end
 
+  # @params id [Integer] id of user
+  # @return redirect to users#index with flash message
+  # Deactivate user account
   def deactivated
     @user.deactivated = true
 

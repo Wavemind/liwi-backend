@@ -1,5 +1,6 @@
 module ApplicationHelper
 
+  # Flash message css
   def flash_class(level)
     case level
     when 'notice' then
@@ -13,6 +14,7 @@ module ApplicationHelper
     end
   end
 
+  # Date format: dd.mm.yyyy
   def date_format(date)
     if date.blank?
       '<em>Not set</em>'.html_safe
@@ -21,6 +23,7 @@ module ApplicationHelper
     end
   end
 
+  # Date with time format: dd.mm.yyyy at HH:MM
   def datetime_format(date)
     if date.blank?
       '<em>Not set</em>'.html_safe
@@ -29,6 +32,7 @@ module ApplicationHelper
     end
   end
 
+  # Time format: HH:MM
   def time_format(date)
     if date.blank?
       '<em>Not set</em>'.html_safe

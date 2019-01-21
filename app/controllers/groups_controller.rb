@@ -35,6 +35,10 @@ class GroupsController < ApplicationController
     end
   end
 
+  # @params group_id [Integer] id of group
+  # @params user_id [Integer] id of user
+  # @return redirect to group#show with flash message
+  # Remove user from group
   def remove_user
     @group = Group.find(params[:group_id])
     user = User.find(params[:user_id])
@@ -46,6 +50,10 @@ class GroupsController < ApplicationController
     end
   end
 
+  # @params group_id [Integer] id of group
+  # @params user_id [Integer] id of user
+  # @return redirect to group#show with flash message
+  # Add user to group
   def add_user
     @group = Group.find(params[:group_id])
     user = User.find(params[:user][:id])

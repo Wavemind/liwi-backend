@@ -3,6 +3,7 @@ class Api::V1::ActivitiesController < ApplicationController
   def create
     device_params = activity_params[:device_attributes]
 
+    # If devise doesn't exist, create it
     device = Device.find_or_create_by(reference_number: device_params[:reference_number]) do |device|
       device.reference_number = device_params[:reference_number]
       device.name = device_params[:name]

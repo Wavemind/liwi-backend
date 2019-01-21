@@ -1,6 +1,8 @@
+# Configuration for user datatable display
 class UserDatatable < AjaxDatatablesRails::ActiveRecord
   extend Forwardable
 
+  # Helpers
   def_delegator :@view, :link_to
   def_delegator :@view, :edit_user_url
   def_delegator :@view, :user_url
@@ -14,6 +16,7 @@ class UserDatatable < AjaxDatatablesRails::ActiveRecord
     super
   end
 
+  # Column configuration
   def view_columns
     @view_columns ||= {
       id: { source: 'User.id' },
@@ -25,9 +28,12 @@ class UserDatatable < AjaxDatatablesRails::ActiveRecord
     }
   end
 
+  # Value display
   def data
     records.map do |record|
       actions = link_to(I18n.t('show'), user_url(record), class: 'btn btn-outline-primary') + " " + link_to(I18n.t('edit'), edit_user_url(record), class: 'btn btn-outline-info') + " "
+
+      # This table is used in 2 views, and action's a not the same
       if params[:from].present?
         actions += link_to(I18n.t('.remove'), group_remove_user_url(params[:id], record), class: 'btn btn-outline-danger', method: :delete, data: { confirm: 'Are you sure?' })
       else
@@ -46,10 +52,13 @@ class UserDatatable < AjaxDatatablesRails::ActiveRecord
     end
   end
 
+  # Activerecord request
   def get_raw_records
     if params[:from].present?
+      # Users from a group
       User.joins(:group_users).where("group_users.group_id = #{params[:id]}")
     else
+      # Users
       User.all
     end
   end

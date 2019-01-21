@@ -1,6 +1,8 @@
+# Configuration for device datatable display
 class DeviceDatatable < AjaxDatatablesRails::ActiveRecord
   extend Forwardable
 
+  # Helpers
   def_delegator :@view, :link_to
   def_delegator :@view, :datetime_format
   def_delegator :@view, :device_url
@@ -11,6 +13,7 @@ class DeviceDatatable < AjaxDatatablesRails::ActiveRecord
     super
   end
 
+  # Column configuration
   def view_columns
     @view_columns ||= {
       reference_number: { source: 'Device.reference_number' },
@@ -20,6 +23,7 @@ class DeviceDatatable < AjaxDatatablesRails::ActiveRecord
     }
   end
 
+  # Value display
   def data
     records.map do |record|
       actions = link_to(I18n.t('show'), device_url(record), class: 'btn btn-outline-primary')
@@ -35,6 +39,7 @@ class DeviceDatatable < AjaxDatatablesRails::ActiveRecord
     end
   end
 
+  # Activerecord request
   def get_raw_records
     Device.all
   end

@@ -9,6 +9,9 @@ class DevicesController < ApplicationController
     end
   end
 
+  # @params nil
+  # @return [JSON] last connection of a devise with user's info
+  # Used for the map on the dashboard for displaying where is the tablette
   def map
     render json: Device.all.to_json(methods: [:last_activity])
   end
