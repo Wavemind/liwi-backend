@@ -22,6 +22,34 @@ en:
       title: "Add role"
     edit:
       title: "Edit role"
+  algorithms:
+    index:
+      title: "Algorithms"
+      columns:
+        id: "ID"
+        name: "Name"
+        description: "Description"
+        version_count: "Amount of versions"
+        creator: "Creator"
+        actions: "Actions"
+    new:
+      title: "Create a version of algorithm"
+    edit:
+      title: "Edit this algorithm version"
+  algorithm_versions:
+    index:
+      title: "Algorithms versions"
+      columns:
+        id: "ID"
+        version: "Version"
+        container: "Container"
+        last_update: "Last update"
+        creator: "Creator"
+        actions: "Actions"
+    new:
+      title: "Add an algorithm"
+    edit:
+      title: "Edit this algorithm"
   groups:
     index:
       title: "Groups"

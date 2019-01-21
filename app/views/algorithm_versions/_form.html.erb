@@ -1,0 +1,10 @@
+<%= simple_form_for @algorith_version, html: { class: 'form-horizontal' } do |f| %>
+
+  <%= f.input :file %>
+  <%= f.input :version %>
+
+  <%= f.association :user, collection: User.all %>
+  <%= f.association :algorithm, collection: Algorithm.all %>
+
+  <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
+<% end %>

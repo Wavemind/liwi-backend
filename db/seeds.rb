@@ -18,6 +18,7 @@ device_sagem = Device.create!(reference_number: '1235KSSFF2244FAA', model: 'J302
 quentin = User.create!(first_name: 'Quentin', last_name: 'Girard', email: 'quentin.girard@wavemind.ch', password: '123456', password_confirmation: '123456', role: role_administrator)
 alain = User.create!(first_name: 'Alain', last_name: 'Fresco', email: 'alain.fresco@wavemind.ch', password: '123456', password_confirmation: '123456', role: role_administrator)
 mickael = User.create!(first_name: 'Mickael', last_name: 'Lacombe', email: 'mickael.lacombe@wavemind.ch', password: '123456', password_confirmation: '123456', role: role_administrator)
+emmanuel = User.create!(first_name: 'Emmanuel', last_name: 'Barchichat', email: 'emmanuel.barchichat@wavemind.ch', password: '123456', password_confirmation: '123456', role: role_administrator)
 julien = User.create!(first_name: 'Julien', last_name: 'Thabard', email: 'julien.thabard@hospvd.ch', password: '123456', password_confirmation: '123456', role: role_administrator)
 vincent = User.create!(first_name: 'Vincent', last_name: 'Faivre', email: 'vincent.faivre@hospvd.ch', password: '123456', password_confirmation: '123456', role: role_administrator)
 valerie = User.create!(first_name: 'Valérie', last_name: 'D\'Acremont', email: 'valerie.dacremont@hospvd.ch', password: '123456', password_confirmation: '123456', role: role_teacher)
@@ -25,7 +26,7 @@ ludovico = User.create!(first_name: 'Ludovico', last_name: 'Cabuccio', email: 'l
 olga = User.create!(first_name: 'Olga', last_name: 'De Santis', email: 'olga.desantis80@gmail.com', password: '123456', password_confirmation: '123456', role: role_teacher)
 
 # Associate group
-group_wavemind.users << [quentin, alain, mickael]
+group_wavemind.users << [quentin, alain, mickael, emmanuel]
 group_wavemind.save
 
 group_pmu.users << [julien, vincent, valerie, ludovico, olga]
@@ -49,3 +50,11 @@ Activity.create(user: olga, device: device_blackberry, latitude: -33.918861, lon
 Activity.create(user: valerie, device: device_blackberry, latitude: -33.918861, longitude: 28.015680, created_at: Time.zone.now + 6.hour, updated_at: Time.zone.now + 6.hour, timezone: 'Berne', version: '1.0.0')
 Activity.create(user: vincent, device: device_blackberry, latitude: -26.958405, longitude: 27.901464, created_at: Time.zone.now + 7.hour, updated_at: Time.zone.now + 7.hour, timezone: 'Berne', version: '1.0.0')
 Activity.create(user: quentin, device: device_blackberry, latitude: -33.918861, longitude: 28.015680, created_at: Time.zone.now + 8.hour, updated_at: Time.zone.now + 8.hour, timezone: 'Berne', version: '1.0.0')
+
+# Algorithms
+epoct = Algorithm.create(name: 'ePoct', description: 'loremp ipsum', user: emmanuel)
+fever_travel = Algorithm.create(name: 'FeverTravel', description: 'loremp ipsum', user: quentin)
+
+AlgorithmVersion.create(version: 'first_trial', json: '{}', algorithm: epoct, user: alain)
+AlgorithmVersion.create(version: '1.0', json: '{}', algorithm: fever_travel, user: mickael)
+AlgorithmVersion.create(version: '1.2', json: '{}', algorithm: fever_travel, user: vincent)
