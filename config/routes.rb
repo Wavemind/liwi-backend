@@ -7,6 +7,10 @@ Rails.application.routes.draw do
 
   resources :roles, only: [:index, :show, :new, :create, :edit, :update]
 
+  resources :algorithms, only: [:index, :show, :new, :create, :edit, :update]
+
+  resources :algorithm_versions, only: [:index, :show, :new, :create, :edit, :update]
+
   resources :groups, only: [:index, :show, :new, :create, :edit, :update] do
     delete 'users/:user_id/remove_user', to: 'groups#remove_user', as: 'remove_user'
     post 'add_user', to: 'groups#add_user', as: 'add_user'

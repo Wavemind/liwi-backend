@@ -1,0 +1,18 @@
+<h1><%= t('.title') %></h1>
+<%= link_to new_algorithm_version_url do %>
+  <button type="button" class="btn btn-outline-secondary"><%= t('add') %></button>
+<% end %>
+
+<table class="table table-condensed table-hover" id="algorithm_versions-datatable" data-source="<%= algorithm_versions_url(format: :json) %>">
+  <thead>
+    <tr>
+      <th><%= t('.columns.id') %></th>
+      <th><%= t('.columns.version') %></th>
+      <th><%= t('.columns.container') %></th>
+      <th><%= t('.columns.last_update') %></th>
+      <th><%= t('.columns.creator') %></th>
+      <th><%= t('.columns.actions') %></th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>

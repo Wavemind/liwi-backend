@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_06_091715) do
+ActiveRecord::Schema.define(version: 2019_01_21_131146) do
 
   create_table "activities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.decimal "longitude", precision: 13, scale: 9
@@ -23,6 +23,26 @@ ActiveRecord::Schema.define(version: 2018_12_06_091715) do
     t.datetime "updated_at", null: false
     t.index ["device_id"], name: "index_activities_on_device_id"
     t.index ["user_id"], name: "index_activities_on_user_id"
+  end
+
+  create_table "algorithm_versions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "version"
+    t.string "json"
+    t.bigint "user_id"
+    t.bigint "algorithm_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["algorithm_id"], name: "index_algorithm_versions_on_algorithm_id"
+    t.index ["user_id"], name: "index_algorithm_versions_on_user_id"
+  end
+
+  create_table "algorithms", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name"
+    t.string "description"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_algorithms_on_user_id"
   end
 
   create_table "devices", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -101,6 +121,9 @@ ActiveRecord::Schema.define(version: 2018_12_06_091715) do
 
   add_foreign_key "activities", "devices"
   add_foreign_key "activities", "users"
+  add_foreign_key "algorithm_versions", "algorithms"
+  add_foreign_key "algorithm_versions", "users"
+  add_foreign_key "algorithms", "users"
   add_foreign_key "group_users", "groups"
   add_foreign_key "group_users", "users"
   add_foreign_key "users", "roles"
