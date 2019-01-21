@@ -1,9 +1,9 @@
-<h1>Details of <%= @user.full_name %></h1>
+<h1><%= t('.title', name: @user.full_name) %></h1>
 
 <p><%= @user.email %></p>
-<p>Role <b><%= @user.role.name %></b></p>
-<p>Last account connection <b><%= datetime_format(@user.last_sign_in_at) %></b></p>
-<h2>Groups</h2>
+<p><%= t('.role') %><b><%= @user.role.name %></b></p>
+<p><%= t('.last_account_connection') %><b><%= datetime_format(@user.last_sign_in_at) %></b></p>
+<h2><%= t('.groups') %></h2>
 <% @user.groups.each do |group|%>
   <p><%= group.name %></p>
 <% end %>

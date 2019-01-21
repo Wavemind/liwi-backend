@@ -19,7 +19,7 @@ class AlgorithmsController < ApplicationController
     @algorithm = Algorithm.new(algorithm_params)
 
     if @algorithm.save
-      redirect_to algorithms_url, notice: t('success_created')
+      redirect_to algorithms_url, notice: t('flash_message.success_created')
     else
       render :new
     end
@@ -27,7 +27,7 @@ class AlgorithmsController < ApplicationController
 
   def update
     if @algorithm.update(algorithm_params)
-      redirect_to algorithms_url, notice: t('success_updated')
+      redirect_to algorithms_url, notice: t('flash_message.success_updated')
     else
       render :edit
     end

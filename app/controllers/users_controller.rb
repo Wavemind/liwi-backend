@@ -22,7 +22,7 @@ class UsersController < ApplicationController
 
     if @user.valid?
       User.invite!(user_params)
-      redirect_to users_url, notice: t('success_created')
+      redirect_to users_url, notice: t('flash_message.success_created')
     else
       render :new
     end
@@ -30,7 +30,7 @@ class UsersController < ApplicationController
 
   def update
     if @user.update(user_params)
-      redirect_to users_url, notice: t('success_updated')
+      redirect_to users_url, notice: t('success_updatedsuccess_updated')
     else
       render :edit
     end
@@ -43,9 +43,9 @@ class UsersController < ApplicationController
     @user.deactivated = false
 
     if @user.save
-      redirect_to users_url, notice: t('success_created')
+      redirect_to users_url, notice: t('flash_message.success_created')
     else
-      redirect_to users_url, danger: t('update_fail')
+      redirect_to users_url, danger: t('flash_message.update_fail')
     end
   end
 
@@ -56,9 +56,9 @@ class UsersController < ApplicationController
     @user.deactivated = true
 
     if @user.save
-      redirect_to users_url, notice: t('success_created')
+      redirect_to users_url, notice: t('flash_message.success_created')
     else
-      redirect_to users_url, danger: t('update_fail')
+      redirect_to users_url, danger: t('flash_message.update_fail')
     end
   end
 

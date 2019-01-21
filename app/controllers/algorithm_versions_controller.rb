@@ -19,7 +19,7 @@ class AlgorithmVersionsController < ApplicationController
     @algorithm_version = AlgorithmVersion.new(algorithm_versions_params)
 
     if @algorithm_version.save
-      redirect_to algorithm_versions_url, notice: t('success_created')
+      redirect_to algorithm_versions_url, notice: t('flash_message.success_created')
     else
       render :new
     end
@@ -27,7 +27,7 @@ class AlgorithmVersionsController < ApplicationController
 
   def update
     if @algorithm_version.update(algorithm_versions_params)
-      redirect_to algorithm_versions_url, notice: t('success_updated')
+      redirect_to algorithm_versions_url, notice: t('success_updatedsuccess_updated')
     else
       render :edit
     end

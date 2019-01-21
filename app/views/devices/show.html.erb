@@ -1,11 +1,11 @@
-<h1>Details of <%= @device.name %></h1>
+<h1><%= t('.title', name: @device.name) %></h1>
 
-<p>Reference number: <b><%= @device.reference_number %></b></p>
-<p>Brand: <b><%= @device.brand %></b></p>
-<p>Model: <b><%= @device.model %></b></p>
-<p>OS: <b><%= @device.os %></b></p>
-<p>OS version: <b><%= @device.os_version %></b></p>
-<p>Status: <b><%= @device.status %></b></p>
+<p><%= t('.reference_number') %><b><%= @device.reference_number %></b></p>
+<p><%= t('.brand') %><b><%= @device.brand %></b></p>
+<p><%= t('.model') %><b><%= @device.model %></b></p>
+<p><%= t('.os') %><b><%= @device.os %></b></p>
+<p><%= t('.os_version') %><b><%= @device.os_version %></b></p>
+<p><%= t('.status') %><b><%= @device.status %></b></p>
 
 <h2>Activities</h2>
 <ul class="list-group">
@@ -13,7 +13,7 @@
     <% if activity.user.present? %>
       <li class="list-group-item">
         <div class="row">
-          <div class="col">User actions</div>
+          <div class="col"><%= t('.reference_number') %></div>
           <div class="col"><%= activity.user.full_name %></div>
           <div class="col"><%= datetime_format(activity.created_at) %></div>
           <div class="col"><%= link_to "Position: #{activity.latitude},#{activity.longitude}", "https://maps.google.com/maps?q=#{activity.latitude},#{activity.longitude}", target: :blank %></div>
@@ -22,7 +22,7 @@
     <% else %>
       <li class="list-group-item">
         <div class="row">
-          <div class="col">Tablette connexion</div>
+          <div class="col"><%= t('.tablet_connection') %></div>
           <div class="col"><%= datetime_format(activity.created_at) %></div>
           <div class="col"><u><%= link_to "Position: #{activity.latitude},#{activity.longitude}", "https://maps.google.com/maps?q=#{activity.latitude},#{activity.longitude}", target: :blank %></u></div>
         </div>

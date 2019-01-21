@@ -5,13 +5,12 @@
 
 <table class="table table-condensed table-hover" id="groups-datatable" data-source="<%= groups_url(format: :json) %>">
   <thead>
-  <tr>
-    <th>ID</th>
-    <th>Name</th>
-    <th>Nb people</th>
-    <th>Actions</th>
-  </tr>
+    <tr>
+      <th><%= t('.columns.id') %></th>
+      <th><%= t('.columns.name') %></th>
+      <th><%= t('.columns.nb_people') %></th>
+      <th><%= t('.columns.actions') %></th>
+    </tr>
   </thead>
-  <tbody>
-  </tbody>
+  <tbody></tbody>
 </table>

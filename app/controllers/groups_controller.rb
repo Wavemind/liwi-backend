@@ -21,7 +21,7 @@ class GroupsController < ApplicationController
     @group = Group.new(group_params)
 
     if @group.save
-      redirect_to groups_url, notice: t('success_created')
+      redirect_to groups_url, notice: t('flash_message.success_created')
     else
       render :new
     end
@@ -29,7 +29,7 @@ class GroupsController < ApplicationController
 
   def update
     if @group.update(group_params)
-      redirect_to groups_url, notice: t('success_updated')
+      redirect_to groups_url, notice: t('success_updatedsuccess_updated')
     else
       render :edit
     end
