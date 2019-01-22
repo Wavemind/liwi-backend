@@ -1,1 +1,8 @@
 <h1>Details of <%= @algorithm.name %></h1>
+
+<%= link_to new_algorithm_algorithm_version_url(@algorithm) do %>
+  <button type="button" class="btn btn-outline-secondary"><%= t('add') %></button>
+<% end %>
+
+<%= render 'algorithm_versions/table' %>
+

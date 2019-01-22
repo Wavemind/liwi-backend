@@ -1,3 +1,4 @@
+# Container of many versions of algorithms
 class Algorithm < ApplicationRecord
 
   belongs_to :user

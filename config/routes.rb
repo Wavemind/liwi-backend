@@ -12,12 +12,12 @@ Rails.application.routes.draw do
       put 'archive', to: 'algorithms#archive', as: 'archive'
       put 'unarchive', to: 'algorithms#unarchive', as: 'unarchive'
     end
-  end
 
-  resources :algorithm_versions, only: [:index, :show, :new, :create, :edit, :update] do
-    member do
-      put 'archive', to: 'algorithm_versions#archive', as: 'archive'
-      put 'unarchive', to: 'algorithm_versions#unarchive', as: 'unarchive'
+    resources :algorithm_versions, only: [:index, :show, :new, :create, :edit, :update] do
+      member do
+        put 'archive', to: 'algorithm_versions#archive', as: 'archive'
+        put 'unarchive', to: 'algorithm_versions#unarchive', as: 'unarchive'
+      end
     end
   end
 

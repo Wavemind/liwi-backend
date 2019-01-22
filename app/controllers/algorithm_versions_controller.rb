@@ -1,5 +1,8 @@
 class AlgorithmVersionsController < ApplicationController
 
+  before_action :set_algorithm, only: [:show, :new, :create, :edit, :update, :archive, :unarchive]
+  before_action :set_algorithm_version, only: [:show, :edit, :update, :archive, :unarchive]
+
   def index
     respond_to do |format|
       format.html
@@ -12,14 +15,16 @@ class AlgorithmVersionsController < ApplicationController
   end
 
   def new
+    @algorithm = Algorithm.find(params[:algorithm_id])
     @algorithm_version = AlgorithmVersion.new
   end
 
   def create
-    @algorithm_version = AlgorithmVersion.new(algorithm_versions_params)
+    @algorithm_version = @algorithm.algorithm_versions.new(algorithm_versions_params)
+    @algorithm_version.user = current_user
 
     if @algorithm_version.save
-      redirect_to algorithm_versions_url, notice: t('flash_message.success_created')
+      redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_created')
     else
       render :new
     end
@@ -27,7 +32,7 @@ class AlgorithmVersionsController < ApplicationController
 
   def update
     if @algorithm_version.update(algorithm_versions_params)
-      redirect_to algorithm_versions_url, notice: t('flash_message.success_updated')
+      redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_updated')
     else
       render :edit
     end
@@ -37,31 +42,33 @@ class AlgorithmVersionsController < ApplicationController
   # @return redirect to algorithm_versions#index with flash message
   # Archive an algorithm version.
   def archive
-    set_algorithm_version
     @algorithm_version.archived = true
 
     if @algorithm_version.save
-      redirect_to algorithm_versions_url, notice: t('flash_message.success_created')
+      redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_created')
     else
-      redirect_to algorithm_versions_url, danger: t('flash_message.update_fail')
+      redirect_to algorithm_url(@algorithm), danger: t('flash_message.update_fail')
     end
   end
 
-  # @params algorithm [Algorithm] algorithm to archive
+  # @params algorithm_version [AlgorithmVersion] algorithm version to archive
   # @return redirect to algorithms#index with flash message
   # Unarchive an algorithm version.
   def unarchive
-    set_algorithm_version
     @algorithm_version.archived = false
 
     if @algorithm_version.save
-      redirect_to algorithm_versions_url, notice: t('flash_message.success_created')
+      redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_created')
     else
-      redirect_to algorithm_versions_url, danger: t('flash_message.update_fail')
+      redirect_to algorithm_url(@algorithm), danger: t('flash_message.update_fail')
     end
   end
 
   private
+
+  def set_algorithm
+    @algorithm = Algorithm.find(params[:algorithm_id])
+  end
 
   def set_algorithm_version
     @algorithm_version = AlgorithmVersion.find(params[:id])
@@ -72,9 +79,6 @@ class AlgorithmVersionsController < ApplicationController
       :id,
       :version,
       :json,
-      :algorithm_id,
-      :user_id
     )
   end
-
 end

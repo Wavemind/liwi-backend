@@ -1,5 +1,7 @@
 class AlgorithmsController < ApplicationController
 
+  before_action :set_algorithm, only: [:show, :edit, :update, :archive, :unarchive]
+
   def index
     respond_to do |format|
       format.html
@@ -17,6 +19,7 @@ class AlgorithmsController < ApplicationController
 
   def create
     @algorithm = Algorithm.new(algorithm_params)
+    @algorithm.user = current_user
 
     if @algorithm.save
       redirect_to algorithms_url, notice: t('flash_message.success_created')
@@ -35,9 +38,8 @@ class AlgorithmsController < ApplicationController
 
   # @params algorithm [Algorithm] algorithm to archive
   # @return redirect to algorithms#index with flash message
-  # Archive an algorithm container. There is no impact for the user but if a parent is archived, the versions are considered archived too
+  # Archive an algorithm. There is no impact for the user but if a parent is archived, the versions are considered archived too
   def archive
-    set_algorithm
     @algorithm.archived = true
 
     if @algorithm.save
@@ -49,9 +51,8 @@ class AlgorithmsController < ApplicationController
 
   # @params algorithm [Algorithm] algorithm to archive
   # @return redirect to algorithms#index with flash message
-  # Unarchive an algorithm container.
+  # Unarchive an algorithm.
   def unarchive
-    set_algorithm
     @algorithm.archived = false
 
     if @algorithm.save
@@ -72,7 +73,6 @@ class AlgorithmsController < ApplicationController
       :id,
       :name,
       :description,
-      :user_id
     )
   end
 

@@ -1,10 +1,7 @@
-<%= simple_form_for @algorithm_version, html: { class: 'form-horizontal' } do |f| %>
+<%= simple_form_for [@algorithm, @algorithm_version], html: { class: 'form-horizontal' } do |f| %>
 
   <%= f.input :json %>
   <%= f.input :version %>
-
-  <%= f.association :user, collection: User.all, label_method: :full_name %>
-  <%= f.association :algorithm, collection: Algorithm.all %>
 
   <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
 <% end %>

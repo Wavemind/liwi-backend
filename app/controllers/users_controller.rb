@@ -30,7 +30,7 @@ class UsersController < ApplicationController
 
   def update
     if @user.update(user_params)
-      redirect_to users_url, notice: t('success_updatedsuccess_updated')
+      redirect_to users_url, notice: t('flash_message.success_updated')
     else
       render :edit
     end

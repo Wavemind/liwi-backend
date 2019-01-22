@@ -1,3 +1,4 @@
+# Version of an algorithm with its logic
 class AlgorithmVersion < ApplicationRecord
 
   belongs_to :algorithm

@@ -2,7 +2,6 @@
 
   <%= f.input :name %>
   <%= f.input :description %>
-  <%= f.association :user, collection: User.all, label_method: :full_name %>
 
   <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
 <% end %>
