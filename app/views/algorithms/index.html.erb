@@ -1,14 +1,16 @@
 <h1><%= t('.title') %></h1>
-<%= link_to new_group_url do %>
+<%= link_to new_algorithm_url do %>
   <button type="button" class="btn btn-outline-secondary"><%= t('add') %></button>
 <% end %>
 
-<table class="table table-condensed table-hover" id="groups-datatable" data-source="<%= groups_url(format: :json) %>">
+<table class="table table-condensed table-hover" id="algorithms-datatable" data-source="<%= algorithms_url(format: :json) %>">
   <thead>
     <tr>
       <th><%= t('.columns.id') %></th>
       <th><%= t('.columns.name') %></th>
-      <th><%= t('.columns.nb_people') %></th>
+      <th><%= t('.columns.description') %></th>
+      <th><%= t('.columns.version_count') %></th>
+      <th><%= t('.columns.creator') %></th>
       <th><%= t('.columns.actions') %></th>
     </tr>
   </thead>

@@ -1,0 +1,7 @@
+<%= simple_form_for [@algorithm, @algorithm_version], html: { class: 'form-horizontal' } do |f| %>
+
+  <%= f.input :json %>
+  <%= f.input :version %>
+
+  <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
+<% end %>

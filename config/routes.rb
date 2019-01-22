@@ -7,6 +7,20 @@ Rails.application.routes.draw do
 
   resources :roles, only: [:index, :show, :new, :create, :edit, :update]
 
+  resources :algorithms, only: [:index, :show, :new, :create, :edit, :update] do
+    member do
+      put 'archive', to: 'algorithms#archive', as: 'archive'
+      put 'unarchive', to: 'algorithms#unarchive', as: 'unarchive'
+    end
+
+    resources :algorithm_versions, only: [:index, :show, :new, :create, :edit, :update] do
+      member do
+        put 'archive', to: 'algorithm_versions#archive', as: 'archive'
+        put 'unarchive', to: 'algorithm_versions#unarchive', as: 'unarchive'
+      end
+    end
+  end
+
   resources :groups, only: [:index, :show, :new, :create, :edit, :update] do
     delete 'users/:user_id/remove_user', to: 'groups#remove_user', as: 'remove_user'
     post 'add_user', to: 'groups#add_user', as: 'add_user'

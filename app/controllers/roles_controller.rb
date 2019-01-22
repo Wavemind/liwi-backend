@@ -21,7 +21,7 @@ class RolesController < ApplicationController
     @role = Role.new(role_params)
 
     if @role.save
-      redirect_to roles_url, notice: t('success_created')
+      redirect_to roles_url, notice: t('flash_message.success_created')
     else
       render :new
     end
@@ -29,7 +29,7 @@ class RolesController < ApplicationController
 
   def update
     if @role.update(role_params)
-      redirect_to roles_url, notice: t('success_updated')
+      redirect_to roles_url, notice: t('flash_message.success_updated')
     else
       render :edit
     end

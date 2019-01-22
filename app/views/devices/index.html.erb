@@ -2,16 +2,15 @@
 
 <table class="table table-condensed table-hover" id="devices-datatable" data-source="<%= devices_url(format: :json) %>">
   <thead>
-  <tr>
-    <th>Reference number</th>
-    <th>Name</th>
-    <th>Brand</th>
-    <th>Model</th>
-    <th>Last activity</th>
-    <th>Last user</th>
-    <th>Actions</th>
-  </tr>
+    <tr>
+      <th><%= t('.columns.reference_number') %></th>
+      <th><%= t('.columns.name') %></th>
+      <th><%= t('.columns.brand') %></th>
+      <th><%= t('.columns.model') %></th>
+      <th><%= t('.columns.last_activity') %></th>
+      <th><%= t('.columns.last_user') %></th>
+      <th><%= t('.columns.actions') %></th>
+    </tr>
   </thead>
-  <tbody>
-  </tbody>
+  <tbody></tbody>
 </table>
