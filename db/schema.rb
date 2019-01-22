@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_22_090043) do
+ActiveRecord::Schema.define(version: 2019_01_21_131146) do
 
   create_table "activities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.decimal "longitude", precision: 13, scale: 9
@@ -27,12 +27,12 @@ ActiveRecord::Schema.define(version: 2019_01_22_090043) do
 
   create_table "algorithm_versions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "version"
-    t.string "json"
+    t.text "json"
+    t.boolean "archived"
     t.bigint "user_id"
     t.bigint "algorithm_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "archived", default: false
     t.index ["algorithm_id"], name: "index_algorithm_versions_on_algorithm_id"
     t.index ["user_id"], name: "index_algorithm_versions_on_user_id"
   end
@@ -40,10 +40,10 @@ ActiveRecord::Schema.define(version: 2019_01_22_090043) do
   create_table "algorithms", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.string "description"
+    t.boolean "archived"
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "archived", default: false
     t.index ["user_id"], name: "index_algorithms_on_user_id"
   end
 

@@ -3,6 +3,7 @@ class CreateAlgorithms < ActiveRecord::Migration[5.2]
     create_table :algorithms do |t|
       t.string :name
       t.string :description
+      t.boolean :archived
 
       t.references :user, foreign_key: true, index: true
 
