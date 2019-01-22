@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_21_131146) do
+ActiveRecord::Schema.define(version: 2019_01_22_160938) do
 
   create_table "activities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.decimal "longitude", precision: 13, scale: 9
@@ -23,6 +23,15 @@ ActiveRecord::Schema.define(version: 2019_01_21_131146) do
     t.datetime "updated_at", null: false
     t.index ["device_id"], name: "index_activities_on_device_id"
     t.index ["user_id"], name: "index_activities_on_user_id"
+  end
+
+  create_table "algorithm_version_diagnostics", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "algorithm_version_id"
+    t.bigint "diagnostic_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["algorithm_version_id"], name: "index_algorithm_version_diagnostics_on_algorithm_version_id"
+    t.index ["diagnostic_id"], name: "index_algorithm_version_diagnostics_on_diagnostic_id"
   end
 
   create_table "algorithm_versions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -47,6 +56,33 @@ ActiveRecord::Schema.define(version: 2019_01_21_131146) do
     t.index ["user_id"], name: "index_algorithms_on_user_id"
   end
 
+  create_table "answer_types", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "value"
+    t.string "display"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "answers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "reference"
+    t.string "label"
+    t.string "operator"
+    t.string "value"
+    t.bigint "node_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["node_id"], name: "index_answers_on_node_id"
+  end
+
+  create_table "available_questions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "algorithm_id"
+    t.bigint "node_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["algorithm_id"], name: "index_available_questions_on_algorithm_id"
+    t.index ["node_id"], name: "index_available_questions_on_node_id"
+  end
+
   create_table "devices", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "reference_number"
     t.string "name"
@@ -55,6 +91,13 @@ ActiveRecord::Schema.define(version: 2019_01_21_131146) do
     t.string "os"
     t.string "os_version"
     t.integer "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "diagnostics", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "reference"
+    t.string "label"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -72,6 +115,18 @@ ActiveRecord::Schema.define(version: 2019_01_21_131146) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "nodes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "label"
+    t.string "reference"
+    t.string "priority"
+    t.string "category"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "answer_type_id"
+    t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
   end
 
   create_table "roles", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -123,10 +178,16 @@ ActiveRecord::Schema.define(version: 2019_01_21_131146) do
 
   add_foreign_key "activities", "devices"
   add_foreign_key "activities", "users"
+  add_foreign_key "algorithm_version_diagnostics", "algorithm_versions"
+  add_foreign_key "algorithm_version_diagnostics", "diagnostics"
   add_foreign_key "algorithm_versions", "algorithms"
   add_foreign_key "algorithm_versions", "users"
   add_foreign_key "algorithms", "users"
+  add_foreign_key "answers", "nodes"
+  add_foreign_key "available_questions", "algorithms"
+  add_foreign_key "available_questions", "nodes"
   add_foreign_key "group_users", "groups"
   add_foreign_key "group_users", "users"
+  add_foreign_key "nodes", "answer_types"
   add_foreign_key "users", "roles"
 end
