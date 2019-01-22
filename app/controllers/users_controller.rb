@@ -38,7 +38,7 @@ class UsersController < ApplicationController
 
   # @params id [Integer] id of user
   # @return redirect to users#index with flash message
-  # Active user account
+  # Activate user account
   def activated
     @user.deactivated = false
 

@@ -1,8 +1,8 @@
-<%= simple_form_for @group, html: { class: 'form-horizontal' } do |f| %>
+<%= simple_form_for @algorithm, html: { class: 'form-horizontal' } do |f| %>
 
   <%= f.input :name %>
-  <%= f.description :name %>
-  <%= f.association :user, collection: User.all %>
+  <%= f.input :description %>
+  <%= f.association :user, collection: User.all, label_method: :full_name %>
 
   <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
 <% end %>

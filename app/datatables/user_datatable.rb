@@ -33,7 +33,7 @@ class UserDatatable < AjaxDatatablesRails::ActiveRecord
     records.map do |record|
       actions = link_to(I18n.t('show'), user_url(record), class: 'btn btn-outline-primary') + " " + link_to(I18n.t('edit'), edit_user_url(record), class: 'btn btn-outline-info') + " "
 
-      # This table is used in 2 views, and action's a not the same
+      # This table is used in 2 views, and actions are not the same
       if params[:from].present?
         actions += link_to(I18n.t('.remove'), group_remove_user_url(params[:id], record), class: 'btn btn-outline-danger', method: :delete, data: { confirm: 'Are you sure?' })
       else

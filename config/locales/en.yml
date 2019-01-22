@@ -1,9 +1,19 @@
 en:
-  users:
+  add: "Add"
+  algorithms:
+    index:
+      columns:
+        id: "ID"
+        name: "Name"
+        description: "Description"
+        version_count: "Amount of versions"
+        creator: "Creator"
+        actions: "Actions"
+      title: "Algorithms"
     new:
-      title: "Create a version of algorithm"
+      title: "Add an algorithm"
     edit:
-      title: "Edit this algorithm version"
+      title: "Edit this algorithm"
   algorithm_versions:
     index:
       columns:
@@ -18,6 +28,7 @@ en:
       title: "Add an algorithm"
     edit:
       title: "Edit this algorithm"
+  archive: "Archive"
   deactivated: "Deactivate"
   devices:
     index:
@@ -76,6 +87,7 @@ en:
       title: "Edit role"
   save: "Save"
   show: "Show"
+  unarchive: "Unarchive"
   users:
     new:
       title: "Add user"

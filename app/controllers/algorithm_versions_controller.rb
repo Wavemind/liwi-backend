@@ -33,9 +33,37 @@ class AlgorithmVersionsController < ApplicationController
     end
   end
 
+  # @params algorithm_version [AlgorithmVersion] version of algorithm to archive
+  # @return redirect to algorithm_versions#index with flash message
+  # Archive an algorithm version.
+  def archive
+    set_algorithm_version
+    @algorithm_version.archived = true
+
+    if @algorithm_version.save
+      redirect_to algorithm_versions_url, notice: t('flash_message.success_created')
+    else
+      redirect_to algorithm_versions_url, danger: t('flash_message.update_fail')
+    end
+  end
+
+  # @params algorithm [Algorithm] algorithm to archive
+  # @return redirect to algorithms#index with flash message
+  # Unarchive an algorithm version.
+  def unarchive
+    set_algorithm_version
+    @algorithm_version.archived = false
+
+    if @algorithm_version.save
+      redirect_to algorithm_versions_url, notice: t('flash_message.success_created')
+    else
+      redirect_to algorithm_versions_url, danger: t('flash_message.update_fail')
+    end
+  end
+
   private
 
-  def set_algorithm
+  def set_algorithm_version
     @algorithm_version = AlgorithmVersion.find(params[:id])
   end
 
@@ -44,7 +72,8 @@ class AlgorithmVersionsController < ApplicationController
       :id,
       :version,
       :json,
-      :algorithm_id
+      :algorithm_id,
+      :user_id
     )
   end
 

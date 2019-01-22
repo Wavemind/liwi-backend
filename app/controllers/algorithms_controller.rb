@@ -33,6 +33,34 @@ class AlgorithmsController < ApplicationController
     end
   end
 
+  # @params algorithm [Algorithm] algorithm to archive
+  # @return redirect to algorithms#index with flash message
+  # Archive an algorithm container. There is no impact for the user but if a parent is archived, the versions are considered archived too
+  def archive
+    set_algorithm
+    @algorithm.archived = true
+
+    if @algorithm.save
+      redirect_to algorithms_url, notice: t('flash_message.success_created')
+    else
+      redirect_to algorithms_url, danger: t('flash_message.update_fail')
+    end
+  end
+
+  # @params algorithm [Algorithm] algorithm to archive
+  # @return redirect to algorithms#index with flash message
+  # Unarchive an algorithm container.
+  def unarchive
+    set_algorithm
+    @algorithm.archived = false
+
+    if @algorithm.save
+      redirect_to algorithms_url, notice: t('flash_message.success_created')
+    else
+      redirect_to algorithms_url, danger: t('flash_message.update_fail')
+    end
+  end
+
   private
 
   def set_algorithm
@@ -43,7 +71,8 @@ class AlgorithmsController < ApplicationController
     params.require(:algorithm).permit(
       :id,
       :name,
-      :description
+      :description,
+      :user_id
     )
   end
 
