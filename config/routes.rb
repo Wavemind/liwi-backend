@@ -46,5 +46,4 @@ Rails.application.routes.draw do
       resources :activities, only: [:create]
     end
   end
-
 end
