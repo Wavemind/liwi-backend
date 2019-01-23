@@ -6,4 +6,8 @@ class AnswerType < ApplicationRecord
   validates_presence_of :value
   validates_presence_of :display
 
+
+  def display_name
+    "#{display} : #{value}"
+  end
 end

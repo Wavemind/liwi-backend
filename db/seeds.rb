@@ -55,6 +55,56 @@ Activity.create(user: quentin, device: device_blackberry, latitude: -33.918861, 
 epoct = Algorithm.create(name: 'ePoct', description: 'loremp ipsum', user: emmanuel)
 fever_travel = Algorithm.create(name: 'FeverTravel', description: 'loremp ipsum', user: quentin)
 
-AlgorithmVersion.create(version: 'first_trial', json: '{}', algorithm: epoct, user: alain)
-AlgorithmVersion.create(version: '1.0', json: '{}', algorithm: fever_travel, user: mickael)
-AlgorithmVersion.create(version: '1.2', json: '{}', algorithm: fever_travel, user: vincent)
+epoc_first = AlgorithmVersion.create(version: 'first_trial', json: '{}', algorithm: epoct, user: alain)
+ft_1_0 = AlgorithmVersion.create(version: '1.0', json: '{}', algorithm: fever_travel, user: mickael)
+ft_1_2 = AlgorithmVersion.create(version: '1.2', json: '{}', algorithm: fever_travel, user: vincent)
+
+# Answer types
+radio_integer = AnswerType.create(value: 'Integer', display: 'Checkbox')
+radio_string = AnswerType.create(value: 'String', display: 'Checkbox')
+radio_boolean = AnswerType.create(value: 'Boolean', display: 'Radiobutton')
+input_integer = AnswerType.create(value: 'Integer', display: 'Input')
+input_float = AnswerType.create(value: 'Float', display: 'Input')
+
+# Questions
+age = Question.create(answer_type: input_integer, label: 'Quel est l''âge du patient ?', reference: 'E1', category: Question.categories[:exposure], priority: Question.categories[:triage])
+convulsion = Question.create(answer_type: input_integer, label: 'How many time did you convulse', reference: 'S3', category: Question.categories[:symptom], priority: Question.categories[:priority])
+drinking_status = Question.create(answer_type: radio_boolean, label: 'Is the patient able to tolerate PO liquid ?', reference: 'S4', category: Question.categories[:symptom], priority: Question.categories[:priority])
+emesis = Question.create(answer_type: input_integer, label: 'How many time did you loose stool or emesis last 24 hours ?', reference: 'S5', category: Question.categories[:symptom], priority: Question.categories[:priority])
+muac = Question.create(answer_type: input_float, label: 'What is MUAC size ?', reference: 'P6', category: Question.categories[:physical_exam], priority: Question.categories[:triage])
+skin_lesion_size = Question.create(answer_type: input_float, label: 'What is the size of the skin lesion ?', reference: 'P21', category: Question.categories[:physical_exam], priority: Question.categories[:basic])
+
+# Answers
+Answer.create(question: age, reference: 'E1_1', label: nil, value: '{12}', operator: '{>=}')
+Answer.create(question: age, reference: 'E1_2', label: nil, value: '{6, 12}', operator: '{>=, <}')
+Answer.create(question: age, reference: 'E1_3', label: nil, value: '{2, 6}', operator: '{>=, <}')
+Answer.create(question: age, reference: 'E1_4', label: nil, value: '{2}', operator: '{<}')
+Answer.create(question: convulsion, reference: 'S3_1', label: nil, value: '{2}', operator: '{>=}')
+Answer.create(question: convulsion, reference: 'S3_2', label: nil, value: '{2}', operator: '{<}')
+Answer.create(question: drinking_status, reference: 'S4_1', label: 'yes', value: nil, operator: nil)
+Answer.create(question: drinking_status, reference: 'S4_2', label: 'no', value: nil, operator: nil)
+Answer.create(question: emesis, reference: 'S5_1', label: nil, value: '{3}', operator: '{>=}')
+Answer.create(question: emesis, reference: 'S5_2', label: nil, value: '{3}', operator: '{<}')
+Answer.create(question: muac, reference: 'P6_1', label: nil, value: '{12.5}', operator: '{>=}')
+Answer.create(question: muac, reference: 'P6_2', label: nil, value: '{11.5, 12.5}', operator: '{>=, <}')
+Answer.create(question: muac, reference: 'P6_3', label: nil, value: '{11.5}', operator: '{<}')
+Answer.create(question: skin_lesion_size, reference: 'P21_1', label: nil, value: '{5}', operator: '{>=}')
+Answer.create(question: skin_lesion_size, reference: 'P21_2', label: nil, value: '{2.5, 5}', operator: '{>=, <}')
+Answer.create(question: skin_lesion_size, reference: 'P21_3', label: nil, value: '{2.5}', operator: '{<}')
+
+# Available questions per algorithm
+AvailableQuestion.create(algorithm: epoct, question: age)
+AvailableQuestion.create(algorithm: epoct, question: muac)
+AvailableQuestion.create(algorithm: epoct, question: skin_lesion_size)
+AvailableQuestion.create(algorithm: fever_travel, question: age)
+AvailableQuestion.create(algorithm: fever_travel, question: convulsion)
+AvailableQuestion.create(algorithm: fever_travel, question: drinking_status)
+AvailableQuestion.create(algorithm: fever_travel, question: emesis)
+
+malaria = Diagnostic.new(label: 'Malaria', reference: 'DD_4')
+impetigo = Diagnostic.new(label: 'IMPETIGO', reference: 'DD_7')
+chicken_pox = Diagnostic.new(label: 'Chicken pox', reference: 'DD_8')
+
+malaria.algorithm_versions << epoc_first
+impetigo.algorithm_versions << ft_1_0
+chicken_pox.algorithm_versions << ft_1_2
