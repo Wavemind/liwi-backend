@@ -1,5 +1,5 @@
 class AlgorithmsController < ApplicationController
-
+  before_action :authenticate_user!
   before_action :set_algorithm, only: [:show, :edit, :update, :archive, :unarchive, :questions]
 
   def index

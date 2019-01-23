@@ -1,5 +1,5 @@
 class AlgorithmVersionsController < ApplicationController
-
+  before_action :authenticate_user!
   before_action :set_algorithm, only: [:show, :new, :create, :edit, :update, :archive, :unarchive]
   before_action :set_algorithm_version, only: [:show, :edit, :update, :archive, :unarchive]
 

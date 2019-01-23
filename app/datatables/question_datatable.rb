@@ -23,15 +23,14 @@ class QuestionDatatable < AjaxDatatablesRails::ActiveRecord
   # Value display
   def data
     records.map do |record|
-      # actions = link_to(I18n.t('show'), group_url(record), class: 'btn btn-outline-primary') + " " + link_to(I18n.t('edit'), edit_group_url(record), class: 'btn btn-outline-info')
       {
         reference: record.reference,
         label: record.label,
         description: record.description,
-        priority: record.priority,
-        category: record.category,
-        answers: record.answers.first.name,
-        answer_type: record.answer_type.display,
+        priority: record.priority.humanize,
+        category: record.category.humanize,
+        answers: record.answers.map(&:label).join(' / '),
+        answer_type: record.answer_type.display_name,
       }
     end
   end
