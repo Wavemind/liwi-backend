@@ -4,7 +4,7 @@ RSpec.describe Answer, type: :model do
 
   before(:each) do
     answer_type = AnswerType.new(value: 'boolean', display: 'radio')
-    @question = Question.create!(reference: 's_9', label: 'skin issue', priority: 'triage', category: 'Symptoms', answer_type: answer_type)
+    @question = Question.create!(reference: 's_9', label: 'skin issue', priority: Question.priorities[:basic], category: Question.categories[:symptom], answer_type: answer_type)
   end
 
   it 'is valid with valid attributes' do

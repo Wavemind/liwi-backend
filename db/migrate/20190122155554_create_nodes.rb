@@ -3,8 +3,8 @@ class CreateNodes < ActiveRecord::Migration[5.2]
     create_table :nodes do |t|
       t.string :label
       t.string :reference
-      t.string :priority
-      t.string :category
+      t.integer :priority
+      t.integer :category
       t.string :type
 
       t.text :description

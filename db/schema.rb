@@ -120,8 +120,8 @@ ActiveRecord::Schema.define(version: 2019_01_22_160938) do
   create_table "nodes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "label"
     t.string "reference"
-    t.string "priority"
-    t.string "category"
+    t.integer "priority"
+    t.integer "category"
     t.string "type"
     t.text "description"
     t.datetime "created_at", null: false

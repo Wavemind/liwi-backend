@@ -7,7 +7,7 @@ RSpec.describe Question, type: :model do
   end
 
   it 'is valid with valid attributes' do
-    question = Question.new(reference: 's_9', label: 'skin issue', priority: 'triage', category: 'Symptoms', answer_type: @answer_type)
+    question = Question.new(reference: 's_9', label: 'skin issue', priority: Question.priorities[:basic], category: Question.categories[:symptom], answer_type: @answer_type)
     expect(question).to be_valid
   end
 
@@ -17,9 +17,9 @@ RSpec.describe Question, type: :model do
   end
 
   it 'is invalid same reference' do
-    question_1 = Question.create!(reference: 's_9', label: 'skin issue', priority: 'triage', category: 'Symptoms', answer_type: @answer_type)
+    question_1 = Question.create!(reference: 's_9', label: 'skin issue', priority: Question.priorities[:basic], category: Question.categories[:symptom], answer_type: @answer_type)
 
-    question = Question.new(reference: 's_9', label: 'skin issue', priority: 'triage', category: 'Symptoms', answer_type: @answer_type)
+    question = Question.new(reference: 's_9', label: 'skin issue', priority: Question.priorities[:basic], category: Question.categories[:symptom], answer_type: @answer_type)
     expect(question).to_not be_valid
   end
 end
