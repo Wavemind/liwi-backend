@@ -3,7 +3,14 @@ Rails.application.routes.draw do
   # Web
   devise_for :users
 
-  root to: 'dashboard#index'
+  authenticated :user do
+    root to: 'dashboard#index'
+  end
+  unauthenticated :user do
+    devise_scope :user do
+      get '/' => 'devise/sessions#new'
+    end
+  end
 
   resources :roles, only: [:index, :show, :new, :create, :edit, :update]
 
