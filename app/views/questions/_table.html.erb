@@ -1,0 +1,14 @@
+<table class="table table-condensed table-hover" id="questions-datatable" data-source="<%= question_algorithm_url(@algorithm, format: :json, id: @algorithm.id) %>">
+  <thead>
+  <tr>
+    <th><%= t('.columns.reference') %></th>
+    <th><%= t('.columns.label') %></th>
+    <th><%= t('.columns.description') %></th>
+    <th><%= t('.columns.priority') %></th>
+    <th><%= t('.columns.category') %></th>
+    <th><%= t('.columns.answers') %></th>
+    <th><%= t('.columns.answer_type') %></th>
+  </tr>
+  </thead>
+  <tbody></tbody>
+</table>

@@ -18,6 +18,7 @@ Rails.application.routes.draw do
     member do
       put 'archive', to: 'algorithms#archive', as: 'archive'
       put 'unarchive', to: 'algorithms#unarchive', as: 'unarchive'
+      get 'questions', to: 'algorithms#questions', as: 'question'
     end
 
     resources :algorithm_versions, only: [:index, :show, :new, :create, :edit, :update] do
@@ -27,6 +28,8 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  resources :questions, only: [:index]
 
   resources :groups, only: [:index, :show, :new, :create, :edit, :update] do
     delete 'users/:user_id/remove_user', to: 'groups#remove_user', as: 'remove_user'

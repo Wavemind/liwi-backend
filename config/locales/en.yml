@@ -14,6 +14,10 @@ en:
       title: "Add an algorithm"
     edit:
       title: "Edit this algorithm"
+    show:
+      title: "Details of %{name}"
+      subtitle_versions: "Versions list"
+      subtitle_questions: "Available questions"
   algorithm_versions:
     index:
       columns:
@@ -28,6 +32,8 @@ en:
       title: "Add an algorithm"
     edit:
       title: "Edit this algorithm"
+    show:
+      title: "Details of %{name} - version %{version}"
   archive: "Archive"
   deactivated: "Deactivate"
   devices:
@@ -108,4 +114,14 @@ en:
       last_account_connection: "Last account connection "
       role: "Role "
       title: "Details of %{name}"
+  questions:
+    table:
+      columns:
+        label: "Label"
+        description: "Description"
+        reference: "Reference"
+        priority: "Priority"
+        category: "Category"
+        answers: "Answers"
+        answer_type: "Type of answers"
 
