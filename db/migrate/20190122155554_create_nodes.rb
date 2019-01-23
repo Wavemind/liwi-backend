@@ -5,6 +5,7 @@ class CreateNodes < ActiveRecord::Migration[5.2]
       t.string :reference
       t.string :priority
       t.string :category
+      t.string :type
 
       t.text :description
 

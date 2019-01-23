@@ -6,7 +6,7 @@ class CreateAnswers < ActiveRecord::Migration[5.2]
       t.string :operator
       t.string :value
 
-      t.references :node, foreign_key: true, index: true
+      t.belongs_to :question
 
       t.timestamps
     end

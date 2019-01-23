@@ -68,10 +68,10 @@ ActiveRecord::Schema.define(version: 2019_01_22_160938) do
     t.string "label"
     t.string "operator"
     t.string "value"
-    t.bigint "node_id"
+    t.bigint "question_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["node_id"], name: "index_answers_on_node_id"
+    t.index ["question_id"], name: "index_answers_on_question_id"
   end
 
   create_table "available_questions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -122,6 +122,7 @@ ActiveRecord::Schema.define(version: 2019_01_22_160938) do
     t.string "reference"
     t.string "priority"
     t.string "category"
+    t.string "type"
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -183,7 +184,6 @@ ActiveRecord::Schema.define(version: 2019_01_22_160938) do
   add_foreign_key "algorithm_versions", "algorithms"
   add_foreign_key "algorithm_versions", "users"
   add_foreign_key "algorithms", "users"
-  add_foreign_key "answers", "nodes"
   add_foreign_key "available_questions", "algorithms"
   add_foreign_key "available_questions", "nodes"
   add_foreign_key "group_users", "groups"
