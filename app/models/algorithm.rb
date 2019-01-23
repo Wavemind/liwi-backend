@@ -3,7 +3,7 @@ class Algorithm < ApplicationRecord
 
   has_many :algorithm_versions
   has_many :available_questions
-  has_many :questions, throught: :available_questions
+  has_many :questions, through: :available_questions
 
   belongs_to :user
 
