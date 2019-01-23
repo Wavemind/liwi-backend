@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 2019_01_22_160938) do
   create_table "algorithm_versions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "version"
     t.text "json"
-    t.boolean "archived"
+    t.boolean "archived", default: false
     t.bigint "user_id"
     t.bigint "algorithm_id"
     t.datetime "created_at", null: false
@@ -49,7 +49,7 @@ ActiveRecord::Schema.define(version: 2019_01_22_160938) do
   create_table "algorithms", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.string "description"
-    t.boolean "archived"
+    t.boolean "archived", default: false
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

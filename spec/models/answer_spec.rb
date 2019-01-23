@@ -13,7 +13,7 @@ RSpec.describe Answer, type: :model do
   end
 
   it 'is invalid with invalid attributes' do
-    answer = Answer.new(reference: 's_9_1', label: nil, operator: nil, value: 'true', question: @question)
+    answer = Answer.new(reference: nil, label: nil, operator: nil, value: 'true', question: @question)
     expect(answer).to_not be_valid
   end
 
