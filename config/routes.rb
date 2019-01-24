@@ -26,6 +26,8 @@ Rails.application.routes.draw do
         put 'archive', to: 'algorithm_versions#archive', as: 'archive'
         put 'unarchive', to: 'algorithm_versions#unarchive', as: 'unarchive'
       end
+
+      resources :diagnostics, only: [:index, :new, :create, :edit, :update]
     end
   end
 

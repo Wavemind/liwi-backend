@@ -19,7 +19,7 @@ en:
       subtitle_versions: "Versions list"
       subtitle_questions: "Available questions"
   algorithm_versions:
-    index:
+    table:
       columns:
         id: "ID"
         version: "Version"
@@ -57,6 +57,21 @@ en:
       tablet_connection: "Tablet connection"
       title: "Details of %{name}"
       user_actions: "User actions"
+  diagnostics:
+    table:
+      columns:
+        id: "ID"
+        reference: "Reference"
+        label: "Name"
+        last_update: "Last update"
+        actions: "Actions"
+      title: "Algorithms versions"
+    new:
+      title: "Add a diagnostic"
+    edit:
+      title: "Edit this diagnostic"
+    show:
+      title: "Details of %{name} - version %{version}"
   edit: "Edit"
   flash_message:
     success_created: "Data was successfully created"

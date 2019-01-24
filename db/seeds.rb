@@ -101,6 +101,7 @@ AvailableQuestion.create!(algorithm: fever_travel, question: convulsion)
 AvailableQuestion.create!(algorithm: fever_travel, question: drinking_status)
 AvailableQuestion.create!(algorithm: fever_travel, question: emesis)
 
+# Diagnostics
 malaria = Diagnostic.new(label: 'Malaria', reference: 'DD_4')
 impetigo = Diagnostic.new(label: 'IMPETIGO', reference: 'DD_7')
 chicken_pox = Diagnostic.new(label: 'Chicken pox', reference: 'DD_8')
