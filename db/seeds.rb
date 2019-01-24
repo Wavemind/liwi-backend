@@ -75,22 +75,22 @@ muac = Question.create!(answer_type: input_float, label: 'What is MUAC size ?', 
 skin_lesion_size = Question.create!(answer_type: input_float, label: 'What is the size of the skin lesion ?', reference: 'P21', category: Question.categories[:physical_exam], priority: Question.priorities[:basic])
 
 # Answers
-Answer.create!(question: age, reference: 'E1_1', label: nil, value: '{12}', operator: '{>=}')
-Answer.create!(question: age, reference: 'E1_2', label: nil, value: '{6, 12}', operator: '{>=, <}')
-Answer.create!(question: age, reference: 'E1_3', label: nil, value: '{2, 6}', operator: '{>=, <}')
-Answer.create!(question: age, reference: 'E1_4', label: nil, value: '{2}', operator: '{<}')
-Answer.create!(question: convulsion, reference: 'S3_1', label: nil, value: '{2}', operator: '{>=}')
-Answer.create!(question: convulsion, reference: 'S3_2', label: nil, value: '{2}', operator: '{<}')
-Answer.create!(question: drinking_status, reference: 'S4_1', label: 'yes', value: nil, operator: nil)
-Answer.create!(question: drinking_status, reference: 'S4_2', label: 'no', value: nil, operator: nil)
-Answer.create!(question: emesis, reference: 'S5_1', label: nil, value: '{3}', operator: '{>=}')
-Answer.create!(question: emesis, reference: 'S5_2', label: nil, value: '{3}', operator: '{<}')
-Answer.create!(question: muac, reference: 'P6_1', label: nil, value: '{12.5}', operator: '{>=}')
-Answer.create!(question: muac, reference: 'P6_2', label: nil, value: '{11.5, 12.5}', operator: '{>=, <}')
-Answer.create!(question: muac, reference: 'P6_3', label: nil, value: '{11.5}', operator: '{<}')
-Answer.create!(question: skin_lesion_size, reference: 'P21_1', label: nil, value: '{5}', operator: '{>=}')
-Answer.create!(question: skin_lesion_size, reference: 'P21_2', label: nil, value: '{2.5, 5}', operator: '{>=, <}')
-Answer.create!(question: skin_lesion_size, reference: 'P21_3', label: nil, value: '{2.5}', operator: '{<}')
+Answer.create!(question: age, reference: 'E_1_1', label: nil, value: '{12}', operator: '{>=}')
+Answer.create!(question: age, reference: 'E_1_2', label: nil, value: '{6, 12}', operator: '{>=, <}')
+Answer.create!(question: age, reference: 'E_1_3', label: nil, value: '{2, 6}', operator: '{>=, <}')
+Answer.create!(question: age, reference: 'E_1_4', label: nil, value: '{2}', operator: '{<}')
+Answer.create!(question: convulsion, reference: 'S_3_1', label: nil, value: '{2}', operator: '{>=}')
+Answer.create!(question: convulsion, reference: 'S_3_2', label: nil, value: '{2}', operator: '{<}')
+Answer.create!(question: drinking_status, reference: 'S_4_1', label: 'yes', value: nil, operator: nil)
+Answer.create!(question: drinking_status, reference: 'S_4_2', label: 'no', value: nil, operator: nil)
+Answer.create!(question: emesis, reference: 'S_5_1', label: nil, value: '{3}', operator: '{>=}')
+Answer.create!(question: emesis, reference: 'S_5_2', label: nil, value: '{3}', operator: '{<}')
+Answer.create!(question: muac, reference: 'P_6_1', label: nil, value: '{12.5}', operator: '{>=}')
+Answer.create!(question: muac, reference: 'P_6_2', label: nil, value: '{11.5, 12.5}', operator: '{>=, <}')
+Answer.create!(question: muac, reference: 'P_6_3', label: nil, value: '{11.5}', operator: '{<}')
+Answer.create!(question: skin_lesion_size, reference: 'P_2_1_1', label: nil, value: '{5}', operator: '{>=}')
+Answer.create!(question: skin_lesion_size, reference: 'P_2_1_2', label: nil, value: '{2.5, 5}', operator: '{>=, <}')
+Answer.create!(question: skin_lesion_size, reference: 'P_2_1_3', label: nil, value: '{2.5}', operator: '{<}')
 
 # Available questions per algorithm
 AvailableQuestion.create!(algorithm: epoct, question: age)
@@ -108,3 +108,7 @@ chicken_pox = Diagnostic.new(label: 'Chicken pox', reference: 'DD_8')
 malaria.algorithm_versions << epoc_first
 impetigo.algorithm_versions << ft_1_0
 chicken_pox.algorithm_versions << ft_1_2
+
+malaria.save
+impetigo.save
+chicken_pox.save
