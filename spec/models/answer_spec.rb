@@ -8,7 +8,7 @@ RSpec.describe Answer, type: :model do
   end
 
   it 'is valid with valid attributes' do
-    answer = Answer.new(reference: 's_9_1', label: 'True', operator: nil, value: 'true', question: @question)
+    answer = Answer.new(reference: '1', label: 'True', operator: nil, value: 'true', question: @question)
     expect(answer).to be_valid
   end
 
@@ -18,8 +18,9 @@ RSpec.describe Answer, type: :model do
   end
 
   it 'is invalid same reference' do
-    answer_1 = Answer.create!(reference: 's_9_1', label: 'True', operator: nil, value: 'true', question: @question)
-    answer = Answer.new(reference: 's_9_1', label: '< 6 %', operator: '<', value: 'true', question: @question)
+    answer_1 = Answer.create!(reference: '4', label: 'True', operator: nil, value: 'true', question: @question)
+    answer = Answer.new(reference: 's_9_4', label: '< 6 %', operator: '<', value: 'true', question: @question)
+
     expect(answer).to_not be_valid
   end
 end
