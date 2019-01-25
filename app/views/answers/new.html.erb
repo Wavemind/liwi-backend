@@ -7,14 +7,14 @@
         <%= render 'answers/form_input', f: ff %>
       <% end %>
       <div class='links'>
-        <%= link_to_add_association 'Ajouter', f, :answers, partial: 'answers/form_input' %>
+        <%= link_to_add_association "<button class='btn btn-outline-success'>#{t('add')}</button".html_safe, f, :answers, partial: 'answers/form_input' %>
       </div>
     <% else %>
       <%= f.simple_fields_for :answers do |ff| %>
         <%= render 'answers/form_multiple', f: ff %>
       <% end %>
       <div class='links'>
-        <%= link_to_add_association 'Ajouter', f, :answers, partial: 'answers/form_multiple' %>
+        <%= link_to_add_association "<button class='btn btn-outline-success'>#{t('add')}</button".html_safe, f, :answers, partial: 'answers/form_multiple' %>
       </div>
     <% end %>
 
