@@ -35,6 +35,7 @@ class UsersController < ApplicationController
     end
   end
 
+  # POST users/:id/activated
   # @params id [Integer] id of user
   # @return redirect to users#index with flash message
   # Activate user account
@@ -48,6 +49,7 @@ class UsersController < ApplicationController
     end
   end
 
+  # POST users/:id/deactivated
   # @params id [Integer] id of user
   # @return redirect to users#index with flash message
   # Deactivate user account

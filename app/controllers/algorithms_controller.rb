@@ -36,6 +36,7 @@ class AlgorithmsController < ApplicationController
     end
   end
 
+  # PUT algorithms/:id/archive
   # @params algorithm [Algorithm] algorithm to archive
   # @return redirect to algorithms#index with flash message
   # Archive an algorithm. There is no impact for the user but if a parent is archived, the versions are considered archived too
@@ -49,6 +50,7 @@ class AlgorithmsController < ApplicationController
     end
   end
 
+  # PUT algorithms/:id/unarchive
   # @params algorithm [Algorithm] algorithm to archive
   # @return redirect to algorithms#index with flash message
   # Unarchive an algorithm.

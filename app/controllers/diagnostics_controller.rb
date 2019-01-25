@@ -5,7 +5,6 @@ class DiagnosticsController < ApplicationController
   before_action :set_diagnostic, only: [:show, :new, :edit, :update]
 
   def index
-    puts 'Cé la dance dé kanar'
     respond_to do |format|
       format.html
       format.json { render json: DiagnosticDatatable.new(params, view_context: view_context) }
@@ -36,42 +35,6 @@ class DiagnosticsController < ApplicationController
       redirect_to algorithm_algorithm_version_diagnostics_url, notice: t('flash_message.success_updated')
     else
       render :edit
-    end
-  end
-
-  # @params diagnostic [Diagnostic] diagnostic to archive
-  # @return redirect to diagnostics#index with flash message
-  # Archive an diagnostic. There is no impact for the user but if a parent is archived, the versions are considered archived too
-  def archive
-    @diagnostic.archived = true
-
-    if @diagnostic.save
-      redirect_to algorithm_algorithm_version_diagnostics_url, notice: t('flash_message.success_created')
-    else
-      redirect_to algorithm_algorithm_version_diagnostics_url, danger: t('flash_message.update_fail')
-    end
-  end
-
-  # @params diagnostic [Diagnostic] diagnostic to archive
-  # @return redirect to diagnostics#index with flash message
-  # Unarchive an diagnostic.
-  def unarchive
-    @diagnostic.archived = false
-
-    if @diagnostic.save
-      redirect_to algorithm_algorithm_version_diagnostics_url, notice: t('flash_message.success_created')
-    else
-      redirect_to algorithm_algorithm_version_diagnostics_url, danger: t('flash_message.update_fail')
-    end
-  end
-
-  # @params diagnostic [Diagnostic] current diagnostic
-  # @return json of question
-  # All questions available for current diagnostic
-  def questions
-    respond_to do |format|
-      format.html
-      format.json { render json: QuestionDatatable.new(params, view_context: view_context) }
     end
   end
 
