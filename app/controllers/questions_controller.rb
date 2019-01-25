@@ -7,6 +7,10 @@ class QuestionsController < ApplicationController
     @question = Question.new
   end
 
+  def edit
+
+  end
+
   def create
     @question = Question.new(question_params)
     @question.algorithms << @algorithm
@@ -21,7 +25,7 @@ class QuestionsController < ApplicationController
 
   def update
     if @question.update(question_params)
-      redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_updated')
+      render 'answers/edit'
     else
       render :edit
     end

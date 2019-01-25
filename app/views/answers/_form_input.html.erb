@@ -1,6 +1,6 @@
 <div class="nested-fields">
   <div class="row">
-    <%= f.input :reference, prepend: "#{@question.reference}_" %>
+    <%= f.input :reference, prepend: (f.object.persisted? ? false : "#{@question.reference}_"), disabled: f.object.persisted? %>
     <%= f.input :value %>
     <%= f.input :operator %>
 
