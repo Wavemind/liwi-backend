@@ -16,7 +16,12 @@ class QuestionsController < ApplicationController
     @question.algorithms << @algorithm
 
     if @question.save
+
+      # Create a new first answer for the form view.
       @question.answers << Answer.new
+      # Clear the error messages to not have any validation errors before filling the form
+      @question.answers.first.errors.clear
+
       render 'answers/new'
     else
       render :new
