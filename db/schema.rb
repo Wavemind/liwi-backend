@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_22_160938) do
+ActiveRecord::Schema.define(version: 2019_01_25_142228) do
 
   create_table "activities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.decimal "longitude", precision: 13, scale: 9
@@ -93,6 +93,15 @@ ActiveRecord::Schema.define(version: 2019_01_22_160938) do
     t.integer "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "diagnostic_health_cares", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "diagnostic_id"
+    t.bigint "health_care_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["diagnostic_id"], name: "index_diagnostic_health_cares_on_diagnostic_id"
+    t.index ["health_care_id"], name: "index_diagnostic_health_cares_on_health_care_id"
   end
 
   create_table "diagnostics", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|

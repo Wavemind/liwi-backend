@@ -1,0 +1,3 @@
+class Treatment < HealthCare
+
+end

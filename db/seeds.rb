@@ -105,9 +105,28 @@ malaria = Diagnostic.new(label: 'Malaria', reference: 'DD_4')
 impetigo = Diagnostic.new(label: 'IMPETIGO', reference: 'DD_7')
 chicken_pox = Diagnostic.new(label: 'Chicken pox', reference: 'DD_8')
 
+
+# Treatments
+paracetamol = Treatment.create!(reference: 'T4', label: 'Take 400mg of paracetamol')
+cephalexin = Treatment.create!(reference: 'T4', label: 'Take 100mg of cephalexin')
+vit_a = Treatment.create!(reference: 'T4', label: 'Take 40mg of vitamin A')
+
+# Managements
+wheelchair = Management.create!(reference: 'M5', label: 'Use a wheelchair for 2 months.')
+crutch = Management.create!(reference: 'M6', label: 'Use crutch for 2 months.')
+
+
 malaria.algorithm_versions << epoc_first
 impetigo.algorithm_versions << ft_1_0
 chicken_pox.algorithm_versions << ft_1_2
+
+malaria.health_cares << paracetamol
+malaria.health_cares << vit_a
+malaria.health_cares << crutch
+impetigo.health_cares << cephalexin
+impetigo.health_cares << crutch
+chicken_pox.health_cares << cephalexin
+chicken_pox.health_cares << wheelchair
 
 malaria.save
 impetigo.save
