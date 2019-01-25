@@ -34,6 +34,9 @@ en:
       title: "Edit this algorithm"
     show:
       title: "Details of %{name} - version %{version}"
+  answers:
+    new:
+      title: "Related answers of %{name} question"
   archive: "Archive"
   deactivated: "Deactivate"
   devices:
@@ -120,7 +123,7 @@ en:
         category: "Category"
         answers: "Answers"
         answer_type: "Type of answers"
-  remove: "Remove user"
+  remove: "Remove"
   roles:
     index:
       title: "Roles"

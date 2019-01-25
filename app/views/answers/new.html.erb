@@ -1,4 +1,4 @@
-<h1><%= t('.title') %></h1>
+<h1><%= t('.title', name: @question.label) %></h1>
 
 <div class="row justify-content-center">
   <%= simple_form_for [@algorithm, @question], html: { class: 'form-horizontal' }, url: answers_algorithm_question_url(@algorithm, @question), method: :put, wrapper: :input_group do |f| %>

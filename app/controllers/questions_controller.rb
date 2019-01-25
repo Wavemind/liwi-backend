@@ -13,7 +13,7 @@ class QuestionsController < ApplicationController
 
     if @question.save
       @question.answers << Answer.new
-      render :new_answer
+      render 'answers/new'
     else
       render :new
     end
@@ -27,14 +27,14 @@ class QuestionsController < ApplicationController
     end
   end
 
-  #
-  #
-  #
+  # @params question [Question] object question contain multiple answers
+  # @return redirect to algorithms#index with flash message
+  # Create answers related to the current question
   def answers
     if @question.update(question_params)
       redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_updated')
     else
-      render :new_answer
+      render 'answers/new'
     end
   end
 
