@@ -35,7 +35,7 @@ class AlgorithmDatatable < AjaxDatatablesRails::ActiveRecord
   end
 
   def get_raw_records
-    Algorithm.all
+    Algorithm.all.includes(:user)
   end
 
 end

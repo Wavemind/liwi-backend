@@ -1,6 +1,6 @@
 class AlgorithmsController < ApplicationController
-
-  before_action :set_algorithm, only: [:show, :edit, :update, :archive, :unarchive]
+  before_action :authenticate_user!
+  before_action :set_algorithm, only: [:show, :edit, :update, :archive, :unarchive, :questions]
 
   def index
     respond_to do |format|
@@ -59,6 +59,16 @@ class AlgorithmsController < ApplicationController
       redirect_to algorithms_url, notice: t('flash_message.success_created')
     else
       redirect_to algorithms_url, danger: t('flash_message.update_fail')
+    end
+  end
+
+  # @params algorithm [Algorithm] current algorithm
+  # @return json of question
+  # All questions available for current algorithm
+  def questions
+    respond_to do |format|
+      format.html
+      format.json { render json: QuestionDatatable.new(params, view_context: view_context) }
     end
   end
 

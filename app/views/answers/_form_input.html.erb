@@ -1,0 +1,8 @@
+<div class="nested-fields">
+  <div class="row">
+    <div class="col align-self-center"><%= f.input :reference, prepend: (f.object.persisted? ? false : "#{@question.reference}_"), disabled: f.object.persisted? %></div>
+    <div class="col align-self-center"><%= f.input :value %></div>
+    <div class="col align-self-center"><%= f.input :operator %></div>
+    <div class="col align-self-center"><%= link_to_remove_association "<button class='btn btn-outline-danger'>#{t('remove')}</button".html_safe, f %></div>
+  </div>
+</div>
