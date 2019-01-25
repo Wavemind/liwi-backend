@@ -1,24 +1,20 @@
 <h1><%= t('.title') %></h1>
 
 <div class="row justify-content-center">
-  <%= simple_form_for [@algorithm, @question], html: { class: 'form-horizontal' }, url: answers_algorithm_question_url(@algorithm, @question), method: :put do |f| %>
+  <%= simple_form_for [@algorithm, @question], html: { class: 'form-horizontal' }, url: answers_algorithm_question_url(@algorithm, @question), method: :put, wrapper: :input_group do |f| %>
     <% if @question.answer_type.display == 'Input' %>
-      <div id='invoice_line_bills' class='form-group'>
-        <%= f.simple_fields_for :answers do |ff| %>
-          <%= render 'form_answer_input', f: ff %>
-        <% end %>
-        <div class='links'>
-          <%= link_to_add_association 'Ajouter', f, :answers, partial: 'form_answer_input' %>
-        </div>
+      <%= f.simple_fields_for :answers do |ff| %>
+        <%= render 'form_answer_input', f: ff %>
+      <% end %>
+      <div class='links'>
+        <%= link_to_add_association 'Ajouter', f, :answers, partial: 'form_answer_input' %>
       </div>
     <% else %>
-      <div id='invoice_line_bills' class='form-group'>
-        <%= f.simple_fields_for :answers do |ff| %>
-          <%= render 'form_answer_multiple', f: ff %>
-        <% end %>
-        <div class='links'>
-          <%= link_to_add_association 'Ajouter', f, :answers, partial: 'form_answer_multiple' %>
-        </div>
+      <%= f.simple_fields_for :answers do |ff| %>
+        <%= render 'form_answer_multiple', f: ff %>
+      <% end %>
+      <div class='links'>
+        <%= link_to_add_association 'Ajouter', f, :answers, partial: 'form_answer_multiple' %>
       </div>
     <% end %>
 
