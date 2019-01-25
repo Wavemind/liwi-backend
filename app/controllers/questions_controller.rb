@@ -7,13 +7,17 @@ class QuestionsController < ApplicationController
     @question = Question.new
   end
 
+  def edit
+
+  end
+
   def create
     @question = Question.new(question_params)
     @question.algorithms << @algorithm
 
     if @question.save
 
-      # Create a new first answer for the form view.
+      # Create a new first answer for the form view
       @question.answers << Answer.new
       # Clear the error messages to not have any validation errors before filling the form
       @question.answers.first.errors.clear
@@ -26,7 +30,7 @@ class QuestionsController < ApplicationController
 
   def update
     if @question.update(question_params)
-      redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_updated')
+      render 'answers/edit'
     else
       render :edit
     end
@@ -36,6 +40,7 @@ class QuestionsController < ApplicationController
   # @return redirect to algorithms#index with flash message
   # Create answers related to the current question
   def answers
+
     if @question.update(question_params)
       redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_updated')
     else

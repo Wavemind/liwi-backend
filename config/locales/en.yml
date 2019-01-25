@@ -36,7 +36,9 @@ en:
       title: "Details of %{name} - version %{version}"
   answers:
     new:
-      title: "Related answers of %{name} question"
+      title: "Create related answers of %{name} question"
+    edit:
+      title: "Edit related answers of %{name} question"
   archive: "Archive"
   deactivated: "Deactivate"
   devices:
@@ -124,6 +126,8 @@ en:
         answers: "Answers"
         answer_type: "Type of answers"
         actions: "Actions"
+    edit:
+      title: "Edit question"
   remove: "Remove"
   roles:
     index:
