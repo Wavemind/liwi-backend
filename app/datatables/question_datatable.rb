@@ -3,6 +3,8 @@ class QuestionDatatable < AjaxDatatablesRails::ActiveRecord
   extend Forwardable
 
   # Helpers
+  def_delegator :@view, :link_to
+  def_delegator :@view, :edit_algorithm_question_url
 
   def initialize(params, opts = {})
     @view = opts[:view_context]
@@ -23,6 +25,7 @@ class QuestionDatatable < AjaxDatatablesRails::ActiveRecord
   # Value display
   def data
     records.map do |record|
+      actions = link_to(I18n.t('edit'), edit_algorithm_question_url(params[:id], record), class: 'btn btn-outline-info')
       {
         reference: record.reference,
         label: record.label,
@@ -31,6 +34,7 @@ class QuestionDatatable < AjaxDatatablesRails::ActiveRecord
         category: I18n.t("questions.categories.#{record.category}"),
         answers: record.answers.map(&:label).join(' / '),
         answer_type: record.answer_type.display_name,
+        actions: actions
       }
     end
   end

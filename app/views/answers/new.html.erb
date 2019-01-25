@@ -4,17 +4,17 @@
   <%= simple_form_for [@algorithm, @question], html: { class: 'form-horizontal' }, url: answers_algorithm_question_url(@algorithm, @question), method: :put, wrapper: :input_group do |f| %>
     <% if @question.answer_type.display == 'Input' %>
       <%= f.simple_fields_for :answers do |ff| %>
-        <%= render 'form_answer_input', f: ff %>
+        <%= render 'answers/form_input', f: ff %>
       <% end %>
       <div class='links'>
-        <%= link_to_add_association 'Ajouter', f, :answers, partial: 'form_answer_input' %>
+        <%= link_to_add_association 'Ajouter', f, :answers, partial: 'answers/form_input' %>
       </div>
     <% else %>
       <%= f.simple_fields_for :answers do |ff| %>
-        <%= render 'form_answer_multiple', f: ff %>
+        <%= render 'answers/form_multiple', f: ff %>
       <% end %>
       <div class='links'>
-        <%= link_to_add_association 'Ajouter', f, :answers, partial: 'form_answer_multiple' %>
+        <%= link_to_add_association 'Ajouter', f, :answers, partial: 'answers/form_multiple' %>
       </div>
     <% end %>
 

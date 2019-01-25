@@ -123,6 +123,7 @@ en:
         category: "Category"
         answers: "Answers"
         answer_type: "Type of answers"
+        actions: "Actions"
   remove: "Remove"
   roles:
     index:

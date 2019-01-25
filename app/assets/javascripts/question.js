@@ -14,6 +14,7 @@ jQuery(document).ready(function () {
       { "data": "category" },
       { "data": "answers" },
       { "data": "answer_type" },
+      { "data": "actions" },
     ]
   });
 });
