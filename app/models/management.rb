@@ -1,0 +1,3 @@
+class Management < HealthCare
+
+end
