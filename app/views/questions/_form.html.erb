@@ -1,0 +1,12 @@
+<%= simple_form_for [@algorithm, @question], html: { class: 'form-horizontal' } do |f| %>
+
+  <%= f.input :reference %>
+  <%= f.input :label %>
+  <%= f.input :description, as: :text %>
+  <%= f.input :priority, collection: Question.priorities.map { |k, v| [t("question.priorities.#{k}"), k] }, prompt: t('select') %>
+  <%= f.input :category, collection: Question.categories.map { |k, v| [t("question.categories.#{k}"), k] }, prompt: t('select') %>
+
+  <%= f.association :answer_type, collection: AnswerType.all, label_method: :display_name, prompt: t('select')  %>
+
+  <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
+<% end %>

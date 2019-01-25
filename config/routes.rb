@@ -29,9 +29,15 @@ Rails.application.routes.draw do
 
       resources :diagnostics, only: [:index, :new, :create, :edit, :update]
     end
-  end
 
-  resources :questions, only: [:index]
+    resources :questions, only: [:new, :create, :edit, :update] do
+      member do
+        put 'answers'
+      end
+
+      resources :answers, only: [:new, :create, :edit, :update]
+    end
+  end
 
   resources :groups, only: [:index, :show, :new, :create, :edit, :update] do
     delete 'users/:user_id/remove_user', to: 'groups#remove_user', as: 'remove_user'

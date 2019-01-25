@@ -31,10 +31,6 @@ class DiagnosticDatatable < AjaxDatatablesRails::ActiveRecord
   end
 
   def get_raw_records
-    puts '****'
-    puts '****'
-    puts '****'
-    puts '****'
     AlgorithmVersion.find(params[:id]).diagnostics
   end
 end

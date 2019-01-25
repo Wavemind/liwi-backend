@@ -98,6 +98,28 @@ en:
     show:
       title: "Details of %{name}"
   prompt: "Select"
+  questions:
+    categories:
+      comorbidity: "Comorbidity"
+      exposure: "Exposure"
+      symptom: "Symptom"
+      physical_exam: "Physical exam"
+      test: "Test"
+    new:
+      title: "New question"
+    priorities:
+      basic: "Basic"
+      triage: "Triage"
+      priority: "Priority"
+    table:
+      columns:
+        label: "Label"
+        description: "Description"
+        reference: "Reference"
+        priority: "Priority"
+        category: "Category"
+        answers: "Answers"
+        answer_type: "Type of answers"
   remove: "Remove user"
   roles:
     index:
@@ -107,6 +129,7 @@ en:
     edit:
       title: "Edit role"
   save: "Save"
+  select: "Please select"
   show: "Show"
   unarchive: "Unarchive"
   users:
@@ -129,14 +152,3 @@ en:
       last_account_connection: "Last account connection "
       role: "Role "
       title: "Details of %{name}"
-  questions:
-    table:
-      columns:
-        label: "Label"
-        description: "Description"
-        reference: "Reference"
-        priority: "Priority"
-        category: "Category"
-        answers: "Answers"
-        answer_type: "Type of answers"
-

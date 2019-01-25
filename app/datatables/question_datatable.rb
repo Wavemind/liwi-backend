@@ -27,8 +27,8 @@ class QuestionDatatable < AjaxDatatablesRails::ActiveRecord
         reference: record.reference,
         label: record.label,
         description: record.description,
-        priority: record.priority.humanize,
-        category: record.category.humanize,
+        priority: I18n.t("questions.priorities.#{record.priority}"),
+        category: I18n.t("questions.categories.#{record.category}"),
         answers: record.answers.map(&:label).join(' / '),
         answer_type: record.answer_type.display_name,
       }
