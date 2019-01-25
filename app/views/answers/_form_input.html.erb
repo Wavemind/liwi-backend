@@ -1,0 +1,10 @@
+<div class="nested-fields">
+  <div class="row">
+    <%= f.input :reference %>
+    <%= f.input :value %>
+    <%= f.input :operator %>
+
+    <%= link_to_remove_association "<button class='btn btn-outline-danger'>#{t('remove')}</button".html_safe, ff %>
+  </div>
+</div>
+
