@@ -36,6 +36,6 @@ class AlgorithmVersionDatatable < AjaxDatatablesRails::ActiveRecord
   end
 
   def get_raw_records
-    Algorithm.find(params[:id]).algorithm_versions
+    Algorithm.find(params[:id]).algorithm_versions.includes(:user)
   end
 end

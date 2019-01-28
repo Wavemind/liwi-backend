@@ -1,0 +1,13 @@
+<table class="table table-condensed table-hover" id="diagnostics-datatable" data-source="<%= algorithm_algorithm_version_diagnostics_url(@algorithm, @algorithm_version, format: :json, id: @algorithm_version.id) %>">
+  <thead>
+    <tr>
+      <th><%= t('.columns.id') %></th>
+      <th><%= t('.columns.reference') %></th>
+      <th><%= t('.columns.label') %></th>
+      <th><%= t('.columns.last_update') %></th>
+      <th><%= t('.columns.actions') %></th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+

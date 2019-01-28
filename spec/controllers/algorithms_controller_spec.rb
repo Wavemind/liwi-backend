@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe AlgorithmsController, type: :controller do
+  login_user
+
   before(:each) do
     role = Role.new(name: 'administrator')
     user = User.new(first_name: 'Foo', last_name: 'Bar', email: 'foo.bar@gmail.com', role: role)

@@ -35,6 +35,7 @@ class GroupsController < ApplicationController
     end
   end
 
+  # DELETE groups/group_id/users/:user_id/remove_user
   # @params group_id [Integer] id of group
   # @params user_id [Integer] id of user
   # @return redirect to group#show with flash message
@@ -50,6 +51,7 @@ class GroupsController < ApplicationController
     end
   end
 
+  # POST groups/:id/add_user
   # @params group_id [Integer] id of group
   # @params user_id [Integer] id of user
   # @return redirect to group#show with flash message
