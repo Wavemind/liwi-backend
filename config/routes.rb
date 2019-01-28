@@ -19,6 +19,8 @@ Rails.application.routes.draw do
       put 'archive', to: 'algorithms#archive', as: 'archive'
       put 'unarchive', to: 'algorithms#unarchive', as: 'unarchive'
       get 'questions', to: 'algorithms#questions', as: 'question'
+      get 'treatments', to: 'algorithms#treatments', as: 'treatment'
+      get 'managements', to: 'algorithms#managements', as: 'management'
     end
 
     resources :algorithm_versions, only: [:index, :show, :new, :create, :edit, :update] do
@@ -27,7 +29,9 @@ Rails.application.routes.draw do
         put 'unarchive', to: 'algorithm_versions#unarchive', as: 'unarchive'
       end
 
-      resources :diagnostics, only: [:index, :new, :create, :edit, :update]
+      resources :diagnostics, only: [:index, :new, :create, :edit, :update] do
+        resources :treatments, only: [:new, :create, :edit, :update]
+      end
     end
 
     resources :questions, only: [:new, :create, :edit, :update] do
@@ -37,6 +41,11 @@ Rails.application.routes.draw do
 
       resources :answers, only: [:new, :create, :edit, :update]
     end
+
+    resources :treatments, only: [:new, :create, :edit, :update]
+
+    resources :managements, only: [:new, :create, :edit, :update]
+
   end
 
   resources :groups, only: [:index, :show, :new, :create, :edit, :update] do

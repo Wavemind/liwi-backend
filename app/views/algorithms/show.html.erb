@@ -14,3 +14,17 @@
 <% end %>
 
 <%= render 'questions/table' %>
+
+<h2><%= t('.subtitle_treatments') %></h2>
+<%= link_to new_algorithm_treatment_url(@algorithm) do %>
+  <button type="button" class="btn btn-outline-secondary"><%= t('add') %></button>
+<% end %>
+
+<%= render 'treatments/table' %>
+
+<h2><%= t('.subtitle_managements') %></h2>
+<%= link_to new_algorithm_management_url(@algorithm) do %>
+  <button type="button" class="btn btn-outline-secondary"><%= t('add') %></button>
+<% end %>
+
+<%= render 'managements/table' %>
