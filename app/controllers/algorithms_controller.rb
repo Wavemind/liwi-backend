@@ -63,12 +63,32 @@ class AlgorithmsController < ApplicationController
   end
 
   # @params algorithm [Algorithm] current algorithm
+  # @return json of management
+  # All managements available for current algorithm
+  def managements
+    respond_to do |format|
+      format.html
+      format.json { render json: ManagementDatatable.new(params, view_context: view_context) }
+    end
+  end
+
+  # @params algorithm [Algorithm] current algorithm
   # @return json of question
   # All questions available for current algorithm
   def questions
     respond_to do |format|
       format.html
       format.json { render json: QuestionDatatable.new(params, view_context: view_context) }
+    end
+  end
+
+  # @params algorithm [Algorithm] current algorithm
+  # @return json of treatment
+  # All treatments available for current algorithm
+  def treatments
+    respond_to do |format|
+      format.html
+      format.json { render json: TreatmentDatatable.new(params, view_context: view_context) }
     end
   end
 
@@ -85,5 +105,4 @@ class AlgorithmsController < ApplicationController
       :description,
     )
   end
-
 end

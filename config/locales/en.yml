@@ -15,9 +15,11 @@ en:
     edit:
       title: "Edit this algorithm"
     show:
-      title: "Details of %{name}"
-      subtitle_versions: "Versions list"
+      subtitle_managements: "Available managements"
       subtitle_questions: "Available questions"
+      subtitle_treatments: "Available treatments"
+      subtitle_versions: "Versions list"
+      title: "Details of %{name}"
   algorithm_versions:
     table:
       columns:
@@ -102,6 +104,18 @@ en:
       error_add_user: "An error occured when adding user to group"
     show:
       title: "Details of %{name}"
+  managements:
+    edit:
+      title: "Edit the management"
+    new:
+      title: "Create a management"
+    table:
+      columns:
+        id: "ID"
+        reference: "Reference"
+        label: "Label"
+        description: "Description"
+        actions: "Actions"
   prompt: "Select"
   questions:
     categories:
@@ -139,6 +153,18 @@ en:
   save: "Save"
   select: "Please select"
   show: "Show"
+  treatments:
+    edit:
+      title: "Edit the treatment"
+    new:
+      title: "Create a treatment"
+    table:
+      columns:
+        id: "ID"
+        reference: "Reference"
+        label: "Label"
+        description: "Description"
+        actions: "Actions"
   unarchive: "Unarchive"
   users:
     new:

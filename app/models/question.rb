@@ -5,8 +5,6 @@ class Question < Node
   enum category: [:comorbidity, :exposure, :symptom, :physical_exam, :test]
 
   has_many :answers
-  has_many :available_questions
-  has_many :algorithms, through: :available_questions
 
   belongs_to :answer_type
 
