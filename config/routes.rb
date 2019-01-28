@@ -62,6 +62,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       mount_devise_token_auth_for 'User', at: 'auth'
       resources :activities, only: [:create]
+      resources :algorithm_versions, only: [:index]
     end
   end
 end
