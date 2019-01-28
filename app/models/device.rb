@@ -6,7 +6,7 @@ class Device < ApplicationRecord
   has_many :activities
   has_many :users, through: :activities
 
-  validates_presence_of :reference_number
+  validates_presence_of :mac_address
   validates_presence_of :name
   validates_presence_of :model
   validates_presence_of :brand
