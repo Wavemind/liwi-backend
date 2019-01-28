@@ -9,6 +9,6 @@
 <% end %>
 
 <h2>Activity</h2>
-<% @user.activities.each do |activity| %>
+<% @user.activities.includes(:device).each do |activity| %>
   <p><%= "#{datetime_format(activity.created_at)} - #{activity.device.brand}/#{activity.device.model}"%></p>
 <% end %>

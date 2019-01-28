@@ -1,8 +1,16 @@
-<h1>Details of <%= @algorithm.name %></h1>
+<h1><%= t('.title', name: @algorithm.name) %></h1>
 
+<h2><%= t('.subtitle_versions') %></h2>
 <%= link_to new_algorithm_algorithm_version_url(@algorithm) do %>
   <button type="button" class="btn btn-outline-secondary"><%= t('add') %></button>
 <% end %>
 
 <%= render 'algorithm_versions/table' %>
 
+
+<h2><%= t('.subtitle_questions') %></h2>
+<%= link_to new_algorithm_question_url(@algorithm) do %>
+  <button type="button" class="btn btn-outline-secondary"><%= t('add') %></button>
+<% end %>
+
+<%= render 'questions/table' %>

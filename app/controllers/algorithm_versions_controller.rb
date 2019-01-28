@@ -1,5 +1,5 @@
 class AlgorithmVersionsController < ApplicationController
-
+  before_action :authenticate_user!
   before_action :set_algorithm, only: [:show, :new, :create, :edit, :update, :archive, :unarchive]
   before_action :set_algorithm_version, only: [:show, :edit, :update, :archive, :unarchive]
 
@@ -38,6 +38,7 @@ class AlgorithmVersionsController < ApplicationController
     end
   end
 
+  # PUT algorithms/:algorithm_id/algorithm_version/:id/archive
   # @params algorithm_version [AlgorithmVersion] version of algorithm to archive
   # @return redirect to algorithm_versions#index with flash message
   # Archive an algorithm version.
@@ -51,6 +52,7 @@ class AlgorithmVersionsController < ApplicationController
     end
   end
 
+  # PUT algorithms/:algorithm_id/algorithm_version/:id/unarchive
   # @params algorithm_version [AlgorithmVersion] algorithm version to archive
   # @return redirect to algorithms#index with flash message
   # Unarchive an algorithm version.
