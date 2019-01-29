@@ -84,7 +84,7 @@ ActiveRecord::Schema.define(version: 2019_01_22_160938) do
   end
 
   create_table "devices", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "reference_number"
+    t.string "mac_address"
     t.string "name"
     t.string "model"
     t.string "brand"

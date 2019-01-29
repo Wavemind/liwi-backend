@@ -44,7 +44,7 @@ en:
   devices:
     index:
       columns:
-        reference_number: "Reference number"
+        mac_address: "MAC address"
         name: "Name"
         brand: "Brand"
         model: "Model"
@@ -57,7 +57,7 @@ en:
       model: "Model: "
       os: "OS: "
       os_version: "OS version: "
-      reference_number: "Reference number: "
+      mac_address: "MAC address: "
       status: "Status: "
       tablet_connection: "Tablet connection"
       title: "Details of %{name}"

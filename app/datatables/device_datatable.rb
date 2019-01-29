@@ -16,7 +16,7 @@ class DeviceDatatable < AjaxDatatablesRails::ActiveRecord
   # Column configuration
   def view_columns
     @view_columns ||= {
-      reference_number: { source: 'Device.reference_number' },
+      mac_address: { source: 'Device.mac_address' },
       name: { source: 'Device.name' },
       brand: { source: 'Device.brand' },
       model: { source: 'Device.model' },
@@ -28,7 +28,7 @@ class DeviceDatatable < AjaxDatatablesRails::ActiveRecord
     records.map do |record|
       actions = link_to(I18n.t('show'), device_url(record), class: 'btn btn-outline-primary')
       {
-        reference_number: record.reference_number,
+        mac_address: record.mac_address,
         name: record.name,
         brand: record.brand,
         model: record.model,

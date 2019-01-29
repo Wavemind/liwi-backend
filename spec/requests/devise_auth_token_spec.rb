@@ -11,15 +11,13 @@ describe 'Whether access is ocurring properly', type: :request do
   end
 
   context 'context: general authentication via API, ' do
-    # it 'doesn\'t give you anything if you don\'t log in' do
-    #   get api_v1_users_url()
-    #   expect(response.status).to eq(401)
-    # end
+    it 'doesn\'t give you anything if you don\'t log in' do
+      get api_v1_algorithm_versions_url()
+      expect(response.status).to eq(401)
+    end
 
     it 'gives you an authentication code if you are an existing user and you satisfy the password' do
       login
-      # puts "#{response.headers.inspect}"
-      # puts "#{response.body.inspect}"
       expect(response.has_header?('access-token')).to eq(true)
     end
 
@@ -33,24 +31,24 @@ describe 'Whether access is ocurring properly', type: :request do
       expect(response.has_header?('access-token')).to eq(true)
     end
 
-    # it 'first get a token, then access a restricted page' do
-    #   login
-    #   auth_params = get_auth_params_from_login_response_headers(response)
-    #   get api_v1_users_url, headers: auth_params
-    #   expect(response).to have_http_status(:success)
-    # end
+    it 'first get a token, then access a restricted page' do
+      login
+      auth_params = get_auth_params_from_login_response_headers(response)
+      get api_v1_algorithm_versions_url, headers: auth_params
+      expect(response).to have_http_status(:success)
+    end
 
-    # it 'deny access to a restricted page with an incorrect token' do
-    #   login
-    #   auth_params = get_auth_params_from_login_response_headers(response).tap { |h| h.each{|k,v|
-    #     if k == 'access-token'
-    #       h[k] = '123'
-    #     end}
-    #   }
-    #
-    #   get api_v1_users_url, headers: auth_params
-    #   expect(response).not_to have_http_status(:success)
-    # end
+    it 'deny access to a restricted page with an incorrect token' do
+      login
+      auth_params = get_auth_params_from_login_response_headers(response).tap { |h| h.each{|k,v|
+        if k == 'access-token'
+          h[k] = '123'
+        end}
+      }
+
+      get api_v1_algorithm_versions_url, headers: auth_params
+      expect(response).not_to have_http_status(:success)
+    end
   end
 
   def login

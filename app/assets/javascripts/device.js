@@ -7,7 +7,7 @@ jQuery(document).ready(function () {
     "ajax": $("#devices-datatable").data('source'),
     "pagingType": "full_numbers",
     "columns": [
-      { "data": "reference_number" },
+      { "data": "mac_address" },
       { "data": "name" },
       { "data": "brand" },
       { "data": "model" },
