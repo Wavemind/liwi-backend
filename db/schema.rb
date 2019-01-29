@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_22_160938) do
+ActiveRecord::Schema.define(version: 2019_01_25_142228) do
 
   create_table "activities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.decimal "longitude", precision: 13, scale: 9
@@ -74,13 +74,13 @@ ActiveRecord::Schema.define(version: 2019_01_22_160938) do
     t.index ["question_id"], name: "index_answers_on_question_id"
   end
 
-  create_table "available_questions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "available_nodes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "algorithm_id"
-    t.bigint "question_id"
+    t.bigint "node_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["algorithm_id"], name: "index_available_questions_on_algorithm_id"
-    t.index ["question_id"], name: "index_available_questions_on_question_id"
+    t.index ["algorithm_id"], name: "index_available_nodes_on_algorithm_id"
+    t.index ["node_id"], name: "index_available_nodes_on_node_id"
   end
 
   create_table "devices", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -93,6 +93,15 @@ ActiveRecord::Schema.define(version: 2019_01_22_160938) do
     t.integer "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "diagnostic_health_cares", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "diagnostic_id"
+    t.bigint "health_care_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["diagnostic_id"], name: "index_diagnostic_health_cares_on_diagnostic_id"
+    t.index ["health_care_id"], name: "index_diagnostic_health_cares_on_health_care_id"
   end
 
   create_table "diagnostics", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -184,7 +193,7 @@ ActiveRecord::Schema.define(version: 2019_01_22_160938) do
   add_foreign_key "algorithm_versions", "algorithms"
   add_foreign_key "algorithm_versions", "users"
   add_foreign_key "algorithms", "users"
-  add_foreign_key "available_questions", "algorithms"
+  add_foreign_key "available_nodes", "algorithms"
   add_foreign_key "group_users", "groups"
   add_foreign_key "group_users", "users"
   add_foreign_key "nodes", "answer_types"

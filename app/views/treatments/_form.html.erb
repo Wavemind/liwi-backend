@@ -1,0 +1,8 @@
+<%= simple_form_for [@algorithm, @treatment], html: { class: 'form-horizontal' } do |f| %>
+
+  <%= f.input :reference, disabled: @treatment.id.present? %>
+  <%= f.input :label %>
+  <%= f.input :description, as: :text %>
+
+  <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
+<% end %>
