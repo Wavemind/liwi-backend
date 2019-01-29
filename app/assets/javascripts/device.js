@@ -13,7 +13,7 @@ jQuery(document).ready(function () {
       { "data": "model" },
       { "data": "last_activity" },
       { "data": "last_user" },
-      { "data": "actions" },
+      { "data": "actions", "className": "text-right"  },
     ]
   });
 

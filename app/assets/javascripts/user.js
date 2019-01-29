@@ -13,7 +13,7 @@ jQuery(document).ready(function () {
       { "data": "email" },
       { "data": "last_connection" },
       { "data": "deactivated" },
-      { "data": "action" },
+      { "data": "action", "className": "text-right" },
     ]
   });
 });

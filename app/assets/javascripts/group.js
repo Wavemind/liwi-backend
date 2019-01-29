@@ -10,7 +10,7 @@ jQuery(document).ready(function () {
       { "data": "id" },
       { "data": "name" },
       { "data": "nb_people" },
-      { "data": "actions" },
+      { "data": "actions", "className": "text-right"  },
     ]
   });
 });
