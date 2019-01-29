@@ -31,7 +31,7 @@ class QuestionDatatable < AjaxDatatablesRails::ActiveRecord
         label: record.label,
         description: record.description,
         priority: I18n.t("questions.priorities.#{record.priority}"),
-        category: I18n.t("questions.categories.#{record.category}"),
+        category: record.category.name,
         answers: record.answers.map(&:label).join(' / '),
         answer_type: record.answer_type.display_name,
         actions: actions
@@ -41,7 +41,7 @@ class QuestionDatatable < AjaxDatatablesRails::ActiveRecord
 
   # Activerecord request
   def get_raw_records
-    Algorithm.find(params[:id]).questions.includes([:answers, :answer_type])
+    Algorithm.find(params[:id]).questions.includes([:answers, :answer_type, :category])
   end
 
 end

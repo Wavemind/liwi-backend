@@ -4,9 +4,9 @@ class CreateNodes < ActiveRecord::Migration[5.2]
       t.string :label
       t.string :reference
       t.integer :priority
-      t.integer :category
       t.string :type
 
+      t.belongs_to :category
       t.text :description
 
       t.timestamps

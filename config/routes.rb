@@ -66,6 +66,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :categories, only: [:index, :show, :new, :create, :edit, :update] do
+    member do
+      get 'reference'
+    end
+  end
+
   # API
   namespace :api do
     namespace :v1 do

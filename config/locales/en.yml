@@ -77,6 +77,7 @@ en:
       title: "Add a diagnostic"
     edit:
       title: "Edit this diagnostic"
+    reference: "DD"
     show:
       title: "Details of %{name} - version %{version}"
   edit: "Edit"
@@ -109,6 +110,7 @@ en:
       title: "Edit the management"
     new:
       title: "Create a management"
+    reference: "M"
     table:
       columns:
         id: "ID"
@@ -130,6 +132,12 @@ en:
       basic: "Basic"
       triage: "Triage"
       priority: "Priority"
+    references:
+      comorbidity: "DC"
+      exposure: "E"
+      symptom: "S"
+      physical_exam: "P"
+      test: "T"
     table:
       columns:
         label: "Label"
@@ -158,6 +166,7 @@ en:
       title: "Edit the treatment"
     new:
       title: "Create a treatment"
+    reference: "T"
     table:
       columns:
         id: "ID"

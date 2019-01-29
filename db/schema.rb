@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_25_142228) do
+ActiveRecord::Schema.define(version: 2019_01_28_154802) do
 
   create_table "activities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.decimal "longitude", precision: 13, scale: 9
@@ -83,6 +83,11 @@ ActiveRecord::Schema.define(version: 2019_01_25_142228) do
     t.index ["node_id"], name: "index_available_nodes_on_node_id"
   end
 
+  create_table "categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name"
+    t.string "reference_prefix"
+  end
+
   create_table "devices", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "reference_number"
     t.string "name"
@@ -130,13 +135,14 @@ ActiveRecord::Schema.define(version: 2019_01_25_142228) do
     t.string "label"
     t.string "reference"
     t.integer "priority"
-    t.integer "category"
     t.string "type"
+    t.bigint "category_id"
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "answer_type_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
+    t.index ["category_id"], name: "index_nodes_on_category_id"
   end
 
   create_table "roles", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
