@@ -1,6 +1,6 @@
 <h1><%= t('.title', name: @device.name) %></h1>
 
-<p><%= t('.reference_number') %><b><%= @device.reference_number %></b></p>
+<p><%= t('.mac_address') %><b><%= @device.mac_address %></b></p>
 <p><%= t('.brand') %><b><%= @device.brand %></b></p>
 <p><%= t('.model') %><b><%= @device.model %></b></p>
 <p><%= t('.os') %><b><%= @device.os %></b></p>
@@ -9,11 +9,11 @@
 
 <h2>Activities</h2>
 <ul class="list-group">
-  <% @device.activities.each do |activity| %>
+  <% @device.activities.includes(:user).each do |activity| %>
     <% if activity.user.present? %>
       <li class="list-group-item">
         <div class="row">
-          <div class="col"><%= t('.reference_number') %></div>
+          <div class="col"><%= t('.mac_address') %><b><%= @device.mac_address %></b></div>
           <div class="col"><%= activity.user.full_name %></div>
           <div class="col"><%= datetime_format(activity.created_at) %></div>
           <div class="col"><%= link_to "Position: #{activity.latitude},#{activity.longitude}", "https://maps.google.com/maps?q=#{activity.latitude},#{activity.longitude}", target: :blank %></div>

@@ -1,7 +1,7 @@
 class CreateActivityAndDevice < ActiveRecord::Migration[5.2]
   def change
     create_table :devices do |t|
-      t.string :reference_number
+      t.string :mac_address
       t.string :name
       t.string :model
       t.string :brand

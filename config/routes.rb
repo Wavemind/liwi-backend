@@ -3,7 +3,14 @@ Rails.application.routes.draw do
   # Web
   devise_for :users
 
-  root to: 'dashboard#index'
+  authenticated :user do
+    root to: 'dashboard#index'
+  end
+  unauthenticated :user do
+    devise_scope :user do
+      get '/' => 'devise/sessions#new'
+    end
+  end
 
   resources :roles, only: [:index, :show, :new, :create, :edit, :update]
 
@@ -11,6 +18,7 @@ Rails.application.routes.draw do
     member do
       put 'archive', to: 'algorithms#archive', as: 'archive'
       put 'unarchive', to: 'algorithms#unarchive', as: 'unarchive'
+      get 'questions', to: 'algorithms#questions', as: 'question'
     end
 
     resources :algorithm_versions, only: [:index, :show, :new, :create, :edit, :update] do
@@ -18,6 +26,16 @@ Rails.application.routes.draw do
         put 'archive', to: 'algorithm_versions#archive', as: 'archive'
         put 'unarchive', to: 'algorithm_versions#unarchive', as: 'unarchive'
       end
+
+      resources :diagnostics, only: [:index, :new, :create, :edit, :update]
+    end
+
+    resources :questions, only: [:new, :create, :edit, :update] do
+      member do
+        put 'answers'
+      end
+
+      resources :answers, only: [:new, :create, :edit, :update]
     end
   end
 
@@ -44,6 +62,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       mount_devise_token_auth_for 'User', at: 'auth'
       resources :activities, only: [:create]
+      resources :algorithm_versions, only: [:index]
     end
   end
 end

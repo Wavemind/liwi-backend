@@ -1,6 +1,6 @@
 class AlgorithmsController < ApplicationController
-
-  before_action :set_algorithm, only: [:show, :edit, :update, :archive, :unarchive]
+  before_action :authenticate_user!
+  before_action :set_algorithm, only: [:show, :edit, :update, :archive, :unarchive, :questions]
 
   def index
     respond_to do |format|
@@ -36,6 +36,7 @@ class AlgorithmsController < ApplicationController
     end
   end
 
+  # PUT algorithms/:id/archive
   # @params algorithm [Algorithm] algorithm to archive
   # @return redirect to algorithms#index with flash message
   # Archive an algorithm. There is no impact for the user but if a parent is archived, the versions are considered archived too
@@ -49,6 +50,7 @@ class AlgorithmsController < ApplicationController
     end
   end
 
+  # PUT algorithms/:id/unarchive
   # @params algorithm [Algorithm] algorithm to archive
   # @return redirect to algorithms#index with flash message
   # Unarchive an algorithm.
@@ -59,6 +61,16 @@ class AlgorithmsController < ApplicationController
       redirect_to algorithms_url, notice: t('flash_message.success_created')
     else
       redirect_to algorithms_url, danger: t('flash_message.update_fail')
+    end
+  end
+
+  # @params algorithm [Algorithm] current algorithm
+  # @return json of question
+  # All questions available for current algorithm
+  def questions
+    respond_to do |format|
+      format.html
+      format.json { render json: QuestionDatatable.new(params, view_context: view_context) }
     end
   end
 

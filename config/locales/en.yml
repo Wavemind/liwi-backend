@@ -14,8 +14,12 @@ en:
       title: "Add an algorithm"
     edit:
       title: "Edit this algorithm"
+    show:
+      title: "Details of %{name}"
+      subtitle_versions: "Versions list"
+      subtitle_questions: "Available questions"
   algorithm_versions:
-    index:
+    table:
       columns:
         id: "ID"
         version: "Version"
@@ -28,12 +32,19 @@ en:
       title: "Add an algorithm"
     edit:
       title: "Edit this algorithm"
+    show:
+      title: "Details of %{name} - version %{version}"
+  answers:
+    new:
+      title: "Create related answers of %{name} question"
+    edit:
+      title: "Edit related answers of %{name} question"
   archive: "Archive"
   deactivated: "Deactivate"
   devices:
     index:
       columns:
-        reference_number: "Reference number"
+        mac_address: "MAC address"
         name: "Name"
         brand: "Brand"
         model: "Model"
@@ -46,11 +57,26 @@ en:
       model: "Model: "
       os: "OS: "
       os_version: "OS version: "
-      reference_number: "Reference number: "
+      mac_address: "MAC address: "
       status: "Status: "
       tablet_connection: "Tablet connection"
       title: "Details of %{name}"
       user_actions: "User actions"
+  diagnostics:
+    table:
+      columns:
+        id: "ID"
+        reference: "Reference"
+        label: "Name"
+        last_update: "Last update"
+        actions: "Actions"
+      title: "Algorithms versions"
+    new:
+      title: "Add a diagnostic"
+    edit:
+      title: "Edit this diagnostic"
+    show:
+      title: "Details of %{name} - version %{version}"
   edit: "Edit"
   flash_message:
     success_created: "Data was successfully created"
@@ -77,7 +103,32 @@ en:
     show:
       title: "Details of %{name}"
   prompt: "Select"
-  remove: "Remove user"
+  questions:
+    categories:
+      comorbidity: "Comorbidity"
+      exposure: "Exposure"
+      symptom: "Symptom"
+      physical_exam: "Physical exam"
+      test: "Test"
+    new:
+      title: "New question"
+    priorities:
+      basic: "Basic"
+      triage: "Triage"
+      priority: "Priority"
+    table:
+      columns:
+        label: "Label"
+        description: "Description"
+        reference: "Reference"
+        priority: "Priority"
+        category: "Category"
+        answers: "Answers"
+        answer_type: "Type of answers"
+        actions: "Actions"
+    edit:
+      title: "Edit question"
+  remove: "Remove"
   roles:
     index:
       title: "Roles"
@@ -86,6 +137,7 @@ en:
     edit:
       title: "Edit role"
   save: "Save"
+  select: "Please select"
   show: "Show"
   unarchive: "Unarchive"
   users:
@@ -108,4 +160,3 @@ en:
       last_account_connection: "Last account connection "
       role: "Role "
       title: "Details of %{name}"
-
