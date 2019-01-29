@@ -69,7 +69,7 @@ input_integer = AnswerType.create!(value: 'Integer', display: 'Input')
 input_float = AnswerType.create!(value: 'Float', display: 'Input')
 
 # Questions
-age = Question.create!(answer_type: input_integer, label: 'Quel est l' 'âge du patient ?', reference: 'E1', category: Question.categories[:exposure], priority: Question.priorities[:triage])
+age = Question.create!(answer_type: input_integer, label: 'How old is the patient ?', reference: 'E1', category: Question.categories[:exposure], priority: Question.priorities[:triage])
 convulsion = Question.create!(answer_type: input_integer, label: 'How many time did you convulse', reference: 'S3', category: Question.categories[:symptom], priority: Question.priorities[:priority])
 drinking_status = Question.create!(answer_type: radio, label: 'Is the patient able to tolerate PO liquid ?', reference: 'S4', category: Question.categories[:symptom], priority: Question.priorities[:priority])
 emesis = Question.create!(answer_type: input_integer, label: 'How many time did you loose stool or emesis last 24 hours ?', reference: 'S5', category: Question.categories[:symptom], priority: Question.priorities[:priority])
