@@ -7,13 +7,12 @@ jQuery(document).ready(function () {
     "ajax": $("#users-datatable").data("source"),
     "pagingType": "full_numbers",
     "columns": [
-      { "data": "id" },
       { "data": "first_name" },
       { "data": "last_name" },
       { "data": "email" },
       { "data": "last_connection" },
       { "data": "deactivated" },
-      { "data": "action" },
+      { "data": "action", "className": "text-right" },
     ]
   });
 });

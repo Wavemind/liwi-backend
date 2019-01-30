@@ -12,8 +12,7 @@ class ManagementDatatable < AjaxDatatablesRails::ActiveRecord
 
   def view_columns
     @view_columns ||= {
-      id: { source: 'Management.id' },
-      name: { source: 'Management.reference' },
+      reference: { source: 'Management.reference' },
     }
   end
 
@@ -21,7 +20,6 @@ class ManagementDatatable < AjaxDatatablesRails::ActiveRecord
     records.map do |record|
       actions = link_to(I18n.t('edit'), edit_algorithm_management_url(params[:id], record), class: 'btn btn-outline-info')
       {
-        id: record.id,
         reference: record.reference,
         label: record.label,
         description: record.description,

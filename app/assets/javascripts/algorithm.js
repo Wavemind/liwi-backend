@@ -7,12 +7,11 @@ jQuery(document).ready(function () {
     "ajax": $("#algorithms-datatable").data("source"),
     "pagingType": "full_numbers",
     "columns": [
-      { "data": "id" },
       { "data": "name" },
       { "data": "description" },
       { "data": "nb_versions" },
       { "data": "creator" },
-      { "data": "actions" },
+      { "data": "actions", "className": "text-right" },
     ]
   });
 });

@@ -14,24 +14,24 @@ jQuery(document).ready(function () {
       { "data": "category" },
       { "data": "answers" },
       { "data": "answer_type" },
-      { "data": "actions" },
+      { "data": "actions", "className": "text-right"},
     ]
   });
 
   // Update the prepend every time the user pick another category
-  $("#question_category_id").change(function(){
-    var prepend = $(this).closest("form").find(".input-group-text")
-    var id = $("#question_category_id option:selected").val()
+  $("#question_category_id").change(() => {
+    var prepend = $(this).closest("form").find(".input-group-text");
+    var id = $("#question_category_id option:selected").val();
 
     if (id.trim()){
       $.ajax({
-        url: window.location.origin + '/categories/' + id + '/reference',
+        url: window.location.origin + "/categories/" + id + "/reference",
         complete: function(response){
-          prepend.text(response.responseText + '_');
+          prepend.text(response.responseText + "_");
         }
       });
     } else {
-      prepend.text('_');
+      prepend.text("_");
     }
   });
 });

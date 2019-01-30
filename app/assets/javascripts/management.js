@@ -7,11 +7,10 @@ jQuery(document).ready(function () {
     "ajax": $("#managements-datatable").data("source"),
     "pagingType": "full_numbers",
     "columns": [
-      { "data": "id" },
       { "data": "reference" },
       { "data": "label" },
       { "data": "description" },
-      { "data": "actions" },
+      { "data": "actions", "className": "text-right" },
     ]
   });
 });

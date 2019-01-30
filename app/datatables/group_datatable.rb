@@ -15,7 +15,6 @@ class GroupDatatable < AjaxDatatablesRails::ActiveRecord
   # Column configuration
   def view_columns
     @view_columns ||= {
-      id: { source: 'Group.id' },
       name: { source: 'Group.name' },
     }
   end
@@ -25,7 +24,6 @@ class GroupDatatable < AjaxDatatablesRails::ActiveRecord
     records.map do |record|
       actions = link_to(I18n.t('show'), group_url(record), class: 'btn btn-outline-primary') + " " + link_to(I18n.t('edit'), edit_group_url(record), class: 'btn btn-outline-info')
       {
-        id: record.id,
         name: record.name,
         nb_people: record.users.count,
         actions: actions
