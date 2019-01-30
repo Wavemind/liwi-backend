@@ -83,6 +83,11 @@ ActiveRecord::Schema.define(version: 2019_01_25_142228) do
     t.index ["node_id"], name: "index_available_nodes_on_node_id"
   end
 
+  create_table "categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name"
+    t.string "reference_prefix"
+  end
+
   create_table "devices", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "mac_address"
     t.string "name"
