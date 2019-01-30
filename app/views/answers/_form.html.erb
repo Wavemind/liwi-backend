@@ -7,13 +7,13 @@
     <%= f.input :id, html_input: { value: @question.id }, as: :hidden %>
 
     <%= f.simple_fields_for :answers do |ff| %>
-      <div class="row">
-        <%= render "answers/form_#{form_type}", f: ff %>
-      </div>
+      <%= render "answers/form_#{form_type}", f: ff %>
     <% end %>
-    <div class='links'>
+
+    <div class="links">
       <%= link_to_add_association "<button class='btn btn-outline-success'>#{t('add')}</button>".html_safe, f, :answers, partial: "answers/form_#{form_type}" %>
     </div>
+
     <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
   <% end %>
 </div>
