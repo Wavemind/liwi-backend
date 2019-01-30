@@ -12,10 +12,16 @@ class Question < Node
 
   accepts_nested_attributes_for :answers, reject_if: :all_blank, allow_destroy: true
 
-  before_validation :complete_reference
+  private
+
+  def unique_reference
+    if Question.where(reference: "#{category.reference_prefix}_#{reference}").any?
+      errors.add(:reference, I18n.t('nodes.validation.reference_used'))
+    end
+  end
 
   def complete_reference
-    self.reference = "#{category.reference_prefix}_#{reference}" if reference.present? && category.present? && !reference.start_with?("#{category.reference_prefix}_")
+    self.reference = "#{category.reference_prefix}_#{reference}" unless reference.start_with?("#{category.reference_prefix}_")
   end
 
 end

@@ -22,9 +22,6 @@ RSpec.describe Answer, type: :model do
     Answer.create!(reference: '4', label: 'True', operator: nil, value: 'true', question: @question)
     answer = Answer.new(reference: '4', label: '< 6 %', operator: '<', value: 'true', question: @question)
 
-    # Imitate the before_create in order to test the uniqueness properly
-    answer.complete_reference
-
     expect(answer).to_not be_valid
   end
 end

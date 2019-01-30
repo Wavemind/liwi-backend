@@ -7,12 +7,19 @@ class Diagnostic < ApplicationRecord
   validates_presence_of :reference
   validates_presence_of :label
 
-  validates_uniqueness_of :reference
+  before_create :complete_reference
+  after_validation :unique_reference
 
-  before_validation :complete_reference
+  private
 
   def complete_reference
-    self.reference = "#{I18n.t('diagnostics.reference')}_#{reference}" if reference.present? && !reference.start_with?("#{I18n.t('diagnostics.reference')}_")
+    self.reference = "#{I18n.t('diagnostics.reference')}_#{reference}" unless reference.start_with?("#{I18n.t('diagnostics.reference')}_")
+  end
+
+  def unique_reference
+    if Diagnostic.where(reference: "#{I18n.t('diagnostics.reference')}_#{reference}").any?
+      errors.add(:reference, I18n.t('nodes.validation.reference_used'))
+    end
   end
 
 end

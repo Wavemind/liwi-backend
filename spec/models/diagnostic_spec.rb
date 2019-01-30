@@ -31,9 +31,6 @@ RSpec.describe Diagnostic, type: :model do
     diagnostic = Diagnostic.new(reference: '1', label: 'lower respiratory tract infection (LRTI)')
     diagnostic.algorithm_versions << @version
 
-    # Imitate the before_create in order to test the uniqueness properly
-    diagnostic.complete_reference
-
     expect(diagnostic).to_not be_valid
   end
 end

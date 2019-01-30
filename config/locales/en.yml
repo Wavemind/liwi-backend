@@ -119,6 +119,9 @@ en:
         label: "Label"
         description: "Description"
         actions: "Actions"
+  nodes:
+    validation:
+      reference_used: "This reference is already used"
   prompt: "Select"
   questions:
     categories:
