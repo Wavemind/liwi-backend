@@ -21,7 +21,7 @@ class Question < Node
   end
 
   def complete_reference
-    self.reference = "#{category.reference_prefix}_#{reference}" unless reference.start_with?("#{category.reference_prefix}_")
+    self.reference = "#{category.reference_prefix}_#{reference}"
   end
 
 end

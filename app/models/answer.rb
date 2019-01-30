@@ -17,6 +17,6 @@ class Answer < ApplicationRecord
   end
 
   def complete_reference
-    self.reference = "#{question.reference}_#{reference}" unless reference.start_with?("#{question.reference}_")
+    self.reference = "#{question.reference}_#{reference}"
   end
 end

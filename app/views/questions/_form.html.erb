@@ -1,7 +1,7 @@
 <%= simple_form_for [@algorithm, @question], html: { class: 'form-horizontal' }, wrapper: :input_group do |f| %>
 
   <%= f.input :priority, collection: Question.priorities.map { |k, v| [t("question.priorities.#{k}"), k] }, prompt: t('select') %>
-  <%= f.association :category, collection: Category.all, label_method: :name, prompt: t('select') %>
+  <%= f.association :category, collection: Category.all, label_method: :name, prompt: t('select'), disabled: f.object.persisted? %>
 
   <%= f.input :reference, prepend: (f.object.persisted? ? false : (@question.category.nil? ? '_' : @question.category.reference_prefix + '_')), disabled: f.object.persisted? %>
   <%= f.input :label %>

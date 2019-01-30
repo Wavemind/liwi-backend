@@ -4,7 +4,7 @@ class Management < HealthCare
   private
 
   def complete_reference
-    self.reference = "#{I18n.t('managements.reference')}_#{reference}" unless reference.start_with?("#{I18n.t('managements.reference')}_")
+    self.reference = "#{I18n.t('managements.reference')}_#{reference}"
   end
 
   def unique_reference

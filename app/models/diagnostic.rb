@@ -13,7 +13,7 @@ class Diagnostic < ApplicationRecord
   private
 
   def complete_reference
-    self.reference = "#{I18n.t('diagnostics.reference')}_#{reference}" unless reference.start_with?("#{I18n.t('diagnostics.reference')}_")
+    self.reference = "#{I18n.t('diagnostics.reference')}_#{reference}"
   end
 
   def unique_reference
