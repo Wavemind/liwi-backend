@@ -9,10 +9,10 @@ class Diagnostic < ApplicationRecord
 
   validates_uniqueness_of :reference
 
-  before_create :complete_reference
+  before_validation :complete_reference
 
   def complete_reference
-    self.reference = "#{I18n.t('diagnostics.reference')}_#{reference}"
+    self.reference = "#{I18n.t('diagnostics.reference')}_#{reference}" if reference.present? && !reference.start_with?("#{I18n.t('diagnostics.reference')}_")
   end
 
 end

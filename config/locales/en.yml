@@ -35,6 +35,7 @@ en:
     edit:
       title: "Edit this algorithm"
     show:
+      subtitle_diagnostics: "Diagnostics"
       title: "Details of %{name} - version %{version}"
   answers:
     new:

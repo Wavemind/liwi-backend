@@ -10,7 +10,7 @@ jQuery(document).ready(function () {
       { "data": "reference" },
       { "data": "label" },
       { "data": "last_update" },
-      { "data": "actions" },
+      { "data": "actions", "className": "text-right" },
     ]
   });
 });

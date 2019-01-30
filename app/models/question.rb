@@ -12,10 +12,10 @@ class Question < Node
 
   accepts_nested_attributes_for :answers, reject_if: :all_blank, allow_destroy: true
 
-  before_create :complete_reference
+  before_validation :complete_reference
 
   def complete_reference
-    self.reference = "#{category.reference_prefix}_#{reference}"
+    self.reference = "#{category.reference_prefix}_#{reference}" if reference.present? && category.present? && !reference.start_with?("#{category.reference_prefix}_")
   end
 
 end

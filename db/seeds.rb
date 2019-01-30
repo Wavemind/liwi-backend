@@ -70,7 +70,7 @@ input_float = AnswerType.create!(value: 'Float', display: 'Input')
 # Categories
 exposure = Category.create!(name: 'Exposure', reference_prefix: 'E')
 symptom = Category.create!(name: 'Symptom', reference_prefix: 'S')
-assessement_text = Category.create!(name: 'Assessment/Test', reference_prefix: 'T')
+assessement_text = Category.create!(name: 'Assessment/Test', reference_prefix: 'A')
 physical_exam = Category.create!(name: 'Physical exam', reference_prefix: 'P')
 comorbidity = Category.create!(name: 'Comorbidity', reference_prefix: 'DC')
 
