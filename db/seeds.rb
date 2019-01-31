@@ -140,3 +140,16 @@ fever_travel.nodes << wheelchair
 malaria.save
 impetigo.save
 chicken_pox.save
+
+john = Patient.create!(first_name: 'John', last_name: 'Do', birth_date: Date.new(1970,1,1))
+marc = Patient.create!(first_name: 'Marc', last_name: 'Do', birth_date: Date.new(1970,1,1))
+kantaing = Patient.create!(first_name: 'Quentin', last_name: 'Girard', birth_date: Date.new(1970,3,2))
+idefix = Patient.create!(first_name: 'Idefix', last_name: 'Wouf', birth_date: Date.new(1970,1,1))
+mick = Patient.create!(first_name: 'Mickael', last_name: 'Lacombe', birth_date: Date.new(1970,3,20))
+
+MedicalCase.create!(patient: john, algorithm_version: epoc_first)
+MedicalCase.create!(patient: marc, algorithm_version: epoc_first)
+MedicalCase.create!(patient: mick, algorithm_version: ft_1_0)
+MedicalCase.create!(patient: kantaing, algorithm_version: ft_1_0)
+MedicalCase.create!(patient: idefix, algorithm_version: ft_1_2)
+MedicalCase.create!(patient: john, algorithm_version: ft_1_2)
