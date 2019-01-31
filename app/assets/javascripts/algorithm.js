@@ -7,7 +7,6 @@ jQuery(document).ready(function () {
     "ajax": $("#algorithms-datatable").data("source"),
     "pagingType": "full_numbers",
     "columns": [
-      { "data": "id" },
       { "data": "name" },
       { "data": "description" },
       { "data": "nb_versions" },

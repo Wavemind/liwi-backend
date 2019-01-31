@@ -7,10 +7,9 @@ jQuery(document).ready(function () {
     "ajax": $("#groups-datatable").data("source"),
     "pagingType": "full_numbers",
     "columns": [
-      { "data": "id" },
       { "data": "name" },
       { "data": "nb_people" },
-      { "data": "actions", "className": "text-right"  },
+      { "data": "actions", "className": "text-right" },
     ]
   });
 });

@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_question, only: [:edit, :update, :answers]
+  before_action :set_question, only: [:edit, :update, :answers, :category_reference]
   before_action :set_algorithm, only: [:new, :create, :edit, :update, :answers]
 
   def new
@@ -41,7 +41,6 @@ class QuestionsController < ApplicationController
   # @return redirect to algorithms#index with flash message
   # Create answers related to the current question
   def answers
-
     if @question.update(question_params)
       redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_updated')
     else
@@ -65,7 +64,7 @@ class QuestionsController < ApplicationController
       :label,
       :reference,
       :priority,
-      :category,
+      :category_id,
       :description,
       :answer_type_id,
       answers_attributes: [

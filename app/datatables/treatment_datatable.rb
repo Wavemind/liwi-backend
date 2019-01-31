@@ -12,8 +12,7 @@ class TreatmentDatatable < AjaxDatatablesRails::ActiveRecord
 
   def view_columns
     @view_columns ||= {
-      id: { source: 'Treatment.id' },
-      name: { source: 'Treatment.reference' },
+      reference: { source: 'Treatment.reference' },
     }
   end
 
@@ -21,7 +20,6 @@ class TreatmentDatatable < AjaxDatatablesRails::ActiveRecord
     records.map do |record|
       actions = link_to(I18n.t('edit'), edit_algorithm_treatment_url(params[:id], record), class: 'btn btn-outline-info')
       {
-        id: record.id,
         reference: record.reference,
         label: record.label,
         description: record.description,

@@ -2,7 +2,7 @@ class DiagnosticsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_algorithm, only: [:show, :new, :create, :edit, :update]
   before_action :set_algorithm_version, only: [:show, :new, :create, :edit, :update]
-  before_action :set_diagnostic, only: [:show, :new, :edit, :update]
+  before_action :set_diagnostic, only: [:show, :edit, :update]
 
   def index
     respond_to do |format|
@@ -21,10 +21,10 @@ class DiagnosticsController < ApplicationController
 
   def create
     @diagnostic = Diagnostic.new(diagnostic_params)
-    @diagnostic.user = current_user
+    @diagnostic.algorithm_versions << @algorithm_version
 
     if @diagnostic.save
-      redirect_to algorithm_algorithm_version_diagnostics_url, notice: t('flash_message.success_created')
+      redirect_to algorithm_algorithm_version_url(@algorithm, @algorithm_version), notice: t('flash_message.success_created')
     else
       render :new
     end
@@ -32,7 +32,7 @@ class DiagnosticsController < ApplicationController
 
   def update
     if @diagnostic.update(diagnostic_params)
-      redirect_to algorithm_algorithm_version_diagnostics_url, notice: t('flash_message.success_updated')
+      redirect_to algorithm_algorithm_version_url(@algorithm, @algorithm_version), notice: t('flash_message.success_updated')
     else
       render :edit
     end

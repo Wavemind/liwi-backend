@@ -19,7 +19,6 @@ class UserDatatable < AjaxDatatablesRails::ActiveRecord
   # Column configuration
   def view_columns
     @view_columns ||= {
-      id: { source: 'User.id' },
       first_name: { source: 'User.first_name' },
       last_name: { source: 'User.last_name' },
       email: { source: 'User.email' },
@@ -41,7 +40,6 @@ class UserDatatable < AjaxDatatablesRails::ActiveRecord
       end
 
       {
-        id: record.id,
         first_name: record.first_name,
         last_name: record.last_name,
         email: record.email,

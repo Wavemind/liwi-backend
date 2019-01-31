@@ -7,11 +7,10 @@ jQuery(document).ready(function () {
     "ajax": $("#diagnostics-datatable").data("source"),
     "pagingType": "full_numbers",
     "columns": [
-      { "data": "id" },
       { "data": "reference" },
       { "data": "label" },
       { "data": "last_update" },
-      { "data": "actions", "className": "text-right"  },
+      { "data": "actions", "className": "text-right" },
     ]
   });
 });

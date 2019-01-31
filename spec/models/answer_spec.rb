@@ -4,7 +4,8 @@ RSpec.describe Answer, type: :model do
 
   before(:each) do
     answer_type = AnswerType.new(value: 'boolean', display: 'radio')
-    @question = Question.create!(reference: 's_9', label: 'skin issue', priority: Question.priorities[:basic], category: Question.categories[:symptom], answer_type: answer_type)
+    category = Category.new(name: 'Symptom', reference_prefix: 'S')
+    @question = Question.create!(reference: '9', label: 'skin issue', priority: Question.priorities[:basic], category: category, answer_type: answer_type)
   end
 
   it 'is valid with valid attributes' do
@@ -18,8 +19,8 @@ RSpec.describe Answer, type: :model do
   end
 
   it 'is invalid same reference' do
-    answer_1 = Answer.create!(reference: '4', label: 'True', operator: nil, value: 'true', question: @question)
-    answer = Answer.new(reference: 's_9_4', label: '< 6 %', operator: '<', value: 'true', question: @question)
+    Answer.create!(reference: '4', label: 'True', operator: nil, value: 'true', question: @question)
+    answer = Answer.new(reference: '4', label: '< 6 %', operator: '<', value: 'true', question: @question)
 
     expect(answer).to_not be_valid
   end

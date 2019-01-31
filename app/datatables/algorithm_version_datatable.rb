@@ -15,8 +15,7 @@ class AlgorithmVersionDatatable < AjaxDatatablesRails::ActiveRecord
 
   def view_columns
     @view_columns ||= {
-      id: { source: 'AlgorithmVersion.id' },
-      name: { source: 'AlgorithmVersion.version' },
+      version: { source: 'AlgorithmVersion.version' },
     }
   end
 
@@ -25,7 +24,6 @@ class AlgorithmVersionDatatable < AjaxDatatablesRails::ActiveRecord
       actions = link_to(I18n.t('show'), algorithm_algorithm_version_url(record.algorithm, record), class: 'btn btn-outline-primary') + " " + link_to(I18n.t('edit'), edit_algorithm_algorithm_version_url(record.algorithm, record), class: 'btn btn-outline-info') + " "
       actions += record.archived ? link_to(I18n.t('unarchive'), unarchive_algorithm_algorithm_version_url(record.algorithm, record), class: 'btn btn-outline-danger', method: :put, data: { confirm: 'Are you sure?' }) : link_to(I18n.t('archive'), archive_algorithm_algorithm_version_url(record.algorithm, record), class: 'btn btn-outline-danger', method: :put, data: { confirm: 'Are you sure?' })
       {
-        id: record.id,
         version: record.version,
         algorithm: record.algorithm.name,
         last_update: date_format(record.updated_at),
