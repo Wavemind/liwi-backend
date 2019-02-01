@@ -2,10 +2,10 @@
 
 <div class="row">
   <div class="col">
-    <%= simple_form_for @user, url: group_add_user_url(@group), method: :post do |f| %>
+    <%= simple_form_for @device, url: group_add_device_url(@group), method: :post do |f| %>
       <div class="row">
         <div class="col">
-          <%= f.input :id, collection: User.where.not(id: GroupUser.where(group_id: @group.id).pluck(:user_id)), label_method: :full_name, label: false , prompt: t('prompt')%>
+          <%= f.input :id, collection: Device.where(group_id: nil), label_method: :label, label: false , prompt: t('prompt')%>
         </div>
         <div class="col">
           <%= f.submit t('add'), class: 'btn btn-primary' %>
@@ -16,16 +16,16 @@
 </div>
 
 
-<table class="table table-condensed table-hover" id="users-datatable" data-source="<%= users_url(format: :json, from: 'group', id: params[:id]) %>">
+<table class="table table-condensed table-hover" id="devices-datatable" data-source="<%= devices_url(format: :json, from: 'group', id: params[:id]) %>">
   <thead>
     <tr>
-      <th><%= t('users.index.columns.id') %></th>
-      <th><%= t('users.index.columns.first_name') %></th>
-      <th><%= t('users.index.columns.last_name') %></th>
-      <th><%= t('users.index.columns.mail') %></th>
-      <th><%= t('users.index.columns.last_connection') %></th>
-      <th><%= t('users.index.columns.status') %></th>
-      <th><%= t('users.index.columns.actions') %></th>
+      <th><%= t('.columns.mac_address') %></th>
+      <th><%= t('.columns.name') %></th>
+      <th><%= t('.columns.brand') %></th>
+      <th><%= t('.columns.model') %></th>
+      <th><%= t('.columns.last_activity') %></th>
+      <th><%= t('.columns.last_user') %></th>
+      <th class="text-right"><%= t('.columns.actions') %></th>
     </tr>
   </thead>
   <tbody></tbody>

@@ -31,14 +31,7 @@ class UserDatatable < AjaxDatatablesRails::ActiveRecord
   def data
     records.map do |record|
       actions = link_to(I18n.t('show'), user_url(record), class: 'btn btn-outline-primary') + " " + link_to(I18n.t('edit'), edit_user_url(record), class: 'btn btn-outline-info') + " "
-
-      # This table is used in 2 views, and actions are not the same
-      if params[:from].present?
-        actions += link_to(I18n.t('.remove'), group_remove_user_url(params[:id], record), class: 'btn btn-outline-danger', method: :delete, data: { confirm: 'Are you sure?' })
-      else
-        actions += record.deactivated ? link_to(I18n.t('.activated'), activated_users_url(record), class: 'btn btn-outline-danger', method: :post, data: { confirm: 'Are you sure?' }) : link_to(I18n.t('.deactivated'), deactivated_users_url(record), class: 'btn btn-outline-danger', method: :post, data: { confirm: 'Are you sure?' })
-      end
-
+      actions += record.deactivated ? link_to(I18n.t('.activated'), activated_users_url(record), class: 'btn btn-outline-danger', method: :post, data: { confirm: 'Are you sure?' }) : link_to(I18n.t('.deactivated'), deactivated_users_url(record), class: 'btn btn-outline-danger', method: :post, data: { confirm: 'Are you sure?' })
       {
         first_name: record.first_name,
         last_name: record.last_name,
@@ -52,13 +45,7 @@ class UserDatatable < AjaxDatatablesRails::ActiveRecord
 
   # Activerecord request
   def get_raw_records
-    if params[:from].present?
-      # Users from a group
-      User.joins(:group_users).where("group_users.group_id = #{params[:id]}")
-    else
-      # Users
-      User.all
-    end
+    User.all
   end
 
 end

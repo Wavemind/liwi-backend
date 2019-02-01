@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_28_154802) do
+ActiveRecord::Schema.define(version: 2019_01_25_142228) do
 
   create_table "activities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.decimal "longitude", precision: 13, scale: 9
@@ -89,7 +89,7 @@ ActiveRecord::Schema.define(version: 2019_01_28_154802) do
   end
 
   create_table "devices", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "reference_number"
+    t.string "mac_address"
     t.string "name"
     t.string "model"
     t.string "brand"
@@ -98,6 +98,8 @@ ActiveRecord::Schema.define(version: 2019_01_28_154802) do
     t.integer "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "group_id"
+    t.index ["group_id"], name: "index_devices_on_group_id"
   end
 
   create_table "diagnostic_health_cares", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -116,13 +118,13 @@ ActiveRecord::Schema.define(version: 2019_01_28_154802) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "group_users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.bigint "group_id"
+  create_table "group_algorithm_versions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "algorithm_version_id"
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["group_id"], name: "index_group_users_on_group_id"
-    t.index ["user_id"], name: "index_group_users_on_user_id"
+    t.index ["algorithm_version_id"], name: "index_group_algorithm_versions_on_algorithm_version_id"
+    t.index ["user_id"], name: "index_group_algorithm_versions_on_user_id"
   end
 
   create_table "groups", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -200,8 +202,9 @@ ActiveRecord::Schema.define(version: 2019_01_28_154802) do
   add_foreign_key "algorithm_versions", "users"
   add_foreign_key "algorithms", "users"
   add_foreign_key "available_nodes", "algorithms"
-  add_foreign_key "group_users", "groups"
-  add_foreign_key "group_users", "users"
+  add_foreign_key "devices", "groups"
+  add_foreign_key "group_algorithm_versions", "algorithm_versions"
+  add_foreign_key "group_algorithm_versions", "users"
   add_foreign_key "nodes", "answer_types"
   add_foreign_key "users", "roles"
 end

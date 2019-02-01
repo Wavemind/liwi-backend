@@ -4,7 +4,6 @@
   <%= f.input :last_name %>
   <%= f.input :email %>
   <%= f.association :role, collection: Role.all %>
-  <%= f.association :groups, collection: Group.all %>
   <%= f.input :deactivated, as: :boolean %>
 
   <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>

@@ -7,7 +7,8 @@ class AlgorithmVersion < ApplicationRecord
   has_many :algorithm_version_diagnostics
   has_many :diagnostics, through: :algorithm_version_diagnostics
 
-  # has_many :medical_cases
+  has_many :group_algorithm_versions
+  has_many :groups, through: :group_algorithm_version
 
   validates_presence_of :json
   validates_presence_of :version
