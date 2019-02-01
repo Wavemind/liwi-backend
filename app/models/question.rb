@@ -14,12 +14,14 @@ class Question < Node
 
   private
 
+  # {Node#unique_reference}
   def unique_reference
     if Question.where(reference: "#{category.reference_prefix}_#{reference}").any?
       errors.add(:reference, I18n.t('nodes.validation.reference_used'))
     end
   end
 
+  # {Node#complete_reference}
   def complete_reference
     self.reference = "#{category.reference_prefix}_#{reference}"
   end

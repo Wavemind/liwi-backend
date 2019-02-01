@@ -12,11 +12,18 @@ class Node < ApplicationRecord
 
   private
 
+  # @params nil
+  # @return nil
+  # Validate the uniqueness after validation if it is present in order to simulate #complete_reference
   def unique_reference
 
   end
 
+  # @params nil
+  # @return nil
+  # Complete the reference with the associated prefix before the entry is created
   def complete_reference
 
   end
+
 end
