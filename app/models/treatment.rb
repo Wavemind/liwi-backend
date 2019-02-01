@@ -1,5 +1,8 @@
 # Define every treatments for a diagnostic
-class Treatment < HealthCare
+class Treatment < Node
+
+  has_many :final_diagnostic_health_cares, as: :treatable
+  has_many :medical_case_health_cares, as: :treatable
 
   private
 

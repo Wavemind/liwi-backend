@@ -4,4 +4,8 @@ class MedicalCase < ApplicationRecord
   belongs_to :patient
   belongs_to :algorithm_version
 
+  has_many :medical_case_health_cares
+  has_many :medical_case_final_diagnostics
+  has_many :final_diagnostics, through: :medical_case_final_diagnostics
+
 end

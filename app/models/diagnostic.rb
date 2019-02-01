@@ -1,8 +1,9 @@
-# How a disease is diagnosed
+# How a disease is diagnosed -> Differential diagnostics
 class Diagnostic < ApplicationRecord
 
   has_many :algorithm_version_diagnostics
   has_many :algorithm_versions, through: :algorithm_version_diagnostics
+  has_many :final_diagnostics
 
   validates_presence_of :reference
   validates_presence_of :label

@@ -1,5 +1,8 @@
 # Define every managements for a diagnostic
-class Management < HealthCare
+class Management < Node
+
+  has_many :final_diagnostic_health_cares, as: :treatable
+  has_many :medical_case_health_cares, as: :treatable
 
   private
 
@@ -10,11 +13,9 @@ class Management < HealthCare
     end
   end
 
-
   # {Node#complete_reference}
   def complete_reference
     self.reference = "#{I18n.t('managements.reference')}_#{reference}"
   end
-
 
 end

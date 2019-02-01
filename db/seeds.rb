@@ -106,6 +106,14 @@ malaria = Diagnostic.new(label: 'Malaria', reference: '4')
 impetigo = Diagnostic.new(label: 'IMPETIGO', reference: '7')
 chicken_pox = Diagnostic.new(label: 'Chicken pox', reference: '8')
 
+malaria.algorithm_versions << epoc_first
+impetigo.algorithm_versions << ft_1_0
+chicken_pox.algorithm_versions << ft_1_2
+
+malaria.save
+impetigo.save
+chicken_pox.save
+
 # Treatments
 paracetamol = Treatment.create!(reference: '4', label: 'Take 400mg of paracetamol')
 cephalexin = Treatment.create!(reference: '5', label: 'Take 100mg of cephalexin')
@@ -114,10 +122,6 @@ vit_a = Treatment.create!(reference: '6', label: 'Take 40mg of vitamin A')
 # Managements
 wheelchair = Management.create!(reference: '5', label: 'Use a wheelchair for 2 months.')
 crutch = Management.create!(reference: '6', label: 'Use crutch for 2 months.')
-
-malaria.algorithm_versions << epoc_first
-impetigo.algorithm_versions << ft_1_0
-chicken_pox.algorithm_versions << ft_1_2
 
 # Available questions
 epoct.nodes << age
@@ -128,28 +132,32 @@ fever_travel.nodes << convulsion
 fever_travel.nodes << drinking_status
 fever_travel.nodes << emesis
 
-# Available health cares
-epoct.nodes << paracetamol
-epoct.nodes << vit_a
+# Available managements
 epoct.nodes << crutch
-epoct.nodes << cephalexin
 fever_travel.nodes << crutch
-fever_travel.nodes << cephalexin
 fever_travel.nodes << wheelchair
 
-malaria.save
-impetigo.save
-chicken_pox.save
+# Available treatments
+epoct.nodes << paracetamol
+epoct.nodes << vit_a
+epoct.nodes << cephalexin
+fever_travel.nodes << cephalexin
 
+epoct.save
+fever_travel.save
+
+# Patients
 john = Patient.create!(first_name: 'John', last_name: 'Do', birth_date: Date.new(1970,1,1))
 marc = Patient.create!(first_name: 'Marc', last_name: 'Do', birth_date: Date.new(1970,1,1))
 kantaing = Patient.create!(first_name: 'Quentin', last_name: 'Girard', birth_date: Date.new(1970,3,2))
 idefix = Patient.create!(first_name: 'Idefix', last_name: 'Wouf', birth_date: Date.new(1970,1,1))
 mick = Patient.create!(first_name: 'Mickael', last_name: 'Lacombe', birth_date: Date.new(1970,3,20))
 
+# Medical cases
 MedicalCase.create!(patient: john, algorithm_version: epoc_first)
 MedicalCase.create!(patient: marc, algorithm_version: epoc_first)
 MedicalCase.create!(patient: mick, algorithm_version: ft_1_0)
 MedicalCase.create!(patient: kantaing, algorithm_version: ft_1_0)
 MedicalCase.create!(patient: idefix, algorithm_version: ft_1_2)
 MedicalCase.create!(patient: john, algorithm_version: ft_1_2)
+

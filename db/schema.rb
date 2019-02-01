@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_28_154802) do
+ActiveRecord::Schema.define(version: 2019_02_01_093426) do
 
   create_table "activities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.decimal "longitude", precision: 13, scale: 9
@@ -86,10 +86,12 @@ ActiveRecord::Schema.define(version: 2019_01_28_154802) do
   create_table "categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.string "reference_prefix"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "devices", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "reference_number"
+    t.string "mac_address"
     t.string "name"
     t.string "model"
     t.string "brand"
@@ -100,20 +102,19 @@ ActiveRecord::Schema.define(version: 2019_01_28_154802) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "diagnostic_health_cares", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.bigint "diagnostic_id"
-    t.bigint "health_care_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["diagnostic_id"], name: "index_diagnostic_health_cares_on_diagnostic_id"
-    t.index ["health_care_id"], name: "index_diagnostic_health_cares_on_health_care_id"
-  end
-
   create_table "diagnostics", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "reference"
     t.string "label"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "final_diagnostic_health_cares", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "treatable_type"
+    t.bigint "treatable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["treatable_type", "treatable_id"], name: "index_final_diagnostics_treatable_id"
   end
 
   create_table "group_users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -131,6 +132,33 @@ ActiveRecord::Schema.define(version: 2019_01_28_154802) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "medical_case_final_diagnostics", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "final_diagnostic_id"
+    t.bigint "medical_case_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["final_diagnostic_id"], name: "index_medical_case_final_diagnostics_on_final_diagnostic_id"
+    t.index ["medical_case_id"], name: "index_medical_case_final_diagnostics_on_medical_case_id"
+  end
+
+  create_table "medical_case_health_cares", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "treatable_type"
+    t.bigint "treatable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["treatable_type", "treatable_id"], name: "index_medical_cases_treatable_id"
+  end
+
+  create_table "medical_cases", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "file"
+    t.bigint "patient_id"
+    t.bigint "algorithm_version_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["algorithm_version_id"], name: "index_medical_cases_on_algorithm_version_id"
+    t.index ["patient_id"], name: "index_medical_cases_on_patient_id"
+  end
+
   create_table "nodes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "label"
     t.string "reference"
@@ -143,6 +171,14 @@ ActiveRecord::Schema.define(version: 2019_01_28_154802) do
     t.bigint "answer_type_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
     t.index ["category_id"], name: "index_nodes_on_category_id"
+  end
+
+  create_table "patients", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.date "birth_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "roles", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
