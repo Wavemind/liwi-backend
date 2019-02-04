@@ -25,15 +25,6 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
     t.index ["user_id"], name: "index_activities_on_user_id"
   end
 
-  create_table "algorithm_version_diagnostics", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.bigint "algorithm_version_id"
-    t.bigint "diagnostic_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["algorithm_version_id"], name: "index_algorithm_version_diagnostics_on_algorithm_version_id"
-    t.index ["diagnostic_id"], name: "index_algorithm_version_diagnostics_on_diagnostic_id"
-  end
-
   create_table "algorithm_versions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "version"
     t.text "json"
@@ -102,7 +93,8 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
 
   create_table "conditions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "operator"
-    t.bigint "relation_id"
+    t.string "referenceable_type"
+    t.bigint "referenceable_id"
     t.string "first_conditionable_type"
     t.bigint "first_conditionable_id"
     t.string "second_conditionable_type"
@@ -110,7 +102,7 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["first_conditionable_type", "first_conditionable_id"], name: "index_first_conditionable_id"
-    t.index ["relation_id"], name: "index_conditions_on_relation_id"
+    t.index ["referenceable_type", "referenceable_id"], name: "index_referenceable_id"
     t.index ["second_conditionable_type", "second_conditionable_id"], name: "index_second_conditionable_id"
   end
 
@@ -131,6 +123,15 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
     t.string "label"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "enabled_diagnostics", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "algorithm_version_id"
+    t.bigint "diagnostic_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["algorithm_version_id"], name: "index_enabled_diagnostics_on_algorithm_version_id"
+    t.index ["diagnostic_id"], name: "index_enabled_diagnostics_on_diagnostic_id"
   end
 
   create_table "final_diagnostic_health_cares", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -266,12 +267,12 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
 
   add_foreign_key "activities", "devices"
   add_foreign_key "activities", "users"
-  add_foreign_key "algorithm_version_diagnostics", "algorithm_versions"
-  add_foreign_key "algorithm_version_diagnostics", "diagnostics"
   add_foreign_key "algorithm_versions", "algorithms"
   add_foreign_key "algorithm_versions", "users"
   add_foreign_key "algorithms", "users"
   add_foreign_key "available_nodes", "algorithms"
+  add_foreign_key "enabled_diagnostics", "algorithm_versions"
+  add_foreign_key "enabled_diagnostics", "diagnostics"
   add_foreign_key "group_users", "groups"
   add_foreign_key "group_users", "users"
   add_foreign_key "nodes", "answer_types"

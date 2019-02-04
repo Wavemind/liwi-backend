@@ -251,43 +251,22 @@ Child.create!(relation: dd7_ps6, node: t2)
 
 
 
-Condition.create!(relation: ps6_p25, first_conditionable: s4_2, operator: nil, second_conditionable: nil)
-Condition.create!(relation: ps6_ps6, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
-Condition.create!(relation: ps6_ps6, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: ps6_p25, first_conditionable: s4_2, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: ps6_ps6, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: ps6_ps6, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
 
-Condition.create!(relation: dd7_p1, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
-Condition.create!(relation: dd7_p3, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
-Condition.create!(relation: dd7_p13, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
-Condition.create!(relation: dd7_p14, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: dd7_p1, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: dd7_p3, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: dd7_p13, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: dd7_p14, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
 
-Condition.create!(relation: dd7_df7, first_conditionable: p14_1, operator: nil, second_conditionable: nil)
-Condition.create!(relation: dd7_df7, first_conditionable: p3_2, operator: 'AND', second_conditionable: p13_1)
-Condition.create!(relation: dd7_df7, first_conditionable: p1_1, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: dd7_df7, first_conditionable: p14_1, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: dd7_df7, first_conditionable: p3_2, operator: 'AND', second_conditionable: p13_1)
+Condition.create!(referenceable: dd7_df7, first_conditionable: p1_1, operator: nil, second_conditionable: nil)
 
-Condition.create!(relation: dd7_ps6, first_conditionable: df7, operator: nil, second_conditionable: nil)
-Condition.create!(relation: dd7_t9, first_conditionable: ps6_1, operator: nil, second_conditionable: nil)
-Condition.create!(relation: dd7_t1, first_conditionable: ps6_1, operator: nil, second_conditionable: nil)
-Condition.create!(relation: dd7_t2, first_conditionable: ps6_2, operator: nil, second_conditionable: nil)
-Condition.create!(relation: dd7_m2, first_conditionable: ps6_2, operator: 'OR', second_conditionable: ps6_1)
+Condition.create!(referenceable: dd7_ps6, first_conditionable: df7, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: dd7_t9, first_conditionable: ps6_1, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: dd7_t1, first_conditionable: ps6_1, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: dd7_t2, first_conditionable: ps6_2, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: dd7_m2, first_conditionable: ps6_2, operator: 'OR', second_conditionable: ps6_1)
 
-
-
-# k_t_kantaing = (A & B) OR (C & D)
-# k2_t_kantaing = ((Y OR Z) & B) OR (C & D)
-# k2_t_kantaing = (Y & B) OR (Z & B) OR (C & D)
-
-
-
-# Chlid.create!(relation: dd7_s2_2, node: p12)
-#
-# Chlid.create!(relation: dd7_p13, answer: s2_1)
-#
-# Chlid.create!(relation: dd7_p14, node: s2)
-#
-# Chlid.create!(relation: dd7_p1, answer: p1_1)
-#
-# Chlid.create!(relation: dd7_df7, answer: p1_1)
-# Chlid.create!(relation: dd7_df7, answer: p1_1)
-# Chlid.create!(relation: dd7_df7, answer: p1_1)
-# Chlid.create!(relation: dd7_df7, answer: p1_1)
-#
