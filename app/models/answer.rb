@@ -1,7 +1,8 @@
 # Every answers to every questions
 class Answer < ApplicationRecord
 
-  belongs_to :question
+  belongs_to :node
+  has_many :children
 
   validates_presence_of :reference
 
@@ -12,13 +13,13 @@ class Answer < ApplicationRecord
 
   # {Node#unique_reference}
   def unique_reference
-    if Answer.where(reference: "#{question.reference}_#{reference}").any?
+    if Answer.where(reference: "#{node.reference}_#{reference}").any?
       errors.add(:reference, I18n.t('nodes.validation.reference_used'))
     end
   end
 
   # {Node#complete_reference}
   def complete_reference
-    self.reference = "#{question.reference}_#{reference}"
+    self.reference = "#{node.reference}_#{reference}"
   end
 end

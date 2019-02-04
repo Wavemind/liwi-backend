@@ -6,7 +6,7 @@ class CreateAnswers < ActiveRecord::Migration[5.2]
       t.string :operator
       t.string :value
 
-      t.belongs_to :question
+      t.belongs_to :node
 
       t.timestamps
     end

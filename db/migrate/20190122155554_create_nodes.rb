@@ -7,6 +7,7 @@ class CreateNodes < ActiveRecord::Migration[5.2]
       t.string :type
 
       t.belongs_to :category
+      t.belongs_to :diagnostic
       t.text :description
 
       t.timestamps

@@ -78,32 +78,32 @@ comorbidity = Category.create!(name: 'Comorbidity', reference_prefix: 'DC')
 # Questions
 age = Question.create!(answer_type: input_integer, label: 'Quel est l' 'âge du patient ?', reference: '1', category: exposure, priority: Question.priorities[:triage])
 convulsion = Question.create!(answer_type: input_integer, label: 'How many time did you convulse', reference: '3', category: symptom, priority: Question.priorities[:priority])
-drinking_status = Question.create!(answer_type: radio, label: 'Is the patient able to tolerate PO liquid ?', reference: '4', category: symptom, priority: Question.priorities[:priority])
+drinking_status = Question.create!(answer_type: radio, label: 'Is the patient able to tolerate PO liquid ?', reference: '45', category: symptom, priority: Question.priorities[:priority])
 emesis = Question.create!(answer_type: input_integer, label: 'How many time did you loose stool or emesis last 24 hours ?', reference: '5', category: symptom, priority: Question.priorities[:priority])
 muac = Question.create!(answer_type: input_float, label: 'What is MUAC size ?', reference: '6', category: physical_exam, priority: Question.priorities[:triage])
 skin_lesion_size = Question.create!(answer_type: input_float, label: 'What is the size of the skin lesion ?', reference: '21', category: physical_exam, priority: Question.priorities[:basic])
 
 # Answers
-Answer.create!(question: age, reference: '1', label: 'more than 12 months', value: '12', operator: '>=')
-Answer.create!(question: age, reference: '2', label: 'between 6 and 12 months', value: '6, 12', operator: '>=, <')
-Answer.create!(question: age, reference: '3', label: 'between 2 and 6 months', value: '2, 6', operator: '>=, <')
-Answer.create!(question: age, reference: '4', label: 'less than 2 months', value: '2', operator: '<')
-Answer.create!(question: convulsion, reference: '1', label: '2 or more', value: '2', operator: '>=')
-Answer.create!(question: convulsion, reference: '2', label: 'less than 2', value: '2', operator: '<')
-Answer.create!(question: drinking_status, reference: '1', label: 'yes', value: nil, operator: nil)
-Answer.create!(question: drinking_status, reference: '2', label: 'no', value: nil, operator: nil)
-Answer.create!(question: emesis, reference: '1', label: '3 or more', value: '3', operator: '>=')
-Answer.create!(question: emesis, reference: '2', label: 'less than 3', value: '3', operator: '<')
-Answer.create!(question: muac, reference: '1', label: '12.5 or more', value: '12.5', operator: '>=')
-Answer.create!(question: muac, reference: '2', label: 'between 11.5 and 12.5', value: '11.5, 12.5', operator: '>=, <')
-Answer.create!(question: muac, reference: '3', label: 'less than 11.5', value: '11.5', operator: '<')
-Answer.create!(question: skin_lesion_size, reference: '1', label: '5 or more cm', value: '5', operator: '>=')
-Answer.create!(question: skin_lesion_size, reference: '2', label: 'between 2.5 and 5 cm', value: '2.5, 5', operator: '>=, <')
-Answer.create!(question: skin_lesion_size, reference: '3', label: 'less than 2.5 cm', value: '2.5', operator: '<')
+Answer.create!(node: age, reference: '1', label: 'more than 12 months', value: '12', operator: '>=')
+Answer.create!(node: age, reference: '2', label: 'between 6 and 12 months', value: '6, 12', operator: '>=, <')
+Answer.create!(node: age, reference: '3', label: 'between 2 and 6 months', value: '2, 6', operator: '>=, <')
+Answer.create!(node: age, reference: '4', label: 'less than 2 months', value: '2', operator: '<')
+Answer.create!(node: convulsion, reference: '1', label: '2 or more', value: '2', operator: '>=')
+Answer.create!(node: convulsion, reference: '2', label: 'less than 2', value: '2', operator: '<')
+Answer.create!(node: drinking_status, reference: '1', label: 'yes', value: nil, operator: nil)
+Answer.create!(node: drinking_status, reference: '2', label: 'no', value: nil, operator: nil)
+Answer.create!(node: emesis, reference: '1', label: '3 or more', value: '3', operator: '>=')
+Answer.create!(node: emesis, reference: '2', label: 'less than 3', value: '3', operator: '<')
+Answer.create!(node: muac, reference: '1', label: '12.5 or more', value: '12.5', operator: '>=')
+Answer.create!(node: muac, reference: '2', label: 'between 11.5 and 12.5', value: '11.5, 12.5', operator: '>=, <')
+Answer.create!(node: muac, reference: '3', label: 'less than 11.5', value: '11.5', operator: '<')
+Answer.create!(node: skin_lesion_size, reference: '1', label: '5 or more cm', value: '5', operator: '>=')
+Answer.create!(node: skin_lesion_size, reference: '2', label: 'between 2.5 and 5 cm', value: '2.5, 5', operator: '>=, <')
+Answer.create!(node: skin_lesion_size, reference: '3', label: 'less than 2.5 cm', value: '2.5', operator: '<')
 
 # Diagnostics
 malaria = Diagnostic.new(label: 'Malaria', reference: '4')
-impetigo = Diagnostic.new(label: 'IMPETIGO', reference: '7')
+impetigo = Diagnostic.new(label: 'IMPETIGO', reference: '6')
 chicken_pox = Diagnostic.new(label: 'Chicken pox', reference: '8')
 
 malaria.algorithm_versions << epoc_first
@@ -161,3 +161,133 @@ MedicalCase.create!(patient: kantaing, algorithm_version: ft_1_0)
 MedicalCase.create!(patient: idefix, algorithm_version: ft_1_2)
 MedicalCase.create!(patient: john, algorithm_version: ft_1_2)
 
+
+#################################################################################################
+
+
+dd7 = Diagnostic.create!(label: 'Severe LRTI', reference: '7')
+df7 = FinalDiagnostic.create!(label: 'Severe lower respiratory tract infection', reference: '7', diagnostic: dd7)
+
+s2 = Question.create!(label: 'Cough', reference: '2', category: symptom, priority: Question.priorities[:priority], answer_type: radio)
+s2_1 = Answer.create!(node: s2, reference: '1', label: 'yes', value: nil, operator: nil)
+s2_2 = Answer.create!(node: s2, reference: '2', label: 'no', value: nil, operator: nil)
+
+s4 = Question.create!(label: 'Drink as usual', reference: '4', category: symptom, priority: Question.priorities[:priority], answer_type: radio)
+s4_1 = Answer.create!(node: s4, reference: '1', label: 'yes', value: nil, operator: nil)
+s4_2 = Answer.create!(node: s4, reference: '2', label: 'no', value: nil, operator: nil)
+
+p1 = Question.create!(label: 'SAO2', reference: '1', category: physical_exam, priority: Question.priorities[:triage], answer_type: input_integer)
+p1_1 = Answer.create!(node: p1, reference: '1', label: '>/= 90%', value: '90', operator: '>=')
+p1_1 = Answer.create!(node: p1, reference: '2', label: '< 90%', value: '90', operator: '<')
+
+p3 = Question.create!(label: 'Respiratory rate', reference: '3', category: physical_exam, priority: Question.priorities[:triage], answer_type: input_integer)
+p3_1 = Answer.create!(node: p3, reference: '1', label: '< 97th%ile', value: '97', operator: '<')
+p3_2 = Answer.create!(node: p3, reference: '2', label: '>/= 97th%ile', value: '97', operator: '>=')
+
+p13 = Question.create!(label: 'Lower chest indrawing', reference: '13', category: physical_exam, priority: Question.priorities[:basic], answer_type: radio)
+p13_1 = Answer.create!(node: p13, reference: '1', label: 'yes', value: nil, operator: nil)
+p13_2 = Answer.create!(node: p13, reference: '2', label: 'no', value: nil, operator: nil)
+
+
+p14 = Question.create!(label: 'Sever respiratory distress', reference: '14', category: physical_exam, priority: Question.priorities[:basic], answer_type: radio)
+p14_1 = Answer.create!(node: p14, reference: '1', label: 'yes', value: nil, operator: nil)
+p14_1 = Answer.create!(node: p14, reference: '2', label: 'no', value: nil, operator: nil)
+
+p25 = Question.create!(label: 'Tolerates PO liquid', reference: '25', category: physical_exam, priority: Question.priorities[:basic], answer_type: radio)
+p25_1 = Answer.create!(node: p25, reference: '1', label: 'yes', value: nil, operator: nil)
+p25_2 = Answer.create!(node: p25, reference: '2', label: 'no', value: nil, operator: nil)
+
+t1 = Treatment.create!(label: 'Amoxicillin', reference: '1')
+t2 = Treatment.create!(label: 'IM ceftriaxone', reference: '2')
+t9 = Treatment.create!(label: 'Oral rehydration', reference: '9')
+
+m2 = Management.create!(label: 'Refer', reference: '2')
+
+ps6 = PredefinedSyndrom.create!(reference: '6', label: 'Able to drink')
+ps6_1 = Answer.create!(node: ps6, reference: '1', label: 'yes', value: nil, operator: nil)
+ps6_2 = Answer.create!(node: ps6, reference: '2', label: 'no', value: nil, operator: nil)
+
+epoct.nodes << [df7, s2, p3, p13, p14, p1, ps6, t9, t1, t2, m2]
+epoct.save
+
+# DF7
+dd7_s2 = Relation.create!(relationable: dd7, node: s2)
+dd7_p3 = Relation.create!(relationable: dd7, node: p3)
+dd7_p13 = Relation.create!(relationable: dd7, node: p13)
+dd7_p14 = Relation.create!(relationable: dd7, node: p14)
+dd7_p1 = Relation.create!(relationable: dd7, node: p1)
+dd7_df7 = Relation.create!(relationable: dd7, node: df7)
+dd7_ps6 = Relation.create!(relationable: dd7, node: ps6)
+dd7_t9 = Relation.create!(relationable: dd7, node: t9)
+dd7_t1 = Relation.create!(relationable: dd7, node: t1)
+dd7_t2 = Relation.create!(relationable: dd7, node: t2)
+dd7_m2 = Relation.create!(relationable: dd7, node: m2)
+
+# PS6
+ps6_s4 = Relation.create!(relationable: ps6, node: s4)
+ps6_p25 = Relation.create!(relationable: ps6, node: p25)
+ps6_ps6 = Relation.create!(relationable: ps6, node: ps6)
+
+
+Child.create!(relation: ps6_s4, node: ps6)
+Child.create!(relation: ps6_s4, node: p25)
+Child.create!(relation: ps6_p25, node: ps6)
+
+Child.create!(relation: dd7_s2, node: p14)
+Child.create!(relation: dd7_s2, node: p13)
+Child.create!(relation: dd7_s2, node: p1)
+Child.create!(relation: dd7_s2, node: p3)
+
+Child.create!(relation: dd7_p14, node: df7)
+Child.create!(relation: dd7_p1, node: df7)
+Child.create!(relation: dd7_p3, node: df7)
+Child.create!(relation: dd7_p13, node: df7)
+
+Child.create!(relation: dd7_df7, node: ps6)
+
+Child.create!(relation: dd7_ps6, node: t9)
+Child.create!(relation: dd7_ps6, node: t1)
+Child.create!(relation: dd7_ps6, node: t2)
+
+
+
+Condition.create!(relation: ps6_p25, first_conditionable: s4_2, operator: nil, second_conditionable: nil)
+Condition.create!(relation: ps6_ps6, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
+Condition.create!(relation: ps6_ps6, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
+
+Condition.create!(relation: dd7_p1, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
+Condition.create!(relation: dd7_p3, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
+Condition.create!(relation: dd7_p13, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
+Condition.create!(relation: dd7_p14, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
+
+Condition.create!(relation: dd7_df7, first_conditionable: p14_1, operator: nil, second_conditionable: nil)
+Condition.create!(relation: dd7_df7, first_conditionable: p3_2, operator: 'AND', second_conditionable: p13_1)
+Condition.create!(relation: dd7_df7, first_conditionable: p1_1, operator: nil, second_conditionable: nil)
+
+Condition.create!(relation: dd7_ps6, first_conditionable: df7, operator: nil, second_conditionable: nil)
+Condition.create!(relation: dd7_t9, first_conditionable: ps6_1, operator: nil, second_conditionable: nil)
+Condition.create!(relation: dd7_t1, first_conditionable: ps6_1, operator: nil, second_conditionable: nil)
+Condition.create!(relation: dd7_t2, first_conditionable: ps6_2, operator: nil, second_conditionable: nil)
+Condition.create!(relation: dd7_m2, first_conditionable: ps6_2, operator: 'OR', second_conditionable: ps6_1)
+
+
+
+# k_t_kantaing = (A & B) OR (C & D)
+# k2_t_kantaing = ((Y OR Z) & B) OR (C & D)
+# k2_t_kantaing = (Y & B) OR (Z & B) OR (C & D)
+
+
+
+# Chlid.create!(relation: dd7_s2_2, node: p12)
+#
+# Chlid.create!(relation: dd7_p13, answer: s2_1)
+#
+# Chlid.create!(relation: dd7_p14, node: s2)
+#
+# Chlid.create!(relation: dd7_p1, answer: p1_1)
+#
+# Chlid.create!(relation: dd7_df7, answer: p1_1)
+# Chlid.create!(relation: dd7_df7, answer: p1_1)
+# Chlid.create!(relation: dd7_df7, answer: p1_1)
+# Chlid.create!(relation: dd7_df7, answer: p1_1)
+#

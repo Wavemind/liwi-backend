@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_01_093426) do
+ActiveRecord::Schema.define(version: 2019_02_01_105145) do
 
   create_table "activities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.decimal "longitude", precision: 13, scale: 9
@@ -68,10 +68,10 @@ ActiveRecord::Schema.define(version: 2019_02_01_093426) do
     t.string "label"
     t.string "operator"
     t.string "value"
-    t.bigint "question_id"
+    t.bigint "node_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["question_id"], name: "index_answers_on_question_id"
+    t.index ["node_id"], name: "index_answers_on_node_id"
   end
 
   create_table "available_nodes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -88,6 +88,30 @@ ActiveRecord::Schema.define(version: 2019_02_01_093426) do
     t.string "reference_prefix"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "children", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.float "wheight"
+    t.bigint "node_id"
+    t.bigint "relation_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["node_id"], name: "index_children_on_node_id"
+    t.index ["relation_id"], name: "index_children_on_relation_id"
+  end
+
+  create_table "conditions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "operator"
+    t.bigint "relation_id"
+    t.string "first_conditionable_type"
+    t.bigint "first_conditionable_id"
+    t.string "second_conditionable_type"
+    t.bigint "second_conditionable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["first_conditionable_type", "first_conditionable_id"], name: "index_first_conditionable_id"
+    t.index ["relation_id"], name: "index_conditions_on_relation_id"
+    t.index ["second_conditionable_type", "second_conditionable_id"], name: "index_second_conditionable_id"
   end
 
   create_table "devices", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -165,12 +189,14 @@ ActiveRecord::Schema.define(version: 2019_02_01_093426) do
     t.integer "priority"
     t.string "type"
     t.bigint "category_id"
+    t.bigint "diagnostic_id"
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "answer_type_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
     t.index ["category_id"], name: "index_nodes_on_category_id"
+    t.index ["diagnostic_id"], name: "index_nodes_on_diagnostic_id"
   end
 
   create_table "patients", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -179,6 +205,16 @@ ActiveRecord::Schema.define(version: 2019_02_01_093426) do
     t.date "birth_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "relations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "node_id"
+    t.string "relationable_type"
+    t.bigint "relationable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["node_id"], name: "index_relations_on_node_id"
+    t.index ["relationable_type", "relationable_id"], name: "index_relations_on_relationable_type_and_relationable_id"
   end
 
   create_table "roles", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
