@@ -99,6 +99,7 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
     t.bigint "first_conditionable_id"
     t.string "second_conditionable_type"
     t.bigint "second_conditionable_id"
+    t.boolean "top_level", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["first_conditionable_type", "first_conditionable_id"], name: "index_first_conditionable_id"
@@ -137,8 +138,10 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
   create_table "final_diagnostic_health_cares", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "treatable_type"
     t.bigint "treatable_id"
+    t.bigint "final_diagnostic_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["final_diagnostic_id"], name: "index_final_diagnostic_health_cares_on_final_diagnostic_id"
     t.index ["treatable_type", "treatable_id"], name: "index_final_diagnostics_treatable_id"
   end
 
@@ -194,10 +197,12 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "final_diagnostic_id"
     t.bigint "answer_type_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
     t.index ["category_id"], name: "index_nodes_on_category_id"
     t.index ["diagnostic_id"], name: "index_nodes_on_diagnostic_id"
+    t.index ["final_diagnostic_id"], name: "index_nodes_on_final_diagnostic_id"
   end
 
   create_table "patients", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|

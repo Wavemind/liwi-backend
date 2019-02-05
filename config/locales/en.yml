@@ -106,6 +106,8 @@ en:
       error_add_user: "An error occured when adding user to group"
     show:
       title: "Details of %{name}"
+  final_diagnostics:
+    reference: "DF"
   managements:
     edit:
       title: "Edit the management"
@@ -122,6 +124,8 @@ en:
   nodes:
     validation:
       reference_used: "This reference is already used"
+  predefined_syndromes:
+    reference: "PS"
   prompt: "Select"
   questions:
     categories:

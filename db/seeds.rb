@@ -106,7 +106,7 @@ malaria = Diagnostic.new(label: 'Malaria', reference: '4')
 impetigo = Diagnostic.new(label: 'IMPETIGO', reference: '6')
 chicken_pox = Diagnostic.new(label: 'Chicken pox', reference: '8')
 
-malaria.algorithm_versions << epoc_first
+# malaria.algorithm_versions << epoc_first
 impetigo.algorithm_versions << ft_1_0
 chicken_pox.algorithm_versions << ft_1_2
 
@@ -168,6 +168,9 @@ MedicalCase.create!(patient: john, algorithm_version: ft_1_2)
 dd7 = Diagnostic.create!(label: 'Severe LRTI', reference: '7')
 df7 = FinalDiagnostic.create!(label: 'Severe lower respiratory tract infection', reference: '7', diagnostic: dd7)
 
+epoc_first.diagnostics << dd7
+epoc_first.save
+
 s2 = Question.create!(label: 'Cough', reference: '2', category: symptom, priority: Question.priorities[:priority], answer_type: radio)
 s2_1 = Answer.create!(node: s2, reference: '1', label: 'yes', value: nil, operator: nil)
 s2_2 = Answer.create!(node: s2, reference: '2', label: 'no', value: nil, operator: nil)
@@ -203,7 +206,10 @@ t9 = Treatment.create!(label: 'Oral rehydration', reference: '9')
 
 m2 = Management.create!(label: 'Refer', reference: '2')
 
-ps6 = PredefinedSyndrom.create!(reference: '6', label: 'Able to drink')
+df7.treatments << [t1,t2,t9]
+df7.managements << [m2]
+
+ps6 = PredefinedSyndrome.create!(reference: '6', label: 'Able to drink')
 ps6_1 = Answer.create!(node: ps6, reference: '1', label: 'yes', value: nil, operator: nil)
 ps6_2 = Answer.create!(node: ps6, reference: '2', label: 'no', value: nil, operator: nil)
 
@@ -268,5 +274,4 @@ Condition.create!(referenceable: dd7_ps6, first_conditionable: df7, operator: ni
 Condition.create!(referenceable: dd7_t9, first_conditionable: ps6_1, operator: nil, second_conditionable: nil)
 Condition.create!(referenceable: dd7_t1, first_conditionable: ps6_1, operator: nil, second_conditionable: nil)
 Condition.create!(referenceable: dd7_t2, first_conditionable: ps6_2, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: dd7_m2, first_conditionable: ps6_2, operator: 'OR', second_conditionable: ps6_1)
-
+Condition.create!(referenceable: dd7_m2, first_conditionable: ps6_2, operator: nil, second_conditionable: ps6_1)

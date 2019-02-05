@@ -2,9 +2,26 @@
 class FinalDiagnostic < Node
 
   belongs_to :diagnostic
+  belongs_to :final_diagnostic, foreign_key: :excluding_diagnostic_id, optional: true
 
   has_many :final_diagnostic_health_cares
   has_many :medical_case_final_diagnostics
   has_many :medical_cases, through: :medical_case_final_diagnostics
+  has_many :managements, through: :final_diagnostic_health_cares, source: :treatable, source_type: 'Management'
+  has_many :treatments, through: :final_diagnostic_health_cares, source: :treatable, source_type: 'Treatment'
+
+  private
+
+  # {Node#unique_reference}
+  def unique_reference
+    if FinalDiagnostic.where(reference: "#{I18n.t('final_diagnostics.reference')}_#{reference}").any?
+      errors.add(:reference, I18n.t('nodes.validation.reference_used'))
+    end
+  end
+
+  # {Node#complete_reference}
+  def complete_reference
+    self.reference = "#{I18n.t('final_diagnostics.reference')}_#{reference}"
+  end
 
 end

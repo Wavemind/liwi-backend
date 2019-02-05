@@ -12,5 +12,8 @@ class CreateNodes < ActiveRecord::Migration[5.2]
 
       t.timestamps
     end
+
+    add_reference :nodes, :final_diagnostic, column: :final_diagnostic_id
+
   end
 end

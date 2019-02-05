@@ -1,5 +1,7 @@
 # How a disease is diagnosed -> Differential diagnostics
 class Diagnostic < ApplicationRecord
+  before_create :complete_reference
+  after_validation :unique_reference
 
   has_many :enabled_diagnostics
   has_many :algorithm_versions, through: :enabled_diagnostics
@@ -10,9 +12,6 @@ class Diagnostic < ApplicationRecord
 
   validates_presence_of :reference
   validates_presence_of :label
-
-  before_create :complete_reference
-  after_validation :unique_reference
 
   private
 
