@@ -49,8 +49,8 @@ Rails.application.routes.draw do
   end
 
   resources :groups, only: [:index, :show, :new, :create, :edit, :update] do
-    delete 'users/:user_id/remove_user', to: 'groups#remove_user', as: 'remove_user'
-    post 'add_user', to: 'groups#add_user', as: 'add_user'
+    delete 'devices/:device_id/remove_device', to: 'groups#remove_device', as: 'remove_device'
+    post 'add_device', to: 'groups#add_device', as: 'add_device'
   end
 
   resources :devices, only: [:index, :show] do
