@@ -2,7 +2,7 @@ class AlgorithmVersionsService
 
   # @params id [AlgorithmVersion] id of the algorithm version to extract
   # @return hash
-  # Build a hash of an algorithm version with its diagnostics, predefined syndromes, questions and health cares
+  # Build a hash of an algorithm version with its diagnostics, predefined syndromes, questions and health cares and metadata
   def self.generate_hash(id)
     @algorithm_version = AlgorithmVersion.find(id)
     @managements = {}
@@ -13,10 +13,12 @@ class AlgorithmVersionsService
     hash = extract_metadata
     hash['diseases'] = []
 
+    # Loop in each diagnostics defined in current algorithm version
     @algorithm_version.diagnostics.each do |diagnostic|
       hash['diseases'] << extract_diagnostic(diagnostic)
     end
 
+    # Set all questions/treatments/managements used in this version of algorithm
     hash['questions'] = generate_questions
     hash['treatments'] = generate_treatments
     hash['managements'] = generate_managements
@@ -25,8 +27,19 @@ class AlgorithmVersionsService
     hash
   end
 
+  ############################################### AMERICA ##############################################################
+  ######################################################################################################################
+  ######################################################################################################################
+  ######################################################################################################################
+  ######################################################################################################################
+  ######################################################################################################################
+  ######################################################################################################################
+  ################################################ MEXICO ##############################################################
+
   private
 
+  # @return hash
+  # Build a hash of metadata about the algorithm and algorithm version
   def self.extract_metadata
     hash = {}
     hash['name'] = @algorithm_version.algorithm.name
@@ -38,6 +51,9 @@ class AlgorithmVersionsService
     hash
   end
 
+  # @params object [Diagnostic]
+  # @return hash
+  # Set metadata of diagnostic and it's condition for differential diagnosis
   def self.extract_diagnostic(diagnostic)
     hash = {}
     hash[diagnostic.id] = {}
@@ -45,9 +61,9 @@ class AlgorithmVersionsService
     hash[diagnostic.id]['reference'] = diagnostic.reference
     hash[diagnostic.id]['label'] = diagnostic.label
     hash[diagnostic.id]['differential'] = extract_conditions(diagnostic.conditions)
-
     hash[diagnostic.id]['nodes'] = []
 
+    # Loop in each question used in current diagnostic
     diagnostic.relations.questions.includes([:children, node:[:answers, :answer_type, :category]]).each do |question_relation|
       # Append the questions in order to list them all at the end of the json.
       assign_node(question_relation.node)
@@ -55,6 +71,7 @@ class AlgorithmVersionsService
       hash[diagnostic.id]['nodes'] << extract_relations(question_relation)
     end
 
+    # Loop in each predefined syndromes used in current diagnostic
     diagnostic.relations.predefined_syndromes.includes([:children, node:[:answers]]).each do |predefined_syndrome_relation|
       # Append the predefined syndromes in order to list them all at the end of the json.
       assign_node(predefined_syndrome_relation.node)
@@ -62,12 +79,17 @@ class AlgorithmVersionsService
       hash[diagnostic.id]['nodes'] << extract_relations(predefined_syndrome_relation)
     end
 
+    # Loop in each final diagnostics for set conditional acceptance and health cares related to it
     diagnostic.relations.final_diagnostics.each do |final_diagnostic_relation|
       hash[diagnostic.id]['nodes'] << extract_final_diagnostic(final_diagnostic_relation)
     end
+
     hash
   end
 
+  # @params object [Relation]
+  # @return hash
+  # Set metadata of a final diagnostic
   def self.extract_final_diagnostic(relation)
     final_diagnostic = relation.node
     hash = {}
@@ -80,6 +102,9 @@ class AlgorithmVersionsService
     hash
   end
 
+  # @params object [Relation]
+  # @return hash
+  # Set children and condition for current node
   def self.extract_relations(relation)
     hash = {}
     hash[relation.id] = extract_conditions(relation.conditions)
@@ -88,6 +113,9 @@ class AlgorithmVersionsService
     hash
   end
 
+  # @params array [Conditions]
+  # @return hash
+  # Return hash of top conditions and conditions
   def self.extract_conditions(conditions)
     hash = {}
     hash['top_conditions'] = []
@@ -105,19 +133,32 @@ class AlgorithmVersionsService
     hash
   end
 
+  # @params hash [Condition]
+  # @return hash
+  # Set metadata for condition
   def self.push_condition(condition)
     hash = {}
     hash[condition.id] = {}
     hash[condition.id]['first_id'] = condition.first_conditionable_id
     hash[condition.id]['first_type'] = condition.first_conditionable_type
+
+    # Give the question's/predefined syndrome's id in order to retrieve it in front-end
     hash[condition.id]['first_node_id'] = condition.first_conditionable.node.id if condition.first_conditionable.is_a?(Answer)
+
     hash[condition.id]['operator'] = condition.operator
     hash[condition.id]['second_id'] = condition.second_conditionable_id
     hash[condition.id]['second_type'] = condition.second_conditionable_type
+
+    # Give the question's/predefined syndrome's id in order to retrieve it in front-end
     hash[condition.id]['second_node_id'] = condition.second_conditionable.node.id if condition.second_conditionable.is_a?(Answer)
+
     hash
   end
 
+  # @params activerecord collection [Treatment, Management]
+  # @params [Integer] id of current diagnostic
+  # @return hash
+  # Set metadata for treatments and managements (health cares)
   def self.extract_health_cares(health_cares, diagnostic_id)
     hash = {}
     health_cares.each do |health_care|
@@ -130,6 +171,8 @@ class AlgorithmVersionsService
     hash
   end
 
+  # @params object [Node]
+  # Push the current node in the appropriate hash if it doesn't exist
   def self.assign_node(node)
     case node.type
     when 'Question'
@@ -145,7 +188,8 @@ class AlgorithmVersionsService
     end
   end
 
-  # Generate hash for nodes
+  # @return hash
+  # Generate all questions with its answers
   def self.generate_questions
     hash = {}
     @questions.each do |key, question|
@@ -174,6 +218,8 @@ class AlgorithmVersionsService
     hash
   end
 
+  # @return hash
+  # Generate all treatments
   def self.generate_treatments
     hash = {}
     @treatments.each do |key, treatment|
@@ -185,6 +231,8 @@ class AlgorithmVersionsService
     hash
   end
 
+  # @return hash
+  # Generate all managements
   def self.generate_managements
     hash = {}
     @managements.each do |key, management|
@@ -196,16 +244,20 @@ class AlgorithmVersionsService
     hash
   end
 
+  # @return hash
+  # Generate all predefined syndromes with its answers and conditions related
   def self.generate_predefined_syndromes
     hash = {}
     @predefined_syndromes.each do |key, predefined_syndrome|
       hash[predefined_syndrome.id] = {}
       hash[predefined_syndrome.id]['nodes'] = []
 
+      # Loop in each relation for defined condition
       predefined_syndrome.relations.includes(:conditions, :children).each do |relation|
         hash[predefined_syndrome.id]['nodes'] << extract_relations(relation)
         hash[predefined_syndrome.id]['answers'] = []
 
+        # Loop in each output possibilities(answer) for defined predefined syndrome
         predefined_syndrome.answers.each do |answer|
           answer_hash = {}
           answer_hash[answer.id] = {}
