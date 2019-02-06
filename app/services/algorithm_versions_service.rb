@@ -11,11 +11,11 @@ class AlgorithmVersionsService
     @predefined_syndromes = {}
 
     hash = extract_metadata
-    hash['diseases'] = []
+    hash['diseases'] = {}
 
     # Loop in each diagnostics defined in current algorithm version
     @algorithm_version.diagnostics.each do |diagnostic|
-      hash['diseases'] << extract_diagnostic(diagnostic)
+      hash['diseases'][diagnostic.id] = extract_diagnostic(diagnostic)
     end
 
     # Set all questions/treatments/managements used in this version of algorithm
@@ -27,14 +27,14 @@ class AlgorithmVersionsService
     hash
   end
 
-  ############################################### AMERICA ##############################################################
+  ###################################################### AMERICA #######################################################
   ######################################################################################################################
   ######################################################################################################################
   ######################################################################################################################
   ######################################################################################################################
   ######################################################################################################################
   ######################################################################################################################
-  ################################################ MEXICO ##############################################################
+  ####################################################### MEXICO #######################################################
 
   private
 
@@ -56,19 +56,19 @@ class AlgorithmVersionsService
   # Set metadata of diagnostic and it's condition for differential diagnosis
   def self.extract_diagnostic(diagnostic)
     hash = {}
-    hash[diagnostic.id] = {}
-    hash[diagnostic.id]['id'] = diagnostic.id
-    hash[diagnostic.id]['reference'] = diagnostic.reference
-    hash[diagnostic.id]['label'] = diagnostic.label
-    hash[diagnostic.id]['differential'] = extract_conditions(diagnostic.conditions)
-    hash[diagnostic.id]['nodes'] = []
+    hash['id'] = diagnostic.id
+    hash['reference'] = diagnostic.reference
+    hash['label'] = diagnostic.label
+    hash['differential'] = extract_conditions(diagnostic.conditions)
+    hash['nodes'] = {}
+    hash['diagnosis'] = {}
 
     # Loop in each question used in current diagnostic
     diagnostic.relations.questions.includes([:children, node:[:answers, :answer_type, :category]]).each do |question_relation|
       # Append the questions in order to list them all at the end of the json.
       assign_node(question_relation.node)
 
-      hash[diagnostic.id]['nodes'] << extract_relations(question_relation)
+      hash['nodes'][question_relation.id] = extract_relations(question_relation)
     end
 
     # Loop in each predefined syndromes used in current diagnostic
@@ -76,12 +76,12 @@ class AlgorithmVersionsService
       # Append the predefined syndromes in order to list them all at the end of the json.
       assign_node(predefined_syndrome_relation.node)
 
-      hash[diagnostic.id]['nodes'] << extract_relations(predefined_syndrome_relation)
+      hash['nodes'][predefined_syndrome_relation.id] = extract_relations(predefined_syndrome_relation)
     end
 
     # Loop in each final diagnostics for set conditional acceptance and health cares related to it
     diagnostic.relations.final_diagnostics.each do |final_diagnostic_relation|
-      hash[diagnostic.id]['nodes'] << extract_final_diagnostic(final_diagnostic_relation)
+      hash['diagnosis'][final_diagnostic_relation.id] = extract_final_diagnostic(final_diagnostic_relation)
     end
 
     hash
@@ -93,12 +93,11 @@ class AlgorithmVersionsService
   def self.extract_final_diagnostic(relation)
     final_diagnostic = relation.node
     hash = {}
-    hash['diagnosis'] = {}
-    hash['diagnosis'][final_diagnostic.id] = extract_conditions(relation.conditions)
-    hash['diagnosis'][final_diagnostic.id]['name'] = final_diagnostic.label
-    hash['diagnosis'][final_diagnostic.id]['treatments'] = extract_health_cares(final_diagnostic.treatments, relation.relationable.id)
-    hash['diagnosis'][final_diagnostic.id]['managements'] = extract_health_cares(final_diagnostic.managements, relation.relationable.id)
-    hash['diagnosis'][final_diagnostic.id]['excluding_diagnosis'] = final_diagnostic.final_diagnostic_id
+    hash[final_diagnostic.id] = extract_conditions(relation.conditions)
+    hash[final_diagnostic.id]['name'] = final_diagnostic.label
+    hash[final_diagnostic.id]['treatments'] = extract_health_cares(final_diagnostic.treatments, relation.relationable.id)
+    hash[final_diagnostic.id]['managements'] = extract_health_cares(final_diagnostic.managements, relation.relationable.id)
+    hash[final_diagnostic.id]['excluding_diagnosis'] = final_diagnostic.final_diagnostic_id
     hash
   end
 
@@ -106,10 +105,9 @@ class AlgorithmVersionsService
   # @return hash
   # Set children and condition for current node
   def self.extract_relations(relation)
-    hash = {}
-    hash[relation.id] = extract_conditions(relation.conditions)
-    hash[relation.id]['id'] = relation.id
-    hash[relation.id]['children'] = relation.children.collect(&:id)
+    hash = extract_conditions(relation.conditions)
+    hash['id'] = relation.id
+    hash['children'] = relation.children.collect(&:id)
     hash
   end
 
@@ -195,24 +193,24 @@ class AlgorithmVersionsService
     @questions.each do |key, question|
       hash[question.id] = {}
       hash[question.id]['id'] = question.id
+      hash[question.id]['reference'] = question.reference
       hash[question.id]['label'] = question.label
       hash[question.id]['description'] = question.description
       hash[question.id]['priority'] = question.priority
       hash[question.id]['category'] = question.category.name
       hash[question.id]['display_format'] = question.answer_type.display
       hash[question.id]['value_format'] = question.answer_type.value
-      hash[question.id]['answers'] = []
+      hash[question.id]['answers'] = {}
 
       question.answers.each do |answer|
         answer_hash = {}
-        answer_hash[answer.id] = {}
-        answer_hash[answer.id]['id'] = answer.id
-        answer_hash[answer.id]['reference'] = answer.reference
-        answer_hash[answer.id]['label'] = answer.label
-        answer_hash[answer.id]['value'] = answer.value
-        answer_hash[answer.id]['operator'] = answer.operator
+        answer_hash['id'] = answer.id
+        answer_hash['reference'] = answer.reference
+        answer_hash['label'] = answer.label
+        answer_hash['value'] = answer.value
+        answer_hash['operator'] = answer.operator
 
-        hash[question.id]['answers'] << answer_hash
+        hash[question.id]['answers'][answer.id] = answer_hash
       end
     end
     hash
@@ -225,6 +223,7 @@ class AlgorithmVersionsService
     @treatments.each do |key, treatment|
       hash[treatment.id] = {}
       hash[treatment.id]['id'] = treatment.id
+      hash[treatment.id]['reference'] = treatment.reference
       hash[treatment.id]['label'] = treatment.label
       hash[treatment.id]['description'] = treatment.description
     end
@@ -238,6 +237,7 @@ class AlgorithmVersionsService
     @managements.each do |key, management|
       hash[management.id] = {}
       hash[management.id]['id'] = management.id
+      hash[management.id]['reference'] = management.reference
       hash[management.id]['label'] = management.label
       hash[management.id]['description'] = management.description
     end
@@ -250,22 +250,21 @@ class AlgorithmVersionsService
     hash = {}
     @predefined_syndromes.each do |key, predefined_syndrome|
       hash[predefined_syndrome.id] = {}
-      hash[predefined_syndrome.id]['nodes'] = []
+      hash[predefined_syndrome.id]['nodes'] = {}
 
       # Loop in each relation for defined condition
       predefined_syndrome.relations.includes(:conditions, :children).each do |relation|
-        hash[predefined_syndrome.id]['nodes'] << extract_relations(relation)
-        hash[predefined_syndrome.id]['answers'] = []
+        hash[predefined_syndrome.id]['nodes'][relation.id] = extract_relations(relation)
+        hash[predefined_syndrome.id]['answers'] = {}
 
         # Loop in each output possibilities(answer) for defined predefined syndrome
         predefined_syndrome.answers.each do |answer|
           answer_hash = {}
-          answer_hash[answer.id] = {}
-          answer_hash[answer.id]['id'] = answer.id
-          answer_hash[answer.id]['reference'] = answer.reference
-          answer_hash[answer.id]['label'] = answer.label
+          answer_hash['id'] = answer.id
+          answer_hash['reference'] = answer.reference
+          answer_hash['label'] = answer.label
 
-          hash[predefined_syndrome.id]['answers'] << answer_hash
+          hash[predefined_syndrome.id]['answers'][answer.id] = answer_hash
         end
       end
     end

@@ -27,6 +27,7 @@ gem 'rubocop-airbnb'
 gem 'devise_token_auth'
 gem 'rack-cors', require: 'rack/cors'
 gem 'momentjs-rails'
+gem 'database_cleaner'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

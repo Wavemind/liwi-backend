@@ -9,18 +9,18 @@ RSpec.describe Answer, type: :model do
   end
 
   it 'is valid with valid attributes' do
-    answer = Answer.new(reference: '1', label: 'True', operator: nil, value: 'true', question: @question)
+    answer = Answer.new(reference: '1', label: 'True', operator: nil, value: 'true', node: @question)
     expect(answer).to be_valid
   end
 
   it 'is invalid with invalid attributes' do
-    answer = Answer.new(reference: nil, label: nil, operator: nil, value: 'true', question: @question)
+    answer = Answer.new(reference: nil, label: nil, operator: nil, value: 'true', node: @question)
     expect(answer).to_not be_valid
   end
 
   it 'is invalid same reference' do
-    Answer.create!(reference: '4', label: 'True', operator: nil, value: 'true', question: @question)
-    answer = Answer.new(reference: '4', label: '< 6 %', operator: '<', value: 'true', question: @question)
+    Answer.create!(reference: '4', label: 'True', operator: nil, value: 'true', node: @question)
+    answer = Answer.new(reference: '4', label: '< 6 %', operator: '<', value: 'true', node: @question)
 
     expect(answer).to_not be_valid
   end

@@ -55,7 +55,7 @@ Activity.create!(user: quentin, device: device_sagem, latitude: -33.918861, long
 epoct = Algorithm.create!(name: 'ePoct', description: 'loremp ipsum', user: emmanuel)
 fever_travel = Algorithm.create!(name: 'FeverTravel', description: 'loremp ipsum', user: quentin)
 
-epoc_first = AlgorithmVersion.create!(version: 'first_trial', algorithm: epoct, user: alain)
+epoc_first = AlgorithmVersion.create!(version: 'first_trial', algorithm: epoct, user: emmanuel)
 ft_1_0 = AlgorithmVersion.create!(version: '1.0', algorithm: fever_travel, user: mickael)
 ft_1_2 = AlgorithmVersion.create!(version: '1.2', algorithm: fever_travel, user: vincent)
 
