@@ -2,7 +2,6 @@
 class Algorithm < ApplicationRecord
 
   has_many :algorithm_versions
-
   has_many :available_nodes
   has_many :nodes, through: :available_nodes
   has_many :questions, -> { where type: 'Question' }, through: :available_nodes, source: :node

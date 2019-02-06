@@ -7,7 +7,6 @@ class Diagnostic < ApplicationRecord
   has_many :algorithm_versions, through: :enabled_diagnostics
   has_many :final_diagnostics
   has_many :conditions, as: :referenceable
-
   has_many :relations, as: :relationable
 
   validates_presence_of :reference
