@@ -10,7 +10,6 @@ class AlgorithmVersion < ApplicationRecord
   has_many :group_accesses
   has_many :groups, through: :group_accesses
 
-  validates_presence_of :json
   validates_presence_of :version
 
   validates_uniqueness_of :version, scope: :algorithm
