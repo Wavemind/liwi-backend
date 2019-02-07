@@ -3,6 +3,7 @@ class DiagnosticDatatable < AjaxDatatablesRails::ActiveRecord
 
   def_delegator :@view, :link_to
   def_delegator :@view, :edit_algorithm_algorithm_version_diagnostic_url
+  def_delegator :@view, :algorithm_algorithm_version_diagnostic_url
   def_delegator :@view, :date_format
 
   def initialize(params, opts = {})
@@ -18,7 +19,8 @@ class DiagnosticDatatable < AjaxDatatablesRails::ActiveRecord
 
   def data
     records.map do |record|
-      actions = link_to(I18n.t('edit'), edit_algorithm_algorithm_version_diagnostic_url(params[:algorithm_id], params[:id], record), class: 'btn btn-outline-info')
+      actions = link_to(I18n.t('show'), algorithm_algorithm_version_diagnostic_url(params[:algorithm_id], params[:id], record), class: 'btn btn-outline-primary') + " " +
+        link_to(I18n.t('edit'), edit_algorithm_algorithm_version_diagnostic_url(params[:algorithm_id], params[:id], record), class: 'btn btn-outline-info')
       {
         reference: record.reference,
         label: record.label,
