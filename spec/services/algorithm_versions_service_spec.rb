@@ -33,12 +33,12 @@ RSpec.describe AlgorithmVersionsService, type: :service do
 
   it 'generates a json with correct amount of conditions' do
     json = JSON.parse(@json.to_json)
-    top_conditions = json["diseases"]["1"]["diagnosis"]["1"]["top_conditions"]
-    conditions = json["diseases"]["1"]["diagnosis"]["1"]["conditions"]
+    top_conditions = json['diseases']['1']['diagnosis']['1']['top_conditions']
+    conditions = json['diseases']['1']['diagnosis']['1']['conditions']
 
     expect(top_conditions.count + conditions.count).to eq(3)
-    expect(top_conditions[1]["9"]["first_id"]).to eq(8)
-    expect(top_conditions[1]["9"]["second_id"]).to eq(9)
+    expect(top_conditions[1]['9']['first_id']).to eq(8)
+    expect(top_conditions[1]['9']['second_id']).to eq(9)
   end
 
 end
