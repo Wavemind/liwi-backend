@@ -72,7 +72,7 @@ class AlgorithmVersionsService
 
     # Loop in each final diagnostics for set conditional acceptance and health cares related to it
     diagnostic.relations.final_diagnostics.each do |final_diagnostic_relation|
-      hash['diagnosis'][final_diagnostic_relation.id] = extract_final_diagnostic(final_diagnostic_relation)
+      hash['diagnosis'][final_diagnostic_relation.node.id] = extract_final_diagnostic(final_diagnostic_relation)
     end
 
     hash
@@ -83,12 +83,11 @@ class AlgorithmVersionsService
   # Set metadata of a final diagnostic
   def self.extract_final_diagnostic(relation)
     final_diagnostic = relation.node
-    hash = {}
-    hash[final_diagnostic.id] = extract_conditions(relation.conditions)
-    hash[final_diagnostic.id]['name'] = final_diagnostic.label
-    hash[final_diagnostic.id]['treatments'] = extract_health_cares(final_diagnostic.treatments, relation.relationable.id)
-    hash[final_diagnostic.id]['managements'] = extract_health_cares(final_diagnostic.managements, relation.relationable.id)
-    hash[final_diagnostic.id]['excluding_diagnosis'] = final_diagnostic.final_diagnostic_id
+    hash = extract_conditions(relation.conditions)
+    hash['name'] = final_diagnostic.label
+    hash['treatments'] = extract_health_cares(final_diagnostic.treatments, relation.relationable.id)
+    hash['managements'] = extract_health_cares(final_diagnostic.managements, relation.relationable.id)
+    hash['excluding_diagnosis'] = final_diagnostic.final_diagnostic_id
     hash
   end
 
