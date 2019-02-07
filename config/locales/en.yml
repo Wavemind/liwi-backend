@@ -81,6 +81,7 @@ en:
     reference: "DD"
     show:
       title: "Details of %{name} - version %{version}"
+      relations: "Relations"
   edit: "Edit"
   flash_message:
     success_created: "Data was successfully created"
@@ -202,3 +203,10 @@ en:
       last_account_connection: "Last account connection "
       role: "Role "
       title: "Details of %{name}"
+  relations:
+    table:
+      columns:
+        type: "Type"
+    destroy:
+      error_destroy: "An error occured"
+  destroy: "Remove"

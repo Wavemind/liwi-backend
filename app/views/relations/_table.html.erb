@@ -1,0 +1,13 @@
+<table class="table table-condensed table-hover" id="relations-datatable" data-source="<%= algorithm_algorithm_version_diagnostic_relations_url(@algorithm, @algorithm_version, @diagnostic, format: :json, id: @diagnostic.id) %>">
+  <thead>
+    <tr>
+      <th><%= t('.columns.id') %></th>
+      <th><%= t('.columns.reference') %></th>
+      <th><%= t('.columns.type') %></th>
+      <th><%= t('.columns.label') %></th>
+      <th><%= t('.columns.actions') %></th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
