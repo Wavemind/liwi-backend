@@ -7,6 +7,8 @@ class AnswerType < ApplicationRecord
   validates_presence_of :display
 
 
+  # @return [String]
+  # Return a displayable string for the view
   def display_name
     "#{display} : #{value}"
   end

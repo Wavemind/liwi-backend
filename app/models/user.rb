@@ -32,6 +32,7 @@ class User < ApplicationRecord
   end
 
   # Replace destroy by lock account
+  # Override destroy method and lock the account instead
   def destroy
     update_attributes(deactivated: true) unless deactivated
   end
@@ -40,5 +41,4 @@ class User < ApplicationRecord
   def active_for_authentication?
     super && !deactivated
   end
-
 end

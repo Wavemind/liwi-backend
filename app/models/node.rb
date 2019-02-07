@@ -27,5 +27,4 @@ class Node < ApplicationRecord
   def complete_reference
 
   end
-
 end
