@@ -216,4 +216,5 @@ en:
     v1:
       algorithm_versions:
         index:
-          no_group: "Your tablet is currently associated with no groups"
+          no_group: "Your tablet isn't associated with groups"
+          no_algorithm_version: "Your group has no algorithm version"

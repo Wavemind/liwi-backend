@@ -73,6 +73,6 @@ Rails.application.configure do
     Bullet.enable = true
     Bullet.alert = true
     Bullet.rails_logger = true
-    Bullet.raise = true
+    # Bullet.raise = true
   end
 end
