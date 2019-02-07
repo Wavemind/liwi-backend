@@ -106,6 +106,13 @@ en:
       error_add_device: "An error occured when adding device to group"
     show:
       title: "Details of %{name}"
+      second_title: "Accesses"
+      columns:
+        algorithm: "Algorithm"
+        algorithm_version: "Algorithm version"
+        created_at: "Created on"
+        end_date: "Archived date"
+      archived: "Archive"
   final_diagnostics:
     reference: "DF"
   managements:
@@ -202,3 +209,11 @@ en:
       last_account_connection: "Last account connection "
       role: "Role "
       title: "Details of %{name}"
+  group_accesses:
+    new:
+      title: "New release"
+  api:
+    v1:
+      algorithm_versions:
+        index:
+          no_group: "Your tablet is currently associated with no groups"
