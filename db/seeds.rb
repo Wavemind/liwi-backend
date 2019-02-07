@@ -254,7 +254,6 @@ Child.create!(relation: dd7_ps6, node: t1)
 Child.create!(relation: dd7_ps6, node: t2)
 
 
-
 Condition.create!(referenceable: ps6_p25, first_conditionable: s4_2, operator: nil, second_conditionable: nil)
 Condition.create!(referenceable: ps6_ps6, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
 Condition.create!(referenceable: ps6_ps6, first_conditionable: s2_1, operator: nil, second_conditionable: nil)

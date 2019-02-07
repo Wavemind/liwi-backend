@@ -1,4 +1,5 @@
 # How a disease is diagnosed -> Differential diagnostics
+# Contains the actual logic from its relations
 class Diagnostic < ApplicationRecord
   before_create :complete_reference
   after_validation :unique_reference
@@ -25,7 +26,5 @@ class Diagnostic < ApplicationRecord
   def complete_reference
     self.reference = "#{I18n.t('diagnostics.reference')}_#{reference}"
   end
-
-
 
 end
