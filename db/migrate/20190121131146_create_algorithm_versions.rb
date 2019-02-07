@@ -10,9 +10,12 @@ class CreateAlgorithmVersions < ActiveRecord::Migration[5.2]
       t.timestamps
     end
 
-    create_table :group_algorithm_versions do |t|
+    create_table :group_accesses do |t|
+      t.boolean :access, default: true
+      t.datetime :end_date
+
       t.references :algorithm_version, foreign_key: true, index: true
-      t.references :user, foreign_key: true, index: true
+      t.references :group, foreign_key: true, index: true
 
       t.timestamps
     end

@@ -5,7 +5,7 @@
     <%= simple_form_for @device, url: group_add_device_url(@group), method: :post do |f| %>
       <div class="row">
         <div class="col">
-          <%= f.input :id, collection: Device.where(group_id: nil), label_method: :label, label: false , prompt: t('prompt')%>
+          <%= f.input :id, collection: Device.where(group_id: nil), label_method: :label, label: false, prompt: t('prompt') %>
         </div>
         <div class="col">
           <%= f.submit t('add'), class: 'btn btn-primary' %>
@@ -18,15 +18,58 @@
 
 <table class="table table-condensed table-hover" id="devices-datatable" data-source="<%= devices_url(format: :json, from: 'group', id: params[:id]) %>">
   <thead>
-    <tr>
-      <th><%= t('.columns.mac_address') %></th>
-      <th><%= t('.columns.name') %></th>
-      <th><%= t('.columns.brand') %></th>
-      <th><%= t('.columns.model') %></th>
-      <th><%= t('.columns.last_activity') %></th>
-      <th><%= t('.columns.last_user') %></th>
-      <th class="text-right"><%= t('.columns.actions') %></th>
-    </tr>
+  <tr>
+    <th><%= t('.columns.mac_address') %></th>
+    <th><%= t('.columns.name') %></th>
+    <th><%= t('.columns.brand') %></th>
+    <th><%= t('.columns.model') %></th>
+    <th><%= t('.columns.last_activity') %></th>
+    <th><%= t('.columns.last_user') %></th>
+    <th class="text-right"><%= t('.columns.actions') %></th>
+  </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<hr/>
+
+<h2><%= t('.second_title') %></h2>
+<div class="row">
+  <div class="col">
+    <% if @current_group_access.present? %>
+      <div class="alert alert-success" role="alert">
+        <%= "Current publish algorithm <b>#{@current_group_access.algorithm_version.display_label}</b>".html_safe %>
+      </div>
+    <% else %>
+      <div class="alert alert-danger" role="alert">
+        There is not algorithm associated to this group
+      </div>
+    <% end %>
+  </div>
+  <div class="col">
+    <%= simple_form_for @group_access do |f| %>
+      <%= f.input :group_id, as: :hidden, input_html: { value: params[:id] } %>
+      <div class="row">
+        <div class="col">
+          <%= f.association :algorithm_version, collection: AlgorithmVersion.includes(:algorithm).where.not(id: (@current_group_access.algorithm_version_id if @current_group_access.present?)), label_method: :display_label, label: false, prompt: t('prompt') %>
+        </div>
+        <div class="col">
+          <%= f.submit t('add'), class: 'btn btn-primary' %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<h3><%= t('.archived') %></h3>
+<table class="table table-condensed table-hover" id="group_accesses-datatable" data-source="<%= group_accesses_url(format: :json, id: params[:id]) %>">
+  <thead>
+  <tr>
+    <th><%= t('.columns.created_at') %></th>
+    <th><%= t('.columns.end_date') %></th>
+    <th><%= t('.columns.algorithm') %></th>
+    <th><%= t('.columns.algorithm_version') %></th>
+  </tr>
   </thead>
   <tbody></tbody>
 </table>
