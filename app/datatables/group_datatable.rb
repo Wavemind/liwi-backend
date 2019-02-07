@@ -25,7 +25,7 @@ class GroupDatatable < AjaxDatatablesRails::ActiveRecord
       actions = link_to(I18n.t('show'), group_url(record), class: 'btn btn-outline-primary') + " " + link_to(I18n.t('edit'), edit_group_url(record), class: 'btn btn-outline-info')
       {
         name: record.name,
-        nb_people: record.users.count,
+        nb_people: record.devices.count,
         actions: actions
       }
     end

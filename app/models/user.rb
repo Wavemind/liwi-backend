@@ -5,8 +5,6 @@ class User < ApplicationRecord
   include DeviseTokenAuth::Concerns::User
 
   belongs_to :role
-  has_many :group_users
-  has_many :groups, through: :group_users
   has_many :activities
   has_many :devices, through: :activities
 

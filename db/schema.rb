@@ -27,7 +27,6 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
 
   create_table "algorithm_versions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "version"
-    t.text "json"
     t.boolean "archived", default: false
     t.bigint "user_id"
     t.bigint "algorithm_id"
@@ -82,7 +81,7 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
   end
 
   create_table "children", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.float "wheight"
+    t.float "weight"
     t.bigint "node_id"
     t.bigint "relation_id"
     t.datetime "created_at", null: false
@@ -117,6 +116,8 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
     t.integer "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "group_id"
+    t.index ["group_id"], name: "index_devices_on_group_id"
   end
 
   create_table "diagnostics", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -145,13 +146,13 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
     t.index ["treatable_type", "treatable_id"], name: "index_final_diagnostics_treatable_id"
   end
 
-  create_table "group_users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.bigint "group_id"
+  create_table "group_algorithm_versions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "algorithm_version_id"
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["group_id"], name: "index_group_users_on_group_id"
-    t.index ["user_id"], name: "index_group_users_on_user_id"
+    t.index ["algorithm_version_id"], name: "index_group_algorithm_versions_on_algorithm_version_id"
+    t.index ["user_id"], name: "index_group_algorithm_versions_on_user_id"
   end
 
   create_table "groups", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -276,10 +277,11 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
   add_foreign_key "algorithm_versions", "users"
   add_foreign_key "algorithms", "users"
   add_foreign_key "available_nodes", "algorithms"
+  add_foreign_key "devices", "groups"
   add_foreign_key "enabled_diagnostics", "algorithm_versions"
   add_foreign_key "enabled_diagnostics", "diagnostics"
-  add_foreign_key "group_users", "groups"
-  add_foreign_key "group_users", "users"
+  add_foreign_key "group_algorithm_versions", "algorithm_versions"
+  add_foreign_key "group_algorithm_versions", "users"
   add_foreign_key "nodes", "answer_types"
   add_foreign_key "users", "roles"
 end

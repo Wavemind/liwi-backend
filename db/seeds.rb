@@ -9,10 +9,10 @@ role_student = Role.create!(name: 'Student')
 role_teacher = Role.create!(name: 'Teacher')
 
 # Device
-device_blackberry = Device.create!(mac_address: 'C5-CA-9C-17-7A-36', model: 'Q10', brand: 'BlackBerry', status: :active, os: 'Android', os_version: '8.0', name: 'MedicalCenter 1')
-device_sony_ericsson = Device.create!(mac_address: 'A6-91-D4-0E-ED-EF', model: '3310', brand: 'Sony Ericsson', status: :active, os: 'Android', os_version: '8.0', name: 'MedicalCenter 2')
-device_apple = Device.create!(mac_address: '35-BC-4A-28-82-4C', model: 'Iphone XYZ', brand: 'Apple', status: :active, os: 'Android', os_version: '8.0', name: 'MedicalCenter 3')
-device_sagem = Device.create!(mac_address: 'BB-3B-AA-69-8F-74', model: 'J302', brand: 'Sagem', status: :active, os: 'Android', os_version: '8.0', name: 'MedicalCenter 4')
+device_blackberry = Device.create!(mac_address: 'C5-CA-9C-17-7A-36', model: 'Q10', brand: 'BlackBerry', status: :active, os: 'Android', os_version: '8.0', name: 'MedicalCenter 1', group: group_wavemind )
+device_sony_ericsson = Device.create!(mac_address: 'A6-91-D4-0E-ED-EF', model: '3310', brand: 'Sony Ericsson', status: :active, os: 'Android', os_version: '8.0', name: 'MedicalCenter 2', group: group_wavemind)
+device_apple = Device.create!(mac_address: '35-BC-4A-28-82-4C', model: 'Iphone XYZ', brand: 'Apple', status: :active, os: 'Android', os_version: '8.0', name: 'MedicalCenter 3', group: group_pmu)
+device_sagem = Device.create!(mac_address: 'BB-3B-AA-69-8F-74', model: 'J302', brand: 'Sagem', status: :active, os: 'Android', os_version: '8.0', name: 'MedicalCenter 4', group: group_unicorne)
 
 # User
 quentin = User.create!(first_name: 'Quentin', last_name: 'Girard', email: 'quentin.girard@wavemind.ch', password: '123456', password_confirmation: '123456', role: role_administrator)
@@ -24,13 +24,6 @@ vincent = User.create!(first_name: 'Vincent', last_name: 'Faivre', email: 'vince
 valerie = User.create!(first_name: 'Valérie', last_name: 'D\'Acremont', email: 'valerie.dacremont@hospvd.ch', password: '123456', password_confirmation: '123456', role: role_teacher)
 ludovico = User.create!(first_name: 'Ludovico', last_name: 'Cabuccio', email: 'ludovico.cobuccio@chuv.ch', password: '123456', password_confirmation: '123456', role: role_teacher)
 olga = User.create!(first_name: 'Olga', last_name: 'De Santis', email: 'olga.desantis80@gmail.com', password: '123456', password_confirmation: '123456', role: role_teacher)
-
-# Associate group
-group_wavemind.users << [quentin, alain, mickael, emmanuel]
-group_wavemind.save
-
-group_pmu.users << [julien, vincent, valerie, ludovico, olga]
-group_pmu.save
 
 # Activity
 Activity.create!(user: alain, device: device_sony_ericsson, latitude: -33.918861, longitude: 18.423300, created_at: '2018-12-01 07:22:00', updated_at: '2018-12-01 07:22:00', timezone: 'Berne', version: '1.0.0')

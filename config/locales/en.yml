@@ -91,19 +91,19 @@ en:
       columns:
         id: "ID"
         name: "Name"
-        nb_people: "Number of people"
+        nb_people: "Number of devices"
         actions: "Actions"
       title: "Groups"
     new:
       title: "Add group"
     edit:
       title: "Edit group"
-    remove_user:
-      success_remove_user: "User was successfully removed from group"
-      error_remove_user: "An error occured when removing user from group"
-    add_user:
-      success_add_user: "User was successfully added to group"
-      error_add_user: "An error occured when adding user to group"
+    remove_device:
+      success_remove_device: "Device was successfully removed from group"
+      error_remove_device: "An error occured when removing device from group"
+    add_device:
+      success_add_device: "Device was successfully added to group"
+      error_add_device: "An error occured when adding device to group"
     show:
       title: "Details of %{name}"
   final_diagnostics:
@@ -199,7 +199,6 @@ en:
         actions: "Actions"
       title: "Users"
     show:
-      groups: "Groups"
       last_account_connection: "Last account connection "
       role: "Role "
       title: "Details of %{name}"

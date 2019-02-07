@@ -10,7 +10,7 @@ class GroupsController < ApplicationController
   end
 
   def show
-    @user = User.new
+    @device = Device.new
   end
 
   def new
@@ -35,37 +35,39 @@ class GroupsController < ApplicationController
     end
   end
 
-  # DELETE groups/group_id/users/:user_id/remove_user
+  # DELETE groups/group_id/devices/:device_id/remove_device
   # @params group_id [Integer] id of group
-  # @params user_id [Integer] id of user
+  # @params device_id [Integer] id of device
   # @return redirect to group#show with flash message
-  # Remove user from group
-  def remove_user
+  # Remove device from group
+  def remove_device
     @group = Group.find(params[:group_id])
-    user = User.find(params[:user_id])
+    device = Device.find(params[:device_id])
 
-    if @group.users.delete(user)
-      redirect_to @group, notice: t('.success_remove_user')
+    device.group_id = nil
+
+    if device.save
+      redirect_to @group, notice: t('.success_remove_device')
     else
-      redirect_to @group, danger: t('.error_remove_user')
+      redirect_to @group, danger: t('.error_remove_device')
     end
   end
 
-  # POST groups/:id/add_user
+  # POST groups/:id/add_device
   # @params group_id [Integer] id of group
-  # @params user_id [Integer] id of user
+  # @params device_id [Integer] id of device
   # @return redirect to group#show with flash message
-  # Add user to group
-  def add_user
+  # Add device to group
+  def add_device
     @group = Group.find(params[:group_id])
-    user = User.find(params[:user][:id])
+    device = Device.find(params[:device][:id])
 
-    @group.users << user
+    device.group_id = @group.id
 
-    if @group.save
-      redirect_to @group, notice: t('.success_add_user')
+    if device.save
+      redirect_to @group, notice: t('.success_add_device')
     else
-      redirect_to @group, danger: t('.error_add_user')
+      redirect_to @group, danger: t('.error_add_device')
     end
   end
 
@@ -78,7 +80,7 @@ class GroupsController < ApplicationController
   def group_params
     params.require(:group).permit(
       :name,
-      user_ids: []
+      device_ids: []
     )
   end
 end
