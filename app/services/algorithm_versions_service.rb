@@ -110,7 +110,7 @@ class AlgorithmVersionsService
     hash['conditions'] = []
 
     if conditions.present?
-      conditions.top_level.each do |condition|
+      conditions.includes([:first_conditionable, :second_conditionable]).top_level.each do |condition|
         hash['top_conditions'] << push_condition(condition)
       end
 

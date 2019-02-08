@@ -8,7 +8,6 @@ jQuery(document).ready(function () {
     "pagingType": "full_numbers",
     "columns": [
       { "data": "version" },
-      { "data": "algorithm" },
       { "data": "last_update" },
       { "data": "creator" },
       { "data": "actions", "className": "text-right" },
