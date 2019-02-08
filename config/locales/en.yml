@@ -211,5 +211,7 @@ en:
     table:
       columns:
         type: "Type"
-  errory: "An error occured"
+    show:
+      children: "Children"
+  error: "An error occured"
   destroy: "Remove"
