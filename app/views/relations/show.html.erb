@@ -13,7 +13,7 @@
     <%= simple_form_for @child, url: algorithm_algorithm_version_diagnostic_relation_children_url(@algorithm, @algorithm_version, @diagnostic, @relation), method: :post do |f| %>
       <div class="row">
         <div class="col">
-          <%= f.input :node_id, collection: Node.where.not(id: @relation.children.select(:node_id)), label_method: :label, label: false, prompt: t('prompt') %>
+          <%= f.association :node, collection: @algorithm.nodes.where.not(id: @relation.children.select(:node_id)), label_method: :label, label: false, prompt: t('prompt') %>
         </div>
         <div class="col">
           <%= f.submit t('add'), class: 'btn btn-primary' %>
