@@ -27,4 +27,10 @@ class Node < ApplicationRecord
   def complete_reference
 
   end
+
+  # @return [String]
+  # Return the label with the reference for the view
+  def reference_label
+    "#{reference} | #{label}"
+  end
 end
