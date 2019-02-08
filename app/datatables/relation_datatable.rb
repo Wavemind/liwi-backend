@@ -23,12 +23,13 @@ class RelationDatatable < AjaxDatatablesRails::ActiveRecord
   # Value display
   def data
     records.map do |record|
-      actions = link_to(I18n.t('destroy'), algorithm_algorithm_version_diagnostic_relation_url(params[:algorithm_id], params[:algorithm_version_id], params[:diagnostic_id], id: record), method: :delete, class: 'btn btn-outline-danger', data: { confirm: 'Are you sure?'})
+      actions = link_to(I18n.t('show'), algorithm_algorithm_version_diagnostic_relation_url(params[:algorithm_id], params[:algorithm_version_id], params[:diagnostic_id], id: record), class: 'btn btn-outline-primary') + " " + link_to(I18n.t('destroy'), algorithm_algorithm_version_diagnostic_relation_url(params[:algorithm_id], params[:algorithm_version_id], params[:diagnostic_id], id: record), method: :delete, class: 'btn btn-outline-danger', data: { confirm: 'Are you sure?' })
       {
         id: record.id,
         reference: record.node.reference,
         type: record.node.type,
         label: record.node.label,
+        children: record.nodes.map(&:label).join(' / '),
         actions: actions
       }
     end
@@ -36,6 +37,6 @@ class RelationDatatable < AjaxDatatablesRails::ActiveRecord
 
   # Activerecord request
   def get_raw_records
-    Relation.where(relationable_id: params[:id], relationable_type: 'Diagnostic').includes(:node)
+    Relation.where(relationable_id: params[:id], relationable_type: 'Diagnostic').includes([:node, :nodes, :children])
   end
 end

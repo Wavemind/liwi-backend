@@ -11,6 +11,7 @@ jQuery(document).ready(function () {
       { "data": "reference" },
       { "data": "type" },
       { "data": "label" },
+      { "data": "children" },
       { "data": "actions", "className": "text-right" },
     ]
   });
