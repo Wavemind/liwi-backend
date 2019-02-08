@@ -35,6 +35,7 @@ en:
     show:
       subtitle_diagnostics: "Diagnostics"
       title: "Details of %{name} - version %{version}"
+      predefined_syndromes: "Predefined Syndromes"
   answers:
     new:
       title: "Create related answers of %{name} question"
@@ -81,6 +82,7 @@ en:
       relations: "Relations"
       subtitle_final_diagnostics: "Finals diagnostics"
       title: "Details of %{name}"
+      predefined_syndromes: "Predefined Syndromes"
   edit: "Edit"
   final_diagnostics:
     new:

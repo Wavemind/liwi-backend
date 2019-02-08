@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_01_105145) do
+ActiveRecord::Schema.define(version: 2019_02_08_132744) do
 
   create_table "activities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.decimal "longitude", precision: 13, scale: 9
@@ -23,6 +23,15 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
     t.datetime "updated_at", null: false
     t.index ["device_id"], name: "index_activities_on_device_id"
     t.index ["user_id"], name: "index_activities_on_user_id"
+  end
+
+  create_table "algorithm_version_predefined_syndromes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "predefined_syndrome_id"
+    t.bigint "algorithm_version_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["algorithm_version_id"], name: "index_av_ps_id"
+    t.index ["predefined_syndrome_id"], name: "index_ps_av_id"
   end
 
   create_table "algorithm_versions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|

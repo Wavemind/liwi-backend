@@ -207,6 +207,9 @@ ps6_2 = Answer.create!(node: ps6, reference: '2', label: 'no', value: nil, opera
 epoct.nodes << [s2, p3, p13, p14, p1, ps6, t9, t1, t2, m2]
 epoct.save
 
+epoc_first.predefined_syndromes << ps6
+epoc_first.save
+
 # DF7
 dd7_s2 = Relation.create!(relationable: dd7, node: s2)
 dd7_p3 = Relation.create!(relationable: dd7, node: p3)
