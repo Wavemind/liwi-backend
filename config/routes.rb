@@ -53,6 +53,8 @@ Rails.application.routes.draw do
     post 'add_device', to: 'groups#add_device', as: 'add_device'
   end
 
+  resources :group_accesses, only: [:index, :create]
+
   resources :devices, only: [:index, :show] do
     collection do
       get 'map'

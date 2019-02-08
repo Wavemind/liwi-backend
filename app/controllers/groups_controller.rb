@@ -11,6 +11,8 @@ class GroupsController < ApplicationController
 
   def show
     @device = Device.new
+    @group_access = GroupAccess.new
+    @current_group_access = GroupAccess.find_by(group_id: params[:id], end_date: nil)
   end
 
   def new

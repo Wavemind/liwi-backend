@@ -15,13 +15,13 @@ class User < ApplicationRecord
 
   validates :email, format: { with: /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i }
 
-  # @return [String]
+  # @return [String] contact first_name and last_name
   # Display full name
   def full_name
     "#{first_name} #{last_name}"
   end
 
-  # @return [String]
+  # @return [String] add html badge
   # Display status of user's account
   def display_deactivated
     unless deactivated
@@ -31,6 +31,7 @@ class User < ApplicationRecord
     end
   end
 
+  # Replace destroy by lock account
   # Override destroy method and lock the account instead
   def destroy
     update_attributes(deactivated: true) unless deactivated

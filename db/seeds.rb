@@ -162,6 +162,10 @@ df7 = FinalDiagnostic.create!(label: 'Severe lower respiratory tract infection',
 epoc_first.diagnostics << dd7
 epoc_first.save
 
+# Assign algorithm_version to group
+group_pmu.algorithm_versions << epoc_first
+group_pmu.save
+
 s2 = Question.create!(label: 'Cough', reference: '2', category: symptom, priority: Question.priorities[:priority], answer_type: radio)
 s2_1 = Answer.create!(node: s2, reference: '1', label: 'yes', value: nil, operator: nil)
 s2_2 = Answer.create!(node: s2, reference: '2', label: 'no', value: nil, operator: nil)
