@@ -1,9 +1,9 @@
-class DiagnosticsController < ApplicationController
+class FinalDiagnosticsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:show, :new, :create, :edit]
-  before_action :set_algorithm_version, only: [:show, :new, :create, :edit]
-  before_action :set_diagnostic, only: [:show, :new, :create, :edit]
-  before_action :set_final_diagnostic, only: [:show, :edit]
+  before_action :set_algorithm, only: [:show, :new, :create, :edit, :destroy]
+  before_action :set_algorithm_version, only: [:show, :new, :create, :edit, :destroy]
+  before_action :set_diagnostic, only: [:show, :new, :create, :edit, :destroy]
+  before_action :set_final_diagnostic, only: [:show, :edit, :destroy]
 
   def index
     respond_to do |format|
@@ -25,6 +25,14 @@ class DiagnosticsController < ApplicationController
 
     if @final_diagnostic.save
       redirect_to algorithm_algorithm_version_diagnostic_url(@algorithm, @algorithm_version, @diagnostic), notice: t('flash_message.success_created')
+    else
+      render :new
+    end
+  end
+
+  def destroy
+    if @final_diagnostic.destroy
+      redirect_to algorithm_algorithm_version_diagnostic_url(@algorithm, @algorithm_version, @diagnostic), notice: t('flash_message.success_deleted')
     else
       render :new
     end

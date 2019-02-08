@@ -1,4 +1,4 @@
-class DiagnosticDatatable < AjaxDatatablesRails::ActiveRecord
+class FinalDiagnosticDatatable < AjaxDatatablesRails::ActiveRecord
   extend Forwardable
 
   def_delegator :@view, :link_to
@@ -17,17 +17,17 @@ class DiagnosticDatatable < AjaxDatatablesRails::ActiveRecord
 
   def data
     records.map do |record|
-      actions = link_to(I18n.t('delete'), algorithm_algorithm_version_diagnostic_final_diagnostic_url(record.diagnostic, record), class: 'btn btn-outline-danger', method: :delete, data: { confirm: 'Are you sure?' })
+      actions = link_to(I18n.t('delete'), algorithm_algorithm_version_diagnostic_final_diagnostic_url(params[:algorithm_id], params[:algorithm_version_id], record.diagnostic, record), class: 'btn btn-outline-danger', method: :delete, data: { confirm: 'Are you sure?' })
       {
         reference: record.reference,
         label: record.label,
-        last_update: date_format(record.updated_at),
+        description: record.description,
         actions: actions
       }
     end
   end
 
   def get_raw_records
-    Diagnostic.find(params[:id]).final_diagnostics
+    Diagnostic.find(params[:diagnostic_id]).final_diagnostics
   end
 end
