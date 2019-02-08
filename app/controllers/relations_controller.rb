@@ -15,6 +15,9 @@ class RelationsController < ApplicationController
   def show
     @children = @relation.children.includes(:node)
     @child = Child.new
+
+    @conditions = @relation.conditions
+    @condition = Condition.new
   end
 
   def create

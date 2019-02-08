@@ -13,8 +13,6 @@ class Diagnostic < ApplicationRecord
   validates_presence_of :reference
   validates_presence_of :label
 
-
-
   private
 
   # {Node#unique_reference}

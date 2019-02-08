@@ -33,6 +33,7 @@ Rails.application.routes.draw do
         resources :final_diagnostics, only: [:index, :show, :new, :create, :edit, :update, :delete, :destroy]
         resources :relations, only: [:index, :show, :destroy, :create] do
           resources :children, only: [:create, :destroy]
+          resources :conditions, only: [:create, :destroy]
         end
       end
     end

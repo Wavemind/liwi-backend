@@ -9,6 +9,11 @@ class Answer < ApplicationRecord
   after_validation :unique_reference
   before_create :complete_reference
 
+
+  def display_condition
+    reference
+  end
+
   private
 
   # {Node#unique_reference}
@@ -22,4 +27,6 @@ class Answer < ApplicationRecord
   def complete_reference
     self.reference = "#{node.reference}_#{reference}"
   end
+
+
 end
