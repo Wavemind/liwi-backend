@@ -207,6 +207,5 @@ en:
     table:
       columns:
         type: "Type"
-    destroy:
-      error_destroy: "An error occured"
+  errory: "An error occured"
   destroy: "Remove"
