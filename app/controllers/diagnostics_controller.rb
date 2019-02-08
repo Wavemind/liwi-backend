@@ -12,7 +12,7 @@ class DiagnosticsController < ApplicationController
   end
 
   def show
-
+    @relation = Relation.new
   end
 
   def new

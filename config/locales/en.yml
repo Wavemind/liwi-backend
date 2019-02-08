@@ -78,8 +78,9 @@ en:
       title: "Edit this diagnostic"
     reference: "DD"
     show:
-      title: "Details of %{name}"
+      relations: "Relations"
       subtitle_final_diagnostics: "Finals diagnostics"
+      title: "Details of %{name}"
   edit: "Edit"
   final_diagnostics:
     new:
@@ -206,3 +207,9 @@ en:
       last_account_connection: "Last account connection "
       role: "Role "
       title: "Details of %{name}"
+  relations:
+    table:
+      columns:
+        type: "Type"
+  errory: "An error occured"
+  destroy: "Remove"

@@ -31,6 +31,7 @@ Rails.application.routes.draw do
 
       resources :diagnostics, only: [:index, :show, :new, :create, :edit, :update] do
         resources :final_diagnostics, only: [:index, :show, :new, :create, :edit, :update, :delete, :destroy]
+        resources :relations, only: [:index, :destroy, :create]
       end
     end
 
