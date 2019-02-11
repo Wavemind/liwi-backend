@@ -28,3 +28,10 @@
 <% end %>
 
 <%= render 'managements/table' %>
+
+<h2><%= t('.subtitle_predefined_syndromes') %></h2>
+<%= link_to new_predefined_syndrome_url do %>
+  <button type="button" class="btn btn-outline-secondary"><%= t('add') %></button>
+<% end %>
+
+<%= render 'predefined_syndromes/table' %>

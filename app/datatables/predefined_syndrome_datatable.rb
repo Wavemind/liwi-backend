@@ -3,8 +3,8 @@ class PredefinedSyndromeDatatable < AjaxDatatablesRails::ActiveRecord
 
   # Helpers
   def_delegator :@view, :link_to
-  def_delegator :@view, :algorithm_algorithm_version_predefined_syndrome_url
-  def_delegator :@view, :algorithm_algorithm_version_predefined_syndrome_relations_url
+  def_delegator :@view, :predefined_syndrome_url
+  def_delegator :@view, :edit_predefined_syndrome_url
 
   def initialize(params, opts = {})
     @view = opts[:view_context]
@@ -16,16 +16,18 @@ class PredefinedSyndromeDatatable < AjaxDatatablesRails::ActiveRecord
     @view_columns ||= {
       reference: { source: 'PredefinedSyndrome.reference' },
       label: { source: 'PredefinedSyndrome.label' },
+      description: { source: 'PredefinedSyndrome.description' },
     }
   end
 
   # Value display
   def data
     records.map do |record|
-      actions = link_to(I18n.t('show'), algorithm_algorithm_version_predefined_syndrome_url(params[:algorithm_id], params[:algorithm_version_id], id: record), class: 'btn btn-outline-primary') + " " + link_to(I18n.t('destroy'), algorithm_algorithm_version_predefined_syndrome_url(params[:algorithm_id], params[:algorithm_version_id], id: record), method: :delete, class: 'btn btn-outline-danger', data: { confirm: 'Are you sure?' })
+      actions = link_to(I18n.t('show'), predefined_syndrome_url(id: record), class: 'btn btn-outline-primary') + " " + link_to(I18n.t('edit'), edit_predefined_syndrome_url(id: record), class: 'btn btn-outline-info')
       {
         reference: record.reference,
         label: record.label,
+        description: record.description,
         actions: actions
       }
     end
@@ -33,6 +35,6 @@ class PredefinedSyndromeDatatable < AjaxDatatablesRails::ActiveRecord
 
   # Activerecord request
   def get_raw_records
-    AlgorithmVersion.find(params[:id]).predefined_syndromes
+    Algorithm.find(params[:id]).predefined_syndromes
   end
 end

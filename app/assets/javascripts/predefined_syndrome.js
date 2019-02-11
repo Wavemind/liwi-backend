@@ -9,7 +9,8 @@ jQuery(document).ready(function () {
     "columns": [
       { "data": "reference" },
       { "data": "label" },
-      { "data": "actions" },
+      { "data": "description" },
+      { "data": "actions", "className": "text-right" },
     ]
   });
 });

@@ -23,12 +23,10 @@ class RelationDatatable < AjaxDatatablesRails::ActiveRecord
   # Value display
   def data
 
-    algorithm = Algorithm.find(params[:algorithm_id])
-    algorithm_version = AlgorithmVersion.find(params[:algorithm_version_id])
     relationable = params[:type].constantize.find(params[:id])
 
     records.map do |record|
-      actions = link_to(I18n.t('show'), polymorphic_url([algorithm, algorithm_version, relationable, record]), class: 'btn btn-outline-primary') + " " + link_to(I18n.t('destroy'), polymorphic_url([algorithm, algorithm_version, relationable, record]), method: :delete, class: 'btn btn-outline-danger', data: { confirm: 'Are you sure?' })
+      actions = link_to(I18n.t('show'), polymorphic_url([relationable, record]), class: 'btn btn-outline-primary') + " " + link_to(I18n.t('destroy'), polymorphic_url([relationable, record]), method: :delete, class: 'btn btn-outline-danger', data: { confirm: 'Are you sure?' })
       {
         id: record.id,
         reference: record.node.reference,

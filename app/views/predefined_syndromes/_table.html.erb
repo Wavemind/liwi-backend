@@ -1,8 +1,9 @@
-<table class="table table-condensed table-hover" id="predefined_syndromes-datatable" data-source="<%= algorithm_algorithm_version_predefined_syndromes_url(@algorithm, @algorithm_version, format: :json, id: @algorithm_version.id) %>">
+<table class="table table-condensed table-hover" id="predefined_syndromes-datatable" data-source="<%= predefined_syndrome_algorithm_url(@algorithm, format: :json) %>">
   <thead>
     <tr>
       <th><%= t('.columns.reference') %></th>
       <th><%= t('.columns.label') %></th>
+      <th><%= t('.columns.description') %></th>
       <th><%= t('.columns.actions') %></th>
     </tr>
   </thead>

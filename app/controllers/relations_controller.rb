@@ -1,8 +1,6 @@
 class RelationsController < ApplicationController
 
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:index, :show, :create, :destroy]
-  before_action :set_algorithm_version, only: [:index, :show, :create, :destroy]
   before_action :set_relationable, only: [:show, :create, :destroy]
   before_action :set_relation, only: [:show, :destroy]
 
@@ -44,14 +42,6 @@ class RelationsController < ApplicationController
 
   def set_relation
     @relation = Relation.find(params[:id])
-  end
-
-  def set_algorithm
-    @algorithm = Algorithm.find(params[:algorithm_id])
-  end
-
-  def set_algorithm_version
-    @algorithm_version = AlgorithmVersion.find(params[:algorithm_version_id])
   end
 
   def set_relationable

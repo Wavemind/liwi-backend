@@ -1,4 +1,4 @@
-<table class="table table-condensed table-hover" id="relations-datatable" data-source="<%= algorithm_algorithm_version_relationable_url(@algorithm.id, @algorithm_version.id, @relationable.class, @relationable.id, format: :json) %>">
+<table class="table table-condensed table-hover" id="relations-datatable" data-source="<%= relationable_url(@relationable.class, @relationable.id, format: :json) %>">
   <thead>
     <tr>
       <th><%= t('.columns.id') %></th>

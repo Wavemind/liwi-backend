@@ -5,9 +5,6 @@ class PredefinedSyndrome < Node
   has_many :answers, foreign_key: 'node_id', dependent: :destroy
   has_many :relations, as: :relationable, dependent: :destroy
 
-  has_many :algorithm_version_predefined_syndromes
-  has_many :algorithm_versions, through: :algorithm_version_predefined_syndromes
-
   private
 
   # {Node#unique_reference}

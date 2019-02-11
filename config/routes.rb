@@ -21,6 +21,7 @@ Rails.application.routes.draw do
       get 'questions', to: 'algorithms#questions', as: 'question'
       get 'treatments', to: 'algorithms#treatments', as: 'treatment'
       get 'managements', to: 'algorithms#managements', as: 'management'
+      get 'predefined_syndromes', to: 'algorithms#predefined_syndromes', as: 'predefined_syndrome'
     end
 
     resources :algorithm_versions, only: [:index, :show, :new, :create, :edit, :update] do
@@ -29,22 +30,11 @@ Rails.application.routes.draw do
         put 'unarchive', to: 'algorithm_versions#unarchive', as: 'unarchive'
       end
 
-      resources :predefined_syndromes, only: [:index, :show, :destroy] do
-        resources :relations, only: [:show, :destroy, :create] do
-          resources :children, only: [:create, :destroy]
-          resources :conditions, only: [:create, :destroy]
-        end
-      end
-
       resources :diagnostics, only: [:index, :show, :new, :create, :edit, :update, :destroy] do
         resources :final_diagnostics, only: [:index, :show, :new, :create, :edit, :update, :delete, :destroy]
-        resources :relations, only: [:show, :destroy, :create] do
-          resources :children, only: [:create, :destroy]
-          resources :conditions, only: [:create, :destroy]
-        end
       end
 
-      get 'relationable/:type/:id', to: 'relations#index', as: 'relationable'
+
 
     end
 
@@ -57,9 +47,21 @@ Rails.application.routes.draw do
     end
 
     resources :treatments, only: [:new, :create, :edit, :update]
-
     resources :managements, only: [:new, :create, :edit, :update]
+  end
 
+  resources :diagnostics, only: [] do
+    resources :relations, only: [:show, :destroy, :create] do
+      resources :children, only: [:create, :destroy]
+      resources :conditions, only: [:create, :destroy]
+    end
+  end
+  get 'relationable/:type/:id', to: 'relations#index', as: 'relationable'
+  resources :predefined_syndromes, only: [:new, :create, :edit, :update, :show] do
+    resources :relations, only: [:show, :destroy, :create] do
+      resources :children, only: [:create, :destroy]
+      resources :conditions, only: [:create, :destroy]
+    end
   end
 
   resources :groups, only: [:index, :show, :new, :create, :edit, :update] do
