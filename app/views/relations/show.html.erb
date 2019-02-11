@@ -10,7 +10,7 @@
     </li>
   <% end %>
   <li class="list-group-item">
-    <%= simple_form_for @child, url: polymorphic_url([@algorithm, @algorithm_version, @relationable, @relation]), method: :post do |f| %>
+    <%= simple_form_for @child, url: polymorphic_url([@algorithm, @algorithm_version, @relationable, @relation, @child]), method: :post do |f| %>
       <div class="row">
         <div class="col">
           <%= f.association :node, collection: @algorithm.nodes.where.not(id: @relation.children.select(:node_id)), label_method: :label, label: false, prompt: t('prompt') %>

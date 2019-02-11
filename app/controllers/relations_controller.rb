@@ -59,7 +59,6 @@ class RelationsController < ApplicationController
     else
       raise
     end
-
   end
 
   def relation_params
