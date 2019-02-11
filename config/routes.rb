@@ -32,13 +32,15 @@ Rails.application.routes.draw do
       resources :predefined_syndromes, only: [:index, :show, :destroy] do
         resources :relations, only: [:show, :destroy, :create] do
           resources :children, only: [:create, :destroy]
+          resources :conditions, only: [:create, :destroy]
         end
       end
 
-      resources :diagnostics, only: [:index, :show, :new, :create, :edit, :update] do
+      resources :diagnostics, only: [:index, :show, :new, :create, :edit, :update, :destroy] do
         resources :final_diagnostics, only: [:index, :show, :new, :create, :edit, :update, :delete, :destroy]
         resources :relations, only: [:show, :destroy, :create] do
           resources :children, only: [:create, :destroy]
+          resources :conditions, only: [:create, :destroy]
         end
       end
 

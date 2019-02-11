@@ -7,8 +7,7 @@ class ChildrenController < ApplicationController
   before_action :set_child, only: [:destroy]
 
   def create
-    @child = Child.new(child_params)
-    @child.relation = @relation
+    @child = @relation.children.new(child_params)
 
     if @child.save
       redirect_to polymorphic_url([@algorithm, @algorithm_version, @relationable, @relation]), notice: t('flash_message.success_created')
@@ -58,9 +57,6 @@ class ChildrenController < ApplicationController
       :id,
       :weight,
       :node_id,
-      :relation_id
     )
   end
-
-
 end
