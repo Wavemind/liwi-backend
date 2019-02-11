@@ -13,6 +13,7 @@ class DiagnosticsController < ApplicationController
 
   def show
     @relation = Relation.new
+    @relationable = @diagnostic
   end
 
   def new

@@ -1,0 +1,19 @@
+<h1><%= t('.title', name: @relationable.label ) %></h1>
+
+<div class="row">
+  <div class="col">
+    <%= simple_form_for @relation, url: algorithm_algorithm_version_predefined_syndrome_relations_url(@algorithm, @algorithm_version, @predefined_syndrome), method: :post do |f| %>
+      <div class="row">
+        <div class="col">
+          <%= f.input :node_id, collection: Node.where.not(id: @predefined_syndrome.relations.select(:node_id)), label_method: :label, label: false , prompt: t('prompt')%>
+        </div>
+        <div class="col">
+          <%= f.submit t('add'), class: 'btn btn-primary' %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<%= render 'relations/table' %>
+

@@ -135,6 +135,9 @@ en:
       reference_used: "This reference is already used"
   predefined_syndromes:
     reference: "PS"
+    show:
+      title: "Details of %{name}"
+      children: "Children"
   prompt: "Select"
   questions:
     categories:

@@ -24,7 +24,6 @@ class PredefinedSyndrome < Node
 
   private
 
-
   # Delete current predefined syndrome used in diagnostics
   def diagnostic_dependencies
     Relation.where(relationable_type: 'Diagnostic', node_id: id).destroy_all

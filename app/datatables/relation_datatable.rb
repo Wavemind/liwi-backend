@@ -3,7 +3,7 @@ class RelationDatatable < AjaxDatatablesRails::ActiveRecord
 
   # Helpers
   def_delegator :@view, :link_to
-  def_delegator :@view, :algorithm_algorithm_version_diagnostic_relation_url
+  def_delegator :@view, :polymorphic_url
 
   def initialize(params, opts = {})
     @view = opts[:view_context]
@@ -22,8 +22,13 @@ class RelationDatatable < AjaxDatatablesRails::ActiveRecord
 
   # Value display
   def data
+
+    algorithm = Algorithm.find(params[:algorithm_id])
+    algorithm_version = AlgorithmVersion.find(params[:algorithm_version_id])
+    relationable = params[:type].constantize.find(params[:id])
+
     records.map do |record|
-      actions = link_to(I18n.t('show'), algorithm_algorithm_version_diagnostic_relation_url(params[:algorithm_id], params[:algorithm_version_id], params[:diagnostic_id], id: record), class: 'btn btn-outline-primary') + " " + link_to(I18n.t('destroy'), algorithm_algorithm_version_diagnostic_relation_url(params[:algorithm_id], params[:algorithm_version_id], params[:diagnostic_id], id: record), method: :delete, class: 'btn btn-outline-danger', data: { confirm: 'Are you sure?' })
+      actions = link_to(I18n.t('show'), polymorphic_url([algorithm, algorithm_version, relationable, record]), class: 'btn btn-outline-primary') + " " + link_to(I18n.t('destroy'), polymorphic_url([algorithm, algorithm_version, relationable, record]), method: :delete, class: 'btn btn-outline-danger', data: { confirm: 'Are you sure?' })
       {
         id: record.id,
         reference: record.node.reference,
@@ -37,6 +42,7 @@ class RelationDatatable < AjaxDatatablesRails::ActiveRecord
 
   # Activerecord request
   def get_raw_records
-    Relation.where(relationable_id: params[:id], relationable_type: 'Diagnostic').includes([:node, :nodes, :children])
+    relation = params[:type].constantize.find(params[:id])
+    Relation.where(relationable: relation).includes([:node, :nodes, :children])
   end
 end

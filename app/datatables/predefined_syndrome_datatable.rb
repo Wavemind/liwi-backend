@@ -4,6 +4,7 @@ class PredefinedSyndromeDatatable < AjaxDatatablesRails::ActiveRecord
   # Helpers
   def_delegator :@view, :link_to
   def_delegator :@view, :algorithm_algorithm_version_predefined_syndrome_url
+  def_delegator :@view, :algorithm_algorithm_version_predefined_syndrome_relations_url
 
   def initialize(params, opts = {})
     @view = opts[:view_context]
@@ -21,7 +22,7 @@ class PredefinedSyndromeDatatable < AjaxDatatablesRails::ActiveRecord
   # Value display
   def data
     records.map do |record|
-      actions = link_to(I18n.t('destroy'), algorithm_algorithm_version_predefined_syndrome_url(params[:algorithm_id], params[:algorithm_version_id], id: record), method: :delete, class: 'btn btn-outline-danger', data: { confirm: 'Are you sure?' })
+      actions = link_to(I18n.t('show'), algorithm_algorithm_version_predefined_syndrome_url(params[:algorithm_id], params[:algorithm_version_id], id: record), class: 'btn btn-outline-primary') + " " + link_to(I18n.t('destroy'), algorithm_algorithm_version_predefined_syndrome_url(params[:algorithm_id], params[:algorithm_version_id], id: record), method: :delete, class: 'btn btn-outline-danger', data: { confirm: 'Are you sure?' })
       {
         reference: record.reference,
         label: record.label,

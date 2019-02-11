@@ -29,13 +29,21 @@ Rails.application.routes.draw do
         put 'unarchive', to: 'algorithm_versions#unarchive', as: 'unarchive'
       end
 
-      resources :predefined_syndromes, only: [:index, :destroy]
-      resources :diagnostics, only: [:index, :show, :new, :create, :edit, :update] do
-        resources :final_diagnostics, only: [:index, :show, :new, :create, :edit, :update, :delete, :destroy]
-        resources :relations, only: [:index, :show, :destroy, :create] do
+      resources :predefined_syndromes, only: [:index, :show, :destroy] do
+        resources :relations, only: [:show, :destroy, :create] do
           resources :children, only: [:create, :destroy]
         end
       end
+
+      resources :diagnostics, only: [:index, :show, :new, :create, :edit, :update] do
+        resources :final_diagnostics, only: [:index, :show, :new, :create, :edit, :update, :delete, :destroy]
+        resources :relations, only: [:show, :destroy, :create] do
+          resources :children, only: [:create, :destroy]
+        end
+      end
+
+      get 'relationable/:type/:id', to: 'relations#index', as: 'relationable'
+
     end
 
     resources :questions, only: [:new, :create, :edit, :update] do
