@@ -1,7 +1,7 @@
 <h1><%= t('.title', name: @diagnostic.label ) %></h1>
 
 <h2><%= t('.subtitle_final_diagnostics') %></h2>
-<%= link_to new_algorithm_algorithm_version_diagnostic_final_diagnostic_url(@algorithm, @algorithm_version, @diagnostic) do %>
+<%= link_to new_diagnostic_final_diagnostic_url(@diagnostic) do %>
   <button type="button" class="btn btn-outline-secondary"><%= t('add') %></button>
 <% end %>
 
@@ -13,7 +13,7 @@
 
 <div class="row">
   <div class="col">
-    <%= simple_form_for @relation, url: algorithm_algorithm_version_diagnostic_relations_url(@algorithm, @algorithm_version, @diagnostic), method: :post do |f| %>
+    <%= simple_form_for @relation, url: diagnostic_relations_url(@diagnostic), method: :post do |f| %>
       <div class="row">
         <div class="col">
           <%= f.association :node, collection: @algorithm.nodes.where.not(id: @diagnostic.relations.select(:node_id)), label_method: :reference_label, prompt: t('select'), label: false  %>

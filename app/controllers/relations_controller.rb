@@ -17,6 +17,12 @@ class RelationsController < ApplicationController
 
     @conditions = @relation.conditions
     @condition = Condition.new
+
+    if params[:diagnostic_id].present?
+      @algorithm = @relationable.algorithm_versions.first.algorithm
+    else
+      @algorithm = @relationable.algorithms.first
+    end
   end
 
   def create
@@ -24,17 +30,17 @@ class RelationsController < ApplicationController
     @relation.relationable = @relationable
 
     if @relation.save
-      redirect_to polymorphic_url([@algorithm, @algorithm_version, @relationable]), notice: t('flash_message.success_created')
+      redirect_to @relationable, notice: t('flash_message.success_created')
     else
-      redirect_to polymorphic_url([@algorithm, @algorithm_version, @relationable]), danger: t('error')
+      redirect_to @relationable, danger: t('error')
     end
   end
 
   def destroy
     if @relation.destroy
-      redirect_to polymorphic_url([@algorithm, @algorithm_version, @relationable]), notice: t('flash_message.success_updated')
+      redirect_to @relationable, notice: t('flash_message.success_updated')
     else
-      redirect_to polymorphic_url([@algorithm, @algorithm_version, @relationable]), danger: t('error')
+      redirect_to @relationable, danger: t('error')
     end
   end
 

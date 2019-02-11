@@ -1,7 +1,5 @@
 class DiagnosticsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:show, :new, :create, :edit, :update, :destroy]
-  before_action :set_algorithm_version, only: [:show, :new, :create, :edit, :update, :destroy]
   before_action :set_diagnostic, only: [:show, :edit, :update, :destroy]
 
   def index
@@ -14,6 +12,8 @@ class DiagnosticsController < ApplicationController
   def show
     @relation = Relation.new
     @relationable = @diagnostic
+
+    @algorithm = @diagnostic.algorithm_versions.first.algorithm
   end
 
   def new
@@ -22,10 +22,10 @@ class DiagnosticsController < ApplicationController
 
   def create
     @diagnostic = Diagnostic.new(diagnostic_params)
-    @diagnostic.algorithm_versions << @algorithm_version
+    @diagnostic.algorithm_versions << AlgorithmVersion.first
 
     if @diagnostic.save
-      redirect_to algorithm_algorithm_version_url(@algorithm, @algorithm_version), notice: t('flash_message.success_created')
+      redirect_to @diagnostic, notice: t('flash_message.success_created')
     else
       render :new
     end
@@ -33,7 +33,7 @@ class DiagnosticsController < ApplicationController
 
   def update
     if @diagnostic.update(diagnostic_params)
-      redirect_to algorithm_algorithm_version_url(@algorithm, @algorithm_version), notice: t('flash_message.success_updated')
+      redirect_to @diagnostic, notice: t('flash_message.success_updated')
     else
       render :edit
     end
@@ -41,21 +41,13 @@ class DiagnosticsController < ApplicationController
 
   def destroy
     if @diagnostic.destroy
-      redirect_to algorithm_algorithm_version_url(@algorithm, @algorithm_version), notice: t('flash_message.success_deleted')
+      redirect_to @diagnostic, notice: t('flash_message.success_deleted')
     else
       render :new
     end
   end
 
   private
-
-  def set_algorithm
-    @algorithm = Algorithm.find(params[:algorithm_id])
-  end
-
-  def set_algorithm_version
-    @algorithm_version = AlgorithmVersion.find(params[:algorithm_version_id])
-  end
 
   def set_diagnostic
     @diagnostic = Diagnostic.find(params[:id])
