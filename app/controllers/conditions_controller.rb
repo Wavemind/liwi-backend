@@ -8,6 +8,10 @@ class ConditionsController < ApplicationController
 
   def create
     @condition = @relation.conditions.new(condition_params)
+    @condition.first_conditionable_id = condition_params[:first_conditionable_id].split(',')[0]
+    @condition.first_conditionable_type = condition_params[:first_conditionable_id].split(',')[1]
+    @condition.second_conditionable_id = condition_params[:second_conditionable_id].split(',')[0]
+    @condition.second_conditionable_type = condition_params[:second_conditionable_id].split(',')[1]
 
     if @condition.save
       redirect_to algorithm_algorithm_version_diagnostic_relation_url(@algorithm, @algorithm_version, @diagnostic, @relation), notice: t('flash_message.success_created')
@@ -50,9 +54,7 @@ class ConditionsController < ApplicationController
     params.require(:condition).permit(
       :id,
       :operator,
-      :first_conditionable_type,
       :first_conditionable_id,
-      :second_conditionable_type,
       :second_conditionable_id,
       :top_level,
     )
