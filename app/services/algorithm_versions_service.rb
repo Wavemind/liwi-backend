@@ -33,6 +33,7 @@ class AlgorithmVersionsService
   # Build a hash of metadata about the algorithm and algorithm version
   def self.extract_metadata
     hash = {}
+    hash['id'] = @algorithm_version.id
     hash['name'] = @algorithm_version.algorithm.name
     hash['version'] = @algorithm_version.version
     hash['description'] = @algorithm_version.algorithm.description
