@@ -11,10 +11,15 @@ class Condition < ApplicationRecord
   scope :top_level, -> { where(top_level: true) }
   scope :low_level, -> { where(top_level: false) }
 
+  validates_presence_of :first_conditionable
 
   # @return [String]
   # Return the id displayed for the view
   def display_condition
     "(#{first_conditionable.display_condition} #{operator.upcase unless operator.nil?} #{second_conditionable.display_condition unless second_conditionable.nil?})"
+  end
+
+  def conditionable_hash
+    "#{self.id},#{self.class.name}"
   end
 end

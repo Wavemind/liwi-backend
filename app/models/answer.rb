@@ -14,6 +14,10 @@ class Answer < ApplicationRecord
     reference
   end
 
+  def conditionable_hash
+    "#{self.id},#{self.class.name}"
+  end
+
   private
 
   # {Node#unique_reference}
@@ -27,6 +31,5 @@ class Answer < ApplicationRecord
   def complete_reference
     self.reference = "#{node.reference}_#{reference}"
   end
-
 
 end
