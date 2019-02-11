@@ -2,7 +2,7 @@ class ConditionsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_algorithm, only: [:index, :show, :create, :destroy]
   before_action :set_algorithm_version, only: [:index, :show, :create, :destroy]
-  before_action :set_diagnostic, only: [:index, :show, :create, :destroy]
+  before_action :set_relationable, only: [:index, :show, :create, :destroy]
   before_action :set_relation, only: [:show, :create, :destroy]
   before_action :set_condition, only: [:destroy]
 
@@ -14,17 +14,17 @@ class ConditionsController < ApplicationController
     @condition.second_conditionable_type = condition_params[:second_conditionable_id].split(',')[1]
 
     if @condition.save
-      redirect_to algorithm_algorithm_version_diagnostic_relation_url(@algorithm, @algorithm_version, @diagnostic, @relation), notice: t('flash_message.success_created')
+      redirect_to polymorphic_url([@algorithm, @algorithm_version, @relationable, @relation]), notice: t('flash_message.success_created')
     else
-      redirect_to algorithm_algorithm_version_diagnostic_relation_url(@algorithm, @algorithm_version, @diagnostic, @relation), alert: t('error')
+      redirect_to polymorphic_url([@algorithm, @algorithm_version, @relationable, @relation]), alert: t('error')
     end
   end
 
   def destroy
     if @condition.destroy
-      redirect_to algorithm_algorithm_version_diagnostic_relation_url(@algorithm, @algorithm_version, @diagnostic, @relation), notice: t('flash_message.success_updated')
+      redirect_to polymorphic_url([@algorithm, @algorithm_version, @relationable, @relation]), notice: t('flash_message.success_updated')
     else
-      redirect_to algorithm_algorithm_version_diagnostic_relation_url(@algorithm, @algorithm_version, @diagnostic, @relation), alert: t('error')
+      redirect_to polymorphic_url([@algorithm, @algorithm_version, @relationable, @relation]), alert: t('error')
     end
   end
 
@@ -46,8 +46,14 @@ class ConditionsController < ApplicationController
     @algorithm_version = AlgorithmVersion.find(params[:algorithm_version_id])
   end
 
-  def set_diagnostic
-    @diagnostic = Diagnostic.find(params[:diagnostic_id])
+  def set_relationable
+    if params[:diagnostic_id].present?
+      @relationable = Diagnostic.find(params[:diagnostic_id])
+    elsif params[:predefined_syndrome_id].present?
+      @relationable = PredefinedSyndrome.find(params[:predefined_syndrome_id])
+    else
+      raise
+    end
   end
 
   def condition_params

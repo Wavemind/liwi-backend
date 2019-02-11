@@ -3,21 +3,21 @@
     <li class="list-group-item">
       <div class="row">
         <div class="col"><%= condition.display_condition %></div>
-        <div class="col text-right"><%= link_to(I18n.t('destroy'), algorithm_algorithm_version_diagnostic_relation_condition_url(@algorithm, @algorithm_version, @diagnostic, @relation, condition), method: :delete, class: 'btn btn-outline-danger', data: { confirm: 'Are you sure?' }) %></div>
+        <div class="col text-right"><%= link_to(I18n.t('destroy'), polymorphic_url([@algorithm, @algorithm_version, @relationable, @relation, condition]), method: :delete, class: 'btn btn-outline-danger', data: { confirm: 'Are you sure?' }) %></div>
       </div>
     </li>
   <% end %>
   <li class="list-group-item">
-    <%= simple_form_for @condition, url: algorithm_algorithm_version_diagnostic_relation_conditions_url(@algorithm, @algorithm_version, @diagnostic, @relation), method: :post do |f| %>
+    <%= simple_form_for @condition, url: polymorphic_url([@algorithm, @algorithm_version, @relationable, @relation, @condition]), method: :post do |f| %>
       <div class="row">
         <div class="col">
-          <%= f.association :first_conditionable, collection: (@diagnostic.relations.questions.includes(node:[:answers]).map(&:node).map(&:answers) + @diagnostic.relations.predefined_syndromes.includes(node:[:answers]).map(&:node).map(&:answers) + @relation.conditions).flatten, value_method: :conditionable_hash, label_method: :display_condition, label: false, prompt: t('prompt') %>
+          <%= f.association :first_conditionable, collection: (@relationable.relations.questions.includes(node:[:answers]).map(&:node).map(&:answers) + @relationable.relations.predefined_syndromes.includes(node:[:answers]).map(&:node).map(&:answers) + @relationable.conditions).flatten, value_method: :conditionable_hash, label_method: :display_condition, label: false, prompt: t('prompt') %>
         </div>
         <div class="col">
           <%= f.input :operator, label: false %>
         </div>
         <div class="col">
-          <%= f.association :second_conditionable, collection: (@diagnostic.relations.questions.includes(node:[:answers]).map(&:node).map(&:answers) + @diagnostic.relations.predefined_syndromes.includes(node:[:answers]).map(&:node).map(&:answers) + @relation.conditions).flatten, value_method: :conditionable_hash, label_method: :display_condition, label: false, prompt: t('prompt') %>
+          <%= f.association :second_conditionable, collection: (@relationable.relations.questions.includes(node:[:answers]).map(&:node).map(&:answers) + @relationable.relations.predefined_syndromes.includes(node:[:answers]).map(&:node).map(&:answers) + @relationable.conditions).flatten, value_method: :conditionable_hash, label_method: :display_condition, label: false, prompt: t('prompt') %>
         </div>
         <div class="col">
           <%= f.input :top_level, as: :boolean %>
