@@ -68,6 +68,4 @@ class RelationsController < ApplicationController
       :relationable_type
     )
   end
-
-
 end

@@ -19,7 +19,16 @@ class Condition < ApplicationRecord
     "(#{first_conditionable.display_condition} #{operator.upcase unless operator.nil?} #{second_conditionable.display_condition unless second_conditionable.nil?})"
   end
 
+  # @return [String]
+  # Return a formatted String with the id and type of polymorphic instance
   def conditionable_hash
     "#{self.id},#{self.class.name}"
+  end
+
+  # @params [String, String]
+  # @return [Object]
+  # Return an object (Answer or Condition) from a string with id and class name
+  def create_conditionable(conditionable)
+    conditionable.split(',')[1].constantize.find(conditionable.split(',')[0])
   end
 end
