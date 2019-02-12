@@ -15,6 +15,7 @@ en:
       title: "Edit this algorithm"
     show:
       subtitle_managements: "Available managements"
+      subtitle_predefined_syndromes: "Available predefined syndromes"
       subtitle_questions: "Available questions"
       subtitle_treatments: "Available treatments"
       subtitle_versions: "Versions list"
