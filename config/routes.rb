@@ -50,6 +50,7 @@ Rails.application.routes.draw do
         resources :children, only: [:create, :destroy]
         resources :conditions, only: [:create, :destroy]
       end
+    end
   end
 
   resources :diagnostics, only: [:index, :show, :new, :create, :edit, :update, :destroy] do
