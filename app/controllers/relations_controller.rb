@@ -30,9 +30,9 @@ class RelationsController < ApplicationController
     @relation.relationable = @relationable
 
     if @relation.save
-      redirect_to @relationable, notice: t('flash_message.success_created')
+      redirect_to polymorphic_url([@relationable, @relation]), notice: t('flash_message.success_created')
     else
-      redirect_to @relationable, danger: t('error')
+      redirect_to @relationable, alert: t('error')
     end
   end
 
@@ -40,7 +40,7 @@ class RelationsController < ApplicationController
     if @relation.destroy
       redirect_to @relationable, notice: t('flash_message.success_updated')
     else
-      redirect_to @relationable, danger: t('error')
+      redirect_to @relationable, alert: t('error')
     end
   end
 

@@ -29,6 +29,7 @@ Rails.application.routes.draw do
         put 'archive', to: 'algorithm_versions#archive', as: 'archive'
         put 'unarchive', to: 'algorithm_versions#unarchive', as: 'unarchive'
       end
+      resources :diagnostics, only: [:index, :new, :create, :edit, :update]
     end
 
     resources :questions, only: [:new, :create, :edit, :update] do
@@ -41,16 +42,18 @@ Rails.application.routes.draw do
 
     resources :treatments, only: [:new, :create, :edit, :update]
     resources :managements, only: [:new, :create, :edit, :update]
-    resources :predefined_syndromes, only: [:new, :create, :edit, :update, :show] do
-      resources :relations, only: [:show, :destroy, :create] do
-        resources :children, only: [:create, :destroy]
-        resources :conditions, only: [:create, :destroy]
-      end
+
+    resources :predefined_syndromes, only: [:index, :new, :create, :edit, :update]
+  end
+
+  resources :predefined_syndromes, only: [:show] do
+    resources :relations, only: [:show, :destroy, :create] do
+      resources :children, only: [:create, :destroy]
+      resources :conditions, only: [:create, :destroy]
     end
   end
 
-  resources :diagnostics, only: [:index, :show, :new, :create, :edit, :update, :destroy] do
-    resources :final_diagnostics, only: [:index, :show, :new, :create, :edit, :update, :delete, :destroy]
+  resources :diagnostics, only: [:show] do
     resources :relations, only: [:show, :destroy, :create] do
       resources :children, only: [:create, :destroy]
       resources :conditions, only: [:create, :destroy]

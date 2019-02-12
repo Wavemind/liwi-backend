@@ -20,6 +20,7 @@ en:
       subtitle_treatments: "Available treatments"
       subtitle_versions: "Versions list"
       title: "Details of %{name}"
+      subtitle_predefined_syndromes: "Available predefined syndromes"
   algorithm_versions:
     table:
       columns:
@@ -139,6 +140,8 @@ en:
     show:
       title: "Details of %{name}"
       children: "Children"
+    new:
+      title: "Create predefined syndrome"
   prompt: "Select"
   questions:
     categories:
