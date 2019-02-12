@@ -11,7 +11,7 @@ class Answer < ApplicationRecord
 
 
   def display_condition
-    reference
+    "answer: #{reference}"
   end
 
   def conditionable_hash
