@@ -5,6 +5,8 @@ class PredefinedSyndrome < Node
   has_many :answers, foreign_key: 'node_id', dependent: :destroy
   has_many :relations, as: :relationable, dependent: :destroy
 
+  after_create :create_answers
+
   private
 
   # {Node#unique_reference}
@@ -26,4 +28,8 @@ class PredefinedSyndrome < Node
     Relation.where(relationable_type: 'Diagnostic', node_id: id).destroy_all
   end
 
+  def create_answers
+    self.answers.create!(reference: '1', label: 'yes')
+    self.answers.create!(reference: '2', label: 'no')
+  end
 end

@@ -1,0 +1,8 @@
+<%= simple_form_for [@algorithm, @predefined_syndrome], html: { class: 'form-horizontal' } do |f| %>
+
+  <%= f.input :reference %>
+  <%= f.input :label %>
+  <%= f.input :description %>
+
+  <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
+<% end %>
