@@ -142,6 +142,8 @@ en:
       children: "Children"
     new:
       title: "Create predefined syndrome"
+    edit:
+      title: "Update the predefined syndrome"
   prompt: "Select"
   questions:
     categories:

@@ -79,7 +79,6 @@ class AlgorithmVersionsController < ApplicationController
     params.require(:algorithm_version).permit(
       :id,
       :version,
-      :json,
     )
   end
 end

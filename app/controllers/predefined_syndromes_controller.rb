@@ -1,7 +1,7 @@
 class PredefinedSyndromesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_predefined_syndrome, only: [:destroy, :show]
-  before_action :set_algorithm, only: [:new, :create]
+  before_action :set_predefined_syndrome, only: [:edit, :update, :destroy, :show]
+  before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy]
 
 
   def new
@@ -13,6 +13,14 @@ class PredefinedSyndromesController < ApplicationController
     @predefined_syndrome.algorithms << @algorithm
 
     if @predefined_syndrome.save
+      redirect_to @algorithm, notice: t('flash_message.success_updated')
+    else
+      redirect_to @algorithm, alert: t('error')
+    end
+  end
+
+  def update
+    if @predefined_syndrome.update(predefined_syndrome_params)
       redirect_to @algorithm, notice: t('flash_message.success_updated')
     else
       redirect_to @algorithm, alert: t('error')

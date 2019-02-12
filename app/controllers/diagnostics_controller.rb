@@ -25,7 +25,7 @@ class DiagnosticsController < ApplicationController
     @diagnostic.algorithm_versions << @algorithm_version
 
     if @diagnostic.save
-      redirect_to @diagnostic, notice: t('flash_message.success_created')
+      redirect_to algorithm_algorithm_version_diagnostic_url(@algorithm, @algorithm_version, @diagnostic), notice: t('flash_message.success_created')
     else
       render :new
     end
@@ -33,7 +33,7 @@ class DiagnosticsController < ApplicationController
 
   def update
     if @diagnostic.update(diagnostic_params)
-      redirect_to @diagnostic, notice: t('flash_message.success_updated')
+      redirect_to algorithm_algorithm_version_diagnostic_url(@algorithm, @algorithm_version, @diagnostic), notice: t('flash_message.success_updated')
     else
       render :edit
     end
@@ -41,7 +41,7 @@ class DiagnosticsController < ApplicationController
 
   def destroy
     if @diagnostic.destroy
-      redirect_to @diagnostic, notice: t('flash_message.success_deleted')
+      redirect_to algorithm_algorithm_version_diagnostic_url(@algorithm, @algorithm_version, @diagnostic), notice: t('flash_message.success_deleted')
     else
       render :new
     end
