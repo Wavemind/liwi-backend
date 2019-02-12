@@ -1,5 +1,7 @@
 class DiagnosticsController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_algorithm, only: [:show, :new, :create, :edit, :update]
+  before_action :set_algorithm_version, only: [:show, :new, :create, :edit, :update]
   before_action :set_diagnostic, only: [:show, :edit, :update, :destroy]
 
   def index
@@ -12,8 +14,6 @@ class DiagnosticsController < ApplicationController
   def show
     @relation = Relation.new
     @relationable = @diagnostic
-
-    @algorithm = @diagnostic.algorithm_versions.first.algorithm
   end
 
   def new
@@ -22,7 +22,7 @@ class DiagnosticsController < ApplicationController
 
   def create
     @diagnostic = Diagnostic.new(diagnostic_params)
-    @diagnostic.algorithm_versions << AlgorithmVersion.first
+    @diagnostic.algorithm_versions << @algorithm_version
 
     if @diagnostic.save
       redirect_to @diagnostic, notice: t('flash_message.success_created')
@@ -48,6 +48,14 @@ class DiagnosticsController < ApplicationController
   end
 
   private
+
+  def set_algorithm
+    @algorithm = Algorithm.find(params[:algorithm_id])
+  end
+
+  def set_algorithm_version
+    @algorithm_version = AlgorithmVersion.find(params[:algorithm_version_id])
+  end
 
   def set_diagnostic
     @diagnostic = Diagnostic.find(params[:id])

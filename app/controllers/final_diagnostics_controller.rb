@@ -1,17 +1,15 @@
 class FinalDiagnosticsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_diagnostic, only: [:show, :new, :create, :edit, :destroy]
-  before_action :set_final_diagnostic, only: [:show, :edit, :destroy]
+  before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy]
+  before_action :set_algorithm_version, only: [:new, :create, :edit, :update, :destroy]
+  before_action :set_diagnostic, only: [:new, :create, :edit, :destroy]
+  before_action :set_final_diagnostic, only: [:edit, :destroy]
 
   def index
     respond_to do |format|
       format.html
       format.json { render json: FinalDiagnosticDatatable.new(params, view_context: view_context) }
     end
-  end
-
-  def show
-
   end
 
   def new
@@ -22,7 +20,7 @@ class FinalDiagnosticsController < ApplicationController
     @final_diagnostic = @diagnostic.final_diagnostics.new(diagnostic_params)
 
     if @final_diagnostic.save
-      redirect_to @diagnostic, notice: t('flash_message.success_created')
+      redirect_to algorithm_algorithm_version_diagnostic_url(@algorithm, @algorithm_version, @diagnostic), notice: t('flash_message.success_created')
     else
       render :new
     end
@@ -30,13 +28,21 @@ class FinalDiagnosticsController < ApplicationController
 
   def destroy
     if @final_diagnostic.destroy
-      redirect_to @diagnostic, notice: t('flash_message.success_deleted')
+      redirect_to algorithm_algorithm_version_diagnostic_url(@algorithm, @algorithm_version, @diagnostic), notice: t('flash_message.success_deleted')
     else
-      render :new
+      redirect_to algorithm_algorithm_version_diagnostic_url(@algorithm, @algorithm_version, @diagnostic), alert: t('flash_message.update_fail')
     end
   end
 
   private
+
+  def set_algorithm
+    @algorithm = Algorithm.find(params[:algorithm_id])
+  end
+
+  def set_algorithm_version
+    @algorithm_version = AlgorithmVersion.find(params[:algorithm_version_id])
+  end
 
   def set_diagnostic
     @diagnostic = Diagnostic.find(params[:diagnostic_id])
