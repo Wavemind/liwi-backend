@@ -5,7 +5,7 @@
     <%= simple_form_for @relation, url: predefined_syndrome_relations_url(@predefined_syndrome), method: :post do |f| %>
       <div class="row">
         <div class="col">
-          <%= f.input :node_id, collection: Node.where.not(id: @predefined_syndrome.relations.select(:node_id)), label_method: :label, label: false , prompt: t('prompt')%>
+          <%= f.input :node_id, collection: Node.where.not(id: @predefined_syndrome.relations.select(:node_id)), label_method: :reference_label, label: false , prompt: t('prompt')%>
         </div>
         <div class="col">
           <%= f.submit t('add'), class: 'btn btn-primary' %>
