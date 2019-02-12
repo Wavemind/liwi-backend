@@ -20,7 +20,6 @@ en:
       subtitle_treatments: "Available treatments"
       subtitle_versions: "Versions list"
       title: "Details of %{name}"
-      subtitle_predefined_syndromes: "Available predefined syndromes"
   algorithm_versions:
     table:
       columns:
@@ -44,8 +43,12 @@ en:
     edit:
       title: "Edit related answers of %{name} question"
   archive: "Archive"
+  children:
+    errors:
+      unknown_relationable: "Unknown relationable"
   deactivated: "Deactivate"
   delete: "Delete"
+  destroy: "Remove"
   devices:
     index:
       columns:
@@ -86,6 +89,7 @@ en:
       title: "Details of %{name}"
       predefined_syndromes: "Predefined Syndromes"
   edit: "Edit"
+  error: "An error occured"
   final_diagnostics:
     new:
       title: "Create a new final diagnostic"
@@ -176,6 +180,12 @@ en:
         actions: "Actions"
     edit:
       title: "Edit question"
+  relations:
+    table:
+      columns:
+        type: "Type"
+    show:
+      children: "Children"
   remove: "Remove"
   roles:
     index:
@@ -218,11 +228,3 @@ en:
       last_account_connection: "Last account connection "
       role: "Role "
       title: "Details of %{name}"
-  relations:
-    table:
-      columns:
-        type: "Type"
-    show:
-      children: "Children"
-  error: "An error occured"
-  destroy: "Remove"

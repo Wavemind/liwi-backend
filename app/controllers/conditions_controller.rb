@@ -6,10 +6,8 @@ class ConditionsController < ApplicationController
 
   def create
     @condition = @relation.conditions.new(condition_params)
-    @condition.first_conditionable_id = condition_params[:first_conditionable_id].split(',')[0]
-    @condition.first_conditionable_type = condition_params[:first_conditionable_id].split(',')[1]
-    @condition.second_conditionable_id = condition_params[:second_conditionable_id].split(',')[0]
-    @condition.second_conditionable_type = condition_params[:second_conditionable_id].split(',')[1]
+    @condition.first_conditionable = create_conditionable(condition_params[:first_conditionable_id])
+    @condition.second_conditionable = create_conditionable(condition_params[:second_conditionable_id])
 
     if @condition.save
       redirect_to polymorphic_url([@relationable, @relation]), notice: t('flash_message.success_created')
