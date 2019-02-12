@@ -13,7 +13,7 @@ class PredefinedSyndromesController < ApplicationController
     @predefined_syndrome.algorithms << @algorithm
 
     if @predefined_syndrome.save
-      redirect_to @algorithm, notice: t('flash_message.success_updated')
+      redirect_to @predefined_syndrome, notice: t('flash_message.success_updated')
     else
       redirect_to @algorithm, alert: t('error')
     end
