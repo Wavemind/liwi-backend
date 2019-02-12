@@ -152,9 +152,7 @@ MedicalCase.create!(patient: kantaing, algorithm_version: ft_1_0)
 MedicalCase.create!(patient: idefix, algorithm_version: ft_1_2)
 MedicalCase.create!(patient: john, algorithm_version: ft_1_2)
 
-
 #################################################################################################
-
 
 dd7 = Diagnostic.create!(label: 'Severe LRTI', reference: '7')
 df7 = FinalDiagnostic.create!(label: 'Severe lower respiratory tract infection', reference: '7', diagnostic: dd7)
@@ -248,8 +246,8 @@ Child.create!(relation: dd7_ps6, node: t2)
 
 
 Condition.create!(referenceable: ps6_p25, first_conditionable: s4_2, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: ps6_ps6, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: ps6_ps6, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: ps6_ps6, first_conditionable: s4_1, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: ps6_ps6, first_conditionable: p25_1, operator: nil, second_conditionable: nil)
 
 Condition.create!(referenceable: dd7_p1, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
 Condition.create!(referenceable: dd7_p3, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
