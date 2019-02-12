@@ -5,9 +5,9 @@ class AlgorithmVersionsService
   # Build a hash of an algorithm version with its diagnostics, predefined syndromes, questions and health cares and metadata
   def self.generate_hash(id)
     @algorithm_version = AlgorithmVersion.find(id)
-    @managements = {}
     @questions = {}
     @treatments = {}
+    @managements = {}
     @predefined_syndromes = {}
 
     hash = extract_metadata
@@ -19,10 +19,11 @@ class AlgorithmVersionsService
     end
 
     # Set all questions/treatments/managements used in this version of algorithm
-    hash['predefined_syndromes'] = generate_predefined_syndromes
-    hash['questions'] = generate_questions
-    hash['treatments'] = generate_treatments
-    hash['managements'] = generate_managements
+    hash['nodes'] = {}
+    hash['nodes'] = hash['nodes'].merge(generate_predefined_syndromes)
+    hash['nodes'] = hash['nodes'].merge(generate_questions)
+    hash['nodes'] = hash['nodes'].merge(generate_managements)
+    hash['nodes'] = hash['nodes'].merge(generate_treatments)
 
     hash
   end
@@ -182,8 +183,11 @@ class AlgorithmVersionsService
   def self.generate_questions
     hash = {}
     @questions.each do |key, question|
+      # diagnos = question.relations.map(&:relationable).map{ |relationable| relationable.id if relationable.is_a?(Diagnostic)}.compact
+
       hash[question.id] = {}
       hash[question.id]['id'] = question.id
+      hash[question.id]['type'] = question.class.name
       hash[question.id]['reference'] = question.reference
       hash[question.id]['label'] = question.label
       hash[question.id]['description'] = question.description
@@ -214,6 +218,7 @@ class AlgorithmVersionsService
     @treatments.each do |key, treatment|
       hash[treatment.id] = {}
       hash[treatment.id]['id'] = treatment.id
+      hash[treatment.id]['type'] = treatment.class.name
       hash[treatment.id]['reference'] = treatment.reference
       hash[treatment.id]['label'] = treatment.label
       hash[treatment.id]['description'] = treatment.description
@@ -228,6 +233,7 @@ class AlgorithmVersionsService
     @managements.each do |key, management|
       hash[management.id] = {}
       hash[management.id]['id'] = management.id
+      hash[management.id]['type'] = management.class.name
       hash[management.id]['reference'] = management.reference
       hash[management.id]['label'] = management.label
       hash[management.id]['description'] = management.description
@@ -241,6 +247,7 @@ class AlgorithmVersionsService
     hash = {}
     @predefined_syndromes.each do |key, predefined_syndrome|
       hash[predefined_syndrome.id] = {}
+      hash[predefined_syndrome.id]['type'] = predefined_syndrome.class.name
       hash[predefined_syndrome.id]['nodes'] = {}
 
       # Loop in each relation for defined condition
