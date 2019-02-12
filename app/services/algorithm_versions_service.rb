@@ -19,10 +19,10 @@ class AlgorithmVersionsService
     end
 
     # Set all questions/treatments/managements used in this version of algorithm
+    hash['predefined_syndromes'] = generate_predefined_syndromes
     hash['questions'] = generate_questions
     hash['treatments'] = generate_treatments
     hash['managements'] = generate_managements
-    hash['predefined_syndromes'] = generate_predefined_syndromes
 
     hash
   end
@@ -60,7 +60,7 @@ class AlgorithmVersionsService
       # Append the questions in order to list them all at the end of the json.
       assign_node(question_relation.node)
 
-      hash['nodes'][question_relation.id] = extract_relations(question_relation)
+      hash['nodes'][question_relation.node.id] = extract_relations(question_relation)
     end
 
     # Loop in each predefined syndromes used in current diagnostic
@@ -68,7 +68,7 @@ class AlgorithmVersionsService
       # Append the predefined syndromes in order to list them all at the end of the json.
       assign_node(predefined_syndrome_relation.node)
 
-      hash['nodes'][predefined_syndrome_relation.id] = extract_relations(predefined_syndrome_relation)
+      hash['nodes'][predefined_syndrome_relation.node.id] = extract_relations(predefined_syndrome_relation)
     end
 
     # Loop in each final diagnostics for set conditional acceptance and health cares related to it
@@ -97,7 +97,7 @@ class AlgorithmVersionsService
   # Set children and condition for current node
   def self.extract_relations(relation)
     hash = extract_conditions(relation.conditions)
-    hash['id'] = relation.id
+    hash['id'] = relation.node.id
     hash['children'] = relation.children.collect(&:id)
     hash
   end
@@ -244,8 +244,11 @@ class AlgorithmVersionsService
       hash[predefined_syndrome.id]['nodes'] = {}
 
       # Loop in each relation for defined condition
-      predefined_syndrome.relations.includes(:conditions, :children).each do |relation|
-        hash[predefined_syndrome.id]['nodes'][relation.id] = extract_relations(relation)
+      predefined_syndrome.relations.questions.includes(:conditions, :children, node:[:category, :answer_type, :answers]).each do |relation|
+
+        assign_node(relation.node)
+
+        hash[predefined_syndrome.id]['nodes'][relation.node.id] = extract_relations(relation)
         hash[predefined_syndrome.id]['answers'] = {}
 
         # Loop in each output possibilities(answer) for defined predefined syndrome

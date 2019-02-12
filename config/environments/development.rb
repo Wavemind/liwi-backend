@@ -76,7 +76,7 @@ Rails.application.configure do
     Bullet.raise = true
 
     # Whitelist
-    Bullet.add_whitelist :type => :n_plus_one_query, :class_name => "Answer", :association => :node
+    Bullet.add_whitelist type: :n_plus_one_query, class_name: 'Answer', association: :node
 
   end
 end
