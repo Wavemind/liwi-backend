@@ -14,10 +14,10 @@ en:
     edit:
       title: "Edit this algorithm"
     show:
-      subtitle_managements: "Available managements"
-      subtitle_predefined_syndromes: "Available predefined syndromes"
-      subtitle_questions: "Available questions"
-      subtitle_treatments: "Available treatments"
+      subtitle_managements: "Managements"
+      subtitle_predefined_syndromes: "Predefined syndromes"
+      subtitle_questions: "Questions"
+      subtitle_treatments: "Treatments"
       subtitle_versions: "Versions list"
       title: "Details of %{name}"
   algorithm_versions:

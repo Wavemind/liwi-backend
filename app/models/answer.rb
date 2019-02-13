@@ -14,7 +14,7 @@ class Answer < ApplicationRecord
   # Return the reference of the answer. This function is needed to do a recursive functional call
   # with conditions or answers, answer being the last level
   def display_condition
-    reference
+    "answer: #{reference}"
   end
 
   # @return [String]

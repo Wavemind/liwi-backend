@@ -13,3 +13,7 @@
 //@import 'datatables/extensions/RowReorder/rowReorder.bootstrap4';
 //@import 'datatables/extensions/Scroller/scroller.bootstrap4';
 //@import 'datatables/extensions/Select/select.bootstrap4';
+
+table[id$="datatable"] {
+  width: 100% !important;
+}
