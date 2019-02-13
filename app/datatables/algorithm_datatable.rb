@@ -15,6 +15,8 @@ class AlgorithmDatatable < AjaxDatatablesRails::ActiveRecord
   def view_columns
     @view_columns ||= {
       name: { source: 'Algorithm.name' },
+      description: { source: 'Algorithm.description' },
+      creator: { source: 'User.last_name' },
     }
   end
 
@@ -33,7 +35,6 @@ class AlgorithmDatatable < AjaxDatatablesRails::ActiveRecord
   end
 
   def get_raw_records
-    Algorithm.all.includes(:user)
+    Algorithm.includes(:user).joins(:user).distinct
   end
-
 end

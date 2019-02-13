@@ -33,7 +33,7 @@ class GroupDatatable < AjaxDatatablesRails::ActiveRecord
 
   # Activerecord request
   def get_raw_records
-    Group.all
+    Group.joins(:devices).all
   end
 
 end

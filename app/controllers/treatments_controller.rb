@@ -32,10 +32,6 @@ class TreatmentsController < ApplicationController
 
   private
 
-  def set_algorithm
-    @algorithm = Algorithm.find(params[:algorithm_id])
-  end
-
   def set_treatment
     @treatment = Treatment.find(params[:id])
   end

@@ -12,6 +12,9 @@ class DiagnosticsController < ApplicationController
   end
 
   def show
+    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
+    add_breadcrumb "#{@algorithm_version.version}", algorithm_algorithm_version_url(@algorithm, @algorithm_version)
+
     @relation = Relation.new
     @relationable = @diagnostic
   end
@@ -48,14 +51,6 @@ class DiagnosticsController < ApplicationController
   end
 
   private
-
-  def set_algorithm
-    @algorithm = Algorithm.find(params[:algorithm_id])
-  end
-
-  def set_algorithm_version
-    @algorithm_version = AlgorithmVersion.find(params[:algorithm_version_id])
-  end
 
   def set_diagnostic
     @diagnostic = Diagnostic.find(params[:id])

@@ -30,10 +30,6 @@ class ConditionsController < ApplicationController
     @condition = Condition.find(params[:id])
   end
 
-  def set_relation
-    @relation = Relation.find(params[:relation_id])
-  end
-
   def set_relationable
     if params[:diagnostic_id].present?
       @relationable = Diagnostic.find(params[:diagnostic_id])

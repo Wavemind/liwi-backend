@@ -1,6 +1,6 @@
 class AlgorithmVersionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:show, :new, :create, :edit, :update, :archive, :unarchive]
+  before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive]
   before_action :set_algorithm_version, only: [:show, :edit, :update, :archive, :unarchive]
 
   def index
@@ -11,6 +11,8 @@ class AlgorithmVersionsController < ApplicationController
   end
 
   def show
+    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
+    add_breadcrumb "#{@algorithm_version.label}"
 
   end
 
@@ -66,10 +68,6 @@ class AlgorithmVersionsController < ApplicationController
   end
 
   private
-
-  def set_algorithm
-    @algorithm = Algorithm.find(params[:algorithm_id])
-  end
 
   def set_algorithm_version
     @algorithm_version = AlgorithmVersion.find(params[:id])

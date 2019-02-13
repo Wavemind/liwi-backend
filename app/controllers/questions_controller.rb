@@ -50,10 +50,6 @@ class QuestionsController < ApplicationController
 
   private
 
-  def set_algorithm
-    @algorithm = Algorithm.find(params[:algorithm_id])
-  end
-
   def set_question
     @question = Question.find(params[:id])
   end

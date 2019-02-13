@@ -13,6 +13,8 @@ class FinalDiagnosticDatatable < AjaxDatatablesRails::ActiveRecord
   def view_columns
     @view_columns ||= {
       reference: { source: 'FinalDiagnostic.reference' },
+      label: { source: 'FinalDiagnostic.label' },
+      description: { source: 'FinalDiagnostic.description' },
     }
   end
 
