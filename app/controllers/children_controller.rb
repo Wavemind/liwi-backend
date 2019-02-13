@@ -38,7 +38,7 @@ class ChildrenController < ApplicationController
     elsif params[:predefined_syndrome_id].present?
       @relationable = PredefinedSyndrome.find(params[:predefined_syndrome_id])
     else
-      raise
+      raise t('.errors.unknown_relationable')
     end
   end
 

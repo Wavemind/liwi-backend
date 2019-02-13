@@ -10,10 +10,15 @@ class Answer < ApplicationRecord
   before_create :complete_reference
 
 
+  # @return [String]
+  # Return the reference of the answer. This function is needed to do a recursive functional call
+  # with conditions or answers, answer being the last level
   def display_condition
     "answer: #{reference}"
   end
 
+  # @return [String]
+  # Return a formatted String with the id and type of polymorphic instance
   def conditionable_hash
     "#{self.id},#{self.class.name}"
   end
@@ -31,5 +36,4 @@ class Answer < ApplicationRecord
   def complete_reference
     self.reference = "#{node.reference}_#{reference}"
   end
-
 end

@@ -11,7 +11,7 @@
     <%= simple_form_for @child, url: polymorphic_url([@relationable, @relation, @child]), method: :post do |f| %>
       <div class="row">
         <div class="col">
-          <%= f.association :node, collection: @algorithm.nodes.where.not(id: @relation.children.select(:node_id)), label_method: :reference_label, label: false, prompt: t('prompt') %>
+          <%= f.association :node, collection: (@algorithm.nodes.where.not(id: @relation.children.select(:node_id)) + FinalDiagnostic.where(diagnostic_id: params[:diagnostic_id])).flatten, label_method: :reference_label, label: false, prompt: t('prompt') %>
         </div>
         <div class="col">
           <%= f.submit t('add'), class: 'btn btn-primary' %>
