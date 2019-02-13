@@ -15,7 +15,6 @@ class AlgorithmVersionsController < ApplicationController
   end
 
   def new
-    @algorithm = Algorithm.find(params[:algorithm_id])
     @algorithm_version = AlgorithmVersion.new
   end
 
@@ -80,7 +79,6 @@ class AlgorithmVersionsController < ApplicationController
     params.require(:algorithm_version).permit(
       :id,
       :version,
-      :json,
     )
   end
 end

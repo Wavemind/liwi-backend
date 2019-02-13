@@ -2,7 +2,7 @@ class DiagnosticsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_algorithm, only: [:show, :new, :create, :edit, :update]
   before_action :set_algorithm_version, only: [:show, :new, :create, :edit, :update]
-  before_action :set_diagnostic, only: [:show, :edit, :update]
+  before_action :set_diagnostic, only: [:show, :edit, :update, :destroy]
 
   def index
     respond_to do |format|
@@ -12,7 +12,8 @@ class DiagnosticsController < ApplicationController
   end
 
   def show
-
+    @relation = Relation.new
+    @relationable = @diagnostic
   end
 
   def new
@@ -24,7 +25,7 @@ class DiagnosticsController < ApplicationController
     @diagnostic.algorithm_versions << @algorithm_version
 
     if @diagnostic.save
-      redirect_to algorithm_algorithm_version_url(@algorithm, @algorithm_version), notice: t('flash_message.success_created')
+      redirect_to algorithm_algorithm_version_diagnostic_url(@algorithm, @algorithm_version, @diagnostic), notice: t('flash_message.success_created')
     else
       render :new
     end
@@ -32,9 +33,17 @@ class DiagnosticsController < ApplicationController
 
   def update
     if @diagnostic.update(diagnostic_params)
-      redirect_to algorithm_algorithm_version_url(@algorithm, @algorithm_version), notice: t('flash_message.success_updated')
+      redirect_to algorithm_algorithm_version_diagnostic_url(@algorithm, @algorithm_version, @diagnostic), notice: t('flash_message.success_updated')
     else
       render :edit
+    end
+  end
+
+  def destroy
+    if @diagnostic.destroy
+      redirect_to algorithm_algorithm_version_diagnostic_url(@algorithm, @algorithm_version, @diagnostic), notice: t('flash_message.success_deleted')
+    else
+      render :new
     end
   end
 

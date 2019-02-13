@@ -4,11 +4,11 @@ class FinalDiagnostic < Node
   belongs_to :diagnostic
   belongs_to :final_diagnostic, foreign_key: :excluding_diagnostic_id, optional: true
 
-  has_many :final_diagnostic_health_cares
   has_many :medical_case_final_diagnostics
   has_many :medical_cases, through: :medical_case_final_diagnostics
-  has_many :managements, through: :final_diagnostic_health_cares, source: :treatable, source_type: 'Management'
-  has_many :treatments, through: :final_diagnostic_health_cares, source: :treatable, source_type: 'Treatment'
+
+  has_many :final_diagnostic_health_cares
+  has_many :nodes, through: :final_diagnostic_health_cares
 
   private
 

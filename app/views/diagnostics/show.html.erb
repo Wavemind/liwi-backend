@@ -1,2 +1,30 @@
+<h1><%= t('.title', name: @diagnostic.label) %></h1>
 
+<h2><%= t('.subtitle_final_diagnostics') %></h2>
+<%= link_to new_algorithm_algorithm_version_diagnostic_final_diagnostic_url(@algorithm, @algorithm_version, @diagnostic) do %>
+  <button type="button" class="btn btn-outline-secondary"><%= t('add') %></button>
+<% end %>
+
+<%= render 'final_diagnostics/table' %>
+
+<hr/>
+
+<h2><%= t('.relations') %></h2>
+
+<div class="row">
+  <div class="col">
+    <%= simple_form_for @relation, url: diagnostic_relations_url(@diagnostic), method: :post do |f| %>
+      <div class="row">
+        <div class="col">
+          <%= f.association :node, collection: (@algorithm.nodes.where.not(id: @diagnostic.relations.select(:node_id)) + FinalDiagnostic.where(diagnostic_id: params[:id])).flatten.sort_by { |r| r.reference }, label_method: :reference_label, prompt: t('select'), label: false %>
+        </div>
+        <div class="col">
+          <%= f.submit t('add'), class: 'btn btn-primary' %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<%= render 'relations/table' %>
 

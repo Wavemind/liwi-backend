@@ -6,11 +6,26 @@ class Node < ApplicationRecord
   has_many :children
   has_many :relations
 
+  has_many :final_diagnostic_health_cares
+  has_many :final_diagnostics, through: :final_diagnostic_health_cares
+
+  has_many :medical_case_health_cares
+  has_many :medical_cases, through: :medical_case_health_cares
+
+  scope :managements, ->() { where(type: 'Management') }
+  scope :treatments, ->() { where(type: 'Treatment') }
+
   validates_presence_of :label
   validates_presence_of :reference
 
   after_validation :unique_reference
   before_create :complete_reference
+
+  # @return [String]
+  # Return the label with the reference for the view
+  def reference_label
+    "#{reference} - #{label}"
+  end
 
   private
 

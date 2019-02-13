@@ -77,6 +77,8 @@ Rails.application.configure do
 
     # Whitelist
     Bullet.add_whitelist type: :n_plus_one_query, class_name: 'Answer', association: :node
-
+    Bullet.add_whitelist type: :unused_eager_loading, class_name: 'Relation', association: :conditions
+    Bullet.add_whitelist type: :n_plus_one_query, class_name: 'Condition', association: :first_conditionable
+    Bullet.add_whitelist type: :n_plus_one_query, class_name: 'Condition', association: :second_conditionable
   end
 end

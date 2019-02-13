@@ -1,29 +1,68 @@
 <h1><%= t('.title', name: @algorithm.name) %></h1>
 
-<h2><%= t('.subtitle_versions') %></h2>
-<%= link_to new_algorithm_algorithm_version_url(@algorithm) do %>
-  <button type="button" class="btn btn-outline-secondary"><%= t('add') %></button>
-<% end %>
 
-<%= render 'algorithm_versions/table' %>
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#versions" role="tab" aria-controls="home" aria-selected="true"><%= t('.subtitle_versions') %></a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#questions" role="tab" aria-controls="profile" aria-selected="false"><%= t('.subtitle_questions')  %> </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#treatments" role="tab" aria-controls="contact" aria-selected="false"><%= t('.subtitle_treatments') %></a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#managmements" role="tab" aria-controls="contact" aria-selected="false"><%= t('.subtitle_managements') %></a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#predefined_syndromes" role="tab" aria-controls="contact" aria-selected="false"><%= t('.subtitle_predefined_syndromes') %></a>
+  </li>
+</ul>
+<div class="tab-content mt-4 ml-4" id="algorithm-table">
+  <div class="tab-pane fade show active" id="versions" role="tabpanel" aria-labelledby="home-tab">
+    <h3><%= t('.subtitle_versions') %></h3>
 
-<h2><%= t('.subtitle_questions') %></h2>
-<%= link_to new_algorithm_question_url(@algorithm) do %>
-  <button type="button" class="btn btn-outline-secondary"><%= t('add') %></button>
-<% end %>
+    <%= link_to new_algorithm_algorithm_version_url(@algorithm) do %>
+      <button type="button" class="btn btn-outline-primary"><%= t('add') %></button>
+    <% end %>
 
-<%= render 'questions/table' %>
+    <%= render 'algorithm_versions/table' %>
+  </div>
+  <div class="tab-pane fade" id="questions" role="tabpanel" aria-labelledby="profile-tab">
+    <h3><%= t('.subtitle_questions') %></h3>
 
-<h2><%= t('.subtitle_treatments') %></h2>
-<%= link_to new_algorithm_treatment_url(@algorithm) do %>
-  <button type="button" class="btn btn-outline-secondary"><%= t('add') %></button>
-<% end %>
+    <%= link_to new_algorithm_question_url(@algorithm) do %>
+      <button type="button" class="btn btn-outline-primary"><%= t('add') %></button>
+    <% end %>
 
-<%= render 'treatments/table' %>
+    <%= render 'questions/table' %>
+  </div>
+  <div class="tab-pane fade" id="treatments" role="tabpanel" aria-labelledby="contact-tab">
+    <h3><%= t('.subtitle_treatments') %></h3>
 
-<h2><%= t('.subtitle_managements') %></h2>
-<%= link_to new_algorithm_management_url(@algorithm) do %>
-  <button type="button" class="btn btn-outline-secondary"><%= t('add') %></button>
-<% end %>
+    <%= link_to new_algorithm_treatment_url(@algorithm) do %>
+      <button type="button" class="btn btn-outline-primary"><%= t('add') %></button>
+    <% end %>
 
-<%= render 'managements/table' %>
+    <%= render 'treatments/table' %>
+  </div>
+  <div class="tab-pane fade" id="managmements" role="tabpanel" aria-labelledby="profile-tab">
+    <h3><%= t('.subtitle_managements') %></h3>
+
+    <%= link_to new_algorithm_management_url(@algorithm) do %>
+      <button type="button" class="btn btn-outline-primary"><%= t('add') %></button>
+    <% end %>
+
+    <%= render 'managements/table' %>
+  </div>
+  <div class="tab-pane fade" id="predefined_syndromes" role="tabpanel" aria-labelledby="contact-tab">
+    <h3><%= t('.subtitle_predefined_syndromes') %></h3>
+
+    <%= link_to new_algorithm_predefined_syndrome_url(@algorithm) do %>
+      <button type="button" class="btn btn-outline-primary"><%= t('add') %></button>
+    <% end %>
+
+    <%= render 'predefined_syndromes/table' %>
+
+  </div>
+</div>

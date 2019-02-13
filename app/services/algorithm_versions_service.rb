@@ -87,8 +87,8 @@ class AlgorithmVersionsService
     final_diagnostic = relation.node
     hash = extract_conditions(relation.conditions)
     hash['name'] = final_diagnostic.label
-    hash['treatments'] = extract_health_cares(final_diagnostic.treatments, relation.relationable.id)
-    hash['managements'] = extract_health_cares(final_diagnostic.managements, relation.relationable.id)
+    hash['treatments'] = extract_health_cares(final_diagnostic.nodes.treatments, relation.relationable.id)
+    hash['managements'] = extract_health_cares(final_diagnostic.nodes.managements, relation.relationable.id)
     hash['excluding_diagnosis'] = final_diagnostic.final_diagnostic_id
     hash
   end

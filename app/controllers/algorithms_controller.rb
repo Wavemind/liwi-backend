@@ -94,6 +94,16 @@ class AlgorithmsController < ApplicationController
     end
   end
 
+  # @params algorithm [Algorithm] current algorithm
+  # @return json of treatment
+  # All predefined syndromes available for current algorithm
+  def predefined_syndromes
+    respond_to do |format|
+      format.html
+      format.json { render json: PredefinedSyndromeDatatable.new(params, view_context: view_context) }
+    end
+  end
+
   private
 
   def set_algorithm

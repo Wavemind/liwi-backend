@@ -154,9 +154,7 @@ MedicalCase.create!(patient: kantaing, algorithm_version: ft_1_0)
 MedicalCase.create!(patient: idefix, algorithm_version: ft_1_2)
 MedicalCase.create!(patient: john, algorithm_version: ft_1_2)
 
-
 #################################################################################################
-
 
 dd7 = Diagnostic.create!(label: 'Severe LRTI', reference: '7')
 df7 = FinalDiagnostic.create!(label: 'Severe lower respiratory tract infection', reference: '7', diagnostic: dd7)
@@ -203,14 +201,13 @@ t9 = Treatment.create!(label: 'Oral rehydration', reference: '9')
 
 m2 = Management.create!(label: 'Refer', reference: '2')
 
-df7.treatments << [t1,t2,t9]
-df7.managements << [m2]
+df7.nodes << [t1,t2,t9, m2]
 
 ps6 = PredefinedSyndrome.create!(reference: '6', label: 'Able to drink')
-ps6_1 = Answer.create!(node: ps6, reference: '1', label: 'yes', value: nil, operator: nil)
-ps6_2 = Answer.create!(node: ps6, reference: '2', label: 'no', value: nil, operator: nil)
+ps6_1 = ps6.answers.first
+ps6_2 = ps6.answers.second
 
-epoct.nodes << [df7, s2, p3, p13, p14, p1, ps6, t9, t1, t2, m2]
+epoct.nodes << [s2, p3, p13, p14, p1, ps6, t9, t1, t2, m2]
 epoct.save
 
 # DF7
@@ -254,8 +251,8 @@ Child.create!(relation: dd7_ps6, node: t2)
 
 
 Condition.create!(referenceable: ps6_p25, first_conditionable: s4_2, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: ps6_ps6, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: ps6_ps6, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: ps6_ps6, first_conditionable: s4_1, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: ps6_ps6, first_conditionable: p25_1, operator: nil, second_conditionable: nil)
 
 Condition.create!(referenceable: dd7_p1, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
 Condition.create!(referenceable: dd7_p3, first_conditionable: s2_1, operator: nil, second_conditionable: nil)

@@ -3,7 +3,6 @@ en:
   algorithms:
     index:
       columns:
-        id: "ID"
         name: "Name"
         description: "Description"
         version_count: "Amount of versions"
@@ -15,15 +14,15 @@ en:
     edit:
       title: "Edit this algorithm"
     show:
-      subtitle_managements: "Available managements"
-      subtitle_questions: "Available questions"
-      subtitle_treatments: "Available treatments"
+      subtitle_managements: "Managements"
+      subtitle_predefined_syndromes: "Predefined syndromes"
+      subtitle_questions: "Questions"
+      subtitle_treatments: "Treatments"
       subtitle_versions: "Versions list"
       title: "Details of %{name}"
   algorithm_versions:
     table:
       columns:
-        id: "ID"
         version: "Version"
         container: "Container"
         last_update: "Last update"
@@ -37,13 +36,19 @@ en:
     show:
       subtitle_diagnostics: "Diagnostics"
       title: "Details of %{name} - version %{version}"
+      predefined_syndromes: "Predefined Syndromes"
   answers:
     new:
       title: "Create related answers of %{name} question"
     edit:
       title: "Edit related answers of %{name} question"
   archive: "Archive"
+  children:
+    errors:
+      unknown_relationable: "Unknown relationable"
   deactivated: "Deactivate"
+  delete: "Delete"
+  destroy: "Remove"
   devices:
     index:
       columns:
@@ -68,7 +73,6 @@ en:
   diagnostics:
     table:
       columns:
-        id: "ID"
         reference: "Reference"
         label: "Name"
         last_update: "Last update"
@@ -80,16 +84,35 @@ en:
       title: "Edit this diagnostic"
     reference: "DD"
     show:
-      title: "Details of %{name} - version %{version}"
+      relations: "Relations"
+      subtitle_final_diagnostics: "Finals diagnostics"
+      title: "Details of %{name}"
+      predefined_syndromes: "Predefined Syndromes"
   edit: "Edit"
+  error: "An error occured"
+  final_diagnostics:
+    new:
+      title: "Create a new final diagnostic"
+    reference: "DF"
+    table:
+      columns:
+        reference: "Reference"
+        label: "Label"
+        description: "Description"
+        actions: "Actions"
+    edit:
+      title: "Edit final diagnostic"
+    show:
+      treatments: "Treatments"
+      managements: "Managements"
   flash_message:
     success_created: "Data was successfully created"
+    success_deleted: "Data was successfully deleted"
     success_updated: "Data was successfully updated"
     update_fail: "Error will updating value"
   groups:
     index:
       columns:
-        id: "ID"
         name: "Name"
         nb_people: "Number of devices"
         actions: "Actions"
@@ -113,8 +136,6 @@ en:
         created_at: "Created on"
         end_date: "Archived date"
       archived: "Archive"
-  final_diagnostics:
-    reference: "DF"
   managements:
     edit:
       title: "Edit the management"
@@ -123,7 +144,6 @@ en:
     reference: "M"
     table:
       columns:
-        id: "ID"
         reference: "Reference"
         label: "Label"
         description: "Description"
@@ -133,6 +153,13 @@ en:
       reference_used: "This reference is already used"
   predefined_syndromes:
     reference: "PS"
+    show:
+      title: "Details of %{name}"
+      children: "Children"
+    new:
+      title: "Create predefined syndrome"
+    edit:
+      title: "Update the predefined syndrome"
   prompt: "Select"
   questions:
     categories:
@@ -165,6 +192,13 @@ en:
         actions: "Actions"
     edit:
       title: "Edit question"
+  relations:
+    table:
+      columns:
+        type: "Type"
+    show:
+      children: "Children"
+      title: "Details of %{name} in %{node}"
   remove: "Remove"
   roles:
     index:
@@ -184,7 +218,6 @@ en:
     reference: "T"
     table:
       columns:
-        id: "ID"
         reference: "Reference"
         label: "Label"
         description: "Description"
@@ -197,7 +230,6 @@ en:
       title: "Update user"
     index:
       columns:
-        id: "ID"
         first_name: "First name"
         last_name: "Last name"
         mail: "Email"

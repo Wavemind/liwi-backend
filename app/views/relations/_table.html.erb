@@ -1,0 +1,14 @@
+<table class="table table-condensed table-hover" id="relations-datatable" data-source="<%= relationable_url(@relationable.class, @relationable.id, format: :json) %>">
+  <thead>
+    <tr>
+      <th><%= t('.columns.id') %></th>
+      <th><%= t('.columns.reference') %></th>
+      <th><%= t('.columns.type') %></th>
+      <th><%= t('.columns.label') %></th>
+      <th><%= t('.columns.children') %></th>
+      <th><%= t('.columns.actions') %></th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
