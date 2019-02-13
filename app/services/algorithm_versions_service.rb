@@ -14,7 +14,7 @@ class AlgorithmVersionsService
     hash['diseases'] = {}
 
     # Loop in each diagnostics defined in current algorithm version
-    @algorithm_version.diagnostics.each do |diagnostic|
+    @algorithm_version.diagnostics.includes(:conditions).each do |diagnostic|
       hash['diseases'][diagnostic.id] = extract_diagnostic(diagnostic)
     end
 
@@ -57,7 +57,7 @@ class AlgorithmVersionsService
     hash['diagnosis'] = {}
 
     # Loop in each question used in current diagnostic
-    diagnostic.relations.questions.includes([:children, node:[:answers, :answer_type, :category]]).each do |question_relation|
+    diagnostic.relations.questions.includes([:children, :nodes, node:[:answers, :answer_type, :category]]).each do |question_relation|
       # Append the questions in order to list them all at the end of the json.
       assign_node(question_relation.node)
 
@@ -65,7 +65,7 @@ class AlgorithmVersionsService
     end
 
     # Loop in each predefined syndromes used in current diagnostic
-    diagnostic.relations.predefined_syndromes.includes([:children, node:[:answers]]).each do |predefined_syndrome_relation|
+    diagnostic.relations.predefined_syndromes.includes([:children, :nodes, node:[:answers]]).each do |predefined_syndrome_relation|
       # Append the predefined syndromes in order to list them all at the end of the json.
       assign_node(predefined_syndrome_relation.node)
 
@@ -99,7 +99,7 @@ class AlgorithmVersionsService
   def self.extract_relations(relation)
     hash = extract_conditions(relation.conditions)
     hash['id'] = relation.node.id
-    hash['children'] = relation.children.collect(&:id)
+    hash['children'] = relation.nodes.collect(&:id)
     hash
   end
 
@@ -251,7 +251,7 @@ class AlgorithmVersionsService
       hash[predefined_syndrome.id]['nodes'] = {}
 
       # Loop in each relation for defined condition
-      predefined_syndrome.relations.questions.includes(:conditions, :children, node:[:category, :answer_type, :answers]).each do |relation|
+      predefined_syndrome.relations.questions.includes(:conditions, :children, :nodes, node:[:category, :answer_type, :answers]).each do |relation|
 
         assign_node(relation.node)
 
