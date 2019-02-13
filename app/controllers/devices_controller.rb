@@ -21,5 +21,4 @@ class DevicesController < ApplicationController
   def set_device
     @device = Device.find(params[:id])
   end
-
 end

@@ -32,10 +32,6 @@ class ManagementsController < ApplicationController
 
   private
 
-  def set_algorithm
-    @algorithm = Algorithm.find(params[:algorithm_id])
-  end
-
   def set_management
     @management = Management.find(params[:id])
   end

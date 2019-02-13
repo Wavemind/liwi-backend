@@ -28,6 +28,9 @@ class PredefinedSyndromesController < ApplicationController
   end
 
   def show
+    add_breadcrumb "#{@predefined_syndrome.algorithms.first.name}", algorithm_url(@predefined_syndrome.algorithms.first)
+    add_breadcrumb "#{@predefined_syndrome.label}"
+
     @relation = Relation.new
     @relationable = @predefined_syndrome
   end
@@ -41,10 +44,6 @@ class PredefinedSyndromesController < ApplicationController
   end
 
   private
-
-  def set_algorithm
-    @algorithm = Algorithm.find(params[:algorithm_id])
-  end
 
   def set_predefined_syndrome
     @predefined_syndrome = PredefinedSyndrome.find(params[:id])

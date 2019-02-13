@@ -20,8 +20,17 @@ class RelationsController < ApplicationController
 
     if params[:diagnostic_id].present?
       @algorithm = @relationable.algorithm_versions.first.algorithm
+
+      add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
+      add_breadcrumb "#{@relationable.algorithm_versions.first.version}", algorithm_algorithm_version_url(@algorithm, @relationable.algorithm_versions.first)
+      add_breadcrumb "#{@relationable.label}", algorithm_algorithm_version_diagnostic_url(@algorithm, @relationable.algorithm_versions.first, @relationable)
+      add_breadcrumb "#{@relation.node.label}"
     else
       @algorithm = @relationable.algorithms.first
+
+      add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
+      add_breadcrumb "#{@relationable.label}", algorithm_predefined_syndrome_url(@algorithm, @relationable)
+      add_breadcrumb "#{@relation.node.label}"
     end
   end
 

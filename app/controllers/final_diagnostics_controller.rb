@@ -17,6 +17,11 @@ class FinalDiagnosticsController < ApplicationController
   end
 
   def show
+    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
+    add_breadcrumb "#{@algorithm_version.version}", algorithm_algorithm_version_url(@algorithm, @algorithm_version)
+    add_breadcrumb "#{@diagnostic.label}", algorithm_algorithm_version_diagnostic_url(@algorithm, @algorithm_version, @diagnostic)
+    add_breadcrumb "#{@final_diagnostic.label}"
+
     @final_diagnostic_health_care = FinalDiagnosticHealthCare.new
     @treatments = @final_diagnostic.final_diagnostic_health_cares.treatments
     @managements = @final_diagnostic.final_diagnostic_health_cares.managements
@@ -49,14 +54,6 @@ class FinalDiagnosticsController < ApplicationController
   end
 
   private
-
-  def set_algorithm
-    @algorithm = Algorithm.find(params[:algorithm_id])
-  end
-
-  def set_algorithm_version
-    @algorithm_version = AlgorithmVersion.find(params[:algorithm_version_id])
-  end
 
   def set_diagnostic
     @diagnostic = Diagnostic.find(params[:diagnostic_id])

@@ -16,6 +16,9 @@ class AlgorithmVersionDatatable < AjaxDatatablesRails::ActiveRecord
   def view_columns
     @view_columns ||= {
       version: { source: 'AlgorithmVersion.version' },
+      algorithm: { source: 'Algorithm.name' },
+      last_update: { source: 'AlgorithmVersion.updated_at' },
+      creator: { source: 'User.last_name' },
     }
   end
 
@@ -33,6 +36,6 @@ class AlgorithmVersionDatatable < AjaxDatatablesRails::ActiveRecord
   end
 
   def get_raw_records
-    Algorithm.find(params[:id]).algorithm_versions.includes(:user)
+    Algorithm.find(params[:id]).algorithm_versions.joins(:algorithm, :user).includes(:user)
   end
 end

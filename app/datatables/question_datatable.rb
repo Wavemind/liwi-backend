@@ -17,8 +17,6 @@ class QuestionDatatable < AjaxDatatablesRails::ActiveRecord
       reference: { source: 'Question.reference' },
       label: { source: 'Question.label' },
       description: { source: 'Question.description' },
-      priority: { source: 'Question.priority' },
-      category: { source: 'Question.category' },
     }
   end
 
