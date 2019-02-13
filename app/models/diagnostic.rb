@@ -15,7 +15,7 @@ class Diagnostic < ApplicationRecord
 
   # @return [String]
   # Return the label with the reference for the view
-  def §
+  def reference_label
     "#{reference} - #{label}"
   end
 
