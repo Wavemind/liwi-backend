@@ -137,13 +137,12 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
   end
 
   create_table "final_diagnostic_health_cares", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "treatable_type"
-    t.bigint "treatable_id"
+    t.bigint "node_id"
     t.bigint "final_diagnostic_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["final_diagnostic_id"], name: "index_final_diagnostic_health_cares_on_final_diagnostic_id"
-    t.index ["treatable_type", "treatable_id"], name: "index_final_diagnostics_treatable_id"
+    t.index ["node_id"], name: "index_final_diagnostic_health_cares_on_node_id"
   end
 
   create_table "group_algorithm_versions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -171,11 +170,12 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
   end
 
   create_table "medical_case_health_cares", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "treatable_type"
-    t.bigint "treatable_id"
+    t.bigint "node_id"
+    t.bigint "medical_case_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["treatable_type", "treatable_id"], name: "index_medical_cases_treatable_id"
+    t.index ["medical_case_id"], name: "index_medical_case_health_cares_on_medical_case_id"
+    t.index ["node_id"], name: "index_medical_case_health_cares_on_node_id"
   end
 
   create_table "medical_cases", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|

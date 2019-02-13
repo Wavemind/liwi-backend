@@ -100,6 +100,11 @@ en:
         label: "Label"
         description: "Description"
         actions: "Actions"
+    edit:
+      title: "Edit final diagnostic"
+    show:
+      treatments: "Treatments"
+      managements: "Managements"
   flash_message:
     success_created: "Data was successfully created"
     success_deleted: "Data was successfully deleted"
