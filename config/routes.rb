@@ -30,7 +30,9 @@ Rails.application.routes.draw do
         put 'unarchive', to: 'algorithm_versions#unarchive', as: 'unarchive'
       end
       resources :diagnostics, only: [:index, :new, :create, :edit, :update, :show] do
-        resources :final_diagnostics, only: [:index, :show, :new, :create, :edit, :update, :delete, :destroy]
+        resources :final_diagnostics, only: [:index, :show, :new, :create, :edit, :update, :delete, :destroy] do
+          resources :final_diagnostic_health_cares, only: [:create, :destroy]
+        end
       end
     end
 

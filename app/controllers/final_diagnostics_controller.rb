@@ -1,9 +1,9 @@
 class FinalDiagnosticsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy]
-  before_action :set_algorithm_version, only: [:new, :create, :edit, :update, :destroy]
-  before_action :set_diagnostic, only: [:new, :create, :edit, :destroy]
-  before_action :set_final_diagnostic, only: [:edit, :destroy]
+  before_action :set_algorithm, only: [:add_treatable, :show, :new, :create, :edit, :update, :destroy]
+  before_action :set_algorithm_version, only: [:add_treatable, :show, :new, :create, :edit, :update, :destroy]
+  before_action :set_diagnostic, only: [:add_treatable, :show, :new, :create, :edit, :update, :destroy]
+  before_action :set_final_diagnostic, only: [:add_treatable, :show, :edit, :update, :destroy]
 
   def index
     respond_to do |format|
@@ -16,13 +16,27 @@ class FinalDiagnosticsController < ApplicationController
     @final_diagnostic = FinalDiagnostic.new
   end
 
+  def show
+    @final_diagnostic_health_care = FinalDiagnosticHealthCare.new
+    @treatments = @final_diagnostic.final_diagnostic_health_cares.treatments
+    @managements = @final_diagnostic.final_diagnostic_health_cares.managements
+  end
+
   def create
-    @final_diagnostic = @diagnostic.final_diagnostics.new(diagnostic_params)
+    @final_diagnostic = @diagnostic.final_diagnostics.new(final_diagnostic_params)
 
     if @final_diagnostic.save
       redirect_to algorithm_algorithm_version_diagnostic_url(@algorithm, @algorithm_version, @diagnostic), notice: t('flash_message.success_created')
     else
       render :new
+    end
+  end
+
+  def update
+    if @final_diagnostic.update(final_diagnostic_params)
+      redirect_to algorithm_algorithm_version_diagnostic_url(@algorithm, @algorithm_version, @diagnostic), notice: t('flash_message.success_updated')
+    else
+      render :edit
     end
   end
 
@@ -52,7 +66,7 @@ class FinalDiagnosticsController < ApplicationController
     @final_diagnostic = Node.find(params[:id])
   end
 
-  def diagnostic_params
+  def final_diagnostic_params
     params.require(:final_diagnostic).permit(
       :id,
       :label,

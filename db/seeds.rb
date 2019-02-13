@@ -197,8 +197,7 @@ t9 = Treatment.create!(label: 'Oral rehydration', reference: '9')
 
 m2 = Management.create!(label: 'Refer', reference: '2')
 
-df7.treatments << [t1,t2,t9]
-df7.managements << [m2]
+df7.nodes << [t1,t2,t9, m2]
 
 ps6 = PredefinedSyndrome.create!(reference: '6', label: 'Able to drink')
 ps6_1 = ps6.answers.first

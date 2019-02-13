@@ -6,6 +6,12 @@ class Node < ApplicationRecord
   has_many :children
   has_many :relations
 
+  has_many :final_diagnostic_health_cares
+  has_many :final_diagnostics, through: :final_diagnostic_health_cares
+
+  has_many :medical_case_health_cares
+  has_many :medical_cases, through: :medical_case_health_cares
+
   validates_presence_of :label
   validates_presence_of :reference
 
