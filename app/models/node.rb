@@ -15,7 +15,7 @@ class Node < ApplicationRecord
   # @return [String]
   # Return the label with the reference for the view
   def reference_label
-    "#{reference} | #{label}"
+    "#{reference} - #{label}"
   end
 
   private

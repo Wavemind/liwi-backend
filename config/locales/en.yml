@@ -186,6 +186,7 @@ en:
         type: "Type"
     show:
       children: "Children"
+      title: "Details of %{name} in %{node}"
   remove: "Remove"
   roles:
     index:

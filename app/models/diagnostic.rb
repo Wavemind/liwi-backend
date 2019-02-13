@@ -13,6 +13,12 @@ class Diagnostic < ApplicationRecord
   validates_presence_of :reference
   validates_presence_of :label
 
+  # @return [String]
+  # Return the label with the reference for the view
+  def §
+    "#{reference} - #{label}"
+  end
+
   private
 
   # {Node#unique_reference}
