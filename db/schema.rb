@@ -145,13 +145,15 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
     t.index ["node_id"], name: "index_final_diagnostic_health_cares_on_node_id"
   end
 
-  create_table "group_algorithm_versions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "group_accesses", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.boolean "access", default: true
+    t.datetime "end_date"
     t.bigint "algorithm_version_id"
-    t.bigint "user_id"
+    t.bigint "group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["algorithm_version_id"], name: "index_group_algorithm_versions_on_algorithm_version_id"
-    t.index ["user_id"], name: "index_group_algorithm_versions_on_user_id"
+    t.index ["algorithm_version_id"], name: "index_group_accesses_on_algorithm_version_id"
+    t.index ["group_id"], name: "index_group_accesses_on_group_id"
   end
 
   create_table "groups", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -280,8 +282,8 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
   add_foreign_key "devices", "groups"
   add_foreign_key "enabled_diagnostics", "algorithm_versions"
   add_foreign_key "enabled_diagnostics", "diagnostics"
-  add_foreign_key "group_algorithm_versions", "algorithm_versions"
-  add_foreign_key "group_algorithm_versions", "users"
+  add_foreign_key "group_accesses", "algorithm_versions"
+  add_foreign_key "group_accesses", "groups"
   add_foreign_key "nodes", "answer_types"
   add_foreign_key "users", "roles"
 end
