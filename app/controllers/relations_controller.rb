@@ -29,7 +29,7 @@ class RelationsController < ApplicationController
       @algorithm = @relationable.algorithms.first
 
       add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
-      add_breadcrumb "#{@relationable.label}", algorithm_predefined_syndrome_url(@algorithm, @relationable)
+      add_breadcrumb "#{@relationable.label}", predefined_syndrome_url(@relationable)
       add_breadcrumb "#{@relation.node.label}"
     end
   end
