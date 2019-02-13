@@ -12,6 +12,12 @@ class Node < ApplicationRecord
   after_validation :unique_reference
   before_create :complete_reference
 
+  # @return [String]
+  # Return the label with the reference for the view
+  def reference_label
+    "#{reference} | #{label}"
+  end
+
   private
 
   # @params nil
@@ -26,11 +32,5 @@ class Node < ApplicationRecord
   # Complete the reference with the associated prefix before the entry is created
   def complete_reference
 
-  end
-
-  # @return [String]
-  # Return the label with the reference for the view
-  def reference_label
-    "#{reference} | #{label}"
   end
 end
