@@ -50,9 +50,9 @@ Activity.create!(user: mickael, device: device_lenovo, latitude: -33.918861, lon
 epoct = Algorithm.create!(name: 'ePoct', description: 'loremp ipsum', user: emmanuel)
 fever_travel = Algorithm.create!(name: 'FeverTravel', description: 'loremp ipsum', user: quentin)
 
-epoc_first = AlgorithmVersion.create!(version: 'first_trial', algorithm: epoct, user: emmanuel)
-ft_1_0 = AlgorithmVersion.create!(version: '1.0', algorithm: fever_travel, user: mickael)
-ft_1_2 = AlgorithmVersion.create!(version: '1.2', algorithm: fever_travel, user: vincent)
+epoc_first = AlgorithmVersion.create!(name: 'first_trial', algorithm: epoct, user: emmanuel)
+ft_1_0 = AlgorithmVersion.create!(name: '1.0', algorithm: fever_travel, user: mickael)
+ft_1_2 = AlgorithmVersion.create!(name: '1.2', algorithm: fever_travel, user: vincent)
 
 # Answer types
 radio = AnswerType.create!(value: 'Array', display: 'Radiobutton')

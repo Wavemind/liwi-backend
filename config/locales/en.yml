@@ -23,7 +23,7 @@ en:
   algorithm_versions:
     table:
       columns:
-        version: "Version"
+        name: "Name"
         container: "Container"
         last_update: "Last update"
         creator: "Creator"
