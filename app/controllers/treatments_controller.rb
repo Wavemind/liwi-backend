@@ -12,8 +12,7 @@ class TreatmentsController < ApplicationController
   end
 
   def create
-    @treatment = Treatment.new(treatment_params)
-    @treatment.algorithms << @algorithm
+    @treatment = @algorithm.treatments.new(treatment_params)
 
     if @treatment.save
       redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_created')

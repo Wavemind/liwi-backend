@@ -2,7 +2,7 @@
 class FinalDiagnostic < Node
 
   belongs_to :diagnostic
-  belongs_to :final_diagnostic, foreign_key: :excluding_diagnostic_id, optional: true
+  belongs_to :excluded_diagnostic, class_name: 'FinalDiagnostic', foreign_key: :final_diagnostic_id, optional: true
 
   has_many :medical_case_final_diagnostics
   has_many :medical_cases, through: :medical_case_final_diagnostics

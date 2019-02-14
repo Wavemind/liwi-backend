@@ -2,12 +2,11 @@
 class Algorithm < ApplicationRecord
 
   has_many :algorithm_versions
-  has_many :available_nodes
-  has_many :nodes, through: :available_nodes
-  has_many :questions, -> { where type: 'Question' }, through: :available_nodes, source: :node
-  has_many :managements, -> { where type: 'Management' }, through: :available_nodes, source: :node
-  has_many :treatments, -> { where type: 'Treatment' }, through: :available_nodes, source: :node
-  has_many :predefined_syndromes, -> { where type: 'PredefinedSyndrome' }, through: :available_nodes, source: :node
+  has_many :nodes, dependent: :destroy
+  has_many :questions, -> { where type: 'Question' }, source: :node
+  has_many :managements, -> { where type: 'Management' }, source: :node
+  has_many :treatments, -> { where type: 'Treatment' }, source: :node
+  has_many :predefined_syndromes, -> { where type: 'PredefinedSyndrome' }, source: :node
 
   belongs_to :user
 

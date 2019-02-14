@@ -105,6 +105,8 @@ en:
     show:
       treatments: "Treatments"
       managements: "Managements"
+      excluded_diagnostic: "Excluded diagnostic"
+      no_excluded_diagnostic: "There is no diagnosis excluded"
   flash_message:
     success_created: "Data was successfully created"
     success_deleted: "Data was successfully deleted"

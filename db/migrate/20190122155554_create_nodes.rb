@@ -10,6 +10,8 @@ class CreateNodes < ActiveRecord::Migration[5.2]
       t.belongs_to :diagnostic
       t.text :description
 
+      t.references :algorithm, foreign_key: true, index: true
+
       t.timestamps
     end
 

@@ -12,8 +12,7 @@ class ManagementsController < ApplicationController
   end
 
   def create
-    @management = Management.new(management_params)
-    @management.algorithms << @algorithm
+    @management = @algorithm.managements.new(management_params)
 
     if @management.save
       redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_created')

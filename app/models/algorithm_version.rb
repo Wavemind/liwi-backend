@@ -4,8 +4,7 @@ class AlgorithmVersion < ApplicationRecord
   belongs_to :algorithm
   belongs_to :user
 
-  has_many :enabled_diagnostics
-  has_many :diagnostics, through: :enabled_diagnostics
+  has_many :diagnostics, dependent: :destroy
 
   has_many :group_accesses
   has_many :groups, through: :group_accesses
