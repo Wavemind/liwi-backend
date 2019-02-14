@@ -77,7 +77,7 @@ Rails.application.routes.draw do
 
   resources :group_accesses, only: [:index, :create]
 
-  resources :devices, only: [:index, :show] do
+  resources :devices, only: [:index, :show, :new, :create] do
     collection do
       get 'map'
     end

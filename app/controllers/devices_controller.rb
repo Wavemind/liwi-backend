@@ -16,9 +16,30 @@ class DevicesController < ApplicationController
     render json: Device.all.to_json(methods: [:last_activity])
   end
 
+  def new
+    @device = Device.new
+  end
+
+  def create
+    @device = Device.create(device_params)
+
+    if @device.save
+      redirect_to devices_url, notice: t('flash_message.success_created')
+    else
+      render :new
+    end
+  end
+
   private
 
   def set_device
     @device = Device.find(params[:id])
+  end
+
+  def device_params
+    params.require(:device).permit(
+      :mac_address,
+      :group_id
+      )
   end
 end
