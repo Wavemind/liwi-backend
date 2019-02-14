@@ -11,25 +11,20 @@ RSpec.describe Diagnostic, type: :model do
   end
 
   it 'is valid with valid attributes' do
-    diagnostic = Diagnostic.new(reference: '1', label: 'lower respiratory tract infection (LRTI)')
-    diagnostic.algorithm_versions << @version
+    diagnostic = Diagnostic.new(algorithm_version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)')
 
     expect(diagnostic).to be_valid
   end
 
   it 'is invalid with invalid attributes' do
-    diagnostic = Diagnostic.new(reference: '1', label: nil)
-    diagnostic.algorithm_versions << @version
+    diagnostic = Diagnostic.new(algorithm_version: @version, reference: '1', label: nil)
 
     expect(diagnostic).to_not be_valid
   end
 
   it 'is invalid same reference' do
-    diagnostic_1 = Diagnostic.create!(reference: '1', label: 'lower respiratory tract infection (LRTI)')
-    diagnostic_1.algorithm_versions << @version
-
-    diagnostic = Diagnostic.new(reference: '1', label: 'lower respiratory tract infection (LRTI)')
-    diagnostic.algorithm_versions << @version
+    Diagnostic.create!(algorithm_version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)')
+    diagnostic = Diagnostic.new(algorithm_version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)')
 
     expect(diagnostic).to_not be_valid
   end

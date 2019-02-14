@@ -1,8 +1,8 @@
 # Every component of an algorithm
 class Node < ApplicationRecord
 
-  has_many :available_nodes
-  has_many :algorithms, through: :available_nodes
+  # DF are not linked to algorithm this way, but through diagnostic > algorithm_version
+  belongs_to :algorithm, optional: true
   has_many :children
   has_many :relations
 

@@ -12,11 +12,9 @@ class QuestionsController < ApplicationController
   end
 
   def create
-    @question = Question.new(question_params)
-    @question.algorithms << @algorithm
+    @question = @algorithm.questions.new(question_params)
 
     if @question.save
-
       # Create a new first answer for the form view
       @question.answers << Answer.new
       # Clear the error messages to not have any validation errors before filling the form

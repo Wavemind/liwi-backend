@@ -123,17 +123,10 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
   create_table "diagnostics", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "reference"
     t.string "label"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "enabled_diagnostics", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "algorithm_version_id"
-    t.bigint "diagnostic_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["algorithm_version_id"], name: "index_enabled_diagnostics_on_algorithm_version_id"
-    t.index ["diagnostic_id"], name: "index_enabled_diagnostics_on_diagnostic_id"
+    t.index ["algorithm_version_id"], name: "index_diagnostics_on_algorithm_version_id"
   end
 
   create_table "final_diagnostic_health_cares", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -198,10 +191,12 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
     t.bigint "category_id"
     t.bigint "diagnostic_id"
     t.text "description"
+    t.bigint "algorithm_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "final_diagnostic_id"
     t.bigint "answer_type_id"
+    t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
     t.index ["category_id"], name: "index_nodes_on_category_id"
     t.index ["diagnostic_id"], name: "index_nodes_on_diagnostic_id"
@@ -280,10 +275,10 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
   add_foreign_key "algorithms", "users"
   add_foreign_key "available_nodes", "algorithms"
   add_foreign_key "devices", "groups"
-  add_foreign_key "enabled_diagnostics", "algorithm_versions"
-  add_foreign_key "enabled_diagnostics", "diagnostics"
+  add_foreign_key "diagnostics", "algorithm_versions"
   add_foreign_key "group_accesses", "algorithm_versions"
   add_foreign_key "group_accesses", "groups"
+  add_foreign_key "nodes", "algorithms"
   add_foreign_key "nodes", "answer_types"
   add_foreign_key "users", "roles"
 end

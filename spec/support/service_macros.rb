@@ -20,55 +20,49 @@ module ServiceMacros
       physical_exam = Category.create!(name: 'Physical exam', reference_prefix: 'P')
       comorbidity = Category.create!(name: 'Comorbidity', reference_prefix: 'DC')
 
-      dd7 = Diagnostic.create!(label: 'Severe LRTI', reference: '7')
+      dd7 = Diagnostic.create!(algorithm_version: epoc_first, label: 'Severe LRTI', reference: '7')
       df7 = FinalDiagnostic.create!(label: 'Severe lower respiratory tract infection', reference: '7', diagnostic: dd7)
 
-      epoc_first.diagnostics << dd7
-      epoc_first.save
-
-      s2 = Question.create!(label: 'Cough', reference: '2', category: symptom, priority: Question.priorities[:priority], answer_type: radio)
+      s2 = Question.create!(algorithm: epoct, label: 'Cough', reference: '2', category: symptom, priority: Question.priorities[:priority], answer_type: radio)
       s2_1 = Answer.create!(node: s2, reference: '1', label: 'yes', value: nil, operator: nil)
       s2_2 = Answer.create!(node: s2, reference: '2', label: 'no', value: nil, operator: nil)
 
-      s4 = Question.create!(label: 'Drink as usual', reference: '4', category: symptom, priority: Question.priorities[:priority], answer_type: radio)
+      s4 = Question.create!(algorithm: epoct, label: 'Drink as usual', reference: '4', category: symptom, priority: Question.priorities[:priority], answer_type: radio)
       s4_1 = Answer.create!(node: s4, reference: '1', label: 'yes', value: nil, operator: nil)
       s4_2 = Answer.create!(node: s4, reference: '2', label: 'no', value: nil, operator: nil)
 
-      p1 = Question.create!(label: 'SAO2', reference: '1', category: physical_exam, priority: Question.priorities[:triage], answer_type: input_integer)
+      p1 = Question.create!(algorithm: epoct, label: 'SAO2', reference: '1', category: physical_exam, priority: Question.priorities[:triage], answer_type: input_integer)
       p1_1 = Answer.create!(node: p1, reference: '1', label: '>/= 90%', value: '90', operator: '>=')
       p1_1 = Answer.create!(node: p1, reference: '2', label: '< 90%', value: '90', operator: '<')
 
-      p3 = Question.create!(label: 'Respiratory rate', reference: '3', category: physical_exam, priority: Question.priorities[:triage], answer_type: input_integer)
+      p3 = Question.create!(algorithm: epoct, label: 'Respiratory rate', reference: '3', category: physical_exam, priority: Question.priorities[:triage], answer_type: input_integer)
       p3_1 = Answer.create!(node: p3, reference: '1', label: '< 97th%ile', value: '97', operator: '<')
       p3_2 = Answer.create!(node: p3, reference: '2', label: '>/= 97th%ile', value: '97', operator: '>=')
 
-      p13 = Question.create!(label: 'Lower chest indrawing', reference: '13', category: physical_exam, priority: Question.priorities[:basic], answer_type: radio)
+      p13 = Question.create!(algorithm: epoct, label: 'Lower chest indrawing', reference: '13', category: physical_exam, priority: Question.priorities[:basic], answer_type: radio)
       p13_1 = Answer.create!(node: p13, reference: '1', label: 'yes', value: nil, operator: nil)
       p13_2 = Answer.create!(node: p13, reference: '2', label: 'no', value: nil, operator: nil)
 
 
-      p14 = Question.create!(label: 'Sever respiratory distress', reference: '14', category: physical_exam, priority: Question.priorities[:basic], answer_type: radio)
+      p14 = Question.create!(algorithm: epoct, label: 'Sever respiratory distress', reference: '14', category: physical_exam, priority: Question.priorities[:basic], answer_type: radio)
       p14_1 = Answer.create!(node: p14, reference: '1', label: 'yes', value: nil, operator: nil)
       p14_1 = Answer.create!(node: p14, reference: '2', label: 'no', value: nil, operator: nil)
 
-      p25 = Question.create!(label: 'Tolerates PO liquid', reference: '25', category: physical_exam, priority: Question.priorities[:basic], answer_type: radio)
+      p25 = Question.create!(algorithm: epoct, label: 'Tolerates PO liquid', reference: '25', category: physical_exam, priority: Question.priorities[:basic], answer_type: radio)
       p25_1 = Answer.create!(node: p25, reference: '1', label: 'yes', value: nil, operator: nil)
       p25_2 = Answer.create!(node: p25, reference: '2', label: 'no', value: nil, operator: nil)
 
-      t1 = Treatment.create!(label: 'Amoxicillin', reference: '1')
-      t2 = Treatment.create!(label: 'IM ceftriaxone', reference: '2')
-      t9 = Treatment.create!(label: 'Oral rehydration', reference: '9')
+      t1 = Treatment.create!(algorithm: epoct, label: 'Amoxicillin', reference: '1')
+      t2 = Treatment.create!(algorithm: epoct, label: 'IM ceftriaxone', reference: '2')
+      t9 = Treatment.create!(algorithm: epoct, label: 'Oral rehydration', reference: '9')
 
-      m2 = Management.create!(label: 'Refer', reference: '2')
+      m2 = Management.create!(algorithm: epoct, label: 'Refer', reference: '2')
 
       df7.nodes << [t1,t2,t9, m2]
 
-      ps6 = PredefinedSyndrome.create!(reference: '6', label: 'Able to drink')
+      ps6 = PredefinedSyndrome.create!(algorithm: epoct, reference: '6', label: 'Able to drink')
       ps6_1 = ps6.answers.first
       ps6_2 = ps6.answers.second
-
-      epoct.nodes << [df7, s2, p3, p13, p14, p1, ps6, t9, t1, t2, m2]
-      epoct.save
 
       # DF7
       dd7_s2 = Relation.create!(relationable: dd7, node: s2)
@@ -111,8 +105,8 @@ module ServiceMacros
 
 
       Condition.create!(referenceable: ps6_p25, first_conditionable: s4_2, operator: nil, second_conditionable: nil)
-      Condition.create!(referenceable: ps6_ps6, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
-      Condition.create!(referenceable: ps6_ps6, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
+      Condition.create!(referenceable: ps6_ps6, first_conditionable: s4_1, operator: nil, second_conditionable: nil)
+      Condition.create!(referenceable: ps6_ps6, first_conditionable: p25_1, operator: nil, second_conditionable: nil)
 
       Condition.create!(referenceable: dd7_p1, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
       Condition.create!(referenceable: dd7_p3, first_conditionable: s2_1, operator: nil, second_conditionable: nil)

@@ -9,8 +9,7 @@ class PredefinedSyndromesController < ApplicationController
   end
 
   def create
-    @predefined_syndrome = PredefinedSyndrome.new(predefined_syndrome_params)
-    @predefined_syndrome.algorithms << @algorithm
+    @predefined_syndrome = @algorithm.predefined_syndromes.new(predefined_syndrome_params)
 
     if @predefined_syndrome.save
       redirect_to @predefined_syndrome, notice: t('flash_message.success_updated')
@@ -28,7 +27,8 @@ class PredefinedSyndromesController < ApplicationController
   end
 
   def show
-    add_breadcrumb "#{@predefined_syndrome.algorithms.first.name}", algorithm_url(@predefined_syndrome.algorithms.first)
+    # Retrieve algorithm, since the show is not in the same route
+    add_breadcrumb "#{@predefined_syndrome.algorithm.name}", algorithm_url(@predefined_syndrome.algorithm)
     add_breadcrumb "#{@predefined_syndrome.label}"
 
     @relation = Relation.new

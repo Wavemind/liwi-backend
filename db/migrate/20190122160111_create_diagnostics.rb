@@ -4,6 +4,8 @@ class CreateDiagnostics < ActiveRecord::Migration[5.2]
       t.string :reference
       t.string :label
 
+      t.references :algorithm_version, foreign_key: true, index: true
+
       t.timestamps
     end
   end

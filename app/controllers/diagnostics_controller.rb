@@ -25,8 +25,7 @@ class DiagnosticsController < ApplicationController
   end
 
   def create
-    @diagnostic = Diagnostic.new(diagnostic_params)
-    @diagnostic.algorithm_versions << @algorithm_version
+    @diagnostic = @algorithm_version.diagnostics.new(diagnostic_params)
 
     if @diagnostic.save
       redirect_to algorithm_algorithm_version_diagnostic_url(@algorithm, @algorithm_version, @diagnostic), notice: t('flash_message.success_created')
