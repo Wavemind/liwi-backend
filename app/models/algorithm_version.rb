@@ -9,12 +9,12 @@ class AlgorithmVersion < ApplicationRecord
   has_many :group_accesses
   has_many :groups, through: :group_accesses
 
-  validates_presence_of :version
+  validates_presence_of :name
 
-  validates_uniqueness_of :version, scope: :algorithm
+  validates_uniqueness_of :name, scope: :algorithm
 
   def display_label
-    "#{algorithm.name} - #{version}"
+    "#{algorithm.name} - #{name}"
   end
 
 end

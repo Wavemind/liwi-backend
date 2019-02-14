@@ -7,7 +7,7 @@ jQuery(document).ready(function () {
     "ajax": $("#algorithm_versions-datatable").data("source"),
     "pagingType": "full_numbers",
     "columns": [
-      { "data": "version" },
+      { "data": "name" },
       { "data": "last_update" },
       { "data": "creator" },
       { "data": "actions", "className": "text-right" },

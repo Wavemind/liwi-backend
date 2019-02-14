@@ -7,7 +7,7 @@ RSpec.describe Diagnostic, type: :model do
     user = User.new(first_name: 'Foo', last_name: 'Bar', email: 'foo.bar@gmail.com', role: role)
     algorithm = Algorithm.new(name: 'EPOCT', description: 'MedicalCenter1', user: user)
 
-    @version = AlgorithmVersion.create!(version: '1.3.2', user: user, algorithm: algorithm)
+    @version = AlgorithmVersion.create!(name: '1.3.2', user: user, algorithm: algorithm)
   end
 
   it 'is valid with valid attributes' do

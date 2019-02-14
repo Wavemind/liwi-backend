@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
   end
 
   create_table "algorithm_versions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "version"
+    t.string "name"
     t.boolean "archived", default: false
     t.bigint "user_id"
     t.bigint "algorithm_id"

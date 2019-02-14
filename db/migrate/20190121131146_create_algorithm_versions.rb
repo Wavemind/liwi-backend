@@ -1,7 +1,7 @@
 class CreateAlgorithmVersions < ActiveRecord::Migration[5.2]
   def change
     create_table :algorithm_versions do |t|
-      t.string :version
+      t.string :name
       t.boolean :archived, default: false
 
       t.references :user, foreign_key: true, index: true

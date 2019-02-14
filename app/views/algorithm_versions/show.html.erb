@@ -1,6 +1,6 @@
 <div class="breadcrumb mb-4"><%= render_breadcrumbs %></div>
 
-<h1><%= t('.title', name: @algorithm_version.algorithm.name, version:@algorithm_version.version ) %></h1>
+<h1><%= t('.title', name: @algorithm_version.algorithm.name, version:@algorithm_version.name ) %></h1>
 
 <h2><%= t('.subtitle_diagnostics') %></h2>
 <%= link_to new_algorithm_algorithm_version_diagnostic_url(@algorithm, @algorithm_version) do %>
