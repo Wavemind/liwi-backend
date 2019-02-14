@@ -53,6 +53,9 @@ class FinalDiagnosticsController < ApplicationController
     end
   end
 
+  # POST /algorithms/:algorithm_id/algorithm_versions/:algorithm_version_id/diagnostics/:diagnostic_id/final_diagnostics/:id/add_excluded_diagnostic
+  # @return
+  # Add excluded diagnostic to final diagnostic
   def add_excluded_diagnostic
     if @final_diagnostic.update(final_diagnostic_params)
       redirect_to algorithm_algorithm_version_diagnostic_url(@algorithm, @algorithm_version, @diagnostic), notice: t('flash_message.success_updated')
@@ -61,6 +64,9 @@ class FinalDiagnosticsController < ApplicationController
     end
   end
 
+  # DELETE /algorithms/:algorithm_id/algorithm_versions/:algorithm_version_id/diagnostics/:diagnostic_id/final_diagnostics/:id/remove_excluded_diagnostic
+  # @return
+  # Remove excluded diagnostic to final diagnostic
   def remove_excluded_diagnostic
     @final_diagnostic.excluded_diagnostic_id = nil
     if @final_diagnostic.save

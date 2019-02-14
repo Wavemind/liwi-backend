@@ -24,6 +24,9 @@ class ConditionsController < ApplicationController
     end
   end
 
+  # POST /diagnostics/:diagnostic_id/conditions/differential
+  # @return
+  # Add diagnostic condition
   def add_diagnostic_condition
     @condition = @relationable.conditions.new(condition_params)
     @condition.first_conditionable = @condition.create_conditionable(condition_params[:first_conditionable_id]) unless condition_params[:first_conditionable_id].empty?
@@ -36,6 +39,9 @@ class ConditionsController < ApplicationController
     end
   end
 
+  # DELETE /diagnostics/:diagnostic_id/conditions/:id/differential
+  # @return
+  # Destroy diagnostic condition
   def destroy_diagnostic_condition
     if @condition.destroy
       redirect_to algorithm_algorithm_version_diagnostic_url(@relationable.algorithm_version.algorithm, @relationable.algorithm_version, @relationable), notice: t('flash_message.success_updated')
