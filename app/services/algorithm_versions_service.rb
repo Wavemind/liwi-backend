@@ -36,7 +36,7 @@ class AlgorithmVersionsService
     hash = {}
     hash['id'] = @algorithm_version.id
     hash['name'] = @algorithm_version.algorithm.name
-    hash['version'] = @algorithm_version.version
+    hash['version'] = @algorithm_version.name
     hash['description'] = @algorithm_version.algorithm.description
     hash['author'] = @algorithm_version.user.full_name
     hash['created_at'] = @algorithm_version.created_at
