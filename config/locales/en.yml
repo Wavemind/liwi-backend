@@ -90,6 +90,7 @@ en:
       subtitle_final_diagnostics: "Finals diagnostics"
       title: "Details of %{name}"
       predefined_syndromes: "Predefined Syndromes"
+      differential_diagnostic_conditions: "Differential diagnostic conditions"
   edit: "Edit"
   error: "An error occured"
   final_diagnostics:
@@ -254,6 +255,7 @@ en:
         index:
           no_group: "Your tablet isn't associated with groups"
           no_algorithm_version: "Your group has no algorithm version"
+          errors_on_save: "An error occured when saving activities"
       activities:
         create:
           errors_device_not_present: "Device doesn't exist"

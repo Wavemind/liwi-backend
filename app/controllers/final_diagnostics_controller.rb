@@ -18,7 +18,7 @@ class FinalDiagnosticsController < ApplicationController
 
   def show
     add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
-    add_breadcrumb "#{@algorithm_version.version}", algorithm_algorithm_version_url(@algorithm, @algorithm_version)
+    add_breadcrumb "#{@algorithm_version.name}", algorithm_algorithm_version_url(@algorithm, @algorithm_version)
     add_breadcrumb "#{@diagnostic.label}", algorithm_algorithm_version_diagnostic_url(@algorithm, @algorithm_version, @diagnostic)
     add_breadcrumb "#{@final_diagnostic.label}"
 
@@ -53,6 +53,9 @@ class FinalDiagnosticsController < ApplicationController
     end
   end
 
+  # POST /algorithms/:algorithm_id/algorithm_versions/:algorithm_version_id/diagnostics/:diagnostic_id/final_diagnostics/:id/add_excluded_diagnostic
+  # @return
+  # Add excluded diagnostic to final diagnostic
   def add_excluded_diagnostic
     if @final_diagnostic.update(final_diagnostic_params)
       redirect_to algorithm_algorithm_version_diagnostic_url(@algorithm, @algorithm_version, @diagnostic), notice: t('flash_message.success_updated')
@@ -61,6 +64,9 @@ class FinalDiagnosticsController < ApplicationController
     end
   end
 
+  # DELETE /algorithms/:algorithm_id/algorithm_versions/:algorithm_version_id/diagnostics/:diagnostic_id/final_diagnostics/:id/remove_excluded_diagnostic
+  # @return
+  # Remove excluded diagnostic to final diagnostic
   def remove_excluded_diagnostic
     @final_diagnostic.excluded_diagnostic_id = nil
     if @final_diagnostic.save

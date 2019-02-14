@@ -66,6 +66,16 @@ Rails.application.routes.draw do
       resources :children, only: [:create, :destroy]
       resources :conditions, only: [:create, :destroy]
     end
+    resources :conditions, only: [] do
+
+      collection do
+        post 'differential', to: 'conditions#add_diagnostic_condition'
+      end
+
+      member do
+        delete 'differential', to: 'conditions#destroy_diagnostic_condition'
+      end
+    end
   end
 
   get 'relationable/:type/:id', to: 'relations#index', as: 'relationable'

@@ -9,10 +9,10 @@ role_student = Role.create!(name: 'Student')
 role_teacher = Role.create!(name: 'Teacher')
 
 # Device
-device_blackberry = Device.create!(mac_address: 'C5-CA-9C-17-7A-36', model: 'Q10', brand: 'BlackBerry', os: 'Android', os_version: '8.0', name: 'MedicalCenter 1', group: group_wavemind )
-device_sony_ericsson = Device.create!(mac_address: 'A6-91-D4-0E-ED-EF', model: '3310', brand: 'Sony Ericsson', os: 'Android', os_version: '8.0', name: 'MedicalCenter 2', group: group_wavemind)
-device_apple = Device.create!(mac_address: '35-BC-4A-28-82-4C', model: 'Iphone XYZ', brand: 'Apple', os: 'Android', os_version: '8.0', name: 'MedicalCenter 3', group: group_pmu)
-device_sagem = Device.create!(mac_address: 'BB-3B-AA-69-8F-74', model: 'J302', brand: 'Sagem', os: 'Android', os_version: '8.0', name: 'MedicalCenter 4', group: group_unicorne)
+device_blackberry = Device.create!(mac_address: 'C5:CA:9C:17:7A:36', model: 'Q10', brand: 'BlackBerry',os: 'Android', os_version: '8.0', name: 'MedicalCenter 1', group: group_wavemind )
+device_sony_ericsson = Device.create!(mac_address: 'A6:91:D4:0E:ED:EF', model: '3310', brand: 'Sony Ericsson', os: 'Android', os_version: '8.0', name: 'MedicalCenter 2', group: group_wavemind)
+device_apple = Device.create!(mac_address: '35:BC:4A:28:82:4C', model: 'Iphone XYZ', brand: 'Apple', os: 'Android', os_version: '8.0', name: 'MedicalCenter 3', group: group_pmu)
+device_sagem = Device.create!(mac_address: 'BB:3B:AA:69:8F:74', model: 'J302', brand: 'Sagem', os: 'Android', os_version: '8.0', name: 'MedicalCenter 4', group: group_unicorne)
 device_lenovo = Device.create!(mac_address: '64:DB:43:D5:31:5C', group: group_wavemind)
 
 # User
