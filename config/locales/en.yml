@@ -253,3 +253,4 @@ en:
         index:
           no_group: "Your tablet isn't associated with groups"
           no_algorithm_version: "Your group has no algorithm version"
+          device_not_exist: "Device doesn't exist"

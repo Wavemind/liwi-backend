@@ -18,6 +18,8 @@ class DiagnosticsController < ApplicationController
 
     @relation = Relation.new
     @relationable = @diagnostic
+    @conditions = @diagnostic.conditions
+    @condition = Condition.new
   end
 
   def new

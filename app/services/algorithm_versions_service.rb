@@ -52,7 +52,6 @@ class AlgorithmVersionsService
     hash['id'] = diagnostic.id
     hash['reference'] = diagnostic.reference
     hash['label'] = diagnostic.label
-    raise
     hash['differential'] = extract_conditions(diagnostic.conditions)
     hash['nodes'] = {}
     hash['diagnosis'] = {}
