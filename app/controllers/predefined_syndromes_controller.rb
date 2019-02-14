@@ -27,8 +27,9 @@ class PredefinedSyndromesController < ApplicationController
   end
 
   def show
+    @algorithm = @predefined_syndrome.algorithm
     # Retrieve algorithm, since the show is not in the same route
-    add_breadcrumb "#{@predefined_syndrome.algorithm.name}", algorithm_url(@predefined_syndrome.algorithm)
+    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
     add_breadcrumb "#{@predefined_syndrome.label}"
 
     @relation = Relation.new
