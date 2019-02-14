@@ -1,9 +1,9 @@
 class FinalDiagnosticsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:add_treatable, :show, :new, :create, :edit, :update, :destroy]
-  before_action :set_algorithm_version, only: [:add_treatable, :show, :new, :create, :edit, :update, :destroy]
-  before_action :set_diagnostic, only: [:add_treatable, :show, :new, :create, :edit, :update, :destroy]
-  before_action :set_final_diagnostic, only: [:add_treatable, :show, :edit, :update, :destroy]
+  before_action :set_algorithm, only: [:show, :new, :create, :edit, :update, :add_excluded_diagnostic, :remove_excluded_diagnostic]
+  before_action :set_algorithm_version, only: [:show, :new, :create, :edit, :update, :add_excluded_diagnostic, :remove_excluded_diagnostic]
+  before_action :set_diagnostic, only: [:show, :new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic]
+  before_action :set_final_diagnostic, only: [:show, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic]
 
   def index
     respond_to do |format|
@@ -53,6 +53,23 @@ class FinalDiagnosticsController < ApplicationController
     end
   end
 
+  def add_excluded_diagnostic
+    if @final_diagnostic.update(final_diagnostic_params)
+      redirect_to algorithm_algorithm_version_diagnostic_url(@algorithm, @algorithm_version, @diagnostic), notice: t('flash_message.success_updated')
+    else
+      redirect_to algorithm_algorithm_version_diagnostic_url(@algorithm, @algorithm_version, @diagnostic), alert: t('flash_message.update_fail')
+    end
+  end
+
+  def remove_excluded_diagnostic
+    @final_diagnostic.excluded_diagnostic_id = nil
+    if @final_diagnostic.save
+      redirect_to algorithm_algorithm_version_diagnostic_url(@algorithm, @algorithm_version, @diagnostic), notice: t('flash_message.success_updated')
+    else
+      redirect_to algorithm_algorithm_version_diagnostic_url(@algorithm, @algorithm_version, @diagnostic), alert: t('flash_message.update_fail')
+    end
+  end
+
   private
 
   def set_diagnostic
@@ -68,6 +85,7 @@ class FinalDiagnosticsController < ApplicationController
       :id,
       :label,
       :reference,
+      :final_diagnostic_id,
       :description
     )
   end

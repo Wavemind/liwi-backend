@@ -31,6 +31,10 @@ Rails.application.routes.draw do
       end
       resources :diagnostics, only: [:index, :new, :create, :edit, :update, :show] do
         resources :final_diagnostics, only: [:index, :show, :new, :create, :edit, :update, :delete, :destroy] do
+          member do
+            post 'add_excluded_diagnostic'
+            delete 'remove_excluded_diagnostic'
+          end
           resources :final_diagnostic_health_cares, only: [:create, :destroy]
         end
       end

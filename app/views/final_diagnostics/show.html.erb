@@ -52,4 +52,31 @@
   </li>
 </ul>
 
+<h1><%= t('.excluded_diagnostic') %></h1>
+<% if @final_diagnostic.excluded_diagnostic.present? %>
+  <div class="alert alert-danger" role="alert">
+    <%= @final_diagnostic.excluded_diagnostic.reference_label %>
+  </div>
+
+<% else %>
+  <div class="alert alert-primary" role="alert">
+    <%= t('.no_excluded_diagnostic') %>
+  </div>
+<% end %>
+
+<li class="list-group-item">
+  <%= simple_form_for @final_diagnostic, url: add_excluded_diagnostic_algorithm_algorithm_version_diagnostic_final_diagnostic_url(@algorithm, @algorithm_version, @diagnostic, @final_diagnostic), method: :post do |f| %>
+    <div class="row">
+      <div class="col">
+        <%= f.input :final_diagnostic_id, collection: @diagnostic.final_diagnostics.where.not(id: params[:id]), label_method: :reference_label, label: false, prompt: t('prompt') %>
+      </div>
+      <div class="col">
+        <%= f.submit t('add'), class: 'btn btn-primary' %>
+      </div>
+    </div>
+  <% end %>
+</li>
+
+
+
 
