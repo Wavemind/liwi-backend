@@ -18,7 +18,7 @@ class FinalDiagnosticsController < ApplicationController
 
   def show
     add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
-    add_breadcrumb "#{@algorithm_version.version}", algorithm_algorithm_version_url(@algorithm, @algorithm_version)
+    add_breadcrumb "#{@algorithm_version.name}", algorithm_algorithm_version_url(@algorithm, @algorithm_version)
     add_breadcrumb "#{@diagnostic.label}", algorithm_algorithm_version_diagnostic_url(@algorithm, @algorithm_version, @diagnostic)
     add_breadcrumb "#{@final_diagnostic.label}"
 

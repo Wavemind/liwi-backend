@@ -12,7 +12,7 @@ class AlgorithmVersionsController < ApplicationController
 
   def show
     add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
-    add_breadcrumb "#{@algorithm_version.version}"
+    add_breadcrumb "#{@algorithm_version.name}"
 
   end
 

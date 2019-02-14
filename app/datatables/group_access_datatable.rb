@@ -16,7 +16,7 @@ class GroupAccessDatatable < AjaxDatatablesRails::ActiveRecord
     @view_columns ||= {
       created_at: { source: 'GroupAccess.created_at' },
       algorithm: { source: 'GroupAccess.algorithm_version.algorithm.name' },
-      algorithm_version: { source: 'GroupAccess.algorithm_version.version' },
+      algorithm_version: { source: 'GroupAccess.algorithm_version.name' },
       end_date: { source: 'GroupAccess.end_date' },
     }
   end
@@ -28,7 +28,7 @@ class GroupAccessDatatable < AjaxDatatablesRails::ActiveRecord
         created_at: date_format(record.created_at),
         end_date: date_format(record.end_date),
         algorithm: record.algorithm_version.algorithm.name,
-        algorithm_version: record.algorithm_version.version
+        algorithm_version: record.algorithm_version.name
       }
     end
   end
