@@ -14,7 +14,7 @@ class DiagnosticsController < ApplicationController
   def show
     add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
     add_breadcrumb "#{@algorithm_version.name}", algorithm_algorithm_version_url(@algorithm, @algorithm_version)
-    add_breadcrumb "#{@diagnostic.label}"
+    add_breadcrumb "#{@diagnostic.reference}"
 
     @relation = Relation.new
     @relationable = @diagnostic
@@ -23,7 +23,16 @@ class DiagnosticsController < ApplicationController
   end
 
   def new
+    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
+    add_breadcrumb "#{@algorithm_version.name}", algorithm_algorithm_version_url(@algorithm, @algorithm_version)
+
     @diagnostic = Diagnostic.new
+  end
+
+  def edit
+    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
+    add_breadcrumb "#{@algorithm_version.name}", algorithm_algorithm_version_url(@algorithm, @algorithm_version)
+    add_breadcrumb "#{@diagnostic.reference}", algorithm_algorithm_version_diagnostic_url(@algorithm, @algorithm_version)
   end
 
   def create

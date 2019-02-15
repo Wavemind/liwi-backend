@@ -3,9 +3,25 @@ class PredefinedSyndromesController < ApplicationController
   before_action :set_predefined_syndrome, only: [:edit, :update, :destroy, :show]
   before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy]
 
+  def show
+    # Retrieve algorithm, since the show is not in the same route
+    @algorithm = @predefined_syndrome.algorithm
+    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
+    add_breadcrumb "#{@predefined_syndrome.label}"
+
+    @relation = Relation.new
+    @relationable = @predefined_syndrome
+  end
 
   def new
+    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
+
     @predefined_syndrome = PredefinedSyndrome.new
+  end
+
+  def edit
+    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
+    add_breadcrumb "#{@predefined_syndrome.label}", predefined_syndrome_url(@predefined_syndrome)
   end
 
   def create
@@ -14,7 +30,7 @@ class PredefinedSyndromesController < ApplicationController
     if @predefined_syndrome.save
       redirect_to @predefined_syndrome, notice: t('flash_message.success_updated')
     else
-      redirect_to @algorithm, alert: t('error')
+      render :new
     end
   end
 
@@ -22,18 +38,8 @@ class PredefinedSyndromesController < ApplicationController
     if @predefined_syndrome.update(predefined_syndrome_params)
       redirect_to @algorithm, notice: t('flash_message.success_updated')
     else
-      redirect_to @algorithm, alert: t('error')
+      render :edit
     end
-  end
-
-  def show
-    @algorithm = @predefined_syndrome.algorithm
-    # Retrieve algorithm, since the show is not in the same route
-    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
-    add_breadcrumb "#{@predefined_syndrome.label}"
-
-    @relation = Relation.new
-    @relationable = @predefined_syndrome
   end
 
   def destroy

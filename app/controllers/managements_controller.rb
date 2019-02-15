@@ -4,11 +4,14 @@ class ManagementsController < ApplicationController
   before_action :set_algorithm, only: [:new, :create, :edit, :update]
 
   def new
+    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
+
     @management = Management.new
   end
 
   def edit
-
+    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
+    add_breadcrumb "#{@management.reference}", algorithm_management_url(@algorithm, @management)
   end
 
   def create

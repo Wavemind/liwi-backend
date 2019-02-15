@@ -37,24 +37,6 @@ class GroupsController < ApplicationController
     end
   end
 
-  # DELETE groups/group_id/devices/:device_id/remove_device
-  # @params group_id [Integer] id of group
-  # @params device_id [Integer] id of device
-  # @return redirect to group#show with flash message
-  # Remove device from group
-  def remove_device
-    @group = Group.find(params[:group_id])
-    device = Device.find(params[:device_id])
-
-    device.group_id = nil
-
-    if device.save
-      redirect_to @group, notice: t('.success_remove_device')
-    else
-      redirect_to @group, danger: t('.error_remove_device')
-    end
-  end
-
   # POST groups/:id/add_device
   # @params group_id [Integer] id of group
   # @params device_id [Integer] id of device
@@ -70,6 +52,24 @@ class GroupsController < ApplicationController
       redirect_to @group, notice: t('.success_add_device')
     else
       redirect_to @group, danger: t('.error_add_device')
+    end
+  end
+
+  # DELETE groups/group_id/devices/:device_id/remove_device
+  # @params group_id [Integer] id of group
+  # @params device_id [Integer] id of device
+  # @return redirect to group#show with flash message
+  # Remove device from group
+  def remove_device
+    @group = Group.find(params[:group_id])
+    device = Device.find(params[:device_id])
+
+    device.group_id = nil
+
+    if device.save
+      redirect_to @group, notice: t('.success_remove_device')
+    else
+      redirect_to @group, danger: t('.error_remove_device')
     end
   end
 

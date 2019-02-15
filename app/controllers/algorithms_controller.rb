@@ -10,11 +10,15 @@ class AlgorithmsController < ApplicationController
   end
 
   def show
-
+    add_breadcrumb "#{@algorithm.name}"
   end
 
   def new
     @algorithm = Algorithm.new
+  end
+
+  def edit
+    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
   end
 
   def create

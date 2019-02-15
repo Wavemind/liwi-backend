@@ -4,11 +4,14 @@ class QuestionsController < ApplicationController
   before_action :set_algorithm, only: [:new, :create, :edit, :update, :answers]
 
   def new
+    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
+
     @question = Question.new
   end
 
   def edit
-
+    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
+    add_breadcrumb "#{@question.label}", algorithms_question_url(@algorithm, @question)
   end
 
   def create

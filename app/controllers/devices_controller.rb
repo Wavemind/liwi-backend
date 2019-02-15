@@ -9,13 +9,6 @@ class DevicesController < ApplicationController
     end
   end
 
-  # GET devices/map
-  # @return [JSON] last connection of a devise with user's info
-  # Used for the map on the dashboard for displaying where is the tablette
-  def map
-    render json: Device.all.to_json(methods: [:last_activity])
-  end
-
   def new
     @device = Device.new
   end
@@ -28,6 +21,13 @@ class DevicesController < ApplicationController
     else
       render :new
     end
+  end
+
+  # GET devices/map
+  # @return [JSON] last connection of a devise with user's info
+  # Used for the map on the dashboard for displaying where is the tablette
+  def map
+    render json: Device.all.to_json(methods: [:last_activity])
   end
 
   private

@@ -12,19 +12,30 @@ class FinalDiagnosticsController < ApplicationController
     end
   end
 
-  def new
-    @final_diagnostic = FinalDiagnostic.new
-  end
-
   def show
     add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
     add_breadcrumb "#{@algorithm_version.name}", algorithm_algorithm_version_url(@algorithm, @algorithm_version)
-    add_breadcrumb "#{@diagnostic.label}", algorithm_algorithm_version_diagnostic_url(@algorithm, @algorithm_version, @diagnostic)
-    add_breadcrumb "#{@final_diagnostic.label}"
+    add_breadcrumb "#{@diagnostic.reference}", algorithm_algorithm_version_diagnostic_url(@algorithm, @algorithm_version, @diagnostic)
+    add_breadcrumb "#{@final_diagnostic.reference}"
 
     @final_diagnostic_health_care = FinalDiagnosticHealthCare.new
     @treatments = @final_diagnostic.final_diagnostic_health_cares.treatments
     @managements = @final_diagnostic.final_diagnostic_health_cares.managements
+  end
+
+  def new
+    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
+    add_breadcrumb "#{@algorithm_version.name}", algorithm_algorithm_version_url(@algorithm, @algorithm_version)
+    add_breadcrumb "#{@diagnostic.reference}", algorithm_algorithm_version_diagnostic_url(@algorithm, @algorithm_version, @diagnostic)
+
+    @final_diagnostic = FinalDiagnostic.new
+  end
+
+  def edit
+    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
+    add_breadcrumb "#{@algorithm_version.name}", algorithm_algorithm_version_url(@algorithm, @algorithm_version)
+    add_breadcrumb "#{@diagnostic.reference}", algorithm_algorithm_version_diagnostic_url(@algorithm, @algorithm_version, @diagnostic)
+    add_breadcrumb "#{@final_diagnostic.reference}", algorithm_algorithm_version_diagnostic_final_diagnostic_url(@algorithm, @algorithm_version, @diagnostic, @final_diagnostic)
   end
 
   def create

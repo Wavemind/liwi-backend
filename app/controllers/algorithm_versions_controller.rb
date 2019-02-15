@@ -13,11 +13,17 @@ class AlgorithmVersionsController < ApplicationController
   def show
     add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
     add_breadcrumb "#{@algorithm_version.name}"
-
   end
 
   def new
+    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
+
     @algorithm_version = AlgorithmVersion.new
+  end
+
+  def edit
+    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
+    add_breadcrumb "#{@algorithm_version.name}", algorithm_algorithm_version_url(@algorithm, @algorithm_version)
   end
 
   def create

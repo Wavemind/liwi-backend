@@ -9,6 +9,7 @@ class PredefinedSyndrome < Node
   private
 
   # {Node#unique_reference}
+  # Scoped by the current algorithm
   def unique_reference
     if self.algorithm.predefined_syndromes.where(reference: "#{I18n.t('predefined_syndromes.reference')}_#{reference}").any?
       errors.add(:reference, I18n.t('nodes.validation.reference_used'))
@@ -19,8 +20,6 @@ class PredefinedSyndrome < Node
   def complete_reference
     self.reference = "#{I18n.t('predefined_syndromes.reference')}_#{reference}"
   end
-
-  private
 
   # Delete current predefined syndrome used in diagnostics
   def diagnostic_dependencies

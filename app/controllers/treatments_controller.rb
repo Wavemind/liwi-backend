@@ -4,11 +4,14 @@ class TreatmentsController < ApplicationController
   before_action :set_algorithm, only: [:new, :create, :edit, :update]
 
   def new
+    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
+
     @treatment = Treatment.new
   end
 
   def edit
-
+    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
+    add_breadcrumb "#{@treatment.reference}", algorithm_treatment_url(@algorithm, @treatment)
   end
 
   def create

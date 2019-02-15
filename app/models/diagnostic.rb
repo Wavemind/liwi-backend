@@ -21,6 +21,7 @@ class Diagnostic < ApplicationRecord
   private
 
   # {Node#unique_reference}
+  # Scoped by the current algorithm
   def unique_reference
     if Diagnostic.joins(algorithm_version: :algorithm)
          .where("reference = '#{I18n.t('diagnostics.reference')}_#{reference}' AND algorithms.id = '#{algorithm_version.algorithm.id}'").any?

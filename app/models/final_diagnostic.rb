@@ -21,6 +21,7 @@ class FinalDiagnostic < Node
   end
 
   # {Node#complete_reference}
+  # Scoped by the current algorithm
   def complete_reference
     self.reference = "#{I18n.t('final_diagnostics.reference')}_#{reference}"
   end
