@@ -28,7 +28,8 @@ gem 'devise_token_auth'
 gem 'rack-cors', require: 'rack/cors'
 gem 'momentjs-rails'
 gem 'database_cleaner'
-gem "breadcrumbs_on_rails"
+gem 'breadcrumbs_on_rails'
+gem 'carrierwave', '~> 1.0'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

@@ -13,7 +13,7 @@ RSpec.describe Question, type: :model do
   end
 
   it 'is invalid with invalid attributes' do
-    question = Question.new(reference: '4', label: 'skin issue', priority: nil, category: @category, answer_type: @answer_type)
+    question = Question.new(reference: '4', label: 'skin issue', priority: nil, category: nil, answer_type: @answer_type)
     expect(question).to_not be_valid
   end
 
