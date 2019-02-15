@@ -234,6 +234,7 @@ class AlgorithmVersionsService
     node.instances.map(&:instanceable).each do |instanceable|
       unless instanceable == node
         if instanceable.is_a?(Diagnostic)
+          # push the id in the array only if it is not already there and if it is handled by the current algorithm version
           diagnostics << instanceable.id if @diagnostics_ids.include?(instanceable.id) && !diagnostics.include?(instanceable.id)
         else
           get_question_diagnostics(instanceable, diagnostics)
@@ -250,6 +251,7 @@ class AlgorithmVersionsService
     node.instances.map(&:instanceable).each do |instanceable|
       unless instanceable == node
         if instanceable.is_a?(Node)
+          # push the id in the array only if it is not already there and if it is handled by the current algorithm version
           predefined_syndromes << instanceable.id if @predefined_syndromes_ids.include?(instanceable.id) && !predefined_syndromes.include?(instanceable.id)
           get_question_predefined_syndromes(instanceable, predefined_syndromes)
         end
