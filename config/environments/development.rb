@@ -73,11 +73,11 @@ Rails.application.configure do
     Bullet.enable = true
     Bullet.alert = true
     Bullet.rails_logger = true
-    Bullet.raise = true
+    # Bullet.raise = true
 
     # Whitelist
     Bullet.add_whitelist type: :n_plus_one_query, class_name: 'Answer', association: :node
-    Bullet.add_whitelist type: :unused_eager_loading, class_name: 'Relation', association: :conditions
+    Bullet.add_whitelist type: :unused_eager_loading, class_name: 'Instance', association: :conditions
     Bullet.add_whitelist type: :n_plus_one_query, class_name: 'Condition', association: :first_conditionable
     Bullet.add_whitelist type: :n_plus_one_query, class_name: 'Condition', association: :second_conditionable
   end

@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
     @algorithm_version = AlgorithmVersion.find(params[:algorithm_version_id])
   end
 
-  def set_relation
-    @relation = Relation.find(params[:relation_id])
+  def set_instance
+    @instance = Instance.find(params[:instance_id])
   end
 end

@@ -11,13 +11,13 @@
     <%= simple_form_for @condition, url: differential_diagnostic_conditions_url(@diagnostic), method: :post do |f| %>
       <div class="row">
         <div class="col">
-          <%= f.association :first_conditionable, collection: (@relationable.relations.questions.includes(node:[:answers]).map(&:node).map(&:answers) + @relationable.relations.predefined_syndromes.includes(node:[:answers]).map(&:node).map(&:answers) + @diagnostic.conditions).flatten, value_method: :conditionable_hash, label_method: :display_condition, label: false, prompt: t('prompt') %>
+          <%= f.association :first_conditionable, collection: (@instanceable.components.questions.includes(node:[:answers]).map(&:node).map(&:answers) + @instanceable.components.predefined_syndromes.includes(node:[:answers]).map(&:node).map(&:answers) + @diagnostic.conditions).flatten, value_method: :conditionable_hash, label_method: :display_condition, label: false, prompt: t('prompt') %>
         </div>
         <div class="col">
           <%= f.input :operator, label: false %>
         </div>
         <div class="col">
-          <%= f.association :second_conditionable, collection: (@relationable.relations.questions.includes(node:[:answers]).map(&:node).map(&:answers) + @relationable.relations.predefined_syndromes.includes(node:[:answers]).map(&:node).map(&:answers) + @diagnostic.conditions).flatten, value_method: :conditionable_hash, label_method: :display_condition, label: false, prompt: t('prompt') %>
+          <%= f.association :second_conditionable, collection: (@instanceable.components.questions.includes(node:[:answers]).map(&:node).map(&:answers) + @instanceable.components.predefined_syndromes.includes(node:[:answers]).map(&:node).map(&:answers) + @diagnostic.conditions).flatten, value_method: :conditionable_hash, label_method: :display_condition, label: false, prompt: t('prompt') %>
         </div>
         <div class="col">
           <%= f.input :top_level, as: :boolean %>

@@ -45,7 +45,7 @@ en:
   archive: "Archive"
   children:
     errors:
-      unknown_relationable: "Unknown relationable"
+      unknown_instanceable: "Unknown instanceable"
   deactivated: "Deactivate"
   delete: "Delete"
   destroy: "Remove"
@@ -84,7 +84,7 @@ en:
       title: "Edit this diagnostic"
     reference: "DD"
     show:
-      relations: "Relations"
+      instances: "Instances"
       subtitle_final_diagnostics: "Finals diagnostics"
       title: "Details of %{name}"
       predefined_syndromes: "Predefined Syndromes"
@@ -195,7 +195,7 @@ en:
         actions: "Actions"
     edit:
       title: "Edit question"
-  relations:
+  instances:
     table:
       columns:
         type: "Type"

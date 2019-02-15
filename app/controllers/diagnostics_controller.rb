@@ -16,8 +16,8 @@ class DiagnosticsController < ApplicationController
     add_breadcrumb "#{@algorithm_version.name}", algorithm_algorithm_version_url(@algorithm, @algorithm_version)
     add_breadcrumb "#{@diagnostic.label}"
 
-    @relation = Relation.new
-    @relationable = @diagnostic
+    @instance = Instance.new
+    @instanceable = @diagnostic
     @conditions = @diagnostic.conditions
     @condition = Condition.new
   end

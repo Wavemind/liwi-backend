@@ -11,14 +11,14 @@
 
 <hr/>
 
-<h2><%= t('.relations') %></h2>
+<h2><%= t('.instances') %></h2>
 
 <div class="row">
   <div class="col">
-    <%= simple_form_for @relation, url: diagnostic_relations_url(@diagnostic), method: :post do |f| %>
+    <%= simple_form_for @instance, url: diagnostic_instances_url(@diagnostic), method: :post do |f| %>
       <div class="row">
         <div class="col">
-          <%= f.association :node, collection: (@algorithm.nodes.where.not(id: @diagnostic.relations.select(:node_id)) + FinalDiagnostic.where(diagnostic_id: params[:id])).flatten.sort_by { |r| r.reference }, label_method: :reference_label, prompt: t('select'), label: false %>
+          <%= f.association :node, collection: (@algorithm.nodes.where.not(id: @diagnostic.components.select(:node_id)) + FinalDiagnostic.where(diagnostic_id: params[:id])).flatten.sort_by { |r| r.reference }, label_method: :reference_label, prompt: t('select'), label: false %>
         </div>
         <div class="col">
           <%= f.submit t('add'), class: 'btn btn-primary' %>
@@ -28,7 +28,7 @@
   </div>
 </div>
 
-<%= render 'relations/table' %>
+<%= render 'instances/table' %>
 
 <h2><%= t('.differential_diagnostic_conditions') %></h2>
 
