@@ -84,7 +84,7 @@ en:
       title: "Edit this diagnostic"
     reference: "DD"
     show:
-      instances: "Instances"
+      instances: "Instance of nodes"
       subtitle_final_diagnostics: "Finals diagnostics"
       title: "Details of %{name}"
       predefined_syndromes: "Predefined Syndromes"

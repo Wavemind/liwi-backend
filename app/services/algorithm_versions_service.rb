@@ -9,6 +9,7 @@ class AlgorithmVersionsService
     @treatments = {}
     @managements = {}
     @predefined_syndromes = {}
+
     @final_diagnostics = {}
 
     # Get all ps and dd ids in order to build working diagnosis
@@ -226,6 +227,9 @@ class AlgorithmVersionsService
     hash
   end
 
+  # @params [Node, Array]
+  # @return [Array]
+  # Recursive method in order to retrieve every diagnostics the question appears in.
   def self.get_question_diagnostics(node, diagnostics)
     node.instances.map(&:instanceable).each do |instanceable|
       unless instanceable == node
@@ -239,6 +243,9 @@ class AlgorithmVersionsService
     diagnostics
   end
 
+  # @params [Node, Array]
+  # @return [Array]
+  # Recursive method in order to retrieve every predefined syndromes the question appears in.
   def self.get_question_predefined_syndromes(node, predefined_syndromes)
     node.instances.map(&:instanceable).each do |instanceable|
       unless instanceable == node
