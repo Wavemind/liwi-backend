@@ -42,6 +42,13 @@ en:
       title: "Create related answers of %{name} question"
     edit:
       title: "Edit related answers of %{name} question"
+  api:
+    v1:
+      algorithm_versions:
+        index:
+          no_group: "Your tablet isn't associated with groups"
+          no_algorithm_version: "Your group has no algorithm version"
+          device_not_exist: "Device doesn't exist"
   archive: "Archive"
   children:
     errors:
@@ -114,22 +121,22 @@ en:
     success_updated: "Data was successfully updated"
     update_fail: "Error will updating value"
   groups:
+    add_device:
+      success_add_device: "Device was successfully added to group"
+      error_add_device: "An error occured when adding device to group"
     index:
       columns:
         name: "Name"
         nb_people: "Number of devices"
         actions: "Actions"
       title: "Groups"
-    new:
-      title: "Add group"
     edit:
       title: "Edit group"
+    new:
+      title: "Add group"
     remove_device:
       success_remove_device: "Device was successfully removed from group"
       error_remove_device: "An error occured when removing device from group"
-    add_device:
-      success_add_device: "Device was successfully added to group"
-      error_add_device: "An error occured when adding device to group"
     show:
       title: "Details of %{name}"
       second_title: "Accesses"
@@ -139,6 +146,9 @@ en:
         created_at: "Created on"
         end_date: "Archived date"
       archived: "Archive"
+  group_accesses:
+    new:
+      title: "New release"
   managements:
     edit:
       title: "Edit the management"
@@ -244,13 +254,3 @@ en:
       last_account_connection: "Last account connection "
       role: "Role "
       title: "Details of %{name}"
-  group_accesses:
-    new:
-      title: "New release"
-  api:
-    v1:
-      algorithm_versions:
-        index:
-          no_group: "Your tablet isn't associated with groups"
-          no_algorithm_version: "Your group has no algorithm version"
-          device_not_exist: "Device doesn't exist"
