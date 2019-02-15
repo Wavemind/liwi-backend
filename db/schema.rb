@@ -64,15 +64,6 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
     t.index ["node_id"], name: "index_answers_on_node_id"
   end
 
-  create_table "available_nodes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.bigint "algorithm_id"
-    t.bigint "node_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["algorithm_id"], name: "index_available_nodes_on_algorithm_id"
-    t.index ["node_id"], name: "index_available_nodes_on_node_id"
-  end
-
   create_table "categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.string "reference_prefix"
@@ -273,7 +264,6 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
   add_foreign_key "algorithm_versions", "algorithms"
   add_foreign_key "algorithm_versions", "users"
   add_foreign_key "algorithms", "users"
-  add_foreign_key "available_nodes", "algorithms"
   add_foreign_key "devices", "groups"
   add_foreign_key "diagnostics", "algorithm_versions"
   add_foreign_key "group_accesses", "algorithm_versions"
