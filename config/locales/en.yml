@@ -49,6 +49,10 @@ en:
           no_group: "Your tablet isn't associated with groups"
           no_algorithm_version: "Your group has no algorithm version"
           device_not_exist: "Device doesn't exist"
+      activities:
+        create:
+          errors_device_not_present: "Device doesn't exist"
+          errors_on_save: "An error occured when saving activities"
   archive: "Archive"
   children:
     errors:
@@ -77,6 +81,8 @@ en:
       tablet_connection: "Tablet connection"
       title: "Details of %{name}"
       user_actions: "User actions"
+    new:
+      title: "Add device"
   diagnostics:
     table:
       columns:

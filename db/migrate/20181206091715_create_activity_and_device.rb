@@ -7,7 +7,7 @@ class CreateActivityAndDevice < ActiveRecord::Migration[5.2]
       t.string :brand
       t.string :os
       t.string :os_version
-      t.integer :status
+      t.integer :status, default: 0
 
       t.timestamps
     end

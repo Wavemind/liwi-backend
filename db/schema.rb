@@ -113,7 +113,7 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
     t.string "brand"
     t.string "os"
     t.string "os_version"
-    t.integer "status"
+    t.integer "status", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "group_id"
