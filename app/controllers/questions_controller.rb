@@ -15,12 +15,17 @@ class QuestionsController < ApplicationController
     @question = @algorithm.questions.new(question_params)
 
     if @question.save
-      # Create a new first answer for the form view
-      @question.answers << Answer.new
-      # Clear the error messages to not have any validation errors before filling the form
-      @question.answers.first.errors.clear
+      # Don't create answers if it is boolean type, since it is automatically created from the model
+      if @question.answer_type.value == 'Boolean'
+        redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_created')
+      else
+        # Create a new first answer for the form view
+        @question.answers << Answer.new
+        # Clear the error messages to not have any validation errors before filling the form
+        @question.answers.first.errors.clear
 
-      render 'answers/new'
+        render 'answers/new'
+      end
     else
       render :new
     end

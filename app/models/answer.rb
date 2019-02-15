@@ -27,7 +27,8 @@ class Answer < ApplicationRecord
 
   # {Node#unique_reference}
   def unique_reference
-    if Answer.where(reference: "#{node.reference}_#{reference}").any?
+    if Answer.joins(node: :algorithm)
+         .where("reference = '#{node.reference}_#{reference}' AND algorithms.id = '#{node.algorithm.id}'").any?
       errors.add(:reference, I18n.t('nodes.validation.reference_used'))
     end
   end
