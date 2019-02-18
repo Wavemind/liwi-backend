@@ -9,5 +9,15 @@
 
   <%= f.association :answer_type, collection: AnswerType.all, label_method: :display_name, prompt: t('select'), disabled: @question.answers.any?  %>
 
+  <hr />
+
+  <%= f.simple_fields_for :medias do |ff| %>
+    <%= render 'medias/fields', f: ff %>
+  <% end %>
+
+  <div class="links">
+    <%= link_to_add_association "<button class='btn btn-outline-success'>#{t('add')}</button>".html_safe, f, :medias, partial: 'medias/fields' %>
+  </div>
+
   <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
 <% end %>

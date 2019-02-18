@@ -5,6 +5,7 @@ class Node < ApplicationRecord
   belongs_to :algorithm, optional: true
   has_many :children
   has_many :instances
+  has_many :medias, as: :fileable
 
   has_many :final_diagnostic_health_cares
   has_many :final_diagnostics, through: :final_diagnostic_health_cares
@@ -14,6 +15,8 @@ class Node < ApplicationRecord
 
   scope :managements, ->() { where(type: 'Management') }
   scope :treatments, ->() { where(type: 'Treatment') }
+
+  accepts_nested_attributes_for :medias, reject_if: :all_blank, allow_destroy: true
 
   validates_presence_of :label
   validates_presence_of :reference
