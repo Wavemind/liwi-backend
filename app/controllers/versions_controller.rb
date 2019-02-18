@@ -22,7 +22,7 @@ class VersionsController < ApplicationController
 
   def edit
     add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
-    add_breadcrumb "#{@algorithm_version.name}", algorithm_algorithm_version_url(@algorithm, @algorithm_version)
+    add_breadcrumb "#{@version.name}", algorithm_version_url(@algorithm, @version)
   end
 
   def create
@@ -44,9 +44,9 @@ class VersionsController < ApplicationController
     end
   end
 
-  # PUT algorithms/:algorithm_id/algorithm_version/:id/archive
-  # @params algorithm_version [AlgorithmVersion] version of algorithm to archive
-  # @return redirect to algorithm_versions#index with flash message
+  # PUT algorithms/:algorithm_id/version/:id/archive
+  # @params version [Version] version of algorithm to archive
+  # @return redirect to versions#index with flash message
   # Archive an algorithm version.
   def archive
     @version.archived = true
@@ -58,8 +58,8 @@ class VersionsController < ApplicationController
     end
   end
 
-  # PUT algorithms/:algorithm_id/algorithm_version/:id/unarchive
-  # @params algorithm_version [AlgorithmVersion] algorithm version to archive
+  # PUT algorithms/:algorithm_id/version/:id/unarchive
+  # @params version [Version] version to archive
   # @return redirect to algorithms#index with flash message
   # Unarchive an algorithm version.
   def unarchive
