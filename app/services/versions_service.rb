@@ -31,8 +31,7 @@ class VersionsService
     hash['nodes'] = hash['nodes'].merge(generate_questions)
     hash['nodes'] = hash['nodes'].merge(generate_managements)
     hash['nodes'] = hash['nodes'].merge(generate_treatments)
-
-    hash['diagnosis'] = @final_diagnostics
+    hash['nodes'] = hash['nodes'].merge(@final_diagnostics)
 
     hash
   end
@@ -100,6 +99,7 @@ class VersionsService
     hash = extract_conditions(instance.conditions)
     hash['disease_id'] = final_diagnostic.diagnostic.id
     hash['name'] = final_diagnostic.label
+    hash['type'] = final_diagnostic.type
     hash['treatments'] = extract_health_cares(final_diagnostic.nodes.treatments, instance.instanceable.id)
     hash['managements'] = extract_health_cares(final_diagnostic.nodes.managements, instance.instanceable.id)
     hash['excluding_diagnosis'] = final_diagnostic.final_diagnostic_id
@@ -207,8 +207,8 @@ class VersionsService
       hash[question.id]['category'] = question.category.name
       hash[question.id]['display_format'] = question.answer_type.display
       hash[question.id]['value_format'] = question.answer_type.value
-      hash[question.id]['ps'] = get_question_predefined_syndromes(question, [])
-      hash[question.id]['dd'] = get_question_diagnostics(question, [])
+      hash[question.id]['ps'] = get_node_predefined_syndromes(question, [])
+      hash[question.id]['dd'] = get_node_diagnostics(question, [])
       hash[question.id]['counter'] = 0
       hash[question.id]['answer'] = nil
       hash[question.id]['answers'] = {}
@@ -230,14 +230,12 @@ class VersionsService
   # @params [Node, Array]
   # @return [Array]
   # Recursive method in order to retrieve every diagnostics the question appears in.
-  def self.get_question_diagnostics(node, diagnostics)
+  def self.get_node_diagnostics(node, diagnostics)
     node.instances.map(&:instanceable).each do |instanceable|
       unless instanceable == node
         if instanceable.is_a?(Diagnostic)
           # push the id in the array only if it is not already there and if it is handled by the current algorithm version
           diagnostics << instanceable.id if @diagnostics_ids.include?(instanceable.id) && !diagnostics.include?(instanceable.id)
-        else
-          get_question_diagnostics(instanceable, diagnostics)
         end
       end
     end
@@ -247,13 +245,13 @@ class VersionsService
   # @params [Node, Array]
   # @return [Array]
   # Recursive method in order to retrieve every predefined syndromes the question appears in.
-  def self.get_question_predefined_syndromes(node, predefined_syndromes)
+  def self.get_node_predefined_syndromes(node, predefined_syndromes)
     node.instances.map(&:instanceable).each do |instanceable|
       unless instanceable == node
         if instanceable.is_a?(Node)
           # push the id in the array only if it is not already there and if it is handled by the current algorithm version
           predefined_syndromes << instanceable.id if @predefined_syndromes_ids.include?(instanceable.id) && !predefined_syndromes.include?(instanceable.id)
-          get_question_predefined_syndromes(instanceable, predefined_syndromes)
+          get_node_predefined_syndromes(instanceable, predefined_syndromes)
         end
       end
     end
@@ -306,8 +304,8 @@ class VersionsService
 
         hash[predefined_syndrome.id]['nodes'][instance.node.id] = extract_instances(instance)
         hash[predefined_syndrome.id]['answers'] = {}
-        hash[predefined_syndrome.id]['ps'] = get_question_predefined_syndromes(predefined_syndrome, [])
-        hash[predefined_syndrome.id]['dd'] = get_question_diagnostics(predefined_syndrome, [])
+        hash[predefined_syndrome.id]['ps'] = get_node_predefined_syndromes(predefined_syndrome, [])
+        hash[predefined_syndrome.id]['dd'] = get_node_diagnostics(predefined_syndrome, [])
         hash[predefined_syndrome.id]['counter'] = 0
         hash[predefined_syndrome.id]['answer'] = nil
 
