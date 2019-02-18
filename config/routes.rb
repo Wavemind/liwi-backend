@@ -24,10 +24,10 @@ Rails.application.routes.draw do
       get 'predefined_syndromes', to: 'algorithms#predefined_syndromes', as: 'predefined_syndrome'
     end
 
-    resources :algorithm_versions, only: [:index, :show, :new, :create, :edit, :update] do
+    resources :versions, only: [:index, :show, :new, :create, :edit, :update] do
       member do
-        put 'archive', to: 'algorithm_versions#archive', as: 'archive'
-        put 'unarchive', to: 'algorithm_versions#unarchive', as: 'unarchive'
+        put 'archive', to: 'versions#archive', as: 'archive'
+        put 'unarchive', to: 'versions#unarchive', as: 'unarchive'
       end
       resources :diagnostics, only: [:index, :new, :create, :edit, :update, :show] do
         resources :final_diagnostics, only: [:index, :show, :new, :create, :edit, :update, :delete, :destroy] do
@@ -55,14 +55,14 @@ Rails.application.routes.draw do
   end
 
   resources :predefined_syndromes, only: [:show] do
-    resources :relations, only: [:show, :destroy, :create] do
+    resources :instances, only: [:show, :destroy, :create] do
       resources :children, only: [:create, :destroy]
       resources :conditions, only: [:create, :destroy]
     end
   end
 
   resources :diagnostics, only: [] do
-    resources :relations, only: [:show, :destroy, :create] do
+    resources :instances, only: [:show, :destroy, :create] do
       resources :children, only: [:create, :destroy]
       resources :conditions, only: [:create, :destroy]
     end
@@ -78,7 +78,7 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'relationable/:type/:id', to: 'relations#index', as: 'relationable'
+  get 'instanceable/:type/:id', to: 'instances#index', as: 'instanceable'
 
   resources :groups, only: [:index, :show, :new, :create, :edit, :update] do
     delete 'devices/:device_id/remove_device', to: 'groups#remove_device', as: 'remove_device'
@@ -111,7 +111,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       mount_devise_token_auth_for 'User', at: 'auth'
       resources :activities, only: [:create]
-      resources :algorithm_versions, only: [:index]
+      resources :versions, only: [:index]
     end
   end
 end

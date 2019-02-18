@@ -9,8 +9,8 @@ class PredefinedSyndromesController < ApplicationController
     add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
     add_breadcrumb "#{@predefined_syndrome.label}"
 
-    @relation = Relation.new
-    @relationable = @predefined_syndrome
+    @instance = Instance.new
+    @instanceable = @predefined_syndrome
   end
 
   def new

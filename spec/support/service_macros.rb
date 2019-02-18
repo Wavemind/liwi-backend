@@ -5,7 +5,7 @@ module ServiceMacros
       role_administrator = Role.create!(name: 'Administrator')
       emmanuel = User.create!(first_name: 'Emmanuel', last_name: 'Barchichat', email: 'emmanuel.barchichat@wavemind.ch', password: '123456', password_confirmation: '123456', role: role_administrator)
       epoct = Algorithm.create!(name: 'ePoct', description: 'loremp ipsum', user: emmanuel)
-      epoc_first = AlgorithmVersion.create!(name: 'first_trial', algorithm: epoct, user: emmanuel)
+      epoc_first = Version.create!(name: 'first_trial', algorithm: epoct, user: emmanuel)
 
       # Answer types
       radio = AnswerType.create!(value: 'Array', display: 'Radiobutton')
@@ -20,7 +20,7 @@ module ServiceMacros
       physical_exam = Category.create!(name: 'Physical exam', reference_prefix: 'P')
       comorbidity = Category.create!(name: 'Comorbidity', reference_prefix: 'DC')
 
-      dd7 = Diagnostic.create!(algorithm_version: epoc_first, label: 'Severe LRTI', reference: '7')
+      dd7 = Diagnostic.create!(version: epoc_first, label: 'Severe LRTI', reference: '7')
       df7 = FinalDiagnostic.create!(label: 'Severe lower respiratory tract infection', reference: '7', diagnostic: dd7)
 
       s2 = Question.create!(algorithm: epoct, label: 'Cough', reference: '2', category: symptom, priority: Question.priorities[:priority], answer_type: radio)
@@ -65,43 +65,43 @@ module ServiceMacros
       ps6_2 = ps6.answers.second
 
       # DF7
-      dd7_s2 = Relation.create!(relationable: dd7, node: s2)
-      dd7_p3 = Relation.create!(relationable: dd7, node: p3)
-      dd7_p13 = Relation.create!(relationable: dd7, node: p13)
-      dd7_p14 = Relation.create!(relationable: dd7, node: p14)
-      dd7_p1 = Relation.create!(relationable: dd7, node: p1)
-      dd7_df7 = Relation.create!(relationable: dd7, node: df7)
-      dd7_ps6 = Relation.create!(relationable: dd7, node: ps6)
-      dd7_t9 = Relation.create!(relationable: dd7, node: t9)
-      dd7_t1 = Relation.create!(relationable: dd7, node: t1)
-      dd7_t2 = Relation.create!(relationable: dd7, node: t2)
-      dd7_m2 = Relation.create!(relationable: dd7, node: m2)
+      dd7_s2 = Instance.create!(instanceable: dd7, node: s2)
+      dd7_p3 = Instance.create!(instanceable: dd7, node: p3)
+      dd7_p13 = Instance.create!(instanceable: dd7, node: p13)
+      dd7_p14 = Instance.create!(instanceable: dd7, node: p14)
+      dd7_p1 = Instance.create!(instanceable: dd7, node: p1)
+      dd7_df7 = Instance.create!(instanceable: dd7, node: df7)
+      dd7_ps6 = Instance.create!(instanceable: dd7, node: ps6)
+      dd7_t9 = Instance.create!(instanceable: dd7, node: t9)
+      dd7_t1 = Instance.create!(instanceable: dd7, node: t1)
+      dd7_t2 = Instance.create!(instanceable: dd7, node: t2)
+      dd7_m2 = Instance.create!(instanceable: dd7, node: m2)
 
       # PS6
-      ps6_s4 = Relation.create!(relationable: ps6, node: s4)
-      ps6_p25 = Relation.create!(relationable: ps6, node: p25)
-      ps6_ps6 = Relation.create!(relationable: ps6, node: ps6)
+      ps6_s4 = Instance.create!(instanceable: ps6, node: s4)
+      ps6_p25 = Instance.create!(instanceable: ps6, node: p25)
+      ps6_ps6 = Instance.create!(instanceable: ps6, node: ps6)
 
 
-      Child.create!(relation: ps6_s4, node: ps6)
-      Child.create!(relation: ps6_s4, node: p25)
-      Child.create!(relation: ps6_p25, node: ps6)
+      Child.create!(instance: ps6_s4, node: ps6)
+      Child.create!(instance: ps6_s4, node: p25)
+      Child.create!(instance: ps6_p25, node: ps6)
 
-      Child.create!(relation: dd7_s2, node: p14)
-      Child.create!(relation: dd7_s2, node: p13)
-      Child.create!(relation: dd7_s2, node: p1)
-      Child.create!(relation: dd7_s2, node: p3)
+      Child.create!(instance: dd7_s2, node: p14)
+      Child.create!(instance: dd7_s2, node: p13)
+      Child.create!(instance: dd7_s2, node: p1)
+      Child.create!(instance: dd7_s2, node: p3)
 
-      Child.create!(relation: dd7_p14, node: df7)
-      Child.create!(relation: dd7_p1, node: df7)
-      Child.create!(relation: dd7_p3, node: df7)
-      Child.create!(relation: dd7_p13, node: df7)
+      Child.create!(instance: dd7_p14, node: df7)
+      Child.create!(instance: dd7_p1, node: df7)
+      Child.create!(instance: dd7_p3, node: df7)
+      Child.create!(instance: dd7_p13, node: df7)
 
-      Child.create!(relation: dd7_df7, node: ps6)
+      Child.create!(instance: dd7_df7, node: ps6)
 
-      Child.create!(relation: dd7_ps6, node: t9)
-      Child.create!(relation: dd7_ps6, node: t1)
-      Child.create!(relation: dd7_ps6, node: t2)
+      Child.create!(instance: dd7_ps6, node: t9)
+      Child.create!(instance: dd7_ps6, node: t1)
+      Child.create!(instance: dd7_ps6, node: t2)
 
 
       Condition.create!(referenceable: ps6_p25, first_conditionable: s4_2, operator: nil, second_conditionable: nil)
@@ -123,7 +123,7 @@ module ServiceMacros
       Condition.create!(referenceable: dd7_t2, first_conditionable: ps6_2, operator: nil, second_conditionable: nil)
       Condition.create!(referenceable: dd7_m2, first_conditionable: ps6_2, operator: nil, second_conditionable: ps6_1)
 
-      @json = AlgorithmVersionsService.generate_hash(AlgorithmVersion.first.id)
+      @json = VersionsService.generate_hash(Version.first.id)
     end
   end
 

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe AlgorithmVersionsService, type: :service do
+RSpec.describe VersionsService, type: :service do
   create_full_algorithm_version
 
   it 'generates a json with correct amount of questions and answers' do

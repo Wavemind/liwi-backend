@@ -76,6 +76,13 @@ class QuestionsController < ApplicationController
         :operator,
         :value,
         :_destroy
+      ],
+      medias_attributes: [
+        :id,
+        :label,
+        :url,
+        :fileable,
+        :_destroy
       ]
     )
   end

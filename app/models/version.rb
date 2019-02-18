@@ -1,5 +1,5 @@
 # Version of an algorithm with its logic
-class AlgorithmVersion < ApplicationRecord
+class Version < ApplicationRecord
 
   belongs_to :algorithm
   belongs_to :user

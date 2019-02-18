@@ -3,7 +3,7 @@ class CreateChildren < ActiveRecord::Migration[5.2]
     create_table :children do |t|
       t.float :weight
       t.references :node
-      t.references :relation
+      t.references :instance
 
       t.timestamps
     end

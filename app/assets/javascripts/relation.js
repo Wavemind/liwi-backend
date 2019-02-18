@@ -1,10 +1,10 @@
 jQuery(document).ready(function () {
-  $("#relations-datatable").dataTable({
+  $("#instances-datatable").dataTable({
     "processing": true,
     "info": false,
     "bLengthChange": false,
     "serverSide": true,
-    "ajax": $("#relations-datatable").data("source"),
+    "ajax": $("#instances-datatable").data("source"),
     "pagingType": "full_numbers",
     "columns": [
       { "data": "id" },

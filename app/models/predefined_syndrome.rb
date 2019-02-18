@@ -4,7 +4,7 @@ class PredefinedSyndrome < Node
   after_create :create_answers
 
   has_many :answers, foreign_key: 'node_id', dependent: :destroy
-  has_many :relations, as: :relationable, dependent: :destroy
+  has_many :components, class_name: "Instance", as: :instanceable, dependent: :destroy
 
   private
 
@@ -23,7 +23,7 @@ class PredefinedSyndrome < Node
 
   # Delete current predefined syndrome used in diagnostics
   def diagnostic_dependencies
-    Relation.where(relationable_type: 'Diagnostic', node_id: id).destroy_all
+    Instance.where(instanceable_type: 'Diagnostic', node_id: id).destroy_all
   end
 
   # Automatically create the answers, since they can't be changed

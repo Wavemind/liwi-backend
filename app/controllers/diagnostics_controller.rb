@@ -1,7 +1,7 @@
 class DiagnosticsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_algorithm, only: [:show, :new, :create, :edit, :update]
-  before_action :set_algorithm_version, only: [:show, :new, :create, :edit, :update]
+  before_action :set_version, only: [:show, :new, :create, :edit, :update]
   before_action :set_diagnostic, only: [:show, :edit, :update, :destroy]
 
   def index
@@ -13,11 +13,11 @@ class DiagnosticsController < ApplicationController
 
   def show
     add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
-    add_breadcrumb "#{@algorithm_version.name}", algorithm_algorithm_version_url(@algorithm, @algorithm_version)
-    add_breadcrumb "#{@diagnostic.reference}"
+    add_breadcrumb "#{@version.name}", algorithm_version_url(@algorithm, @version)
+    add_breadcrumb "#{@diagnostic.label}"
 
-    @relation = Relation.new
-    @relationable = @diagnostic
+    @instance = Instance.new
+    @instanceable = @diagnostic
     @conditions = @diagnostic.conditions
     @condition = Condition.new
   end
@@ -36,10 +36,10 @@ class DiagnosticsController < ApplicationController
   end
 
   def create
-    @diagnostic = @algorithm_version.diagnostics.new(diagnostic_params)
+    @diagnostic = @version.diagnostics.new(diagnostic_params)
 
     if @diagnostic.save
-      redirect_to algorithm_algorithm_version_diagnostic_url(@algorithm, @algorithm_version, @diagnostic), notice: t('flash_message.success_created')
+      redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic), notice: t('flash_message.success_created')
     else
       render :new
     end
@@ -47,7 +47,7 @@ class DiagnosticsController < ApplicationController
 
   def update
     if @diagnostic.update(diagnostic_params)
-      redirect_to algorithm_algorithm_version_diagnostic_url(@algorithm, @algorithm_version, @diagnostic), notice: t('flash_message.success_updated')
+      redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic), notice: t('flash_message.success_updated')
     else
       render :edit
     end
@@ -55,7 +55,7 @@ class DiagnosticsController < ApplicationController
 
   def destroy
     if @diagnostic.destroy
-      redirect_to algorithm_algorithm_version_diagnostic_url(@algorithm, @algorithm_version, @diagnostic), notice: t('flash_message.success_deleted')
+      redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic), notice: t('flash_message.success_deleted')
     else
       render :new
     end

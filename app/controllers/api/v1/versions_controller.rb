@@ -1,4 +1,4 @@
-class Api::V1::AlgorithmVersionsController < Api::V1::ApplicationController
+class Api::V1::VersionsController < Api::V1::ApplicationController
 
   def index
     # Get the devise make the request
@@ -7,12 +7,12 @@ class Api::V1::AlgorithmVersionsController < Api::V1::ApplicationController
     if device.present?
       if device.group.present?
         # Find the algorithm version available for this group
-        algorithm_version = device.group.algorithm_versions.where('group_accesses.end_date IS NULL').first
+        version = device.group.versions.where('group_accesses.end_date IS NULL').first
 
-        if algorithm_version.present?
-          render json: AlgorithmVersionsService.generate_hash(algorithm_version.id)
+        if version.present?
+          render json: VersionsService.generate_hash(version.id)
         else
-          render json: { errors: t('.no_algorithm_version') }, status: :unprocessable_entity
+          render json: { errors: t('.no_version') }, status: :unprocessable_entity
         end
       else
         render json: { errors: t('.no_group') }, status: :unprocessable_entity

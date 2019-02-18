@@ -26,7 +26,9 @@ class Question < Node
 
   # {Node#complete_reference}
   def complete_reference
-    self.reference = "#{category.reference_prefix}_#{reference}"
+    if category.present?
+      self.reference = "#{category.reference_prefix}_#{reference}"
+    end
   end
 
   # Automatically create the answers, since they can't be changed

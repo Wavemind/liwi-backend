@@ -20,7 +20,7 @@ en:
       subtitle_treatments: "Treatments"
       subtitle_versions: "Versions list"
       title: "Details of %{name}"
-  algorithm_versions:
+  versions:
     table:
       columns:
         name: "Name"
@@ -44,10 +44,10 @@ en:
       title: "Edit related answers of %{name} question"
   api:
     v1:
-      algorithm_versions:
+      versions:
         index:
           no_group: "Your tablet isn't associated with groups"
-          no_algorithm_version: "Your group has no algorithm version"
+          no_version: "Your group has no version"
           device_not_exist: "Device doesn't exist"
       activities:
         create:
@@ -56,7 +56,7 @@ en:
   archive: "Archive"
   children:
     errors:
-      unknown_relationable: "Unknown relationable"
+      unknown_instanceable: "Unknown instanceable"
   deactivated: "Deactivate"
   delete: "Delete"
   destroy: "Remove"
@@ -97,7 +97,7 @@ en:
       title: "Edit this diagnostic"
     reference: "DD"
     show:
-      relations: "Relations"
+      instances: "Instance of nodes"
       subtitle_final_diagnostics: "Finals diagnostics"
       title: "Details of %{name}"
       predefined_syndromes: "Predefined Syndromes"
@@ -148,7 +148,7 @@ en:
       second_title: "Accesses"
       columns:
         algorithm: "Algorithm"
-        algorithm_version: "Algorithm version"
+        version: "Version"
         created_at: "Created on"
         end_date: "Archived date"
       archived: "Archive"
@@ -211,7 +211,7 @@ en:
         actions: "Actions"
     edit:
       title: "Edit question"
-  relations:
+  instances:
     table:
       columns:
         type: "Type"

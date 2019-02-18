@@ -35,6 +35,7 @@
 /config/database.yml
 
 /public
+/public/media/*
 
 coverage
 

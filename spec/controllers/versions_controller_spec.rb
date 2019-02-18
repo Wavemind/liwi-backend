@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe AlgorithmVersionsController, type: :controller do
+RSpec.describe VersionsController, type: :controller do
   login_user
 
   before(:each) do
@@ -8,8 +8,8 @@ RSpec.describe AlgorithmVersionsController, type: :controller do
     user = User.new(first_name: 'Foo', last_name: 'Bar', email: 'foo.bar@gmail.com', role: role)
     @algorithm = Algorithm.new(name: 'EPOCT', description: 'MedicalCenter1', user: user)
 
-    @version = AlgorithmVersion.create!(name: 'final', algorithm: @algorithm, user: user)
-    @archived_version = AlgorithmVersion.create!(name: 'obsolete', algorithm: @algorithm, user: user, archived: true)
+    @version = Version.create!(name: 'final', algorithm: @algorithm, user: user)
+    @archived_version = Version.create!(name: 'obsolete', algorithm: @algorithm, user: user, archived: true)
   end
 
   it 'archives correctly' do
