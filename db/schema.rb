@@ -74,11 +74,11 @@ ActiveRecord::Schema.define(version: 2019_02_15_125719) do
   create_table "children", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.float "weight"
     t.bigint "node_id"
-    t.bigint "relation_id"
+    t.bigint "instance_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["instance_id"], name: "index_children_on_instance_id"
     t.index ["node_id"], name: "index_children_on_node_id"
-    t.index ["relation_id"], name: "index_children_on_relation_id"
   end
 
   create_table "conditions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -146,6 +146,16 @@ ActiveRecord::Schema.define(version: 2019_02_15_125719) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "instances", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "node_id"
+    t.string "instanceable_type"
+    t.bigint "instanceable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["instanceable_type", "instanceable_id"], name: "index_instances_on_instanceable_type_and_instanceable_id"
+    t.index ["node_id"], name: "index_instances_on_node_id"
+  end
+
   create_table "medias", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "label"
     t.string "url"
@@ -210,16 +220,6 @@ ActiveRecord::Schema.define(version: 2019_02_15_125719) do
     t.date "birth_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "relations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.bigint "node_id"
-    t.string "relationable_type"
-    t.bigint "relationable_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["node_id"], name: "index_relations_on_node_id"
-    t.index ["relationable_type", "relationable_id"], name: "index_relations_on_relationable_type_and_relationable_id"
   end
 
   create_table "roles", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
