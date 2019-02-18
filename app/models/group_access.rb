@@ -1,14 +1,14 @@
-# Intermediary table between groups and algorithm_version
+# Intermediary table between groups and version
 class GroupAccess < ApplicationRecord
-  before_create :archive_algorithm_version
+  before_create :archive_version
 
   belongs_to :group
-  belongs_to :algorithm_version
+  belongs_to :version
 
   private
 
-  # Callback before_create for archived an algorithm_version
-  def archive_algorithm_version
+  # Callback before_create for archived a version
+  def archive_version
     last_group_access = GroupAccess.find_by(group_id: self.group_id, end_date: nil)
 
     if last_group_access.present?

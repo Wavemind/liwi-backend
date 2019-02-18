@@ -1,4 +1,4 @@
-<%= simple_form_for [@algorithm, @algorithm_version, @diagnostic], html: { class: 'form-horizontal' }, wrapper: :input_group do |f| %>
+<%= simple_form_for [@algorithm, @version, @diagnostic], html: { class: 'form-horizontal' }, wrapper: :input_group do |f| %>
 
   <%= f.input :reference, prepend: (f.object.persisted? ? false : "#{t('diagnostics.reference')}_"), disabled: f.object.persisted? %>
   <%= f.input :label %>

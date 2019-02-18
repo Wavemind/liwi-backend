@@ -27,7 +27,7 @@ class AlgorithmDatatable < AjaxDatatablesRails::ActiveRecord
       {
         name: record.name,
         description: record.description,
-        nb_versions: record.algorithm_versions.count,
+        nb_versions: record.versions.count,
         creator: record.user.full_name,
         actions: actions
       }

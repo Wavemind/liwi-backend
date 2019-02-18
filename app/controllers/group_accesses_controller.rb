@@ -23,7 +23,7 @@ class GroupAccessesController < ApplicationController
   def group_access_params
     params.require(:group_access).permit(
       :id,
-      :algorithm_version_id,
+      :version_id,
       :group_id
       )
   end

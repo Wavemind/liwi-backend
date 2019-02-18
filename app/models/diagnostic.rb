@@ -4,10 +4,10 @@ class Diagnostic < ApplicationRecord
   before_create :complete_reference
   after_validation :unique_reference
 
-  belongs_to :algorithm_version
+  belongs_to :version
   has_many :final_diagnostics, dependent: :destroy
   has_many :conditions, as: :referenceable, dependent: :destroy
-  has_many :components, class_name: "Instance", as: :instanceable, dependent: :destroy
+  has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy
 
   validates_presence_of :reference
   validates_presence_of :label

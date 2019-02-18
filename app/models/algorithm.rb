@@ -1,7 +1,7 @@
 # Container of many versions of algorithms
 class Algorithm < ApplicationRecord
 
-  has_many :algorithm_versions
+  has_many :versions
   has_many :nodes, dependent: :destroy
   has_many :questions, -> { where type: 'Question' }, source: :node
   has_many :managements, -> { where type: 'Management' }, source: :node

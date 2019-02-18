@@ -16,11 +16,11 @@ RSpec.describe Group, type: :model do
     user = User.new(first_name: 'Foo', last_name: 'Bar', email: 'foo.bar@gmail.com', role: role)
     algorithm = Algorithm.new(name: 'EPOCT', description: 'MedicalCenter1', user: user)
 
-    version = AlgorithmVersion.new(name: '1.3.2', user: user, algorithm: algorithm)
+    version = Version.new(name: '1.3.2', user: user, algorithm: algorithm)
 
     group = Group.new(name: 'Test')
-    group.algorithm_versions << version
+    group.versions << version
 
-    expect(group.algorithm_versions.first).to eql(version)
+    expect(group.versions.first).to eql(version)
   end
 end
