@@ -42,7 +42,7 @@ class QuestionsController < ApplicationController
     end
   end
 
-  # PUT algorithm/:algorithm_id/algorithm_version/:algorithm_version_id/questions/:id/answers
+  # PUT algorithm/:algorithm_id/version/:version_id/questions/:id/answers
   # @params question [Question] object question contain multiple answers
   # @return redirect to algorithms#index with flash message
   # Create answers related to the current question

@@ -1,7 +1,7 @@
 # Child of Node / Questions asked to the patient
 class Question < Node
 
-  after_create :create_boolean_answers, if: Proc.new { self.answer_type.value == 'Boolean' }
+  after_create :create_boolean_answers, if: Proc.new { answer_type.value == 'Boolean' }
 
   enum priority: [:basic, :triage, :priority]
 
@@ -19,7 +19,7 @@ class Question < Node
   # {Node#unique_reference}
   # Scoped by the current algorithm
   def unique_reference
-    if self.algorithm.questions.where(reference: "#{category.reference_prefix}_#{reference}").any?
+    if algorithm.questions.where(reference: "#{category.reference_prefix}_#{reference}").any?
       errors.add(:reference, I18n.t('nodes.validation.reference_used'))
     end
   end
@@ -33,7 +33,7 @@ class Question < Node
 
   # Automatically create the answers, since they can't be changed
   def create_boolean_answers
-    self.answers.create!(reference: '1', label: 'yes')
-    self.answers.create!(reference: '2', label: 'no')
+    answers.create!(reference: '1', label: 'yes')
+    answers.create!(reference: '2', label: 'no')
   end
 end

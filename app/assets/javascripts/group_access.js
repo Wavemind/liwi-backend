@@ -10,7 +10,7 @@ jQuery(document).ready(function () {
       { "data": "created_at" },
       { "data": "end_date" },
       { "data": "algorithm" },
-      { "data": "algorithm_version" },
+      { "data": "version" },
     ]
   });
 });
