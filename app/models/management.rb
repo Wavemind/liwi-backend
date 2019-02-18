@@ -6,7 +6,7 @@ class Management < Node
   # {Node#unique_reference}
   # Scoped by the current algorithm
   def unique_reference
-    if self.algorithm.managements.where(reference: "#{I18n.t('managements.reference')}_#{reference}").any?
+    if algorithm.managements.where(reference: "#{I18n.t('managements.reference')}_#{reference}").any?
       errors.add(:reference, I18n.t('nodes.validation.reference_used'))
     end
   end

@@ -11,7 +11,7 @@ class PredefinedSyndrome < Node
   # {Node#unique_reference}
   # Scoped by the current algorithm
   def unique_reference
-    if self.algorithm.predefined_syndromes.where(reference: "#{I18n.t('predefined_syndromes.reference')}_#{reference}").any?
+    if algorithm.predefined_syndromes.where(reference: "#{I18n.t('predefined_syndromes.reference')}_#{reference}").any?
       errors.add(:reference, I18n.t('nodes.validation.reference_used'))
     end
   end
@@ -28,7 +28,7 @@ class PredefinedSyndrome < Node
 
   # Automatically create the answers, since they can't be changed
   def create_answers
-    self.answers.create!(reference: '1', label: 'yes')
-    self.answers.create!(reference: '2', label: 'no')
+    answers.create!(reference: '1', label: 'yes')
+    answers.create!(reference: '2', label: 'no')
   end
 end

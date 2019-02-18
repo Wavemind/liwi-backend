@@ -6,7 +6,7 @@ class Treatment < Node
   # {Node#unique_reference}
   # Scoped by the current algorithm
   def unique_reference
-    if self.algorithm.treatments.where(reference: "#{I18n.t('treatments.reference')}_#{reference}").any?
+    if algorithm.treatments.where(reference: "#{I18n.t('treatments.reference')}_#{reference}").any?
       errors.add(:reference, I18n.t('nodes.validation.reference_used'))
     end
   end

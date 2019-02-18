@@ -12,7 +12,10 @@
 
 ActiveRecord::Schema.define(version: 2019_02_01_105145) do
 
-  create_table "activities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "activities", force: :cascade do |t|
     t.decimal "longitude", precision: 13, scale: 9
     t.decimal "latitude", precision: 13, scale: 9
     t.string "timezone"
@@ -25,7 +28,7 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
     t.index ["user_id"], name: "index_activities_on_user_id"
   end
 
-  create_table "algorithm_versions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "algorithm_versions", force: :cascade do |t|
     t.string "name"
     t.boolean "archived", default: false
     t.bigint "user_id"
@@ -36,7 +39,7 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
     t.index ["user_id"], name: "index_algorithm_versions_on_user_id"
   end
 
-  create_table "algorithms", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "algorithms", force: :cascade do |t|
     t.string "name"
     t.string "description"
     t.boolean "archived", default: false
@@ -46,14 +49,14 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
     t.index ["user_id"], name: "index_algorithms_on_user_id"
   end
 
-  create_table "answer_types", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "answer_types", force: :cascade do |t|
     t.string "value"
     t.string "display"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "answers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "answers", force: :cascade do |t|
     t.string "reference"
     t.string "label"
     t.string "operator"
@@ -64,14 +67,14 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
     t.index ["node_id"], name: "index_answers_on_node_id"
   end
 
-  create_table "categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "categories", force: :cascade do |t|
     t.string "name"
     t.string "reference_prefix"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "children", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "children", force: :cascade do |t|
     t.float "weight"
     t.bigint "node_id"
     t.bigint "relation_id"
@@ -81,7 +84,7 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
     t.index ["relation_id"], name: "index_children_on_relation_id"
   end
 
-  create_table "conditions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "conditions", force: :cascade do |t|
     t.string "operator"
     t.string "referenceable_type"
     t.bigint "referenceable_id"
@@ -97,7 +100,7 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
     t.index ["second_conditionable_type", "second_conditionable_id"], name: "index_second_conditionable_id"
   end
 
-  create_table "devices", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "devices", force: :cascade do |t|
     t.string "mac_address"
     t.string "name"
     t.string "model"
@@ -111,7 +114,7 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
     t.index ["group_id"], name: "index_devices_on_group_id"
   end
 
-  create_table "diagnostics", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "diagnostics", force: :cascade do |t|
     t.string "reference"
     t.string "label"
     t.bigint "algorithm_version_id"
@@ -120,7 +123,7 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
     t.index ["algorithm_version_id"], name: "index_diagnostics_on_algorithm_version_id"
   end
 
-  create_table "final_diagnostic_health_cares", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "final_diagnostic_health_cares", force: :cascade do |t|
     t.bigint "node_id"
     t.bigint "final_diagnostic_id"
     t.datetime "created_at", null: false
@@ -129,7 +132,7 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
     t.index ["node_id"], name: "index_final_diagnostic_health_cares_on_node_id"
   end
 
-  create_table "group_accesses", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "group_accesses", force: :cascade do |t|
     t.boolean "access", default: true
     t.datetime "end_date"
     t.bigint "algorithm_version_id"
@@ -140,13 +143,13 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
     t.index ["group_id"], name: "index_group_accesses_on_group_id"
   end
 
-  create_table "groups", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "groups", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "medical_case_final_diagnostics", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "medical_case_final_diagnostics", force: :cascade do |t|
     t.bigint "final_diagnostic_id"
     t.bigint "medical_case_id"
     t.datetime "created_at", null: false
@@ -155,7 +158,7 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
     t.index ["medical_case_id"], name: "index_medical_case_final_diagnostics_on_medical_case_id"
   end
 
-  create_table "medical_case_health_cares", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "medical_case_health_cares", force: :cascade do |t|
     t.bigint "node_id"
     t.bigint "medical_case_id"
     t.datetime "created_at", null: false
@@ -164,7 +167,7 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
     t.index ["node_id"], name: "index_medical_case_health_cares_on_node_id"
   end
 
-  create_table "medical_cases", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "medical_cases", force: :cascade do |t|
     t.string "file"
     t.bigint "patient_id"
     t.bigint "algorithm_version_id"
@@ -174,7 +177,7 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
     t.index ["patient_id"], name: "index_medical_cases_on_patient_id"
   end
 
-  create_table "nodes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "nodes", force: :cascade do |t|
     t.string "label"
     t.string "reference"
     t.integer "priority"
@@ -194,7 +197,7 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
     t.index ["final_diagnostic_id"], name: "index_nodes_on_final_diagnostic_id"
   end
 
-  create_table "patients", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "patients", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
     t.date "birth_date"
@@ -202,7 +205,7 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "relations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "relations", force: :cascade do |t|
     t.bigint "node_id"
     t.string "relationable_type"
     t.bigint "relationable_id"
@@ -212,13 +215,13 @@ ActiveRecord::Schema.define(version: 2019_02_01_105145) do
     t.index ["relationable_type", "relationable_id"], name: "index_relations_on_relationable_type_and_relationable_id"
   end
 
-  create_table "roles", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "roles", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "users", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
     t.datetime "created_at", null: false
