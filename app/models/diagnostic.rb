@@ -24,7 +24,7 @@ class Diagnostic < ApplicationRecord
   # Scoped by the current algorithm
   def unique_reference
     if Diagnostic.joins(algorithm_version: :algorithm)
-         .where("reference = '#{I18n.t('diagnostics.reference')}_#{reference}' AND algorithms.id = '#{algorithm_version.algorithm.id}'").any?
+         .where("reference = ? AND algorithms.id = ?", "#{I18n.t('diagnostics.reference')}_#{reference}", "#{algorithm_version.algorithm.id}").any?
       errors.add(:reference, I18n.t('nodes.validation.reference_used'))
     end
   end

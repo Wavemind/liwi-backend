@@ -82,7 +82,7 @@ class AlgorithmVersionsController < ApplicationController
   def algorithm_versions_params
     params.require(:algorithm_version).permit(
       :id,
-      :version,
+      :name,
     )
   end
 end

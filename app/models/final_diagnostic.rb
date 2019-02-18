@@ -15,7 +15,7 @@ class FinalDiagnostic < Node
   # {Node#unique_reference}
   def unique_reference
     if FinalDiagnostic.joins(diagnostic: [algorithm_version: :algorithm])
-         .where("nodes.reference = '#{I18n.t('final_diagnostics.reference')}_#{reference}' AND algorithms.id = '#{diagnostic.algorithm_version.algorithm.id}'").any?
+         .where("nodes.reference = ? AND algorithms.id = ?", "#{I18n.t('final_diagnostics.reference')}_#{reference}", "#{diagnostic.algorithm_version.algorithm.id}").any?
       errors.add(:reference, I18n.t('nodes.validation.reference_used'))
     end
   end

@@ -30,7 +30,7 @@ en:
         actions: "Actions"
       title: "Algorithms versions"
     new:
-      title: "Add an algorithm"
+      title: "Add an algorithm version"
     edit:
       title: "Edit this algorithm"
     show:
