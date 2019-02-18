@@ -15,7 +15,7 @@
     <%= simple_form_for @final_diagnostic_health_care, url: algorithm_version_diagnostic_final_diagnostic_final_diagnostic_health_cares_url(@algorithm, @version, @diagnostic, @final_diagnostic), method: :post do |f| %>
       <div class="row">
         <div class="col">
-          <%= f.association :node, collection: @algorithm.nodes.where('type = "Treatment"').where.not(id: @treatments.select(:node_id)), label_method: :reference_label, label: false, prompt: t('prompt') %>
+          <%= f.association :node, collection: @algorithm.nodes.where(type: 'Treatment').where.not(id: @treatments.select(:node_id)), label_method: :reference_label, label: false, prompt: t('prompt') %>
         </div>
         <div class="col">
           <%= f.submit t('add'), class: 'btn btn-primary' %>
@@ -42,7 +42,7 @@
     <%= simple_form_for @final_diagnostic_health_care, url: algorithm_version_diagnostic_final_diagnostic_final_diagnostic_health_cares_url(@algorithm, @version, @diagnostic, @final_diagnostic), method: :post do |f| %>
       <div class="row">
         <div class="col">
-          <%= f.association :node, collection: @algorithm.nodes.where('type = "Management"').where.not(id: @managements.select(:node_id)), label_method: :reference_label, label: false, prompt: t('prompt') %>
+          <%= f.association :node, collection: @algorithm.nodes.where(type: 'Management').where.not(id: @managements.select(:node_id)), label_method: :reference_label, label: false, prompt: t('prompt') %>
         </div>
         <div class="col">
           <%= f.submit t('add'), class: 'btn btn-primary' %>

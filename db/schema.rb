@@ -28,17 +28,6 @@ ActiveRecord::Schema.define(version: 2019_02_15_125719) do
     t.index ["user_id"], name: "index_activities_on_user_id"
   end
 
-  create_table "algorithm_versions", force: :cascade do |t|
-    t.string "name"
-    t.boolean "archived", default: false
-    t.bigint "user_id"
-    t.bigint "algorithm_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["algorithm_id"], name: "index_algorithm_versions_on_algorithm_id"
-    t.index ["user_id"], name: "index_algorithm_versions_on_user_id"
-  end
-
   create_table "algorithms", force: :cascade do |t|
     t.string "name"
     t.string "description"
@@ -117,10 +106,10 @@ ActiveRecord::Schema.define(version: 2019_02_15_125719) do
   create_table "diagnostics", force: :cascade do |t|
     t.string "reference"
     t.string "label"
-    t.bigint "algorithm_version_id"
+    t.bigint "version_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["algorithm_version_id"], name: "index_diagnostics_on_algorithm_version_id"
+    t.index ["version_id"], name: "index_diagnostics_on_version_id"
   end
 
   create_table "final_diagnostic_health_cares", force: :cascade do |t|
@@ -135,12 +124,12 @@ ActiveRecord::Schema.define(version: 2019_02_15_125719) do
   create_table "group_accesses", force: :cascade do |t|
     t.boolean "access", default: true
     t.datetime "end_date"
-    t.bigint "algorithm_version_id"
+    t.bigint "version_id"
     t.bigint "group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["algorithm_version_id"], name: "index_group_accesses_on_algorithm_version_id"
     t.index ["group_id"], name: "index_group_accesses_on_group_id"
+    t.index ["version_id"], name: "index_group_accesses_on_version_id"
   end
 
   create_table "groups", force: :cascade do |t|
@@ -190,11 +179,11 @@ ActiveRecord::Schema.define(version: 2019_02_15_125719) do
   create_table "medical_cases", force: :cascade do |t|
     t.string "file"
     t.bigint "patient_id"
-    t.bigint "algorithm_version_id"
+    t.bigint "version_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["algorithm_version_id"], name: "index_medical_cases_on_algorithm_version_id"
     t.index ["patient_id"], name: "index_medical_cases_on_patient_id"
+    t.index ["version_id"], name: "index_medical_cases_on_version_id"
   end
 
   create_table "nodes", force: :cascade do |t|
@@ -272,16 +261,27 @@ ActiveRecord::Schema.define(version: 2019_02_15_125719) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  create_table "versions", force: :cascade do |t|
+    t.string "name"
+    t.boolean "archived", default: false
+    t.bigint "user_id"
+    t.bigint "algorithm_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["algorithm_id"], name: "index_versions_on_algorithm_id"
+    t.index ["user_id"], name: "index_versions_on_user_id"
+  end
+
   add_foreign_key "activities", "devices"
   add_foreign_key "activities", "users"
-  add_foreign_key "algorithm_versions", "algorithms"
-  add_foreign_key "algorithm_versions", "users"
   add_foreign_key "algorithms", "users"
   add_foreign_key "devices", "groups"
-  add_foreign_key "diagnostics", "algorithm_versions"
-  add_foreign_key "group_accesses", "algorithm_versions"
+  add_foreign_key "diagnostics", "versions"
   add_foreign_key "group_accesses", "groups"
+  add_foreign_key "group_accesses", "versions"
   add_foreign_key "nodes", "algorithms"
   add_foreign_key "nodes", "answer_types"
   add_foreign_key "users", "roles"
+  add_foreign_key "versions", "algorithms"
+  add_foreign_key "versions", "users"
 end
