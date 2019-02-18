@@ -19,11 +19,11 @@ class InstancesController < ApplicationController
     @condition = Condition.new
 
     if params[:diagnostic_id].present?
-      @algorithm = @instanceable.algorithm_version.algorithm
+      @algorithm = @instanceable.version.algorithm
 
       add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
-      add_breadcrumb "#{@instanceable.algorithm_version.name}", algorithm_algorithm_version_url(@algorithm, @instanceable.algorithm_version)
-      add_breadcrumb "#{@instanceable.label}", algorithm_algorithm_version_diagnostic_url(@algorithm, @instanceable.algorithm_version, @instanceable)
+      add_breadcrumb "#{@instanceable.version.name}", algorithm_version_url(@algorithm, @instanceable.version)
+      add_breadcrumb "#{@instanceable.label}", algorithm_version_diagnostic_url(@algorithm, @instanceable.version, @instanceable)
       add_breadcrumb "#{@instance.node.label}"
     else
       @algorithm = @instanceable.algorithm

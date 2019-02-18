@@ -2,7 +2,7 @@
 class MedicalCase < ApplicationRecord
 
   belongs_to :patient
-  belongs_to :algorithm_version
+  belongs_to :version
 
   has_many :medical_case_health_cares
   has_many :medical_case_final_diagnostics

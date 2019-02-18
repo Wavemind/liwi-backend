@@ -1,6 +1,6 @@
-class CreateAlgorithmVersions < ActiveRecord::Migration[5.2]
+class CreateVersions < ActiveRecord::Migration[5.2]
   def change
-    create_table :algorithm_versions do |t|
+    create_table :versions do |t|
       t.string :name
       t.boolean :archived, default: false
 
@@ -14,7 +14,7 @@ class CreateAlgorithmVersions < ActiveRecord::Migration[5.2]
       t.boolean :access, default: true
       t.datetime :end_date
 
-      t.references :algorithm_version, foreign_key: true, index: true
+      t.references :version, foreign_key: true, index: true
       t.references :group, foreign_key: true, index: true
 
       t.timestamps

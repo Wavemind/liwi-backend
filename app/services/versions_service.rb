@@ -1,10 +1,10 @@
-class AlgorithmVersionsService
+class VersionsService
 
-  # @params id [AlgorithmVersion] id of the algorithm version to extract
+  # @params id [Version] id of the algorithm version to extract
   # @return hash
   # Build a hash of an algorithm version with its diagnostics, predefined syndromes, questions and health cares and metadata
   def self.generate_hash(id)
-    @algorithm_version = AlgorithmVersion.find(id)
+    @version = Version.find(id)
     @questions = {}
     @treatments = {}
     @managements = {}
@@ -20,7 +20,7 @@ class AlgorithmVersionsService
     hash['diseases'] = {}
 
     # Loop in each diagnostics defined in current algorithm version
-    @algorithm_version.diagnostics.includes(:conditions).each do |diagnostic|
+    @version.diagnostics.includes(:conditions).each do |diagnostic|
       @diagnostics_ids << diagnostic.id
       hash['diseases'][diagnostic.id] = extract_diagnostic(diagnostic)
     end
@@ -43,14 +43,14 @@ class AlgorithmVersionsService
   # Build a hash of metadata about the algorithm and algorithm version
   def self.extract_metadata
     hash = {}
-    hash['id'] = @algorithm_version.id
-    hash['algorithm_id'] = @algorithm_version.algorithm.id
-    hash['name'] = @algorithm_version.algorithm.name
-    hash['version'] = @algorithm_version.name
-    hash['description'] = @algorithm_version.algorithm.description
-    hash['author'] = @algorithm_version.user.full_name
-    hash['created_at'] = @algorithm_version.created_at
-    hash['updated_at'] = @algorithm_version.updated_at
+    hash['id'] = @version.id
+    hash['algorithm_id'] = @version.algorithm.id
+    hash['name'] = @version.algorithm.name
+    hash['version'] = @version.name
+    hash['description'] = @version.algorithm.description
+    hash['author'] = @version.user.full_name
+    hash['created_at'] = @version.created_at
+    hash['updated_at'] = @version.updated_at
     hash
   end
 

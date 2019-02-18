@@ -50,9 +50,9 @@ Activity.create!(user: mickael, device: device_lenovo, latitude: -33.918861, lon
 epoct = Algorithm.create!(name: 'ePoct', description: 'loremp ipsum', user: emmanuel)
 fever_travel = Algorithm.create!(name: 'FeverTravel', description: 'loremp ipsum', user: quentin)
 
-epoc_first = AlgorithmVersion.create!(name: 'first_trial', algorithm: epoct, user: emmanuel)
-ft_1_0 = AlgorithmVersion.create!(name: '1.0', algorithm: fever_travel, user: mickael)
-ft_1_2 = AlgorithmVersion.create!(name: '1.2', algorithm: fever_travel, user: vincent)
+epoc_first = Version.create!(name: 'first_trial', algorithm: epoct, user: emmanuel)
+ft_1_0 = Version.create!(name: '1.0', algorithm: fever_travel, user: mickael)
+ft_1_2 = Version.create!(name: '1.2', algorithm: fever_travel, user: vincent)
 
 # Answer types
 radio = AnswerType.create!(value: 'Array', display: 'Radiobutton')
@@ -95,9 +95,9 @@ Answer.create!(node: skin_lesion_size, reference: '2', label: 'between 2.5 and 5
 Answer.create!(node: skin_lesion_size, reference: '3', label: 'less than 2.5 cm', value: '2.5', operator: '<')
 
 # Diagnostics
-Diagnostic.create!(algorithm_version: ft_1_0, label: 'Malaria', reference: '4')
-Diagnostic.create!(algorithm_version: ft_1_0, label: 'IMPETIGO', reference: '6')
-Diagnostic.create!(algorithm_version: ft_1_2, label: 'Chicken pox', reference: '8')
+Diagnostic.create!(version: ft_1_0, label: 'Malaria', reference: '4')
+Diagnostic.create!(version: ft_1_0, label: 'IMPETIGO', reference: '6')
+Diagnostic.create!(version: ft_1_2, label: 'Chicken pox', reference: '8')
 
 # Treatments
 Treatment.create!(algorithm: epoct, reference: '4', label: 'Take 400mg of paracetamol')
@@ -116,21 +116,21 @@ idefix = Patient.create!(first_name: 'Idefix', last_name: 'Wouf', birth_date: Da
 mick = Patient.create!(first_name: 'Mickael', last_name: 'Lacombe', birth_date: Date.new(1970,3,20))
 
 # Medical cases
-MedicalCase.create!(patient: john, algorithm_version: epoc_first)
-MedicalCase.create!(patient: marc, algorithm_version: epoc_first)
-MedicalCase.create!(patient: mick, algorithm_version: ft_1_0)
-MedicalCase.create!(patient: kantaing, algorithm_version: ft_1_0)
-MedicalCase.create!(patient: idefix, algorithm_version: ft_1_2)
-MedicalCase.create!(patient: john, algorithm_version: ft_1_2)
+MedicalCase.create!(patient: john, version: epoc_first)
+MedicalCase.create!(patient: marc, version: epoc_first)
+MedicalCase.create!(patient: mick, version: ft_1_0)
+MedicalCase.create!(patient: kantaing, version: ft_1_0)
+MedicalCase.create!(patient: idefix, version: ft_1_2)
+MedicalCase.create!(patient: john, version: ft_1_2)
 
 #################################################################################################
 
-dd7 = Diagnostic.create!(algorithm_version: epoc_first, label: 'Severe LRTI', reference: '7')
+dd7 = Diagnostic.create!(version: epoc_first, label: 'Severe LRTI', reference: '7')
 df7 = FinalDiagnostic.create!(label: 'Severe lower respiratory tract infection', reference: '7', diagnostic: dd7)
 
-# Assign algorithm_version to group
-group_pmu.algorithm_versions << epoc_first
-group_pmu.save
+# Assign version to group
+group_wavemind.versions << epoc_first
+group_wavemind.save
 
 s2 = Question.create!(algorithm: epoct, label: 'Cough', reference: '2', category: symptom, priority: Question.priorities[:priority], answer_type: radio)
 s2_1 = Answer.create!(node: s2, reference: '1', label: 'yes', value: nil, operator: nil)

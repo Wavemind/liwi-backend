@@ -5,7 +5,7 @@ module ServiceMacros
       role_administrator = Role.create!(name: 'Administrator')
       emmanuel = User.create!(first_name: 'Emmanuel', last_name: 'Barchichat', email: 'emmanuel.barchichat@wavemind.ch', password: '123456', password_confirmation: '123456', role: role_administrator)
       epoct = Algorithm.create!(name: 'ePoct', description: 'loremp ipsum', user: emmanuel)
-      epoc_first = AlgorithmVersion.create!(name: 'first_trial', algorithm: epoct, user: emmanuel)
+      epoc_first = Version.create!(name: 'first_trial', algorithm: epoct, user: emmanuel)
 
       # Answer types
       radio = AnswerType.create!(value: 'Array', display: 'Radiobutton')
@@ -20,7 +20,7 @@ module ServiceMacros
       physical_exam = Category.create!(name: 'Physical exam', reference_prefix: 'P')
       comorbidity = Category.create!(name: 'Comorbidity', reference_prefix: 'DC')
 
-      dd7 = Diagnostic.create!(algorithm_version: epoc_first, label: 'Severe LRTI', reference: '7')
+      dd7 = Diagnostic.create!(version: epoc_first, label: 'Severe LRTI', reference: '7')
       df7 = FinalDiagnostic.create!(label: 'Severe lower respiratory tract infection', reference: '7', diagnostic: dd7)
 
       s2 = Question.create!(algorithm: epoct, label: 'Cough', reference: '2', category: symptom, priority: Question.priorities[:priority], answer_type: radio)
@@ -123,7 +123,7 @@ module ServiceMacros
       Condition.create!(referenceable: dd7_t2, first_conditionable: ps6_2, operator: nil, second_conditionable: nil)
       Condition.create!(referenceable: dd7_m2, first_conditionable: ps6_2, operator: nil, second_conditionable: ps6_1)
 
-      @json = AlgorithmVersionsService.generate_hash(AlgorithmVersion.first.id)
+      @json = VersionsService.generate_hash(Version.first.id)
     end
   end
 
