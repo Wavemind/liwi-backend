@@ -1,8 +1,8 @@
-# Define the relations between an answer and its nodes
-class Relation < ApplicationRecord
+# Define the instance of a node in a diagnostic
+class Instance < ApplicationRecord
 
   belongs_to :node
-  belongs_to :relationable, polymorphic: true
+  belongs_to :instanceable, polymorphic: true
 
   has_many :children, dependent: :destroy
   has_many :nodes, through: :children

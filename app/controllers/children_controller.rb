@@ -1,24 +1,24 @@
 class ChildrenController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_relationable, only: [:index, :show, :create, :destroy]
-  before_action :set_relation, only: [:show, :create, :destroy]
+  before_action :set_instanceable, only: [:index, :show, :create, :destroy]
+  before_action :set_instance, only: [:show, :create, :destroy]
   before_action :set_child, only: [:destroy]
 
   def create
-    @child = @relation.children.new(child_params)
+    @child = @instance.children.new(child_params)
 
     if @child.save
-      redirect_to polymorphic_url([@relationable, @relation]), notice: t('flash_message.success_created')
+      redirect_to polymorphic_url([@instanceable, @instance]), notice: t('flash_message.success_created')
     else
-      redirect_to polymorphic_url([@relationable, @relation]), alert: t('error')
+      redirect_to polymorphic_url([@instanceable, @instance]), alert: t('error')
     end
   end
 
   def destroy
     if @child.destroy
-      redirect_to polymorphic_url([@relationable, @relation]), notice: t('flash_message.success_updated')
+      redirect_to polymorphic_url([@instanceable, @instance]), notice: t('flash_message.success_updated')
     else
-      redirect_to polymorphic_url([@relationable, @relation]), alert: t('error')
+      redirect_to polymorphic_url([@instanceable, @instance]), alert: t('error')
     end
   end
 
@@ -28,13 +28,13 @@ class ChildrenController < ApplicationController
     @child = Child.find(params[:id])
   end
 
-  def set_relationable
+  def set_instanceable
     if params[:diagnostic_id].present?
-      @relationable = Diagnostic.find(params[:diagnostic_id])
+      @instanceable = Diagnostic.find(params[:diagnostic_id])
     elsif params[:predefined_syndrome_id].present?
-      @relationable = PredefinedSyndrome.find(params[:predefined_syndrome_id])
+      @instanceable = PredefinedSyndrome.find(params[:predefined_syndrome_id])
     else
-      raise t('.errors.unknown_relationable')
+      raise t('.errors.unknown_instanceable')
     end
   end
 

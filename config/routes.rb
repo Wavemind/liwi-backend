@@ -55,14 +55,14 @@ Rails.application.routes.draw do
   end
 
   resources :predefined_syndromes, only: [:show] do
-    resources :relations, only: [:show, :destroy, :create] do
+    resources :instances, only: [:show, :destroy, :create] do
       resources :children, only: [:create, :destroy]
       resources :conditions, only: [:create, :destroy]
     end
   end
 
   resources :diagnostics, only: [] do
-    resources :relations, only: [:show, :destroy, :create] do
+    resources :instances, only: [:show, :destroy, :create] do
       resources :children, only: [:create, :destroy]
       resources :conditions, only: [:create, :destroy]
     end
@@ -78,7 +78,7 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'relationable/:type/:id', to: 'relations#index', as: 'relationable'
+  get 'instanceable/:type/:id', to: 'instances#index', as: 'instanceable'
 
   resources :groups, only: [:index, :show, :new, :create, :edit, :update] do
     delete 'devices/:device_id/remove_device', to: 'groups#remove_device', as: 'remove_device'

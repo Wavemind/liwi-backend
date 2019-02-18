@@ -7,7 +7,7 @@ class Diagnostic < ApplicationRecord
   belongs_to :algorithm_version
   has_many :final_diagnostics, dependent: :destroy
   has_many :conditions, as: :referenceable, dependent: :destroy
-  has_many :relations, as: :relationable, dependent: :destroy
+  has_many :components, class_name: "Instance", as: :instanceable, dependent: :destroy
 
   validates_presence_of :reference
   validates_presence_of :label
