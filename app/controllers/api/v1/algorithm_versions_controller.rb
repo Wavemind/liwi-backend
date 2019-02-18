@@ -10,7 +10,7 @@ class Api::V1::AlgorithmVersionsController < Api::V1::ApplicationController
         algorithm_version = device.group.algorithm_versions.where('group_accesses.end_date IS NULL').first
 
         if algorithm_version.present?
-          render json: AlgorithmVersionsService.generate_hash(1)
+          render json: AlgorithmVersionsService.generate_hash(algorithm_version.id)
         else
           render json: { errors: t('.no_algorithm_version') }, status: :unprocessable_entity
         end
