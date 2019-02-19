@@ -20,6 +20,22 @@ class Diagnostic < ApplicationRecord
     "#{reference} - #{label}"
   end
 
+  def questions
+    Node.joins(:instances).where('type = ? AND instances.instanceable_id = ? AND instances.instanceable_type = ?', 'Question', id, self.class.name)
+  end
+
+  def predefined_syndromes
+    Node.joins(:instances).where('type = ? AND instances.instanceable_id = ? AND instances.instanceable_type = ?', 'PredefinedSyndrome', id, self.class.name)
+  end
+
+  def managements
+    Node.joins(:instances).where('type = ? AND instances.instanceable_id = ? AND instances.instanceable_type = ?', 'Management', id, self.class.name)
+  end
+
+  def treatments
+    Node.joins(:instances).where('type = ? AND instances.instanceable_id = ? AND instances.instanceable_type = ?', 'Treatment', id, self.class.name)
+  end
+
   private
 
   # {Node#unique_reference}
@@ -35,5 +51,4 @@ class Diagnostic < ApplicationRecord
   def complete_reference
     self.reference = "#{I18n.t('diagnostics.reference')}_#{reference}"
   end
-
 end

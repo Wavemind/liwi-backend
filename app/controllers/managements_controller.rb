@@ -1,6 +1,6 @@
 class ManagementsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_management, only: [:edit, :update]
+  before_action :set_management, only: [:edit, :update, :update_translations]
   before_action :set_algorithm, only: [:new, :create, :edit, :update]
 
   def new
@@ -32,6 +32,18 @@ class ManagementsController < ApplicationController
     end
   end
 
+  def update_translations
+    if @management.update(management_params)
+      flash.now[:notice] = t('flash_message.success_updated')
+    else
+      flash.now[:alert] = t('flash_message.update_fail')
+    end
+
+    respond_to do |format|
+      format.html
+    end
+  end
+
   private
 
   def set_management
@@ -43,7 +55,9 @@ class ManagementsController < ApplicationController
       :id,
       :reference,
       :label_en,
+      :label_fr,
       :description_en,
+      :description_fr,
       :algorithm_id,
     )
   end

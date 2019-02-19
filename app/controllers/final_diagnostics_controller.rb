@@ -3,7 +3,7 @@ class FinalDiagnosticsController < ApplicationController
   before_action :set_algorithm, only: [:show, :new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic]
   before_action :set_version, only: [:show, :new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic]
   before_action :set_diagnostic, only: [:show, :new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic]
-  before_action :set_final_diagnostic, only: [:show, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic]
+  before_action :set_final_diagnostic, only: [:show, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic, :update_translations]
 
   def index
     respond_to do |format|
@@ -87,6 +87,18 @@ class FinalDiagnosticsController < ApplicationController
     end
   end
 
+  def update_translations
+    if @final_diagnostic.update(final_diagnostic_params)
+      flash.now[:notice] = t('flash_message.success_updated')
+    else
+      flash.now[:alert] = t('flash_message.update_fail')
+    end
+
+    respond_to do |format|
+      format.html
+    end
+  end
+
   private
 
   def set_diagnostic
@@ -102,8 +114,10 @@ class FinalDiagnosticsController < ApplicationController
       :id,
       :label,
       :reference_en,
+      :reference_fr,
       :final_diagnostic_id,
-      :description_en
+      :description_en,
+      :description_fr
     )
   end
 end

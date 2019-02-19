@@ -2,7 +2,7 @@ class DiagnosticsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_algorithm, only: [:show, :new, :create, :edit, :update]
   before_action :set_version, only: [:show, :new, :create, :edit, :update]
-  before_action :set_diagnostic, only: [:show, :edit, :update, :destroy]
+  before_action :set_diagnostic, only: [:show, :edit, :update, :destroy, :update_translations]
 
   def index
     respond_to do |format|
@@ -61,6 +61,18 @@ class DiagnosticsController < ApplicationController
     end
   end
 
+  def update_translations
+    if @diagnostic.update(diagnostic_params)
+      flash.now[:notice] = t('flash_message.success_updated')
+    else
+      flash.now[:alert] = t('flash_message.update_fail')
+    end
+
+    respond_to do |format|
+      format.html
+    end
+  end
+
   private
 
   def set_diagnostic
@@ -71,6 +83,7 @@ class DiagnosticsController < ApplicationController
     params.require(:diagnostic).permit(
       :id,
       :label_en,
+      :label_fr,
       :reference
     )
   end

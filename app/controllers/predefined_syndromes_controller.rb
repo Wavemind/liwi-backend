@@ -1,6 +1,6 @@
 class PredefinedSyndromesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_predefined_syndrome, only: [:edit, :update, :destroy, :show]
+  before_action :set_predefined_syndrome, only: [:edit, :update, :destroy, :show, :update_translations]
   before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy]
 
   def show
@@ -50,6 +50,18 @@ class PredefinedSyndromesController < ApplicationController
     end
   end
 
+  def update_translations
+    if @predefined_syndrome.update(set_predefined_syndrome)
+      flash.now[:notice] = t('flash_message.success_updated')
+    else
+      flash.now[:alert] = t('flash_message.update_fail')
+    end
+
+    respond_to do |format|
+      format.html
+    end
+  end
+
   private
 
   def set_predefined_syndrome
@@ -61,7 +73,9 @@ class PredefinedSyndromesController < ApplicationController
       :id,
       :reference,
       :label_en,
+      :label_fr,
       :description_en,
+      :description_fr,
       :algorithm_id,
       )
   end

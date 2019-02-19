@@ -97,11 +97,12 @@ en:
       title: "Edit this diagnostic"
     reference: "DD"
     show:
+      differential_diagnostic_conditions: "Differential diagnostic conditions"
       instances: "Instance of nodes"
+      predefined_syndromes: "Predefined Syndromes"
       subtitle_final_diagnostics: "Finals diagnostics"
       title: "Details of %{name}"
-      predefined_syndromes: "Predefined Syndromes"
-      differential_diagnostic_conditions: "Differential diagnostic conditions"
+      translations: "Translations"
   edit: "Edit"
   error: "An error occured"
   final_diagnostics:

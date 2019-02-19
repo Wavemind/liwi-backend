@@ -1,6 +1,6 @@
 class TreatmentsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_treatment, only: [:edit, :update]
+  before_action :set_treatment, only: [:edit, :update, :update_translations]
   before_action :set_algorithm, only: [:new, :create, :edit, :update]
 
   def new
@@ -32,6 +32,18 @@ class TreatmentsController < ApplicationController
     end
   end
 
+  def update_translations
+    if @treatment.update(treatment_params)
+      flash.now[:notice] = t('flash_message.success_updated')
+    else
+      flash.now[:alert] = t('flash_message.update_fail')
+    end
+
+    respond_to do |format|
+      format.html
+    end
+  end
+
   private
 
   def set_treatment
@@ -43,7 +55,9 @@ class TreatmentsController < ApplicationController
       :id,
       :reference,
       :label_en,
+      :label_fr,
       :description_en,
+      :description_fr,
       :algorithm_id,
     )
   end

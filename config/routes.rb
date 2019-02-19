@@ -29,11 +29,16 @@ Rails.application.routes.draw do
         put 'archive', to: 'versions#archive', as: 'archive'
         put 'unarchive', to: 'versions#unarchive', as: 'unarchive'
       end
-      resources :diagnostics, only: [:index, :new, :create, :edit, :update, :show] do
-        resources :final_diagnostics, only: [:index, :show, :new, :create, :edit, :update, :delete, :destroy] do
+      resources :diagnostics, only: [:index, :new, :create, :edit, :update, :show, :update_translations] do
+        member do
+          put 'update_translations'
+        end
+
+        resources :final_diagnostics, only: [:index, :show, :new, :create, :edit, :update, :delete, :destroy, :update_translations] do
           member do
             post 'add_excluded_diagnostic'
             delete 'remove_excluded_diagnostic'
+            put 'update_translations'
           end
           resources :final_diagnostic_health_cares, only: [:create, :destroy]
         end
@@ -43,15 +48,33 @@ Rails.application.routes.draw do
     resources :questions, only: [:new, :create, :edit, :update] do
       member do
         put 'answers'
+        put 'update_translations'
       end
 
-      resources :answers, only: [:new, :create, :edit, :update]
+      resources :answers, only: [:new, :create, :edit, :update] do
+        member do
+          put 'update_translations'
+        end
+      end
     end
 
-    resources :treatments, only: [:new, :create, :edit, :update]
-    resources :managements, only: [:new, :create, :edit, :update]
+    resources :treatments, only: [:new, :create, :edit, :update] do
+      member do
+        put 'update_translations'
+      end
+    end
 
-    resources :predefined_syndromes, only: [:index, :new, :create, :edit, :update]
+    resources :managements, only: [:new, :create, :edit, :update] do
+      member do
+        put 'update_translations'
+      end
+    end
+
+    resources :predefined_syndromes, only: [:index, :new, :create, :edit, :update] do
+      member do
+        put 'update_translations'
+      end
+    end
   end
 
   resources :predefined_syndromes, only: [:show] do

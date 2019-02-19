@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_question, only: [:edit, :update, :answers, :category_reference]
+  before_action :set_question, only: [:edit, :update, :answers, :category_reference, :update_translations]
   before_action :set_algorithm, only: [:new, :create, :edit, :update, :answers]
 
   def new
@@ -54,6 +54,18 @@ class QuestionsController < ApplicationController
     end
   end
 
+  def update_translations
+    if @question.update(question_params)
+      flash.now[:notice] = t('flash_message.success_updated')
+    else
+      flash.now[:alert] = t('flash_message.update_fail')
+    end
+
+    respond_to do |format|
+      format.html
+    end
+  end
+
   private
 
   def set_question
@@ -64,10 +76,12 @@ class QuestionsController < ApplicationController
     params.require(:question).permit(
       :id,
       :label_en,
+      :label_fr,
       :reference,
       :priority,
       :category_id,
       :description_en,
+      :description_fr,
       :answer_type_id,
       answers_attributes: [
         :id,

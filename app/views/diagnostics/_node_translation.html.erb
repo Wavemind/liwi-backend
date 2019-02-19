@@ -1,0 +1,13 @@
+<div class="row">
+  <div class="col-sm-2"><%= f.input :reference, disabled: true %></div>
+  <div class="col-sm-5"><%= f.input :label_en %></div>
+  <div class="col-sm-5"><%= f.input :label_fr %></div>
+</div>
+
+<div class="row">
+  <div class="col-sm-2"></div>
+  <div class="col-sm-5"><%= f.input :description_en %></div>
+  <div class="col-sm-5"><%= f.input :description_fr %></div>
+</div>
+
+<%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
