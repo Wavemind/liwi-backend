@@ -5,16 +5,17 @@
 <body>
 
 <div class="wrapper">
-
   <%= render 'layouts/side_menu' %>
 
   <!-- Page Content  -->
   <div id="content">
 
+    <div class="breadcrumb mb-4"><%= render_breadcrumbs %></div>
+
     <%= render 'layouts/flash' %>
 
     <%= yield %>
-
+    
   </div>
 </div>
 
