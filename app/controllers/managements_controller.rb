@@ -42,8 +42,8 @@ class ManagementsController < ApplicationController
     params.require(:management).permit(
       :id,
       :reference,
-      :label,
-      :description,
+      :label_en,
+      :description_en,
       :algorithm_id,
     )
   end

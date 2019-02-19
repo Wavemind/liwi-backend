@@ -101,9 +101,9 @@ class FinalDiagnosticsController < ApplicationController
     params.require(:final_diagnostic).permit(
       :id,
       :label,
-      :reference,
+      :reference_en,
       :final_diagnostic_id,
-      :description
+      :description_en
     )
   end
 end

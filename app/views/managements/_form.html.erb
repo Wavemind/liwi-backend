@@ -1,8 +1,8 @@
 <%= simple_form_for [@algorithm, @management], html: { class: 'form-horizontal' }, wrapper: :input_group do |f| %>
 
   <%= f.input :reference, prepend: (f.object.persisted? ? false : "#{t('managements.reference')}_"), disabled: f.object.persisted? %>
-  <%= f.input :label %>
-  <%= f.input :description, as: :text %>
+  <%= f.input :label_en %>
+  <%= f.input :description_en, as: :text %>
 
   <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
 <% end %>

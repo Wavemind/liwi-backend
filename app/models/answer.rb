@@ -9,6 +9,7 @@ class Answer < ApplicationRecord
   after_validation :unique_reference
   before_create :complete_reference
 
+  translates :label
 
   # @return [String]
   # Return the reference of the answer. This function is needed to do a recursive functional call

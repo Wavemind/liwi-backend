@@ -1,7 +1,7 @@
 <div class="nested-fields">
   <div class="row">
     <div class="col align-self-center"><%= f.input :reference, prepend: (f.object.persisted? ? false : "#{@question.reference}_"), disabled: f.object.persisted? %></div>
-    <div class="col align-self-center"><%= f.input :label %></div>
+    <div class="col align-self-center"><%= f.input :label_en %></div>
     <div class="col align-self-center"><%= f.input :value %></div>
     <div class="col align-self-center"><%= f.input :operator %></div>
 

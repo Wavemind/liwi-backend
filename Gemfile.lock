@@ -125,6 +125,8 @@ GEM
     ffi (1.9.25)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
+    hstore_translate (2.0.0)
+      activerecord (>= 4.2.0)
     i18n (1.1.1)
       concurrent-ruby (~> 1.0)
     io-like (0.3.0)
@@ -325,6 +327,7 @@ DEPENDENCIES
   devise
   devise_invitable (~> 1.7.0)
   devise_token_auth
+  hstore_translate
   jbuilder (~> 2.5)
   jquery-datatables
   jquery-rails

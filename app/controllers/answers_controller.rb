@@ -41,11 +41,11 @@ class AnswersController < ApplicationController
   def answer_params
     params.require(:answer).permit(
       :id,
-      :label,
+      :label_en,
       :reference,
       :priority,
       :category,
-      :description,
+      :description_en,
       :answer_type_id,
     )
   end

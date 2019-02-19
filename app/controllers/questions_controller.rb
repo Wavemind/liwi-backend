@@ -63,16 +63,16 @@ class QuestionsController < ApplicationController
   def question_params
     params.require(:question).permit(
       :id,
-      :label,
+      :label_en,
       :reference,
       :priority,
       :category_id,
-      :description,
+      :description_en,
       :answer_type_id,
       answers_attributes: [
         :id,
         :reference,
-        :label,
+        :label_en,
         :operator,
         :value,
         :_destroy

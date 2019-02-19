@@ -42,8 +42,8 @@ class TreatmentsController < ApplicationController
     params.require(:treatment).permit(
       :id,
       :reference,
-      :label,
-      :description,
+      :label_en,
+      :description_en,
       :algorithm_id,
     )
   end

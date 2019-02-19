@@ -4,8 +4,8 @@
   <%= f.association :category, collection: Category.all, label_method: :name, prompt: t('select'), disabled: f.object.persisted? %>
 
   <%= f.input :reference, prepend: (f.object.persisted? ? false : (@question.category.nil? ? '_' : @question.category.reference_prefix + '_')), disabled: f.object.persisted? %>
-  <%= f.input :label %>
-  <%= f.input :description, as: :text %>
+  <%= f.input :label_en %>
+  <%= f.input :description_en, as: :text %>
 
   <%= f.association :answer_type, collection: AnswerType.all, label_method: :display_name, prompt: t('select'), disabled: @question.answers.any?  %>
 

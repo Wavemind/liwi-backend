@@ -70,7 +70,7 @@ class DiagnosticsController < ApplicationController
   def diagnostic_params
     params.require(:diagnostic).permit(
       :id,
-      :label,
+      :label_en,
       :reference
     )
   end
