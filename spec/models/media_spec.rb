@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Media, type: :model, focus: :true do
+RSpec.describe Media, type: :model do
   create_question
 
   it 'is valid with valid attributes' do
