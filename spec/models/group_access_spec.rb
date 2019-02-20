@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe GroupAccess, type: :model, focus: :true do
+RSpec.describe GroupAccess, type: :model do
   create_version
 
   before(:each) do
