@@ -141,20 +141,18 @@ class VersionsService
   # Set metadata for condition
   def self.push_condition(condition)
     hash = {}
-    hash[condition.id] = {}
-    hash[condition.id]['first_id'] = condition.first_conditionable_id
-    hash[condition.id]['first_type'] = condition.first_conditionable_type
+    hash['first_id'] = condition.first_conditionable_id
+    hash['first_type'] = condition.first_conditionable_type
 
     # Give the question's/predefined syndrome's id in order to retrieve it in front-end
-    hash[condition.id]['first_node_id'] = condition.first_conditionable.node.id if condition.first_conditionable.is_a?(Answer)
+    hash['first_node_id'] = condition.first_conditionable.node.id if condition.first_conditionable.is_a?(Answer)
 
-    hash[condition.id]['operator'] = condition.operator
-    hash[condition.id]['second_id'] = condition.second_conditionable_id
-    hash[condition.id]['second_type'] = condition.second_conditionable_type
+    hash['operator'] = condition.operator
+    hash['second_id'] = condition.second_conditionable_id
+    hash['second_type'] = condition.second_conditionable_type
 
     # Give the question's/predefined syndrome's id in order to retrieve it in front-end
-    hash[condition.id]['second_node_id'] = condition.second_conditionable.node.id if condition.second_conditionable.is_a?(Answer)
-
+    hash['second_node_id'] = condition.second_conditionable.node.id if condition.second_conditionable.is_a?(Answer)
     hash
   end
 
@@ -210,6 +208,7 @@ class VersionsService
       hash[question.id]['ps'] = get_node_predefined_syndromes(question, [])
       hash[question.id]['dd'] = get_node_diagnostics(question, [])
       hash[question.id]['counter'] = 0
+      hash[question.id]['value'] = 0
       hash[question.id]['answer'] = nil
       hash[question.id]['answers'] = {}
 
