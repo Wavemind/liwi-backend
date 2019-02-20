@@ -21,4 +21,14 @@ module ModelMacros
     end
   end
 
+  def create_diagnostic
+    before(:each) do
+      role_administrator = Role.create!(name: 'Administrator')
+      user = User.create!(first_name: 'Alain', last_name: 'Fresco', email: 'alain.fresco@wavemind.ch', password: '123456', password_confirmation: '123456', role: role_administrator)
+      algorithm = Algorithm.create!(name: 'ePoct', user: user)
+      epoc_first = Version.create!(name: 'first_trial', algorithm: algorithm, user: user)
+      @dd7 = Diagnostic.create!(version: epoc_first, label_en: 'Severe LRTI', reference: '7')
+    end
+  end
+
 end
