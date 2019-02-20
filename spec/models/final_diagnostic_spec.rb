@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe FinalDiagnostic, type: :model do
+  create_algorithm
   create_diagnostic
 
   it 'is valid with valid attributes' do
