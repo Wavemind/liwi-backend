@@ -177,6 +177,9 @@ en:
         label: "Label"
         description: "Description"
         actions: "Actions"
+  medical_case:
+    validation:
+      wrong_node_type: "This node is not a management or a treatment."
   nodes:
     validation:
       reference_used: "This reference is already used"
