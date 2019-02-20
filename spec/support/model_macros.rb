@@ -7,6 +7,15 @@ module ModelMacros
     end
   end
 
+  def create_version
+    before(:each) do
+      role_administrator = Role.create!(name: 'Administrator')
+      user = User.create!(first_name: 'Alain', last_name: 'Fresco', email: 'alain.fresco@wavemind.ch', password: '123456', password_confirmation: '123456', role: role_administrator)
+      algorithm = Algorithm.create!(name: 'ePoct', user: user)
+      @version = Version.create!(name: 'first_trial', algorithm: algorithm, user: user)
+    end
+  end
+
   def create_answer_type
     before(:each) do
       @input_integer = AnswerType.create!(value: 'Integer', display: 'Input')
