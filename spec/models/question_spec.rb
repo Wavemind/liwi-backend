@@ -1,11 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe Question, type: :model do
+  create_algorithm
 
   before(:each) do
-    role_administrator = Role.create!(name: 'Administrator')
-    alain = User.create!(first_name: 'Alain', last_name: 'Fresco', email: 'alain.fresco@wavemind.ch', password: '123456', password_confirmation: '123456', role: role_administrator)
-    @algorithm = Algorithm.create!(name: 'ePoct', user: alain)
     @answer_type = AnswerType.new(value: 'Array', display: 'Radiobutton')
     @category = Category.new(name: 'Symptom', reference_prefix: 'S')
   end

@@ -1,14 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe Answer, type: :model do
+  create_algorithm
 
   before(:each) do
-    role_administrator = Role.create!(name: 'Administrator')
-    alain = User.create!(first_name: 'Alain', last_name: 'Fresco', email: 'alain.fresco@wavemind.ch', password: '123456', password_confirmation: '123456', role: role_administrator)
-    algorithm = Algorithm.create!(name: 'ePoct', user: alain)
     answer_type = AnswerType.new(value: 'Array', display: 'Radiobutton')
     category = Category.new(name: 'Symptom', reference_prefix: 'S')
-    @question = Question.create!(reference: '9', label: 'skin issue', priority: Question.priorities[:basic], category: category, answer_type: answer_type, algorithm: algorithm)
+    @question = Question.create!(reference: '9', label: 'skin issue', priority: Question.priorities[:basic], category: category, answer_type: answer_type, algorithm: @algorithm)
   end
 
   it 'is valid with valid attributes' do
