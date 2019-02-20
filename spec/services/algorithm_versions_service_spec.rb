@@ -19,7 +19,7 @@ RSpec.describe VersionsService, type: :service do
     conditions = json['diseases'].values[0]['diagnosis'].values[0]['conditions']
 
     expect(top_conditions.count + conditions.count).to eq(3)
-    expect(top_conditions[1]['25']['first_id']).to eq(23)
-    expect(top_conditions[1]['24']['second_id']).to eq(25)
+    expect(top_conditions[1]['first_id']).to eq(8)
+    expect(top_conditions[1]['second_id']).to eq(9)
   end
 end
