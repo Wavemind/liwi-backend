@@ -9,6 +9,7 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require 'rspec/rails'
 require 'devise'
 require_relative 'support/controller_macros'
+require_relative 'support/model_macros'
 require_relative 'support/service_macros'
 
 # Add additional requires below this line. Rails is not loaded until this point!
@@ -48,6 +49,7 @@ RSpec.configure do |config|
   # Devise configuration
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.extend ControllerMacros, type: :controller
+  config.extend ModelMacros, type: :model
   config.extend ServiceMacros, type: :service
 
   # RSpec Rails can automatically mix in different behaviours to your tests
