@@ -24,4 +24,11 @@ RSpec.describe Question, type: :model do
 
     expect(question).to_not be_valid
   end
+
+  it 'creates automatically 2 answers when answer_type is boolean', focus: true do
+    boolean_type = AnswerType.new(value: 'Boolean', display: 'Radiobutton')
+    question = Question.create!(reference: '9', label: 'skin issue', priority: Question.priorities[:basic], category: @category, answer_type: boolean_type, algorithm: @algorithm)
+
+    expect(question.answers.count).to eq(2)
+  end
 end
