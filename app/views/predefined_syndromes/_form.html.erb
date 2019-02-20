@@ -1,8 +1,8 @@
 <%= simple_form_for [@algorithm, @predefined_syndrome], html: { class: 'form-horizontal' }, wrapper: :input_group do |f| %>
 
   <%= f.input :reference, prepend: (f.object.persisted? ? false : "#{t('predefined_syndromes.reference')}_"), disabled: f.object.persisted? %>
-  <%= f.input :label %>
-  <%= f.input :description %>
+  <%= f.input :label_en %>
+  <%= f.input :description_en %>
 
   <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
 <% end %>

@@ -30,6 +30,7 @@ gem 'momentjs-rails'
 gem 'database_cleaner'
 gem 'breadcrumbs_on_rails'
 gem 'carrierwave', '~> 1.0'
+gem 'hstore_translate'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

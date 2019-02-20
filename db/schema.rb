@@ -13,6 +13,7 @@
 ActiveRecord::Schema.define(version: 2019_02_15_125719) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "hstore"
   enable_extension "plpgsql"
 
   create_table "activities", force: :cascade do |t|
@@ -47,7 +48,7 @@ ActiveRecord::Schema.define(version: 2019_02_15_125719) do
 
   create_table "answers", force: :cascade do |t|
     t.string "reference"
-    t.string "label"
+    t.hstore "label_translations"
     t.string "operator"
     t.string "value"
     t.bigint "node_id"
@@ -57,7 +58,7 @@ ActiveRecord::Schema.define(version: 2019_02_15_125719) do
   end
 
   create_table "categories", force: :cascade do |t|
-    t.string "name"
+    t.hstore "name_translations"
     t.string "reference_prefix"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -105,7 +106,7 @@ ActiveRecord::Schema.define(version: 2019_02_15_125719) do
 
   create_table "diagnostics", force: :cascade do |t|
     t.string "reference"
-    t.string "label"
+    t.hstore "label_translations"
     t.bigint "version_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -187,13 +188,13 @@ ActiveRecord::Schema.define(version: 2019_02_15_125719) do
   end
 
   create_table "nodes", force: :cascade do |t|
-    t.string "label"
+    t.hstore "label_translations"
     t.string "reference"
     t.integer "priority"
     t.string "type"
     t.bigint "category_id"
     t.bigint "diagnostic_id"
-    t.text "description"
+    t.hstore "description_translations"
     t.bigint "algorithm_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

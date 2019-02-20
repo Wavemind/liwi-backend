@@ -3,7 +3,7 @@ class FinalDiagnosticsController < ApplicationController
   before_action :set_algorithm, only: [:show, :new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic]
   before_action :set_version, only: [:show, :new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic]
   before_action :set_diagnostic, only: [:show, :new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic]
-  before_action :set_final_diagnostic, only: [:show, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic]
+  before_action :set_final_diagnostic, only: [:show, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic, :update_translations]
 
   def index
     respond_to do |format|
@@ -13,10 +13,10 @@ class FinalDiagnosticsController < ApplicationController
   end
 
   def show
-    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
-    add_breadcrumb "#{@version.name}", algorithm_version_url(@algorithm, @version)
-    add_breadcrumb "#{@diagnostic.reference}", algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic)
-    add_breadcrumb "#{@final_diagnostic.reference}"
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
+    add_breadcrumb @version.name, algorithm_version_url(@algorithm, @version)
+    add_breadcrumb @diagnostic.reference, algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic)
+    add_breadcrumb @final_diagnostic.reference
 
     @final_diagnostic_health_care = FinalDiagnosticHealthCare.new
     @treatments = @final_diagnostic.final_diagnostic_health_cares.treatments
@@ -24,18 +24,18 @@ class FinalDiagnosticsController < ApplicationController
   end
 
   def new
-    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
-    add_breadcrumb "#{@version.name}", algorithm_version_url(@algorithm, @version)
-    add_breadcrumb "#{@diagnostic.reference}", algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic)
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
+    add_breadcrumb @version.name, algorithm_version_url(@algorithm, @version)
+    add_breadcrumb @diagnostic.reference, algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic)
 
     @final_diagnostic = FinalDiagnostic.new
   end
 
   def edit
-    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
-    add_breadcrumb "#{@version.name}", algorithm_version_url(@algorithm, @version)
-    add_breadcrumb "#{@diagnostic.reference}", algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic)
-    add_breadcrumb "#{@final_diagnostic.reference}", algorithm_version_diagnostic_final_diagnostic_url(@algorithm, @version, @diagnostic, @final_diagnostic)
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
+    add_breadcrumb @version.name, algorithm_version_url(@algorithm, @version)
+    add_breadcrumb @diagnostic.reference, algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic)
+    add_breadcrumb @final_diagnostic.reference, algorithm_version_diagnostic_final_diagnostic_url(@algorithm, @version, @diagnostic, @final_diagnostic)
   end
 
   def create
@@ -87,6 +87,18 @@ class FinalDiagnosticsController < ApplicationController
     end
   end
 
+  # @params FinalDiagnostic with the translations
+  # Update the object with its translation without
+  def update_translations
+    if @final_diagnostic.update(final_diagnostic_params)
+      @json = { status: 'success', message: t('flash_message.success_updated')}
+    else
+      @json = { status: 'alert', message: t('flash_message.update_fail')}
+    end
+
+    render 'update_translations', formats: :js
+  end
+
   private
 
   def set_diagnostic
@@ -101,9 +113,11 @@ class FinalDiagnosticsController < ApplicationController
     params.require(:final_diagnostic).permit(
       :id,
       :label,
-      :reference,
+      :reference_en,
+      :reference_fr,
       :final_diagnostic_id,
-      :description
+      :description_en,
+      :description_fr
     )
   end
 end

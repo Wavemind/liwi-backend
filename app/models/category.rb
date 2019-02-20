@@ -6,4 +6,6 @@ class Category < ApplicationRecord
   validates_presence_of :name
   validates_presence_of :reference_prefix
 
+  translates :name
+
 end

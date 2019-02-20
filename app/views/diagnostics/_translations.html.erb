@@ -1,0 +1,73 @@
+<div>
+
+  <h4><%= t('.diagnostic') %></h4>
+
+  <%= simple_form_for @diagnostic, url: update_translations_algorithm_version_diagnostic_url(@diagnostic.version.algorithm, @diagnostic.version, @diagnostic), remote: true, method: :put, html: {class: 'form-horizontal'} do |f| %>
+    <div class="row">
+      <div class="col-sm-2"><%= f.input :reference, disabled: true %></div>
+      <div class="col-sm-4"><%= f.input :label_en %></div>
+      <div class="col-sm-4"><%= f.input :label_fr %></div>
+      <div class="col-sm-2"><%= f.submit t('save'), class: 'btn btn-primary my-4 float-right', data: { disable_with: false } %></div>
+    </div>
+  <% end %>
+
+  <hr/>
+  <h4><%= t('.final_diagnostics') %></h4>
+
+  <% @diagnostic.final_diagnostics.each do |final_diagnostic| %>
+    <%= simple_form_for final_diagnostic, url: update_translations_algorithm_version_diagnostic_final_diagnostic_url(@diagnostic.version.algorithm, @diagnostic.version, @diagnostic, final_diagnostic), method: :put, remote: true, html: {class: 'form-horizontal'} do |f| %>
+      <%= render 'node_translation', f: f %>
+    <% end %>
+  <% end %>
+
+  <hr/>
+  <h4><%= t('.questions') %></h4>
+
+  <% @diagnostic.questions.includes(:answer_type).each do |question| %>
+    <%= simple_form_for question, url: update_translations_algorithm_question_url(@diagnostic.version.algorithm, question), method: :put, remote: true, html: {class: 'form-horizontal'} do |f| %>
+      <%= render 'node_translation', f: f %>
+    <% end %>
+    <br />
+    <% unless question.answer_type.value == 'Boolean' %>
+      <% question.answers.each do |answer| %>
+        <%= simple_form_for answer, url: update_translations_algorithm_question_answer_url(@diagnostic.version.algorithm, question, answer), method: :put, remote: true, html: {class: 'form-horizontal'} do |f| %>
+          <div class="row">
+            <div class="col-sm-2"><%= f.input :reference, disabled: true %></div>
+            <div class="col-sm-4"><%= f.input :label_en %></div>
+            <div class="col-sm-4"><%= f.input :label_fr %></div>
+            <div class="col-sm-2"><%= f.submit t('save'), class: 'btn btn-primary my-4 float-right', data: { disable_with: false } %></div>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %>
+    <hr />
+<% end %>
+
+  <hr/>
+  <h4><%= t('.predefined_syndromes') %></h4>
+
+  <% @diagnostic.predefined_syndromes.each do |predefined_syndrome| %>
+    <%= simple_form_for predefined_syndrome, url: update_translations_algorithm_predefined_syndrome_url(@diagnostic.version.algorithm, predefined_syndrome), method: :put, remote: true, html: {class: 'form-horizontal'} do |f| %>
+      <%= render 'node_translation', f: f %>
+    <% end %>
+  <% end %>
+
+  <hr/>
+  <h4><%= t('.managements') %></h4>
+
+  <% @diagnostic.managements.each do |management| %>
+    <%= simple_form_for management, url: update_translations_algorithm_management_url(@diagnostic.version.algorithm, management), method: :put, remote: true, html: {class: 'form-horizontal'} do |f| %>
+      <%= render 'node_translation', f: f %>
+    <% end %>
+  <% end %>
+
+  <hr/>
+  <h4><%= t('.treatments') %></h4>
+
+  <% @diagnostic.treatments.each do |treatment| %>
+    <%= simple_form_for treatment, url: update_translations_algorithm_treatment_url(@diagnostic.version.algorithm, treatment), method: :put, remote: true, html: {class: 'form-horizontal'} do |f| %>
+      <%= render 'node_translation', f: f %>
+    <% end %>
+  <% end %>
+
+</div>

@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_answer, only: [:edit, :update]
+  before_action :set_answer, only: [:edit, :update, :update_translations]
   before_action :set_question, only: [:new, :create, :edit, :update]
   before_action :set_algorithm, only: [:new, :create, :edit, :update]
 
@@ -28,6 +28,18 @@ class AnswersController < ApplicationController
     end
   end
 
+  # @params Answer with the translations
+  # Update the object with its translation without
+  def update_translations
+    if @answer.update(answer_params)
+      @json = { status: 'success', message: t('flash_message.success_updated')}
+    else
+      @json = { status: 'alert', message: t('flash_message.update_fail')}
+    end
+
+    render 'update_translations', formats: :js
+  end
+
   private
 
   def set_question
@@ -41,11 +53,12 @@ class AnswersController < ApplicationController
   def answer_params
     params.require(:answer).permit(
       :id,
-      :label,
+      :label_en,
+      :label_fr,
       :reference,
       :priority,
       :category,
-      :description,
+      :description_en,
       :answer_type_id,
     )
   end

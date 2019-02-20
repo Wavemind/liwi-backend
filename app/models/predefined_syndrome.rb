@@ -1,6 +1,5 @@
 # Define the children of an answer
 class PredefinedSyndrome < Node
-  before_destroy :diagnostic_dependencies
   after_create :create_answers
 
   has_many :answers, foreign_key: 'node_id', dependent: :destroy
@@ -21,14 +20,8 @@ class PredefinedSyndrome < Node
     self.reference = "#{I18n.t('predefined_syndromes.reference')}_#{reference}"
   end
 
-  # Delete current predefined syndrome used in diagnostics
-  def diagnostic_dependencies
-    Instance.where(instanceable_type: 'Diagnostic', node_id: id).destroy_all
-  end
-
   # Automatically create the answers, since they can't be changed
   def create_answers
-    answers.create!(reference: '1', label: 'yes')
-    answers.create!(reference: '2', label: 'no')
+    Answer.create_boolean(id)
   end
 end

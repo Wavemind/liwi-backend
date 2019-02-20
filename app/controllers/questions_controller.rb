@@ -1,17 +1,17 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_question, only: [:edit, :update, :answers, :category_reference]
+  before_action :set_question, only: [:edit, :update, :answers, :category_reference, :update_translations]
   before_action :set_algorithm, only: [:new, :create, :edit, :update, :answers]
 
   def new
-    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
 
     @question = Question.new
   end
 
   def edit
-    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
-    add_breadcrumb "#{@question.label}", algorithms_question_url(@algorithm, @question)
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
+    add_breadcrumb @question.label, algorithms_question_url(@algorithm, @question)
   end
 
   def create
@@ -54,6 +54,18 @@ class QuestionsController < ApplicationController
     end
   end
 
+  # @params Question with the translations
+  # Update the object with its translation without
+  def update_translations
+    if @question.update(question_params)
+      @json = { status: 'success', message: t('flash_message.success_updated')}
+    else
+      @json = { status: 'alert', message: t('flash_message.update_fail')}
+    end
+
+    render 'update_translations', formats: :js
+  end
+
   private
 
   def set_question
@@ -63,16 +75,18 @@ class QuestionsController < ApplicationController
   def question_params
     params.require(:question).permit(
       :id,
-      :label,
+      :label_en,
+      :label_fr,
       :reference,
       :priority,
       :category_id,
-      :description,
+      :description_en,
+      :description_fr,
       :answer_type_id,
       answers_attributes: [
         :id,
         :reference,
-        :label,
+        :label_en,
         :operator,
         :value,
         :_destroy

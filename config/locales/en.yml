@@ -38,10 +38,12 @@ en:
       title: "Details of %{name} - version %{version}"
       predefined_syndromes: "Predefined Syndromes"
   answers:
-    new:
-      title: "Create related answers of %{name} question"
     edit:
       title: "Edit related answers of %{name} question"
+    new:
+      title: "Create related answers of %{name} question"
+    no: "No"
+    yes: "Yes"
   api:
     v1:
       versions:
@@ -97,11 +99,19 @@ en:
       title: "Edit this diagnostic"
     reference: "DD"
     show:
+      differential_diagnostic_conditions: "Differential diagnostic conditions"
       instances: "Instance of nodes"
+      predefined_syndromes: "Predefined Syndromes"
       subtitle_final_diagnostics: "Finals diagnostics"
       title: "Details of %{name}"
-      predefined_syndromes: "Predefined Syndromes"
-      differential_diagnostic_conditions: "Differential diagnostic conditions"
+      translations: "Translations"
+    translations:
+      diagnostic: "Diagnostic"
+      final_diagnostics: "Final diagnostics"
+      managements: "Managements"
+      predefined_syndromes: "Predefined syndromes"
+      questions: "Questions"
+      treatments: "Treatments"
   edit: "Edit"
   error: "An error occured"
   final_diagnostics:

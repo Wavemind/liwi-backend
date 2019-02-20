@@ -33,7 +33,6 @@ class Question < Node
 
   # Automatically create the answers, since they can't be changed
   def create_boolean_answers
-    answers.create!(reference: '1', label: 'yes')
-    answers.create!(reference: '2', label: 'no')
+    Answer.create_boolean(id)
   end
 end

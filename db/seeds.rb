@@ -62,50 +62,50 @@ input_integer = AnswerType.create!(value: 'Integer', display: 'Input')
 input_float = AnswerType.create!(value: 'Float', display: 'Input')
 
 # Categories
-exposure = Category.create!(name: 'Exposure', reference_prefix: 'E')
-symptom = Category.create!(name: 'Symptom', reference_prefix: 'S')
-assessement_text = Category.create!(name: 'Assessment/Test', reference_prefix: 'A')
-physical_exam = Category.create!(name: 'Physical exam', reference_prefix: 'P')
-comorbidity = Category.create!(name: 'Comorbidity', reference_prefix: 'DC')
+exposure = Category.create!(name_en: 'Exposure', reference_prefix: 'E')
+symptom = Category.create!(name_en: 'Symptom', reference_prefix: 'S')
+assessement_text = Category.create!(name_en: 'Assessment/Test', reference_prefix: 'A')
+physical_exam = Category.create!(name_en: 'Physical exam', reference_prefix: 'P')
+comorbidity = Category.create!(name_en: 'Comorbidity', reference_prefix: 'DC')
 
 
 # Questions
-age = Question.create!(algorithm: epoct, answer_type: input_integer, label: 'Quel est l' 'âge du patient ?', reference: '1', category: exposure, priority: Question.priorities[:triage])
-convulsion = Question.create!(algorithm: epoct, answer_type: input_integer, label: 'How many time did you convulse', reference: '3', category: symptom, priority: Question.priorities[:priority])
-drinking_status = Question.create!(algorithm: epoct, answer_type: boolean, label: 'Is the patient able to tolerate PO liquid ?', reference: '45', category: symptom, priority: Question.priorities[:priority])
-emesis = Question.create!(algorithm: epoct, answer_type: input_integer, label: 'How many time did you loose stool or emesis last 24 hours ?', reference: '5', category: symptom, priority: Question.priorities[:priority])
-muac = Question.create!(algorithm: epoct, answer_type: input_float, label: 'What is MUAC size ?', reference: '6', category: physical_exam, priority: Question.priorities[:triage])
-skin_lesion_size = Question.create!(algorithm: epoct, answer_type: input_float, label: 'What is the size of the skin lesion ?', reference: '21', category: physical_exam, priority: Question.priorities[:basic])
+age = Question.create!(algorithm: epoct, answer_type: input_integer, label_en: 'Quel est l' 'âge du patient ?', reference: '1', category: exposure, priority: Question.priorities[:triage])
+convulsion = Question.create!(algorithm: epoct, answer_type: input_integer, label_en: 'How many time did you convulse', reference: '3', category: symptom, priority: Question.priorities[:priority])
+drinking_status = Question.create!(algorithm: epoct, answer_type: boolean, label_en: 'Is the patient able to tolerate PO liquid ?', reference: '45', category: symptom, priority: Question.priorities[:priority])
+emesis = Question.create!(algorithm: epoct, answer_type: input_integer, label_en: 'How many time did you loose stool or emesis last 24 hours ?', reference: '5', category: symptom, priority: Question.priorities[:priority])
+muac = Question.create!(algorithm: epoct, answer_type: input_float, label_en: 'What is MUAC size ?', reference: '6', category: physical_exam, priority: Question.priorities[:triage])
+skin_lesion_size = Question.create!(algorithm: epoct, answer_type: input_float, label_en: 'What is the size of the skin lesion ?', reference: '21', category: physical_exam, priority: Question.priorities[:basic])
 
 # Answers
-Answer.create!(node: age, reference: '1', label: 'more than 12 months', value: '12', operator: '>=')
-Answer.create!(node: age, reference: '2', label: 'between 6 and 12 months', value: '6, 12', operator: '>=, <')
-Answer.create!(node: age, reference: '3', label: 'between 2 and 6 months', value: '2, 6', operator: '>=, <')
-Answer.create!(node: age, reference: '4', label: 'less than 2 months', value: '2', operator: '<')
-Answer.create!(node: convulsion, reference: '1', label: '2 or more', value: '2', operator: '>=')
-Answer.create!(node: convulsion, reference: '2', label: 'less than 2', value: '2', operator: '<')
-Answer.create!(node: emesis, reference: '1', label: '3 or more', value: '3', operator: '>=')
-Answer.create!(node: emesis, reference: '2', label: 'less than 3', value: '3', operator: '<')
-Answer.create!(node: muac, reference: '1', label: '12.5 or more', value: '12.5', operator: '>=')
-Answer.create!(node: muac, reference: '2', label: 'between 11.5 and 12.5', value: '11.5, 12.5', operator: '>=, <')
-Answer.create!(node: muac, reference: '3', label: 'less than 11.5', value: '11.5', operator: '<')
-Answer.create!(node: skin_lesion_size, reference: '1', label: '5 or more cm', value: '5', operator: '>=')
-Answer.create!(node: skin_lesion_size, reference: '2', label: 'between 2.5 and 5 cm', value: '2.5, 5', operator: '>=, <')
-Answer.create!(node: skin_lesion_size, reference: '3', label: 'less than 2.5 cm', value: '2.5', operator: '<')
+Answer.create!(node: age, reference: '1', label_en: 'more than 12 months', value: '12', operator: '>=')
+Answer.create!(node: age, reference: '2', label_en: 'between 6 and 12 months', value: '6, 12', operator: '>=, <')
+Answer.create!(node: age, reference: '3', label_en: 'between 2 and 6 months', value: '2, 6', operator: '>=, <')
+Answer.create!(node: age, reference: '4', label_en: 'less than 2 months', value: '2', operator: '<')
+Answer.create!(node: convulsion, reference: '1', label_en: '2 or more', value: '2', operator: '>=')
+Answer.create!(node: convulsion, reference: '2', label_en: 'less than 2', value: '2', operator: '<')
+Answer.create!(node: emesis, reference: '1', label_en: '3 or more', value: '3', operator: '>=')
+Answer.create!(node: emesis, reference: '2', label_en: 'less than 3', value: '3', operator: '<')
+Answer.create!(node: muac, reference: '1', label_en: '12.5 or more', value: '12.5', operator: '>=')
+Answer.create!(node: muac, reference: '2', label_en: 'between 11.5 and 12.5', value: '11.5, 12.5', operator: '>=, <')
+Answer.create!(node: muac, reference: '3', label_en: 'less than 11.5', value: '11.5', operator: '<')
+Answer.create!(node: skin_lesion_size, reference: '1', label_en: '5 or more cm', value: '5', operator: '>=')
+Answer.create!(node: skin_lesion_size, reference: '2', label_en: 'between 2.5 and 5 cm', value: '2.5, 5', operator: '>=, <')
+Answer.create!(node: skin_lesion_size, reference: '3', label_en: 'less than 2.5 cm', value: '2.5', operator: '<')
 
 # Diagnostics
-Diagnostic.create!(version: ft_1_0, label: 'Malaria', reference: '4')
-Diagnostic.create!(version: ft_1_0, label: 'IMPETIGO', reference: '6')
-Diagnostic.create!(version: ft_1_2, label: 'Chicken pox', reference: '8')
+Diagnostic.create!(version: ft_1_0, label_en: 'Malaria', reference: '4')
+Diagnostic.create!(version: ft_1_0, label_en: 'IMPETIGO', reference: '6')
+Diagnostic.create!(version: ft_1_2, label_en: 'Chicken pox', reference: '8')
 
 # Treatments
-Treatment.create!(algorithm: epoct, reference: '4', label: 'Take 400mg of paracetamol')
-Treatment.create!(algorithm: epoct, reference: '5', label: 'Take 100mg of cephalexin')
-Treatment.create!(algorithm: epoct, reference: '6', label: 'Take 40mg of vitamin A')
+Treatment.create!(algorithm: epoct, reference: '4', label_en: 'Take 400mg of paracetamol')
+Treatment.create!(algorithm: epoct, reference: '5', label_en: 'Take 100mg of cephalexin')
+Treatment.create!(algorithm: epoct, reference: '6', label_en: 'Take 40mg of vitamin A')
 
 # Managements
-Management.create!(algorithm: epoct, reference: '5', label: 'Use a wheelchair for 2 months.')
-Management.create!(algorithm: epoct, reference: '6', label: 'Use crutch for 2 months.')
+Management.create!(algorithm: epoct, reference: '5', label_en: 'Use a wheelchair for 2 months.')
+Management.create!(algorithm: epoct, reference: '6', label_en: 'Use crutch for 2 months.')
 
 # Patients
 john = Patient.create!(first_name: 'John', last_name: 'Do', birth_date: Date.new(1970,1,1))
@@ -124,50 +124,50 @@ MedicalCase.create!(patient: john, version: ft_1_2)
 
 #################################################################################################
 
-dd7 = Diagnostic.create!(version: epoc_first, label: 'Severe LRTI', reference: '7')
-df7 = FinalDiagnostic.create!(label: 'Severe lower respiratory tract infection', reference: '7', diagnostic: dd7)
+dd7 = Diagnostic.create!(version: epoc_first, label_en: 'Severe LRTI', reference: '7')
+df7 = FinalDiagnostic.create!(label_en: 'Severe lower respiratory tract infection', reference: '7', diagnostic: dd7)
 
 # Assign version to group
 group_wavemind.versions << epoc_first
 group_wavemind.save
 
-s2 = Question.create!(algorithm: epoct, label: 'Cough', reference: '2', category: symptom, priority: Question.priorities[:priority], answer_type: boolean)
+s2 = Question.create!(algorithm: epoct, label_en: 'Cough', reference: '2', category: symptom, priority: Question.priorities[:priority], answer_type: boolean)
 s2_1 = s2.answers.first
 s2_2 = s2.answers.second
 
-s4 = Question.create!(algorithm: epoct, label: 'Drink as usual', reference: '4', category: symptom, priority: Question.priorities[:priority], answer_type: boolean)
+s4 = Question.create!(algorithm: epoct, label_en: 'Drink as usual', reference: '4', category: symptom, priority: Question.priorities[:priority], answer_type: boolean)
 s4_1 = s4.answers.first
 s4_2 = s4.answers.second
 
-p1 = Question.create!(algorithm: epoct, label: 'SAO2', reference: '1', category: physical_exam, priority: Question.priorities[:triage], answer_type: input_integer)
-p1_1 = Answer.create!(node: p1, reference: '1', label: '>/= 90%', value: '90', operator: '>=')
-p1_1 = Answer.create!(node: p1, reference: '2', label: '< 90%', value: '90', operator: '<')
+p1 = Question.create!(algorithm: epoct, label_en: 'SAO2', reference: '1', category: physical_exam, priority: Question.priorities[:triage], answer_type: input_integer)
+p1_1 = Answer.create!(node: p1, reference: '1', label_en: '>/= 90%', value: '90', operator: '>=')
+p1_1 = Answer.create!(node: p1, reference: '2', label_en: '< 90%', value: '90', operator: '<')
 
-p3 = Question.create!(algorithm: epoct, label: 'Respiratory rate', reference: '3', category: physical_exam, priority: Question.priorities[:triage], answer_type: input_integer)
-p3_1 = Answer.create!(node: p3, reference: '1', label: '< 97th%ile', value: '97', operator: '<')
-p3_2 = Answer.create!(node: p3, reference: '2', label: '>/= 97th%ile', value: '97', operator: '>=')
+p3 = Question.create!(algorithm: epoct, label_en: 'Respiratory rate', reference: '3', category: physical_exam, priority: Question.priorities[:triage], answer_type: input_integer)
+p3_1 = Answer.create!(node: p3, reference: '1', label_en: '< 97th%ile', value: '97', operator: '<')
+p3_2 = Answer.create!(node: p3, reference: '2', label_en: '>/= 97th%ile', value: '97', operator: '>=')
 
-p13 = Question.create!(algorithm: epoct, label: 'Lower chest indrawing', reference: '13', category: physical_exam, priority: Question.priorities[:basic], answer_type: boolean)
+p13 = Question.create!(algorithm: epoct, label_en: 'Lower chest indrawing', reference: '13', category: physical_exam, priority: Question.priorities[:basic], answer_type: boolean)
 p13_1 = p13.answers.first
 p13_2 = p13.answers.second
 
-p14 = Question.create!(algorithm: epoct, label: 'Sever respiratory distress', reference: '14', category: physical_exam, priority: Question.priorities[:basic], answer_type: boolean)
+p14 = Question.create!(algorithm: epoct, label_en: 'Sever respiratory distress', reference: '14', category: physical_exam, priority: Question.priorities[:basic], answer_type: boolean)
 p14_1 = p14.answers.first
 p14_1 = p14.answers.second
 
-p25 = Question.create!(algorithm: epoct, label: 'Tolerates PO liquid', reference: '25', category: physical_exam, priority: Question.priorities[:basic], answer_type: boolean)
+p25 = Question.create!(algorithm: epoct, label_en: 'Tolerates PO liquid', reference: '25', category: physical_exam, priority: Question.priorities[:basic], answer_type: boolean)
 p25_1 = p25.answers.first
 p25_2 = p25.answers.second
 
-t1 = Treatment.create!(algorithm: epoct, label: 'Amoxicillin', reference: '1')
-t2 = Treatment.create!(algorithm: epoct, label: 'IM ceftriaxone', reference: '2')
-t9 = Treatment.create!(algorithm: epoct, label: 'Oral rehydration', reference: '9')
+t1 = Treatment.create!(algorithm: epoct, label_en: 'Amoxicillin', reference: '1')
+t2 = Treatment.create!(algorithm: epoct, label_en: 'IM ceftriaxone', reference: '2')
+t9 = Treatment.create!(algorithm: epoct, label_en: 'Oral rehydration', reference: '9')
 
-m2 = Management.create!(algorithm: epoct, label: 'Refer', reference: '2')
+m2 = Management.create!(algorithm: epoct, label_en: 'Refer', reference: '2')
 
 df7.nodes << [t1,t2,t9, m2]
 
-ps6 = PredefinedSyndrome.create!(algorithm: epoct, reference: '6', label: 'Able to drink')
+ps6 = PredefinedSyndrome.create!(algorithm: epoct, reference: '6', label_en: 'Able to drink')
 ps6_1 = ps6.answers.first
 ps6_2 = ps6.answers.second
 

@@ -2,7 +2,7 @@ class DiagnosticsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_algorithm, only: [:show, :new, :create, :edit, :update]
   before_action :set_version, only: [:show, :new, :create, :edit, :update]
-  before_action :set_diagnostic, only: [:show, :edit, :update, :destroy]
+  before_action :set_diagnostic, only: [:show, :edit, :update, :destroy, :update_translations]
 
   def index
     respond_to do |format|
@@ -12,9 +12,9 @@ class DiagnosticsController < ApplicationController
   end
 
   def show
-    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
-    add_breadcrumb "#{@version.name}", algorithm_version_url(@algorithm, @version)
-    add_breadcrumb "#{@diagnostic.label}"
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
+    add_breadcrumb @version.name, algorithm_version_url(@algorithm, @version)
+    add_breadcrumb @diagnostic.label
 
     @instance = Instance.new
     @instanceable = @diagnostic
@@ -23,16 +23,16 @@ class DiagnosticsController < ApplicationController
   end
 
   def new
-    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
-    add_breadcrumb "#{@version.name}", algorithm_version_url(@algorithm, @version)
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
+    add_breadcrumb @version.name, algorithm_version_url(@algorithm, @version)
 
     @diagnostic = Diagnostic.new
   end
 
   def edit
-    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
-    add_breadcrumb "#{@version.name}", algorithm_version_url(@algorithm, @version)
-    add_breadcrumb "#{@diagnostic.reference}", algorithm_version_diagnostic_url(@algorithm, @version)
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
+    add_breadcrumb @version.name, algorithm_version_url(@algorithm, @version)
+    add_breadcrumb @diagnostic.reference, algorithm_version_diagnostic_url(@algorithm, @version)
   end
 
   def create
@@ -61,6 +61,18 @@ class DiagnosticsController < ApplicationController
     end
   end
 
+  # @params Diagnostic with the translations
+  # Update the object with its translation without
+  def update_translations
+    if @diagnostic.update(diagnostic_params)
+      @json = { status: 'success', message: t('flash_message.success_updated')}
+    else
+      @json = { status: 'alert', message: t('flash_message.update_fail')}
+    end
+
+    render 'update_translations', formats: :js
+  end
+
   private
 
   def set_diagnostic
@@ -70,7 +82,8 @@ class DiagnosticsController < ApplicationController
   def diagnostic_params
     params.require(:diagnostic).permit(
       :id,
-      :label,
+      :label_en,
+      :label_fr,
       :reference
     )
   end

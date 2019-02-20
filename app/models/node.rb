@@ -24,6 +24,8 @@ class Node < ApplicationRecord
   after_validation :unique_reference
   before_create :complete_reference
 
+  translates :label, :description
+
   # @return [String]
   # Return the label with the reference for the view
   def reference_label
