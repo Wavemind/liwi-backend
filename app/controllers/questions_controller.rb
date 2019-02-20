@@ -47,9 +47,14 @@ class QuestionsController < ApplicationController
   # @return redirect to algorithms#index with flash message
   # Create answers related to the current question
   def answers
+
     if @question.update(question_params)
       redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_updated')
     else
+      puts '############################'
+      puts @question.errors.full_messages
+      puts '############################'
+
       render 'answers/new'
     end
   end

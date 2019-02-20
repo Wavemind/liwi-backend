@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Condition, type: :model do
   create_algorithm
   create_answer_type
-  create_condition
+  create_category
 
   before(:each) do
     # Version

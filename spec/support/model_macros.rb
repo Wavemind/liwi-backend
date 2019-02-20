@@ -23,7 +23,7 @@ module ModelMacros
     end
   end
 
-  def create_condition
+  def create_category
     before(:each) do
       @physical_exam = Category.create!(name_en: 'Physical exam', reference_prefix: 'P')
       @symptom = Category.create!(name_en: 'Symptom', reference_prefix: 'S')

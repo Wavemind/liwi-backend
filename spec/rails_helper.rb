@@ -49,7 +49,8 @@ RSpec.configure do |config|
   # Devise configuration
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.extend ControllerMacros, type: :controller
-  config.extend ModelMacros, type: [:model, :controller]
+  config.extend ModelMacros, type: :model
+  config.extend ModelMacros, type: :controller
   config.extend ServiceMacros, type: :service
 
   # RSpec Rails can automatically mix in different behaviours to your tests
