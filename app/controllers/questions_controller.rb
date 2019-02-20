@@ -51,10 +51,6 @@ class QuestionsController < ApplicationController
     if @question.update(question_params)
       redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_updated')
     else
-      puts '############################'
-      puts @question.errors.full_messages
-      puts '############################'
-
       render 'answers/new'
     end
   end
