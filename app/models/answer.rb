@@ -24,13 +24,20 @@ class Answer < ApplicationRecord
     "#{self.id},#{self.class.name}"
   end
 
+  # @param [Integer] node id to link to questions
+  # Create 2 automatic answers (yes & no) for PS and boolean questions
+  def self.create_boolean(node_id)
+    Answer.create!(node_id: node_id, reference: '1', label: I18n.t('answers.yes'))
+    Answer.create!(node_id: node_id, reference: '2', label: I18n.t('answers.no'))
+  end
+
   private
 
   # {Node#unique_reference}
   # Scoped by the current algorithm
   def unique_reference
     if Answer.joins(node: :algorithm)
-         .where("answers.reference = ? AND algorithms.id = ?", "#{node.reference}_#{reference}", "#{node.algorithm.id}").any?
+         .where('answers.reference = ? AND algorithms.id = ?', "#{node.reference}_#{reference}", node.algorithm.id).any?
       errors.add(:reference, I18n.t('nodes.validation.reference_used'))
     end
   end

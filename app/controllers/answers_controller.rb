@@ -28,6 +28,8 @@ class AnswersController < ApplicationController
     end
   end
 
+  # @params Answer with the translations
+  # Update the object with its translation without
   def update_translations
     if @answer.update(answer_params)
       @json = { status: 'success', message: t('flash_message.success_updated')}

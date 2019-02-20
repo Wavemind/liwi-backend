@@ -32,6 +32,8 @@ class TreatmentsController < ApplicationController
     end
   end
 
+  # @params Treatment with the translations
+  # Update the object with its translation without
   def update_translations
     if @treatment.update(treatment_params)
       @json = { status: 'success', message: t('flash_message.success_updated')}

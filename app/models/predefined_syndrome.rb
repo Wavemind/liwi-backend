@@ -22,7 +22,6 @@ class PredefinedSyndrome < Node
 
   # Automatically create the answers, since they can't be changed
   def create_answers
-    answers.create!(reference: '1', label: I18n.t('answers.yes'))
-    answers.create!(reference: '2', label: I18n.t('answers.no'))
+    Answer.create_boolean(id)
   end
 end

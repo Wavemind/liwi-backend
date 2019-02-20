@@ -32,6 +32,8 @@ class ManagementsController < ApplicationController
     end
   end
 
+  # @params Management with the translations
+  # Update the object with its translation without
   def update_translations
     if @management.update(management_params)
       @json = { status: 'success', message: t('flash_message.success_updated')}
