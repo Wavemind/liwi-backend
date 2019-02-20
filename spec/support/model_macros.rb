@@ -6,4 +6,19 @@ module ModelMacros
       @algorithm = Algorithm.create!(name: 'ePoct', user: @user)
     end
   end
+
+  def create_answer_type
+    before(:each) do
+      @input_integer = AnswerType.create!(value: 'Integer', display: 'Input')
+      @boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
+    end
+  end
+
+  def create_condition
+    before(:each) do
+      @physical_exam = Category.create!(name_en: 'Physical exam', reference_prefix: 'P')
+      @symptom = Category.create!(name_en: 'Symptom', reference_prefix: 'S')
+    end
+  end
+
 end
