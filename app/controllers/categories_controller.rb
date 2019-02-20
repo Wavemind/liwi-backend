@@ -2,14 +2,6 @@ class CategoriesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_category, only: [:show, :edit, :update, :reference]
 
-  def index
-    
-  end
-
-  def show
-
-  end
-
   def new
     @category = Category.new
   end
@@ -32,6 +24,9 @@ class CategoriesController < ApplicationController
     end
   end
 
+  # @param [Category]
+  # @return [String] with the prefix
+  # Method to get the prefix to the given category for the view
   def reference
     render json: @category.reference_prefix
   end

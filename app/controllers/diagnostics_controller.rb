@@ -12,9 +12,9 @@ class DiagnosticsController < ApplicationController
   end
 
   def show
-    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
-    add_breadcrumb "#{@version.name}", algorithm_version_url(@algorithm, @version)
-    add_breadcrumb "#{@diagnostic.label}"
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
+    add_breadcrumb @version.name, algorithm_version_url(@algorithm, @version)
+    add_breadcrumb @diagnostic.label
 
     @instance = Instance.new
     @instanceable = @diagnostic
@@ -23,16 +23,16 @@ class DiagnosticsController < ApplicationController
   end
 
   def new
-    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
-    add_breadcrumb "#{@version.name}", algorithm_version_url(@algorithm, @version)
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
+    add_breadcrumb @version.name, algorithm_version_url(@algorithm, @version)
 
     @diagnostic = Diagnostic.new
   end
 
   def edit
-    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
-    add_breadcrumb "#{@version.name}", algorithm_version_url(@algorithm, @version)
-    add_breadcrumb "#{@diagnostic.reference}", algorithm_version_diagnostic_url(@algorithm, @version)
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
+    add_breadcrumb @version.name, algorithm_version_url(@algorithm, @version)
+    add_breadcrumb @diagnostic.reference, algorithm_version_diagnostic_url(@algorithm, @version)
   end
 
   def create

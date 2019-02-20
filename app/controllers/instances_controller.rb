@@ -21,16 +21,16 @@ class InstancesController < ApplicationController
     if params[:diagnostic_id].present?
       @algorithm = @instanceable.version.algorithm
 
-      add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
-      add_breadcrumb "#{@instanceable.version.name}", algorithm_version_url(@algorithm, @instanceable.version)
-      add_breadcrumb "#{@instanceable.label}", algorithm_version_diagnostic_url(@algorithm, @instanceable.version, @instanceable)
-      add_breadcrumb "#{@instance.node.label}"
+      add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
+      add_breadcrumb @instanceable.version.name, algorithm_version_url(@algorithm, @instanceable.version)
+      add_breadcrumb @instanceable.label, algorithm_version_diagnostic_url(@algorithm, @instanceable.version, @instanceable)
+      add_breadcrumb @instance.node.label
     else
       @algorithm = @instanceable.algorithm
 
-      add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
-      add_breadcrumb "#{@instanceable.label}", predefined_syndrome_url(@instanceable)
-      add_breadcrumb "#{@instance.node.label}"
+      add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
+      add_breadcrumb @instanceable.label, predefined_syndrome_url(@instanceable)
+      add_breadcrumb @instance.node.label
     end
   end
 

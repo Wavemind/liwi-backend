@@ -6,22 +6,22 @@ class PredefinedSyndromesController < ApplicationController
   def show
     # Retrieve algorithm, since the show is not in the same route
     @algorithm = @predefined_syndrome.algorithm
-    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
-    add_breadcrumb "#{@predefined_syndrome.label}"
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
+    add_breadcrumb @predefined_syndrome.label
 
     @instance = Instance.new
     @instanceable = @predefined_syndrome
   end
 
   def new
-    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
 
     @predefined_syndrome = PredefinedSyndrome.new
   end
 
   def edit
-    add_breadcrumb "#{@algorithm.name}", algorithm_url(@algorithm)
-    add_breadcrumb "#{@predefined_syndrome.label}", predefined_syndrome_url(@predefined_syndrome)
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
+    add_breadcrumb @predefined_syndrome.label, predefined_syndrome_url(@predefined_syndrome)
   end
 
   def create
