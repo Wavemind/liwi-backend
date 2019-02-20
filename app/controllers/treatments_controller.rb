@@ -34,14 +34,12 @@ class TreatmentsController < ApplicationController
 
   def update_translations
     if @treatment.update(treatment_params)
-      flash.now[:notice] = t('flash_message.success_updated')
+      @json = { status: 'success', message: t('flash_message.success_updated')}
     else
-      flash.now[:alert] = t('flash_message.update_fail')
+      @json = { status: 'alert', message: t('flash_message.update_fail')}
     end
 
-    respond_to do |format|
-      format.html
-    end
+    render 'update_translations', formats: :js
   end
 
   private
