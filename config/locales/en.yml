@@ -20,30 +20,13 @@ en:
       subtitle_treatments: "Treatments"
       subtitle_versions: "Versions list"
       title: "Details of %{name}"
-  versions:
-    table:
-      columns:
-        name: "Name"
-        container: "Container"
-        last_update: "Last update"
-        creator: "Creator"
-        actions: "Actions"
-      title: "Algorithms versions"
-    new:
-      title: "Add an algorithm version"
-    edit:
-      title: "Edit this algorithm"
-    show:
-      subtitle_diagnostics: "Diagnostics"
-      title: "Details of %{name} - version %{version}"
-      predefined_syndromes: "Predefined Syndromes"
   answers:
     edit:
       title: "Edit related answers of %{name} question"
     new:
       title: "Create related answers of %{name} question"
-    no: "No"
-    yes: "Yes"
+    "no": "No"
+    "yes": "Yes"
   api:
     v1:
       versions:
@@ -165,6 +148,13 @@ en:
   group_accesses:
     new:
       title: "New release"
+  instances:
+    table:
+      columns:
+        type: "Type"
+    show:
+      children: "Children"
+      title: "Details of %{name} in %{node}"
   managements:
     edit:
       title: "Edit the management"
@@ -221,13 +211,6 @@ en:
         actions: "Actions"
     edit:
       title: "Edit question"
-  instances:
-    table:
-      columns:
-        type: "Type"
-    show:
-      children: "Children"
-      title: "Details of %{name} in %{node}"
   remove: "Remove"
   roles:
     index:
@@ -270,3 +253,20 @@ en:
       last_account_connection: "Last account connection "
       role: "Role "
       title: "Details of %{name}"
+  versions:
+    table:
+      columns:
+        name: "Name"
+        container: "Container"
+        last_update: "Last update"
+        creator: "Creator"
+        actions: "Actions"
+      title: "Algorithms versions"
+    new:
+      title: "Add an algorithm version"
+    edit:
+      title: "Edit this algorithm"
+    show:
+      subtitle_diagnostics: "Diagnostics"
+      title: "Details of %{name} - version %{version}"
+      predefined_syndromes: "Predefined Syndromes"

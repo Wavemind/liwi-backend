@@ -292,7 +292,7 @@ class VersionsService
   def self.generate_predefined_syndromes
     hash = {}
     @predefined_syndromes.each do |key, predefined_syndrome|
-      hash[predefined_syndrome.id] = {}
+      hash[predefined_syndrome.id] = extract_conditions(predefined_syndrome.instances.find_by(instanceable_id: predefined_syndrome.id).conditions)
       hash[predefined_syndrome.id]['type'] = predefined_syndrome.class.name
       hash[predefined_syndrome.id]['nodes'] = {}
 
