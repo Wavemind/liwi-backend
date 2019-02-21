@@ -55,11 +55,11 @@ class PredefinedSyndromesController < ApplicationController
   def update_translations
     if @predefined_syndrome.update(set_predefined_syndrome)
       @json = { status: 'success', message: t('flash_message.success_updated')}
+      render 'diagnostics/update_translations', formats: :js, status: :ok
     else
       @json = { status: 'alert', message: t('flash_message.update_fail')}
+      render 'diagnostics/update_translations', formats: :js, status: :unprocessable_entity
     end
-
-    render 'update_translations', formats: :js
   end
 
   private

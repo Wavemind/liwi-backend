@@ -37,11 +37,11 @@ class TreatmentsController < ApplicationController
   def update_translations
     if @treatment.update(treatment_params)
       @json = { status: 'success', message: t('flash_message.success_updated')}
+      render 'diagnostics/update_translations', formats: :js, status: :ok
     else
       @json = { status: 'alert', message: t('flash_message.update_fail')}
+      render 'diagnostics/update_translations', formats: :js, status: :unprocessable_entity
     end
-
-    render 'update_translations', formats: :js
   end
 
   private

@@ -79,7 +79,7 @@ class FinalDiagnosticsController < ApplicationController
   # @return
   # Remove excluded diagnostic to final diagnostic
   def remove_excluded_diagnostic
-    @final_diagnostic.excluded_diagnostic_id = nil
+    @final_diagnostic.excluded_diagnostic = nil
     if @final_diagnostic.save
       redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic), notice: t('flash_message.success_updated')
     else
@@ -92,11 +92,11 @@ class FinalDiagnosticsController < ApplicationController
   def update_translations
     if @final_diagnostic.update(final_diagnostic_params)
       @json = { status: 'success', message: t('flash_message.success_updated')}
+      render 'diagnostics/update_translations', formats: :js, status: :ok
     else
       @json = { status: 'alert', message: t('flash_message.update_fail')}
+      render 'diagnostics/update_translations', formats: :js, status: :unprocessable_entity
     end
-
-    render 'update_translations', formats: :js
   end
 
   private
@@ -112,9 +112,9 @@ class FinalDiagnosticsController < ApplicationController
   def final_diagnostic_params
     params.require(:final_diagnostic).permit(
       :id,
-      :label,
-      :reference_en,
-      :reference_fr,
+      :reference,
+      :label_en,
+      :label_fr,
       :final_diagnostic_id,
       :description_en,
       :description_fr

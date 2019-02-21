@@ -6,7 +6,7 @@ RSpec.describe ConditionsController, type: :controller do
   create_diagnostic
   create_question
 
-  it 'creates diagnostic condition from controller than remove it with the second' do
+  it 'creates diagnostic condition from controller than remove it with the remove method' do
     hash = @question.answers.first.conditionable_hash
     post :add_diagnostic_condition, params: { diagnostic_id: @dd7.id, condition: {
       first_conditionable_id: hash,
