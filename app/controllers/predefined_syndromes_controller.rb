@@ -53,7 +53,7 @@ class PredefinedSyndromesController < ApplicationController
   # @params PredefinedSyndrome with the translations
   # Update the object with its translation without
   def update_translations
-    if @predefined_syndrome.update(set_predefined_syndrome)
+    if @predefined_syndrome.update(predefined_syndrome_params)
       @json = { status: 'success', message: t('flash_message.success_updated')}
       render 'diagnostics/update_translations', formats: :js, status: :ok
     else

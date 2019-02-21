@@ -5,6 +5,7 @@ class Answer < ApplicationRecord
   has_many :children
 
   validates_presence_of :reference
+  validates_presence_of :label
 
   after_validation :unique_reference
   before_create :complete_reference
