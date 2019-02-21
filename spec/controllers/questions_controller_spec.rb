@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe QuestionsController, type: :controller do
+RSpec.describe QuestionsController, type: :controller, focus: :true do
   login_user
   create_algorithm
   create_answer_type
@@ -118,5 +118,40 @@ RSpec.describe QuestionsController, type: :controller do
         }
       }
     }.to change(Answer, :count).by(0)
+  end
+
+
+  it 'adds translations without rendering the view' do
+    @question = Question.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', category: @symptom, priority: Question.priorities[:priority], answer_type: @boolean)
+
+    put :update_translations, params: {
+      algorithm_id: @algorithm.id,
+      id: @question.id,
+      question: {
+        label_fr: 'Label en français',
+      }
+    }
+
+    expect(response).to render_template('diagnostics/update_translations')
+    expect(response).to have_attributes(status: 200)
+
+    @question.reload
+    expect(@question.label_fr).to eq('Label en français')
+  end
+
+  it 'returns error when sending attributes with clearing a mandatory field' do
+    @question = Question.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', category: @symptom, priority: Question.priorities[:priority], answer_type: @boolean)
+
+    put :update_translations, params: {
+      algorithm_id: @algorithm.id,
+      id: @question.id,
+      question: {
+        label_en: '',
+      }
+    }
+
+    expect(response).to render_template('diagnostics/update_translations')
+    expect(response).to have_attributes(status: 422)
+
   end
 end
