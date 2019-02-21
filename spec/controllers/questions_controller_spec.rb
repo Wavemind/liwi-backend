@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe QuestionsController, type: :controller, focus: :true do
+RSpec.describe QuestionsController, type: :controller do
   login_user
   create_algorithm
   create_answer_type
