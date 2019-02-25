@@ -112,9 +112,9 @@ class FinalDiagnosticsController < ApplicationController
   def final_diagnostic_params
     params.require(:final_diagnostic).permit(
       :id,
-      :label,
-      :reference_en,
-      :reference_fr,
+      :label_en,
+      :label_fr,
+      :reference,
       :final_diagnostic_id,
       :description_en,
       :description_fr
