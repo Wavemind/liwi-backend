@@ -13,6 +13,8 @@ class Condition < ApplicationRecord
 
   validates_presence_of :first_conditionable
 
+  nilify_blanks :only => [:operator]
+
   # @return [String]
   # Return the id displayed for the view
   def display_condition
