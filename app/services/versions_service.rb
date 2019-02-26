@@ -99,6 +99,7 @@ class VersionsService
     hash = extract_conditions(instance.conditions)
     hash['disease_id'] = final_diagnostic.diagnostic.id
     hash['name'] = final_diagnostic.label
+    hash['id'] = final_diagnostic.id
     hash['type'] = final_diagnostic.type
     hash['treatments'] = extract_health_cares(final_diagnostic.nodes.treatments, instance.instanceable.id)
     hash['managements'] = extract_health_cares(final_diagnostic.nodes.managements, instance.instanceable.id)
@@ -239,7 +240,12 @@ class VersionsService
       unless instanceable == node
         if instanceable.is_a?(Diagnostic)
           # push the id in the array only if it is not already there and if it is handled by the current algorithm version
-          diagnostics << instanceable.id if @diagnostics_ids.include?(instanceable.id) && !diagnostics.include?(instanceable.id)
+          if @diagnostics_ids.include?(instanceable.id) && !diagnostics.include?(instanceable.id)
+            hash = {}
+            hash['id'] = instanceable.id
+            hash['conditionValue'] = nil
+            diagnostics << hash
+          end
         end
       end
     end
@@ -254,8 +260,12 @@ class VersionsService
       unless instanceable == node
         if instanceable.is_a?(Node)
           # push the id in the array only if it is not already there and if it is handled by the current algorithm version
-          predefined_syndromes << instanceable.id if @predefined_syndromes_ids.include?(instanceable.id) && !predefined_syndromes.include?(instanceable.id)
-          get_node_predefined_syndromes(instanceable, predefined_syndromes)
+          if @predefined_syndromes_ids.include?(instanceable.id) && !predefined_syndromes.include?(instanceable.id)
+            hash = {}
+            hash['id'] = instanceable.id
+            hash['conditionValue'] = nil
+            predefined_syndromes << hash
+          end
         end
       end
     end
@@ -298,6 +308,7 @@ class VersionsService
     hash = {}
     @predefined_syndromes.each do |key, predefined_syndrome|
       hash[predefined_syndrome.id] = {}
+      hash[predefined_syndrome.id]['id'] = predefined_syndrome.id
       hash[predefined_syndrome.id]['type'] = predefined_syndrome.class.name
       hash[predefined_syndrome.id]['nodes'] = {}
       hash[predefined_syndrome.id]['answers'] = push_predefined_syndrome_answers(predefined_syndrome)
