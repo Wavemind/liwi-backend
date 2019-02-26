@@ -28,8 +28,8 @@ class Answer < ApplicationRecord
   # @param [Integer] node id to link to questions
   # Create 2 automatic answers (yes & no) for PS and boolean questions
   def self.create_boolean(node_id)
-    Answer.create!(node_id: node_id, reference: '1', label: I18n.t('answers.yes'))
-    Answer.create!(node_id: node_id, reference: '2', label: I18n.t('answers.no'))
+    Answer.create!(node_id: node_id, reference: '1', label_en: I18n.t('answers.yes'))
+    Answer.create!(node_id: node_id, reference: '2', label_en: I18n.t('answers.no'))
   end
 
   private
