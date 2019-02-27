@@ -26,6 +26,7 @@ class PredefinedSyndromeDatatable < AjaxDatatablesRails::ActiveRecord
       actions = link_to(I18n.t('show'), predefined_syndrome_url(id: record), class: 'btn btn-outline-primary') + " " + link_to(I18n.t('edit'), edit_algorithm_predefined_syndrome_url(params[:id], id: record), class: 'btn btn-outline-info')
       {
         reference: record.reference,
+        category: record.category.name,
         label: record.label,
         description: record.description,
         actions: actions

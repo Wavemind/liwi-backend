@@ -59,6 +59,7 @@ ActiveRecord::Schema.define(version: 2019_02_15_125719) do
 
   create_table "categories", force: :cascade do |t|
     t.hstore "name_translations"
+    t.string "parent"
     t.string "reference_prefix"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
