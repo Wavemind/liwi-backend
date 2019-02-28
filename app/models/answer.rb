@@ -40,7 +40,7 @@ class Answer < ApplicationRecord
   # Ensure that the entered values are in the correct type
   def correct_value_type
     if node.is_a?(Question) && node.answer_type.display == 'Input'
-      if Answer.operators[operator] == Answer.operators[:between]
+      if between?
         errors.add(:value, I18n.t('answers.validation.value_missing')) unless value.include?(',')
         value.split(',').each do |val|
           validate_value_type(val)

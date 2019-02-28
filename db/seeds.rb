@@ -73,7 +73,7 @@ comorbidity = Category.create!(name_en: 'Comorbidity', reference_prefix: 'DC')
 age = Question.create!(algorithm: epoct, answer_type: input_integer, label_en: 'Quel est l' 'âge du patient ?', reference: '1', category: exposure, priority: Question.priorities[:triage])
 convulsion = Question.create!(algorithm: epoct, answer_type: input_integer, label_en: 'How many time did you convulse', reference: '3', category: symptom, priority: Question.priorities[:priority])
 drinking_status = Question.create!(algorithm: epoct, answer_type: boolean, label_en: 'Is the patient able to tolerate PO liquid ?', reference: '45', category: symptom, priority: Question.priorities[:priority])
-emesis = Question.create!(algorithm: epoct, answer_type: input_integer, label_en: 'How many time did you loose stool or emesis last 24 hours ?', reference: '5', category: symptom, priority: Question.priorities[:priority]) # https://www.youtube.com/watch?v=qNo41sQbIsI
+emesis = Question.create!(algorithm: epoct, answer_type: input_integer, label_en: 'How many time did you loose stool or emesis last 24 hours ?', reference: '5', category: symptom, priority: Question.priorities[:priority])
 muac = Question.create!(algorithm: epoct, answer_type: input_float, label_en: 'What is MUAC size ?', reference: '6', category: physical_exam, priority: Question.priorities[:triage])
 skin_lesion_size = Question.create!(algorithm: epoct, answer_type: input_float, label_en: 'What is the size of the skin lesion ?', reference: '21', category: physical_exam, priority: Question.priorities[:basic])
 
