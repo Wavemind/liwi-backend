@@ -99,6 +99,7 @@ class VersionsService
     hash = extract_conditions(instance.conditions)
     hash['disease_id'] = final_diagnostic.diagnostic.id
     hash['name'] = final_diagnostic.label
+    hash['id'] = final_diagnostic.id
     hash['type'] = final_diagnostic.type
     hash['treatments'] = extract_health_cares(final_diagnostic.nodes.treatments, instance.instanceable.id)
     hash['managements'] = extract_health_cares(final_diagnostic.nodes.managements, instance.instanceable.id)
@@ -185,6 +186,11 @@ class VersionsService
     when 'PredefinedSyndrome'
       @predefined_syndromes_ids << node.id
       @predefined_syndromes[node.id] = node if @predefined_syndromes[node.id].nil?
+
+      # Recursive nodes on PS
+      Instance.where(instanceable: node).each do |instance|
+        assign_node(instance.node) unless instance.node == node
+      end
     else
       raise "The given node's type #{node.type} (#{node.reference}) is not handled."
     end
@@ -234,7 +240,12 @@ class VersionsService
       unless instanceable == node
         if instanceable.is_a?(Diagnostic)
           # push the id in the array only if it is not already there and if it is handled by the current algorithm version
-          diagnostics << instanceable.id if @diagnostics_ids.include?(instanceable.id) && !diagnostics.include?(instanceable.id)
+          if @diagnostics_ids.include?(instanceable.id) && !diagnostics.include?(instanceable.id)
+            hash = {}
+            hash['id'] = instanceable.id
+            hash['conditionValue'] = nil
+            diagnostics << hash
+          end
         end
       end
     end
@@ -249,8 +260,12 @@ class VersionsService
       unless instanceable == node
         if instanceable.is_a?(Node)
           # push the id in the array only if it is not already there and if it is handled by the current algorithm version
-          predefined_syndromes << instanceable.id if @predefined_syndromes_ids.include?(instanceable.id) && !predefined_syndromes.include?(instanceable.id)
-          get_node_predefined_syndromes(instanceable, predefined_syndromes)
+          if @predefined_syndromes_ids.include?(instanceable.id) && !predefined_syndromes.include?(instanceable.id)
+            hash = {}
+            hash['id'] = instanceable.id
+            hash['conditionValue'] = nil
+            predefined_syndromes << hash
+          end
         end
       end
     end
@@ -293,31 +308,37 @@ class VersionsService
     hash = {}
     @predefined_syndromes.each do |key, predefined_syndrome|
       hash[predefined_syndrome.id] = extract_conditions(predefined_syndrome.instances.find_by(instanceable_id: predefined_syndrome.id).conditions)
+      hash[predefined_syndrome.id]['id'] = predefined_syndrome.id
       hash[predefined_syndrome.id]['type'] = predefined_syndrome.class.name
       hash[predefined_syndrome.id]['nodes'] = {}
+      hash[predefined_syndrome.id]['answers'] = push_predefined_syndrome_answers(predefined_syndrome)
+      hash[predefined_syndrome.id]['ps'] = get_node_predefined_syndromes(predefined_syndrome, [])
+      hash[predefined_syndrome.id]['dd'] = get_node_diagnostics(predefined_syndrome, [])
+      hash[predefined_syndrome.id]['answer'] = nil
 
       # Loop in each instance for defined condition
       predefined_syndrome.components.questions.includes(:conditions, :children, :nodes, node:[:category, :answer_type, :answers]).each do |instance|
-
-        assign_node(instance.node)
-
+        # assign_node(instance.node)
         hash[predefined_syndrome.id]['nodes'][instance.node.id] = extract_instances(instance)
-        hash[predefined_syndrome.id]['answers'] = {}
-        hash[predefined_syndrome.id]['ps'] = get_node_predefined_syndromes(predefined_syndrome, [])
-        hash[predefined_syndrome.id]['dd'] = get_node_diagnostics(predefined_syndrome, [])
-        hash[predefined_syndrome.id]['counter'] = 0
-        hash[predefined_syndrome.id]['answer'] = nil
-
-        # Loop in each output possibilities(answer) for defined predefined syndrome
-        predefined_syndrome.answers.each do |answer|
-          answer_hash = {}
-          answer_hash['id'] = answer.id
-          answer_hash['reference'] = answer.reference
-          answer_hash['label'] = answer.label
-
-          hash[predefined_syndrome.id]['answers'][answer.id] = answer_hash
-        end
       end
+
+      predefined_syndrome.components.predefined_syndromes.includes(:conditions, :children, :nodes).each do |instance|
+        hash[predefined_syndrome.id]['nodes'][instance.node.id] = extract_instances(instance) unless predefined_syndrome == instance.node
+      end
+    end
+    hash
+  end
+
+  # Loop in each output possibilities(answer) for defined predefined syndrome
+  def self.push_predefined_syndrome_answers(predefined_syndrome)
+    hash = {}
+    predefined_syndrome.answers.each do |answer|
+      answer_hash = {}
+      answer_hash['id'] = answer.id
+      answer_hash['reference'] = answer.reference
+      answer_hash['label'] = answer.label
+
+      hash[answer.id] = answer_hash
     end
     hash
   end

@@ -62,11 +62,14 @@ input_integer = AnswerType.create!(value: 'Integer', display: 'Input')
 input_float = AnswerType.create!(value: 'Float', display: 'Input')
 
 # Categories
-exposure = Category.create!(name_en: 'Exposure', reference_prefix: 'E')
-symptom = Category.create!(name_en: 'Symptom', reference_prefix: 'S')
-assessement_text = Category.create!(name_en: 'Assessment/Test', reference_prefix: 'A')
-physical_exam = Category.create!(name_en: 'Physical exam', reference_prefix: 'P')
-comorbidity = Category.create!(name_en: 'Comorbidity', reference_prefix: 'DC')
+exposure = Category.create!(name_en: 'Exposure', reference_prefix: 'E', parent: 'Question')
+symptom = Category.create!(name_en: 'Symptom', reference_prefix: 'S', parent: 'Question')
+assessement_text = Category.create!(name_en: 'Assessment/Test', reference_prefix: 'A', parent: 'Question')
+physical_exam = Category.create!(name_en: 'Physical exam', reference_prefix: 'P', parent: 'Question')
+
+predefined_syndrome = Category.create!(name_en: 'Predefined syndrome', reference_prefix: 'PS', parent: 'PredefinedSyndrome')
+comorbidity = Category.create!(name_en: 'Comorbidity', reference_prefix: 'DC', parent: 'PredefinedSyndrome')
+predefined_condition = Category.create!(name_en: 'Predefined condition', reference_prefix: 'C', parent: 'PredefinedSyndrome')
 
 
 # Questions
@@ -167,7 +170,7 @@ m2 = Management.create!(algorithm: epoct, label_en: 'Refer', reference: '2')
 
 df7.nodes << [t1,t2,t9, m2]
 
-ps6 = PredefinedSyndrome.create!(algorithm: epoct, reference: '6', label_en: 'Able to drink')
+ps6 = PredefinedSyndrome.create!(algorithm: epoct, reference: '6', label_en: 'Able to drink', category: predefined_syndrome)
 ps6_1 = ps6.answers.first
 ps6_2 = ps6.answers.second
 

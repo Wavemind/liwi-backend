@@ -31,6 +31,7 @@ gem 'database_cleaner'
 gem 'breadcrumbs_on_rails'
 gem 'carrierwave', '~> 1.0'
 gem 'hstore_translate'
+gem 'nilify_blanks'
 gem 'rails-controller-testing'
 
 group :development, :test do

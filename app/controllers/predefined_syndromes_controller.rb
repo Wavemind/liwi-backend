@@ -76,6 +76,7 @@ class PredefinedSyndromesController < ApplicationController
       :label_fr,
       :description_en,
       :description_fr,
+      :category_id,
       :algorithm_id,
       )
   end
