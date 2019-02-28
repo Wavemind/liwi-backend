@@ -8,7 +8,7 @@ module ServiceMacros
       epoc_first = Version.create!(name: 'first_trial', algorithm: epoct, user: emmanuel)
 
       # Answer types
-      radio = AnswerType.create!(value: 'Array', display: 'Radiobutton')
+      boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
       checkbox = AnswerType.create!(value: 'Array', display: 'Checkbox')
       input_integer = AnswerType.create!(value: 'Integer', display: 'Input')
       input_float = AnswerType.create!(value: 'Float', display: 'Input')
@@ -26,34 +26,34 @@ module ServiceMacros
       dd7 = Diagnostic.create!(version: epoc_first, label: 'Severe LRTI', reference: '7')
       df7 = FinalDiagnostic.create!(label: 'Severe lower respiratory tract infection', reference: '7', diagnostic: dd7)
 
-      s2 = Question.create!(algorithm: epoct, label: 'Cough', reference: '2', category: symptom, priority: Question.priorities[:priority], answer_type: radio)
-      s2_1 = Answer.create!(node: s2, reference: '1', label: 'yes', value: nil, operator: nil)
-      s2_2 = Answer.create!(node: s2, reference: '2', label: 'no', value: nil, operator: nil)
+      s2 = Question.create!(algorithm: epoct, label: 'Cough', reference: '2', category: symptom, priority: Question.priorities[:priority], answer_type: boolean)
+      s2_1 = s2.answers.first
+      s2_2 = s2.answers.second
 
-      s4 = Question.create!(algorithm: epoct, label: 'Drink as usual', reference: '4', category: symptom, priority: Question.priorities[:priority], answer_type: radio)
-      s4_1 = Answer.create!(node: s4, reference: '1', label: 'yes', value: nil, operator: nil)
-      s4_2 = Answer.create!(node: s4, reference: '2', label: 'no', value: nil, operator: nil)
+      s4 = Question.create!(algorithm: epoct, label: 'Drink as usual', reference: '4', category: symptom, priority: Question.priorities[:priority], answer_type: boolean)
+      s4_1 = s4.answers.first
+      s4_2 = s4.answers.second
 
       p1 = Question.create!(algorithm: epoct, label: 'SAO2', reference: '1', category: physical_exam, priority: Question.priorities[:triage], answer_type: input_integer)
-      p1_1 = Answer.create!(node: p1, reference: '1', label: '>/= 90%', value: '90', operator: '>=')
-      p1_1 = Answer.create!(node: p1, reference: '2', label: '< 90%', value: '90', operator: '<')
+      p1_1 = Answer.create!(node: p1, reference: '1', label: '>/= 90%', value: '90', operator: Answer.operators[:more_or_equal])
+      p1_1 = Answer.create!(node: p1, reference: '2', label: '< 90%', value: '90', operator: Answer.operators[:less])
 
       p3 = Question.create!(algorithm: epoct, label: 'Respiratory rate', reference: '3', category: physical_exam, priority: Question.priorities[:triage], answer_type: input_integer)
-      p3_1 = Answer.create!(node: p3, reference: '1', label: '< 97th%ile', value: '97', operator: '<')
-      p3_2 = Answer.create!(node: p3, reference: '2', label: '>/= 97th%ile', value: '97', operator: '>=')
+      p3_1 = Answer.create!(node: p3, reference: '1', label: '< 97th%ile', value: '97', operator: Answer.operators[:less])
+      p3_2 = Answer.create!(node: p3, reference: '2', label: '>/= 97th%ile', value: '97', operator: Answer.operators[:more_or_equal])
 
-      p13 = Question.create!(algorithm: epoct, label: 'Lower chest indrawing', reference: '13', category: physical_exam, priority: Question.priorities[:basic], answer_type: radio)
-      p13_1 = Answer.create!(node: p13, reference: '1', label: 'yes', value: nil, operator: nil)
-      p13_2 = Answer.create!(node: p13, reference: '2', label: 'no', value: nil, operator: nil)
+      p13 = Question.create!(algorithm: epoct, label: 'Lower chest indrawing', reference: '13', category: physical_exam, priority: Question.priorities[:basic], answer_type: boolean)
+      p13_1 = p13.answers.first
+      p13_2 = p13.answers.second
 
 
-      p14 = Question.create!(algorithm: epoct, label: 'Sever respiratory distress', reference: '14', category: physical_exam, priority: Question.priorities[:basic], answer_type: radio)
-      p14_1 = Answer.create!(node: p14, reference: '1', label: 'yes', value: nil, operator: nil)
-      p14_1 = Answer.create!(node: p14, reference: '2', label: 'no', value: nil, operator: nil)
+      p14 = Question.create!(algorithm: epoct, label: 'Sever respiratory distress', reference: '14', category: physical_exam, priority: Question.priorities[:basic], answer_type: boolean)
+      p14_1 = p14.answers.first
+      p14_1 = p14.answers.second
 
-      p25 = Question.create!(algorithm: epoct, label: 'Tolerates PO liquid', reference: '25', category: physical_exam, priority: Question.priorities[:basic], answer_type: radio)
-      p25_1 = Answer.create!(node: p25, reference: '1', label: 'yes', value: nil, operator: nil)
-      p25_2 = Answer.create!(node: p25, reference: '2', label: 'no', value: nil, operator: nil)
+      p25 = Question.create!(algorithm: epoct, label: 'Tolerates PO liquid', reference: '25', category: physical_exam, priority: Question.priorities[:basic], answer_type: boolean)
+      p25_1 = p25.answers.first
+      p25_2 = p25.answers.second
 
       t1 = Treatment.create!(algorithm: epoct, label: 'Amoxicillin', reference: '1')
       t2 = Treatment.create!(algorithm: epoct, label: 'IM ceftriaxone', reference: '2')
