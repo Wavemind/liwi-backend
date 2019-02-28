@@ -93,6 +93,7 @@ en:
       title: "Edit this diagnostic"
     reference: "DD"
     show:
+      diagram: "Diagram"
       differential_diagnostic_conditions: "Differential diagnostic conditions"
       instances: "Instance of nodes"
       predefined_syndromes: "Predefined Syndromes"

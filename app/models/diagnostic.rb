@@ -44,6 +44,37 @@ class Diagnostic < ApplicationRecord
     Node.joins(:instances).where('type = ? AND instances.instanceable_id = ? AND instances.instanceable_type = ?', 'Treatment', id, self.class.name)
   end
 
+
+
+
+  def generate_questions_order
+    nodes = []
+    first_nodes = []
+    components.each do |instance|
+      first_nodes << instance if (instance.node.is_a?(Question) || instance.node.is_a?(PredefinedSyndrome)) && !instance.conditions.any?
+    end
+    nodes << first_nodes
+    get_children(first_nodes, nodes)
+  end
+
+  def get_children(instances, nodes)
+    current_nodes = []
+    instances.map(&:children).flatten.each do |child|
+      current_nodes << child.node if child.node.is_a?(Question) || child.node.is_a?(PredefinedSyndrome)
+    end
+
+    if current_nodes.any?
+      current_instances = Instance.where('instanceable_id = ? AND instanceable_type = ? AND node_id IN (?)', id, self.class.name, current_nodes.map(&:id).flatten)
+      nodes << current_instances
+      get_children(current_instances, nodes)
+    else
+      nodes
+    end
+  end
+
+
+
+
   private
 
   # {Node#unique_reference}

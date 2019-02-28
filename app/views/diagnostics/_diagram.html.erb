@@ -1,0 +1,34 @@
+<div>
+
+  <% @diagnostic.generate_questions_order.each do |level| %>
+    <div class="row">
+      <% level.each do |level| %>
+        <div class="col-sm border rounded" style="margin-right: 10px;">
+          <div class="row">
+            <div class="col-sm text-center">
+              <p><%= level.node.reference_label %></p>
+            </div>
+          </div>
+
+          <div class="row">
+            <% level.conditions.each do |condition| %>
+              <div class="col-sm text-center border-top">
+                <%= condition.display_condition %>
+              </div>
+            <% end %>
+          </div>
+
+          <div class="row">
+            <% level.node.answers.each do |answer| %>
+              <div class="col-sm text-center border-top">
+                <%= answer.reference_label %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <br />
+  <% end %>
+
+</div>

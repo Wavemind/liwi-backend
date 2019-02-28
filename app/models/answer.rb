@@ -16,6 +16,12 @@ class Answer < ApplicationRecord
   translates :label
 
   # @return [String]
+  # Return the label with the reference for the view
+  def reference_label
+    "#{reference} - #{label}"
+  end
+
+  # @return [String]
   # Return the reference of the answer. This function is needed to do a recursive functional call
   # with conditions or answers, answer being the last level
   def display_condition
