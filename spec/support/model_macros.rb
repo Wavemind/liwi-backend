@@ -64,7 +64,7 @@ module ModelMacros
 
       # Answers
       @s2_1 = s2.answers.first
-      @p3_2 = Answer.create!(node: p3, reference: '2', label_en: '>/= 97th%ile', value: '97', operator: '>=')
+      @p3_2 = Answer.create!(node: p3, reference: '2', label_en: '>/= 97th%ile', value: '97', operator: Answer.operators[:more_or_equal])
       @p13_1 = p13.answers.first
 
       # Diagnostics

@@ -62,7 +62,7 @@ RSpec.describe QuestionsController, type: :controller do
               reference: '45',
               label_en: 'more than 12 months',
               value: '12',
-              operator: '>='
+              operator: :more_or_equal
             }
           ]
         }
@@ -84,13 +84,13 @@ RSpec.describe QuestionsController, type: :controller do
               reference: '45',
               label_en: 'more than 12 months',
               value: '12',
-              operator: '>='
+              operator: :more_or_equal
             },
             {
               reference: '46',
               label_en: 'more than 12 months',
               value: '12',
-              operator: '>='
+              operator: :more_or_equal
             }
           ]
         }
@@ -112,7 +112,7 @@ RSpec.describe QuestionsController, type: :controller do
               reference: nil,
               label_en: 'more than 12 months',
               value: '12',
-              operator: '>='
+              operator: :more_or_equal
             }
           ]
         }
