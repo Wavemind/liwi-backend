@@ -1,12 +1,15 @@
 # Every answers to every questions
 class Answer < ApplicationRecord
 
+  enum operator: [:less, :between, :more_or_equal]
+
   belongs_to :node
   has_many :children
 
   validates_presence_of :reference
   validates_presence_of :label
 
+  after_validation :correct_value_type
   after_validation :unique_reference
   before_create :complete_reference
 
@@ -33,6 +36,30 @@ class Answer < ApplicationRecord
   end
 
   private
+
+  # Ensure that the entered values are in the correct type
+  def correct_value_type
+    if node.is_a?(Question) && node.answer_type.display == 'Input'
+      if Answer.operators[operator] == Answer.operators[:between]
+        errors.add(:value, I18n.t('answers.validation.value_missing')) unless value.include?(',')
+        value.split(',').each do |val|
+          validate_value_type(val)
+        end
+      else
+        validate_value_type(value)
+      end
+    end
+  end
+
+  # @param [String] val
+  # Force value into Integer or Float and raise a validation error otherwise
+  def validate_value_type(val)
+    if node.answer_type.value == 'Integer'
+      Integer(val) rescue errors.add(:value, I18n.t('answers.validation.wrong_value_type', type: node.answer_type.value))
+    elsif node.answer_type.value == 'Float'
+      Float(val) rescue errors.add(:value, I18n.t('answers.validation.wrong_value_type', type: node.answer_type.value))
+    end
+  end
 
   # {Node#unique_reference}
   # Scoped by the current algorithm

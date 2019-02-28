@@ -39,9 +39,15 @@ module ModelMacros
 
   def create_question
     before(:each) do
-      symptom = Category.create!(name_en: 'Symptom', reference_prefix: 'S')
+      symptom = Category.create!(name_en: 'Symptom', reference_prefix: 'S', parent: 'Question')
       boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
       @question = Question.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', category: symptom, priority: Question.priorities[:priority], answer_type: boolean)
+    end
+  end
+
+  def create_predefined_syndrome_category
+    before(:each) do
+      @ps_category = Category.create!(reference_prefix: 'PS', name_en: 'Predefined syndrome', parent: 'PredefinedSyndrome')
     end
   end
 
@@ -70,7 +76,8 @@ module ModelMacros
       @dd7_df7 = Instance.create!(instanceable: dd7, node: df7)
 
       # PS
-      ps6 = PredefinedSyndrome.create!(algorithm: @algorithm, reference: '6', label_en: 'Able to drink')
+      ps_category = Category.create!(reference_prefix: 'PS', name_en: 'Predefined syndrome', parent: 'PredefinedSyndrome')
+      ps6 = PredefinedSyndrome.create!(algorithm: @algorithm, reference: '6', label_en: 'Able to drink', category: ps_category)
 
       # Children
       Child.create!(instance: @dd7_p1, node: df7)

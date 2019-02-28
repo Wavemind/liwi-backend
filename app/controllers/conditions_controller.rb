@@ -76,5 +76,4 @@ class ConditionsController < ApplicationController
     )
   end
 
-
 end

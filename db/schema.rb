@@ -49,7 +49,7 @@ ActiveRecord::Schema.define(version: 2019_02_15_125719) do
   create_table "answers", force: :cascade do |t|
     t.string "reference"
     t.hstore "label_translations"
-    t.string "operator"
+    t.integer "operator"
     t.string "value"
     t.bigint "node_id"
     t.datetime "created_at", null: false
@@ -75,7 +75,7 @@ ActiveRecord::Schema.define(version: 2019_02_15_125719) do
   end
 
   create_table "conditions", force: :cascade do |t|
-    t.string "operator"
+    t.integer "operator"
     t.string "referenceable_type"
     t.bigint "referenceable_id"
     t.string "first_conditionable_type"

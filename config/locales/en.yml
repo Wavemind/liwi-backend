@@ -26,6 +26,13 @@ en:
     new:
       title: "Create related answers of %{name} question"
     "no": "No"
+    operators:
+      between: ">=, <"
+      less: "<"
+      more_or_equal: ">="
+    validation:
+      value_missing: "Use coma separated values when using between operator"
+      wrong_value_type: "The value is not in the correct type : %{type}"
     "yes": "Yes"
   api:
     v1:
@@ -42,6 +49,10 @@ en:
   children:
     errors:
       unknown_instanceable: "Unknown instanceable"
+  conditions:
+    operators:
+      and_operator: "AND"
+      or_operator: "OR"
   deactivated: "Deactivate"
   delete: "Delete"
   destroy: "Remove"

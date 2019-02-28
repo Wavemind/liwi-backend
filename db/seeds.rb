@@ -73,25 +73,25 @@ comorbidity = Category.create!(name_en: 'Comorbidity', reference_prefix: 'DC')
 age = Question.create!(algorithm: epoct, answer_type: input_integer, label_en: 'Quel est l' 'âge du patient ?', reference: '1', category: exposure, priority: Question.priorities[:triage])
 convulsion = Question.create!(algorithm: epoct, answer_type: input_integer, label_en: 'How many time did you convulse', reference: '3', category: symptom, priority: Question.priorities[:priority])
 drinking_status = Question.create!(algorithm: epoct, answer_type: boolean, label_en: 'Is the patient able to tolerate PO liquid ?', reference: '45', category: symptom, priority: Question.priorities[:priority])
-emesis = Question.create!(algorithm: epoct, answer_type: input_integer, label_en: 'How many time did you loose stool or emesis last 24 hours ?', reference: '5', category: symptom, priority: Question.priorities[:priority])
+emesis = Question.create!(algorithm: epoct, answer_type: input_integer, label_en: 'How many time did you loose stool or emesis last 24 hours ?', reference: '5', category: symptom, priority: Question.priorities[:priority]) # https://www.youtube.com/watch?v=qNo41sQbIsI
 muac = Question.create!(algorithm: epoct, answer_type: input_float, label_en: 'What is MUAC size ?', reference: '6', category: physical_exam, priority: Question.priorities[:triage])
 skin_lesion_size = Question.create!(algorithm: epoct, answer_type: input_float, label_en: 'What is the size of the skin lesion ?', reference: '21', category: physical_exam, priority: Question.priorities[:basic])
 
 # Answers
-Answer.create!(node: age, reference: '1', label_en: 'more than 12 months', value: '12', operator: '>=')
-Answer.create!(node: age, reference: '2', label_en: 'between 6 and 12 months', value: '6, 12', operator: '>=, <')
-Answer.create!(node: age, reference: '3', label_en: 'between 2 and 6 months', value: '2, 6', operator: '>=, <')
-Answer.create!(node: age, reference: '4', label_en: 'less than 2 months', value: '2', operator: '<')
-Answer.create!(node: convulsion, reference: '1', label_en: '2 or more', value: '2', operator: '>=')
-Answer.create!(node: convulsion, reference: '2', label_en: 'less than 2', value: '2', operator: '<')
-Answer.create!(node: emesis, reference: '1', label_en: '3 or more', value: '3', operator: '>=')
-Answer.create!(node: emesis, reference: '2', label_en: 'less than 3', value: '3', operator: '<')
-Answer.create!(node: muac, reference: '1', label_en: '12.5 or more', value: '12.5', operator: '>=')
-Answer.create!(node: muac, reference: '2', label_en: 'between 11.5 and 12.5', value: '11.5, 12.5', operator: '>=, <')
-Answer.create!(node: muac, reference: '3', label_en: 'less than 11.5', value: '11.5', operator: '<')
-Answer.create!(node: skin_lesion_size, reference: '1', label_en: '5 or more cm', value: '5', operator: '>=')
-Answer.create!(node: skin_lesion_size, reference: '2', label_en: 'between 2.5 and 5 cm', value: '2.5, 5', operator: '>=, <')
-Answer.create!(node: skin_lesion_size, reference: '3', label_en: 'less than 2.5 cm', value: '2.5', operator: '<')
+Answer.create!(node: age, reference: '1', label_en: 'more than 12 months', value: '12', operator: Answer.operators[:more_or_equal])
+Answer.create!(node: age, reference: '2', label_en: 'between 6 and 12 months', value: '6, 12', operator: Answer.operators[:between])
+Answer.create!(node: age, reference: '3', label_en: 'between 2 and 6 months', value: '2, 6', operator: Answer.operators[:between])
+Answer.create!(node: age, reference: '4', label_en: 'less than 2 months', value: '2', operator: Answer.operators[:less])
+Answer.create!(node: convulsion, reference: '1', label_en: '2 or more', value: '2', operator: Answer.operators[:more_or_equal])
+Answer.create!(node: convulsion, reference: '2', label_en: 'less than 2', value: '2', operator: Answer.operators[:less])
+Answer.create!(node: emesis, reference: '1', label_en: '3 or more', value: '3', operator: Answer.operators[:more_or_equal])
+Answer.create!(node: emesis, reference: '2', label_en: 'less than 3', value: '3', operator: Answer.operators[:less])
+Answer.create!(node: muac, reference: '1', label_en: '12.5 or more', value: '12.5', operator: Answer.operators[:more_or_equal])
+Answer.create!(node: muac, reference: '2', label_en: 'between 11.5 and 12.5', value: '11.5, 12.5', operator: Answer.operators[:between])
+Answer.create!(node: muac, reference: '3', label_en: 'less than 11.5', value: '11.5', operator: Answer.operators[:less])
+Answer.create!(node: skin_lesion_size, reference: '1', label_en: '5 or more cm', value: '5', operator: Answer.operators[:more_or_equal])
+Answer.create!(node: skin_lesion_size, reference: '2', label_en: 'between 2.5 and 5 cm', value: '2.5, 5', operator: Answer.operators[:between])
+Answer.create!(node: skin_lesion_size, reference: '3', label_en: 'less than 2.5 cm', value: '2.5', operator: Answer.operators[:less])
 
 # Diagnostics
 Diagnostic.create!(version: ft_1_0, label_en: 'Malaria', reference: '4')
@@ -140,12 +140,12 @@ s4_1 = s4.answers.first
 s4_2 = s4.answers.second
 
 p1 = Question.create!(algorithm: epoct, label_en: 'SAO2', reference: '1', category: physical_exam, priority: Question.priorities[:triage], answer_type: input_integer)
-p1_1 = Answer.create!(node: p1, reference: '1', label_en: '>/= 90%', value: '90', operator: '>=')
-p1_1 = Answer.create!(node: p1, reference: '2', label_en: '< 90%', value: '90', operator: '<')
+p1_1 = Answer.create!(node: p1, reference: '1', label_en: '>/= 90%', value: '90', operator: Answer.operators[:more_or_equal])
+p1_1 = Answer.create!(node: p1, reference: '2', label_en: '< 90%', value: '90', operator: Answer.operators[:less])
 
 p3 = Question.create!(algorithm: epoct, label_en: 'Respiratory rate', reference: '3', category: physical_exam, priority: Question.priorities[:triage], answer_type: input_integer)
-p3_1 = Answer.create!(node: p3, reference: '1', label_en: '< 97th%ile', value: '97', operator: '<')
-p3_2 = Answer.create!(node: p3, reference: '2', label_en: '>/= 97th%ile', value: '97', operator: '>=')
+p3_1 = Answer.create!(node: p3, reference: '1', label_en: '< 97th%ile', value: '97', operator: Answer.operators[:less])
+p3_2 = Answer.create!(node: p3, reference: '2', label_en: '>/= 97th%ile', value: '97', operator: Answer.operators[:more_or_equal])
 
 p13 = Question.create!(algorithm: epoct, label_en: 'Lower chest indrawing', reference: '13', category: physical_exam, priority: Question.priorities[:basic], answer_type: boolean)
 p13_1 = p13.answers.first
@@ -220,7 +220,7 @@ Condition.create!(referenceable: dd7_p13, first_conditionable: s2_1, operator: n
 Condition.create!(referenceable: dd7_p14, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
 
 Condition.create!(referenceable: dd7_df7, first_conditionable: p14_1, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: dd7_df7, first_conditionable: p3_2, operator: 'AND', second_conditionable: p13_1)
+Condition.create!(referenceable: dd7_df7, first_conditionable: p3_2, operator: Condition.operators[:and_operator], second_conditionable: p13_1)
 Condition.create!(referenceable: dd7_df7, first_conditionable: p1_1, operator: nil, second_conditionable: nil)
 
 Condition.create!(referenceable: dd7_ps6, first_conditionable: df7, operator: nil, second_conditionable: nil)
