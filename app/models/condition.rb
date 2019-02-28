@@ -4,6 +4,8 @@
 # in order to be processed before the sub-condition
 class Condition < ApplicationRecord
 
+  enum operator: [:and_operator, :or_operator]
+
   belongs_to :referenceable, polymorphic: true
   belongs_to :first_conditionable, polymorphic: true
   belongs_to :second_conditionable, polymorphic: true, optional: true

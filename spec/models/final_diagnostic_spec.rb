@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe FinalDiagnostic, type: :model do
   create_algorithm
   create_diagnostic
+  create_predefined_syndrome_category
 
   it 'is valid with valid attributes' do
     final_diagnostic = FinalDiagnostic.new(label_en: 'Severe lower respiratory tract infection', description_en: 'A shot description',reference: '7', diagnostic: @dd7)
@@ -32,7 +33,7 @@ RSpec.describe FinalDiagnostic, type: :model do
   end
 
   it 'cannot include a node which is not a health care (Management/Treatment)' do
-    predefined_syndrome = PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
+    predefined_syndrome = PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm, category: @ps_category)
 
     final_diagnostic = FinalDiagnostic.new(label_en: 'Severe lower respiratory tract infection', description_en: 'A shot description',reference: '7', diagnostic: @dd7)
     final_diagnostic.nodes << predefined_syndrome

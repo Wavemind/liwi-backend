@@ -14,11 +14,14 @@ module ServiceMacros
       input_float = AnswerType.create!(value: 'Float', display: 'Input')
 
       # Categories
-      exposure = Category.create!(name: 'Exposure', reference_prefix: 'E')
-      symptom = Category.create!(name: 'Symptom', reference_prefix: 'S')
-      assessement_text = Category.create!(name: 'Assessment/Test', reference_prefix: 'A')
-      physical_exam = Category.create!(name: 'Physical exam', reference_prefix: 'P')
-      comorbidity = Category.create!(name: 'Comorbidity', reference_prefix: 'DC')
+      exposure = Category.create!(name_en: 'Exposure', reference_prefix: 'E', parent: 'Question')
+      symptom = Category.create!(name_en: 'Symptom', reference_prefix: 'S', parent: 'Question')
+      assessement_text = Category.create!(name_en: 'Assessment/Test', reference_prefix: 'A', parent: 'Question')
+      physical_exam = Category.create!(name_en: 'Physical exam', reference_prefix: 'P', parent: 'Question')
+
+      predefined_syndrome = Category.create!(name_en: 'Predefined syndrome', reference_prefix: 'PS', parent: 'PredefinedSyndrome')
+      comorbidity = Category.create!(name_en: 'Comorbidity', reference_prefix: 'DC', parent: 'PredefinedSyndrome')
+      predefined_condition = Category.create!(name_en: 'Predefined condition', reference_prefix: 'C', parent: 'PredefinedSyndrome')
 
       dd7 = Diagnostic.create!(version: epoc_first, label: 'Severe LRTI', reference: '7')
       df7 = FinalDiagnostic.create!(label: 'Severe lower respiratory tract infection', reference: '7', diagnostic: dd7)
@@ -60,7 +63,7 @@ module ServiceMacros
 
       df7.nodes << [t1,t2,t9, m2]
 
-      ps6 = PredefinedSyndrome.create!(algorithm: epoct, reference: '6', label: 'Able to drink')
+      ps6 = PredefinedSyndrome.create!(algorithm: epoct, reference: '6', label: 'Able to drink', category: predefined_syndrome)
       ps6_1 = ps6.answers.first
       ps6_2 = ps6.answers.second
 
@@ -114,7 +117,7 @@ module ServiceMacros
       Condition.create!(referenceable: dd7_p14, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
 
       Condition.create!(referenceable: dd7_df7, first_conditionable: p14_1, operator: nil, second_conditionable: nil)
-      Condition.create!(referenceable: dd7_df7, first_conditionable: p3_2, operator: 'AND', second_conditionable: p13_1)
+      Condition.create!(referenceable: dd7_df7, first_conditionable: p3_2, operator: Condition.operators[:and_operator], second_conditionable: p13_1)
       Condition.create!(referenceable: dd7_df7, first_conditionable: p1_1, operator: nil, second_conditionable: nil)
 
       Condition.create!(referenceable: dd7_ps6, first_conditionable: df7, operator: nil, second_conditionable: nil)

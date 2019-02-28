@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe MedicalCase, type: :model do
   create_algorithm
+  create_predefined_syndrome_category
 
   before(:each) do
     @version = Version.create!(name: '1.0', user: @user, algorithm: @algorithm)
@@ -29,7 +30,7 @@ RSpec.describe MedicalCase, type: :model do
   end
 
   it 'cannot include a node which is not a health care (Management/Treatment)' do
-    predefined_syndrome = PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
+    predefined_syndrome = PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm, category: @ps_category)
 
     medical_case = MedicalCase.new(version: @version, patient: @patient)
     medical_case.nodes << predefined_syndrome

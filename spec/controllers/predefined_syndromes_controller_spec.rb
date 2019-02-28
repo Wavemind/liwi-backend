@@ -3,9 +3,10 @@ require 'rails_helper'
 RSpec.describe PredefinedSyndromesController, type: :controller do
   login_user
   create_algorithm
+  create_predefined_syndrome_category
 
   before(:each) do
-    @predefined_syndrome = @algorithm.predefined_syndromes.create!(reference: 1, label_en: 'Label en')
+    @predefined_syndrome = @algorithm.predefined_syndromes.create!(reference: 1, label_en: 'Label en', category: @ps_category)
   end
 
   it 'adds translations without rendering the view' do
