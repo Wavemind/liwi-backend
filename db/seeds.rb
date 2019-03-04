@@ -101,15 +101,6 @@ Diagnostic.create!(version: ft_1_0, label_en: 'Malaria', reference: '4')
 Diagnostic.create!(version: ft_1_0, label_en: 'IMPETIGO', reference: '6')
 Diagnostic.create!(version: ft_1_2, label_en: 'Chicken pox', reference: '8')
 
-# Treatments
-Treatment.create!(algorithm: epoct, reference: '4', label_en: 'Take 400mg of paracetamol')
-Treatment.create!(algorithm: epoct, reference: '5', label_en: 'Take 100mg of cephalexin')
-Treatment.create!(algorithm: epoct, reference: '6', label_en: 'Take 40mg of vitamin A')
-
-# Managements
-Management.create!(algorithm: epoct, reference: '5', label_en: 'Use a wheelchair for 2 months.')
-Management.create!(algorithm: epoct, reference: '6', label_en: 'Use crutch for 2 months.')
-
 # Patients
 john = Patient.create!(first_name: 'John', last_name: 'Do', birth_date: Date.new(1970,1,1))
 marc = Patient.create!(first_name: 'Marc', last_name: 'Do', birth_date: Date.new(1970,1,1))
@@ -230,4 +221,3 @@ Condition.create!(referenceable: dd7_ps6, first_conditionable: df7, operator: ni
 Condition.create!(referenceable: dd7_t9, first_conditionable: ps6_1, operator: nil, second_conditionable: nil)
 Condition.create!(referenceable: dd7_t1, first_conditionable: ps6_1, operator: nil, second_conditionable: nil)
 Condition.create!(referenceable: dd7_t2, first_conditionable: ps6_2, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: dd7_m2, first_conditionable: ps6_2, operator: nil, second_conditionable: ps6_1)

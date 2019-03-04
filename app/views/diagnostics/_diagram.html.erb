@@ -1,34 +1,97 @@
-<div>
+<div id="diagnostic_diagram">
 
   <% @diagnostic.generate_questions_order.each do |level| %>
     <div class="row">
       <% level.each do |level| %>
-        <div class="col-sm border rounded" style="margin-right: 10px;">
-          <div class="row">
-            <div class="col-sm text-center">
-              <p><%= level.node.reference_label %></p>
-            </div>
-          </div>
+        <div class="col border border-3 rounded node-block">
 
           <div class="row">
             <% level.conditions.each do |condition| %>
-              <div class="col-sm text-center border-top">
+              <div class="col-sm text-center <%= 'border-right' unless condition == level.conditions.last %>">
                 <%= condition.display_condition %>
               </div>
             <% end %>
           </div>
 
           <div class="row">
+            <div class="col-sm text-center border-top">
+              <p><%= level.node.reference_label %></p>
+            </div>
+          </div>
+
+          <div class="row">
             <% level.node.answers.each do |answer| %>
-              <div class="col-sm text-center border-top">
-                <%= answer.reference_label %>
+              <div class="col">
+                <div class="row">
+                  <div class="col-sm text-center border-top <%= 'border-right' unless answer == level.node.answers.last %>">
+                    <%= answer.reference_label %>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm text-center border-top <%= 'border-right' unless answer == level.node.answers.last %>">
+                    <%= @diagnostic.components.select { |instance|
+                      instance.conditions.where(first_conditionable: answer).or(instance.conditions.where(second_conditionable: answer)).any? }.map {|instance| instance.node.reference }.join(', ') %>
+                  </div>
+                </div>
               </div>
             <% end %>
           </div>
         </div>
       <% end %>
     </div>
-    <br />
+
+    <br/>
   <% end %>
+
+  <div class="row">
+    <% @diagnostic.final_diagnostics.each do |df| %>
+      <div class="col-sm border border-3 rounded node-block">
+        <div class="row">
+          <% df.instances.where(instanceable: @diagnostic).first.conditions.each do |condition| %>
+            <div class="col-sm text-center <%= 'border-right' unless condition == df.instances.where(instanceable: @diagnostic).first.conditions.last%>">
+              <%= condition.display_condition %>
+            </div>
+          <% end if df.instances.where(instanceable: @diagnostic).any? %>
+        </div>
+
+        <div class="row">
+          <div class="col-sm text-center node-block border-top">
+            <p><%= df.reference_label %></p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <br/>
+
+  <div class="row">
+    <% (@diagnostic.managements + @diagnostic.treatments).each do |hc| %>
+      <div class="col border border-3 rounded node-block">
+
+        <div class="row">
+          <% hc.instances.where(instanceable: @diagnostic).first.conditions.each do |condition| %>
+            <div class="col-sm text-center border-bottom">
+              <%= condition.display_condition %>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="row">
+          <div class="col-sm text-center border-bottom">
+            <p><%= hc.reference_label %></p>
+          </div>
+        </div>
+
+        <div class="row">
+          <% hc.final_diagnostics.each do |df| %>
+            <div class="col-sm text-center">
+              <p><%= df.reference %></p>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
 
 </div>

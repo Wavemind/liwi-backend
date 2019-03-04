@@ -200,3 +200,21 @@ td {
     text-decoration: none;
   }
 }
+
+/* ---------------------------------------------------
+    Algorithms views
+----------------------------------------------------- */
+
+#diagnostic_diagram div.col-sm {
+  padding: 3px 0 3px 0;
+  height: 100%
+}
+
+.node-block {
+  margin-right: 10px;
+  align-self: start;
+}
+
+.border-3 {
+  border-width: 3px !important;
+}

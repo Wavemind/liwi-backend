@@ -5,7 +5,7 @@ class Question < Node
 
   enum priority: [:basic, :triage, :priority]
 
-  has_many :answers, foreign_key: 'node_id'
+  has_many :answers, foreign_key: 'node_id', dependent: :destroy
   belongs_to :category
   belongs_to :answer_type
 
