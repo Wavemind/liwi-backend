@@ -15,4 +15,11 @@ class Instance < ApplicationRecord
   scope :treatments, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'Treatment') }
   scope :final_diagnostics, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'FinalDiagnostic') }
 
+  before_destroy :remove_children_from_parents
+
+  # Delete children aswell using this instance
+  def remove_children_from_parents
+    instanceable.components.select { |i| i.children.select { |c| c.destroy if c.node == self.node } }
+  end
+
 end
