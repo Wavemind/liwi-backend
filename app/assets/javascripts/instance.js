@@ -7,7 +7,6 @@ jQuery(document).ready(function () {
     "ajax": $("#instances-datatable").data("source"),
     "pagingType": "full_numbers",
     "columns": [
-      { "data": "id" },
       { "data": "reference" },
       { "data": "type" },
       { "data": "label" },

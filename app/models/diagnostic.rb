@@ -14,6 +14,16 @@ class Diagnostic < ApplicationRecord
 
   translates :label
 
+  # Enable recursive duplicating
+  # https://github.com/amoeba-rb/amoeba#usage
+  amoeba do
+    enable
+    include_association :components
+    include_association :final_diagnostics
+    include_association :conditions
+    append reference: I18n.t('duplicated')
+  end
+
   # @return [String]
   # Return the label with the reference for the view
   def reference_label
@@ -44,6 +54,44 @@ class Diagnostic < ApplicationRecord
     Node.joins(:instances).where('type = ? AND instances.instanceable_id = ? AND instances.instanceable_type = ?', 'Treatment', id, self.class.name)
   end
 
+  # @params [Diagnostic]
+  # After a duplicate, link DF instances to the duplicated ones instead of the source ones
+  def relink_instance
+    self.components.joins(:node).where('nodes.type = ?', 'FinalDiagnostic').each do |df_instance|
+      df_instance.node = Node.find_by(reference: "#{df_instance.node.reference}#{I18n.t('duplicated')}")
+      df_instance.save
+    end
+  end
+
+  # @params [Diagnostic]
+  # Generate the ordered questions
+  def generate_questions_order
+    nodes = []
+    first_nodes = []
+    components.each do |instance|
+      first_nodes << instance if (instance.node.is_a?(Question) || instance.node.is_a?(PredefinedSyndrome)) && !instance.conditions.any?
+    end
+    nodes << first_nodes
+    get_children(first_nodes, nodes)
+  end
+
+  # @params [Array][Instance], [Array][Node]
+  # Get children question nodes
+  def get_children(instances, nodes)
+    current_nodes = []
+    instances.map(&:children).flatten.each do |child|
+      current_nodes << child.node if child.node.is_a?(Question) || child.node.is_a?(PredefinedSyndrome)
+    end
+
+    if current_nodes.any?
+      current_instances = Instance.where('instanceable_id = ? AND instanceable_type = ? AND node_id IN (?)', id, self.class.name, current_nodes.map(&:id).flatten)
+      nodes << current_instances
+      get_children(current_instances, nodes)
+    else
+      nodes
+    end
+  end
+
   private
 
   # {Node#unique_reference}
@@ -57,6 +105,6 @@ class Diagnostic < ApplicationRecord
 
   # {Node#complete_reference}
   def complete_reference
-    self.reference = "#{I18n.t('diagnostics.reference')}_#{reference}"
+    self.reference = "#{I18n.t('diagnostics.reference')}_#{reference}" unless self.reference.include?(I18n.t('duplicated'))
   end
 end

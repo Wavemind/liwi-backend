@@ -10,6 +10,14 @@ class FinalDiagnostic < Node
   has_many :final_diagnostic_health_cares
   has_many :nodes, through: :final_diagnostic_health_cares
 
+  # Enable recursive duplicating
+  # https://github.com/amoeba-rb/amoeba#usage
+  amoeba do
+    enable
+    include_association :final_diagnostic_health_cares
+    append reference: I18n.t('duplicated')
+  end
+
   private
 
   # {Node#unique_reference}
@@ -23,6 +31,6 @@ class FinalDiagnostic < Node
   # {Node#complete_reference}
   # Scoped by the current algorithm
   def complete_reference
-    self.reference = "#{I18n.t('final_diagnostics.reference')}_#{reference}"
+    self.reference = "#{I18n.t('final_diagnostics.reference')}_#{reference}" unless self.reference.include?(I18n.t('duplicated'))
   end
 end

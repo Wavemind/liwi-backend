@@ -13,10 +13,9 @@ class InstanceDatatable < AjaxDatatablesRails::ActiveRecord
   # Column configuration
   def view_columns
     @view_columns ||= {
-      id: { source: 'Instance.id' },
-      reference: { source: 'Instance.node.reference' },
-      type: { source: 'Instance.node.type' },
-      label: { source: 'Instance.node.label' },
+      reference: { source: 'Node.reference' },
+      type: { source: 'Node.type' },
+      label: { source: 'Node.label_translations' },
     }
   end
 
@@ -27,7 +26,6 @@ class InstanceDatatable < AjaxDatatablesRails::ActiveRecord
     records.map do |record|
       actions = link_to(I18n.t('show'), polymorphic_url([instanceable, record]), class: 'btn btn-outline-primary') + " " + link_to(I18n.t('destroy'), polymorphic_url([instanceable, record]), method: :delete, class: 'btn btn-outline-danger', data: { confirm: 'Are you sure?' })
       {
-        id: record.id,
         reference: record.node.reference,
         type: record.node.type,
         label: record.node.label,
@@ -40,6 +38,6 @@ class InstanceDatatable < AjaxDatatablesRails::ActiveRecord
   # Activerecord request
   def get_raw_records
     instance = params[:type].constantize.find(params[:id])
-    Instance.where(instanceable: instance).includes([:node, :nodes, :children])
+    Instance.joins(:node).includes(:node, :children).where(instanceable: instance)
   end
 end

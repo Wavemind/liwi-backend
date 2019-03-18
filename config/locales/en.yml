@@ -106,6 +106,8 @@ en:
       predefined_syndromes: "Predefined syndromes"
       questions: "Questions"
       treatments: "Treatments"
+  duplicate: "Duplicate"
+  duplicated: "_duplicated"
   edit: "Edit"
   error: "An error occured"
   final_diagnostics:

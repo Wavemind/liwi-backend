@@ -29,9 +29,10 @@ Rails.application.routes.draw do
         put 'archive', to: 'versions#archive', as: 'archive'
         put 'unarchive', to: 'versions#unarchive', as: 'unarchive'
       end
-      resources :diagnostics, only: [:index, :new, :create, :edit, :update, :show, :update_translations] do
+      resources :diagnostics, only: [:index, :new, :create, :edit, :update, :show, :destroy, :duplicate, :update_translations] do
         member do
           put 'update_translations'
+          post 'duplicate'
         end
 
         resources :final_diagnostics, only: [:index, :show, :new, :create, :edit, :update, :delete, :destroy, :update_translations] do

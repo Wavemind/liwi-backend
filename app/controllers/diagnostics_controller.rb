@@ -1,8 +1,8 @@
 class DiagnosticsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:show, :new, :create, :edit, :update]
-  before_action :set_version, only: [:show, :new, :create, :edit, :update]
-  before_action :set_diagnostic, only: [:show, :edit, :update, :destroy, :update_translations]
+  before_action :set_algorithm, only: [:show, :new, :create, :edit, :update, :destroy, :duplicate]
+  before_action :set_version, only: [:show, :new, :create, :edit, :update, :destroy, :duplicate]
+  before_action :set_diagnostic, only: [:show, :edit, :update, :destroy, :update_translations, :duplicate]
 
   def index
     respond_to do |format|
@@ -55,7 +55,20 @@ class DiagnosticsController < ApplicationController
 
   def destroy
     if @diagnostic.destroy
-      redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic), notice: t('flash_message.success_deleted')
+      redirect_to algorithm_version_url(@algorithm, @version), notice: t('flash_message.success_deleted')
+    else
+      render :new
+    end
+  end
+
+  # @params [Diagnostic] diagnostic to duplicate
+  # Duplicate a diagnostic with the whole logic (Instances with their Conditions and Children), the FinalDiagnostics and Conditions attached to it
+  def duplicate
+    duplicated_diagnostic = @diagnostic.amoeba_dup
+
+    if duplicated_diagnostic.save
+      duplicated_diagnostic.relink_instance
+      redirect_to algorithm_version_url(@algorithm, @version), notice: t('flash_message.success_deleted')
     else
       render :new
     end
