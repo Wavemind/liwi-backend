@@ -5,13 +5,16 @@
     <a class="nav-link active" id="home-tab" data-toggle="tab" href="#instances" role="tab" aria-controls="home" aria-selected="true"><%= t('.instances') %></a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#final_diagnostics" role="tab" aria-controls="profile" aria-selected="false"><%= t('.subtitle_final_diagnostics')  %> </a>
+    <a class="nav-link" id="final_diagnostics-tab" data-toggle="tab" href="#final_diagnostics" role="tab" aria-controls="final_diagnostics" aria-selected="false"><%= t('.subtitle_final_diagnostics')  %> </a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#differential_conditions" role="tab" aria-controls="contact" aria-selected="false"><%= t('.differential_diagnostic_conditions') %></a>
+    <a class="nav-link" id="differential_conditions-tab" data-toggle="tab" href="#differential_conditions" role="tab" aria-controls="differential_conditions" aria-selected="false"><%= t('.differential_diagnostic_conditions') %></a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#translations" role="tab" aria-controls="contact" aria-selected="false"><%= t('.translations') %></a>
+    <a class="nav-link" id="translations-tab" data-toggle="tab" href="#translations" role="tab" aria-controls="translations" aria-selected="false"><%= t('.translations') %></a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="diagram-tab" data-toggle="tab" href="#diagram" role="tab" aria-controls="diagram" aria-selected="false"><%= t('.diagram') %></a>
   </li>
 </ul>
 
@@ -56,6 +59,10 @@
 
   <div class="tab-pane fade" id="translations" role="tabpanel" aria-labelledby="translations-tab">
     <%= render 'translations' %>
+  </div>
+
+  <div class="tab-pane fade" id="diagram" role="tabpanel" aria-labelledby="diagram-tab">
+    <%= render 'diagram' %>
   </div>
 </div>
 

@@ -21,7 +21,7 @@ class Condition < ApplicationRecord
   # @return [String]
   # Return the id displayed for the view
   def display_condition
-    "Cond : (#{first_conditionable.display_condition} #{operator.upcase unless operator.nil?} #{second_conditionable.display_condition unless second_conditionable.nil?})"
+    "#{first_conditionable.display_condition} #{operator.upcase unless operator.nil?} #{second_conditionable.display_condition unless second_conditionable.nil?}"
   end
 
   # @return [String]
