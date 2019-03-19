@@ -57,7 +57,7 @@ class Diagnostic < ApplicationRecord
   # @params [Diagnostic]
   # After a duplicate, link DF instances to the duplicated ones instead of the source ones
   def relink_instance
-    self.components.joins(:node).where('nodes.type = ?', 'FinalDiagnostic').each do |df_instance|
+    components.final_diagnostics.each do |df_instance|
       df_instance.node = Node.find_by(reference: "#{df_instance.node.reference}#{I18n.t('duplicated')}")
       df_instance.save
     end

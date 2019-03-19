@@ -38,6 +38,6 @@ class InstanceDatatable < AjaxDatatablesRails::ActiveRecord
   # Activerecord request
   def get_raw_records
     instance = params[:type].constantize.find(params[:id])
-    Instance.joins(:node).includes(:node, :children).where(instanceable: instance)
+    Instance.joins(:node).includes(:node, :nodes, :children).where(instanceable: instance)
   end
 end

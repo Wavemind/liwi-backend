@@ -38,7 +38,7 @@ RSpec.describe DiagnosticsController, type: :controller do
     expect(response).to have_attributes(status: 422)
   end
 
-  it 'duplicates the diagnostic properly', focus: true do
+  it 'duplicates the diagnostic properly' do
     post :duplicate, params: {
       algorithm_id: @algorithm.id,
       version_id: @dd7.version.id,

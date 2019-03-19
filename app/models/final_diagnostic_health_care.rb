@@ -6,8 +6,8 @@ class FinalDiagnosticHealthCare < ApplicationRecord
 
   after_validation :node_is_management_or_treatment
 
-  scope :managements, ->() { joins(:node).includes(:node).where('nodes.type = ?', 'Management') }
-  scope :treatments, ->() { joins(:node).includes(:node).where('nodes.type = ?', 'Treatment') }
+  scope :managements, ->() { joins(:node).where('nodes.type = ?', 'Management') }
+  scope :treatments, ->() { joins(:node).where('nodes.type = ?', 'Treatment') }
 
   private
 
