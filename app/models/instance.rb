@@ -17,6 +17,14 @@ class Instance < ApplicationRecord
 
   before_destroy :remove_children_from_parents
 
+  # Enable recursive duplicating
+  # https://github.com/amoeba-rb/amoeba#usage
+  amoeba do
+    enable
+    include_association :children
+    include_association :conditions
+  end
+
   # Delete children aswell using this instance
   def remove_children_from_parents
     instanceable.components.select { |i| i.children.select { |c| c.destroy if c.node == self.node } }

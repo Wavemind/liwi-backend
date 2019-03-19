@@ -68,12 +68,12 @@ module ModelMacros
       @p13_1 = p13.answers.first
 
       # Diagnostics
-      dd7 = Diagnostic.create!(version: epoc_first, label_en: 'Severe LRTI', reference: '7')
-      df7 = FinalDiagnostic.create!(label_en: 'Severe lower respiratory tract infection', reference: '7', diagnostic: dd7)
+      @dd7 = Diagnostic.create!(version: epoc_first, label_en: 'Severe LRTI', reference: '7')
+      df7 = FinalDiagnostic.create!(label_en: 'Severe lower respiratory tract infection', reference: '7', diagnostic: @dd7)
 
       # Instances
-      @dd7_p1 = Instance.create!(instanceable: dd7, node: p1)
-      @dd7_df7 = Instance.create!(instanceable: dd7, node: df7)
+      @dd7_p1 = Instance.create!(instanceable: @dd7, node: p1)
+      @dd7_df7 = Instance.create!(instanceable: @dd7, node: df7)
 
       # PS
       ps_category = Category.create!(reference_prefix: 'PS', name_en: 'Predefined syndrome', parent: 'PredefinedSyndrome')
