@@ -1,7 +1,7 @@
 class TreatmentsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_treatment, only: [:edit, :update, :update_translations]
-  before_action :set_algorithm, only: [:new, :create, :edit, :update]
+  before_action :set_treatment, only: [:edit, :update, :update_translations, :destroy]
+  before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy]
 
   def new
     add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
@@ -29,6 +29,18 @@ class TreatmentsController < ApplicationController
       redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_updated')
     else
       render :edit
+    end
+  end
+
+  def destroy
+    if @treatment.dependencies?
+      redirect_to algorithm_url(@algorithm), alert: t('dependencies')
+    else
+      if @treatment.destroy
+        redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_updated')
+      else
+        redirect_to algorithm_url(@algorithm), alert: t('error')
+      end
     end
   end
 

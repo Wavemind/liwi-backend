@@ -57,10 +57,14 @@ class FinalDiagnosticsController < ApplicationController
   end
 
   def destroy
-    if @final_diagnostic.destroy
-      redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic), notice: t('flash_message.success_deleted')
+    if @final_diagnostic.dependencies?
+      redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic), alert: t('dependencies')
     else
-      redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic), alert: t('flash_message.update_fail')
+      if @final_diagnostic.destroy
+        redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic), notice: t('flash_message.success_updated')
+      else
+        redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic), alert: t('error')
+      end
     end
   end
 

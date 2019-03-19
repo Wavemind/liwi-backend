@@ -1,7 +1,7 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_question, only: [:edit, :update, :answers, :category_reference, :update_translations]
-  before_action :set_algorithm, only: [:new, :create, :edit, :update, :answers]
+  before_action :set_question, only: [:edit, :update, :answers, :category_reference, :update_translations, :destroy]
+  before_action :set_algorithm, only: [:new, :create, :edit, :update, :answers, :destroy]
 
   def new
     add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
@@ -42,12 +42,23 @@ class QuestionsController < ApplicationController
     end
   end
 
+  def destroy
+    if @question.dependencies?
+      redirect_to algorithm_url(@algorithm), alert: t('dependencies')
+    else
+      if @question.destroy
+        redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_updated')
+      else
+        redirect_to algorithm_url(@algorithm), alert: t('error')
+      end
+    end
+  end
+
   # PUT algorithm/:algorithm_id/version/:version_id/questions/:id/answers
   # @params question [Question] object question contain multiple answers
   # @return redirect to algorithms#index with flash message
   # Create answers related to the current question
   def answers
-
     if @question.update(question_params)
       redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_updated')
     else
@@ -59,10 +70,10 @@ class QuestionsController < ApplicationController
   # Update the object with its translation without
   def update_translations
     if @question.update(question_params)
-      @json = { status: 'success', message: t('flash_message.success_updated')}
+      @json = { status: 'success', message: t('flash_message.success_updated') }
       render 'diagnostics/update_translations', formats: :js, status: :ok
     else
-      @json = { status: 'alert', message: t('flash_message.update_fail')}
+      @json = { status: 'alert', message: t('flash_message.update_fail') }
       render 'diagnostics/update_translations', formats: :js, status: :unprocessable_entity
     end
   end

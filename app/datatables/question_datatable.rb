@@ -5,6 +5,7 @@ class QuestionDatatable < AjaxDatatablesRails::ActiveRecord
   # Helpers
   def_delegator :@view, :link_to
   def_delegator :@view, :edit_algorithm_question_url
+  def_delegator :@view, :algorithm_question_url
 
   def initialize(params, opts = {})
     @view = opts[:view_context]
@@ -23,7 +24,7 @@ class QuestionDatatable < AjaxDatatablesRails::ActiveRecord
   # Value display
   def data
     records.map do |record|
-      actions = link_to(I18n.t('edit'), edit_algorithm_question_url(params[:id], record), class: 'btn btn-outline-info')
+      actions = link_to(I18n.t('edit'), edit_algorithm_question_url(params[:id], record), class: 'btn btn-outline-info') + " " + link_to(I18n.t('delete'), algorithm_question_url(record.algorithm, record), class: "btn btn-outline-danger #{record.dependencies? ? 'disabled' : ''}", method: :delete, data: { confirm: 'Are you sure?' })
       {
         reference: record.reference,
         label: record.label,

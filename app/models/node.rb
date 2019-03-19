@@ -32,6 +32,12 @@ class Node < ApplicationRecord
     "#{reference} - #{label}"
   end
 
+  # @return [Boolean]
+  # Verify if current node have dependencies in instances
+  def dependencies?
+    self.instances.any?
+  end
+
   private
 
   # @params nil

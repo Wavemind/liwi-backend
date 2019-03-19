@@ -46,7 +46,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :questions, only: [:new, :create, :edit, :update] do
+    resources :questions, only: [:new, :create, :edit, :update, :destroy] do
       member do
         put 'answers'
         put 'update_translations'
@@ -59,13 +59,13 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :treatments, only: [:new, :create, :edit, :update] do
+    resources :treatments, only: [:new, :create, :edit, :update, :destroy] do
       member do
         put 'update_translations'
       end
     end
 
-    resources :managements, only: [:new, :create, :edit, :update] do
+    resources :managements, only: [:new, :create, :edit, :update, :destroy] do
       member do
         put 'update_translations'
       end
