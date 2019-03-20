@@ -33,9 +33,9 @@ class Node < ApplicationRecord
   end
 
   # @return [Boolean]
-  # Verify if current node have dependencies in instances
+  # Verify if current node have instances dependencies
   def dependencies?
-    self.instances.any?
+    instances.any?
   end
 
   private

@@ -33,6 +33,7 @@ class ManagementsController < ApplicationController
   end
 
   def destroy
+    # If user remove 'disabled' css in button, we verify in controller
     if @management.dependencies?
       redirect_to algorithm_url(@algorithm), alert: t('dependencies')
     else

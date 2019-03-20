@@ -57,6 +57,7 @@ class FinalDiagnosticsController < ApplicationController
   end
 
   def destroy
+    # If user remove 'disabled' css in button, we verify in controller
     if @final_diagnostic.dependencies?
       redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic), alert: t('dependencies')
     else
