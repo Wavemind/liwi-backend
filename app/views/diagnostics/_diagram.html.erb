@@ -65,7 +65,7 @@
 
   <h2 class="mt-2"><%= t 'diagnostics.translations.treatments' %> / <%= t 'diagnostics.translations.managements' %></h2>
   <div class="row">
-    <% (@diagnostic.managements.includes(:final_diagnostics, final_diagnostic_health_cares: [:final_diagnostic]) + @diagnostic.treatments.includes(:final_diagnostics, final_diagnostic_health_cares: [:final_diagnostic])).each do |hc| %>
+    <% (@diagnostic.managements + @diagnostic.treatments).each do |hc| %>
       <div class="col border border-3 rounded node-block">
 
         <div class="row">
