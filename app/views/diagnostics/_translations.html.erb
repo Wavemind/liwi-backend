@@ -3,7 +3,7 @@
   <ul class="nav nav-tabs" id="myTab" role="tablist">
     <% Language.all.each do |language| %>
       <li class="nav-item">
-        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#instances" role="tab" aria-controls="home" aria-selected="true"><%= t('.instances') %></a>
+        <a class="nav-link active" id="#<%= language.code %>-tab" data-toggle="tab" href="#<%= language.code %>" role="tab" aria-controls="#<%= language.code %>" aria-selected="true">#<%= language.name %></a>
       </li>
     <% end %>
   </ul>
