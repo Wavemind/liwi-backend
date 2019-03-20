@@ -5,6 +5,8 @@ RSpec.describe QuestionsController, type: :controller do
   create_algorithm
   create_answer_type
   create_category
+  create_instances
+  create_question
 
   it 'render answer if question is valid' do
     post :create, params: {
@@ -120,7 +122,6 @@ RSpec.describe QuestionsController, type: :controller do
     }.to change(Answer, :count).by(0)
   end
 
-
   it 'adds translations without rendering the view' do
     @question = Question.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', category: @symptom, priority: Question.priorities[:priority], answer_type: @boolean)
 
@@ -153,5 +154,29 @@ RSpec.describe QuestionsController, type: :controller do
     expect(response).to render_template('diagnostics/update_translations')
     expect(response).to have_attributes(status: 422)
 
+  end
+
+  it 'returns error message when trying to remove a question who has an instance' do
+    Instance.create!(instanceable: @dd7, node: @question)
+
+    delete :destroy, params: {
+      algorithm_id: @algorithm.id,
+      id: @question.id,
+    }
+
+    expect(response).to redirect_to(@algorithm)
+    expect(response).to have_attributes(status: 302)
+    expect(flash[:alert]).to eq I18n.t('dependencies')
+  end
+
+  it 'returns success full message when removing a question hasn\'t instance dependecy' do
+    delete :destroy, params: {
+      algorithm_id: @algorithm.id,
+      id: @question.id,
+    }
+
+    expect(response).to redirect_to(@algorithm)
+    expect(response).to have_attributes(status: 302)
+    expect(flash[:notice]).to eq I18n.t('flash_message.success_updated')
   end
 end

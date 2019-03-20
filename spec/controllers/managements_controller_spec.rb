@@ -3,6 +3,9 @@ require 'rails_helper'
 RSpec.describe ManagementsController, type: :controller do
   login_user
   create_algorithm
+  create_answer_type
+  create_category
+  create_instances
 
   before(:each) do
     @management = @algorithm.managements.create!(reference: 1, label_en: 'Label en')
@@ -37,6 +40,30 @@ RSpec.describe ManagementsController, type: :controller do
     expect(response).to render_template('diagnostics/update_translations')
     expect(response).to have_attributes(status: 422)
 
+  end
+
+  it 'returns error message when trying to remove a management who has an instance' do
+    Instance.create!(instanceable: @dd7, node: @management)
+
+    delete :destroy, params: {
+      algorithm_id: @algorithm.id,
+      id: @management.id,
+    }
+
+    expect(response).to redirect_to(@algorithm)
+    expect(response).to have_attributes(status: 302)
+    expect(flash[:alert]).to eq I18n.t('dependencies')
+  end
+
+  it 'returns success full message when removing a management hasn\'t instance dependecy' do
+    delete :destroy, params: {
+      algorithm_id: @algorithm.id,
+      id: @management.id,
+    }
+
+    expect(response).to redirect_to(@algorithm)
+    expect(response).to have_attributes(status: 302)
+    expect(flash[:notice]).to eq I18n.t('flash_message.success_updated')
   end
 
 end

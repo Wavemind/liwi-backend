@@ -41,7 +41,7 @@ module ModelMacros
     before(:each) do
       symptom = Category.create!(name_en: 'Symptom', reference_prefix: 'S', parent: 'Question')
       boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
-      @question = Question.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', category: symptom, priority: Question.priorities[:priority], answer_type: boolean)
+      @question = Question.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2456', category: symptom, priority: Question.priorities[:priority], answer_type: boolean)
     end
   end
 
@@ -57,10 +57,10 @@ module ModelMacros
       epoc_first = Version.create!(name: 'first_trial', algorithm: @algorithm, user: @user)
 
       # Questions
-      s2 = Question.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', category: @symptom, priority: Question.priorities[:priority], answer_type: @boolean)
-      p13 = Question.create!(algorithm: @algorithm, label_en: 'Lower chest indrawing', reference: '13', category: @physical_exam, priority: Question.priorities[:basic], answer_type: @boolean)
-      p3 = Question.create!(algorithm: @algorithm, label_en: 'Respiratory rate', reference: '3', category: @physical_exam, priority: Question.priorities[:triage], answer_type: @input_integer)
-      p1 = Question.create!(algorithm: @algorithm, label_en: 'SAO2', reference: '1', category: @physical_exam, priority: Question.priorities[:triage], answer_type: @input_integer)
+      s2 = Question.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2123123', category: @symptom, priority: Question.priorities[:priority], answer_type: @boolean)
+      p13 = Question.create!(algorithm: @algorithm, label_en: 'Lower chest indrawing', reference: '1331231231', category: @physical_exam, priority: Question.priorities[:basic], answer_type: @boolean)
+      p3 = Question.create!(algorithm: @algorithm, label_en: 'Respiratory rate', reference: '34123123', category: @physical_exam, priority: Question.priorities[:triage], answer_type: @input_integer)
+      p1 = Question.create!(algorithm: @algorithm, label_en: 'SAO2', reference: '1123123', category: @physical_exam, priority: Question.priorities[:triage], answer_type: @input_integer)
 
       # Answers
       @s2_1 = s2.answers.first
