@@ -35,6 +35,7 @@ gem 'nilify_blanks'
 gem 'rails-controller-testing'
 gem 'react_on_rails'
 gem 'webpacker', '~> 3'
+gem 'foreman'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
@@ -66,3 +67,5 @@ group :production do
 end
 
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+
+gem 'mini_racer', platforms: :ruby

@@ -2,6 +2,13 @@
 # yarn lockfile v1
 
 
+"@babel/runtime-corejs2@^7.0.0":
+  version "7.4.0"
+  resolved "http://54.93.89.199:4873/@babel%2fruntime-corejs2/-/runtime-corejs2-7.4.0.tgz#72e94a5b59300482c2a334c06958021057c30da8"
+  dependencies:
+    core-js "^2.6.5"
+    regenerator-runtime "^0.13.2"
+
 "@rails/webpacker@3.5":
   version "3.5.5"
   resolved "http://54.93.89.199:4873/@rails%2fwebpacker/-/webpacker-3.5.5.tgz#8911c66bcefc8bc6b91270e92f0d39e3c2d43116"
@@ -1455,7 +1462,7 @@ copy-descriptor@^0.1.0:
   version "0.1.1"
   resolved "http://54.93.89.199:4873/copy-descriptor/-/copy-descriptor-0.1.1.tgz#676f6eb3c39997c2ee1ac3a924fd6124748f578d"
 
-core-js@^2.4.0, core-js@^2.5.0:
+core-js@^2.4.0, core-js@^2.5.0, core-js@^2.6.5:
   version "2.6.5"
   resolved "http://54.93.89.199:4873/core-js/-/core-js-2.6.5.tgz#44bc8d249e7fb2ff5d00e0341a7ffb94fbf67895"
 
@@ -4665,6 +4672,12 @@ react-is@^16.8.1:
   version "16.8.4"
   resolved "http://54.93.89.199:4873/react-is/-/react-is-16.8.4.tgz#90f336a68c3a29a096a3d648ab80e87ec61482a2"
 
+react-on-rails@11.2.2:
+  version "11.2.2"
+  resolved "http://54.93.89.199:4873/react-on-rails/-/react-on-rails-11.2.2.tgz#e5cc062e41832f548d9d40dfc2aebd586b932f95"
+  dependencies:
+    "@babel/runtime-corejs2" "^7.0.0"
+
 react@^16.8.4:
   version "16.8.4"
   resolved "http://54.93.89.199:4873/react/-/react-16.8.4.tgz#fdf7bd9ae53f03a9c4cd1a371432c206be1c4768"
@@ -4769,6 +4782,10 @@ regenerator-runtime@^0.10.5:
 regenerator-runtime@^0.11.0:
   version "0.11.1"
   resolved "http://54.93.89.199:4873/regenerator-runtime/-/regenerator-runtime-0.11.1.tgz#be05ad7f9bf7d22e056f9726cee5017fbf19e2e9"
+
+regenerator-runtime@^0.13.2:
+  version "0.13.2"
+  resolved "http://54.93.89.199:4873/regenerator-runtime/-/regenerator-runtime-0.13.2.tgz#32e59c9a6fb9b1a4aff09b4930ca2d4477343447"
 
 regenerator-transform@^0.10.0:
   version "0.10.1"
