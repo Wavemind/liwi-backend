@@ -4,6 +4,8 @@
 
 <%= render 'conditions/table' %>
 
-<h2><%= t('.children') %></h2>
+<% unless @instance.node.is_a?(Management) || @instance.node.is_a?(Treatment) %>
+  <h2><%= t('.children') %></h2>
 
-<%= render 'children/table' %>
+  <%= render 'children/table' %>
+<% end %>
