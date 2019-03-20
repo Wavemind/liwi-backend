@@ -67,10 +67,7 @@ class Diagnostic < ApplicationRecord
   # Generate the ordered questions
   def generate_questions_order
     nodes = []
-    first_nodes = []
-    components.each do |instance|
-      first_nodes << instance if (instance.node.is_a?(Question) || instance.node.is_a?(PredefinedSyndrome)) && !instance.conditions.any?
-    end
+    first_nodes = components.includes(:node, :conditions).where(conditions: { referenceable_id: nil }).where('nodes.type = ? OR nodes.type = ?', 'Question', 'PredefinedSyndrome')
     nodes << first_nodes
     get_children(first_nodes, nodes)
   end
@@ -79,7 +76,7 @@ class Diagnostic < ApplicationRecord
   # Get children question nodes
   def get_children(instances, nodes)
     current_nodes = []
-    instances.map(&:children).flatten.each do |child|
+    instances.includes(children: [:node]).map(&:children).flatten.each do |child|
       current_nodes << child.node if child.node.is_a?(Question) || child.node.is_a?(PredefinedSyndrome)
     end
 
