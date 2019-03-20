@@ -96,9 +96,9 @@ class DiagnosticsController < ApplicationController
   def diagnostic_params
     params.require(:diagnostic).permit(
       :id,
+      :reference,
       :label_en,
-      :label_fr,
-      :reference
+      Language.label_params
     )
   end
 end

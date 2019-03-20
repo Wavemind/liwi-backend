@@ -170,6 +170,9 @@ en:
     show:
       children: "Children"
       title: "Details of %{name} in %{node}"
+  languages:
+    description: "description_"
+    label: "label_"
   managements:
     edit:
       title: "Edit the management"

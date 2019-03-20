@@ -1,5 +1,15 @@
 <div>
 
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <% Language.all.each do |language| %>
+      <li class="nav-item">
+        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#instances" role="tab" aria-controls="home" aria-selected="true"><%= t('.instances') %></a>
+      </li>
+    <% end %>
+  </ul>
+
+
+
   <h4><%= t('.diagnostic') %></h4>
 
   <%= simple_form_for @diagnostic, url: update_translations_algorithm_version_diagnostic_url(@diagnostic.version.algorithm, @diagnostic.version, @diagnostic), remote: true, method: :put, html: {class: 'form-horizontal'} do |f| %>
