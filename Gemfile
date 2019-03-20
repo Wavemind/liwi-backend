@@ -33,6 +33,8 @@ gem 'carrierwave', '~> 1.0'
 gem 'hstore_translate'
 gem 'nilify_blanks'
 gem 'rails-controller-testing'
+gem 'react_on_rails'
+gem 'webpacker', '~> 3'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
