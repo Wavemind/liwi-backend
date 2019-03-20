@@ -172,7 +172,11 @@ en:
       title: "Details of %{name} in %{node}"
   languages:
     description: "description_"
+    edit:
+      title: "Edit the language"
     label: "label_"
+    new:
+      title: "New language"
   managements:
     edit:
       title: "Edit the management"
@@ -241,6 +245,9 @@ en:
       title: "Edit role"
   save: "Save"
   select: "Please select"
+  settings:
+    index:
+      languages: "Languages"
   show: "Show"
   treatments:
     edit:

@@ -1,0 +1,7 @@
+<h2><%= t('.languages') %></h2>
+
+<%= link_to new_language_url do %>
+  <button type="button" class="btn btn-outline-secondary mb-4"><%= t('add') %></button>
+<% end %>
+
+<%= render 'languages/table' %>

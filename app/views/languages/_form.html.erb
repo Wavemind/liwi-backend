@@ -1,0 +1,7 @@
+<%= simple_form_for @language, html: { class: 'form-horizontal' } do |f| %>
+
+  <%= f.input :name %>
+  <%= f.input :code %>
+
+  <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
+<% end %>
