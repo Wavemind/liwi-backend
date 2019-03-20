@@ -10,7 +10,6 @@ RSpec.describe FinalDiagnosticsController, type: :controller do
   end
 
   it 'creates excluding final diagnostic from controller than remove it with the destroy method' do
-
     df2 = @dd7.final_diagnostics.create!(reference: 2, label_en: 'df')
 
     post :add_excluded_diagnostic, params: {
@@ -40,7 +39,6 @@ RSpec.describe FinalDiagnosticsController, type: :controller do
   end
 
   it 'adds translations without rendering the view' do
-
     put :update_translations, params: {
       algorithm_id: @algorithm.id,
       version_id: @dd7.version.id,
@@ -71,7 +69,30 @@ RSpec.describe FinalDiagnosticsController, type: :controller do
 
     expect(response).to render_template('diagnostics/update_translations')
     expect(response).to have_attributes(status: 422)
+  end
 
+  it 'returns error message when trying to remove a final diagnostic who has an instance' do
+    Instance.create!(instanceable: @dd7, node: @df1)
+
+    delete :destroy, params: {
+      algorithm_id: @algorithm.id,
+      version_id: @dd7.version.id,
+      diagnostic_id: @dd7.id,
+      id: @df1.id,
+    }
+
+    expect(flash[:alert]).to eq I18n.t('dependencies')
+  end
+
+  it 'returns success full message when removing a final diagnostic hasn\'t instance dependecy' do
+    delete :destroy, params: {
+      algorithm_id: @algorithm.id,
+      version_id: @dd7.version.id,
+      diagnostic_id: @dd7.id,
+      id: @df1.id,
+    }
+
+    expect(flash[:notice]).to eq I18n.t('flash_message.success_updated')
   end
 
 end
