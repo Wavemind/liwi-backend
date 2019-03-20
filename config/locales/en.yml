@@ -287,3 +287,4 @@ en:
       subtitle_diagnostics: "Diagnostics"
       title: "Details of %{name} - version %{version}"
       predefined_syndromes: "Predefined Syndromes"
+  warning_dependency: "Attention ! Editing this node will affect :"

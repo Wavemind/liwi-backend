@@ -1,5 +1,7 @@
 <h1><%= t('.title') %></h1>
 
+<%= render 'utils/dependency_warning', node: @treatment %>
+
 <div class="row justify-content-center">
   <%= render 'form' %>
 </div>
