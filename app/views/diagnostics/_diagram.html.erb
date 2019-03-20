@@ -29,7 +29,7 @@
                 <div class="row">
                   <div class="col-sm text-center border-top <%= 'border-right' unless answer == elem.node.answers.last %>">
                     <small>
-                      <%= @diagnostic.components.select { |instance|
+                      <%= @diagnostic.components.includes(:node).select { |instance|
                         instance.conditions.where(first_conditionable: answer).or(instance.conditions.where(second_conditionable: answer)).any? }.map { |instance| instance.node.reference }.join(', ') %>
                     </small>
                   </div>
@@ -65,7 +65,7 @@
 
   <h2 class="mt-2"><%= t 'diagnostics.translations.treatments' %> / <%= t 'diagnostics.translations.managements' %></h2>
   <div class="row">
-    <% (@diagnostic.managements + @diagnostic.treatments).each do |hc| %>
+    <% (@diagnostic.managements.includes(:final_diagnostics, final_diagnostic_health_cares: [:final_diagnostic]) + @diagnostic.treatments.includes(:final_diagnostics, final_diagnostic_health_cares: [:final_diagnostic])).each do |hc| %>
       <div class="col border border-3 rounded node-block">
 
         <div class="row">
@@ -80,14 +80,6 @@
           <div class="col-sm text-center border-bottom p-3">
             <h5 class="m-0"><%= hc.reference_label %></h5>
           </div>
-        </div>
-
-        <div class="row">
-          <% hc.final_diagnostics.each do |df| %>
-            <div class="col-sm text-center">
-              <p><%= df.reference %></p>
-            </div>
-          <% end %>
         </div>
       </div>
     <% end %>
