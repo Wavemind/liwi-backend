@@ -43,10 +43,14 @@ class PredefinedSyndromesController < ApplicationController
   end
 
   def destroy
-    if @predefined_syndrome.destroy
-      redirect_to @algorithm, notice: t('flash_message.success_updated')
+    if @predefined_syndrome.dependencies?
+      redirect_to algorithm_url(@algorithm), alert: t('dependencies')
     else
-      redirect_to @algorithm, alert: t('error')
+      if @predefined_syndrome.destroy
+        redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_updated')
+      else
+        redirect_to algorithm_url(@algorithm), alert: t('error')
+      end
     end
   end
 

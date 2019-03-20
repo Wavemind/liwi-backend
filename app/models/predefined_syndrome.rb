@@ -5,7 +5,7 @@ class PredefinedSyndrome < Node
   belongs_to :category
 
   has_many :answers, foreign_key: 'node_id', dependent: :destroy
-  has_many :components, class_name: "Instance", as: :instanceable, dependent: :destroy
+  has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy
 
   private
 

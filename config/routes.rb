@@ -71,7 +71,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :predefined_syndromes, only: [:index, :new, :create, :edit, :update] do
+    resources :predefined_syndromes, only: [:index, :new, :create, :edit, :update, :destroy] do
       member do
         put 'update_translations'
       end
