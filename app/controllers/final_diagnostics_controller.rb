@@ -19,7 +19,7 @@ class FinalDiagnosticsController < ApplicationController
     add_breadcrumb @final_diagnostic.reference
 
     @final_diagnostic_health_care = FinalDiagnosticHealthCare.new
-    @treatments = @final_diagnostic.final_diagnostic_health_cares.treatments
+    @treatments = @final_diagnostic.final_diagnostic_health_cares.treatments.includes(:node)
     @managements = @final_diagnostic.final_diagnostic_health_cares.managements
   end
 

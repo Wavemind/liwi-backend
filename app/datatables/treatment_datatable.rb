@@ -31,6 +31,6 @@ class TreatmentDatatable < AjaxDatatablesRails::ActiveRecord
   end
 
   def get_raw_records
-    Algorithm.find(params[:id]).treatments
+    Algorithm.find(params[:id]).treatments.includes([:algorithm, :instances])
   end
 end

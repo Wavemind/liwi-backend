@@ -16,7 +16,7 @@ class Condition < ApplicationRecord
   validates_presence_of :first_conditionable
 
   # Puts nil instead of empty string when operator is not set in the view.
-  nilify_blanks :only => [:operator]
+  nilify_blanks only: [:operator]
 
   # @return [String]
   # Return the id displayed for the view

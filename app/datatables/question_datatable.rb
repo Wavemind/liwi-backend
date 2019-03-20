@@ -40,7 +40,7 @@ class QuestionDatatable < AjaxDatatablesRails::ActiveRecord
 
   # Activerecord request
   def get_raw_records
-    Algorithm.find(params[:id]).questions.includes([:answers, :answer_type, :category])
+    Algorithm.find(params[:id]).questions.includes([:answers, :answer_type, :category, :algorithm, :instances])
   end
 
 end
