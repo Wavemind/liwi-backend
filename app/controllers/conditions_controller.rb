@@ -33,9 +33,9 @@ class ConditionsController < ApplicationController
     @condition.second_conditionable = @condition.create_conditionable(condition_params[:second_conditionable_id]) unless condition_params[:second_conditionable_id].empty?
 
     if @condition.save
-      redirect_to algorithm_version_diagnostic_url(@instanceable.version.algorithm, @instanceable.version, @instanceable), notice: t('flash_message.success_created')
+      redirect_to algorithm_version_diagnostic_url(@instanceable.version.algorithm, @instanceable.version, @instanceable, panel: 'differential_conditions'), notice: t('flash_message.success_created')
     else
-      redirect_to algorithm_version_diagnostic_url(@instanceable.version.algorithm, @instanceable.version, @instanceable), alert: t('error')
+      redirect_to algorithm_version_diagnostic_url(@instanceable.version.algorithm, @instanceable.version, @instanceable, panel: 'differential_conditions'), alert: t('error')
     end
   end
 
@@ -44,9 +44,9 @@ class ConditionsController < ApplicationController
   # Destroy diagnostic condition
   def destroy_diagnostic_condition
     if @condition.destroy
-      redirect_to algorithm_version_diagnostic_url(@instanceable.version.algorithm, @instanceable.version, @instanceable), notice: t('flash_message.success_updated')
+      redirect_to algorithm_version_diagnostic_url(@instanceable.version.algorithm, @instanceable.version, @instanceable, panel: 'differential_conditions'), notice: t('flash_message.success_updated')
     else
-      redirect_to algorithm_version_diagnostic_url(@instanceable.version.algorithm, @instanceable.version, @instanceable), alert: t('error')
+      redirect_to algorithm_version_diagnostic_url(@instanceable.version.algorithm, @instanceable.version, @instanceable, panel: 'differential_conditions'), alert: t('error')
     end
   end
 
