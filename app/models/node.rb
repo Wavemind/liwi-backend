@@ -38,6 +38,12 @@ class Node < ApplicationRecord
     instances.any?
   end
 
+  # @return [ActiveRecord::Association]
+  # List of instances
+  def dependencies
+    instances
+  end
+
   private
 
   # @params nil
