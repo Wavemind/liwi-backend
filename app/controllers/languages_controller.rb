@@ -28,7 +28,7 @@ class LanguagesController < ApplicationController
     if @language.destroy
       redirect_to settings_url, notice: t('flash_message.success_deleted')
     else
-      redirect_to settings_url
+      redirect_to settings_url, alert: t('flash_message.delete_fail')
     end
   end
 

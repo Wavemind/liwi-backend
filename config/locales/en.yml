@@ -130,6 +130,7 @@ en:
       excluded_diagnostic: "Excluded diagnostic"
       no_excluded_diagnostic: "There is no diagnosis excluded"
   flash_message:
+    delete_fail: "Error will deleting the entry"
     success_created: "Data was successfully created"
     success_deleted: "Data was successfully deleted"
     success_updated: "Data was successfully updated"
