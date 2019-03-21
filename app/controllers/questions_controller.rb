@@ -89,12 +89,12 @@ class QuestionsController < ApplicationController
     params.require(:question).permit(
       :id,
       :label_en,
-      :label_fr,
+      Language.label_params,
       :reference,
       :priority,
       :category_id,
       :description_en,
-      :description_fr,
+      Language.description_params,
       :answer_type_id,
       answers_attributes: [
         :id,
