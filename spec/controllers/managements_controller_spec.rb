@@ -50,7 +50,7 @@ RSpec.describe ManagementsController, type: :controller do
       id: @management.id,
     }
 
-    expect(response).to redirect_to(@algorithm)
+    expect(response).to redirect_to algorithm_url(@algorithm, panel: 'managements')
     expect(response).to have_attributes(status: 302)
     expect(flash[:alert]).to eq I18n.t('dependencies')
   end
@@ -61,7 +61,7 @@ RSpec.describe ManagementsController, type: :controller do
       id: @management.id,
     }
 
-    expect(response).to redirect_to(@algorithm)
+    expect(response).to redirect_to algorithm_url(@algorithm, panel: 'managements')
     expect(response).to have_attributes(status: 302)
     expect(flash[:notice]).to eq I18n.t('flash_message.success_updated')
   end

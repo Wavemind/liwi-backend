@@ -33,7 +33,7 @@ RSpec.describe QuestionsController, type: :controller do
         answer_type_id: @boolean.id
       }
     }
-    expect(response).to redirect_to algorithm_url(@algorithm)
+    expect(response).to redirect_to algorithm_url(@algorithm, panel: 'questions')
   end
 
   it 'render new if question is invalid' do
@@ -164,7 +164,7 @@ RSpec.describe QuestionsController, type: :controller do
       id: @question.id,
     }
 
-    expect(response).to redirect_to(@algorithm)
+    expect(response).to redirect_to algorithm_url(@algorithm, panel: 'questions')
     expect(response).to have_attributes(status: 302)
     expect(flash[:alert]).to eq I18n.t('dependencies')
   end
@@ -175,7 +175,7 @@ RSpec.describe QuestionsController, type: :controller do
       id: @question.id,
     }
 
-    expect(response).to redirect_to(@algorithm)
+    expect(response).to redirect_to algorithm_url(@algorithm, panel: 'questions')
     expect(response).to have_attributes(status: 302)
     expect(flash[:notice]).to eq I18n.t('flash_message.success_updated')
   end
