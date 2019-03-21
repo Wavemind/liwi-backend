@@ -31,6 +31,6 @@ class ManagementDatatable < AjaxDatatablesRails::ActiveRecord
   end
 
   def get_raw_records
-    Algorithm.find(params[:id]).managements
+    Algorithm.find(params[:id]).managements.includes([:algorithm, :instances])
   end
 end

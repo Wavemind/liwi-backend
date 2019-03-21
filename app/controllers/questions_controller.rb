@@ -10,7 +10,7 @@ class QuestionsController < ApplicationController
   end
 
   def edit
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'questions')
     add_breadcrumb @question.label, algorithm_question_url(@algorithm, @question)
   end
 
@@ -20,7 +20,7 @@ class QuestionsController < ApplicationController
     if @question.save
       # Don't create answers if it is boolean type, since it is automatically created from the model
       if @question.answer_type.value == 'Boolean'
-        redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_created')
+        redirect_to algorithm_url(@algorithm, panel: 'questions'), notice: t('flash_message.success_created')
       else
         # Create a new first answer for the form view
         @question.answers << Answer.new
@@ -45,12 +45,12 @@ class QuestionsController < ApplicationController
   def destroy
     # If user remove 'disabled' css in button, we verify in controller
     if @question.dependencies?
-      redirect_to algorithm_url(@algorithm), alert: t('dependencies')
+      redirect_to algorithm_url(@algorithm, panel: 'questions'), alert: t('dependencies')
     else
       if @question.destroy
-        redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_updated')
+        redirect_to algorithm_url(@algorithm, panel: 'questions'), notice: t('flash_message.success_updated')
       else
-        redirect_to algorithm_url(@algorithm), alert: t('error')
+        redirect_to algorithm_url(@algorithm, panel: 'questions'), alert: t('error')
       end
     end
   end
@@ -61,7 +61,7 @@ class QuestionsController < ApplicationController
   # Create answers related to the current question
   def answers
     if @question.update(question_params)
-      redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_updated')
+      redirect_to algorithm_url(@algorithm, panel: 'questions'), notice: t('flash_message.success_updated')
     else
       render 'answers/new'
     end

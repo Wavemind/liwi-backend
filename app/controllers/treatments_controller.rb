@@ -4,13 +4,13 @@ class TreatmentsController < ApplicationController
   before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy]
 
   def new
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'treatments')
 
     @treatment = Treatment.new
   end
 
   def edit
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'treatments')
     add_breadcrumb @treatment.reference, algorithm_treatment_url(@algorithm, @treatment)
   end
 
@@ -18,7 +18,7 @@ class TreatmentsController < ApplicationController
     @treatment = @algorithm.treatments.new(treatment_params)
 
     if @treatment.save
-      redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_created')
+      redirect_to algorithm_url(@algorithm, panel: 'treatments'), notice: t('flash_message.success_created')
     else
       render :new
     end
@@ -26,7 +26,7 @@ class TreatmentsController < ApplicationController
 
   def update
     if @treatment.update(treatment_params)
-      redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_updated')
+      redirect_to algorithm_url(@algorithm, panel: 'treatments'), notice: t('flash_message.success_updated')
     else
       render :edit
     end
@@ -35,12 +35,12 @@ class TreatmentsController < ApplicationController
   def destroy
     # If user remove 'disabled' css in button, we verify in controller
     if @treatment.dependencies?
-      redirect_to algorithm_url(@algorithm), alert: t('dependencies')
+      redirect_to algorithm_url(@algorithm, panel: 'treatments'), alert: t('dependencies')
     else
       if @treatment.destroy
-        redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_updated')
+        redirect_to algorithm_url(@algorithm, panel: 'treatments'), notice: t('flash_message.success_updated')
       else
-        redirect_to algorithm_url(@algorithm), alert: t('error')
+        redirect_to algorithm_url(@algorithm, panel: 'treatments'), alert: t('error')
       end
     end
   end

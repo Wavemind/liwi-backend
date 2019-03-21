@@ -4,13 +4,13 @@ class ManagementsController < ApplicationController
   before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy]
 
   def new
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'managements')
 
     @management = Management.new
   end
 
   def edit
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'managements')
     add_breadcrumb @management.reference, algorithm_management_url(@algorithm, @management)
   end
 
@@ -18,7 +18,7 @@ class ManagementsController < ApplicationController
     @management = @algorithm.managements.new(management_params)
 
     if @management.save
-      redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_created')
+      redirect_to algorithm_url(@algorithm, panel: 'managements'), notice: t('flash_message.success_created')
     else
       render :new
     end
@@ -26,7 +26,7 @@ class ManagementsController < ApplicationController
 
   def update
     if @management.update(management_params)
-      redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_updated')
+      redirect_to algorithm_url(@algorithm, panel: 'managements'), notice: t('flash_message.success_updated')
     else
       render :edit
     end
@@ -35,12 +35,12 @@ class ManagementsController < ApplicationController
   def destroy
     # If user remove 'disabled' css in button, we verify in controller
     if @management.dependencies?
-      redirect_to algorithm_url(@algorithm), alert: t('dependencies')
+      redirect_to algorithm_url(@algorithm, panel: 'managements'), alert: t('dependencies')
     else
       if @management.destroy
-        redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_updated')
+        redirect_to algorithm_url(@algorithm, panel: 'managements'), notice: t('flash_message.success_updated')
       else
-        redirect_to algorithm_url(@algorithm), alert: t('error')
+        redirect_to algorithm_url(@algorithm, panel: 'managements'), alert: t('error')
       end
     end
   end

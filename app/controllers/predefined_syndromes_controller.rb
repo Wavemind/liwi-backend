@@ -6,7 +6,7 @@ class PredefinedSyndromesController < ApplicationController
   def show
     # Retrieve algorithm, since the show is not in the same route
     @algorithm = @predefined_syndrome.algorithm
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'predefined_syndromes')
     add_breadcrumb @predefined_syndrome.label
 
     @instance = Instance.new
@@ -14,13 +14,13 @@ class PredefinedSyndromesController < ApplicationController
   end
 
   def new
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'predefined_syndromes')
 
     @predefined_syndrome = PredefinedSyndrome.new
   end
 
   def edit
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'predefined_syndromes')
     add_breadcrumb @predefined_syndrome.label, predefined_syndrome_url(@predefined_syndrome)
   end
 
@@ -36,7 +36,7 @@ class PredefinedSyndromesController < ApplicationController
 
   def update
     if @predefined_syndrome.update(predefined_syndrome_params)
-      redirect_to @algorithm, notice: t('flash_message.success_updated')
+      redirect_to algorithm_url(@algorithm, panel: 'predefined_syndromes'), notice: t('flash_message.success_updated')
     else
       render :edit
     end
@@ -45,12 +45,12 @@ class PredefinedSyndromesController < ApplicationController
   def destroy
     # If user remove 'disabled' css in button, we verify in controller
     if @predefined_syndrome.dependencies?
-      redirect_to algorithm_url(@algorithm), alert: t('dependencies')
+      redirect_to algorithm_url(@algorithm, panel: 'predefined_syndromes'), alert: t('dependencies')
     else
       if @predefined_syndrome.destroy
-        redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_updated')
+        redirect_to algorithm_url(@algorithm, panel: 'predefined_syndromes'), notice: t('flash_message.success_updated')
       else
-        redirect_to algorithm_url(@algorithm), alert: t('error')
+        redirect_to algorithm_url(@algorithm, panel: 'predefined_syndromes'), alert: t('error')
       end
     end
   end
