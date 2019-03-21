@@ -1,3 +1,7 @@
+# Languages (english is basic)
+Language.create!(name: 'French', code: 'fr')
+Language.create!(name: 'Swahili', code: 'sw')
+
 # Group
 group_wavemind = Group.create!(name: 'Wavemind')
 group_unicorne = Group.create!(name: 'Unicorne')

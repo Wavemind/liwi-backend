@@ -14,6 +14,9 @@ Rails.application.routes.draw do
 
   resources :roles, only: [:index, :show, :new, :create, :edit, :update]
 
+  resources :settings, only: [:index]
+  resources :languages, only: [:new, :create, :update, :destroy]
+
   resources :algorithms, only: [:index, :show, :new, :create, :edit, :update] do
     member do
       put 'archive', to: 'algorithms#archive', as: 'archive'

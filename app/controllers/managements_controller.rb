@@ -68,9 +68,9 @@ class ManagementsController < ApplicationController
       :id,
       :reference,
       :label_en,
-      :label_fr,
+      Language.label_params,
       :description_en,
-      :description_fr,
+      Language.description_params,
       :algorithm_id,
     )
   end

@@ -119,10 +119,10 @@ class FinalDiagnosticsController < ApplicationController
       :id,
       :reference,
       :label_en,
-      :label_fr,
+      Language.label_params,
       :final_diagnostic_id,
       :description_en,
-      :description_fr
+      Language.description_params
     )
   end
 end

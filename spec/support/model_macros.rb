@@ -1,6 +1,7 @@
 module ModelMacros
   def create_algorithm
     before(:each) do
+      Language.create!(name: 'French', code: 'fr')
       role_administrator = Role.create!(name: 'Administrator')
       @user = User.create!(first_name: 'Alain', last_name: 'Fresco', email: 'alain.fresco@wavemind.ch', password: '123456', password_confirmation: '123456', role: role_administrator)
       @algorithm = Algorithm.create!(name: 'ePoct', user: @user)

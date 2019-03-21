@@ -130,6 +130,7 @@ en:
       excluded_diagnostic: "Excluded diagnostic"
       no_excluded_diagnostic: "There is no diagnosis excluded"
   flash_message:
+    delete_fail: "Error will deleting the entry"
     success_created: "Data was successfully created"
     success_deleted: "Data was successfully deleted"
     success_updated: "Data was successfully updated"
@@ -170,6 +171,13 @@ en:
     show:
       children: "Children"
       title: "Details of %{name} in %{node}"
+  languages:
+    description: "description_"
+    edit:
+      title: "Edit the language"
+    label: "label_"
+    new:
+      title: "New language"
   managements:
     edit:
       title: "Edit the management"
@@ -238,6 +246,9 @@ en:
       title: "Edit role"
   save: "Save"
   select: "Please select"
+  settings:
+    index:
+      languages: "Languages"
   show: "Show"
   treatments:
     edit:

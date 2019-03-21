@@ -54,7 +54,7 @@ class AnswersController < ApplicationController
     params.require(:answer).permit(
       :id,
       :label_en,
-      :label_fr,
+      Language.label_params,
       :reference,
       :priority,
       :category,

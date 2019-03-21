@@ -78,9 +78,9 @@ class PredefinedSyndromesController < ApplicationController
       :id,
       :reference,
       :label_en,
-      :label_fr,
+      Language.label_params,
       :description_en,
-      :description_fr,
+      Language.description_params,
       :category_id,
       :algorithm_id,
       )

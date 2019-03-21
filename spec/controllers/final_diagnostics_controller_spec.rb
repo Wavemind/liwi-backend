@@ -95,4 +95,21 @@ RSpec.describe FinalDiagnosticsController, type: :controller do
     expect(flash[:notice]).to eq I18n.t('flash_message.success_updated')
   end
 
+  it 'creates a language then be able to translate in that language' do
+    Language.create!(name: 'Hebrew', code: 'he')
+
+    put :update_translations, params: {
+      algorithm_id: @algorithm.id,
+      version_id: @dd7.version.id,
+      diagnostic_id: @dd7.id,
+      id: @df1.id,
+      final_diagnostic: {
+        label_he: 'Shalom',
+      }
+    }
+
+    @df1.reload
+    expect(@df1.label_he).to eq('Shalom')
+  end
+
 end
