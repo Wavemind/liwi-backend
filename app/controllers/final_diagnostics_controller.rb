@@ -15,7 +15,7 @@ class FinalDiagnosticsController < ApplicationController
   def show
     add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
     add_breadcrumb @version.name, algorithm_version_url(@algorithm, @version)
-    add_breadcrumb @diagnostic.reference, algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic)
+    add_breadcrumb @diagnostic.reference, algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'final_diagnostics')
     add_breadcrumb @final_diagnostic.reference
 
     @final_diagnostic_health_care = FinalDiagnosticHealthCare.new
@@ -26,7 +26,7 @@ class FinalDiagnosticsController < ApplicationController
   def new
     add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
     add_breadcrumb @version.name, algorithm_version_url(@algorithm, @version)
-    add_breadcrumb @diagnostic.reference, algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic)
+    add_breadcrumb @diagnostic.reference, algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'final_diagnostics')
 
     @final_diagnostic = FinalDiagnostic.new
   end
@@ -34,7 +34,7 @@ class FinalDiagnosticsController < ApplicationController
   def edit
     add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
     add_breadcrumb @version.name, algorithm_version_url(@algorithm, @version)
-    add_breadcrumb @diagnostic.reference, algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic)
+    add_breadcrumb @diagnostic.reference, algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'final_diagnostics')
     add_breadcrumb @final_diagnostic.reference, algorithm_version_diagnostic_final_diagnostic_url(@algorithm, @version, @diagnostic, @final_diagnostic)
   end
 
@@ -42,7 +42,7 @@ class FinalDiagnosticsController < ApplicationController
     @final_diagnostic = @diagnostic.final_diagnostics.new(final_diagnostic_params)
 
     if @final_diagnostic.save
-      redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic), notice: t('flash_message.success_created')
+      redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'final_diagnostics'), notice: t('flash_message.success_created')
     else
       render :new
     end
@@ -50,7 +50,7 @@ class FinalDiagnosticsController < ApplicationController
 
   def update
     if @final_diagnostic.update(final_diagnostic_params)
-      redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic), notice: t('flash_message.success_updated')
+      redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'final_diagnostics'), notice: t('flash_message.success_updated')
     else
       render :edit
     end
@@ -59,12 +59,12 @@ class FinalDiagnosticsController < ApplicationController
   def destroy
     # If user remove 'disabled' css in button, we verify in controller
     if @final_diagnostic.dependencies?
-      redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic), alert: t('dependencies')
+      redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'final_diagnostics'), alert: t('dependencies')
     else
       if @final_diagnostic.destroy
-        redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic), notice: t('flash_message.success_updated')
+        redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'final_diagnostics'), notice: t('flash_message.success_updated')
       else
-        redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic), alert: t('error')
+        redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'final_diagnostics'), alert: t('error')
       end
     end
   end
@@ -74,9 +74,9 @@ class FinalDiagnosticsController < ApplicationController
   # Add excluded diagnostic to final diagnostic
   def add_excluded_diagnostic
     if @final_diagnostic.update(final_diagnostic_params)
-      redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic), notice: t('flash_message.success_updated')
+      redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'final_diagnostics'), notice: t('flash_message.success_updated')
     else
-      redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic), alert: t('flash_message.update_fail')
+      redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'final_diagnostics'), alert: t('flash_message.update_fail')
     end
   end
 
@@ -86,9 +86,9 @@ class FinalDiagnosticsController < ApplicationController
   def remove_excluded_diagnostic
     @final_diagnostic.excluded_diagnostic = nil
     if @final_diagnostic.save
-      redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic), notice: t('flash_message.success_updated')
+      redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'final_diagnostics'), notice: t('flash_message.success_updated')
     else
-      redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic), alert: t('flash_message.update_fail')
+      redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'final_diagnostics'), alert: t('flash_message.update_fail')
     end
   end
 

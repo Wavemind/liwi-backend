@@ -22,7 +22,7 @@ class AnswersController < ApplicationController
 
   def update
     if @answer.update(answer_params)
-      redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_updated')
+      redirect_to algorithm_url(@algorithm, panel: 'questions'), notice: t('flash_message.success_updated')
     else
       render :edit
     end

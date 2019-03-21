@@ -11,7 +11,7 @@ class VersionsController < ApplicationController
   end
 
   def show
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'versions')
     add_breadcrumb @version.name
   end
 
@@ -20,7 +20,7 @@ class VersionsController < ApplicationController
   end
 
   def edit
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'versions')
     add_breadcrumb @version.name, algorithm_version_url(@algorithm, @version)
   end
 
@@ -29,7 +29,7 @@ class VersionsController < ApplicationController
     @version.user = current_user
 
     if @version.save
-      redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_created')
+      redirect_to algorithm_url(@algorithm, panel: 'versions'), notice: t('flash_message.success_created')
     else
       render :new
     end
@@ -37,7 +37,7 @@ class VersionsController < ApplicationController
 
   def update
     if @version.update(version_params)
-      redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_updated')
+      redirect_to algorithm_url(@algorithm, panel: 'versions'), notice: t('flash_message.success_updated')
     else
       render :edit
     end
@@ -51,9 +51,9 @@ class VersionsController < ApplicationController
     @version.archived = true
 
     if @version.save
-      redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_created')
+      redirect_to algorithm_url(@algorithm, panel: 'versions'), notice: t('flash_message.success_created')
     else
-      redirect_to algorithm_url(@algorithm), danger: t('flash_message.update_fail')
+      redirect_to algorithm_url(@algorithm, panel: 'versions'), danger: t('flash_message.update_fail')
     end
   end
 
@@ -65,9 +65,9 @@ class VersionsController < ApplicationController
     @version.archived = false
 
     if @version.save
-      redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_created')
+      redirect_to algorithm_url(@algorithm, panel: 'versions'), notice: t('flash_message.success_created')
     else
-      redirect_to algorithm_url(@algorithm), danger: t('flash_message.update_fail')
+      redirect_to algorithm_url(@algorithm, panel: 'versions'), danger: t('flash_message.update_fail')
     end
   end
 
