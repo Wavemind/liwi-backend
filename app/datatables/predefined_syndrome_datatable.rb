@@ -37,6 +37,6 @@ class PredefinedSyndromeDatatable < AjaxDatatablesRails::ActiveRecord
 
   # Activerecord request
   def get_raw_records
-    Algorithm.find(params[:id]).predefined_syndromes
+    Algorithm.find(params[:id]).predefined_syndromes.includes(:instances, :category, :algorithm)
   end
 end
