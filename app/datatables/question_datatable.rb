@@ -16,8 +16,8 @@ class QuestionDatatable < AjaxDatatablesRails::ActiveRecord
   def view_columns
     @view_columns ||= {
       reference: { source: 'Question.reference' },
-      label: { source: 'Question.label' },
-      description: { source: 'Question.description' },
+      label: { source: 'Question.label_translations' },
+      description: { source: 'Question.description_translations' },
     }
   end
 

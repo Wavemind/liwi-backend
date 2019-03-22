@@ -19,7 +19,7 @@ class Question < Node
   # {Node#unique_reference}
   # Scoped by the current algorithm
   def unique_reference
-    if algorithm.questions.where(reference: "#{category.reference_prefix}_#{reference}").any?
+    if algorithm.questions.where(reference: "#{category.reference_prefix}#{reference}").any?
       errors.add(:reference, I18n.t('nodes.validation.reference_used'))
     end
   end
@@ -27,7 +27,7 @@ class Question < Node
   # {Node#complete_reference}
   def complete_reference
     if category.present?
-      self.reference = "#{category.reference_prefix}_#{reference}"
+      self.reference = "#{category.reference_prefix}#{reference}"
     end
   end
 

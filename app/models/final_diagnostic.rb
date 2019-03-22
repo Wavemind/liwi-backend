@@ -23,7 +23,7 @@ class FinalDiagnostic < Node
   # {Node#unique_reference}
   def unique_reference
     if FinalDiagnostic.joins(diagnostic: [version: :algorithm])
-         .where('nodes.reference = ? AND algorithms.id = ?', "#{I18n.t('final_diagnostics.reference')}_#{reference}", diagnostic.version.algorithm.id).any?
+         .where('nodes.reference = ? AND algorithms.id = ?', "#{I18n.t('final_diagnostics.reference')}#{reference}", diagnostic.version.algorithm.id).any?
       errors.add(:reference, I18n.t('nodes.validation.reference_used'))
     end
   end
@@ -31,6 +31,6 @@ class FinalDiagnostic < Node
   # {Node#complete_reference}
   # Scoped by the current algorithm
   def complete_reference
-    self.reference = "#{I18n.t('final_diagnostics.reference')}_#{reference}" unless self.reference.include?(I18n.t('duplicated'))
+    self.reference = "#{I18n.t('final_diagnostics.reference')}#{reference}" unless self.reference.include?(I18n.t('duplicated'))
   end
 end

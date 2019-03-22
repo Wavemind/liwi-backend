@@ -13,8 +13,8 @@ class TreatmentDatatable < AjaxDatatablesRails::ActiveRecord
   def view_columns
     @view_columns ||= {
       reference: { source: 'Treatment.reference' },
-      label: { source: 'Treatment.label' },
-      description: { source: 'Treatment.description' },
+      label: { source: 'Treatment.label_translations' },
+      description: { source: 'Treatment.description_translations' },
     }
   end
 

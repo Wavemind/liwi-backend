@@ -1,7 +1,7 @@
 <%= simple_form_for [@algorithm, @predefined_syndrome], html: { class: 'form-horizontal' }, wrapper: :input_group do |f| %>
   <%= f.association :category, collection: Category.predefined_syndrome_categories, label_method: :name, prompt: t('select'), disabled: f.object.persisted? %>
 
-  <%= f.input :reference, prepend: (f.object.persisted? ? false : (@predefined_syndrome.category.nil? ? '_' : @predefined_syndrome.category.reference_prefix + '_')), disabled: f.object.persisted? %>
+  <%= f.input :reference, prepend: (f.object.persisted? ? false : (@predefined_syndrome.category.nil? ? '' : @predefined_syndrome.category.reference_prefix)), disabled: f.object.persisted? %>
   <%= f.input :label_en %>
   <%= f.input :description_en %>
 
