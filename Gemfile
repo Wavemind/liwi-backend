@@ -33,7 +33,7 @@ gem 'carrierwave', '~> 1.0'
 gem 'hstore_translate'
 gem 'nilify_blanks'
 gem 'rails-controller-testing'
-gem 'react_on_rails'
+gem 'react-rails'
 gem 'webpacker', '~> 3'
 gem 'foreman'
 

@@ -1,13 +1,12 @@
 {
-  "name": "liwi-backend",
-  "private": true,
   "dependencies": {
     "@rails/webpacker": "3.5",
     "babel-preset-react": "^6.24.1",
     "prop-types": "^15.7.2",
     "react": "^16.8.4",
+    "react-archer": "^1.0.2",
     "react-dom": "^16.8.4",
-    "react-on-rails": "11.2.2"
+    "react_ujs": "^2.4.4"
   },
   "devDependencies": {
     "webpack-dev-server": "2.11.2"

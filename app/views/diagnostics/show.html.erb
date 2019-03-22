@@ -62,6 +62,13 @@
   </div>
 
   <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'diagram'%>" id="diagram" role="tabpanel" aria-labelledby="diagram-tab">
+    <%= react_component('Diagram', {
+      diagnostic: @diagnostic.generate_questions_order.as_json(include: [conditions: {include: [:first_conditionable]}, node: {include: [:answers]}]),
+      finalDiagnostics: @diagnostic.final_diagnostics.as_json(include: [instances: {include: [conditions: {include: [:first_conditionable, :second_conditionable]}]}]),
+      treatments: @diagnostic.treatments,
+      managements: @diagnostic.managements,
+    }) %>
+    <hr/>
     <%= render 'diagram' %>
   </div>
 </div>
