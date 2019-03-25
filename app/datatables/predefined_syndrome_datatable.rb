@@ -16,8 +16,8 @@ class PredefinedSyndromeDatatable < AjaxDatatablesRails::ActiveRecord
   def view_columns
     @view_columns ||= {
       reference: { source: 'PredefinedSyndrome.reference' },
-      label: { source: 'PredefinedSyndrome.label' },
-      description: { source: 'PredefinedSyndrome.description' },
+      label: { source: 'PredefinedSyndrome.label_translations' },
+      description: { source: 'PredefinedSyndrome.description_translations' },
     }
   end
 
@@ -37,6 +37,6 @@ class PredefinedSyndromeDatatable < AjaxDatatablesRails::ActiveRecord
 
   # Activerecord request
   def get_raw_records
-    Algorithm.find(params[:id]).predefined_syndromes
+    Algorithm.find(params[:id]).predefined_syndromes.includes(:instances, :category, :algorithm)
   end
 end

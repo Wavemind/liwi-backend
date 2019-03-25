@@ -13,8 +13,8 @@ class ManagementDatatable < AjaxDatatablesRails::ActiveRecord
   def view_columns
     @view_columns ||= {
       reference: { source: 'Management.reference' },
-      label: { source: 'Management.label' },
-      description: { source: 'Management.description' },
+      label: { source: 'Management.label_translations' },
+      description: { source: 'Management.description_translations' },
     }
   end
 

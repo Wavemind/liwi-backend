@@ -15,8 +15,7 @@ class DiagnosticDatatable < AjaxDatatablesRails::ActiveRecord
   def view_columns
     @view_columns ||= {
       reference: { source: 'Diagnostic.reference' },
-      label: { source: 'Diagnostic.label' },
-      last_update: { source: 'Diagnostic.last_update' },
+      label: { source: 'Diagnostic.label_translations' },
     }
   end
 

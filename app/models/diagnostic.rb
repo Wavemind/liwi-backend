@@ -95,13 +95,13 @@ class Diagnostic < ApplicationRecord
   # Scoped by the current algorithm
   def unique_reference
     if Diagnostic.joins(version: :algorithm)
-         .where('reference = ? AND algorithms.id = ?', "#{I18n.t('diagnostics.reference')}_#{reference}", version.algorithm.id).any?
+         .where('reference = ? AND algorithms.id = ?', "#{I18n.t('diagnostics.reference')}#{reference}", version.algorithm.id).any?
       errors.add(:reference, I18n.t('nodes.validation.reference_used'))
     end
   end
 
   # {Node#complete_reference}
   def complete_reference
-    self.reference = "#{I18n.t('diagnostics.reference')}_#{reference}" unless self.reference.include?(I18n.t('duplicated'))
+    self.reference = "#{I18n.t('diagnostics.reference')}#{reference}" unless self.reference.include?(I18n.t('duplicated'))
   end
 end
