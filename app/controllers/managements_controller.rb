@@ -11,7 +11,7 @@ class ManagementsController < ApplicationController
 
   def edit
     add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'managements')
-    add_breadcrumb @management.reference, algorithm_management_url(@algorithm, @management)
+    add_breadcrumb @management.reference
   end
 
   def create

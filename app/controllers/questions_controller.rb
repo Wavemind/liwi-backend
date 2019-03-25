@@ -11,7 +11,7 @@ class QuestionsController < ApplicationController
 
   def edit
     add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'questions')
-    add_breadcrumb @question.label, algorithm_question_url(@algorithm, @question)
+    add_breadcrumb @question.label
   end
 
   def create

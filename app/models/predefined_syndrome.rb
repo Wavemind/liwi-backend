@@ -12,14 +12,14 @@ class PredefinedSyndrome < Node
   # {Node#unique_reference}
   # Scoped by the current algorithm
   def unique_reference
-    if algorithm.predefined_syndromes.where(reference: "#{category.reference_prefix}_#{reference}").any?
+    if algorithm.predefined_syndromes.where(reference: "#{category.reference_prefix}#{reference}").any?
       errors.add(:reference, I18n.t('nodes.validation.reference_used'))
     end
   end
 
   # {Node#complete_reference}
   def complete_reference
-    self.reference = "#{category.reference_prefix}_#{reference}"
+    self.reference = "#{category.reference_prefix}#{reference}"
   end
 
   # Automatically create the answers, since they can't be changed

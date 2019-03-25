@@ -11,7 +11,7 @@ class TreatmentsController < ApplicationController
 
   def edit
     add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'treatments')
-    add_breadcrumb @treatment.reference, algorithm_treatment_url(@algorithm, @treatment)
+    add_breadcrumb @treatment.reference
   end
 
   def create
