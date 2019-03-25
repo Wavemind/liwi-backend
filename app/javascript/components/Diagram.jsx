@@ -1,103 +1,99 @@
-import React from 'react';
-import { ArcherContainer, ArcherElement } from 'react-archer';
-
-const rowStyle = {
-  margin: '200px 0',
-  display: 'flex',
-  justifyContent: 'space-between',
-};
-const boxStyle = { padding: '10px', border: '1px solid black', textAlign: 'center' };
-
-const generateCondition = (conditions) => {
-  let relations = [];
-
-  conditions.map((condition) => {
-    relations.push(
-        {
-          targetId: condition.first_conditionable.node_id,
-          targetAnchor: 'bottom',
-          sourceAnchor: 'top',
-        }
-      );
-      if (condition.second_conditionable_id !== null) {
-        relations.push(
-          {
-            targetId: condition.second_conditionable.node_id,
-            targetAnchor: 'bottom',
-            sourceAnchor: 'top',
-          }
-        );
-      }
-    }
-  );
-
-  return relations;
-};
-
-const generateNode = (relation) => {
-  return (
-    <ArcherElement
-      key={relation.node_id}
-      id={relation.node_id}
-      relations={relation.conditions.length > 0 ? generateCondition(relation.conditions) : ''}
-    >
-      <div style={boxStyle}>
-        {relation.node_id}<br/>
-        {relation.node.label_translations['en']}<br/>
-        {relation.node.reference}
-        <hr/>
-        {relation.node.answers.map((answer) => (answer.reference))}
-      </div>
-    </ArcherElement>
-  )
-};
+import {
+  DiagramEngine,
+  DiagramModel,
+  DefaultNodeModel,
+  LinkModel,
+  DiagramWidget
+} from "storm-react-diagrams";
+import * as React from "react";
+import * as _ from "lodash";
 
 class Diagram extends React.Component {
   render = () => {
-
     const {
       diagnostic,
       finalDiagnostics,
-      treatments,
-      managements,
+      healthCares
     } = this.props;
 
-    return (
-      <div style={{ height: '800px', margin: '50px' }}>
-        <ArcherContainer strokeColor="red">
-          {diagnostic.map((levels) => (
-            <div style={rowStyle}>
-              {levels.map((relation) => (generateNode(relation)))}
-            </div>
-          ))}
-          <div>
-            {finalDiagnostics.reduce((r, { instances }) => {
-              let and_condition = instances[0].conditions.map(condition => condition.operator === 'and_operator');
-              if (and_condition.includes(true)) {
 
-              }
-            }, [])}
-            {finalDiagnostics.map((finalDiagnostic) => (
-              <div>
-                <ArcherElement
-                  key={finalDiagnostic.instances[0].id}
-                  id={finalDiagnostic.instances[0].node_id}
-                  relations={generateCondition(finalDiagnostic.instances[0].conditions)}
-                >
-                  <div style={boxStyle}>
-                    {finalDiagnostic.id}<br/>
-                    {finalDiagnostic.label_translations['en']}<br/>
-                    {finalDiagnostic.reference}
-                    <hr/>
-                    {treatments.map(treatment => treatment.reference + ' ')}
-                    {managements.map(management => management.reference + ' ')}
-                  </div>
-                </ArcherElement>
-              </div>))}
-          </div>
-        </ArcherContainer>
-      </div>
-    );
+    //1) setup the diagram engine
+    let engine = new DiagramEngine();
+    engine.installDefaultFactories();
+
+    //2) setup the diagram model
+    let model = new DiagramModel();
+
+    let nodes = [];
+
+    let yPosition = 0;
+    // PS and QUESTIONS
+    diagnostic.map((levels, i) => (
+      levels.map((relation, j) => {
+        let node = new DefaultNodeModel(relation.node.reference, "rgb(0,192,255)");
+        yPosition = i * 120;
+        node.setPosition(j * 200, yPosition);
+        relation.node.answers.map((answer) => (node.addOutPort(answer.reference)));
+        node.addInPort(relation.node.reference);
+        nodes.push(node);
+        model.addAll(node);
+      })
+    ));
+
+    let instances = diagnostic.flat();
+
+    // Display final diagnostics
+    finalDiagnostics.map((df, index) => {
+      let node = new DefaultNodeModel(`${df.reference}`, "rgb(0,192,255)");
+      yPosition += 120;
+      node.setPosition(index  * 200, yPosition);
+      node.addInPort(df.reference);
+      nodes.push(node);
+      model.addAll(node);
+      instances.push(df.instances[0])
+    });
+
+    nodes.map((node, index) => {
+      instances[index].conditions.map((condition) => {
+
+        let nodeAnswer = condition.first_conditionable.node.reference;
+        let firstAnswer = _.filter(nodes, ["name", nodeAnswer])[0];
+
+        if (condition.second_conditionable_id !== null && condition.operator === 'and_operator'){
+          let nodeAnswer = condition.second_conditionable.node.reference;
+          let secondAnswer = _.filter(nodes, ["name", nodeAnswer])[0];
+
+          let andNode = new DefaultNodeModel(` `, "rgba(0,0,0, 0)");
+          andNode.setPosition( Math.min(firstAnswer.x, secondAnswer.x) + 150, firstAnswer.y + 80);
+          andNode.addOutPort(' ');
+          andNode.addInPort(' ');
+
+
+          let firstLink = firstAnswer.getOutPorts()[0].link(andNode.getInPorts()[0]);
+          let secondLink = secondAnswer.getOutPorts()[0].link(andNode.getInPorts()[0]);
+          let andLink = andNode.getOutPorts()[0].link(node.getInPorts()[0]);
+          model.addAll(andNode, firstLink, secondLink, andLink);
+        } else {
+          model.addAll(firstAnswer.getOutPorts()[0].link(node.getInPorts()[0]));
+        }
+      });
+    });
+
+    console.log(healthCares);
+
+    healthCares.map((healthCare, j) => {
+      console.log(healthCare);
+      let node = new DefaultNodeModel(healthCare.reference, "rgb(0,192,255)");
+      node.setPosition(100 * j, yPosition + 50);
+      model.addAll(node);
+    });
+
+    // DF
+    //5) load model into engine
+    engine.setDiagramModel(model);
+
+    //6) render the diagram!
+    return <DiagramWidget className="srd-demo-canvas" diagramEngine={engine}/>;
   };
 }
 

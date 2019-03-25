@@ -1,12 +1,15 @@
 {
   "dependencies": {
     "@rails/webpacker": "3.5",
+    "@types/node": "^11.11.6",
     "babel-preset-react": "^6.24.1",
+    "lodash": "^4.17.11",
     "prop-types": "^15.7.2",
     "react": "^16.8.4",
-    "react-archer": "^1.0.2",
     "react-dom": "^16.8.4",
-    "react_ujs": "^2.4.4"
+    "react_ujs": "^2.4.4",
+    "storm-react-diagrams": "^5.2.1",
+    "style-loader": "^0.23.1"
   },
   "devDependencies": {
     "webpack-dev-server": "2.11.2"
