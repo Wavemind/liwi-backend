@@ -3,20 +3,11 @@ class VersionsService
   # @params id [Version] id of the algorithm version to extract
   # @return hash
   # Build a hash of an algorithm version with its diagnostics, predefined syndromes, questions and health cares and metadata
-  def self.generate_hash(id)
+  def self.generate_version_hash(id)
+    init
     @version = Version.find(id)
-    @questions = {}
-    @treatments = {}
-    @managements = {}
-    @predefined_syndromes = {}
 
-    @final_diagnostics = {}
-
-    # Get all ps and dd ids in order to build working diagnosis
-    @diagnostics_ids = []
-    @predefined_syndromes_ids = []
-
-    hash = extract_metadata
+    hash = extract_version_metadata
     hash['diseases'] = {}
 
     # Loop in each diagnostics defined in current algorithm version
@@ -26,21 +17,55 @@ class VersionsService
     end
 
     # Set all questions/treatments/managements used in this version of algorithm
-    hash['nodes'] = {}
-    hash['nodes'] = hash['nodes'].merge(generate_predefined_syndromes)
-    hash['nodes'] = hash['nodes'].merge(generate_questions)
-    hash['nodes'] = hash['nodes'].merge(generate_managements)
-    hash['nodes'] = hash['nodes'].merge(generate_treatments)
-    hash['nodes'] = hash['nodes'].merge(@final_diagnostics)
+    hash['nodes'] = generate_nodes
 
+    hash
+  end
+
+  # @params [Diagnostic]
+  def self.generate_diagnostic_hash(diagnostic)
+    init
+
+    hash = extract_diagnostic_metadata(diagnostic)
+    hash['diagnostic'] = extract_diagnostic(diagnostic)
+    hash['nodes'] = generate_nodes
     hash
   end
 
   private
 
+  def self.init
+    @questions = {}
+    @treatments = {}
+    @managements = {}
+    @predefined_syndromes = {}
+    @final_diagnostics = {}
+
+    # Get all ps and dd ids in order to build working diagnosis
+    @diagnostics_ids = []
+    @predefined_syndromes_ids = []
+  end
+  
+  def self.generate_nodes
+    hash = {}
+    hash = hash.merge(generate_predefined_syndromes)
+    hash = hash.merge(generate_questions)
+    hash = hash.merge(generate_managements)
+    hash = hash.merge(generate_treatments)
+    hash.merge(@final_diagnostics)
+  end
+
   # @return hash
   # Build a hash of metadata about the algorithm and algorithm version
-  def self.extract_metadata
+  def self.extract_diagnostic_metadata(diagnostic)
+    hash = {}
+    hash['id'] = diagnostic.id
+    hash
+  end
+
+  # @return hash
+  # Build a hash of metadata about the algorithm and algorithm version
+  def self.extract_version_metadata
     hash = {}
     hash['id'] = @version.id
     hash['algorithm_id'] = @version.algorithm.id

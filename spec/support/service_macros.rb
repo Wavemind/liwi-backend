@@ -126,7 +126,7 @@ module ServiceMacros
       Condition.create!(referenceable: dd7_t2, first_conditionable: ps6_2, operator: nil, second_conditionable: nil)
       Condition.create!(referenceable: dd7_m2, first_conditionable: ps6_2, operator: nil, second_conditionable: ps6_1)
 
-      @json = VersionsService.generate_hash(Version.first.id)
+      @json = VersionsService.generate_version_hash(Version.first.id)
     end
   end
 
