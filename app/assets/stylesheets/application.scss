@@ -251,3 +251,18 @@ td {
   overflow: visible;
   font-size: 11px;
 }
+
+.srd-default-node__name {
+  font-size: 12px;
+  font-weight: bold;
+  margin: 2px;
+  min-width: 150px;
+}
+
+.srd-default-node__ports{
+  margin: 2px;
+}
+
+.and {
+  visibility: hidden;
+}

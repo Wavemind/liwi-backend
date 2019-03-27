@@ -54,6 +54,14 @@ class Diagnostic < ApplicationRecord
     Node.joins(:instances).where('type = ? AND instances.instanceable_id = ? AND instances.instanceable_type = ?', 'Treatment', id, self.class.name)
   end
 
+  def management_instances
+    components.joins(:node).where('nodes.type = ?', 'Management')
+  end
+
+  def treatment_instances
+    components.joins(:node).where('nodes.type = ?', 'Treatment')
+  end
+
   # @params [Diagnostic]
   # After a duplicate, link DF instances to the duplicated ones instead of the source ones
   def relink_instance
@@ -67,7 +75,7 @@ class Diagnostic < ApplicationRecord
   # Generate the ordered questions
   def generate_questions_order
     nodes = []
-    first_nodes = components.includes(:node, :conditions).where(conditions: { referenceable_id: nil }).where('nodes.type = ? OR nodes.type = ?', 'Question', 'PredefinedSyndrome')
+    first_nodes = components.includes(:node, :conditions, :children).where(conditions: { referenceable_id: nil }).where.not(children: { node_id: nil }).where('nodes.type = ? OR nodes.type = ?', 'Question', 'PredefinedSyndrome')
     nodes << first_nodes
     get_children(first_nodes, nodes)
   end

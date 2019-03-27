@@ -150,7 +150,7 @@ p13 = Question.create!(algorithm: epoct, label_en: 'Lower chest indrawing', refe
 p13_1 = p13.answers.first
 
 p14 = Question.create!(algorithm: epoct, label_en: 'Sever respiratory distress', reference: '14', category: physical_exam, priority: Question.priorities[:basic], answer_type: boolean)
-p14_1 = p14.answers.second
+p14_1 = p14.answers.first
 
 p25 = Question.create!(algorithm: epoct, label_en: 'Tolerates PO liquid', reference: '25', category: physical_exam, priority: Question.priorities[:basic], answer_type: boolean)
 p25_1 = p25.answers.first
