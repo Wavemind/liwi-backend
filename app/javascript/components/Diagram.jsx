@@ -2,7 +2,6 @@ import {
   DiagramEngine,
   DiagramModel,
   DefaultNodeModel,
-  LinkModel,
   DiagramWidget
 } from "storm-react-diagrams";
 import * as React from "react";
@@ -11,12 +10,25 @@ import * as _ from "lodash";
 class Diagram extends React.Component {
 
   componentDidMount(){
+    // Add css class to the 'and' nodes in order to make them invisible and simulate an and link
     for (let e of document.getElementsByClassName('srd-default-node__name')) {
       if (e.innerText === ''){
         e.parentElement.parentElement.classList.add("and");
       }
     }
   }
+
+  // Get full label of an object
+  getFullLabel = (obj) => {
+    return obj.reference + ' - ' + obj.label_translations['en'];
+  };
+
+  // Create a node from label with its inport
+  createNode = (label, color = "rgb(0,192,255)") => {
+    let node = new DefaultNodeModel(label, color);
+    node.addInPort(' ');
+    return node;
+  };
 
   render = () => {
     const {
@@ -25,76 +37,67 @@ class Diagram extends React.Component {
       healthCares
     } = this.props;
 
-    let nodeLevels = [];
-    let maxLevel = 0;
-
-    //1) setup the diagram engine
+    // setup the diagram engine
     let engine = new DiagramEngine();
     engine.installDefaultFactories();
-
-    //2) setup the diagram model
+    // setup the diagram model
     let model = new DiagramModel();
 
-    let nodes = [];
+    let nodes = []; // Save nodes to link them at the end
+    let nodeLevels = []; // Save nodes level to position them at the end
 
-    // PS and QUESTIONS
-    diagnostic.map((levels, i) => {
+    // Create nodes for PS and questions
+    diagnostic.map((levels) => {
       let currentLevel = [];
-      levels.map((relation, j) => {
-        let node = new DefaultNodeModel(relation.node.reference + ' - ' + relation.node.label_translations['en'], "rgb(0,192,255)");
+      levels.map((relation) => {
+        let node = this.createNode(this.getFullLabel(relation.node));
         currentLevel.push(node);
-        relation.node.answers.map((answer) => (node.addOutPort(answer.reference + ' - ' + answer.label_translations['en'])));
-        node.addInPort(' ');
+        relation.node.answers.map((answer) => (node.addOutPort(this.getFullLabel(answer))));
         nodes.push(node);
         model.addAll(node);
       });
 
       nodeLevels.push(currentLevel);
-      if (nodeLevels.length > maxLevel){
-        maxLevel = nodeLevels.length
-      }
     });
 
     let instances = diagnostic.flat();
 
+    // Create nodes for final diagnostics
     let dfLevel = [];
-    // Display final diagnostics
-    finalDiagnostics.map((df, index) => {
-      let node = new DefaultNodeModel(`${df.reference + ' - ' + df.label_translations['en']}`, "rgb(0,192,255)");
+    finalDiagnostics.map((df) => {
+      let node = this.createNode(this.getFullLabel(df));
       dfLevel.push(node);
-      node.addInPort(df.reference);
       nodes.push(node);
       model.addAll(node);
       instances.push(df.instances[0])
     });
 
     nodeLevels.push(dfLevel);
-    if (dfLevel.length > maxLevel){
-      maxLevel = dfLevel.length
-    }
 
     let hcLevel = [];
     let hcConditions = [];
     let conditionRefs = {};
-    healthCares.map((healthCare, j) => {
-      let node = new DefaultNodeModel(healthCare.node.reference + ' - ' + healthCare.node.label_translations['en'], "rgb(0,192,255)");
 
+    // Create nodes for treatments and managements
+    healthCares.map((healthCare, j) => {
+      let node = this.createNode(this.getFullLabel(healthCare.node));
+      // Get condition nodes of treatments and managements
       if (healthCare.conditions != null && healthCare.conditions.length > 0){
-        node.addInPort(' ');
         healthCare.conditions.map((condition) => {
           let answerNode = condition.first_conditionable.node;
           let condNode;
           if (!(answerNode.reference in conditionRefs)){
-            condNode = new DefaultNodeModel(answerNode.reference + ' - ' + answerNode.label_translations['en'], "rgb(0,192,255)");
-            answerNode.answers.map((answer) => (condNode.addOutPort(answer.reference + ' - ' + answer.label_translations['en'])));
+            condNode = this.createNode(this.getFullLabel(answerNode));
+
+            answerNode.answers.map((answer) => (condNode.addOutPort(this.getFullLabel(answer))));
 
             hcConditions.push(condNode);
             conditionRefs[answerNode.reference] = condNode;
             model.addAll(condNode);
           } else {
-            condNode = _.filter(hcConditions, ["name", answerNode.reference + ' - ' + answerNode.label_translations['en']])[0];
+            condNode = _.filter(hcConditions, ["name", this.getFullLabel(answerNode)])[0];
           }
-          model.addAll(_.filter(condNode.getOutPorts(), ["label", condition.first_conditionable.reference + ' - ' + condition.first_conditionable.label_translations['en']])[0].link(node.getInPorts()[0]));
+          model.addAll(_.filter(condNode.getOutPorts(), ["label", this.getFullLabel(condition.first_conditionable)])[0].link(node.getInPorts()[0]));
         });
       }
 
@@ -103,16 +106,9 @@ class Diagram extends React.Component {
     });
 
     nodeLevels.push(hcConditions);
-    if (hcConditions.length > maxLevel){
-      maxLevel = hcConditions.length
-    }
-
     nodeLevels.push(hcLevel);
-    if (hcLevel.length > maxLevel){
-      maxLevel = hcLevel.length
-    }
 
-
+    // Positions nodes in a horizontal way
     let height = 500;
     let x = 0;
     let y = 0;
@@ -127,42 +123,38 @@ class Diagram extends React.Component {
       x += 300;
     });
 
-
-
-
+    // Create links between nodes
     nodes.map((node, index) => {
       instances[index].conditions.map((condition) => {
 
         let firstAnswer = condition.first_conditionable;
-        let firstNodeAnswer = _.filter(nodes, ["name", firstAnswer.node.reference + ' - ' + firstAnswer.node.label_translations['en']])[0];
+        let firstNodeAnswer = _.filter(nodes, ["name", this.getFullLabel(firstAnswer.node)])[0];
 
         if (condition.second_conditionable_id !== null && condition.operator === 'and_operator'){
           let secondAnswer = condition.second_conditionable;
-          let secondNodeAnswer = _.filter(nodes, ["name", secondAnswer.node.reference + ' - ' + secondAnswer.node.label_translations['en']])[0];
+          let secondNodeAnswer = _.filter(nodes, ["name", this.getFullLabel(secondAnswer.node)])[0];
 
-          let andNode = new DefaultNodeModel(' ', "rgba(f,f,f, 0)");
+          let andNode = this.createNode(' ', "rgba(f,f,f, 0)");
           andNode.setPosition( Math.min(firstNodeAnswer.x, secondNodeAnswer.x) + 200, firstNodeAnswer.y + 50);
           andNode.addOutPort(' ');
-          andNode.addInPort(' ');
 
-
-          let firstLink = _.filter(firstNodeAnswer.getOutPorts(), ["label", firstAnswer.reference + ' - ' + firstAnswer.label_translations['en']])[0].link(andNode.getInPorts()[0]);
-          let secondLink =  _.filter(secondNodeAnswer.getOutPorts(), ["label", secondAnswer.reference + ' - ' + secondAnswer.label_translations['en']])[0].link(andNode.getInPorts()[0]);
+          let firstLink = _.filter(firstNodeAnswer.getOutPorts(), ["label", this.getFullLabel(firstAnswer)])[0].link(andNode.getInPorts()[0]);
+          let secondLink =  _.filter(secondNodeAnswer.getOutPorts(), ["label", this.getFullLabel(secondAnswer)])[0].link(andNode.getInPorts()[0]);
           let andLink = andNode.getInPorts()[0].link(node.getInPorts()[0]);
           model.addAll(andNode, firstLink, secondLink, andLink);
         } else {
-          model.addAll(_.filter(firstNodeAnswer.getOutPorts(), ["label", firstAnswer.reference + ' - ' + firstAnswer.label_translations['en']])[0].link(node.getInPorts()[0]));
+          model.addAll(_.filter(firstNodeAnswer.getOutPorts(), ["label", this.getFullLabel(firstAnswer)])[0].link(node.getInPorts()[0]));
         }
       });
     });
 
 
-    // DF
-    //5) load model into engine
+    // load model into engine
     engine.setDiagramModel(model);
 
-    //6) render the diagram!
-    return <DiagramWidget className="srd-demo-canvas" diagramEngine={engine}/>;
+    // render the diagram!
+    model.setLocked(true);
+    return <DiagramWidget className="srd-demo-canvas" diagramEngine={engine} allowLooseLinks={false} allowCanvasZoom={false} />;
   };
 }
 
