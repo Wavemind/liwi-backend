@@ -14,6 +14,11 @@ class Diagram extends React.Component {
     for (let e of document.getElementsByClassName('srd-default-node__name')) {
       if (e.innerText === ''){
         e.parentElement.parentElement.classList.add("and");
+      } else {
+        let node = e.parentElement.parentElement;
+        node.dataset.reference = e.innerText.substring(0, e.innerText.indexOf(" - "));
+        node.dataset.diagnostic = this.props.diagnostic.id;
+        node.addEventListener("click", editInstance)
       }
     }
   }
@@ -33,6 +38,7 @@ class Diagram extends React.Component {
   render = () => {
     const {
       diagnostic,
+      questions,
       finalDiagnostics,
       healthCares
     } = this.props;
@@ -47,9 +53,10 @@ class Diagram extends React.Component {
     let nodeLevels = []; // Save nodes level to position them at the end
 
     // Create nodes for PS and questions
-    diagnostic.map((levels) => {
+    questions.map((levels) => {
       let currentLevel = [];
       levels.map((relation) => {
+        console.log(relation.node.reference);
         let node = this.createNode(this.getFullLabel(relation.node));
         currentLevel.push(node);
         relation.node.answers.map((answer) => (node.addOutPort(this.getFullLabel(answer))));
@@ -60,7 +67,7 @@ class Diagram extends React.Component {
       nodeLevels.push(currentLevel);
     });
 
-    let instances = diagnostic.flat();
+    let instances = questions.flat();
 
     // Create nodes for final diagnostics
     let dfLevel = [];

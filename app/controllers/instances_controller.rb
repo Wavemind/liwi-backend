@@ -1,7 +1,7 @@
 class InstancesController < ApplicationController
 
   before_action :authenticate_user!
-  before_action :set_instanceable, only: [:show, :create, :destroy]
+  before_action :set_instanceable, only: [:show, :create, :destroy, :by_reference]
   before_action :set_instance, only: [:show, :destroy]
 
   def index
@@ -51,6 +51,15 @@ class InstancesController < ApplicationController
     else
       redirect_back fallback_location: root_path, alert: t('error')
     end
+  end
+
+  def by_reference
+    if params[:diagnostic_id].present?
+      @node = @instanceable.version.algorithm.nodes.find_by(reference: params[:reference]);
+    else
+      @node = @instanceable.algorithm.nodes.find_by(reference: params[:reference]);
+    end
+    render json: polymorphic_url([@instanceable, @instanceable.components.find_by(node: @node)])
   end
 
   private

@@ -82,14 +82,20 @@ Rails.application.routes.draw do
   end
 
   resources :predefined_syndromes, only: [:show] do
-    resources :instances, only: [:show, :destroy, :create] do
+    resources :instances, only: [:show, :destroy, :create, :by_reference] do
+      collection do
+        get 'by_reference'
+      end
       resources :children, only: [:create, :destroy]
       resources :conditions, only: [:create, :destroy]
     end
   end
 
   resources :diagnostics, only: [] do
-    resources :instances, only: [:show, :destroy, :create] do
+    resources :instances, only: [:show, :destroy, :create, :by_reference] do
+      collection do
+        get 'by_reference'
+      end
       resources :children, only: [:create, :destroy]
       resources :conditions, only: [:create, :destroy]
     end

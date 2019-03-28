@@ -25,16 +25,7 @@
 
     <div class="row">
       <div class="col">
-        <%= simple_form_for @instance, url: diagnostic_instances_url(@diagnostic), method: :post do |f| %>
-          <div class="row">
-            <div class="col">
-              <%= f.association :node, collection: (@algorithm.nodes.where.not(id: @diagnostic.components.select(:node_id)) + FinalDiagnostic.where(diagnostic_id: params[:id])).flatten.sort_by(&:reference), label_method: :reference_label, prompt: t('select'), label: false %>
-            </div>
-            <div class="col">
-              <%= f.submit t('add'), class: 'btn btn-primary' %>
-            </div>
-          </div>
-        <% end %>
+        <%= render 'select_node' %>
       </div>
     </div>
 
@@ -62,9 +53,12 @@
   </div>
 
   <div class="tab-pane fade  <%= 'show active' if params[:panel].blank? || params[:panel] == 'diagram'%>" id="diagram" role="tabpanel" aria-labelledby="diagram-tab">
+    <%= render 'select_node' %>
+
     <div class="docs-preview-wrapper">
       <%= react_component('Diagram', {
-        diagnostic: @diagnostic.generate_questions_order.as_json(include: [conditions: { include: [first_conditionable: { include: [:node] }] }, node: { include: [:answers] }]),
+        diagnostic: @diagnostic,
+        questions: @diagnostic.generate_questions_order.as_json(include: [conditions: { include: [first_conditionable: { include: [:node] }] }, node: { include: [:answers] }]),
         finalDiagnostics: @diagnostic.final_diagnostics.as_json(include: [instances: { include: [conditions: { include: [first_conditionable: { include: [:node] }, second_conditionable: { include: [:node] }] }] }]),
         healthCares: @diagnostic.treatment_instances.as_json(include: [ :node, conditions: { include: [first_conditionable: { include: [node: { include: [:answers]}]}]}]) + @diagnostic.management_instances.as_json(include: [ :node, conditions: { include: [first_conditionable: { include: [:node]}]}]),
       }) %>
