@@ -12,15 +12,28 @@ class Diagram extends React.Component {
   componentDidMount(){
     // Add css class to the 'and' nodes in order to make them invisible and simulate an and link
     for (let e of document.getElementsByClassName('srd-default-node__name')) {
-      if (e.innerText === ''){
+      if (e.innerText === ''){ // And boxes
         e.parentElement.parentElement.classList.add("and");
-      } else {
+      } else if (e.innerText.indexOf(" - ") === -1){ // Titles box
+        e.parentElement.parentElement.classList.add("node-titles");
+      } else { // Node boxes
         let node = e.parentElement.parentElement;
         node.dataset.reference = e.innerText.substring(0, e.innerText.indexOf(" - "));
         node.dataset.diagnostic = this.props.diagnostic.id;
         node.addEventListener("click", editInstance)
       }
     }
+
+    // Retrieve links which are vertical (ax = bx) to identify the seperator links - Sorry Quentin
+    window.requestAnimationFrame(function() {
+      for (let e of document.getElementsByClassName('srd-link-layer')[0].childNodes) {
+        let points = e.childNodes[0].childNodes[0].getAttribute('d').split(' ');
+        points = points.slice(points.length - 2);
+        if (points[0].split(',')[0] === points[1].split(',')[0]){
+          e.classList.add("separator-link");
+        }
+      }
+    });
   }
 
   // Get full label of an object
@@ -29,7 +42,7 @@ class Diagram extends React.Component {
   };
 
   // Create a node from label with its inport
-  createNode = (label, color = "rgb(0,192,255)") => {
+  createNode = (label, color = "rgb(255,255,255)") => {
     let node = new DefaultNodeModel(label, color);
     node.addInPort(' ');
     return node;
@@ -56,7 +69,6 @@ class Diagram extends React.Component {
     questions.map((levels) => {
       let currentLevel = [];
       levels.map((relation) => {
-        console.log(relation.node.reference);
         let node = this.createNode(this.getFullLabel(relation.node));
         currentLevel.push(node);
         relation.node.answers.map((answer) => (node.addOutPort(this.getFullLabel(answer))));
@@ -118,7 +130,7 @@ class Diagram extends React.Component {
     // Positions nodes in a horizontal way
     let height = 500;
     let x = 0;
-    let y = 0;
+    let y = 60;
     nodeLevels.map((level) => {
       let space = height - (level.length * 100);
       y += space / 2;
@@ -126,9 +138,40 @@ class Diagram extends React.Component {
         node.setPosition(x, y);
         y += 80;
       });
-      y = 0;
+      y = 60;
       x += 300;
     });
+
+    // Titles
+    x = 0;
+    y = 0;
+    let yBot = 500;
+    let qTitle = new DefaultNodeModel("Questions and Predefined syndromes", "rgb(255,255,255)");
+    qTitle.setPosition(x, y);
+    x += (300 * questions.length);
+
+    let dfTitle = this.createNode("Final diagnostics");
+    dfTitle.setPosition(x - 50, y);
+    let dfBotTitle = this.createNode(' ');
+    dfBotTitle.setPosition(x - 50, yBot);
+    x += 300;
+
+    if (hcConditions.length > 0){
+      let hcCondTitle = this.createNode("Treatments and Managements conditions");
+      hcCondTitle.setPosition(x - 50, y);
+      let hcCondBotTitle = this.createNode(' ');
+      hcCondBotTitle.setPosition(x - 50, yBot);
+      x += 300;
+      model.addAll(hcCondTitle, hcCondBotTitle, hcCondTitle.getInPorts()[0].link(hcCondBotTitle.getInPorts()[0]));
+    }
+
+    let hcTitle = this.createNode("Treatments and Managements");
+    hcTitle.setPosition(x - 50, y);
+    let hcBotTitle = this.createNode(' ');
+    hcBotTitle.setPosition(x - 50, yBot);
+
+    model.addAll(qTitle, dfTitle, dfBotTitle, dfTitle.getInPorts()[0].link(dfBotTitle.getInPorts()[0]), hcTitle, hcBotTitle, hcTitle.getInPorts()[0].link(hcBotTitle.getInPorts()[0]));
+
 
     // Create links between nodes
     nodes.map((node, index) => {
@@ -142,7 +185,7 @@ class Diagram extends React.Component {
           let secondNodeAnswer = _.filter(nodes, ["name", this.getFullLabel(secondAnswer.node)])[0];
 
           let andNode = this.createNode(' ', "rgba(f,f,f, 0)");
-          andNode.setPosition( Math.min(firstNodeAnswer.x, secondNodeAnswer.x) + 200, firstNodeAnswer.y + 50);
+          andNode.setPosition( Math.min(firstNodeAnswer.x, secondNodeAnswer.x) + 250, firstNodeAnswer.y + 50);
           andNode.addOutPort(' ');
 
           let firstLink = _.filter(firstNodeAnswer.getOutPorts(), ["label", this.getFullLabel(firstAnswer)])[0].link(andNode.getInPorts()[0]);

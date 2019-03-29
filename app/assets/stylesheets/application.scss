@@ -246,7 +246,7 @@ td {
   background-color: transparent;
   border-radius: 5px;
   font-family: sans-serif;
-  color: white;
+  color: black;
   border: 0;
   overflow: visible;
   font-size: 11px;
@@ -272,5 +272,18 @@ td {
 }
 
 .srd-default-link path {
-  stroke: orangered;
+  stroke: black;
+}
+
+.separator-link{
+  stroke-dasharray: 10,2;
+}
+
+.node-titles {
+  color: black;
+  background-image: none;
+}
+
+.node-titles .srd-default-node__ports {
+  background-image: none;
 }

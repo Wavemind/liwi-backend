@@ -15,6 +15,8 @@ class Condition < ApplicationRecord
 
   validates_presence_of :first_conditionable
 
+  after_create :add_children
+
   # Puts nil instead of empty string when operator is not set in the view.
   nilify_blanks only: [:operator]
 
@@ -35,5 +37,19 @@ class Condition < ApplicationRecord
   # Return an object (Answer or Condition) from a string with id and class name
   def create_conditionable(conditionable)
     conditionable.split(',')[1].constantize.find(conditionable.split(',')[0])
+  end
+
+  def add_children
+    if referenceable.is_a?(Instance) && !(referenceable.node.is_a?(Treatment) || referenceable.node.is_a?(Treatment))
+      create_children(first_conditionable)
+      create_children(second_conditionable)
+    end
+  end
+
+  def create_children(conditionable)
+    if conditionable.is_a?(Answer)
+      parent = conditionable.node.instances.where(instanceable: referenceable.instanceable).first
+      parent.children.create!(node: referenceable.node) unless parent.children.where(node: referenceable.node).any?
+    end
   end
 end
