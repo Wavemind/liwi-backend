@@ -11,7 +11,7 @@ jQuery(document).ready(function () {
       { "data": "label" },
       { "data": "description" },
       { "data": "priority" },
-      { "data": "category" },r
+      { "data": "category" },
       { "data": "answers" },
       { "data": "answer_type" },
       { "data": "actions", "className": "text-right"},

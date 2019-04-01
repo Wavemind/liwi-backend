@@ -50,7 +50,6 @@ class Diagram extends React.Component {
 
   render = () => {
     const {
-      diagnostic,
       questions,
       finalDiagnostics,
       healthCares
@@ -83,6 +82,7 @@ class Diagram extends React.Component {
 
     // Create nodes for final diagnostics
     let dfLevel = [];
+
     finalDiagnostics.map((df) => {
       let node = this.createNode(this.getFullLabel(df));
       dfLevel.push(node);
@@ -98,14 +98,14 @@ class Diagram extends React.Component {
     let conditionRefs = {};
 
     // Create nodes for treatments and managements
-    healthCares.map((healthCare, j) => {
+    healthCares.map((healthCare) => {
       let node = this.createNode(this.getFullLabel(healthCare.node));
       // Get condition nodes of treatments and managements
       if (healthCare.conditions != null && healthCare.conditions.length > 0){
         healthCare.conditions.map((condition) => {
           let answerNode = condition.first_conditionable.node;
           let condNode;
-          if (!(answerNode.reference in conditionRefs)){
+          if (!(answerNode.reference in conditionRefs)) {
             condNode = this.createNode(this.getFullLabel(answerNode));
 
             answerNode.answers.map((answer) => (condNode.addOutPort(this.getFullLabel(answer))));
@@ -156,7 +156,7 @@ class Diagram extends React.Component {
     dfBotTitle.setPosition(x - 50, yBot);
     x += 300;
 
-    if (hcConditions.length > 0){
+    if (hcConditions.length > 0) {
       let hcCondTitle = this.createNode("Treatments and Managements conditions");
       hcCondTitle.setPosition(x - 50, y);
       let hcCondBotTitle = this.createNode(' ');
@@ -171,7 +171,6 @@ class Diagram extends React.Component {
     hcBotTitle.setPosition(x - 50, yBot);
 
     model.addAll(qTitle, dfTitle, dfBotTitle, dfTitle.getInPorts()[0].link(dfBotTitle.getInPorts()[0]), hcTitle, hcBotTitle, hcTitle.getInPorts()[0].link(hcBotTitle.getInPorts()[0]));
-
 
     // Create links between nodes
     nodes.map((node, index) => {
@@ -197,7 +196,6 @@ class Diagram extends React.Component {
         }
       });
     });
-
 
     // load model into engine
     engine.setDiagramModel(model);
