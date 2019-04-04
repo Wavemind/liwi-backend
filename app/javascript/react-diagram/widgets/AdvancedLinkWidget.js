@@ -1,9 +1,8 @@
-/**
- * Render only 1 link
- * @class MyLinkWidget
- */
-class CustomLinkWidget extends DefaultLinkWidget {
+import * as React from "react";
+import { DefaultLinkWidget } from "storm-react-diagrams";
 
+
+class AdvancedLinkWidget extends DefaultLinkWidget {
   /**
    * Get direction of the link
    * Useful for animation
@@ -80,4 +79,4 @@ class CustomLinkWidget extends DefaultLinkWidget {
   }
 }
 
-export default CustomLinkWidget;
+export default AdvancedLinkWidget;
