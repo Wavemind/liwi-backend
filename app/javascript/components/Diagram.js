@@ -85,6 +85,14 @@ class Diagram extends React.Component {
       instances.push(df.instances[0])
     });
 
+    // Excluded diagnostic
+    finalDiagnostics.map((df) => {
+      if (df.final_diagnostic_id !== null) {
+        console.log(nodes);
+        console.log(_.filter(nodes, ["id", this.getFullLabel(firstAnswer.id)]));
+      }
+    });
+
     nodeLevels.push(dfLevel);
 
     let hcLevel = [];

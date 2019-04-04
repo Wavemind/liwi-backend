@@ -26,8 +26,6 @@ class AdvancedLinkFactory extends DefaultLinkFactory {
     let displayArrow = widget.props.link.arrow;
     let displaySeparator = widget.props.link.separator;
 
-    console.log(displaySeparator);
-
     return (
       <g className={displaySeparator ? widget.bem(" separator-link") : ""}>
         {displayArrow === true ? (
