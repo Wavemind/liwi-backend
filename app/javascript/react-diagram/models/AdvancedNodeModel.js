@@ -3,7 +3,6 @@ import AdvancedPortModel from "../models/AdvancedPortModel";
 import * as _ from "lodash";
 
 class AdvancedNodeModel extends DefaultNodeModel {
-  // Set ALL DATA HERE !!
   name: string;
   color: string;
   reference: string;
@@ -14,8 +13,8 @@ class AdvancedNodeModel extends DefaultNodeModel {
     super("advanced");
     this.name = name;
     this.color = color;
-    this.reference= reference;
-    this.dbId= dbId;
+    this.reference = reference;
+    this.dbId = dbId;
   }
 
   addInPort(label: string): AdvancedPortModel {
@@ -35,7 +34,9 @@ class AdvancedNodeModel extends DefaultNodeModel {
   serialize() {
     return _.merge(super.serialize(), {
       name: this.name,
-      color: this.color
+      color: this.color,
+      reference: this.reference,
+      dbId: this.dbId,
     });
   }
 
@@ -45,8 +46,20 @@ class AdvancedNodeModel extends DefaultNodeModel {
     });
   }
 
+  getInPort(): AdvancedPortModel[] {
+    return _.find(this.ports, portModel => {
+      return portModel.in;
+    });
+  }
+
   getOutPorts(): AdvancedPortModel[] {
     return _.filter(this.ports, portModel => {
+      return !portModel.in;
+    });
+  }
+
+  getOutPort(): AdvancedPortModel[] {
+    return _.find(this.ports, portModel => {
       return !portModel.in;
     });
   }

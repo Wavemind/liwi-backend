@@ -7,6 +7,7 @@ import * as React from "react";
 import * as _ from "lodash";
 
 import AdvancedLinkFactory from '../react-diagram/factories/AdvancedLinkFactory';
+import AdvancedNodeFactory from '../react-diagram/factories/AdvancedNodeFactory';
 import AdvancedNodeModel from '../react-diagram/models/AdvancedNodeModel';
 
 class Diagram extends React.Component {
@@ -33,8 +34,8 @@ class Diagram extends React.Component {
   };
 
   // Create a node from label with its inport
-  createNode = (label, color = "rgb(255,255,255)") => {
-    let node = new AdvancedNodeModel(label, color);
+  createNode = (label, reference = null, dbId = null, color = "rgb(255,255,255)") => {
+    let node = new AdvancedNodeModel(label, reference, dbId, color);
     node.addInPort(' ');
     return node;
   };
@@ -46,13 +47,13 @@ class Diagram extends React.Component {
       healthCares
     } = this.props;
 
-    // setup the diagram engine
+    // Setup the diagram engine
     let engine = new DiagramEngine();
     engine.installDefaultFactories();
     engine.registerLinkFactory(new AdvancedLinkFactory());
+    engine.registerNodeFactory(new AdvancedNodeFactory());
 
-
-    // setup the diagram model
+    // Setup the diagram model
     let model = new DiagramModel();
 
     let nodes = []; // Save nodes to link them at the end
@@ -62,7 +63,7 @@ class Diagram extends React.Component {
     questions.map((levels) => {
       let currentLevel = [];
       levels.map((relation) => {
-        let node = this.createNode(this.getFullLabel(relation.node));
+        let node = this.createNode(this.getFullLabel(relation.node), relation.node.reference, relation.node.id);
         currentLevel.push(node);
         relation.node.answers.map((answer) => (node.addOutPort(this.getFullLabel(answer))));
         nodes.push(node);
@@ -78,7 +79,10 @@ class Diagram extends React.Component {
     let dfLevel = [];
 
     finalDiagnostics.map((df) => {
-      let node = this.createNode(this.getFullLabel(df));
+      let node = this.createNode(this.getFullLabel(df), df.reference, df.id);
+      if (df.final_diagnostic_id !== null) {
+        node.addOutPort(this.getFullLabel(_.find(finalDiagnostics, ["id", df.final_diagnostic_id])));
+      }
       dfLevel.push(node);
       nodes.push(node);
       model.addAll(node);
@@ -88,8 +92,13 @@ class Diagram extends React.Component {
     // Excluded diagnostic
     finalDiagnostics.map((df) => {
       if (df.final_diagnostic_id !== null) {
-        console.log(nodes);
-        console.log(_.filter(nodes, ["id", this.getFullLabel(firstAnswer.id)]));
+        let mainDF = _.find(dfLevel, ["dbId", df.id]);
+        let excludedDF = _.find(dfLevel, ["dbId", df.final_diagnostic_id]);
+
+        let link = mainDF.getOutPort().link(excludedDF.getInPort());
+        link.displaySeparator(true);
+
+        model.addAll(link);
       }
     });
 
@@ -101,14 +110,14 @@ class Diagram extends React.Component {
 
     // Create nodes for treatments and managements
     healthCares.map((healthCare) => {
-      let node = this.createNode(this.getFullLabel(healthCare.node));
+      let node = this.createNode(this.getFullLabel(healthCare.node), healthCare.node.reference, healthCare.node.dbId);
       // Get condition nodes of treatments and managements
       if (healthCare.conditions != null && healthCare.conditions.length > 0){
         healthCare.conditions.map((condition) => {
           let answerNode = condition.first_conditionable.node;
           let condNode;
           if (!(answerNode.reference in conditionRefs)) {
-            condNode = this.createNode(this.getFullLabel(answerNode));
+            condNode = this.createNode(this.getFullLabel(answerNode), answerNode.reference, answerNode.id);
 
             answerNode.answers.map((answer) => (condNode.addOutPort(this.getFullLabel(answer))));
 
@@ -116,9 +125,9 @@ class Diagram extends React.Component {
             conditionRefs[answerNode.reference] = condNode;
             model.addAll(condNode);
           } else {
-            condNode = _.filter(hcConditions, ["name", this.getFullLabel(answerNode)])[0];
+            condNode = _.find(hcConditions, ["name", this.getFullLabel(answerNode)]);
           }
-          model.addAll(_.filter(condNode.getOutPorts(), ["label", this.getFullLabel(condition.first_conditionable)])[0].link(node.getInPorts()[0]));
+          model.addAll(_.find(condNode.getOutPorts(), ["label", this.getFullLabel(condition.first_conditionable)]).link(node.getInPort()));
         });
       }
 
@@ -156,22 +165,27 @@ class Diagram extends React.Component {
     let dfBotTitle = this.createNode(' ');
     dfTitle.setPosition(x - 50, y);
     dfBotTitle.setPosition(x - 50, yBot);
+
     x += 300;
 
-    let dfLink = dfTitle.getInPorts()[0].link(dfBotTitle.getInPorts()[0]);
+    let dfLink = dfTitle.getInPort().link(dfBotTitle.getInPort());
     dfLink.displayArrow(false);
     dfLink.displaySeparator(true);
 
 
     if (hcConditions.length > 0) {
       let hcCondTitle = this.createNode("Treatments and Managements conditions");
-      hcCondTitle.setPosition(x - 50, y);
       let hcCondBotTitle = this.createNode(' ');
+      let hcCondLink = hcCondTitle.getInPort().link(hcCondBotTitle.getInPort());
+
+      hcCondTitle.setPosition(x - 50, y);
       hcCondBotTitle.setPosition(x - 50, yBot);
+
       x += 300;
-      let hcCondLink = hcCondTitle.getInPorts()[0].link(hcCondBotTitle.getInPorts()[0]);
+
       hcCondLink.displayArrow(false);
       hcCondLink.displaySeparator(true);
+
       model.addAll(hcCondTitle, hcCondBotTitle, hcCondLink);
     }
 
@@ -179,7 +193,7 @@ class Diagram extends React.Component {
     hcTitle.setPosition(x - 50, y);
     let hcBotTitle = this.createNode(' ');
     hcBotTitle.setPosition(x - 50, yBot);
-    let hcTitleLink = hcTitle.getInPorts()[0].link(hcBotTitle.getInPorts()[0]);
+    let hcTitleLink = hcTitle.getInPort().link(hcBotTitle.getInPort());
     hcTitleLink.displayArrow(false);
     hcTitleLink.displaySeparator(true);
 
@@ -188,26 +202,27 @@ class Diagram extends React.Component {
     // Create links between nodes
     nodes.map((node, index) => {
       instances[index].conditions.map((condition) => {
-
         let firstAnswer = condition.first_conditionable;
-        let firstNodeAnswer = _.filter(nodes, ["name", this.getFullLabel(firstAnswer.node)])[0];
+        let firstNodeAnswer = _.find(nodes, ["name", this.getFullLabel(firstAnswer.node)]);
 
         if (condition.second_conditionable_id !== null && condition.operator === 'and_operator') {
           let secondAnswer = condition.second_conditionable;
-          let secondNodeAnswer = _.filter(nodes, ["name", this.getFullLabel(secondAnswer.node)])[0];
+          let secondNodeAnswer = _.find(nodes, ["name", this.getFullLabel(secondAnswer.node)]);
 
           let andNode = this.createNode(' ', "rgba(f,f,f, 0)");
           andNode.setPosition( Math.min(firstNodeAnswer.x, secondNodeAnswer.x) + 250, firstNodeAnswer.y + 50);
           andNode.addOutPort(' ');
 
-          let firstLink = _.filter(firstNodeAnswer.getOutPorts(), ["label", this.getFullLabel(firstAnswer)])[0].link(andNode.getInPorts()[0]);
+          let firstLink = _.find(firstNodeAnswer.getOutPorts(), ["label", this.getFullLabel(firstAnswer)]).link(andNode.getInPort());
+          let secondLink =  _.find(secondNodeAnswer.getOutPorts(), ["label", this.getFullLabel(secondAnswer)]).link(andNode.getInPort());
+          let andLink = andNode.getInPort().link(node.getInPort());
+
           firstLink.displayArrow(false);
-          let secondLink =  _.filter(secondNodeAnswer.getOutPorts(), ["label", this.getFullLabel(secondAnswer)])[0].link(andNode.getInPorts()[0]);
           secondLink.displayArrow(false);
-          let andLink = andNode.getInPorts()[0].link(node.getInPorts()[0]);
+
           model.addAll(andNode, firstLink, secondLink, andLink);
         } else {
-          let link = _.filter(firstNodeAnswer.getOutPorts(), ["label", this.getFullLabel(firstAnswer)])[0].link(node.getInPorts()[0]);
+          let link = _.find(firstNodeAnswer.getOutPorts(), ["label", this.getFullLabel(firstAnswer)]).link(node.getInPort());
           model.addAll(link);
         }
       });

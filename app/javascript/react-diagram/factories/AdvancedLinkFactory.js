@@ -30,8 +30,8 @@ class AdvancedLinkFactory extends DefaultLinkFactory {
       <g className={displaySeparator ? widget.bem(" separator-link") : ""}>
         {displayArrow === true ? (
         <defs>
-          <marker id={markerId} markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto">
-            <path d="M0,0 L0,4 L4,2 Z" style={{fill: "#000", stroke: 'none'}} />
+          <marker id={markerId} markerWidth="6" markerHeight="4" refX="8" refY="2" orient="auto">
+            <path d="M0,0 L0,4 L5,2 Z" style={{fill: "#000", stroke: 'none'}} />
           </marker>
 
           <marker id={markerEndUrl} markerWidth="6" markerHeight="4" refX="-1" refY="2" orient="auto">
