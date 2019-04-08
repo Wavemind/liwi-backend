@@ -1,4 +1,8 @@
 en:
+  activerecord:
+    attributes:
+      node:
+        unavailable: "Can be unavailable ?"
   add: "Add"
   algorithms:
     index:

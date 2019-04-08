@@ -20,14 +20,25 @@ jQuery(document).ready(function () {
 
   // Update the prepend every time the user pick another category
   $("#question_category_id").change(function() {
-    var prepend = $(this).closest("form").find(".input-group-text");
-    var id = $("#question_category_id option:selected").val();
+    let prepend = $(this).closest("form").find(".input-group-text");
+    let questionUnavailable = $(this).closest("form").find("fieldset.question_unavailable");
+    let id = $("#question_category_id option:selected").val();
+
+    console.log(questionUnavailable);
 
     if (id.trim()){
       $.ajax({
         url: window.location.origin + "/categories/" + id + "/reference",
         complete: function(response){
           prepend.text(response.responseText + "_");
+
+          if (response.responseText == 'A') {
+            $(questionUnavailable).removeClass('hidden');
+          } else {
+            if (!$(questionUnavailable).hasClass('hidden')) {
+              $(questionUnavailable).addClass('hidden');
+            }
+          }
         }
       });
     } else {

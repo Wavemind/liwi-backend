@@ -3,6 +3,8 @@ class Question < Node
 
   after_create :create_boolean_answers, if: Proc.new { answer_type.value == 'Boolean' }
 
+  attr_accessor :unavailable
+
   enum priority: [:basic, :triage, :priority]
 
   has_many :answers, foreign_key: 'node_id', dependent: :destroy
