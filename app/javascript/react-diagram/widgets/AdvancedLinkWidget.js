@@ -63,7 +63,7 @@ class AdvancedLinkWidget extends DefaultLinkWidget {
     // Needed for the creating Labels
     const LinkClone = (
       <path
-        strokeWidth={1}
+        strokeWidth={0}
         stroke="rgba(0,0,0,0)"
         d={path}
         ref={ref => ref && this.refPaths.push(ref)}

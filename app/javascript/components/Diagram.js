@@ -150,13 +150,13 @@ class Diagram extends React.Component {
         y += 150;
       });
       y = 60;
-      x += 300;
+      x += 320;
     });
 
     // Titles
     x = 0;
     y = 0;
-    let yBot = 500;
+    let yBot = 700;
     let qTitle = this.createNode("Questions and Predefined syndromes");
     qTitle.setPosition(x, y);
     x += (300 * questions.length);
@@ -166,7 +166,7 @@ class Diagram extends React.Component {
     dfTitle.setPosition(x - 50, y);
     dfBotTitle.setPosition(x - 50, yBot);
 
-    x += 300;
+    x += 400;
 
     let dfLink = dfTitle.getInPort().link(dfBotTitle.getInPort());
     dfLink.displayArrow(false);
@@ -181,7 +181,7 @@ class Diagram extends React.Component {
       hcCondTitle.setPosition(x - 50, y);
       hcCondBotTitle.setPosition(x - 50, yBot);
 
-      x += 300;
+      x += 400;
 
       hcCondLink.displayArrow(false);
       hcCondLink.displaySeparator(true);

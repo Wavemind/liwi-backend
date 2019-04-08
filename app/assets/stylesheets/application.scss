@@ -274,7 +274,7 @@ td {
 }
 
 .separator-link {
-  stroke-dasharray: 5;
+  stroke-dasharray: 15;
 }
 
 .node-titles {
@@ -299,4 +299,8 @@ td {
 
 .srd-port {
   font-weight: bold;
+}
+
+.name {
+  padding-right: 5px;
 }
