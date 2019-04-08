@@ -112,7 +112,7 @@ class Diagram extends React.Component {
     healthCares.map((healthCare) => {
       let node = this.createNode(this.getFullLabel(healthCare.node), healthCare.node.reference, healthCare.node.dbId);
       // Get condition nodes of treatments and managements
-      if (healthCare.conditions != null && healthCare.conditions.length > 0){
+      if (healthCare.conditions != null && healthCare.conditions.length > 0) {
         healthCare.conditions.map((condition) => {
           let answerNode = condition.first_conditionable.node;
           let condNode;
@@ -147,7 +147,7 @@ class Diagram extends React.Component {
       y += space / 2;
       level.map((node) => {
         node.setPosition(x, y);
-        y += 80;
+        y += 150;
       });
       y = 60;
       x += 300;
