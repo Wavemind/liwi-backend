@@ -10,7 +10,7 @@ export interface AdvancedNodeWidgetProps {
 export interface AdvancedNodeWidgetState {}
 
 /**
- * @author Dylan Vorster
+ * @author Jean Neige
  */
 class AdvancedNodeWidget extends BaseWidget<AdvancedNodeWidgetProps, AdvancedNodeWidgetState> {
   static defaultProps: AdvancedNodeWidgetProps = {
