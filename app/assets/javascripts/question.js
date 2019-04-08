@@ -24,8 +24,6 @@ jQuery(document).ready(function() {
     let questionUnavailable = $(this).closest("form").find("fieldset.question_unavailable");
     let id = $("#question_category_id option:selected").val();
 
-    console.log(questionUnavailable);
-
     if (id.trim()) {
       $.ajax({
         url: window.location.origin + "/categories/" + id + "/reference",
