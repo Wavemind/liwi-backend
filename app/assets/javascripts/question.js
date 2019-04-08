@@ -1,4 +1,4 @@
-jQuery(document).ready(function () {
+jQuery(document).ready(function() {
   $("#questions-datatable").dataTable({
     "processing": true,
     "info": false,
@@ -14,7 +14,7 @@ jQuery(document).ready(function () {
       { "data": "category" },
       { "data": "answers" },
       { "data": "answer_type" },
-      { "data": "actions", "className": "text-right"},
+      { "data": "actions", "className": "text-right" }
     ]
   });
 
@@ -26,18 +26,16 @@ jQuery(document).ready(function () {
 
     console.log(questionUnavailable);
 
-    if (id.trim()){
+    if (id.trim()) {
       $.ajax({
         url: window.location.origin + "/categories/" + id + "/reference",
-        complete: function(response){
+        complete: function(response) {
           prepend.text(response.responseText + "_");
 
-          if (response.responseText == 'A') {
-            $(questionUnavailable).removeClass('hidden');
-          } else {
-            if (!$(questionUnavailable).hasClass('hidden')) {
-              $(questionUnavailable).addClass('hidden');
-            }
+          if ($(questionUnavailable).hasClass("hidden") && response.responseText === "A") {
+            $(questionUnavailable).removeClass("hidden");
+          } else if(response.responseText !== "A") {
+            $(questionUnavailable).addClass("hidden");
           }
         }
       });

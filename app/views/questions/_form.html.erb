@@ -9,7 +9,7 @@
 
   <%= f.association :answer_type, collection: AnswerType.all, label_method: :display_name, prompt: t('select'), disabled: @question.answers.any?  %>
 
-  <%= f.input :unavailable, as: :boolean, wrapper_html: { class: 'hidden' }  %>
+  <%= f.input :unavailable, as: :boolean %>
 
   <hr />
 

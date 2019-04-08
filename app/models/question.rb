@@ -2,6 +2,7 @@
 class Question < Node
 
   after_create :create_boolean_answers, if: Proc.new { answer_type.value == 'Boolean' }
+  after_create :create_unavailable_answer, if: Proc.new { unavailable }
 
   attr_accessor :unavailable
 
@@ -36,5 +37,10 @@ class Question < Node
   # Automatically create the answers, since they can't be changed
   def create_boolean_answers
     Answer.create_boolean(id)
+  end
+
+  # Automatically create unavailable answer
+  def create_unavailable_answer
+    Answer.create_unavailable(id)
   end
 end

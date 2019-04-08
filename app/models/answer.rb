@@ -41,6 +41,12 @@ class Answer < ApplicationRecord
     Answer.create!(node_id: node_id, reference: '2', label_en: I18n.t('answers.no'))
   end
 
+  # @param [Integer] node id to link to questions
+  # Create 1 automatic answer for tests/assessments if attr_accessor :unavailable in question is checked
+  def self.create_unavailable(node_id)
+    Answer.create!(node_id: node_id, reference: '100', label_en: I18n.t('answers.unavailable'))
+  end
+
   private
 
   # Ensure that the entered values are in the correct type

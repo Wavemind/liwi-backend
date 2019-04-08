@@ -38,6 +38,7 @@ en:
       value_missing: "Use coma separated values when using between operator"
       wrong_value_type: "The value is not in the correct type : %{type}"
     "yes": "Yes"
+    unavailable: "Test/Assessment is unavailable"
   api:
     v1:
       versions:
