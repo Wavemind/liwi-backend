@@ -6,7 +6,7 @@ class Question < Node
 
   attr_accessor :unavailable
 
-  enum priority: [:basic, :triage, :priority]
+  enum priority: [:basic, :triage, :mandatory]
 
   has_many :answers, foreign_key: 'node_id', dependent: :destroy
   belongs_to :category

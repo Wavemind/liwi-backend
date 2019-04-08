@@ -51,7 +51,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   it 'create an answer for current question if attributes is valid' do
-    @question = Question.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', category: @symptom, priority: Question.priorities[:priority], answer_type: @boolean)
+    @question = Question.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', category: @symptom, priority: Question.priorities[:mandatory], answer_type: @boolean)
 
     expect {
       put :answers, params: {
@@ -73,7 +73,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   it 'create multiple answers for current question if attributes is valid' do
-    @question = Question.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', category: @symptom, priority: Question.priorities[:priority], answer_type: @boolean)
+    @question = Question.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', category: @symptom, priority: Question.priorities[:mandatory], answer_type: @boolean)
 
     expect {
       put :answers, params: {
@@ -101,7 +101,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   it 'doesn\'t create an answer for current question if attributes is invalid' do
-    @question = Question.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', category: @symptom, priority: Question.priorities[:priority], answer_type: @boolean)
+    @question = Question.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', category: @symptom, priority: Question.priorities[:mandatory], answer_type: @boolean)
 
     expect {
       put :answers, params: {
@@ -123,7 +123,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   it 'adds translations without rendering the view' do
-    @question = Question.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', category: @symptom, priority: Question.priorities[:priority], answer_type: @boolean)
+    @question = Question.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', category: @symptom, priority: Question.priorities[:mandatory], answer_type: @boolean)
 
     put :update_translations, params: {
       algorithm_id: @algorithm.id,
@@ -141,7 +141,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   it 'returns error when sending attributes with clearing a mandatory field' do
-    @question = Question.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', category: @symptom, priority: Question.priorities[:priority], answer_type: @boolean)
+    @question = Question.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', category: @symptom, priority: Question.priorities[:mandatory], answer_type: @boolean)
 
     put :update_translations, params: {
       algorithm_id: @algorithm.id,

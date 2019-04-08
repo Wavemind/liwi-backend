@@ -26,11 +26,11 @@ module ServiceMacros
       dd7 = Diagnostic.create!(version: epoc_first, label: 'Severe LRTI', reference: '7')
       df7 = FinalDiagnostic.create!(label: 'Severe lower respiratory tract infection', reference: '7', diagnostic: dd7)
 
-      s2 = Question.create!(algorithm: epoct, label: 'Cough', reference: '2', category: symptom, priority: Question.priorities[:priority], answer_type: boolean)
+      s2 = Question.create!(algorithm: epoct, label: 'Cough', reference: '2', category: symptom, priority: Question.priorities[:mandatory], answer_type: boolean)
       s2_1 = s2.answers.first
       s2_2 = s2.answers.second
 
-      s4 = Question.create!(algorithm: epoct, label: 'Drink as usual', reference: '4', category: symptom, priority: Question.priorities[:priority], answer_type: boolean)
+      s4 = Question.create!(algorithm: epoct, label: 'Drink as usual', reference: '4', category: symptom, priority: Question.priorities[:mandatory], answer_type: boolean)
       s4_1 = s4.answers.first
       s4_2 = s4.answers.second
 
