@@ -96,6 +96,7 @@ class QuestionsController < ApplicationController
       :description_en,
       Language.description_params,
       :answer_type_id,
+      :unavailable,
       answers_attributes: [
         :id,
         :reference,

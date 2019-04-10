@@ -36,9 +36,15 @@ class Answer < ApplicationRecord
 
   # @param [Integer] node id to link to questions
   # Create 2 automatic answers (yes & no) for PS and boolean questions
-  def self.create_boolean(node_id)
-    Answer.create!(node_id: node_id, reference: '1', label_en: I18n.t('answers.yes'))
-    Answer.create!(node_id: node_id, reference: '2', label_en: I18n.t('answers.no'))
+  # def self.create_boolean(node_id)
+  #   Answer.create!(node_id: node_id, reference: '1', label_en: I18n.t('answers.yes'))
+  #   Answer.create!(node_id: node_id, reference: '2', label_en: I18n.t('answers.no'))
+  # end
+
+  # @param [Integer] node id to link to questions
+  # Create 1 automatic answer for tests/assessments if attr_accessor :unavailable in question is checked
+  def self.create_unavailable(node_id)
+    Answer.create!(node_id: node_id, reference: '100', label_en: I18n.t('answers.unavailable'))
   end
 
   private

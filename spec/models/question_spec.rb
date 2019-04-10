@@ -31,4 +31,11 @@ RSpec.describe Question, type: :model do
 
     expect(question.answers.count).to eq(2)
   end
+
+  it 'creates automatically 3 answers when answer_type is boolean and unavailable is true' do
+    boolean_type = AnswerType.new(value: 'Boolean', display: 'Radiobutton')
+    question = Question.create!(reference: '9', label: 'skin issue', priority: Question.priorities[:basic], category: @category, answer_type: boolean_type, algorithm: @algorithm, unavailable: true)
+
+    expect(question.answers.count).to eq(3)
+  end
 end

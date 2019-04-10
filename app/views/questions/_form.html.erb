@@ -9,6 +9,8 @@
 
   <%= f.association :answer_type, collection: AnswerType.all, label_method: :display_name, prompt: t('select'), disabled: @question.answers.any?  %>
 
+  <%= f.input :unavailable, as: :boolean %>
+
   <hr />
 
   <%= f.simple_fields_for :medias do |ff| %>

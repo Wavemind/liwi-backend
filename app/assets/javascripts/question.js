@@ -1,4 +1,4 @@
-jQuery(document).ready(function () {
+jQuery(document).ready(function() {
   $("#questions-datatable").dataTable({
     "processing": true,
     "info": false,
@@ -14,20 +14,27 @@ jQuery(document).ready(function () {
       { "data": "category" },
       { "data": "answers" },
       { "data": "answer_type" },
-      { "data": "actions", "className": "text-right"},
+      { "data": "actions", "className": "text-right" }
     ]
   });
 
   // Update the prepend every time the user pick another category
   $("#question_category_id").change(function() {
-    var prepend = $(this).closest("form").find(".input-group-text");
-    var id = $("#question_category_id option:selected").val();
+    let prepend = $(this).closest("form").find(".input-group-text");
+    let questionUnavailable = $(this).closest("form").find("fieldset.question_unavailable");
+    let id = $("#question_category_id option:selected").val();
 
-    if (id.trim()){
+    if (id.trim()) {
       $.ajax({
         url: window.location.origin + "/categories/" + id + "/reference",
-        complete: function(response){
+        complete: function(response) {
           prepend.text(response.responseText + "_");
+
+          if ($(questionUnavailable).hasClass("d-none") && response.responseText === "A") {
+            $(questionUnavailable).removeClass("d-none");
+          } else if(response.responseText !== "A") {
+            $(questionUnavailable).addClass("d-none");
+          }
         }
       });
     } else {

@@ -78,9 +78,9 @@ predefined_condition = Category.create!(name_en: 'Predefined condition', referen
 
 # Questions
 e1 = Question.create!(algorithm: epoct, answer_type: input_integer, label_en: 'Age', reference: '1', category: exposure, priority: Question.priorities[:triage])
-s3 = Question.create!(algorithm: epoct, answer_type: input_integer, label_en: 'Convulsions in current illness', reference: '3', category: symptom, priority: Question.priorities[:priority])
-s45 = Question.create!(algorithm: epoct, answer_type: boolean, label_en: 'Is the patient able to tolerate PO liquid ?', reference: '45', category: symptom, priority: Question.priorities[:priority])
-s5 = Question.create!(algorithm: epoct, answer_type: input_integer, label_en: 'How many time did you loose stool or emesis last 24 hours ?', reference: '5', category: symptom, priority: Question.priorities[:priority])
+s3 = Question.create!(algorithm: epoct, answer_type: input_integer, label_en: 'Convulsions in current illness', reference: '3', category: symptom, priority: Question.priorities[:mandatory])
+s45 = Question.create!(algorithm: epoct, answer_type: boolean, label_en: 'Is the patient able to tolerate PO liquid ?', reference: '45', category: symptom, priority: Question.priorities[:mandatory])
+s5 = Question.create!(algorithm: epoct, answer_type: input_integer, label_en: 'How many time did you loose stool or emesis last 24 hours ?', reference: '5', category: symptom, priority: Question.priorities[:mandatory])
 p6 = Question.create!(algorithm: epoct, answer_type: input_float, label_en: 'What is MUAC size ?', reference: '6', category: physical_exam, priority: Question.priorities[:triage])
 p21 = Question.create!(algorithm: epoct, answer_type: input_float, label_en: 'What is the size of the skin lesion ?', reference: '21', category: physical_exam, priority: Question.priorities[:basic])
 
@@ -131,10 +131,10 @@ group_wavemind.save
 dd7 = Diagnostic.create!(version: epoc_first, label_en: 'Severe LRTI', reference: '7')
 df7 = FinalDiagnostic.create!(label_en: 'Severe lower respiratory tract infection', reference: '7', diagnostic: dd7)
 
-s2 = Question.create!(algorithm: epoct, label_en: 'Cough', reference: '2', category: symptom, priority: Question.priorities[:priority], answer_type: boolean)
+s2 = Question.create!(algorithm: epoct, label_en: 'Cough', reference: '2', category: symptom, priority: Question.priorities[:mandatory], answer_type: boolean)
 s2_1 = s2.answers.first
 
-s4 = Question.create!(algorithm: epoct, label_en: 'Drink as usual', reference: '4', category: symptom, priority: Question.priorities[:priority], answer_type: boolean)
+s4 = Question.create!(algorithm: epoct, label_en: 'Drink as usual', reference: '4', category: symptom, priority: Question.priorities[:mandatory], answer_type: boolean)
 s4_1 = s4.answers.first
 s4_2 = s4.answers.second
 
@@ -238,7 +238,7 @@ p2 = Question.create!(algorithm: epoct, label_en: 'Severe tachycardia (th %ile)'
 p2_1 = p2.answers.create!(reference: '1', label_en: 'More than 90', value: '90', operator: Answer.operators[:more_or_equal])
 p2_2 = p2.answers.create!(reference: '2', label_en: 'Less than 90', value: '90', operator: Answer.operators[:less])
 
-p9 = Question.create!(algorithm: epoct, label_en: 'Stiff neck', reference: '9', category: physical_exam, priority: Question.priorities[:priority], answer_type: boolean)
+p9 = Question.create!(algorithm: epoct, label_en: 'Stiff neck', reference: '9', category: physical_exam, priority: Question.priorities[:mandatory], answer_type: boolean)
 p9_1 = p9.answers.first
 p9_2 = p9.answers.second
 
@@ -255,11 +255,11 @@ p5_1 = p5.answers.create!(reference: '1', label_en: 'less than -3', value: '-3',
 p5_2 = p5.answers.create!(reference: '2', label_en: 'Between -3 and -2', value: '-3,-2', operator: Answer.operators[:between])
 p5_3 = p5.answers.create!(reference: '3', label_en: 'More than -2', value: '-2', operator: Answer.operators[:more_or_equal])
 
-a1 = Question.create!(algorithm: epoct, label_en: 'mRDT', reference: '1', category: assessment_test, priority: Question.priorities[:priority], answer_type: dropdown_list)
+a1 = Question.create!(algorithm: epoct, label_en: 'mRDT', reference: '1', category: assessment_test, priority: Question.priorities[:mandatory], answer_type: dropdown_list)
 a1_1 = a1.answers.create!(reference: '1', label_en: 'positive', value: nil, operator: nil)
 a1_2 = a1.answers.create!(reference: '2', label_en: 'negative', value: nil, operator: nil)
 
-a2 = Question.create!(algorithm: epoct, label_en: 'SaO2 (%)', reference: '2', category: assessment_test, priority: Question.priorities[:priority], answer_type: input_integer)
+a2 = Question.create!(algorithm: epoct, label_en: 'SaO2 (%)', reference: '2', category: assessment_test, priority: Question.priorities[:mandatory], answer_type: input_integer)
 a2_1 = a2.answers.create!(reference: '1', label_en: 'Less than 6', value: '6', operator: Answer.operators[:less])
 a2_2 = a2.answers.create!(reference: '2', label_en: 'More than 6', value: '6', operator: Answer.operators[:more_or_equal])
 
@@ -272,11 +272,11 @@ a4 = Question.create!(algorithm: epoct, label_en: 'SaO2 (%)', reference: '4', ca
 a4_1 = a4.answers.create!(reference: '1', label_en: 'Less than 3.3', value: '3.3', operator: Answer.operators[:less])
 a4_2 = a4.answers.create!(reference: '2', label_en: 'More than 3.3', value: '3.3', operator: Answer.operators[:more_or_equal])
 
-s8 = Question.create!(algorithm: epoct, label_en: 'Extremity pain', reference: '8', category: symptom, priority: Question.priorities[:priority], answer_type: boolean)
+s8 = Question.create!(algorithm: epoct, label_en: 'Extremity pain', reference: '8', category: symptom, priority: Question.priorities[:mandatory], answer_type: boolean)
 s8_1 = s8.answers.first
 s8_2 = s8.answers.second
 
-p24 = Question.create!(algorithm: epoct, label_en: 'Joint swelling', reference: '24', category: physical_exam, priority: Question.priorities[:priority], answer_type: boolean)
+p24 = Question.create!(algorithm: epoct, label_en: 'Joint swelling', reference: '24', category: physical_exam, priority: Question.priorities[:mandatory], answer_type: boolean)
 p24_1 = p24.answers.first
 p24_2 = p24.answers.second
 

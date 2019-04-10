@@ -44,6 +44,14 @@ class Node < ApplicationRecord
     instances
   end
 
+  # Automatically create the answers, since they can't be changed
+  # Create 2 automatic answers (yes & no) for PS and boolean questions
+  def create_boolean
+    self.answers << Answer.new(reference: '1', label_en: I18n.t('answers.yes'))
+    self.answers << Answer.new(reference: '2', label_en: I18n.t('answers.no'))
+    self.save
+  end
+
   private
 
   # @params nil

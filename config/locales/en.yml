@@ -1,4 +1,8 @@
 en:
+  activerecord:
+    attributes:
+      node:
+        unavailable: "Can be unavailable ?"
   add: "Add"
   algorithms:
     index:
@@ -34,6 +38,7 @@ en:
       value_missing: "Use coma separated values when using between operator"
       wrong_value_type: "The value is not in the correct type : %{type}"
     "yes": "Yes"
+    unavailable: "Test/Assessment is unavailable"
   api:
     v1:
       versions:
@@ -217,7 +222,7 @@ en:
     priorities:
       basic: "Basic"
       triage: "Triage"
-      priority: "Priority"
+      mandatory: "Mandatory"
     references:
       comorbidity: "DC"
       exposure: "E"
@@ -229,7 +234,7 @@ en:
         label: "Label"
         description: "Description"
         reference: "Reference"
-        priority: "Priority"
+        mandatory: "Mandatory"
         category: "Category"
         answers: "Answers"
         answer_type: "Type of answers"

@@ -1,6 +1,6 @@
 # Define the children of an answer
 class PredefinedSyndrome < Node
-  after_create :create_answers
+  after_create :create_boolean
 
   belongs_to :category
 
@@ -20,10 +20,5 @@ class PredefinedSyndrome < Node
   # {Node#complete_reference}
   def complete_reference
     self.reference = "#{category.reference_prefix}#{reference}"
-  end
-
-  # Automatically create the answers, since they can't be changed
-  def create_answers
-    Answer.create_boolean(id)
   end
 end

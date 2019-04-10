@@ -1,9 +1,12 @@
 # Child of Node / Questions asked to the patient
 class Question < Node
 
-  after_create :create_boolean_answers, if: Proc.new { answer_type.value == 'Boolean' }
+  after_create :create_boolean, if: Proc.new { answer_type.value == 'Boolean' }
+  after_create :create_unavailable_answer, if: Proc.new { unavailable }
 
-  enum priority: [:basic, :triage, :priority]
+  attr_accessor :unavailable
+
+  enum priority: [:basic, :triage, :mandatory]
 
   has_many :answers, foreign_key: 'node_id', dependent: :destroy
   belongs_to :category
@@ -31,8 +34,9 @@ class Question < Node
     end
   end
 
-  # Automatically create the answers, since they can't be changed
-  def create_boolean_answers
-    Answer.create_boolean(id)
+  # Automatically create unavailable answer
+  # Create 1 automatic answer for tests/assessments if attr_accessor :unavailable in question is checked
+  def create_unavailable_answer
+    Answer.create!(node_id: id, reference: '100', label_en: I18n.t('answers.unavailable'))
   end
 end
