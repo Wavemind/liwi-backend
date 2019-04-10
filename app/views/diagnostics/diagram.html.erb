@@ -1,0 +1,12 @@
+<div class="row">
+  <div class="col">
+    <div class="docs-preview-wrapper">
+      <%= react_component('Diagram', {
+        diagnostic: @diagnostic,
+        questions: @questions,
+        finalDiagnostics: @final_diagnostics,
+        healthCares: @health_cares,
+      }) %>
+    </div>
+  </div>
+</div>

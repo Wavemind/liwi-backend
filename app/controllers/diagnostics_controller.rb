@@ -1,8 +1,9 @@
 class DiagnosticsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:show, :new, :create, :edit, :update, :destroy, :duplicate]
-  before_action :set_version, only: [:show, :new, :create, :edit, :update, :destroy, :duplicate]
-  before_action :set_diagnostic, only: [:show, :edit, :update, :update_translations]
+  before_action :set_algorithm, only: [:show, :new, :create, :edit, :update, :destroy, :duplicate, :diagram]
+  before_action :set_version, only: [:show, :new, :create, :edit, :update, :destroy, :duplicate, :diagram]
+  before_action :set_diagnostic, only: [:show, :edit, :update, :update_translations, :diagram]
+  layout 'diagram', only: [:diagram]
 
   def index
     respond_to do |format|
@@ -79,12 +80,20 @@ class DiagnosticsController < ApplicationController
   # Update the object with its translation without
   def update_translations
     if @diagnostic.update(diagnostic_params)
-      @json = { status: 'success', message: t('flash_message.success_updated')}
+      @json = { status: 'success', message: t('flash_message.success_updated') }
       render 'update_translations', formats: :js, status: :ok
     else
-      @json = { status: 'alert', message: t('flash_message.update_fail')}
+      @json = { status: 'alert', message: t('flash_message.update_fail') }
       render 'update_translations', formats: :js, status: :unprocessable_entity
     end
+  end
+
+  # @params Diagnostic
+  # React Diagram
+  def diagram
+    @questions = @diagnostic.generate_questions_order.as_json(include: [conditions: { include: [first_conditionable: { include: [:node] }, second_conditionable: { include: [:node] }] }, node: { include: [:answers] }])
+    @final_diagnostics = @diagnostic.final_diagnostics.as_json(include: [instances: { include: [conditions: { include: [first_conditionable: { include: [:node] }, second_conditionable: { include: [:node] }] }] }])
+    @health_cares = @diagnostic.treatment_instances.as_json(include: [ :node, conditions: { include: [first_conditionable: { include: [node: { include: [:answers]}]}]}]) + @diagnostic.management_instances.as_json(include: [ :node, conditions: { include: [first_conditionable: { include: [:node]}]}])
   end
 
   private
@@ -101,4 +110,5 @@ class DiagnosticsController < ApplicationController
       Language.label_params
     )
   end
+
 end
