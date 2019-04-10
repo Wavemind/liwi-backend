@@ -30,10 +30,10 @@ jQuery(document).ready(function() {
         complete: function(response) {
           prepend.text(response.responseText + "_");
 
-          if ($(questionUnavailable).hasClass("hidden") && response.responseText === "A") {
-            $(questionUnavailable).removeClass("hidden");
+          if ($(questionUnavailable).hasClass("d-none") && response.responseText === "A") {
+            $(questionUnavailable).removeClass("d-none");
           } else if(response.responseText !== "A") {
-            $(questionUnavailable).addClass("hidden");
+            $(questionUnavailable).addClass("d-none");
           }
         }
       });
