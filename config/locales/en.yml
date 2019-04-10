@@ -299,3 +299,5 @@ en:
       title: "Details of %{name} - version %{version}"
       predefined_syndromes: "Predefined Syndromes"
   warning_dependency: "Warning ! Editing this node will affect :"
+  close: "Close"
+  open_diagram: "Open diagram editor"
