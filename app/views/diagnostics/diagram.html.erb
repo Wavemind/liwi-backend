@@ -1,12 +1,15 @@
 <div class="row">
-  <div class="col">
-    <div class="docs-preview-wrapper">
-      <%= react_component('Diagram', {
-        diagnostic: @diagnostic,
-        questions: @questions,
-        finalDiagnostics: @final_diagnostics,
-        healthCares: @health_cares,
-      }) %>
-    </div>
+  <div class="col-md-11">
+    <%= react_component('Diagram', {
+      diagnostic: @diagnostic,
+      questions: @questions,
+      finalDiagnostics: @final_diagnostics,
+      healthCares: @health_cares,
+      availableNodes: @available_nodes,
+    }) %>
+  </div>
+
+  <div class="col-md-1 text-right">
+    <%= link_to(I18n.t('close'), algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], params[:id]), class: 'btn btn-danger mt-2 mr-2') %>
   </div>
 </div>

@@ -6,37 +6,38 @@ import {
 import * as React from "react";
 import * as _ from "lodash";
 
-import AdvancedLinkFactory from '../react-diagram/factories/AdvancedLinkFactory';
-import AdvancedNodeFactory from '../react-diagram/factories/AdvancedNodeFactory';
-import AdvancedNodeModel from '../react-diagram/models/AdvancedNodeModel';
+import AdvancedLinkFactory from "../react-diagram/factories/AdvancedLinkFactory";
+import AdvancedNodeFactory from "../react-diagram/factories/AdvancedNodeFactory";
+import AdvancedNodeModel from "../react-diagram/models/AdvancedNodeModel";
+import NodeList from "../react-diagram/lists/NodeList";
 
 class Diagram extends React.Component {
 
-  componentDidMount(){
-  // Add css class to the 'and' nodes in order to make them invisible and simulate an and link
-    for (let e of document.getElementsByClassName('srd-default-node__name')) {
-      if (e.innerText === ''){ // And boxes
+  componentDidMount() {
+    // Add css class to the 'and' nodes in order to make them invisible and simulate an and link
+    for (let e of document.getElementsByClassName("srd-default-node__name")) {
+      if (e.innerText === "") { // And boxes
         e.parentElement.parentElement.classList.add("and");
-      } else if (e.innerText.indexOf(" - ") === -1){ // Titles box
+      } else if (e.innerText.indexOf(" - ") === -1) { // Titles box
         e.parentElement.parentElement.classList.add("node-titles");
       } else { // Node boxes
         let node = e.parentElement.parentElement;
         node.dataset.reference = e.innerText.substring(0, e.innerText.indexOf(" - "));
         node.dataset.diagnostic = this.props.diagnostic.id;
-        node.addEventListener("click", editInstance)
+        node.addEventListener("click", editInstance);
       }
     }
   }
 
   // Get full label of an object
   getFullLabel = (obj) => {
-    return obj.reference + ' - ' + obj.label_translations['en'];
+    return obj.reference + " - " + obj.label_translations["en"];
   };
 
   // Create a node from label with its inport
   createNode = (label, reference = null, dbId = null, color = "rgb(255,255,255)") => {
     let node = new AdvancedNodeModel(label, reference, dbId, color);
-    node.addInPort(' ');
+    node.addInPort(" ");
     return node;
   };
 
@@ -44,7 +45,8 @@ class Diagram extends React.Component {
     const {
       questions,
       finalDiagnostics,
-      healthCares
+      healthCares,
+      availableNodes,
     } = this.props;
 
     // Setup the diagram engine
@@ -86,7 +88,7 @@ class Diagram extends React.Component {
       dfLevel.push(node);
       nodes.push(node);
       model.addAll(node);
-      instances.push(df.instances[0])
+      instances.push(df.instances[0]);
     });
 
     // Excluded diagnostic
@@ -162,7 +164,7 @@ class Diagram extends React.Component {
     x += (300 * questions.length);
 
     let dfTitle = this.createNode("Final diagnostics");
-    let dfBotTitle = this.createNode(' ');
+    let dfBotTitle = this.createNode(" ");
     dfTitle.setPosition(x - 50, y);
     dfBotTitle.setPosition(x - 50, yBot);
 
@@ -175,7 +177,7 @@ class Diagram extends React.Component {
 
     if (hcConditions.length > 0) {
       let hcCondTitle = this.createNode("Treatments and Managements conditions");
-      let hcCondBotTitle = this.createNode(' ');
+      let hcCondBotTitle = this.createNode(" ");
       let hcCondLink = hcCondTitle.getInPort().link(hcCondBotTitle.getInPort());
 
       hcCondTitle.setPosition(x - 50, y);
@@ -191,7 +193,7 @@ class Diagram extends React.Component {
 
     let hcTitle = this.createNode("Treatments and Managements");
     hcTitle.setPosition(x - 50, y);
-    let hcBotTitle = this.createNode(' ');
+    let hcBotTitle = this.createNode(" ");
     hcBotTitle.setPosition(x - 50, yBot);
     let hcTitleLink = hcTitle.getInPort().link(hcBotTitle.getInPort());
     hcTitleLink.displayArrow(false);
@@ -205,16 +207,16 @@ class Diagram extends React.Component {
         let firstAnswer = condition.first_conditionable;
         let firstNodeAnswer = _.find(nodes, ["name", this.getFullLabel(firstAnswer.node)]);
 
-        if (condition.second_conditionable_id !== null && condition.operator === 'and_operator') {
+        if (condition.second_conditionable_id !== null && condition.operator === "and_operator") {
           let secondAnswer = condition.second_conditionable;
           let secondNodeAnswer = _.find(nodes, ["name", this.getFullLabel(secondAnswer.node)]);
 
-          let andNode = this.createNode(' ', "rgba(f,f,f, 0)");
-          andNode.setPosition( Math.min(firstNodeAnswer.x, secondNodeAnswer.x) + 250, firstNodeAnswer.y + 50);
-          andNode.addOutPort(' ');
+          let andNode = this.createNode(" ", "rgba(f,f,f, 0)");
+          andNode.setPosition(Math.min(firstNodeAnswer.x, secondNodeAnswer.x) + 250, firstNodeAnswer.y + 50);
+          andNode.addOutPort(" ");
 
           let firstLink = _.find(firstNodeAnswer.getOutPorts(), ["label", this.getFullLabel(firstAnswer)]).link(andNode.getInPort());
-          let secondLink =  _.find(secondNodeAnswer.getOutPorts(), ["label", this.getFullLabel(secondAnswer)]).link(andNode.getInPort());
+          let secondLink = _.find(secondNodeAnswer.getOutPorts(), ["label", this.getFullLabel(secondAnswer)]).link(andNode.getInPort());
           let andLink = andNode.getInPort().link(node.getInPort());
 
           firstLink.displayArrow(false);
@@ -233,7 +235,21 @@ class Diagram extends React.Component {
 
     // render the diagram!
     model.setLocked(true);
-    return <DiagramWidget className="srd-demo-canvas" diagramEngine={engine} allowLooseLinks={false} allowCanvasZoom={false} />;
+    return (
+      <div className="row">
+        <div className="col-md-2" style={{backgroundColor: 'pink'}}>
+          <NodeList nodes={availableNodes} />
+        </div>
+        <div className="col-md-10">
+          <DiagramWidget
+            className="srd-demo-canvas"
+            diagramEngine={engine}
+            allowLooseLinks={false}
+            allowCanvasZoom={false}
+          />
+        </div>
+      </div>
+    );
   };
 }
 
