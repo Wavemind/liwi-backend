@@ -6,7 +6,6 @@ class NodeListItem extends React.Component {
     super(props);
   }
 
-  // Get full label of an object
   getFullLabel = (obj) => {
     return obj.reference + " - " + obj.label_translations["en"];
   };
@@ -15,22 +14,35 @@ class NodeListItem extends React.Component {
     const { node } = this.props;
 
     return (
-      <div className="srd-default-node pt-4"
+      <div className="pt-2"
            draggable={true}
            onDragStart={event => {
              event.dataTransfer.setData("node", JSON.stringify(node));
            }}>
-        <div className="srd-default-node__title">
-          <div className="srd-default-node__name">{this.getFullLabel(node)}</div>
-        </div>
-          <div className="row srd-default-node">
-            <div className="col">
-              <div className="name">S2_1 - Yes</div>
+        <div className="mx-1 node">
+          <div className="py-2 node-category">
+            <div className="col  pl-2 pr-0 text-left">
+              {node.reference}
             </div>
-            <div className="col">
-              <div className="name">S2_2 - No</div>
+            <div className="col  pl-0 pr-2 text-right">
+              {node.priority}
             </div>
           </div>
+          <div className="py-2 node-label">
+            <div className="col text-center">
+              {node.label_translations["en"]}
+            </div>
+          </div>
+          {node.get_answers !== null ? (
+              <div className="py-1 node-answers">
+              {node.get_answers.map((answer) => (
+                <div className="col text-center answer-split">
+                  {this.getFullLabel(answer)}
+                </div>
+                ))}
+              </div>
+          ) : ''}
+        </div>
       </div>
     );
   };

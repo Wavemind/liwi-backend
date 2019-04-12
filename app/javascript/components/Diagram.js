@@ -16,9 +16,7 @@ class Diagram extends React.Component {
   componentDidMount() {
     // Add css class to the 'and' nodes in order to make them invisible and simulate an and link
     for (let e of document.getElementsByClassName("srd-default-node__name")) {
-      if (e.innerText === "") { // And boxes
-        e.parentElement.parentElement.classList.add("and");
-      } else if (e.innerText.indexOf(" - ") === -1) { // Titles box
+      if (e.innerText.indexOf(" - ") === -1) { // Titles box
         e.parentElement.parentElement.classList.add("node-titles");
       }
     }
@@ -206,7 +204,7 @@ class Diagram extends React.Component {
           let secondAnswer = condition.second_conditionable;
           let secondNodeAnswer = _.find(nodes, ["name", this.getFullLabel(secondAnswer.node)]);
 
-          let andNode = this.createNode(" ", "rgba(f,f,f, 0)");
+          let andNode = this.createNode("AND", "red");
           andNode.setPosition(Math.min(firstNodeAnswer.x, secondNodeAnswer.x) + 250, firstNodeAnswer.y + 50);
           andNode.addOutPort(" ");
 
@@ -251,7 +249,7 @@ class Diagram extends React.Component {
               nodeDiagram.addOutPort(' ')
             }
 
-            model.addAll(nodeDiagram);
+            model.addNode(nodeDiagram);
           }}
           onDragOver={event => {
             event.preventDefault();

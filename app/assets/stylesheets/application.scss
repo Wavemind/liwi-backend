@@ -284,6 +284,7 @@ td {
 
 .srd-default-node__ports {
   font-size: 9pt;
+  margin: 0;
 }
 
 .srd-default-port {
@@ -299,4 +300,39 @@ td {
 
 .name {
   padding-right: 5px;
+}
+
+// Node diagram display
+.node {
+  cursor: pointer;
+  background-color: #fff;
+  font-size: 10px;
+  color: #fff;
+  border: 1px solid gray;
+}
+
+.node-category {
+  display: flex;
+  background-color: gray;
+}
+
+.node-label {
+  display: flex;
+  color: #000;
+  font-size: 14px;
+}
+
+.node-answers {
+  display: flex;
+  color: #000;
+  border-top: 1px solid gray;
+  font-size: 12;
+}
+
+.answer-split {
+  border-right: 1px solid gray;
+
+  &:last-child {
+    border-right: none;
+  }
 }

@@ -37,7 +37,6 @@ class NodeList extends React.Component {
       } else {
         category = _.camelCase(node.type);
       }
-
       orderedNodes[category].push(node);
     });
 

@@ -12,11 +12,9 @@ class AdvancedLinkWidget extends DefaultLinkWidget {
    * @return true if direction should be reversed
    */
   getDirection(source: Object, target: Object): boolean {
-    console.log(target);
     const difX = source.x - target.x,
       difY = source.y - target.y,
       isHorisontal = Math.abs(difX) > Math.abs(difY);
-
     return isHorisontal ? difX > 0 : difY > 0;
   }
 
@@ -33,13 +31,10 @@ class AdvancedLinkWidget extends DefaultLinkWidget {
     extraProps: any,
     id: string | number
   ): Element<"g"> {
-    const { diagramEngine, link } = this.props,
-      { selected } = this.state;
+    const { diagramEngine, link } = this.props;
+    const { selected } = this.state;
 
-    console.log('coucou ?')
-    console.log(link)
-
-    let inversed = this.getDirection(link.sourcePort, link.targetPort);
+    // let inversed = this.getDirection(link.sourcePort, link.targetPort);
 
     const Link = React.cloneElement(
       diagramEngine
@@ -48,8 +43,7 @@ class AdvancedLinkWidget extends DefaultLinkWidget {
           link,
           this,
           selected || link.isSelected(),
-          path,
-          inversed,
+          path
         ),
       {
         ...extraProps,
