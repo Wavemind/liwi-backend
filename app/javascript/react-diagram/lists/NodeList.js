@@ -48,9 +48,9 @@ class NodeList extends React.Component {
     const { orderedNodes } = this.state;
 
     return (
-      <div className="accordion mt-5" id="accordionNodes">
+      <div className="accordion" id="accordionNodes">
         {Object.keys(orderedNodes).map( index => (
-          <div className="card">
+          <div className="card" key={index}>
             <div className="card-header" id={`heading-${index}`}>
               <h2 className="mb-0">
                 <button className="btn btn-link" type="button" data-toggle="collapse" data-target={`#collapse-${index}`}
@@ -62,9 +62,9 @@ class NodeList extends React.Component {
 
             <div id={`collapse-${index}`} className={`collapse ${index === 0 ? `show` : ``}`} aria-labelledby={`heading-${index}`}
                  data-parent="#accordionNodes">
-              <div className="card-body">
+              <div className="card-body p-0">
                 {orderedNodes[index].map((node) => (
-                  <NodeListItem node={node}/>
+                  <NodeListItem node={node} key={node.id} />
                 ))}
               </div>
             </div>

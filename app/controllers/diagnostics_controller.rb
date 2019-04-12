@@ -94,7 +94,7 @@ class DiagnosticsController < ApplicationController
     @questions = @diagnostic.generate_questions_order.as_json(include: [conditions: { include: [first_conditionable: { include: [:node] }, second_conditionable: { include: [:node] }] }, node: { include: [:answers] }])
     @final_diagnostics = @diagnostic.final_diagnostics.as_json(include: [instances: { include: [conditions: { include: [first_conditionable: { include: [:node] }, second_conditionable: { include: [:node] }] }] }])
     @health_cares = @diagnostic.treatment_instances.as_json(include: [ :node, conditions: { include: [first_conditionable: { include: [node: { include: [:answers]}]}]}]) + @diagnostic.management_instances.as_json(include: [ :node, conditions: { include: [first_conditionable: { include: [:node]}]}])
-    @available_nodes = (@algorithm.nodes.where.not(id: @diagnostic.components.select(:node_id)) + FinalDiagnostic.where(diagnostic_id: params[:id])).as_json(methods: [:category_name, :type])
+    @available_nodes = (@algorithm.nodes.where.not(id: @diagnostic.components.select(:node_id)) + FinalDiagnostic.where(diagnostic_id: params[:id])).as_json(methods: [:category_name, :type, :get_answers])
   end
 
   private

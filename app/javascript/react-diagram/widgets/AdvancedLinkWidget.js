@@ -12,6 +12,7 @@ class AdvancedLinkWidget extends DefaultLinkWidget {
    * @return true if direction should be reversed
    */
   getDirection(source: Object, target: Object): boolean {
+    console.log(target);
     const difX = source.x - target.x,
       difY = source.y - target.y,
       isHorisontal = Math.abs(difX) > Math.abs(difY);
@@ -34,6 +35,9 @@ class AdvancedLinkWidget extends DefaultLinkWidget {
   ): Element<"g"> {
     const { diagramEngine, link } = this.props,
       { selected } = this.state;
+
+    console.log('coucou ?')
+    console.log(link)
 
     let inversed = this.getDirection(link.sourcePort, link.targetPort);
 

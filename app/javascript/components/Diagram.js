@@ -20,18 +20,14 @@ class Diagram extends React.Component {
         e.parentElement.parentElement.classList.add("and");
       } else if (e.innerText.indexOf(" - ") === -1) { // Titles box
         e.parentElement.parentElement.classList.add("node-titles");
-      } else { // Node boxes
-        let node = e.parentElement.parentElement;
-        node.dataset.reference = e.innerText.substring(0, e.innerText.indexOf(" - "));
-        node.dataset.diagnostic = this.props.diagnostic.id;
-        node.addEventListener("click", editInstance);
       }
     }
   }
 
+  // @params node
   // Get full label of an object
-  getFullLabel = (obj) => {
-    return obj.reference + " - " + obj.label_translations["en"];
+  getFullLabel = (node) => {
+    return node.reference + " - " + node.label_translations["en"];
   };
 
   // Create a node from label with its inport
@@ -174,7 +170,6 @@ class Diagram extends React.Component {
     dfLink.displayArrow(false);
     dfLink.displaySeparator(true);
 
-
     if (hcConditions.length > 0) {
       let hcCondTitle = this.createNode("Treatments and Managements conditions");
       let hcCondBotTitle = this.createNode(" ");
@@ -234,17 +229,37 @@ class Diagram extends React.Component {
     engine.setDiagramModel(model);
 
     // render the diagram!
-    model.setLocked(true);
     return (
       <div className="row">
-        <div className="col-md-2" style={{backgroundColor: 'pink'}}>
+        <div className="col-md-2 px-0">
           <NodeList nodes={availableNodes} />
         </div>
-        <div className="col-md-10">
+        <div
+          className="col-md-10 mt-2"
+          onDrop={event => {
+            let nodeDb = JSON.parse(event.dataTransfer.getData("node"));
+            let nodeDiagram = this.createNode(this.getFullLabel(nodeDb), nodeDb.reference, nodeDb.id);
+            let points = engine.getRelativeMousePoint(event);
+            nodeDiagram.x = points.x;
+            nodeDiagram.y = points.y;
+
+            console.log(nodeDb);
+
+            if (nodeDb.get_answers !== undefined) {
+              nodeDb.get_answers.map((answer) => (nodeDiagram.addOutPort(this.getFullLabel(answer))));
+            } else {
+              nodeDiagram.addOutPort(' ')
+            }
+
+            model.addAll(nodeDiagram);
+          }}
+          onDragOver={event => {
+            event.preventDefault();
+          }}
+        >
           <DiagramWidget
             className="srd-demo-canvas"
             diagramEngine={engine}
-            allowLooseLinks={false}
             allowCanvasZoom={false}
           />
         </div>

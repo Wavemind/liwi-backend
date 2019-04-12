@@ -60,6 +60,12 @@ class Node < ApplicationRecord
     end
   end
 
+  def get_answers
+    if defined? answers
+      answers
+    end
+  end
+
   private
 
   # @params nil
