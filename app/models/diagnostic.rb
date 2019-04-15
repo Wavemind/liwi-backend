@@ -97,6 +97,22 @@ class Diagnostic < ApplicationRecord
     end
   end
 
+  def questions_json
+    generate_questions_order.as_json(include: [conditions: { include: [first_conditionable: { include: [:node] }, second_conditionable: { include: [:node] }] }, node: { include: [:answers] }])
+  end
+
+  def final_diagnostics_json
+    final_diagnostics.as_json(include: [instances: { include: [conditions: { include: [first_conditionable: { include: [:node] }, second_conditionable: { include: [:node] }] }] }])
+  end
+
+  def health_cares_json
+    treatment_instances.as_json(include: [ :node, conditions: { include: [first_conditionable: { include: [node: { include: [:answers]}]}]}]) + management_instances.as_json(include: [ :node, conditions: { include: [first_conditionable: { include: [:node]}]}])
+  end
+
+  def available_nodes_json
+    (version.algorithm.nodes.where.not(id: components.select(:node_id)) + final_diagnostics).as_json(methods: [:category_name, :type, :get_answers])
+  end
+
   private
 
   # {Node#unique_reference}

@@ -37,6 +37,6 @@ class Question < Node
   # Automatically create unavailable answer
   # Create 1 automatic answer for tests/assessments if attr_accessor :unavailable in question is checked
   def create_unavailable_answer
-    Answer.create!(node_id: id, reference: '100', label_en: I18n.t('answers.unavailable'))
+    Answer.create!(node_id: id, reference: '0', label_en: I18n.t('answers.unavailable'))
   end
 end

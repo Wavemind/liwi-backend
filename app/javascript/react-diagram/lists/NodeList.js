@@ -32,7 +32,7 @@ class NodeList extends React.Component {
     nodes.map((node) => {
       let category = '';
 
-      if (node.type === 'Question') {
+      if (node.type === 'Question' || node.type === 'PredefinedSyndrome') {
         category = _.camelCase(node.category_name);
       } else {
         category = _.camelCase(node.type);

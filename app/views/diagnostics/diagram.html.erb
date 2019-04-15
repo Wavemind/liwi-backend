@@ -2,10 +2,10 @@
   <div class="col-md-11">
     <%= react_component('Diagram', {
       diagnostic: @diagnostic,
-      questions: @questions,
-      finalDiagnostics: @final_diagnostics,
-      healthCares: @health_cares,
-      availableNodes: @available_nodes
+      questions: @diagnostic.questions_json,
+      finalDiagnostics: @diagnostic.final_diagnostics_json,
+      healthCares: @diagnostic.health_cares_json,
+      availableNodes: @diagnostic.available_nodes_json
     }) %>
   </div>
 

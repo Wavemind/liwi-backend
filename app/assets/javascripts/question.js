@@ -28,7 +28,7 @@ jQuery(document).ready(function() {
       $.ajax({
         url: window.location.origin + "/categories/" + id + "/reference",
         complete: function(response) {
-          prepend.text(response.responseText + "_");
+          prepend.text(response.responseText);
 
           if ($(questionUnavailable).hasClass("d-none") && response.responseText === "A") {
             $(questionUnavailable).removeClass("d-none");
