@@ -41,6 +41,7 @@ class Diagram extends React.Component {
       finalDiagnostics,
       healthCares,
       availableNodes,
+      isDiagnostic,
     } = this.props;
 
     // Setup the diagram engine
@@ -74,65 +75,112 @@ class Diagram extends React.Component {
     // Create nodes for final diagnostics
     let dfLevel = [];
 
-    finalDiagnostics.map((df) => {
-      let node = this.createNode(this.getFullLabel(df), df.reference, df.id);
-      if (df.final_diagnostic_id !== null) {
-        node.addOutPort(this.getFullLabel(_.find(finalDiagnostics, ["id", df.final_diagnostic_id])));
+    if (isDiagnostic) {
+      finalDiagnostics.map((df) => {
+        let node = this.createNode(this.getFullLabel(df), df.reference, df.id);
+        if (df.final_diagnostic_id !== null) {
+          node.addOutPort(this.getFullLabel(_.find(finalDiagnostics, ["id", df.final_diagnostic_id])));
+        }
+        dfLevel.push(node);
+        nodes.push(node);
+        model.addAll(node);
+        instances.push(df.instances[0]);
+      });
+
+      // Excluded diagnostic
+      finalDiagnostics.map((df) => {
+        if (df.final_diagnostic_id !== null) {
+          let mainDF = _.find(dfLevel, ["dbId", df.id]);
+          let excludedDF = _.find(dfLevel, ["dbId", df.final_diagnostic_id]);
+
+          let link = mainDF.getOutPort().link(excludedDF.getInPort());
+          link.displaySeparator(true);
+
+          model.addAll(link);
+        }
+      });
+
+      nodeLevels.push(dfLevel);
+
+      let hcLevel = [];
+      let hcConditions = [];
+      let conditionRefs = {};
+
+      // Create nodes for treatments and managements
+      healthCares.map((healthCare) => {
+        let node = this.createNode(this.getFullLabel(healthCare.node), healthCare.node.reference, healthCare.node.dbId);
+        // Get condition nodes of treatments and managements
+        if (healthCare.conditions != null && healthCare.conditions.length > 0) {
+          healthCare.conditions.map((condition) => {
+            let answerNode = condition.first_conditionable.node;
+            let condNode;
+            if (!(answerNode.reference in conditionRefs)) {
+              condNode = this.createNode(this.getFullLabel(answerNode), answerNode.reference, answerNode.id);
+
+              answerNode.answers.map((answer) => (condNode.addOutPort(this.getFullLabel(answer))));
+
+              hcConditions.push(condNode);
+              conditionRefs[answerNode.reference] = condNode;
+              model.addAll(condNode);
+            } else {
+              condNode = _.find(hcConditions, ["name", this.getFullLabel(answerNode)]);
+            }
+            model.addAll(_.find(condNode.getOutPorts(), ["label", this.getFullLabel(condition.first_conditionable)]).link(node.getInPort()));
+          });
+        }
+
+        hcLevel.push(node);
+        model.addAll(node);
+      });
+
+      nodeLevels.push(hcConditions);
+      nodeLevels.push(hcLevel);
+
+      // Titles
+      x = 0;
+      y = 0;
+      let yBot = 700;
+      let qTitle = this.createNode("Questions and Predefined syndromes");
+      qTitle.setPosition(x, y);
+      x += (300 * questions.length);
+
+      let dfTitle = this.createNode("Final diagnostics");
+      let dfBotTitle = this.createNode(" ");
+      dfTitle.setPosition(x - 50, y);
+      dfBotTitle.setPosition(x - 50, yBot);
+
+      x += 400;
+
+      let dfLink = dfTitle.getInPort().link(dfBotTitle.getInPort());
+      dfLink.displayArrow(false);
+      dfLink.displaySeparator(true);
+
+      if (hcConditions.length > 0) {
+        let hcCondTitle = this.createNode("Treatments and Managements conditions");
+        let hcCondBotTitle = this.createNode(" ");
+        let hcCondLink = hcCondTitle.getInPort().link(hcCondBotTitle.getInPort());
+
+        hcCondTitle.setPosition(x - 50, y);
+        hcCondBotTitle.setPosition(x - 50, yBot);
+
+        x += 400;
+
+        hcCondLink.displayArrow(false);
+        hcCondLink.displaySeparator(true);
+
+        model.addAll(hcCondTitle, hcCondBotTitle, hcCondLink);
       }
-      dfLevel.push(node);
-      nodes.push(node);
-      model.addAll(node);
-      instances.push(df.instances[0]);
-    });
 
-    // Excluded diagnostic
-    finalDiagnostics.map((df) => {
-      if (df.final_diagnostic_id !== null) {
-        let mainDF = _.find(dfLevel, ["dbId", df.id]);
-        let excludedDF = _.find(dfLevel, ["dbId", df.final_diagnostic_id]);
+      let hcTitle = this.createNode("Treatments and Managements");
+      hcTitle.setPosition(x - 50, y);
+      let hcBotTitle = this.createNode(" ");
+      hcBotTitle.setPosition(x - 50, yBot);
+      let hcTitleLink = hcTitle.getInPort().link(hcBotTitle.getInPort());
+      hcTitleLink.displayArrow(false);
+      hcTitleLink.displaySeparator(true);
 
-        let link = mainDF.getOutPort().link(excludedDF.getInPort());
-        link.displaySeparator(true);
-
-        model.addAll(link);
-      }
-    });
-
-    nodeLevels.push(dfLevel);
-
-    let hcLevel = [];
-    let hcConditions = [];
-    let conditionRefs = {};
-
-    // Create nodes for treatments and managements
-    healthCares.map((healthCare) => {
-      let node = this.createNode(this.getFullLabel(healthCare.node), healthCare.node.reference, healthCare.node.dbId);
-      // Get condition nodes of treatments and managements
-      if (healthCare.conditions != null && healthCare.conditions.length > 0) {
-        healthCare.conditions.map((condition) => {
-          let answerNode = condition.first_conditionable.node;
-          let condNode;
-          if (!(answerNode.reference in conditionRefs)) {
-            condNode = this.createNode(this.getFullLabel(answerNode), answerNode.reference, answerNode.id);
-
-            answerNode.answers.map((answer) => (condNode.addOutPort(this.getFullLabel(answer))));
-
-            hcConditions.push(condNode);
-            conditionRefs[answerNode.reference] = condNode;
-            model.addAll(condNode);
-          } else {
-            condNode = _.find(hcConditions, ["name", this.getFullLabel(answerNode)]);
-          }
-          model.addAll(_.find(condNode.getOutPorts(), ["label", this.getFullLabel(condition.first_conditionable)]).link(node.getInPort()));
-        });
-      }
-
-      hcLevel.push(node);
-      model.addAll(node);
-    });
-
-    nodeLevels.push(hcConditions);
-    nodeLevels.push(hcLevel);
+      model.addAll(qTitle, dfTitle, dfBotTitle, dfLink, hcTitle, hcBotTitle, hcTitleLink);
+    }
 
     // Positions nodes in a horizontal way
     let height = 500;
@@ -149,50 +197,6 @@ class Diagram extends React.Component {
       x += 320;
     });
 
-    // Titles
-    x = 0;
-    y = 0;
-    let yBot = 700;
-    let qTitle = this.createNode("Questions and Predefined syndromes");
-    qTitle.setPosition(x, y);
-    x += (300 * questions.length);
-
-    let dfTitle = this.createNode("Final diagnostics");
-    let dfBotTitle = this.createNode(" ");
-    dfTitle.setPosition(x - 50, y);
-    dfBotTitle.setPosition(x - 50, yBot);
-
-    x += 400;
-
-    let dfLink = dfTitle.getInPort().link(dfBotTitle.getInPort());
-    dfLink.displayArrow(false);
-    dfLink.displaySeparator(true);
-
-    if (hcConditions.length > 0) {
-      let hcCondTitle = this.createNode("Treatments and Managements conditions");
-      let hcCondBotTitle = this.createNode(" ");
-      let hcCondLink = hcCondTitle.getInPort().link(hcCondBotTitle.getInPort());
-
-      hcCondTitle.setPosition(x - 50, y);
-      hcCondBotTitle.setPosition(x - 50, yBot);
-
-      x += 400;
-
-      hcCondLink.displayArrow(false);
-      hcCondLink.displaySeparator(true);
-
-      model.addAll(hcCondTitle, hcCondBotTitle, hcCondLink);
-    }
-
-    let hcTitle = this.createNode("Treatments and Managements");
-    hcTitle.setPosition(x - 50, y);
-    let hcBotTitle = this.createNode(" ");
-    hcBotTitle.setPosition(x - 50, yBot);
-    let hcTitleLink = hcTitle.getInPort().link(hcBotTitle.getInPort());
-    hcTitleLink.displayArrow(false);
-    hcTitleLink.displaySeparator(true);
-
-    model.addAll(qTitle, dfTitle, dfBotTitle, dfLink, hcTitle, hcBotTitle, hcTitleLink);
 
     // Create links between nodes
     nodes.map((node, index) => {

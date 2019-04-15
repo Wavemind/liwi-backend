@@ -91,6 +91,9 @@ Rails.application.routes.draw do
       resources :children, only: [:create, :destroy]
       resources :conditions, only: [:create, :destroy]
     end
+    member do
+      get 'diagram'
+    end
   end
 
   resources :diagnostics, only: [] do

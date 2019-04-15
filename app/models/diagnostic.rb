@@ -54,14 +54,6 @@ class Diagnostic < ApplicationRecord
     Node.joins(:instances).where('type = ? AND instances.instanceable_id = ? AND instances.instanceable_type = ?', 'Treatment', id, self.class.name)
   end
 
-  def management_instances
-    components.joins(:node).where('nodes.type = ?', 'Management')
-  end
-
-  def treatment_instances
-    components.joins(:node).where('nodes.type = ?', 'Treatment')
-  end
-
   # @params [Diagnostic]
   # After a duplicate, link DF instances to the duplicated ones instead of the source ones
   def relink_instance
@@ -90,6 +82,7 @@ class Diagnostic < ApplicationRecord
 
     if current_nodes.any?
       current_instances = Instance.where('instanceable_id = ? AND instanceable_type = ? AND node_id IN (?)', id, self.class.name, current_nodes.map(&:id).flatten)
+      current_instances.each { |instance| nodes = remove_old_node(nodes, instance) }
       nodes << current_instances
       get_children(current_instances, nodes)
     else
@@ -97,18 +90,37 @@ class Diagnostic < ApplicationRecord
     end
   end
 
+  # @params [Array][Array][Instances] instances before delete, [Instance] instance to delete
+  # @@return [Array][Array][Instances] instances after delete
+  # Remove the duplicated node if it was already set before. We keep the last one in order to be coherent in the diagram.
+  def remove_old_node(instances, instance)
+    instances.each_with_index do |level, index|
+      instances[index] = instances[index].to_a unless instances[index].is_a? Array # Convert ActiveRelation to Array to prevent database updating
+      instances[index].delete(instance)
+    end
+    instances
+  end
+
+  # @return [Json]
+  # Return questions in json format
   def questions_json
     generate_questions_order.as_json(include: [conditions: { include: [first_conditionable: { include: [:node] }, second_conditionable: { include: [:node] }] }, node: { include: [:answers] }])
   end
 
+  # @return [Json]
+  # Return final diagnostics in json format
   def final_diagnostics_json
     final_diagnostics.as_json(include: [instances: { include: [conditions: { include: [first_conditionable: { include: [:node] }, second_conditionable: { include: [:node] }] }] }])
   end
 
+  # @return [Json]
+  # Return treatments and managements in json format
   def health_cares_json
-    treatment_instances.as_json(include: [ :node, conditions: { include: [first_conditionable: { include: [node: { include: [:answers]}]}]}]) + management_instances.as_json(include: [ :node, conditions: { include: [first_conditionable: { include: [:node]}]}])
+    components.treatment.as_json(include: [ :node, conditions: { include: [first_conditionable: { include: [node: { include: [:answers]}]}]}]) + components.management.as_json(include: [ :node, conditions: { include: [first_conditionable: { include: [:node]}]}])
   end
 
+  # @return [Json]
+  # Return available nodes in the algorithm in json format
   def available_nodes_json
     (version.algorithm.nodes.where.not(id: components.select(:node_id)) + final_diagnostics).as_json(methods: [:category_name, :type, :get_answers])
   end

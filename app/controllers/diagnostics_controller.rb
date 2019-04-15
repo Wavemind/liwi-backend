@@ -88,7 +88,6 @@ class DiagnosticsController < ApplicationController
     end
   end
 
-  # @params Diagnostic
   # React Diagram
   def diagram
   end
