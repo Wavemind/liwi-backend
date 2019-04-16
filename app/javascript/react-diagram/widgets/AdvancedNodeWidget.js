@@ -31,11 +31,8 @@ class AdvancedNodeWidget extends BaseWidget<AdvancedNodeWidgetProps, AdvancedNod
     );
   }
 
-
-
   render() {
     const { diagramNode } = this.props;
-
     let outPorts = [];
 
     diagramNode.getOutPorts().map((outPort) => {
@@ -46,7 +43,8 @@ class AdvancedNodeWidget extends BaseWidget<AdvancedNodeWidgetProps, AdvancedNod
 
     return (
       <div className="node">
-        <div className="port py-2 node-category" data-name={inPort.name} data-nodeid={inPort.parent.id}>
+        <div className="port py-2 node-category">
+          <div className="port srd-port" data-name={inPort.name} data-nodeid={inPort.parent.id}></div>
           <div className="col pl-2 pr-0 text-left">
             {(diagramNode.node === 'AND') ? 'AND' : diagramNode.node.reference}
           </div>

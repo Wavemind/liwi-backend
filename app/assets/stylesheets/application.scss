@@ -315,10 +315,8 @@ td {
 .node-category {
   display: flex;
   background-color: gray;
-
-  &:hover,&.selected{
-    background: green;
-  }
+  align-items: center;
+  justify-content: center;
 }
 
 .node-label {
@@ -344,4 +342,11 @@ td {
   &:last-child {
     border-right: none;
   }
+}
+
+.srd-port {
+  position: absolute;
+  z-index: 10;
+  top: -8px;
+  align-item: center;
 }
