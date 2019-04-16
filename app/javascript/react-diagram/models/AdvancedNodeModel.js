@@ -3,18 +3,18 @@ import AdvancedPortModel from "../models/AdvancedPortModel";
 import * as _ from "lodash";
 
 class AdvancedNodeModel extends DefaultNodeModel {
-  name: string;
-  color: string;
+  node;
   reference: string;
-  dbId;
+  color: string;
+  outPorts: array;
   ports: { [s: string]: AdvancedPortModel };
 
-  constructor(name: string = "Untitled", reference: string, dbId, color: string = "rgb(255,255,255)") {
+  constructor(node, reference: string, color: string, outPorts) {
     super("advanced");
-    this.name = name;
-    this.color = color;
+    this.node = node;
     this.reference = reference;
-    this.dbId = dbId;
+    this.color = color;
+    this.outPorts = outPorts;
   }
 
   addInPort(label: string): AdvancedPortModel {
@@ -27,16 +27,17 @@ class AdvancedNodeModel extends DefaultNodeModel {
 
   deSerialize(object, engine: DiagramEngine) {
     super.deSerialize(object, engine);
-    this.name = object.name;
+    this.node = object.node;
+    this.reference = object.reference;
     this.color = object.color;
   }
 
   serialize() {
     return _.merge(super.serialize(), {
-      name: this.name,
-      color: this.color,
+      node: this.node,
       reference: this.reference,
-      dbId: this.dbId,
+      color: this.color,
+      outPorts: this.outPorts,
     });
   }
 

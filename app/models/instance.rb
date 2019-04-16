@@ -9,7 +9,7 @@ class Instance < ApplicationRecord
 
   has_many :conditions, as: :referenceable, dependent: :destroy
 
-  scope :management, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'Management') }
+  scope :managements, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'Management') }
   scope :questions, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'Question') }
   scope :predefined_syndromes, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'PredefinedSyndrome') }
   scope :treatments, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'Treatment') }

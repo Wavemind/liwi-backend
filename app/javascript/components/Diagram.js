@@ -25,14 +25,14 @@ class Diagram extends React.Component {
   // @params node
   // Get full label of an object
   getFullLabel = (node) => {
-    return node.reference + " - " + node.label_translations["en"];
+    return node.label_translations["en"];
   };
 
   // Create a node from label with its inport
-  createNode = (label, reference = null, dbId = null, color = "rgb(255,255,255)") => {
-    let node = new AdvancedNodeModel(label, reference, dbId, color);
-    node.addInPort(" ");
-    return node;
+  createNode = (node, outPorts = [], color = "rgb(255,255,255)") => {
+    let advancedNode = new AdvancedNodeModel(node, node.reference, outPorts, color);
+    advancedNode.addInPort(" ");
+    return advancedNode;
   };
 
   render = () => {
@@ -60,7 +60,7 @@ class Diagram extends React.Component {
     questions.map((levels) => {
       let currentLevel = [];
       levels.map((relation) => {
-        let node = this.createNode(this.getFullLabel(relation.node), relation.node.reference, relation.node.id);
+        let node = this.createNode(relation.node, relation.node.answers);
         currentLevel.push(node);
         relation.node.answers.map((answer) => (node.addOutPort(this.getFullLabel(answer))));
         nodes.push(node);
@@ -77,7 +77,7 @@ class Diagram extends React.Component {
 
     if (isDiagnostic) {
       finalDiagnostics.map((df) => {
-        let node = this.createNode(this.getFullLabel(df), df.reference, df.id);
+        let node = this.createNode(df);
         if (df.final_diagnostic_id !== null) {
           node.addOutPort(this.getFullLabel(_.find(finalDiagnostics, ["id", df.final_diagnostic_id])));
         }
@@ -108,14 +108,14 @@ class Diagram extends React.Component {
 
       // Create nodes for treatments and managements
       healthCares.map((healthCare) => {
-        let node = this.createNode(this.getFullLabel(healthCare.node), healthCare.node.reference, healthCare.node.dbId);
+        let node = this.createNode(healthCare.node);
         // Get condition nodes of treatments and managements
         if (healthCare.conditions != null && healthCare.conditions.length > 0) {
           healthCare.conditions.map((condition) => {
             let answerNode = condition.first_conditionable.node;
             let condNode;
             if (!(answerNode.reference in conditionRefs)) {
-              condNode = this.createNode(this.getFullLabel(answerNode), answerNode.reference, answerNode.id);
+              condNode = this.createNode(answerNode, answerNode.answers);
 
               answerNode.answers.map((answer) => (condNode.addOutPort(this.getFullLabel(answer))));
 
@@ -123,7 +123,7 @@ class Diagram extends React.Component {
               conditionRefs[answerNode.reference] = condNode;
               model.addAll(condNode);
             } else {
-              condNode = _.find(hcConditions, ["name", this.getFullLabel(answerNode)]);
+              condNode = _.find(hcConditions, ["reference", answerNode.reference]);
             }
             model.addAll(_.find(condNode.getOutPorts(), ["label", this.getFullLabel(condition.first_conditionable)]).link(node.getInPort()));
           });
@@ -136,50 +136,50 @@ class Diagram extends React.Component {
       nodeLevels.push(hcConditions);
       nodeLevels.push(hcLevel);
 
-      // Titles
-      x = 0;
-      y = 0;
-      let yBot = 700;
-      let qTitle = this.createNode("Questions and Predefined syndromes");
-      qTitle.setPosition(x, y);
-      x += (300 * questions.length);
-
-      let dfTitle = this.createNode("Final diagnostics");
-      let dfBotTitle = this.createNode(" ");
-      dfTitle.setPosition(x - 50, y);
-      dfBotTitle.setPosition(x - 50, yBot);
-
-      x += 400;
-
-      let dfLink = dfTitle.getInPort().link(dfBotTitle.getInPort());
-      dfLink.displayArrow(false);
-      dfLink.displaySeparator(true);
-
-      if (hcConditions.length > 0) {
-        let hcCondTitle = this.createNode("Treatments and Managements conditions");
-        let hcCondBotTitle = this.createNode(" ");
-        let hcCondLink = hcCondTitle.getInPort().link(hcCondBotTitle.getInPort());
-
-        hcCondTitle.setPosition(x - 50, y);
-        hcCondBotTitle.setPosition(x - 50, yBot);
-
-        x += 400;
-
-        hcCondLink.displayArrow(false);
-        hcCondLink.displaySeparator(true);
-
-        model.addAll(hcCondTitle, hcCondBotTitle, hcCondLink);
-      }
-
-      let hcTitle = this.createNode("Treatments and Managements");
-      hcTitle.setPosition(x - 50, y);
-      let hcBotTitle = this.createNode(" ");
-      hcBotTitle.setPosition(x - 50, yBot);
-      let hcTitleLink = hcTitle.getInPort().link(hcBotTitle.getInPort());
-      hcTitleLink.displayArrow(false);
-      hcTitleLink.displaySeparator(true);
-
-      model.addAll(qTitle, dfTitle, dfBotTitle, dfLink, hcTitle, hcBotTitle, hcTitleLink);
+    //   // Titles
+    //   x = 0;
+    //   y = 0;
+    //   let yBot = 700;
+    //   let qTitle = this.createNode("Questions and Predefined syndromes");
+    //   qTitle.setPosition(x, y);
+    //   x += (300 * questions.length);
+    //
+    //   let dfTitle = this.createNode("Final diagnostics");
+    //   let dfBotTitle = this.createNode(" ");
+    //   dfTitle.setPosition(x - 50, y);
+    //   dfBotTitle.setPosition(x - 50, yBot);
+    //
+    //   x += 400;
+    //
+    //   let dfLink = dfTitle.getInPort().link(dfBotTitle.getInPort());
+    //   dfLink.displayArrow(false);
+    //   dfLink.displaySeparator(true);
+    //
+    //   if (hcConditions.length > 0) {
+    //     let hcCondTitle = this.createNode("Treatments and Managements conditions");
+    //     let hcCondBotTitle = this.createNode(" ");
+    //     let hcCondLink = hcCondTitle.getInPort().link(hcCondBotTitle.getInPort());
+    //
+    //     hcCondTitle.setPosition(x - 50, y);
+    //     hcCondBotTitle.setPosition(x - 50, yBot);
+    //
+    //     x += 400;
+    //
+    //     hcCondLink.displayArrow(false);
+    //     hcCondLink.displaySeparator(true);
+    //
+    //     model.addAll(hcCondTitle, hcCondBotTitle, hcCondLink);
+    //   }
+    //
+    //   let hcTitle = this.createNode("Treatments and Managements");
+    //   hcTitle.setPosition(x - 50, y);
+    //   let hcBotTitle = this.createNode(" ");
+    //   hcBotTitle.setPosition(x - 50, yBot);
+    //   let hcTitleLink = hcTitle.getInPort().link(hcBotTitle.getInPort());
+    //   hcTitleLink.displayArrow(false);
+    //   hcTitleLink.displaySeparator(true);
+    //
+    //   model.addAll(qTitle, dfTitle, dfBotTitle, dfLink, hcTitle, hcBotTitle, hcTitleLink);
     }
 
     // Positions nodes in a horizontal way
@@ -202,13 +202,15 @@ class Diagram extends React.Component {
     nodes.map((node, index) => {
       instances[index].conditions.map((condition) => {
         let firstAnswer = condition.first_conditionable;
-        let firstNodeAnswer = _.find(nodes, ["name", this.getFullLabel(firstAnswer.node)]);
+        let firstNodeAnswer = _.find(nodes, ["reference", firstAnswer.node.reference]);
 
         if (condition.second_conditionable_id !== null && condition.operator === "and_operator") {
           let secondAnswer = condition.second_conditionable;
-          let secondNodeAnswer = _.find(nodes, ["name", this.getFullLabel(secondAnswer.node)]);
+          let secondNodeAnswer = _.find(nodes, ["reference", secondAnswer.node.reference]);
 
-          let andNode = this.createNode("AND", "red");
+          // let andNode = this.createNode("AND", "red");
+          let andNode = new AdvancedNodeModel('AND', '', '', 'red');
+          andNode.addInPort(" ");
           andNode.setPosition(Math.min(firstNodeAnswer.x, secondNodeAnswer.x) + 250, firstNodeAnswer.y + 50);
           andNode.addOutPort(" ");
 
@@ -240,12 +242,10 @@ class Diagram extends React.Component {
           className="col-md-10 mt-2"
           onDrop={event => {
             let nodeDb = JSON.parse(event.dataTransfer.getData("node"));
-            let nodeDiagram = this.createNode(this.getFullLabel(nodeDb), nodeDb.reference, nodeDb.id);
+            let nodeDiagram = this.createNode(nodeDb);
             let points = engine.getRelativeMousePoint(event);
             nodeDiagram.x = points.x;
             nodeDiagram.y = points.y;
-
-            console.log(nodeDb);
 
             if (nodeDb.get_answers !== undefined) {
               nodeDb.get_answers.map((answer) => (nodeDiagram.addOutPort(this.getFullLabel(answer))));

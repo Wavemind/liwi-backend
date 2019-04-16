@@ -309,11 +309,16 @@ td {
   font-size: 10px;
   color: #fff;
   border: 1px solid gray;
+  min-width: 120px;
 }
 
 .node-category {
   display: flex;
   background-color: gray;
+
+  &:hover,&.selected{
+    background: green;
+  }
 }
 
 .node-label {
@@ -326,11 +331,15 @@ td {
   display: flex;
   color: #000;
   border-top: 1px solid gray;
-  font-size: 12;
+  font-size: 12px;
 }
 
 .answer-split {
   border-right: 1px solid gray;
+
+  &:hover,&.selected{
+    background: pink;
+  }
 
   &:last-child {
     border-right: none;

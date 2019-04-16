@@ -116,7 +116,7 @@ class Diagnostic < ApplicationRecord
   # @return [Json]
   # Return treatments and managements in json format
   def health_cares_json
-    components.treatment.as_json(include: [ :node, conditions: { include: [first_conditionable: { include: [node: { include: [:answers]}]}]}]) + components.management.as_json(include: [ :node, conditions: { include: [first_conditionable: { include: [:node]}]}])
+    components.treatments.as_json(include: [ :node, conditions: { include: [first_conditionable: { include: [node: { include: [:answers]}]}]}]) + components.managements.as_json(include: [ :node, conditions: { include: [first_conditionable: { include: [:node]}]}])
   end
 
   # @return [Json]
