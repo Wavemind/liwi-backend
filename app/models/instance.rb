@@ -33,16 +33,20 @@ class Instance < ApplicationRecord
   # Delete properly conditions from children in the current diagnostic or predefined syndrome.
   def remove_condition_from_children
     instanceable.components.map(&:conditions).flatten.each do |cond|
-      if cond.first_conditionable.is_a?(Answer) && cond.first_conditionable.node == node
-        if cond.second_conditionable.is_a?(Answer)
-          cond.update!(first_conditionable: cond.second_conditionable, operator: nil, second_conditionable: nil)
-        else
-          cond.second_conditionable.update!(top_level: cond.top_level) if cond.second_conditionable.is_a?(Condition)
-          cond.destroy!
-        end
-      elsif cond.second_conditionable.is_a?(Answer) && cond.second_conditionable.node == node
-        cond.update!(operator: nil, second_conditionable: nil)
+      self.class.remove_condition(cond, self)
+    end
+  end
+
+  def self.remove_condition(cond, instance)
+    if cond.first_conditionable.is_a?(Answer) && cond.first_conditionable.node == instance.node
+      if cond.second_conditionable.is_a?(Answer)
+        cond.update!(first_conditionable: cond.second_conditionable, operator: nil, second_conditionable: nil)
+      else
+        cond.second_conditionable.update!(top_level: cond.top_level) if cond.second_conditionable.is_a?(Condition)
+        cond.destroy!
       end
+    elsif cond.second_conditionable.is_a?(Answer) && cond.second_conditionable.node == instance.node
+      cond.update!(operator: nil, second_conditionable: nil)
     end
   end
 end
