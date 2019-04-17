@@ -193,7 +193,7 @@ class Diagram extends React.Component {
           let secondAnswer = condition.second_conditionable;
           let secondNodeAnswer = _.find(nodes, ["reference", secondAnswer.node.reference]);
 
-          let andNode = new AdvancedNodeModel('AND', '', '', '');
+          let andNode = new AdvancedNodeModel("AND", "", "", "");
           andNode.addInPort(" ");
           andNode.setPosition(Math.min(firstNodeAnswer.x, secondNodeAnswer.x) + 250, firstNodeAnswer.y + 50);
           andNode.addOutPort(" ");
@@ -213,18 +213,21 @@ class Diagram extends React.Component {
       });
     });
 
-
     model.addListener({
-      linksUpdated: function(eventLink){
+      linksUpdated: function(eventLink) {
         eventLink.link.addListener({
           targetPortChanged: function(eventPort) {
-            console.log(eventLink.link.sourcePort.reference);
-            console.log(eventLink.link.sourcePort.dbId);
-            console.log(eventPort.port.parent.reference);
-            console.log(eventPort.port.parent.node.id);
+            console.log("CREATE LINK");
+            console.log(eventLink.link.sourcePort.reference, eventLink.link.sourcePort.dbId);
+            console.log(eventPort.port.parent.reference, eventPort.port.parent.node.id);
+          },
+          entityRemoved: function(removedLink) {
+            console.log("DELETE LINK");
+            console.log(eventLink.link.sourcePort.reference, eventLink.link.sourcePort.dbId);
+            console.log(removedLink.entity.targetPort.parent.reference, removedLink.entity.targetPort.parent.node.id);
           }
         });
-      }
+      },
     });
 
     // load model into engine
@@ -288,6 +291,7 @@ class Diagram extends React.Component {
             className="srd-demo-canvas"
             diagramEngine={engine}
             allowCanvasZoom={false}
+            maxNumberPointsPerLink={0}
           />
         </div>
       </div>

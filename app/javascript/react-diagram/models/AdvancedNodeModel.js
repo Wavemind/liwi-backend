@@ -15,6 +15,13 @@ class AdvancedNodeModel extends DefaultNodeModel {
     this.reference = reference;
     this.color = color;
     this.outPorts = outPorts;
+
+    this.addListener({
+      entityRemoved: function(removedNode) {
+        console.log("DELETE NODE");
+        console.log('removedNode ', removedNode);
+      },
+    });
   }
 
   addInPort(label: string, reference: string = '', id: string = ''): AdvancedPortModel {
