@@ -334,6 +334,7 @@ class VersionsService
     @predefined_syndromes.each do |key, predefined_syndrome|
       hash[predefined_syndrome.id] = extract_conditions(predefined_syndrome.instances.find_by(instanceable_id: predefined_syndrome.id).conditions)
       hash[predefined_syndrome.id]['id'] = predefined_syndrome.id
+      hash[predefined_syndrome.id]['reference'] = predefined_syndrome.reference
       hash[predefined_syndrome.id]['type'] = predefined_syndrome.class.name
       hash[predefined_syndrome.id]['nodes'] = {}
       hash[predefined_syndrome.id]['answers'] = push_predefined_syndrome_answers(predefined_syndrome)
