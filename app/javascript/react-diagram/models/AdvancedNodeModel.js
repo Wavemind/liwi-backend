@@ -17,12 +17,16 @@ class AdvancedNodeModel extends DefaultNodeModel {
     this.outPorts = outPorts;
   }
 
-  addInPort(label: string): AdvancedPortModel {
-    return this.addPort(new AdvancedPortModel(true, Toolkit.UID(), label));
+  addInPort(label: string, reference: string = '', id: string = ''): AdvancedPortModel {
+    let inPort = new AdvancedPortModel(true, Toolkit.UID(), label);
+    inPort.setData(reference, id);
+    return this.addPort(inPort);
   }
 
-  addOutPort(label: string): AdvancedPortModel {
-    return this.addPort(new AdvancedPortModel(false, Toolkit.UID(), label));
+  addOutPort(label: string, reference: string = '', id: string = ''): AdvancedPortModel {
+    let outPort = new AdvancedPortModel(false, Toolkit.UID(), label);
+    outPort.setData(reference, id);
+    return this.addPort(outPort);
   }
 
   deSerialize(object, engine: DiagramEngine) {

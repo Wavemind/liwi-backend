@@ -17,7 +17,7 @@ class Diagram extends React.Component {
     super();
     this.state = {
       engine: new DiagramEngine()
-    }
+    };
   }
 
   componentWillMount() {
@@ -25,18 +25,18 @@ class Diagram extends React.Component {
       questions,
       finalDiagnostics,
       healthCares,
-      isDiagnostic,
+      isDiagnostic
     } = this.props;
 
     const { engine } = this.state;
+
+    // Setup the diagram model
+    let model = new DiagramModel();
 
     // Setup the diagram engine
     engine.installDefaultFactories();
     engine.registerLinkFactory(new AdvancedLinkFactory());
     engine.registerNodeFactory(new AdvancedNodeFactory());
-
-    // Setup the diagram model
-    let model = new DiagramModel();
 
     let nodes = []; // Save nodes to link them at the end
     let nodeLevels = []; // Save nodes level to position them at the end
@@ -47,7 +47,7 @@ class Diagram extends React.Component {
       levels.map((relation) => {
         let node = this.createNode(relation.node, relation.node.answers);
         currentLevel.push(node);
-        relation.node.answers.map((answer) => (node.addOutPort(this.getFullLabel(answer))));
+        relation.node.answers.map((answer) => (node.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
         nodes.push(node);
         model.addAll(node);
       });
@@ -102,7 +102,7 @@ class Diagram extends React.Component {
             if (!(answerNode.reference in conditionRefs)) {
               condNode = this.createNode(answerNode, answerNode.answers);
 
-              answerNode.answers.map((answer) => (condNode.addOutPort(this.getFullLabel(answer))));
+              answerNode.answers.map((answer) => (condNode.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
 
               hcConditions.push(condNode);
               conditionRefs[answerNode.reference] = condNode;
@@ -192,7 +192,7 @@ class Diagram extends React.Component {
           let secondAnswer = condition.second_conditionable;
           let secondNodeAnswer = _.find(nodes, ["reference", secondAnswer.node.reference]);
 
-          let andNode = new AdvancedNodeModel('AND', '', '', 'red');
+          let andNode = new AdvancedNodeModel("AND", "", "", "red");
           andNode.addInPort(" ");
           andNode.setPosition(Math.min(firstNodeAnswer.x, secondNodeAnswer.x) + 250, firstNodeAnswer.y + 50);
           andNode.addOutPort(" ");
@@ -212,22 +212,27 @@ class Diagram extends React.Component {
       });
     });
 
+
+    model.addListener({
+      linksUpdated: function(eventLink){
+        eventLink.link.addListener({
+          targetPortChanged: function(eventPort) {
+            console.log(eventLink.link.sourcePort.reference);
+            console.log(eventLink.link.sourcePort.dbId);
+            console.log(eventPort.port.parent.reference);
+            console.log(eventPort.port.parent.node.id);
+          }
+        });
+      }
+    });
+
     // load model into engine
     engine.setDiagramModel(model);
     this.updateEngine(engine);
   }
 
-  componentDidMount() {
-    // Add css class to the 'and' nodes in order to make them invisible and simulate an and link
-    for (let e of document.getElementsByClassName("srd-default-node__name")) {
-      if (e.innerText.indexOf(" - ") === -1) { // Titles box
-        e.parentElement.parentElement.classList.add("node-titles");
-      }
-    }
-  }
-
   updateEngine = (engine) => {
-    this.setState({engine});
+    this.setState({ engine });
   };
 
   // @params node
@@ -240,22 +245,19 @@ class Diagram extends React.Component {
   createNode = (node, outPorts = [], color = "rgb(255,255,255)") => {
     let advancedNode = new AdvancedNodeModel(node, node.reference, outPorts, color);
     advancedNode.addInPort(" ");
-    console.log(advancedNode);
     return advancedNode;
   };
 
   render = () => {
-
     const { availableNodes } = this.props;
     const { engine } = this.state;
 
     let model = engine.getDiagramModel();
 
-    // render the diagram!
     return (
       <div className="row">
         <div className="col-md-2 px-0">
-          <NodeList nodes={availableNodes} />
+          <NodeList nodes={availableNodes}/>
         </div>
         <div
           className="col-md-10 mt-2"
@@ -265,7 +267,7 @@ class Diagram extends React.Component {
 
             if (nodeDb.get_answers !== undefined) {
               nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers);
-              nodeDb.get_answers.map((answer) => (nodeDiagram.addOutPort(this.getFullLabel(answer))));
+              nodeDb.get_answers.map((answer) => (nodeDiagram.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
             } else {
               nodeDiagram = this.createNode(nodeDb);
             }
