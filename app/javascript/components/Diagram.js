@@ -192,14 +192,14 @@ class Diagram extends React.Component {
           let secondAnswer = condition.second_conditionable;
           let secondNodeAnswer = _.find(nodes, ["reference", secondAnswer.node.reference]);
 
-          let andNode = new AdvancedNodeModel('AND', '', '', 'red');
+          let andNode = new AdvancedNodeModel('AND', '', '', '');
           andNode.addInPort(" ");
           andNode.setPosition(Math.min(firstNodeAnswer.x, secondNodeAnswer.x) + 250, firstNodeAnswer.y + 50);
           andNode.addOutPort(" ");
 
           let firstLink = _.find(firstNodeAnswer.getOutPorts(), ["label", this.getFullLabel(firstAnswer)]).link(andNode.getInPort());
           let secondLink = _.find(secondNodeAnswer.getOutPorts(), ["label", this.getFullLabel(secondAnswer)]).link(andNode.getInPort());
-          let andLink = andNode.getInPort().link(node.getInPort());
+          let andLink = andNode.getOutPort().link(node.getInPort());
 
           firstLink.displayArrow(false);
           secondLink.displayArrow(false);
