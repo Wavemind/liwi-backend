@@ -42,17 +42,23 @@ class AdvancedNodeWidget extends BaseWidget<AdvancedNodeWidgetProps, AdvancedNod
     let inPort = diagramNode.getInPort();
 
     return (
-      <div className="node">
+      <div className={`node ${(diagramNode.node === 'AND') ? 'and' : ''}`}>
         <div className="port py-2 node-category">
           <div className="port srd-port" data-name={inPort.name} data-nodeid={inPort.parent.id}></div>
           <div className="col pl-2 pr-0 text-left">
             {(diagramNode.node === 'AND') ? 'AND' : diagramNode.node.reference}
           </div>
           <div className="col pl-0 pr-2 text-right">
-            {(diagramNode.node === 'AND') ? null : diagramNode.node.priority}
+            {(diagramNode.node === 'AND') ? '' : diagramNode.node.priority}
           </div>
         </div>
-        {(diagramNode.node === 'AND') ? null : (
+        {(diagramNode.node === 'AND') ? (
+          <div>
+            <div className="node-answers">
+              <div className="port srd-port" style={{top: 28, left: 8}} data-name={diagramNode.getOutPort().name} data-nodeid={diagramNode.getOutPort().parent.id}></div>
+            </div>
+          </div>
+          ) : (
           <div>
             <div className="py-2 node-label">
               <div className="col text-center">

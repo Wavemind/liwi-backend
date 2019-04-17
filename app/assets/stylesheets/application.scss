@@ -262,7 +262,10 @@ td {
 }
 
 .and {
-  visibility: hidden;
+  .srd-node & {
+    min-width: 30px !important;
+    max-width: 30px !important;
+  }
 }
 
 .srd-default-link path {
@@ -309,8 +312,12 @@ td {
   font-size: 10px;
   color: #fff;
   border: 1px solid gray;
-  min-width: 120px;
+  .srd-node & {
+    min-width: 120px;
+  }
 }
+
+.srd-node .node
 
 .node-category {
   display: flex;
