@@ -72,6 +72,12 @@ class DiagnosticsController < ApplicationController
 
     parent_instance.children.new(node: child_node)
     child_instance.conditions.new(first_conditionable: parent_answer, top_level: true)
+
+    if parent_instance.save && child_instance.save
+      render json: { status: 'success', message: t('flash_message.success_created')}
+    else
+      render json: { status: 'alert', message: t('flash_message.update_fail')}
+    end
   end
 
   # React Diagram
