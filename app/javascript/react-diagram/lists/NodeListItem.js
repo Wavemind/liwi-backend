@@ -18,13 +18,14 @@ class NodeListItem extends React.Component {
            draggable={true}
            onDragStart={event => {
              event.dataTransfer.setData("node", JSON.stringify(node));
-           }}>
+           }}
+      >
         <div className="mx-1 node">
-          <div className="py-2 node-category">
-            <div className="col  pl-2 pr-0 text-left">
+          <div className="port py-2 node-category">
+            <div className="col pl-2 pr-0 text-left">
               {node.reference}
             </div>
-            <div className="col  pl-0 pr-2 text-right">
+            <div className="col pl-0 pr-2 text-right">
               {node.priority}
             </div>
           </div>

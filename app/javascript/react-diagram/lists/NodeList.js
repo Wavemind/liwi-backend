@@ -63,7 +63,7 @@ class NodeList extends React.Component {
                  data-parent="#accordionNodes">
               <div className="card-body p-0">
                 {orderedNodes[index].map((node) => (
-                  <NodeListItem node={node} key={node.id} />
+                  <NodeListItem node={node} key={node.reference} />
                 ))}
               </div>
             </div>
