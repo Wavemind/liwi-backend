@@ -97,6 +97,11 @@ Rails.application.routes.draw do
   end
 
   resources :diagnostics, only: [] do
+    member do
+      post 'create_link'
+      delete 'remove_link'
+    end
+
     resources :instances, only: [:show, :destroy, :create, :by_reference] do
       collection do
         get 'by_reference'
@@ -104,6 +109,7 @@ Rails.application.routes.draw do
       resources :children, only: [:create, :destroy]
       resources :conditions, only: [:create, :destroy]
     end
+
     resources :conditions, only: [] do
 
       collection do
