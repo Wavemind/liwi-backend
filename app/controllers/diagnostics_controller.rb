@@ -2,7 +2,7 @@ class DiagnosticsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_algorithm, only: [:show, :new, :create, :edit, :update, :destroy, :duplicate]
   before_action :set_version, only: [:show, :new, :create, :edit, :update, :destroy, :duplicate]
-  before_action :set_diagnostic, only: [:show, :edit, :update, :update_translations, :diagram]
+  before_action :set_diagnostic, only: [:show, :edit, :update, :create_link, :diagram, :update_translations]
   layout 'diagram', only: [:diagram]
 
   def index
@@ -63,6 +63,21 @@ class DiagnosticsController < ApplicationController
     end
   end
 
+  def create_link
+    parent_answer = Answer.find(diagnostic_params[:answer_id])
+    child_node = Node.find(diagnostic_params[:node_id])
+
+    parent_instance = @diagnostic.components.find_by(node_id: parent_answer.node_id)
+    child_instance = @diagnostic.components.find_by(node_id: child_node.id)
+
+    parent_instance.children.new(node: child_node)
+    child_instance.conditions.new(first_conditionable: parent_answer, top_level: true)
+  end
+
+  # React Diagram
+  def diagram
+  end
+
   # @params [Diagnostic] diagnostic to duplicate
   # Duplicate a diagnostic with the whole logic (Instances with their Conditions and Children), the FinalDiagnostics and Conditions attached to it
   def duplicate
@@ -88,10 +103,6 @@ class DiagnosticsController < ApplicationController
     end
   end
 
-  # React Diagram
-  def diagram
-  end
-
   private
 
   def set_diagnostic
@@ -103,7 +114,9 @@ class DiagnosticsController < ApplicationController
       :id,
       :reference,
       :label_en,
-      Language.label_params
+      Language.label_params,
+      :answer_id,
+      :node_id
     )
   end
 end
