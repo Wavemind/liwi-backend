@@ -2,7 +2,7 @@ class DiagnosticsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_algorithm, only: [:show, :new, :create, :edit, :update, :destroy, :duplicate]
   before_action :set_version, only: [:show, :new, :create, :edit, :update, :destroy, :duplicate]
-  before_action :set_diagnostic, only: [:show, :edit, :update, :create_link, :diagram, :update_translations]
+  before_action :set_diagnostic, only: [:show, :edit, :update, :diagram, :update_translations]
   layout 'diagram', only: [:diagram]
 
   def index

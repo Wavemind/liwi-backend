@@ -92,7 +92,7 @@ Rails.application.routes.draw do
         delete 'remove_link'
       end
       member do
-        delete 'delete_from_diagram'
+        delete 'remove_from_diagram'
       end
       resources :children, only: [:create, :destroy]
       resources :conditions, only: [:create, :destroy]
@@ -112,7 +112,7 @@ Rails.application.routes.draw do
         delete 'remove_link'
       end
       member do
-        delete 'delete_from_diagram'
+        delete 'remove_from_diagram'
       end
       resources :children, only: [:create, :destroy]
       resources :conditions, only: [:create, :destroy]

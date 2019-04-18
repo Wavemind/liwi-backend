@@ -10,62 +10,104 @@ export default class Http {
   constructor(instanceableId, instanceableType) {
     this.url = window.location.origin;
     this.instanceableId = instanceableId;
-    this.instanceableType = instanceableType === 'Diagnostic' ? 'diagnostics' : 'predefined_syndromes';
+    this.instanceableType = instanceableType === "Diagnostic" ? "diagnostics" : "predefined_syndromes";
     this.token = document.querySelector("meta[name='csrf-token']").content;
   }
 
+  // @params [Integer] nodeId
+  // @return [Object] body of request
+  // Create an instance
   createInstance = async (nodeId) => {
     const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/create_from_diagram`;
+    const body = {
+      instance: {
+        node_id: nodeId,
+        instanceable_id: this.instanceableId,
+        instanceable_type: this.instanceableType
+      }
+    };
+    const header = await this.setHeaders('POST', body);
+    const request = await fetch( url, header).catch(error => console.log(error));
+    let response = await request.json();
+    if (!request.ok) {
+      console.log(response.errors);
+    }
+    return await response;
+  };
 
-    const request = await fetch(url, {
-      method: 'post',
-      headers: {
-        Accept: 'application/json, text/plain',
-        'Content-Type': 'application/json',
-        'X-CSRF-Token': this.token,
-      },
-      body: JSON.stringify({
-        instance: {
-          node_id: nodeId,
-          instanceable_id: this.instanceableId,
-          instanceable_type: this.instanceableType,
-        }
-      }),
-    }).catch(error => console.log(error));
 
+  // @params [Integer] nodeId, [Integer] answerId
+  // @return [Object] body of request
+  // Create a Link
+  createLink = async (nodeId, answerId) => {
+    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/create_link`;
+    const body = {
+      diagnostic: {
+        node_id: nodeId,
+        answer_id: answerId,
+      }
+    };
+    const header = await this.setHeaders('POST', body);
+    const request = await fetch( url, header).catch(error => console.log(error));
+    let response = await request.json();
+    if (!request.ok) {
+      console.log(response.errors);
+    }
+    return await response;
+  };
+
+
+  // @params [Integer] nodeId
+  // @return [Object] body of request
+  // Delete an instance
+  removeInstance = async (nodeId) => {
+    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/${nodeId}/remove_from_diagram`;
+    const header = await this.setHeaders('DELETE');
+    const request = await fetch(url, header).catch(error => console.log(error));
     let body = await request.json();
-
-    // Display error
     if (!request.ok) {
       console.log(body.errors);
     }
-
     return await body;
-  }
+  };
 
 
-  deleteInstance = async (nodeId) => {
-    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/${nodeId}/delete_from_diagram`;
-
-    const request = await fetch(url, {
-      method: 'delete',
-      headers: {
-        Accept: 'application/json, text/plain',
-        'Content-Type': 'application/json',
-        'X-CSRF-Token': this.token,
-      },
-    }).catch(error => console.log(error));
-
-    let body = await request.json();
-
-    // Display error
+  // @params [Integer] nodeId, [Integer] answerId
+  // @return [Object] body of request
+  // Delete a Link
+  removeLink = async (nodeId, answerId) => {
+    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/remove_link`;
+    const body = {
+      diagnostic: {
+        node_id: nodeId,
+        answer_id: answerId,
+      }
+    };
+    const header = await this.setHeaders('DELETE', body);
+    const request = await fetch( url, header).catch(error => console.log(error));
+    let response = await request.json();
     if (!request.ok) {
-      console.log(body.errors);
+      console.log(response.errors);
     }
+    return await response;
+  };
 
-    return await body;
-  }
 
-
+  // @params [String] method, [Object] body
+  // @return [Object] header
+  // Set header credentials to communicate with server
+  setHeaders = async (method = 'GET', body = false) => {
+    let header = {
+      method: method,
+      headers: {},
+    };
+    if (method === 'POST' || method === 'PATCH' || method === 'DELETE') {
+      header.body = JSON.stringify(body);
+      header.headers['Accept'] = 'application/json, text/plain';
+      header.headers['Content-Type'] = 'application/json';
+      header.headers["X-CSRF-Token"] = this.token;
+    }
+    return header;
+  };
 
 }

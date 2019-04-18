@@ -21,7 +21,7 @@ class AdvancedNodeModel extends DefaultNodeModel {
     this.addListener({
       entityRemoved: function(removedNode) {
         // Delete node in DB
-        http.deleteInstance(removedNode.entity.node.id);
+        http.removeInstance(removedNode.entity.node.id);
       },
     });
   }
