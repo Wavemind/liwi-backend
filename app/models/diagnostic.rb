@@ -76,7 +76,7 @@ class Diagnostic < ApplicationRecord
       health_cares.map(&:conditions).flatten.each do |cond|
         isHcCondition = true if ((cond.first_conditionable.is_a?(Answer) && cond.first_conditionable.node.id == instance.node.id) || (cond.second_conditionable.is_a?(Answer) && cond.second_conditionable.node.id == instance.node.id))
       end
-      first_instances.delete(instance) if isHcCondition
+      first_instances = first_instances.where.not(id: instance.id) if isHcCondition
     end
 
     nodes << first_instances

@@ -174,18 +174,20 @@ class Diagram extends React.Component {
     }
 
     // Positions nodes in a horizontal way
-    let height = 500;
+    let width = 1400;
     let x = 0;
     let y = 60;
     nodeLevels.map((level) => {
-      let space = height - (level.length * 100);
-      y += space / 2;
+      let nbNodes = level.length;
+      let totalSpace = width - (nbNodes * 200);
+      let marges = totalSpace - ((nbNodes - 1) * 120);
+      x += marges / 2
       level.map((node) => {
         node.setPosition(x, y);
-        y += 150;
+        x += 200 + 120;
       });
-      y = 60;
-      x += 320;
+      x = 0;
+      y += 200;
     });
 
     // Create links between nodes
@@ -200,7 +202,7 @@ class Diagram extends React.Component {
 
           let andNode = new AdvancedNodeModel("AND", "", "", "");
           andNode.addInPort(" ");
-          andNode.setPosition(Math.min(firstNodeAnswer.x, secondNodeAnswer.x) + 250, firstNodeAnswer.y + 50);
+          andNode.setPosition(Math.min(firstNodeAnswer.x, secondNodeAnswer.x) + 200, firstNodeAnswer.y + 100);
           andNode.addOutPort(" ");
 
           let firstLink = _.find(firstNodeAnswer.getOutPorts(), ["label", this.getFullLabel(firstAnswer)]).link(andNode.getInPort());
