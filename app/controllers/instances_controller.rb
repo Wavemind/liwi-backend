@@ -1,8 +1,8 @@
 class InstancesController < ApplicationController
 
   before_action :authenticate_user!
-  before_action :set_instanceable, only: [:show, :create, :destroy, :by_reference, :create_from_diagram, :delete_from_diagram]
-  before_action :set_instance, only: [:show, :destroy, :delete_from_diagram]
+  before_action :set_instanceable, only: [:show, :create, :destroy, :by_reference, :create_from_diagram, :remove_from_diagram]
+  before_action :set_instance, only: [:show, :destroy, :remove_from_diagram]
 
   def index
     respond_to do |format|
@@ -77,10 +77,10 @@ class InstancesController < ApplicationController
     end
   end
 
-  # POST /diagnostics/:diagnostic_id/instances/:node_id/delete_from_diagram
+  # POST /diagnostics/:diagnostic_id/instances/:node_id/remove_from_diagram
   # @return JSON of instance
   # Delete an instances and json format
-  def delete_from_diagram
+  def remove_from_diagram
     node = @instanceable.components.find_by(node_id: params[:id])
 
     node.destroy

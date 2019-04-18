@@ -23,6 +23,7 @@ class Diagram extends React.Component {
 
   componentWillMount() {
     const {
+      instanceable,
       instanceableType,
       questions,
       finalDiagnostics,
@@ -33,6 +34,9 @@ class Diagram extends React.Component {
 
     // Setup the diagram model
     let model = new DiagramModel();
+
+    // Init http class
+    const http = new Http(instanceable.id, instanceableType);
 
     // Setup the diagram engine
     engine.installDefaultFactories();
@@ -214,18 +218,30 @@ class Diagram extends React.Component {
       });
     });
 
+    // Set eventListener for create/remove link
     model.addListener({
       linksUpdated: function(eventLink) {
+        console.log(eventLink.link.listeners);
         eventLink.link.addListener({
           targetPortChanged: function(eventPort) {
             console.log("CREATE LINK");
-            console.log(eventLink.link.sourcePort.reference, eventLink.link.sourcePort.dbId);
-            console.log(eventPort.port.parent.reference, eventPort.port.parent.node.id);
+            let nodeId = eventPort.port.parent.node.id;
+            let answerId = eventLink.link.sourcePort.dbId;
+
+            console.log('nodeId', nodeId);
+            console.log('answerId', answerId);
+
+            http.createLink(nodeId, answerId);
           },
           entityRemoved: function(removedLink) {
-            console.log("DELETE LINK");
-            console.log(eventLink.link.sourcePort.reference, eventLink.link.sourcePort.dbId);
-            console.log(removedLink.entity.targetPort.parent.reference, removedLink.entity.targetPort.parent.node.id);
+            console.log("REMOVE LINK");
+            let nodeId = removedLink.entity.targetPort.parent.node.id;
+            let answerId = eventLink.link.sourcePort.dbId;
+
+            console.log('nodeId', nodeId);
+            console.log('answerId', answerId);
+
+            http.removeLink(nodeId, answerId);
           }
         });
       },

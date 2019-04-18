@@ -2,7 +2,7 @@ class DiagnosticsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_algorithm, only: [:show, :new, :create, :edit, :update, :destroy, :duplicate]
   before_action :set_version, only: [:show, :new, :create, :edit, :update, :destroy, :duplicate]
-  before_action :set_diagnostic, only: [:show, :edit, :update, :create_link, :diagram, :update_translations]
+  before_action :set_diagnostic, only: [:show, :edit, :update, :create_link, :remove_link, :diagram, :update_translations]
   before_action :set_child, only: [:create_link, :remove_link]
   before_action :set_parent, only: [:create_link, :remove_link]
   layout 'diagram', only: [:diagram]
@@ -102,7 +102,7 @@ class DiagnosticsController < ApplicationController
       Instance.remove_condition(cond, @parent_instance)
     end
 
-    if @parent_instance.children.find_by(node: @chlid_node).destroy
+    if @parent_instance.children.find_by(node: @child_node).destroy
       render json: { status: 'success', message: t('flash_message.success_deleted')}
     else
       render json: { status: 'alert', message: t('flash_message.delete_fail')}
@@ -125,12 +125,12 @@ class DiagnosticsController < ApplicationController
 
   def set_child
     @child_node = Node.find(diagnostic_params[:node_id])
-    @child_instance = @diagnostic.components.find_by(node_id: child_node.id)
+    @child_instance = @diagnostic.components.find_by(node_id: @child_node.id)
   end
 
   def set_parent
     @parent_answer = Answer.find(diagnostic_params[:answer_id])
-    @parent_instance = @diagnostic.components.find_by(node_id: parent_answer.node_id)
+    @parent_instance = @diagnostic.components.find_by(node_id: @parent_answer.node_id)
   end
 
   def set_diagnostic
