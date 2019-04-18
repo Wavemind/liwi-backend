@@ -10,6 +10,7 @@ import AdvancedLinkFactory from "../react-diagram/factories/AdvancedLinkFactory"
 import AdvancedNodeFactory from "../react-diagram/factories/AdvancedNodeFactory";
 import AdvancedNodeModel from "../react-diagram/models/AdvancedNodeModel";
 import NodeList from "../react-diagram/lists/NodeList";
+import Http from "../http";
 
 class Diagram extends React.Component {
 
@@ -22,10 +23,10 @@ class Diagram extends React.Component {
 
   componentWillMount() {
     const {
+      instanceableType,
       questions,
       finalDiagnostics,
       healthCares,
-      isDiagnostic
     } = this.props;
 
     const { engine } = this.state;
@@ -61,7 +62,7 @@ class Diagram extends React.Component {
     // Create nodes for final diagnostics
     let dfLevel = [];
 
-    if (isDiagnostic) {
+    if (instanceableType === 'Diagnostic') {
       finalDiagnostics.map((df) => {
         let node = this.createNode(df);
         if (df.final_diagnostic_id !== null) {
@@ -247,14 +248,25 @@ class Diagram extends React.Component {
 
   // Create a node from label with its inport
   createNode = (node, outPorts = [], color = "rgb(255,255,255)") => {
-    let advancedNode = new AdvancedNodeModel(node, node.reference, outPorts, color);
+    const {
+      instanceable,
+      instanceableType
+    } = this.props;
+
+    let advancedNode = new AdvancedNodeModel(node, node.reference, outPorts, color, instanceable.id, instanceableType);
     advancedNode.addInPort(" ");
     return advancedNode;
   };
 
   render = () => {
-    const { availableNodes } = this.props;
+    const {
+      availableNodes,
+      instanceable,
+      instanceableType
+    } = this.props;
     const { engine } = this.state;
+
+    const http = new Http(instanceable.id, instanceableType);
 
     let model = engine.getDiagramModel();
 
@@ -265,7 +277,7 @@ class Diagram extends React.Component {
         </div>
         <div
           className="col-md-10 mt-2"
-          onDrop={event => {
+          onDrop={async event => {
             let nodeDb = JSON.parse(event.dataTransfer.getData("node"));
             let nodeDiagram = {};
 
@@ -279,6 +291,8 @@ class Diagram extends React.Component {
             let points = engine.getRelativeMousePoint(event);
             nodeDiagram.x = points.x;
             nodeDiagram.y = points.y;
+
+            await http.createInstance(nodeDb.id);
 
             model.addNode(nodeDiagram);
             this.updateEngine(engine);

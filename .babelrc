@@ -5,8 +5,8 @@
       {
         "modules": false,
         "targets": {
-          "browsers": "> 1%",
-          "uglify": true
+          "uglify": true,
+          "node": "current",
         },
         "useBuiltIns": true
       }
@@ -24,3 +24,4 @@
     ]
   ]
 }
+
