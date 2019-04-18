@@ -11,8 +11,8 @@ class AdvancedLinkFactory extends DefaultLinkFactory {
 
   generateReactWidget(diagramEngine: DiagramEngine, link: AdvancedLinkModel): JSX.Element {
     return React.createElement(AdvancedLinkWidget, {
-      link: link(),
-      diagramEngine: diagramEngine,
+      link: link,
+      diagramEngine: diagramEngine
     });
   }
 
