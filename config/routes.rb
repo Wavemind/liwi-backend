@@ -88,6 +88,8 @@ Rails.application.routes.draw do
       collection do
         get 'by_reference'
         post 'create_from_diagram'
+        post 'create_link'
+        delete 'remove_link'
       end
       member do
         delete 'delete_from_diagram'
@@ -102,15 +104,12 @@ Rails.application.routes.draw do
   end
 
   resources :diagnostics, only: [] do
-    member do
-      post 'create_link'
-      delete 'remove_link'
-    end
-
     resources :instances, only: [:show, :destroy, :create, :by_reference] do
       collection do
         get 'by_reference'
         post 'create_from_diagram'
+        post 'create_link'
+        delete 'remove_link'
       end
       member do
         delete 'delete_from_diagram'
