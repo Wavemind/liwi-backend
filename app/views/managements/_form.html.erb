@@ -1,6 +1,6 @@
 <%= simple_form_for [@algorithm, @management], html: { class: 'form-horizontal' }, wrapper: :input_group do |f| %>
 
-  <%= f.input :reference, prepend: (f.object.persisted? ? false : "#{t('managements.reference')}_"), disabled: f.object.persisted? %>
+  <%= f.input :reference, prepend: (f.object.persisted? ? false : t('managements.reference')), disabled: f.object.persisted? %>
   <%= f.input :label_en %>
   <%= f.input :description_en, as: :text %>
 

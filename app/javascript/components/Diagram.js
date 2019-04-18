@@ -61,12 +61,14 @@ class Diagram extends React.Component {
 
     // Create nodes for final diagnostics
     let dfLevel = [];
+    let excludingDF = null;
 
     if (instanceableType === 'Diagnostic') {
       finalDiagnostics.map((df) => {
         let node = this.createNode(df);
         if (df.final_diagnostic_id !== null) {
-          node.addOutPort(this.getFullLabel(_.find(finalDiagnostics, ["id", df.final_diagnostic_id])));
+          excludingDF = df;
+          node.addOutPort(this.getFullLabel(_.find(finalDiagnostics, ["id", df.final_diagnostic_id])), df.reference, df.id);
         }
         dfLevel.push(node);
         nodes.push(node);
@@ -75,17 +77,15 @@ class Diagram extends React.Component {
       });
 
       // Excluded diagnostic
-      finalDiagnostics.map((df) => {
-        if (df.final_diagnostic_id !== null) {
-          let mainDF = _.find(dfLevel, ["dbId", df.id]);
-          let excludedDF = _.find(dfLevel, ["dbId", df.final_diagnostic_id]);
+      if (excludingDF !== null) {
+        let mainDF = _.find(dfLevel, ["node.id", excludingDF.id]);
+        let excludedDF = _.find(dfLevel, ["node.id", excludingDF.final_diagnostic_id]);
 
-          let link = mainDF.getOutPort().link(excludedDF.getInPort());
-          link.displaySeparator(true);
+        let link = mainDF.getOutPort().link(excludedDF.getInPort());
+        link.displaySeparator(true);
 
-          model.addAll(link);
-        }
-      });
+        model.addAll(link);
+      }
 
       nodeLevels.push(dfLevel);
 
