@@ -125,12 +125,12 @@ class DiagnosticsController < ApplicationController
 
   def set_child
     @child_node = Node.find(diagnostic_params[:node_id])
-    @child_instance = @diagnostic.components.find_by(node_id: child_node.id)
+    @child_instance = @diagnostic.components.find_by(node_id: @child_node.id)
   end
 
   def set_parent
     @parent_answer = Answer.find(diagnostic_params[:answer_id])
-    @parent_instance = @diagnostic.components.find_by(node_id: parent_answer.node_id)
+    @parent_instance = @diagnostic.components.find_by(node_id: @parent_answer.node_id)
   end
 
   def set_diagnostic

@@ -198,7 +198,7 @@ class Diagram extends React.Component {
 
           let andNode = new AdvancedNodeModel("AND", "", "", "");
           andNode.addInPort(" ");
-          andNode.setPosition(Math.min(firstNodeAnswer.x, secondNodeAnswer.x) + 250, firstNodeAnswer.y + 100);
+          andNode.setPosition(Math.min(firstNodeAnswer.x, secondNodeAnswer.x) + 200, firstNodeAnswer.y + 100);
           andNode.addOutPort(" ");
 
           let firstLink = _.find(firstNodeAnswer.getOutPorts(), ["label", this.getFullLabel(firstAnswer)]).link(andNode.getInPort());
