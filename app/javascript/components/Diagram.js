@@ -220,31 +220,16 @@ class Diagram extends React.Component {
       });
     });
 
+
     // Set eventListener for create/remove link
     model.addListener({
       linksUpdated: function(eventLink) {
-        console.log(eventLink.link.listeners);
         eventLink.link.addListener({
           targetPortChanged: function(eventPort) {
-            console.log("CREATE LINK");
             let nodeId = eventPort.port.parent.node.id;
             let answerId = eventLink.link.sourcePort.dbId;
-
-            console.log('nodeId', nodeId);
-            console.log('answerId', answerId);
-
             http.createLink(nodeId, answerId);
           },
-          entityRemoved: function(removedLink) {
-            console.log("REMOVE LINK");
-            let nodeId = removedLink.entity.targetPort.parent.node.id;
-            let answerId = eventLink.link.sourcePort.dbId;
-
-            console.log('nodeId', nodeId);
-            console.log('answerId', answerId);
-
-            http.removeLink(nodeId, answerId);
-          }
         });
       },
     });
@@ -312,7 +297,7 @@ class Diagram extends React.Component {
 
             await http.createInstance(nodeDb.id);
 
-            model.addNode(nodeDiagram);
+            model.addAll(nodeDiagram);
             this.updateEngine(engine);
           }}
           onDragOver={event => {
