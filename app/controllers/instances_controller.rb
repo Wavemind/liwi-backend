@@ -53,6 +53,8 @@ class InstancesController < ApplicationController
     end
   end
 
+  # @params [String] reference
+  # Find an instance by its node reference
   def by_reference
     if params[:diagnostic_id].present?
       @node = @instanceable.version.algorithm.nodes.find_by(reference: params[:reference]);

@@ -37,6 +37,7 @@ class Instance < ApplicationRecord
     end
   end
 
+  # Remove condition - cut the method in order to be called for one condition
   def self.remove_condition(cond, instance)
     if cond.first_conditionable.is_a?(Answer) && cond.first_conditionable.node == instance.node
       if cond.second_conditionable.is_a?(Answer)

@@ -65,6 +65,8 @@ class DiagnosticsController < ApplicationController
     end
   end
 
+  # @params [Diagnostic] Current diagnostic, [Answer] Answer from parent of the link, [Node] child of the link
+  # Create link in both way from diagram
   def create_link
     @parent_instance.children.new(node: @child_node)
     @child_instance.conditions.new(first_conditionable: @parent_answer, top_level: true)
@@ -76,7 +78,7 @@ class DiagnosticsController < ApplicationController
     end
   end
 
-  # React Diagram
+  # Generate react diagram
   def diagram
   end
 
@@ -93,6 +95,8 @@ class DiagnosticsController < ApplicationController
     end
   end
 
+  # @params [Diagnostic] Current diagnostic, [Answer] Answer from parent of the link, [Node] child of the link
+  # Remove a link from diagram and remove from both child and parent concerned
   def remove_link
     @child_instance.conditions.each do |cond|
       Instance.remove_condition(cond, @parent_instance)

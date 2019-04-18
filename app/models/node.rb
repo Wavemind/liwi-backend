@@ -60,6 +60,8 @@ class Node < ApplicationRecord
     end
   end
 
+  # @return [Array][Answers]
+  # Return answers if any
   def get_answers
     if defined? answers
       answers
