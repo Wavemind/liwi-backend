@@ -97,7 +97,7 @@ class DiagnosticsController < ApplicationController
     @child_instance.conditions.each do |cond|
       Instance.remove_condition(cond, @parent_instance)
     end
-    
+
     if @parent_instance.children.find_by(node: @chlid_node).destroy
       render json: { status: 'success', message: t('flash_message.success_deleted')}
     else

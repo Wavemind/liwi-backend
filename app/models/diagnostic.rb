@@ -67,9 +67,20 @@ class Diagnostic < ApplicationRecord
   # Generate the ordered questions
   def generate_questions_order
     nodes = []
-    first_nodes = components.includes(:node, :conditions, :children).where(conditions: { referenceable_id: nil }).where.not(children: { node_id: nil }).where('nodes.type = ? OR nodes.type = ?', 'Question', 'PredefinedSyndrome')
-    nodes << first_nodes
-    get_children(first_nodes, nodes)
+    first_instances = components.includes(:node, :conditions, :children).where(conditions: { referenceable_id: nil }).where('nodes.type = ? OR nodes.type = ?', 'Question', 'PredefinedSyndrome')
+
+    health_cares = components.treatments + components.managements
+    # Excluding health cares conditions
+    first_instances.each do |instance|
+      isHcCondition = false
+      health_cares.map(&:conditions).flatten.each do |cond|
+        isHcCondition = true if ((cond.first_conditionable.is_a?(Answer) && cond.first_conditionable.node.id == instance.node.id) || (cond.second_conditionable.is_a?(Answer) && cond.second_conditionable.node.id == instance.node.id))
+      end
+      first_instances.delete(instance) if isHcCondition
+    end
+
+    nodes << first_instances
+    get_children(first_instances, nodes)
   end
 
   # @params [Array][Instance], [Array][Node]
