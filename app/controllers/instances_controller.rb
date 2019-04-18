@@ -1,8 +1,8 @@
 class InstancesController < ApplicationController
 
   before_action :authenticate_user!
-  before_action :set_instanceable, only: [:show, :create, :destroy, :by_reference]
-  before_action :set_instance, only: [:show, :destroy]
+  before_action :set_instanceable, only: [:show, :create, :destroy, :by_reference, :create_from_diagram, :delete_from_diagram]
+  before_action :set_instance, only: [:show, :destroy, :delete_from_diagram]
 
   def index
     respond_to do |format|
@@ -62,6 +62,31 @@ class InstancesController < ApplicationController
       @node = @instanceable.algorithm.nodes.find_by(reference: params[:reference]);
     end
     render json: polymorphic_url([@instanceable, @instanceable.components.find_by(node: @node)])
+  end
+
+  # POST /diagnostics/:diagnostic_id/instances/diagram_create
+  # @return JSON of instance
+  # Create an instances and return json format
+  def create_from_diagram
+    instance = Instance.new(instance_params)
+    instance.instanceable = @instanceable
+    instance.save
+
+    respond_to do |format|
+      format.json { render json: instance }
+    end
+  end
+
+  # POST /diagnostics/:diagnostic_id/instances/:node_id/delete_from_diagram
+  # @return JSON of instance
+  # Delete an instances and json format
+  def delete_from_diagram
+    node = @instanceable.components.find_by(node_id: params[:id])
+
+    node.destroy
+    respond_to do |format|
+      format.json { render json: @instance }
+    end
   end
 
   private

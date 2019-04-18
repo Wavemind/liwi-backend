@@ -1,6 +1,7 @@
 import { DefaultNodeModel, DiagramEngine, Toolkit } from "storm-react-diagrams";
 import AdvancedPortModel from "../models/AdvancedPortModel";
 import * as _ from "lodash";
+import Http from "../../http";
 
 class AdvancedNodeModel extends DefaultNodeModel {
   node;
@@ -9,17 +10,18 @@ class AdvancedNodeModel extends DefaultNodeModel {
   outPorts: array;
   ports: { [s: string]: AdvancedPortModel };
 
-  constructor(node, reference: string, color: string, outPorts) {
+  constructor(node, reference: string, color: string, outPorts, instanceableId, instanceableType) {
     super("advanced");
     this.node = node;
     this.reference = reference;
     this.color = color;
     this.outPorts = outPorts;
+    const http = new Http(instanceableId, instanceableType);
 
     this.addListener({
       entityRemoved: function(removedNode) {
-        console.log("DELETE NODE");
-        console.log('removedNode ', removedNode);
+        // Delete node in DB
+        http.deleteInstance(removedNode.entity.node.id);
       },
     });
   }
@@ -41,6 +43,7 @@ class AdvancedNodeModel extends DefaultNodeModel {
     this.node = object.node;
     this.reference = object.reference;
     this.color = object.color;
+    this.outPorts = object.outPorts;
   }
 
   serialize() {

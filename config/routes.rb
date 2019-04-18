@@ -87,9 +87,14 @@ Rails.application.routes.draw do
     resources :instances, only: [:show, :destroy, :create, :by_reference] do
       collection do
         get 'by_reference'
+        post 'create_from_diagram'
+      end
+      member do
+        delete 'delete_from_diagram'
       end
       resources :children, only: [:create, :destroy]
       resources :conditions, only: [:create, :destroy]
+
     end
     member do
       get 'diagram'
@@ -105,6 +110,10 @@ Rails.application.routes.draw do
     resources :instances, only: [:show, :destroy, :create, :by_reference] do
       collection do
         get 'by_reference'
+        post 'create_from_diagram'
+      end
+      member do
+        delete 'delete_from_diagram'
       end
       resources :children, only: [:create, :destroy]
       resources :conditions, only: [:create, :destroy]
