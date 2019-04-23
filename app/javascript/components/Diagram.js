@@ -9,8 +9,11 @@ import * as _ from "lodash";
 import AdvancedLinkFactory from "../react-diagram/factories/AdvancedLinkFactory";
 import AdvancedNodeFactory from "../react-diagram/factories/AdvancedNodeFactory";
 import AdvancedNodeModel from "../react-diagram/models/AdvancedNodeModel";
+
 import NodeList from "../react-diagram/lists/NodeList";
 import Http from "../http";
+
+import { withDiagram } from '../context/Diagram.context';
 
 class Diagram extends React.Component {
 
@@ -30,13 +33,15 @@ class Diagram extends React.Component {
       healthCares,
     } = this.props;
 
+    console.log(this.props)
+
     const { engine } = this.state;
 
     // Setup the diagram model
     let model = new DiagramModel();
 
     // Init http class
-    const http = new Http(instanceable.id, instanceableType);
+    const http = new Http();
 
     // Setup the diagram engine
     engine.installDefaultFactories();
@@ -316,4 +321,4 @@ class Diagram extends React.Component {
   };
 }
 
-export default Diagram;
+export default withDiagram(Diagram);

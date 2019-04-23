@@ -1,12 +1,15 @@
 <div class="row">
   <div class="col-md-11">
-    <%= react_component('Diagram', {
-      instanceable: @diagnostic,
-      instanceableType: @diagnostic.class.name,
-      questions: @diagnostic.questions_json,
-      finalDiagnostics: @diagnostic.final_diagnostics_json,
-      healthCares: @diagnostic.health_cares_json,
-      availableNodes: @diagnostic.available_nodes_json,
+    <%= react_component('Provider', {
+      render: 'Diagram',
+      context: {
+        instanceable: @diagnostic,
+        instanceableType: @diagnostic.class.name,
+        questions: @diagnostic.questions_json,
+        finalDiagnostics: @diagnostic.final_diagnostics_json,
+        healthCares: @diagnostic.health_cares_json,
+        availableNodes: @diagnostic.available_nodes_json,
+      }
     }) %>
   </div>
 
