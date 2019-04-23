@@ -2,9 +2,7 @@ class DiagnosticsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_algorithm, only: [:show, :new, :create, :edit, :update, :destroy, :duplicate]
   before_action :set_version, only: [:show, :new, :create, :edit, :update, :destroy, :duplicate]
-  before_action :set_diagnostic, only: [:show, :edit, :update, :create_link, :remove_link, :diagram, :update_translations]
-  before_action :set_child, only: [:create_link, :remove_link]
-  before_action :set_parent, only: [:create_link, :remove_link]
+  before_action :set_diagnostic, only: [:show, :edit, :update, :diagram, :update_translations]
   layout 'diagram', only: [:diagram]
 
   def index
@@ -65,19 +63,6 @@ class DiagnosticsController < ApplicationController
     end
   end
 
-  # @params [Diagnostic] Current diagnostic, [Answer] Answer from parent of the link, [Node] child of the link
-  # Create link in both way from diagram
-  def create_link
-    @parent_instance.children.new(node: @child_node)
-    @child_instance.conditions.new(first_conditionable: @parent_answer, top_level: true)
-
-    if @parent_instance.save && @child_instance.save
-      render json: { status: 'success', message: t('flash_message.success_created')}
-    else
-      render json: { status: 'alert', message: t('flash_message.update_fail')}
-    end
-  end
-
   # Generate react diagram
   def diagram
   end
@@ -95,20 +80,6 @@ class DiagnosticsController < ApplicationController
     end
   end
 
-  # @params [Diagnostic] Current diagnostic, [Answer] Answer from parent of the link, [Node] child of the link
-  # Remove a link from diagram and remove from both child and parent concerned
-  def remove_link
-    @child_instance.conditions.each do |cond|
-      Instance.remove_condition(cond, @parent_instance)
-    end
-
-    if @parent_instance.children.find_by(node: @child_node).destroy
-      render json: { status: 'success', message: t('flash_message.success_deleted')}
-    else
-      render json: { status: 'alert', message: t('flash_message.delete_fail')}
-    end
-  end
-
   # @params Diagnostic with the translations
   # Update the object with its translation without
   def update_translations
@@ -123,16 +94,6 @@ class DiagnosticsController < ApplicationController
 
   private
 
-  def set_child
-    @child_node = Node.find(diagnostic_params[:node_id])
-    @child_instance = @diagnostic.components.find_by(node_id: @child_node.id)
-  end
-
-  def set_parent
-    @parent_answer = Answer.find(diagnostic_params[:answer_id])
-    @parent_instance = @diagnostic.components.find_by(node_id: @parent_answer.node_id)
-  end
-
   def set_diagnostic
     @diagnostic = Diagnostic.find(params[:id])
   end
@@ -142,9 +103,7 @@ class DiagnosticsController < ApplicationController
       :id,
       :reference,
       :label_en,
-      Language.label_params,
-      :answer_id,
-      :node_id
+      Language.label_params
     )
   end
 end

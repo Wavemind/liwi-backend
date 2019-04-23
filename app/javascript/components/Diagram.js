@@ -192,7 +192,9 @@ class Diagram extends React.Component {
         x += 200 + 120;
       });
       x = 0;
-      y += 200;
+      if (level.length > 0) {
+        y += 200;
+      }
     });
 
     // Create links between nodes

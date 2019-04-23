@@ -1,8 +1,10 @@
 class InstancesController < ApplicationController
 
   before_action :authenticate_user!
-  before_action :set_instanceable, only: [:show, :create, :destroy, :by_reference, :create_from_diagram, :remove_from_diagram]
+  before_action :set_instanceable, only: [:show, :create, :destroy, :by_reference, :create_from_diagram, :remove_from_diagram, :create_link, :remove_link]
   before_action :set_instance, only: [:show, :destroy, :remove_from_diagram]
+  before_action :set_child, only: [:create_link, :remove_link]
+  before_action :set_parent, only: [:create_link, :remove_link]
 
   def index
     respond_to do |format|
@@ -77,19 +79,56 @@ class InstancesController < ApplicationController
     end
   end
 
+  # @params [Diagnostic] Current diagnostic, [Answer] Answer from parent of the link, [Node] child of the link
+  # Create link in both way from diagram
+  def create_link
+    @parent_instance.children.new(node: @child_node)
+    @child_instance.conditions.new(first_conditionable: @parent_answer, top_level: true)
+
+    if @parent_instance.save && @child_instance.save
+      render json: { status: 'success', message: t('flash_message.success_created')}
+    else
+      render json: { status: 'alert', message: t('flash_message.update_fail')}
+    end
+  end
+
   # POST /diagnostics/:diagnostic_id/instances/:node_id/remove_from_diagram
   # @return JSON of instance
   # Delete an instances and json format
   def remove_from_diagram
     node = @instanceable.components.find_by(node_id: params[:id])
-
     node.destroy
+
     respond_to do |format|
       format.json { render json: @instance }
     end
   end
 
+  # @params [Diagnostic] Current diagnostic, [Answer] Answer from parent of the link, [Node] child of the link
+  # Remove a link from diagram and remove from both child and parent concerned
+  def remove_link
+    @child_instance.conditions.each do |cond|
+      Instance.remove_condition(cond, @parent_instance)
+    end
+
+    if @parent_instance.children.find_by(node: @chlid_node).destroy
+      render json: { status: 'success', message: t('flash_message.success_deleted')}
+    else
+      render json: { status: 'alert', message: t('flash_message.delete_fail')}
+    end
+  end
+
   private
+
+  def set_child
+    @child_node = Node.find(instance_params[:node_id])
+    @child_instance = @instanceable.components.find_by(node_id: @child_node.id)
+  end
+
+  def set_parent
+    @parent_answer = Answer.find(instance_params[:answer_id])
+    @parent_instance = @instanceable.components.find_by(node_id: @parent_answer.node_id)
+  end
 
   def set_instance
     @instance = Instance.find(params[:id])
@@ -110,7 +149,8 @@ class InstancesController < ApplicationController
       :id,
       :node_id,
       :instanceable_id,
-      :instanceable_type
+      :instanceable_type,
+      :answer_id
     )
   end
 end
