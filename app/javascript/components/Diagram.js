@@ -128,51 +128,6 @@ class Diagram extends React.Component {
 
       nodeLevels.push(hcConditions);
       nodeLevels.push(hcLevel);
-
-      //   // Titles
-      //   x = 0;
-      //   y = 0;
-      //   let yBot = 700;
-      //   let qTitle = this.createNode("Questions and Predefined syndromes");
-      //   qTitle.setPosition(x, y);
-      //   x += (300 * questions.length);
-      //
-      //   let dfTitle = this.createNode("Final diagnostics");
-      //   let dfBotTitle = this.createNode(" ");
-      //   dfTitle.setPosition(x - 50, y);
-      //   dfBotTitle.setPosition(x - 50, yBot);
-      //
-      //   x += 400;
-      //
-      //   let dfLink = dfTitle.getInPort().link(dfBotTitle.getInPort());
-      //   dfLink.displayArrow(false);
-      //   dfLink.displaySeparator(true);
-      //
-      //   if (hcConditions.length > 0) {
-      //     let hcCondTitle = this.createNode("Treatments and Managements conditions");
-      //     let hcCondBotTitle = this.createNode(" ");
-      //     let hcCondLink = hcCondTitle.getInPort().link(hcCondBotTitle.getInPort());
-      //
-      //     hcCondTitle.setPosition(x - 50, y);
-      //     hcCondBotTitle.setPosition(x - 50, yBot);
-      //
-      //     x += 400;
-      //
-      //     hcCondLink.displayArrow(false);
-      //     hcCondLink.displaySeparator(true);
-      //
-      //     model.addAll(hcCondTitle, hcCondBotTitle, hcCondLink);
-      //   }
-      //
-      //   let hcTitle = this.createNode("Treatments and Managements");
-      //   hcTitle.setPosition(x - 50, y);
-      //   let hcBotTitle = this.createNode(" ");
-      //   hcBotTitle.setPosition(x - 50, yBot);
-      //   let hcTitleLink = hcTitle.getInPort().link(hcBotTitle.getInPort());
-      //   hcTitleLink.displayArrow(false);
-      //   hcTitleLink.displaySeparator(true);
-      //
-      //   model.addAll(qTitle, dfTitle, dfBotTitle, dfLink, hcTitle, hcBotTitle, hcTitleLink);
     }
 
     // Positions nodes in a horizontal way
@@ -227,29 +182,29 @@ class Diagram extends React.Component {
 
     // Set eventListener for create link
     model.addListener({
-      linksUpdated: function(eventLink) {
+      linksUpdated: function(model) {
         // Disable link from inPort
-        if (eventLink.link.sourcePort.in) {
-          if (model.getLink(eventLink.link.id) !== null) {
-            model.removeLink(eventLink.link.id)
+        if (model.link.sourcePort.in) {
+          if (model.getLink(model.link.id) !== null) {
+            model.removeLink(model.link.id)
           }
         }
 
-        eventLink.link.addListener({
+        model.link.addListener({
           targetPortChanged: function(eventPort) {
             let exists = false;
 
             // Verify if link is already set
-            Object.keys(eventLink.entity.links).map(index => {
-              let link = eventLink.entity.links[index];
-              let portEntity = eventPort.entity
-              if (link.id != portEntity.id && (link.sourcePort.id == portEntity.sourcePort.id && link.targetPort.parent.id == portEntity.targetPort.parent.id)) {
+            Object.keys(model.entity.links).map(index => {
+              let link = model.entity.links[index];
+              let portEntity = eventPort.entity;
+              if (link.id !== portEntity.id && (link.sourcePort.id === portEntity.sourcePort.id && link.targetPort.parent.id === portEntity.targetPort.parent.id)) {
                 exists = true;
               }
             });
 
             let nodeId = eventPort.port.parent.node.id;
-            let answerId = eventLink.link.sourcePort.dbId;
+            let answerId = model.link.sourcePort.dbId;
             http.createLink(nodeId, answerId);
           }
         });
@@ -275,16 +230,18 @@ class Diagram extends React.Component {
   createNode = (node, outPorts = [], color = "rgb(255,255,255)") => {
     const {
       instanceable,
-      instanceableType
+      instanceableType,
+      addNode,
     } = this.props;
 
-    let advancedNode = new AdvancedNodeModel(node, node.reference, outPorts, color, instanceable.id, instanceableType);
+    let advancedNode = new AdvancedNodeModel(node, node.reference, outPorts, color, addNode);
     advancedNode.addInPort(" ");
     return advancedNode;
   };
 
   render = () => {
     const { engine } = this.state;
+    const { removeNode } = this.props;
 
     const http = new Http();
 
@@ -313,6 +270,7 @@ class Diagram extends React.Component {
             nodeDiagram.y = points.y;
 
             await http.createInstance(nodeDb.id);
+            removeNode(nodeDb);
 
             model.addAll(nodeDiagram);
             this.updateEngine(engine);

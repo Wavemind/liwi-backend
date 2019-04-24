@@ -6,59 +6,16 @@ import { withDiagram } from "../../context/Diagram.context";
 class NodeList extends React.Component {
 
   state = {
-    orderedNodes: {}
+    orderedNodes: {},
+    availableNodes: {}
   };
 
   constructor(props) {
     super(props);
   }
 
-  componentWillMount() {
-    this.orderNodes();
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    // console.log('#######################################');
-    // console.log(nextProps.orderedNodes);
-    // console.log(this.state.orderedNodes);
-    return nextProps.orderedNodes !== this.state.orderedNodes;
-  }
-
-  orderNodes = () => {
-    const { availableNodes, set } = this.props;
-
-    let orderedNodes = {
-      exposure: [],
-      symptom: [],
-      assessmentTest: [],
-      physicalExam: [],
-      predefinedSyndrome: [],
-      comorbidity: [],
-      predefinedCondition: [],
-      treatment: [],
-      management: [],
-      finalDiagnostic: []
-    };
-
-    // Assign node to correct array
-    availableNodes.map((node) => {
-      let category = "";
-
-      if (node.type === "Question" || node.type === "PredefinedSyndrome") {
-        category = _.camelCase(node.category_name);
-      } else {
-        category = _.camelCase(node.type);
-      }
-      orderedNodes[category].push(node);
-    });
-
-    this.setState({ orderedNodes });
-    set('orderedNodes', orderedNodes);
-  };
-
   render = () => {
-    const { orderedNodes } = this.state;
-
+    const { orderedNodes } = this.props;
     return (
       <div className="accordion" id="accordionNodes">
         {Object.keys(orderedNodes).map(index => (

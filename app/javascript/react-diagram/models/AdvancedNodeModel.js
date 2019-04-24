@@ -9,8 +9,9 @@ class AdvancedNodeModel extends DefaultNodeModel {
   color: string;
   outPorts: array;
   ports: { [s: string]: AdvancedPortModel };
+  addNode;
 
-  constructor(node, reference: string, color: string, outPorts) {
+  constructor(node, reference: string, color: string, outPorts, addNode) {
     super("advanced");
     this.node = node;
     this.reference = reference;
@@ -22,7 +23,7 @@ class AdvancedNodeModel extends DefaultNodeModel {
       entityRemoved: function(removedNode) {
         // Delete node in DB
         http.removeInstance(removedNode.entity.node.id);
-
+        addNode(removedNode.entity.node)
       },
     });
   }
