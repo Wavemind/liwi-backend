@@ -225,15 +225,33 @@ class Diagram extends React.Component {
     });
 
 
-    // Set eventListener for create/remove link
+    // Set eventListener for create link
     model.addListener({
       linksUpdated: function(eventLink) {
+        // Disable link from inPort
+        if (eventLink.link.sourcePort.in) {
+          if (model.getLink(eventLink.link.id) !== null) {
+            model.removeLink(eventLink.link.id)
+          }
+        }
+
         eventLink.link.addListener({
           targetPortChanged: function(eventPort) {
+            let exists = false;
+
+            // Verify if link is already set
+            Object.keys(eventLink.entity.links).map(index => {
+              let link = eventLink.entity.links[index];
+              let portEntity = eventPort.entity
+              if (link.id != portEntity.id && (link.sourcePort.id == portEntity.sourcePort.id && link.targetPort.parent.id == portEntity.targetPort.parent.id)) {
+                exists = true;
+              }
+            });
+
             let nodeId = eventPort.port.parent.node.id;
             let answerId = eventLink.link.sourcePort.dbId;
             http.createLink(nodeId, answerId);
-          },
+          }
         });
       },
     });
