@@ -25,7 +25,12 @@ class AdvancedLinkModel extends DefaultLinkModel {
       entityRemoved: function(removedLink) {
         let nodeId = removedLink.entity.targetPort.parent.node.id;
         let answerId = removedLink.entity.sourcePort.dbId;
-        http.removeLink(nodeId, answerId);
+        let selected = removedLink.entity.selected;
+
+        // Don't trigger automatic removing link since node does it already
+        if (selected) {
+          http.removeLink(nodeId, answerId);
+        }
       },
     });
   }

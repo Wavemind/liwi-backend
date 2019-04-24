@@ -16,6 +16,7 @@ export default class Http {
     this.token = document.querySelector("meta[name='csrf-token']").content;
   }
 
+
   // @params [Integer] nodeId
   // @return [Object] body of request
   // Create an instance
@@ -63,6 +64,7 @@ export default class Http {
   // @return [Object] body of request
   // Delete an instance
   removeInstance = async (nodeId) => {
+    console.log('removeInstance');
     const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/remove_from_diagram`;
     const body = {
       instance: {
@@ -84,6 +86,7 @@ export default class Http {
   // @return [Object] body of request
   // Delete a Link
   removeLink = async (nodeId, answerId) => {
+    console.log('removeLink');
     const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/remove_link`;
     const body = {
       instance: {
