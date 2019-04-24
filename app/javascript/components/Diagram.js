@@ -26,14 +26,11 @@ class Diagram extends React.Component {
 
   componentWillMount() {
     const {
-      instanceable,
       instanceableType,
       questions,
       finalDiagnostics,
       healthCares,
     } = this.props;
-
-    console.log(this.props)
 
     const { engine } = this.state;
 
@@ -269,21 +266,16 @@ class Diagram extends React.Component {
   };
 
   render = () => {
-    const {
-      availableNodes,
-      instanceable,
-      instanceableType
-    } = this.props;
     const { engine } = this.state;
 
-    const http = new Http(instanceable.id, instanceableType);
+    const http = new Http();
 
     let model = engine.getDiagramModel();
 
     return (
       <div className="row">
         <div className="col-md-2 px-0">
-          <NodeList nodes={availableNodes}/>
+          <NodeList />
         </div>
         <div
           className="col-md-10 mt-2"
@@ -291,7 +283,7 @@ class Diagram extends React.Component {
             let nodeDb = JSON.parse(event.dataTransfer.getData("node"));
             let nodeDiagram = {};
 
-            if (nodeDb.get_answers !== undefined) {
+            if (nodeDb.get_answers !== null) {
               nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers);
               nodeDb.get_answers.map((answer) => (nodeDiagram.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
             } else {

@@ -16,7 +16,7 @@ class AdvancedNodeModel extends DefaultNodeModel {
     this.reference = reference;
     this.color = color;
     this.outPorts = outPorts;
-    const http = new Http(instanceableId, instanceableType);
+    const http = new Http();
 
     this.addListener({
       entityRemoved: function(removedNode) {

@@ -7,10 +7,12 @@ export default class Http {
   instanceableId;
   instanceableType;
 
-  constructor(instanceableId, instanceableType) {
+  constructor() {
+    let data = document.querySelector("span");
+
     this.url = window.location.origin;
-    this.instanceableId = instanceableId;
-    this.instanceableType = instanceableType === "Diagnostic" ? "diagnostics" : "predefined_syndromes";
+    this.instanceableId = data.dataset.id;
+    this.instanceableType = data.dataset.type === "Diagnostic" ? "diagnostics" : "predefined_syndromes";
     this.token = document.querySelector("meta[name='csrf-token']").content;
   }
 
@@ -42,7 +44,7 @@ export default class Http {
   createLink = async (nodeId, answerId) => {
     const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/create_link`;
     const body = {
-      diagnostic: {
+      instance: {
         node_id: nodeId,
         answer_id: answerId,
       }
@@ -84,7 +86,7 @@ export default class Http {
   removeLink = async (nodeId, answerId) => {
     const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/remove_link`;
     const body = {
-      diagnostic: {
+      instance: {
         node_id: nodeId,
         answer_id: answerId,
       }

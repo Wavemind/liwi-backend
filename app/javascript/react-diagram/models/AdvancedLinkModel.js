@@ -19,7 +19,7 @@ class AdvancedLinkModel extends DefaultLinkModel {
     this.arrow = true;
     this.separator = false;
 
-    const http = new Http('5', 'Diagnostic');
+    const http = new Http();
 
     this.addListener({
       entityRemoved: function(removedLink) {

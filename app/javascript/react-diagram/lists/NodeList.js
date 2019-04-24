@@ -1,6 +1,7 @@
 import * as React from "react";
-import NodeListItem from "./NodeListItem";
 import * as _ from "lodash";
+import NodeListItem from "./NodeListItem";
+import { withDiagram } from "../../context/Diagram.context";
 
 class NodeList extends React.Component {
 
@@ -13,7 +14,18 @@ class NodeList extends React.Component {
   }
 
   componentWillMount() {
-    const { nodes } = this.props;
+    this.orderNodes();
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    // console.log('#######################################');
+    // console.log(nextProps.orderedNodes);
+    // console.log(this.state.orderedNodes);
+    return nextProps.orderedNodes !== this.state.orderedNodes;
+  }
+
+  orderNodes = () => {
+    const { availableNodes, set } = this.props;
 
     let orderedNodes = {
       exposure: [],
@@ -25,14 +37,14 @@ class NodeList extends React.Component {
       predefinedCondition: [],
       treatment: [],
       management: [],
-      finalDiagnostic: [],
+      finalDiagnostic: []
     };
 
     // Assign node to correct array
-    nodes.map((node) => {
-      let category = '';
+    availableNodes.map((node) => {
+      let category = "";
 
-      if (node.type === 'Question' || node.type === 'PredefinedSyndrome') {
+      if (node.type === "Question" || node.type === "PredefinedSyndrome") {
         category = _.camelCase(node.category_name);
       } else {
         category = _.camelCase(node.type);
@@ -40,15 +52,16 @@ class NodeList extends React.Component {
       orderedNodes[category].push(node);
     });
 
-    this.setState({orderedNodes})
-  }
+    this.setState({ orderedNodes });
+    set('orderedNodes', orderedNodes);
+  };
 
   render = () => {
     const { orderedNodes } = this.state;
 
     return (
       <div className="accordion" id="accordionNodes">
-        {Object.keys(orderedNodes).map( index => (
+        {Object.keys(orderedNodes).map(index => (
           <div className="card" key={index}>
             <div className="card-header" id={`heading-${index}`}>
               <h2 className="mb-0">
@@ -59,11 +72,12 @@ class NodeList extends React.Component {
               </h2>
             </div>
 
-            <div id={`collapse-${index}`} className={`collapse ${index === 0 ? `show` : ``}`} aria-labelledby={`heading-${index}`}
+            <div id={`collapse-${index}`} className={`collapse ${index === 0 ? `show` : ``}`}
+                 aria-labelledby={`heading-${index}`}
                  data-parent="#accordionNodes">
               <div className="card-body p-0">
                 {orderedNodes[index].map((node) => (
-                  <NodeListItem node={node} key={node.reference} />
+                  <NodeListItem node={node} key={node.reference}/>
                 ))}
               </div>
             </div>
@@ -74,4 +88,4 @@ class NodeList extends React.Component {
   };
 }
 
-export default NodeList;
+export default withDiagram(NodeList);

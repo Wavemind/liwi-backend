@@ -1,4 +1,5 @@
 import * as React from "react";
+import { withDiagram } from '../../context/Diagram.context';
 
 class NodeListItem extends React.Component {
 
@@ -49,4 +50,4 @@ class NodeListItem extends React.Component {
   };
 }
 
-export default NodeListItem;
+export default withDiagram(NodeListItem);
