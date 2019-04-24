@@ -40,7 +40,7 @@ export default class Http {
   // @return [Object] body of request
   // Create a Link
   createLink = async (nodeId, answerId) => {
-    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/create_link`;
+    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/create_link`;
     const body = {
       diagnostic: {
         node_id: nodeId,
@@ -61,10 +61,16 @@ export default class Http {
   // @return [Object] body of request
   // Delete an instance
   removeInstance = async (nodeId) => {
-    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/${nodeId}/remove_from_diagram`;
-    const header = await this.setHeaders('DELETE');
+    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/remove_from_diagram`;
+    const body = {
+      instance: {
+        node_id: nodeId,
+        instanceable_id: this.instanceableId,
+        instanceable_type: this.instanceableType
+      }
+    };
+    const header = await this.setHeaders('DELETE', body);
     const request = await fetch(url, header).catch(error => console.log(error));
-    let body = await request.json();
     if (!request.ok) {
       console.log(body.errors);
     }
@@ -76,7 +82,7 @@ export default class Http {
   // @return [Object] body of request
   // Delete a Link
   removeLink = async (nodeId, answerId) => {
-    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/remove_link`;
+    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/remove_link`;
     const body = {
       diagnostic: {
         node_id: nodeId,

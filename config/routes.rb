@@ -89,10 +89,8 @@ Rails.application.routes.draw do
         get 'by_reference'
         post 'create_from_diagram'
         post 'create_link'
-        delete 'remove_link'
-      end
-      member do
         delete 'remove_from_diagram'
+        delete 'remove_link'
       end
       resources :children, only: [:create, :destroy]
       resources :conditions, only: [:create, :destroy]
@@ -109,10 +107,8 @@ Rails.application.routes.draw do
         get 'by_reference'
         post 'create_from_diagram'
         post 'create_link'
-        delete 'remove_link'
-      end
-      member do
         delete 'remove_from_diagram'
+        delete 'remove_link'
       end
       resources :children, only: [:create, :destroy]
       resources :conditions, only: [:create, :destroy]

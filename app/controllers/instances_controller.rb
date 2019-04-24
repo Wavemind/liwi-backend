@@ -2,7 +2,7 @@ class InstancesController < ApplicationController
 
   before_action :authenticate_user!
   before_action :set_instanceable, only: [:show, :create, :destroy, :by_reference, :create_from_diagram, :remove_from_diagram, :create_link, :remove_link]
-  before_action :set_instance, only: [:show, :destroy, :remove_from_diagram]
+  before_action :set_instance, only: [:show, :destroy]
   before_action :set_child, only: [:create_link, :remove_link]
   before_action :set_parent, only: [:create_link, :remove_link]
 
@@ -75,6 +75,7 @@ class InstancesController < ApplicationController
     instance.save
 
     respond_to do |format|
+      format.html {}
       format.json { render json: instance }
     end
   end
@@ -96,10 +97,11 @@ class InstancesController < ApplicationController
   # @return JSON of instance
   # Delete an instances and json format
   def remove_from_diagram
-    node = @instanceable.components.find_by(node_id: params[:id])
+    node = @instanceable.components.find_by(node_id: instance_params[:node_id])
     node.destroy
 
     respond_to do |format|
+      format.html {}
       format.json { render json: @instance }
     end
   end
@@ -111,7 +113,7 @@ class InstancesController < ApplicationController
       Instance.remove_condition(cond, @parent_instance)
     end
 
-    if @parent_instance.children.find_by(node: @chlid_node).destroy
+    if @parent_instance.children.find_by(node: @child_node).destroy
       render json: { status: 'success', message: t('flash_message.success_deleted')}
     else
       render json: { status: 'alert', message: t('flash_message.delete_fail')}
