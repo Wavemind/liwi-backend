@@ -16,6 +16,7 @@ class NodeList extends React.Component {
 
   render = () => {
     const { orderedNodes } = this.props;
+
     return (
       <div className="accordion" id="accordionNodes">
         {Object.keys(orderedNodes).map(index => (

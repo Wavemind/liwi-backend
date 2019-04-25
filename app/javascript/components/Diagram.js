@@ -229,11 +229,7 @@ class Diagram extends React.Component {
 
   // Create a node from label with its inport
   createNode = (node, outPorts = [], color = "rgb(255,255,255)") => {
-    const {
-      instanceable,
-      instanceableType,
-      addNode,
-    } = this.props;
+    const { addNode } = this.props;
 
     let advancedNode = new AdvancedNodeModel(node, node.reference, outPorts, color, addNode);
     advancedNode.addInPort(" ");
@@ -249,43 +245,66 @@ class Diagram extends React.Component {
     let model = engine.getDiagramModel();
 
     return (
-      <div className="row">
-        <div className="col-md-2 px-0">
-          <NodeList />
-        </div>
-        <div
-          className="col-md-10 mt-2"
-          onDrop={async event => {
-            let nodeDb = JSON.parse(event.dataTransfer.getData("node"));
-            let nodeDiagram = {};
+      <div className="content">
+        <ul className="nav">
+          <li className="nav-item">
+            <div className="pt-2"
+                 draggable={true}
+                 onDragStart={event => {
+                   event.dataTransfer.setData("node", JSON.stringify('AND'));
+                 }}
+            >
+              AND
+            </div>
+          </li>
+        </ul>
+        <div className="row">
+          <div className="col-md-2 px-0">
+            <NodeList />
+          </div>
+          <div
+            className="col-md-10 mt-2"
+            onDrop={async event => {
+              let nodeDb = JSON.parse(event.dataTransfer.getData("node"));
+              let points = engine.getRelativeMousePoint(event);
+              let nodeDiagram = {};
 
-            if (nodeDb.get_answers !== null) {
-              nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers);
-              nodeDb.get_answers.map((answer) => (nodeDiagram.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
-            } else {
-              nodeDiagram = this.createNode(nodeDb);
-            }
+              // Create new node
+              // else
+              // create AND node
+              if (nodeDb !== 'AND') {
+                if (nodeDb.get_answers !== null) {
+                  nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers);
+                  nodeDb.get_answers.map((answer) => (nodeDiagram.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
+                } else {
+                  nodeDiagram = this.createNode(nodeDb);
+                }
 
-            let points = engine.getRelativeMousePoint(event);
-            nodeDiagram.x = points.x;
-            nodeDiagram.y = points.y;
+                await http.createInstance(nodeDb.id);
+                removeNode(nodeDb);
+              } else {
+                nodeDiagram = new AdvancedNodeModel("AND", "", "", "");
+                nodeDiagram.addInPort(" ");
+                nodeDiagram.addOutPort(" ");
+              }
 
-            await http.createInstance(nodeDb.id);
-            removeNode(nodeDb);
+              nodeDiagram.x = points.x;
+              nodeDiagram.y = points.y;
 
-            model.addAll(nodeDiagram);
-            this.updateEngine(engine);
-          }}
-          onDragOver={event => {
-            event.preventDefault();
-          }}
-        >
-          <DiagramWidget
-            className="srd-demo-canvas"
-            diagramEngine={engine}
-            allowCanvasZoom={false}
-            maxNumberPointsPerLink={0}
-          />
+              model.addAll(nodeDiagram);
+              this.updateEngine(engine);
+            }}
+            onDragOver={event => {
+              event.preventDefault();
+            }}
+          >
+            <DiagramWidget
+              className="srd-demo-canvas"
+              diagramEngine={engine}
+              allowCanvasZoom={false}
+              maxNumberPointsPerLink={0}
+            />
+          </div>
         </div>
       </div>
     );

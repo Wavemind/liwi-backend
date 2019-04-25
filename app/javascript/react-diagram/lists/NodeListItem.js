@@ -35,15 +35,6 @@ class NodeListItem extends React.Component {
               {node.label_translations["en"]}
             </div>
           </div>
-          {node.get_answers !== null ? (
-              <div className="py-1 node-answers">
-              {node.get_answers.map((answer) => (
-                <div className="col text-center answer-split">
-                  {this.getFullLabel(answer)}
-                </div>
-                ))}
-              </div>
-          ) : ''}
         </div>
       </div>
     );

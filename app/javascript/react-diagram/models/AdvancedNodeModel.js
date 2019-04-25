@@ -19,13 +19,16 @@ class AdvancedNodeModel extends DefaultNodeModel {
     this.outPorts = outPorts;
     const http = new Http();
 
-    this.addListener({
-      entityRemoved: function(removedNode) {
-        // Delete node in DB
-        http.removeInstance(removedNode.entity.node.id);
-        addNode(removedNode.entity.node)
-      },
-    });
+    // Don't trigger entity removed for AND node
+    if (this.node !== 'AND') {
+      this.addListener({
+        entityRemoved: function(removedNode) {
+          // Delete node in DB
+          http.removeInstance(removedNode.entity.node.id);
+          addNode(removedNode.entity.node)
+        },
+      });
+    }
   }
 
   addInPort(label: string, reference: string = '', id: string = ''): AdvancedPortModel {
