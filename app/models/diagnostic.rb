@@ -121,7 +121,7 @@ class Diagnostic < ApplicationRecord
   # @return [Json]
   # Return final diagnostics in json format
   def final_diagnostics_json
-    final_diagnostics.as_json(include: [instances: { include: [conditions: { include: [first_conditionable: { include: [:node] }, second_conditionable: { include: [:node] }] }] }])
+    components.final_diagnostics.as_json(include: [ :node, conditions: { include: [first_conditionable: { include: [node: { include: [:answers]}]}, second_conditionable: { include: [node: { include: [:answers]}]}]}])
   end
 
   # @return [Json]

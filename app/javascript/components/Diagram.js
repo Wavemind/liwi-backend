@@ -52,10 +52,10 @@ class Diagram extends React.Component {
     // Create nodes for PS and questions
     questions.map((levels) => {
       let currentLevel = [];
-      levels.map((relation) => {
-        let node = this.createNode(relation.node, relation.node.answers);
+      levels.map((instance) => {
+        let node = this.createNode(instance.node, instance.node.answers);
         currentLevel.push(node);
-        relation.node.answers.map((answer) => (node.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
+        instance.node.answers.map((answer) => (node.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
         nodes.push(node);
         model.addAll(node);
       });
@@ -70,7 +70,8 @@ class Diagram extends React.Component {
     let excludingDF = null;
 
     if (instanceableType === 'Diagnostic') {
-      finalDiagnostics.map((df) => {
+      finalDiagnostics.map((instance) => {
+        let df = instance.node;
         let node = this.createNode(df);
         if (df.final_diagnostic_id !== null) {
           excludingDF = df;
@@ -79,7 +80,7 @@ class Diagram extends React.Component {
         dfLevel.push(node);
         nodes.push(node);
         model.addAll(node);
-        instances.push(df.instances[0]);
+        instances.push(instance);
       });
 
       // Excluded diagnostic
@@ -182,29 +183,29 @@ class Diagram extends React.Component {
 
     // Set eventListener for create link
     model.addListener({
-      linksUpdated: function(model) {
+      linksUpdated: function(eventModel) {
         // Disable link from inPort
-        if (model.link.sourcePort.in) {
-          if (model.getLink(model.link.id) !== null) {
-            model.removeLink(model.link.id)
+        if (eventModel.link.sourcePort.in) {
+          if (model.getLink(eventModel.link.id) !== null) {
+            model.removeLink(eventModel.link.id)
           }
         }
 
-        model.link.addListener({
-          targetPortChanged: function(eventPort) {
+        eventModel.link.addListener({
+          targetPortChanged: function(eventLink) {
             let exists = false;
 
             // Verify if link is already set
-            Object.keys(model.entity.links).map(index => {
-              let link = model.entity.links[index];
-              let portEntity = eventPort.entity;
+            Object.keys(eventModel.entity.links).map(index => {
+              let link = eventModel.entity.links[index];
+              let portEntity = eventLink.entity;
               if (link.id !== portEntity.id && (link.sourcePort.id === portEntity.sourcePort.id && link.targetPort.parent.id === portEntity.targetPort.parent.id)) {
                 exists = true;
               }
             });
 
-            let nodeId = eventPort.port.parent.node.id;
-            let answerId = model.link.sourcePort.dbId;
+            let nodeId = eventLink.port.parent.node.id;
+            let answerId = eventModel.link.sourcePort.dbId;
             http.createLink(nodeId, answerId);
           }
         });

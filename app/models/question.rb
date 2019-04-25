@@ -2,7 +2,7 @@
 class Question < Node
 
   after_create :create_boolean, if: Proc.new { answer_type.value == 'Boolean' }
-  after_create :create_unavailable_answer, if: Proc.new { unavailable }
+  after_create :create_unavailable_answer, if: Proc.new { unavailable == '1' }
 
   attr_accessor :unavailable
 
