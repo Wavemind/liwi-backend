@@ -340,10 +340,6 @@ td {
 .answer-split {
   border-right: 1px solid gray;
 
-  &:hover,&.selected{
-    background: pink;
-  }
-
   &:last-child {
     border-right: none;
   }
@@ -354,4 +350,26 @@ td {
   z-index: 10;
   top: -8px;
   align-item: center;
+}
+
+.out-port {
+  background-color: lightgreen;
+  width: 15px;
+  height: 15px;
+  margin-left: auto;
+  margin-right: auto;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -15px;
+  border-radius: 10px;
+
+  &:hover {
+    background-color: green;
+  }
+}
+
+.in-port {
+  background-color:cadetblue;
+  top: -10px;
 }
