@@ -26,7 +26,10 @@ class AdvancedNodeWidget extends BaseWidget<AdvancedNodeWidgetProps, AdvancedNod
   generateOutPort(port) {
     return (
       <div key={port.getID()} className="col px-0">
-        <div className="port py-1 text-center answer-split" data-name={port.name} data-nodeid={port.parent.id}>{port.label}</div>
+        <div>
+          <div className="py-1 text-center answer-split">{port.label}</div>
+        </div>
+        <div className="port mb-3" data-name={port.name} data-nodeid={port.parent.id} style={{backgroundColor: 'red', zIndex: 10, width: 15, height: 15, bottom: 28, position: 'absolute'}}></div>
       </div>
     );
   }
