@@ -25,14 +25,13 @@ class AdvancedNodeWidget extends BaseWidget<AdvancedNodeWidgetProps, AdvancedNod
 
   generateOutPort(port) {
     return (
-      <div key={port.getID()} className="col px-0">
-        <div>
+      <div key={port.getID()} className="col px-0" style={{position: 'relative'}}>
           <div className="py-1 text-center answer-split">{port.label}</div>
-        </div>
-        <div className="port mb-3" data-name={port.name} data-nodeid={port.parent.id} style={{backgroundColor: 'red', zIndex: 10, width: 15, height: 15, bottom: 28, position: 'absolute'}}></div>
+          <div className="port out-port" data-name={port.name} data-nodeid={port.parent.id} />
       </div>
     );
   }
+
 
   render() {
     const { diagramNode } = this.props;
@@ -47,7 +46,7 @@ class AdvancedNodeWidget extends BaseWidget<AdvancedNodeWidgetProps, AdvancedNod
     return (
       <div className={`node ${(diagramNode.node === 'AND') ? 'and' : ''}`}>
         <div className="port py-2 node-category">
-          <div className="port srd-port" data-name={inPort.name} data-nodeid={inPort.parent.id}></div>
+          <div className="port srd-port in-port" data-name={inPort.name} data-nodeid={inPort.parent.id} />
           <div className="col pl-2 pr-0 text-left">
             {(diagramNode.node === 'AND') ? 'AND' : diagramNode.node.reference}
           </div>
@@ -58,7 +57,7 @@ class AdvancedNodeWidget extends BaseWidget<AdvancedNodeWidgetProps, AdvancedNod
         {(diagramNode.node === 'AND') ? (
           <div>
             <div className="node-answers">
-              <div className="port srd-port" style={{top: 28, left: 8}} data-name={diagramNode.getOutPort().name} data-nodeid={diagramNode.getOutPort().parent.id}></div>
+              <div className="port srd-port" style={{top: 28, left: 8}} data-name={diagramNode.getOutPort().name} data-nodeid={diagramNode.getOutPort().parent.id} />
             </div>
           </div>
           ) : (
