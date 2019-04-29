@@ -3,7 +3,7 @@ import { BaseWidget } from "storm-react-diagrams";
 import AdvancedNodeModel from "../models/AdvancedNodeModel";
 
 export interface AdvancedNodeWidgetProps {
-  node: AdvancedNodeModel;
+  diagramNode: AdvancedNodeModel;
   size?: number;
 }
 
@@ -23,32 +23,53 @@ class AdvancedNodeWidget extends BaseWidget<AdvancedNodeWidgetProps, AdvancedNod
     this.state = {};
   }
 
-  generatePort(output, port) {
-    let displayedPort = <div className="port srd-port" data-name={port.name} data-nodeid={port.parent.id}>{output === 'out' ? '+' : ''}</div>;
-    let displayedLabel = <div className="name">{port.label}</div>;
-
+  generateOutPort(port) {
     return (
-      <div className={`srd-default-port srd-default-port--${output}`} key={port.getID()}>
-        {displayedLabel}
-        {displayedPort}
+      <div key={port.getID()} className="col px-0">
+        <div className="port py-1 text-center answer-split" data-name={port.name} data-nodeid={port.parent.id}>{port.label}</div>
       </div>
     );
   }
 
   render() {
+    const { diagramNode } = this.props;
+    let outPorts = [];
+
+    diagramNode.getOutPorts().map((outPort) => {
+      outPorts.push(this.generateOutPort(outPort));
+    });
+
+    let inPort = diagramNode.getInPort();
+
     return (
-      <div className={"srd-default-node"} style={{ background: this.props.node.color }}>
-        <div className={"srd-default-node__title"}>
-          <div className={"srd-default-node__name"}>{this.props.node.name}</div>
-        </div>
-        <div className={"srd-default-node__ports"}>
-          <div className={"srd-default-node__in"}>
-            {_.map(this.props.node.getInPorts(), this.generatePort.bind(this, 'in'))}
+      <div className={`node ${(diagramNode.node === 'AND') ? 'and' : ''}`}>
+        <div className="port py-2 node-category">
+          <div className="port srd-port" data-name={inPort.name} data-nodeid={inPort.parent.id}></div>
+          <div className="col pl-2 pr-0 text-left">
+            {(diagramNode.node === 'AND') ? 'AND' : diagramNode.node.reference}
           </div>
-          <div className={"srd-default-node__out"}>
-            {_.map(this.props.node.getOutPorts(), this.generatePort.bind(this, 'out'))}
+          <div className="col pl-0 pr-2 text-right">
+            {(diagramNode.node === 'AND') ? '' : diagramNode.node.priority}
           </div>
         </div>
+        {(diagramNode.node === 'AND') ? (
+          <div>
+            <div className="node-answers">
+              <div className="port srd-port" style={{top: 28, left: 8}} data-name={diagramNode.getOutPort().name} data-nodeid={diagramNode.getOutPort().parent.id}></div>
+            </div>
+          </div>
+          ) : (
+          <div>
+            <div className="py-2 node-label">
+              <div className="col text-center">
+                {diagramNode.node.label_translations['en']}
+              </div>
+            </div>
+            <div className="node-answers">
+                {outPorts}
+            </div>
+          </div>
+          )}
       </div>
     );
   }

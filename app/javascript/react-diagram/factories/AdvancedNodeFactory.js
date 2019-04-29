@@ -9,7 +9,7 @@ class AdvancedNodeFactory extends DefaultNodeFactory {
   }
 
   generateReactWidget(diagramEngine: DiagramEngine, node: AdvancedNodeModel): JSX.Element {
-    return <AdvancedNodeWidget node={node} />;
+    return <AdvancedNodeWidget diagramNode={node} />;
   }
 
   getNewInstance() {

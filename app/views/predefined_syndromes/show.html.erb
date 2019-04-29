@@ -1,4 +1,7 @@
 <h1><%= t('.title', name: @instanceable.label ) %></h1>
+<div class="col text-right">
+  <%= link_to(I18n.t('open_diagram'), diagram_predefined_syndrome_url(@predefined_syndrome), class: 'btn btn-primary') %>
+</div>
 
 <div class="row">
   <div class="col">

@@ -1,0 +1,18 @@
+<div class="row">
+  <div class="col-md-11">
+    <span data-type="<%= @predefined_syndrome.class.name %>" data-id="<%= @predefined_syndrome.id %>"></span>
+    <%= react_component('Provider', {
+      render: 'Diagram',
+      context: {
+        instanceable: @predefined_syndrome,
+        instanceable_type: @diagnostic.class.name,
+        questions: @predefined_syndrome.questions_json,
+        availableNodes: @predefined_syndrome.available_nodes_json,
+      }
+    }) %>
+  </div>
+
+  <div class="col-md-1 text-right">
+    <%= link_to(I18n.t('close'), predefined_syndrome_url(params[:id]), class: 'btn btn-danger mt-2 mr-2') %>
+  </div>
+</div>

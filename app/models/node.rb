@@ -52,6 +52,22 @@ class Node < ApplicationRecord
     self.save
   end
 
+  # @return name of category
+  # Used as method for rendering all unused node in a diagnostic
+  def category_name
+    if category_id.present?
+      category.name
+    end
+  end
+
+  # @return [Array][Answers]
+  # Return answers if any
+  def get_answers
+    if defined? answers
+      answers
+    end
+  end
+
   private
 
   # @params nil

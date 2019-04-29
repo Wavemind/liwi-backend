@@ -15,7 +15,6 @@ class AdvancedLinkWidget extends DefaultLinkWidget {
     const difX = source.x - target.x,
       difY = source.y - target.y,
       isHorisontal = Math.abs(difX) > Math.abs(difY);
-
     return isHorisontal ? difX > 0 : difY > 0;
   }
 
@@ -32,10 +31,10 @@ class AdvancedLinkWidget extends DefaultLinkWidget {
     extraProps: any,
     id: string | number
   ): Element<"g"> {
-    const { diagramEngine, link } = this.props,
-      { selected } = this.state;
+    const { diagramEngine, link } = this.props;
+    const { selected } = this.state;
 
-    let inversed = this.getDirection(link.sourcePort, link.targetPort);
+    // let inversed = this.getDirection(link.sourcePort, link.targetPort);
 
     const Link = React.cloneElement(
       diagramEngine
@@ -44,8 +43,7 @@ class AdvancedLinkWidget extends DefaultLinkWidget {
           link,
           this,
           selected || link.isSelected(),
-          path,
-          inversed,
+          path
         ),
       {
         ...extraProps,

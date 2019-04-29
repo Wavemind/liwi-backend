@@ -61,27 +61,29 @@ module ModelMacros
       s2 = Question.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2123123', category: @symptom, priority: Question.priorities[:mandatory], answer_type: @boolean)
       p13 = Question.create!(algorithm: @algorithm, label_en: 'Lower chest indrawing', reference: '1331231231', category: @physical_exam, priority: Question.priorities[:basic], answer_type: @boolean)
       p3 = Question.create!(algorithm: @algorithm, label_en: 'Respiratory rate', reference: '34123123', category: @physical_exam, priority: Question.priorities[:triage], answer_type: @input_integer)
-      p1 = Question.create!(algorithm: @algorithm, label_en: 'SAO2', reference: '1123123', category: @physical_exam, priority: Question.priorities[:triage], answer_type: @input_integer)
+      @p1 = Question.create!(algorithm: @algorithm, label_en: 'SAO2', reference: '1123123', category: @physical_exam, priority: Question.priorities[:triage], answer_type: @input_integer)
 
       # Answers
       @s2_1 = s2.answers.first
+      @p1_1 = Answer.create!(node: @p1, reference: '1', label_en: '>/= 90%', value: '90', operator: Answer.operators[:more_or_equal])
       @p3_2 = Answer.create!(node: p3, reference: '2', label_en: '>/= 97th%ile', value: '97', operator: Answer.operators[:more_or_equal])
       @p13_1 = p13.answers.first
 
       # Diagnostics
       @dd7 = Diagnostic.create!(version: epoc_first, label_en: 'Severe LRTI', reference: '7')
-      df7 = FinalDiagnostic.create!(label_en: 'Severe lower respiratory tract infection', reference: '7', diagnostic: @dd7)
+      @df7 = FinalDiagnostic.create!(label_en: 'Severe lower respiratory tract infection', reference: '7', diagnostic: @dd7)
 
       # Instances
-      @dd7_p1 = Instance.create!(instanceable: @dd7, node: p1)
-      @dd7_df7 = Instance.create!(instanceable: @dd7, node: df7)
+      @dd7_p1 = Instance.create!(instanceable: @dd7, node: @p1)
+      @dd7_s2 = Instance.create!(instanceable: @dd7, node: s2)
+      @dd7_df7 = Instance.create!(instanceable: @dd7, node: @df7)
 
       # PS
       ps_category = Category.create!(reference_prefix: 'PS', name_en: 'Predefined syndrome', parent: 'PredefinedSyndrome')
       ps6 = PredefinedSyndrome.create!(algorithm: @algorithm, reference: '6', label_en: 'Able to drink', category: ps_category)
 
       # Children
-      Child.create!(instance: @dd7_p1, node: df7)
+      Child.create!(instance: @dd7_p1, node: @df7)
       Child.create!(instance: @dd7_df7, node: ps6)
     end
   end

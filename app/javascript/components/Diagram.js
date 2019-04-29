@@ -6,55 +6,45 @@ import {
 import * as React from "react";
 import * as _ from "lodash";
 
-import AdvancedLinkFactory from '../react-diagram/factories/AdvancedLinkFactory';
-import AdvancedNodeFactory from '../react-diagram/factories/AdvancedNodeFactory';
-import AdvancedNodeModel from '../react-diagram/models/AdvancedNodeModel';
+import AdvancedLinkFactory from "../react-diagram/factories/AdvancedLinkFactory";
+import AdvancedNodeFactory from "../react-diagram/factories/AdvancedNodeFactory";
+import AdvancedNodeModel from "../react-diagram/models/AdvancedNodeModel";
+
+import NodeList from "../react-diagram/lists/NodeList";
+import Http from "../http";
+
+import { withDiagram } from '../context/Diagram.context';
 
 class Diagram extends React.Component {
 
-  componentDidMount(){
-  // Add css class to the 'and' nodes in order to make them invisible and simulate an and link
-    for (let e of document.getElementsByClassName('srd-default-node__name')) {
-      if (e.innerText === ''){ // And boxes
-        e.parentElement.parentElement.classList.add("and");
-      } else if (e.innerText.indexOf(" - ") === -1){ // Titles box
-        e.parentElement.parentElement.classList.add("node-titles");
-      } else { // Node boxes
-        let node = e.parentElement.parentElement;
-        node.dataset.reference = e.innerText.substring(0, e.innerText.indexOf(" - "));
-        node.dataset.diagnostic = this.props.diagnostic.id;
-        node.addEventListener("click", editInstance)
-      }
-    }
+  constructor() {
+    super();
+    this.state = {
+      engine: new DiagramEngine()
+    };
   }
 
-  // Get full label of an object
-  getFullLabel = (obj) => {
-    return obj.reference + ' - ' + obj.label_translations['en'];
-  };
-
-  // Create a node from label with its inport
-  createNode = (label, reference = null, dbId = null, color = "rgb(255,255,255)") => {
-    let node = new AdvancedNodeModel(label, reference, dbId, color);
-    node.addInPort(' ');
-    return node;
-  };
-
-  render = () => {
+  componentWillMount() {
     const {
+      instanceableType,
       questions,
       finalDiagnostics,
-      healthCares
+      healthCares,
     } = this.props;
 
+    const { engine } = this.state;
+
+    // Setup the diagram model
+    let model = new DiagramModel();
+
+    // Init http class
+    const http = new Http();
+
     // Setup the diagram engine
-    let engine = new DiagramEngine();
     engine.installDefaultFactories();
     engine.registerLinkFactory(new AdvancedLinkFactory());
     engine.registerNodeFactory(new AdvancedNodeFactory());
 
-    // Setup the diagram model
-    let model = new DiagramModel();
 
     let nodes = []; // Save nodes to link them at the end
     let nodeLevels = []; // Save nodes level to position them at the end
@@ -62,10 +52,10 @@ class Diagram extends React.Component {
     // Create nodes for PS and questions
     questions.map((levels) => {
       let currentLevel = [];
-      levels.map((relation) => {
-        let node = this.createNode(this.getFullLabel(relation.node), relation.node.reference, relation.node.id);
+      levels.map((instance) => {
+        let node = this.createNode(instance.node, instance.node.answers);
         currentLevel.push(node);
-        relation.node.answers.map((answer) => (node.addOutPort(this.getFullLabel(answer))));
+        instance.node.answers.map((answer) => (node.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
         nodes.push(node);
         model.addAll(node);
       });
@@ -77,145 +67,107 @@ class Diagram extends React.Component {
 
     // Create nodes for final diagnostics
     let dfLevel = [];
+    let excludingDF = null;
 
-    finalDiagnostics.map((df) => {
-      let node = this.createNode(this.getFullLabel(df), df.reference, df.id);
-      if (df.final_diagnostic_id !== null) {
-        node.addOutPort(this.getFullLabel(_.find(finalDiagnostics, ["id", df.final_diagnostic_id])));
-      }
-      dfLevel.push(node);
-      nodes.push(node);
-      model.addAll(node);
-      instances.push(df.instances[0])
-    });
+    if (instanceableType === 'Diagnostic') {
+      finalDiagnostics.map((instance) => {
+        let df = instance.node;
+        let node = this.createNode(df);
+        if (df.final_diagnostic_id !== null) {
+          excludingDF = df;
+          node.addOutPort(this.getFullLabel(_.find(finalDiagnostics, ["id", df.final_diagnostic_id])), df.reference, df.id);
+        }
+        dfLevel.push(node);
+        nodes.push(node);
+        model.addAll(node);
+        instances.push(instance);
+      });
 
-    // Excluded diagnostic
-    finalDiagnostics.map((df) => {
-      if (df.final_diagnostic_id !== null) {
-        let mainDF = _.find(dfLevel, ["dbId", df.id]);
-        let excludedDF = _.find(dfLevel, ["dbId", df.final_diagnostic_id]);
+      // Excluded diagnostic
+      if (excludingDF !== null) {
+        let mainDF = _.find(dfLevel, ["node.id", excludingDF.id]);
+        let excludedDF = _.find(dfLevel, ["node.id", excludingDF.final_diagnostic_id]);
 
         let link = mainDF.getOutPort().link(excludedDF.getInPort());
         link.displaySeparator(true);
 
         model.addAll(link);
       }
-    });
 
-    nodeLevels.push(dfLevel);
+      nodeLevels.push(dfLevel);
 
-    let hcLevel = [];
-    let hcConditions = [];
-    let conditionRefs = {};
+      let hcLevel = [];
+      let hcConditions = [];
+      let conditionRefs = {};
 
-    // Create nodes for treatments and managements
-    healthCares.map((healthCare) => {
-      let node = this.createNode(this.getFullLabel(healthCare.node), healthCare.node.reference, healthCare.node.dbId);
-      // Get condition nodes of treatments and managements
-      if (healthCare.conditions != null && healthCare.conditions.length > 0) {
-        healthCare.conditions.map((condition) => {
-          let answerNode = condition.first_conditionable.node;
-          let condNode;
-          if (!(answerNode.reference in conditionRefs)) {
-            condNode = this.createNode(this.getFullLabel(answerNode), answerNode.reference, answerNode.id);
+      // Create nodes for treatments and managements
+      healthCares.map((healthCare) => {
+        let node = this.createNode(healthCare.node);
+        // Get condition nodes of treatments and managements
+        if (healthCare.conditions != null && healthCare.conditions.length > 0) {
+          healthCare.conditions.map((condition) => {
+            let answerNode = condition.first_conditionable.node;
+            let condNode;
+            if (!(answerNode.reference in conditionRefs)) {
+              condNode = this.createNode(answerNode, answerNode.answers);
 
-            answerNode.answers.map((answer) => (condNode.addOutPort(this.getFullLabel(answer))));
+              answerNode.answers.map((answer) => (condNode.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
 
-            hcConditions.push(condNode);
-            conditionRefs[answerNode.reference] = condNode;
-            model.addAll(condNode);
-          } else {
-            condNode = _.find(hcConditions, ["name", this.getFullLabel(answerNode)]);
-          }
-          model.addAll(_.find(condNode.getOutPorts(), ["label", this.getFullLabel(condition.first_conditionable)]).link(node.getInPort()));
-        });
-      }
+              hcConditions.push(condNode);
+              conditionRefs[answerNode.reference] = condNode;
+              model.addAll(condNode);
+            } else {
+              condNode = _.find(hcConditions, ["reference", answerNode.reference]);
+            }
+            model.addAll(_.find(condNode.getOutPorts(), ["label", this.getFullLabel(condition.first_conditionable)]).link(node.getInPort()));
+          });
+        }
 
-      hcLevel.push(node);
-      model.addAll(node);
-    });
+        hcLevel.push(node);
+        model.addAll(node);
+      });
 
-    nodeLevels.push(hcConditions);
-    nodeLevels.push(hcLevel);
+      nodeLevels.push(hcConditions);
+      nodeLevels.push(hcLevel);
+    }
 
     // Positions nodes in a horizontal way
-    let height = 500;
+    let width = 1400;
     let x = 0;
     let y = 60;
     nodeLevels.map((level) => {
-      let space = height - (level.length * 100);
-      y += space / 2;
+      let nbNodes = level.length;
+      let totalSpace = width - (nbNodes * 200);
+      let marges = totalSpace - ((nbNodes - 1) * 120);
+      x += marges / 2
       level.map((node) => {
         node.setPosition(x, y);
-        y += 150;
+        x += 200 + 120;
       });
-      y = 60;
-      x += 320;
+      x = 0;
+      if (level.length > 0) {
+        y += 200;
+      }
     });
-
-    // Titles
-    x = 0;
-    y = 0;
-    let yBot = 700;
-    let qTitle = this.createNode("Questions and Predefined syndromes");
-    qTitle.setPosition(x, y);
-    x += (300 * questions.length);
-
-    let dfTitle = this.createNode("Final diagnostics");
-    let dfBotTitle = this.createNode(' ');
-    dfTitle.setPosition(x - 50, y);
-    dfBotTitle.setPosition(x - 50, yBot);
-
-    x += 400;
-
-    let dfLink = dfTitle.getInPort().link(dfBotTitle.getInPort());
-    dfLink.displayArrow(false);
-    dfLink.displaySeparator(true);
-
-
-    if (hcConditions.length > 0) {
-      let hcCondTitle = this.createNode("Treatments and Managements conditions");
-      let hcCondBotTitle = this.createNode(' ');
-      let hcCondLink = hcCondTitle.getInPort().link(hcCondBotTitle.getInPort());
-
-      hcCondTitle.setPosition(x - 50, y);
-      hcCondBotTitle.setPosition(x - 50, yBot);
-
-      x += 400;
-
-      hcCondLink.displayArrow(false);
-      hcCondLink.displaySeparator(true);
-
-      model.addAll(hcCondTitle, hcCondBotTitle, hcCondLink);
-    }
-
-    let hcTitle = this.createNode("Treatments and Managements");
-    hcTitle.setPosition(x - 50, y);
-    let hcBotTitle = this.createNode(' ');
-    hcBotTitle.setPosition(x - 50, yBot);
-    let hcTitleLink = hcTitle.getInPort().link(hcBotTitle.getInPort());
-    hcTitleLink.displayArrow(false);
-    hcTitleLink.displaySeparator(true);
-
-    model.addAll(qTitle, dfTitle, dfBotTitle, dfLink, hcTitle, hcBotTitle, hcTitleLink);
 
     // Create links between nodes
     nodes.map((node, index) => {
       instances[index].conditions.map((condition) => {
         let firstAnswer = condition.first_conditionable;
-        let firstNodeAnswer = _.find(nodes, ["name", this.getFullLabel(firstAnswer.node)]);
+        let firstNodeAnswer = _.find(nodes, ["reference", firstAnswer.node.reference]);
 
-        if (condition.second_conditionable_id !== null && condition.operator === 'and_operator') {
+        if (condition.second_conditionable_id !== null && condition.operator === "and_operator") {
           let secondAnswer = condition.second_conditionable;
-          let secondNodeAnswer = _.find(nodes, ["name", this.getFullLabel(secondAnswer.node)]);
+          let secondNodeAnswer = _.find(nodes, ["reference", secondAnswer.node.reference]);
 
-          let andNode = this.createNode(' ', "rgba(f,f,f, 0)");
-          andNode.setPosition( Math.min(firstNodeAnswer.x, secondNodeAnswer.x) + 250, firstNodeAnswer.y + 50);
-          andNode.addOutPort(' ');
+          let andNode = new AdvancedNodeModel("AND", "", "", "");
+          andNode.addInPort(" ");
+          andNode.setPosition(Math.min(firstNodeAnswer.x, secondNodeAnswer.x) + 200, firstNodeAnswer.y + 100);
+          andNode.addOutPort(" ");
 
           let firstLink = _.find(firstNodeAnswer.getOutPorts(), ["label", this.getFullLabel(firstAnswer)]).link(andNode.getInPort());
-          let secondLink =  _.find(secondNodeAnswer.getOutPorts(), ["label", this.getFullLabel(secondAnswer)]).link(andNode.getInPort());
-          let andLink = andNode.getInPort().link(node.getInPort());
+          let secondLink = _.find(secondNodeAnswer.getOutPorts(), ["label", this.getFullLabel(secondAnswer)]).link(andNode.getInPort());
+          let andLink = andNode.getOutPort().link(node.getInPort());
 
           firstLink.displayArrow(false);
           secondLink.displayArrow(false);
@@ -228,13 +180,135 @@ class Diagram extends React.Component {
       });
     });
 
+
+    // Set eventListener for create link
+    model.addListener({
+      linksUpdated: function(eventModel) {
+        // Disable link from inPort
+        if (eventModel.link.sourcePort.in) {
+          if (model.getLink(eventModel.link.id) !== null) {
+            model.removeLink(eventModel.link.id)
+          }
+        }
+
+        eventModel.link.addListener({
+          targetPortChanged: function(eventLink) {
+            let exists = false;
+
+            // Verify if link is already set
+            Object.keys(eventModel.entity.links).map(index => {
+              let link = eventModel.entity.links[index];
+              let portEntity = eventLink.entity;
+              if (link.id !== portEntity.id && (link.sourcePort.id === portEntity.sourcePort.id && link.targetPort.parent.id === portEntity.targetPort.parent.id)) {
+                exists = true;
+              }
+            });
+
+            let nodeId = eventLink.port.parent.node.id;
+            let answerId = eventModel.link.sourcePort.dbId;
+            http.createLink(nodeId, answerId);
+          }
+        });
+      },
+    });
+
     // load model into engine
     engine.setDiagramModel(model);
+    this.updateEngine(engine);
+  }
 
-    // render the diagram!
-    model.setLocked(true);
-    return <DiagramWidget className="srd-demo-canvas" diagramEngine={engine} allowLooseLinks={false} allowCanvasZoom={false} />;
+  updateEngine = (engine) => {
+    this.setState({ engine });
+  };
+
+  // @params node
+  // Get full label of an object
+  getFullLabel = (node) => {
+    return node.label_translations["en"];
+  };
+
+  // Create a node from label with its inport
+  createNode = (node, outPorts = [], color = "rgb(255,255,255)") => {
+    const { addNode } = this.props;
+
+    let advancedNode = new AdvancedNodeModel(node, node.reference, outPorts, color, addNode);
+    advancedNode.addInPort(" ");
+    return advancedNode;
+  };
+
+  render = () => {
+    const { engine } = this.state;
+    const { removeNode } = this.props;
+
+    const http = new Http();
+
+    let model = engine.getDiagramModel();
+
+    return (
+      <div className="content">
+        <ul className="nav">
+          <li className="nav-item">
+            <div className="pt-2"
+                 draggable={true}
+                 onDragStart={event => {
+                   event.dataTransfer.setData("node", JSON.stringify('AND'));
+                 }}
+            >
+              AND
+            </div>
+          </li>
+        </ul>
+        <div className="row">
+          <div className="col-md-2 px-0">
+            <NodeList />
+          </div>
+          <div
+            className="col-md-10 mt-2"
+            onDrop={async event => {
+              let nodeDb = JSON.parse(event.dataTransfer.getData("node"));
+              let points = engine.getRelativeMousePoint(event);
+              let nodeDiagram = {};
+
+              // Create new node
+              // else
+              // create AND node
+              if (nodeDb !== 'AND') {
+                if (nodeDb.get_answers !== null) {
+                  nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers);
+                  nodeDb.get_answers.map((answer) => (nodeDiagram.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
+                } else {
+                  nodeDiagram = this.createNode(nodeDb);
+                }
+
+                await http.createInstance(nodeDb.id);
+                removeNode(nodeDb);
+              } else {
+                nodeDiagram = new AdvancedNodeModel("AND", "", "", "");
+                nodeDiagram.addInPort(" ");
+                nodeDiagram.addOutPort(" ");
+              }
+
+              nodeDiagram.x = points.x;
+              nodeDiagram.y = points.y;
+
+              model.addAll(nodeDiagram);
+              this.updateEngine(engine);
+            }}
+            onDragOver={event => {
+              event.preventDefault();
+            }}
+          >
+            <DiagramWidget
+              className="srd-demo-canvas"
+              diagramEngine={engine}
+              allowCanvasZoom={false}
+              maxNumberPointsPerLink={0}
+            />
+          </div>
+        </div>
+      </div>
+    );
   };
 }
 
-export default Diagram;
+export default withDiagram(Diagram);

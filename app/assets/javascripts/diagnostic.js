@@ -16,7 +16,6 @@ jQuery(document).ready(function () {
 });
 
 function editInstance() {
-  console.log(this);
   $.ajax({
     url: window.location.origin + "/diagnostics/" + this.dataset.diagnostic + "/instances/by_reference",
     data: {reference: this.dataset.reference},

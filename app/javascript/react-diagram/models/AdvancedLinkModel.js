@@ -1,5 +1,6 @@
 import { DefaultLinkModel, DiagramEngine } from "storm-react-diagrams";
 import * as _ from "lodash";
+import Http from "../../http";
 
 class AdvancedLinkModel extends DefaultLinkModel {
   width: number;
@@ -17,6 +18,21 @@ class AdvancedLinkModel extends DefaultLinkModel {
     this.markers = { startMarker: true, endMarker: false };
     this.arrow = true;
     this.separator = false;
+
+    const http = new Http();
+
+    this.addListener({
+      entityRemoved: function(removedLink) {
+        let nodeId = removedLink.entity.targetPort.parent.node.id;
+        let answerId = removedLink.entity.sourcePort.dbId;
+        let selected = removedLink.entity.selected;
+
+        // Don't trigger automatic removing link since node does it already
+        if (selected) {
+          http.removeLink(nodeId, answerId);
+        }
+      },
+    });
   }
 
   serialize() {

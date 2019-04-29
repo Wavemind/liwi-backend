@@ -1,7 +1,8 @@
 class PredefinedSyndromesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_predefined_syndrome, only: [:edit, :update, :destroy, :show, :update_translations]
+  before_action :set_predefined_syndrome, only: [:edit, :update, :destroy, :show, :update_translations, :diagram]
   before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy]
+  layout 'diagram', only: [:diagram]
 
   def show
     # Retrieve algorithm, since the show is not in the same route
@@ -65,6 +66,10 @@ class PredefinedSyndromesController < ApplicationController
       @json = { status: 'alert', message: t('flash_message.update_fail')}
       render 'diagnostics/update_translations', formats: :js, status: :unprocessable_entity
     end
+  end
+
+  # React Diagram
+  def diagram
   end
 
   private

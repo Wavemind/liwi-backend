@@ -233,11 +233,7 @@ td {
 }
 
 .srd-demo-canvas {
-  height: 100%;
-  min-height: 800px;
-  //background-color: #3c3c3c !important;
-  //background-image: linear-gradient(0deg, transparent 24%, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.05) 75%, rgba(255, 255, 255, 0.05) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.05) 75%, rgba(255, 255, 255, 0.05) 76%, transparent 77%, transparent);
-  background-size: 50px 50px;
+  height: 100vh;
 }
 
 .srd-default-node {
@@ -266,7 +262,10 @@ td {
 }
 
 .and {
-  visibility: hidden;
+  .srd-node & {
+    min-width: 30px !important;
+    max-width: 30px !important;
+  }
 }
 
 .srd-default-link path {
@@ -288,6 +287,7 @@ td {
 
 .srd-default-node__ports {
   font-size: 9pt;
+  margin: 0;
 }
 
 .srd-default-port {
@@ -303,4 +303,55 @@ td {
 
 .name {
   padding-right: 5px;
+}
+
+// Node diagram display
+.node {
+  cursor: pointer;
+  background-color: #fff;
+  font-size: 10px;
+  color: #fff;
+  border: 1px solid gray;
+  .srd-node & {
+    min-width: 120px;
+  }
+}
+
+.node-category {
+  display: flex;
+  background-color: gray;
+  align-items: center;
+  justify-content: center;
+}
+
+.node-label {
+  display: flex;
+  color: #000;
+  font-size: 14px;
+}
+
+.node-answers {
+  display: flex;
+  color: #000;
+  border-top: 1px solid gray;
+  font-size: 12px;
+}
+
+.answer-split {
+  border-right: 1px solid gray;
+
+  &:hover,&.selected{
+    background: pink;
+  }
+
+  &:last-child {
+    border-right: none;
+  }
+}
+
+.srd-port {
+  position: absolute;
+  z-index: 10;
+  top: -8px;
+  align-item: center;
 }

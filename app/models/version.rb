@@ -13,6 +13,8 @@ class Version < ApplicationRecord
 
   validates_uniqueness_of :name, scope: :algorithm
 
+  # @return [String]
+  # Return a displayable string for this version
   def display_label
     "#{algorithm.name} - #{name}"
   end

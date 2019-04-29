@@ -4,11 +4,6 @@
 
 <body>
 <main role="main" class="container-fluid">
-  <div class="row">
-    <div class="col text-right">
-      <%= link_to(I18n.t('close'), algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], params[:id]), class: 'btn btn-danger mt-2 mr-2') %>
-    </div>
-  </div>
 
   <%= yield %>
 
