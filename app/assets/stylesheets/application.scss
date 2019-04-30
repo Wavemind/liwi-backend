@@ -373,3 +373,23 @@ td {
   background-color:cadetblue;
   top: -10px;
 }
+
+.inExcluded {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  background-color: pink;
+  top: 50%;
+  bottom: 50%;
+  right: -10px;
+}
+
+.outExcluded {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  background-color: red;
+  top: 50%;
+  bottom: 50%;
+  left: -10px;
+}
