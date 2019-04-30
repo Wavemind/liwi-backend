@@ -133,7 +133,7 @@ class Diagnostic < ApplicationRecord
   # @return [Json]
   # Return available nodes in the algorithm in json format
   def available_nodes_json
-    (version.algorithm.nodes.where.not(id: components.select(:node_id)) + final_diagnostics).as_json(methods: [:category_name, :type, :get_answers])
+    (version.algorithm.nodes.where.not(id: components.select(:node_id)) + final_diagnostics.where.not(id: components.select(:node_id))).as_json(methods: [:category_name, :type, :get_answers])
   end
 
   private

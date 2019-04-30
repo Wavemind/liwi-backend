@@ -265,7 +265,9 @@ class Diagram extends React.Component {
         </ul>
         <div className="row">
           <div className="col-md-2 px-0">
-            <NodeList />
+            <section className="node-list">
+              <NodeList />
+            </section>
             <button className="btn btn-primary mt-2 mr-2" onClick={() => {this.initDiagram()}}>Order node</button>
           </div>
           <div
@@ -305,7 +307,7 @@ class Diagram extends React.Component {
             }}
           >
             <DiagramWidget
-              className="srd-demo-canvas"
+              className="srd-canvas"
               diagramEngine={engine}
               allowCanvasZoom={false}
               maxNumberPointsPerLink={0}

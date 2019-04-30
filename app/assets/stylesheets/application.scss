@@ -224,7 +224,6 @@ td {
 
 
 .docs-preview-wrapper {
-  //background: #3c3c3c;
   border-radius: 10px;
   overflow: hidden;
   padding: 10px;
@@ -232,8 +231,9 @@ td {
   margin-bottom: 20px;
 }
 
-.srd-demo-canvas {
-  height: 100vh;
+.srd-canvas {
+  height: 95vh;
+  overflow:scroll
 }
 
 .srd-default-node {
@@ -372,4 +372,10 @@ td {
 .in-port {
   background-color:cadetblue;
   top: -10px;
+}
+
+.node-list {
+  overflow-x: hidden;
+  overflow-y: auto;
+  height:90vh;
 }
