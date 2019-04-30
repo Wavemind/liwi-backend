@@ -25,6 +25,10 @@ class Diagram extends React.Component {
   }
 
   componentWillMount() {
+    this.initDiagram();
+  }
+
+  initDiagram = () => {
     const {
       instanceableType,
       questions,
@@ -44,7 +48,6 @@ class Diagram extends React.Component {
     engine.installDefaultFactories();
     engine.registerLinkFactory(new AdvancedLinkFactory());
     engine.registerNodeFactory(new AdvancedNodeFactory());
-
 
     let nodes = []; // Save nodes to link them at the end
     let nodeLevels = []; // Save nodes level to position them at the end
@@ -139,7 +142,7 @@ class Diagram extends React.Component {
       let nbNodes = level.length;
       let totalSpace = width - (nbNodes * 200);
       let marges = totalSpace - ((nbNodes - 1) * 120);
-      x += marges / 2
+      x += marges / 2;
       level.map((node) => {
         node.setPosition(x, y);
         x += 200 + 120;
@@ -215,8 +218,10 @@ class Diagram extends React.Component {
     // load model into engine
     engine.setDiagramModel(model);
     this.updateEngine(engine);
-  }
+  };
 
+  // @params engine
+  // Set state of engine
   updateEngine = (engine) => {
     this.setState({ engine });
   };
@@ -261,6 +266,7 @@ class Diagram extends React.Component {
         <div className="row">
           <div className="col-md-2 px-0">
             <NodeList />
+            <button className="btn btn-primary mt-2 mr-2" onClick={() => {this.initDiagram()}}>Order node</button>
           </div>
           <div
             className="col-md-10 mt-2"
