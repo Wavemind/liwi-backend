@@ -8,7 +8,7 @@ export default class Http {
   instanceableType;
 
   constructor() {
-    let data = document.querySelector("span");
+    let data = document.querySelector("p");
 
     this.url = window.location.origin;
     this.instanceableId = data.dataset.id;

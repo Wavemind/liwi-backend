@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-md-11">
-    <span data-type="<%= @diagnostic.class.name %>" data-id="<%= @diagnostic.id %>"></span>
+    <p data-type="<%= @diagnostic.class.name %>" data-id="<%= @diagnostic.id %>"></p>
     <%= react_component('Provider', {
       render: 'Diagram',
       context: {
