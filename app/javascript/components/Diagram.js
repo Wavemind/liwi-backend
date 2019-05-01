@@ -13,6 +13,8 @@ import AdvancedNodeModel from "../react-diagram/models/AdvancedNodeModel";
 import NodeList from "../react-diagram/lists/NodeList";
 import Http from "../http";
 
+import FormModal from "./FormModal";
+
 import { withDiagram } from '../context/Diagram.context';
 
 class Diagram extends React.Component {
@@ -251,6 +253,7 @@ class Diagram extends React.Component {
 
     return (
       <div className="content">
+        <FormModal/>
         <ul className="nav">
           <li className="nav-item">
             <div className="pt-2"

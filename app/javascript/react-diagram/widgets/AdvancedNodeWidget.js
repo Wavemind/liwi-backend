@@ -1,6 +1,7 @@
 import * as React from "react";
 import { BaseWidget } from "storm-react-diagrams";
 import AdvancedNodeModel from "../models/AdvancedNodeModel";
+import { withDiagram} from "../../context/Diagram.context";
 
 export interface AdvancedNodeWidgetProps {
   diagramNode: AdvancedNodeModel;
@@ -32,6 +33,12 @@ class AdvancedNodeWidget extends BaseWidget<AdvancedNodeWidgetProps, AdvancedNod
     );
   }
 
+  setContextState = (id) => {
+    const {set} = this.props;
+
+    set("currentNodeId", id);
+    set("modalIsOpen", true);
+  };
 
   render() {
     const { diagramNode } = this.props;
@@ -47,6 +54,7 @@ class AdvancedNodeWidget extends BaseWidget<AdvancedNodeWidgetProps, AdvancedNod
       <div className={`node ${(diagramNode.node === 'AND') ? 'and' : ''}`}>
         <div className="port py-2 node-category">
           <div className="port srd-port in-port" data-name={inPort.name} data-nodeid={inPort.parent.id} />
+          {(diagramNode.node === 'AND') ? '' : <div className="condition-container"><a href="#" onClick={() => this.setContextState(inPort.parent.node.id)} className="manage-conditions">Conds</a></div>}
           <div className="col pl-2 pr-0 text-left">
             {(diagramNode.node === 'AND') ? 'AND' : diagramNode.node.reference}
           </div>
@@ -77,4 +85,4 @@ class AdvancedNodeWidget extends BaseWidget<AdvancedNodeWidgetProps, AdvancedNod
   }
 }
 
-export default AdvancedNodeWidget;
+export default withDiagram(AdvancedNodeWidget);

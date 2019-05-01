@@ -233,7 +233,6 @@ td {
 
 .srd-canvas {
   height: 95vh;
-  overflow:scroll
 }
 
 .srd-default-node {
@@ -378,4 +377,21 @@ td {
   overflow-x: hidden;
   overflow-y: auto;
   height:90vh;
+}
+
+.manage-conditions {
+  z-index: 15;
+  color: blue;
+  margin-left: auto;
+  margin-right: auto;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  &:hover {
+    font-weight: bold;
+  }
+}
+
+.condition-container {
+  text-align: center
 }

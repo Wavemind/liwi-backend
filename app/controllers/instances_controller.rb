@@ -1,7 +1,7 @@
 class InstancesController < ApplicationController
 
   before_action :authenticate_user!
-  before_action :set_instanceable, only: [:show, :create, :destroy, :by_reference, :create_from_diagram, :remove_from_diagram, :create_link, :remove_link]
+  before_action :set_instanceable, only: [:show, :create, :destroy, :by_reference, :create_from_diagram, :remove_from_diagram, :create_link, :remove_link, :load_conditions]
   before_action :set_instance, only: [:show, :destroy]
   before_action :set_child, only: [:create_link, :remove_link]
   before_action :set_parent, only: [:create_link, :remove_link]
@@ -83,7 +83,7 @@ class InstancesController < ApplicationController
   # @params [Diagnostic] Current diagnostic, [Answer] Answer from parent of the link, [Node] child of the link
   # Create link in both way from diagram
   def create_link
-    @parent_instance.children.new(node: @child_node)
+    @parent_instance.children.new(node: @child_node) unless @child_node.is_a?(Treatment) || @child_node.is_a?(Management)
     @child_instance.conditions.new(first_conditionable: @parent_answer, top_level: true)
 
     if @parent_instance.save && @child_instance.save
@@ -91,6 +91,13 @@ class InstancesController < ApplicationController
     else
       render json: { status: 'alert', message: t('flash_message.update_fail')}
     end
+  end
+
+  # @params [Diagnostic] Current diagnostic [Node] child of the link
+  # Create link in both way from diagram
+  def load_conditions
+    instance = @instanceable.components.find_by(node_id: params[:node_id])
+    render json: instance.as_json(include: {conditions: { include: [first_conditionable: { include: [node: { include: [:answers]}]}, second_conditionable: { include: [node: { include: [:answers]}]}]}})
   end
 
   # POST /diagnostics/:diagnostic_id/instances/:node_id/remove_from_diagram
@@ -113,7 +120,7 @@ class InstancesController < ApplicationController
       Instance.remove_condition(cond, @parent_instance)
     end
 
-    if @parent_instance.children.find_by(node: @child_node).destroy
+    if !(@child_node.is_a?(Treatment) || @child_node.is_a?(Management)) && @parent_instance.children.find_by(node: @child_node).destroy
       render json: { status: 'success', message: t('flash_message.success_deleted')}
     else
       render json: { status: 'alert', message: t('flash_message.delete_fail')}

@@ -3,10 +3,13 @@
     "@rails/webpacker": "3.5",
     "@types/node": "^11.11.6",
     "babel-preset-react": "^6.24.1",
+    "bootstrap": "^4.3.1",
     "lodash": "^4.17.11",
     "prop-types": "^15.7.2",
     "react": "^16.8.4",
+    "react-bootstrap": "^1.0.0-beta.8",
     "react-dom": "^16.8.4",
+    "react-modal": "^3.8.1",
     "react_ujs": "^2.4.4",
     "storm-react-diagrams": "^5.2.1",
     "style-loader": "^0.23.1"

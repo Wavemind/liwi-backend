@@ -62,7 +62,7 @@ export default class DiagramProvider extends React.Component {
 
   addNode = async (node) => {
     const { availableNodes } = this.state;
-    availableNodes.push(node)
+    availableNodes.push(node);
     this.setState({availableNodes}, async () => {
       await this.orderNodes();
     });
@@ -79,6 +79,8 @@ export default class DiagramProvider extends React.Component {
     healthCares: null,
     availableNodes: null,
     orderedNodes: [],
+    modalIsOpen: false,
+    currentNodeId: null,
   };
 
   render() {

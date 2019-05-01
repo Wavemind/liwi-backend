@@ -60,6 +60,19 @@ export default class Http {
   };
 
 
+  getInstanceConditions = async (nodeId) => {
+    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/load_conditions?node_id=${nodeId}`;
+    const header = await this.setHeaders('GET');
+    const request = await fetch( url, header).catch(error => console.log(error));
+    let response = await request.json();
+    if (!request.ok) {
+      console.log(response.errors);
+    }
+    console.log('response', response);
+    return await response;
+  };
+
+
   // @params [Integer] nodeId
   // @return [Object] body of request
   // Delete an instance

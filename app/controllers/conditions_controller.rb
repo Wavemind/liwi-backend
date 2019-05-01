@@ -10,17 +10,29 @@ class ConditionsController < ApplicationController
     @condition.second_conditionable = @condition.create_conditionable(condition_params[:second_conditionable_id]) unless condition_params[:second_conditionable_id].empty?
 
     if @condition.save
-      redirect_to polymorphic_url([@instanceable, @instance]), notice: t('flash_message.success_created')
+      respond_to do |format|
+        format.html {}
+        format.json { render json: t('flash_message.success_created') }
+      end
     else
-      redirect_to polymorphic_url([@instanceable, @instance]), alert: t('error')
+      respond_to do |format|
+        format.html {}
+        format.json { render json: t('error') }
+      end
     end
   end
 
   def destroy
     if @condition.destroy
-      redirect_to polymorphic_url([@instanceable, @instance]), notice: t('flash_message.success_updated')
+      respond_to do |format|
+        format.html {}
+        format.json { render json: t('flash_message.success_created') }
+      end
     else
-      redirect_to polymorphic_url([@instanceable, @instance]), alert: t('error')
+      respond_to do |format|
+        format.html {}
+        format.json { render json: t('error') }
+      end
     end
   end
 
