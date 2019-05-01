@@ -45,7 +45,6 @@ class Diagram extends React.Component {
     engine.registerLinkFactory(new AdvancedLinkFactory());
     engine.registerNodeFactory(new AdvancedNodeFactory());
 
-
     let nodes = []; // Save nodes to link them at the end
     let nodeLevels = []; // Save nodes level to position them at the end
 
