@@ -59,7 +59,9 @@ export default class Http {
     return await response;
   };
 
-
+  // @params [Integer] nodeId
+  // @return [Object] response
+  // Get a condition with its conditions
   getInstanceConditions = async (nodeId) => {
     const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/load_conditions?node_id=${nodeId}`;
     const header = await this.setHeaders('GET');
@@ -71,6 +73,21 @@ export default class Http {
     return await response;
   };
 
+  removeCondition = async (instanceId, condID) => {
+    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/${instanceId}/conditions/${condID}`;
+    const body = {
+      instance: {
+        instanceable_id: this.instanceableId,
+        instanceable_type: this.instanceableType
+      }
+    };
+    const header = await this.setHeaders('DELETE', body);
+    const request = await fetch(url, header).catch(error => console.log(error));
+    if (!request.ok) {
+      console.log(body.errors);
+    }
+    return await body;
+  };
 
   // @params [Integer] nodeId
   // @return [Object] body of request

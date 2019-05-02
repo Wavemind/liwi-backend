@@ -25,7 +25,7 @@ class Answer < ApplicationRecord
   # Return the reference of the answer. This function is needed to do a recursive functional call
   # with conditions or answers, answer being the last level
   def display_condition
-    "answer: #{reference}"
+    "#{reference}"
   end
 
   # @return [String]
@@ -38,6 +38,10 @@ class Answer < ApplicationRecord
   # Create 1 automatic answer for tests/assessments if attr_accessor :unavailable in question is checked
   def self.create_unavailable(node_id)
     Answer.create!(node_id: node_id, reference: '100', label_en: I18n.t('answers.unavailable'))
+  end
+
+  def get_node
+    node.as_json(include: [:answers])
   end
 
   private

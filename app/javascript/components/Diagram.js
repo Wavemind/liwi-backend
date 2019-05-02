@@ -111,7 +111,7 @@ class Diagram extends React.Component {
         // Get condition nodes of treatments and managements
         if (healthCare.conditions != null && healthCare.conditions.length > 0) {
           healthCare.conditions.map((condition) => {
-            let answerNode = condition.first_conditionable.node;
+            let answerNode = condition.first_conditionable.get_node;
             let condNode;
             if (!(answerNode.reference in conditionRefs)) {
               condNode = this.createNode(answerNode, answerNode.answers);
@@ -159,11 +159,11 @@ class Diagram extends React.Component {
     nodes.map((node, index) => {
       instances[index].conditions.map((condition) => {
         let firstAnswer = condition.first_conditionable;
-        let firstNodeAnswer = _.find(nodes, ["reference", firstAnswer.node.reference]);
+        let firstNodeAnswer = _.find(nodes, ["reference", firstAnswer.get_node.reference]);
 
         if (condition.second_conditionable_id !== null && condition.operator === "and_operator") {
           let secondAnswer = condition.second_conditionable;
-          let secondNodeAnswer = _.find(nodes, ["reference", secondAnswer.node.reference]);
+          let secondNodeAnswer = _.find(nodes, ["reference", secondAnswer.get_node.reference]);
 
           let andNode = new AdvancedNodeModel("AND", "", "", "");
           andNode.addInPort(" ");

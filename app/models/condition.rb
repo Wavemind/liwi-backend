@@ -10,6 +10,9 @@ class Condition < ApplicationRecord
   belongs_to :first_conditionable, polymorphic: true
   belongs_to :second_conditionable, polymorphic: true, optional: true
 
+  after_create :create_children, unless: Proc.new { self.referenceable.is_a?(Diagnostic) }
+  before_destroy :remove_children, unless: Proc.new { self.referenceable.is_a?(Diagnostic) }
+
   scope :top_level, -> { where(top_level: true) }
   scope :low_level, -> { where(top_level: false) }
 
@@ -21,7 +24,36 @@ class Condition < ApplicationRecord
   # @return [String]
   # Return the id displayed for the view
   def display_condition
-    "#{first_conditionable.display_condition} #{operator.upcase unless operator.nil?} #{second_conditionable.display_condition unless second_conditionable.nil?}"
+    "(#{first_conditionable.display_condition} #{I18n.t("conditions.operators.#{operator}") unless operator.nil?} #{second_conditionable.display_condition unless second_conditionable.nil?})"
+  end
+
+  def create_children
+    create_child(self)
+  end
+
+  def create_child(condition)
+    if condition.first_conditionable.is_a?(Answer) && (!condition.first_conditionable.node.is_a?(Treatment) || !condition.first_conditionable.node.is_a?(Management))
+      Child.create!(instance: condition.first_conditionable.node.instances.find_by(instanceable: condition.referenceable.instanceable), node: condition.referenceable.node)
+    else
+      create_link(condition.first_conditionable)
+    end
+
+    if condition.second_conditionable.is_a?(Answer) && (!condition.second_conditionable.node.is_a?(Treatment) || !condition.second_conditionable.node.is_a?(Management))
+      Child.create!(instance: condition.second_conditionable.node.instances.find_by(instanceable: condition.referenceable.instanceable), node: condition.referenceable.node)
+    elsif second_conditionable.is_a?(Condition)
+      create_link(condition.second_conditionable)
+    end
+  end
+
+  def remove_children
+    Child.find_by(instance: first_conditionable.node.instances.find_by(instanceable: referenceable.instanceable),
+                node: referenceable.node).destroy! if first_conditionable.is_a?(Answer) && (!first_conditionable.node.is_a?(Treatment) || !first_conditionable.node.is_a?(Management))
+    Child.find_by(instance: second_conditionable.node.instances.find_by(instanceable: referenceable.instanceable),
+                node: referenceable.node).destroy! if second_conditionable.is_a?(Answer) && (!second_conditionable.node.is_a?(Treatment) || !second_conditionable.node.is_a?(Management))
+  end
+
+  def get_node
+    nil
   end
 
   # @return [String]

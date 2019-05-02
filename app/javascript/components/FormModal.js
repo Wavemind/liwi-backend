@@ -7,6 +7,7 @@ import {
   Col,
   Form
 } from "react-bootstrap";
+import * as _ from "lodash";
 import { withDiagram } from "../context/Diagram.context";
 import Http from "../http";
 
@@ -15,8 +16,10 @@ class FormModal extends React.Component {
     super(props);
     this.state = {
       instance: {
-        conditions: []
-      }
+        conditions: null
+      },
+      available_conditions: [],
+      operators: []
     };
   }
 
@@ -27,8 +30,12 @@ class FormModal extends React.Component {
   async componentWillReceiveProps(nextProps) {
     const { currentNodeId } = nextProps;
     const http = new Http();
-    let instance = await http.getInstanceConditions(currentNodeId);
-    await this.setState({ instance });
+    const json = await http.getInstanceConditions(currentNodeId);
+    await this.setState({
+      instance: json.instance,
+      available_conditions: json.available_conditions,
+      operators: json.operators
+    });
   }
 
   toggleModal = async () => {
@@ -36,11 +43,29 @@ class FormModal extends React.Component {
     await set("modalIsOpen", !modalIsOpen);
   };
 
+  removeCondition = async (id) => {
+    const http = new Http();
+    await http.removeCondition(this.state.instance.id, id);
+
+    let newInstance = {
+      ...this.state.instance,
+      conditions: [...this.state.instance.conditions],
+    };
+
+    _.remove(newInstance.conditions, function(condition) {
+      return condition.id === id;
+    });
+
+    await this.setState({
+      instance: newInstance,
+    });
+  };
+
   render() {
     const { modalIsOpen } = this.props;
-    const { instance } = this.state;
+    const { instance, available_conditions, operators } = this.state;
     return (
-      modalIsOpen && instance.conditions.length > 0 ? (
+      modalIsOpen && instance.conditions !== null ? (
         <Modal show={modalIsOpen} onHide={() => this.toggleModal()} size="lg">
           <Modal.Header closeButton>
             <Modal.Title>{instance.instanceable_type}</Modal.Title>
@@ -53,7 +78,7 @@ class FormModal extends React.Component {
                 <ListGroup.Item key={index}>
                   <Row>
                     <Col>{condition.first_conditionable_type}: {condition.first_conditionable.node.reference}</Col>
-                    <Col className="text-right"><Button variant="outline-danger">Remove</Button></Col>
+                    <Col className="text-right"><Button onClick={() => this.removeCondition(condition.id)} variant="outline-danger">Remove</Button></Col>
                   </Row>
                 </ListGroup.Item>
               ))}
@@ -66,58 +91,45 @@ class FormModal extends React.Component {
                 <Col>
                   <Form.Group controlId="exampleForm.ControlSelect1">
                     <Form.Control as="select">
-                      <option>1</option>
-                      <option>2</option>
-                      <option>3</option>
-                      <option>4</option>
-                      <option>5</option>
+                      {
+                        available_conditions.map((cond) => (
+                          <option>{cond.display_condition}</option>
+                        ))
+                      }
                     </Form.Control>
                   </Form.Group>
                 </Col>
                 <Col>
                   <Form.Group controlId="exampleForm.ControlSelect1">
                     <Form.Control as="select">
-                      <option>1</option>
-                      <option>2</option>
-                      <option>3</option>
-                      <option>4</option>
-                      <option>5</option>
+                      <option></option>
+                      {
+                        operators.map((operator) => (
+                          <option>{operator[0]}</option>
+                        ))
+                      }
                     </Form.Control>
                   </Form.Group>
                 </Col>
                 <Col>
                   <Form.Group controlId="exampleForm.ControlSelect1">
                     <Form.Control as="select">
-                      <option>1</option>
-                      <option>2</option>
-                      <option>3</option>
-                      <option>4</option>
-                      <option>5</option>
+                      <option></option>
+                      {
+                        available_conditions.map((cond) => (
+                          <option>{cond.display_condition}</option>
+                        ))
+                      }
                     </Form.Control>
                   </Form.Group>
                 </Col>
                 <Col className="text-right">
                   <Button variant="success">
-                    Save
+                    Add
                   </Button>
                 </Col>
               </Row>
             </Form>
-
-            <hr/>
-
-            <h2>Children</h2>
-            <ListGroup>
-              {instance.conditions.map((condition, index) => (
-                <ListGroup.Item key={index}>
-                  <Row>
-                    <Col>{condition.first_conditionable_type}: {condition.first_conditionable.node.reference}</Col>
-                    <Col className="text-right"><Button variant="outline-danger">Remove</Button></Col>
-                  </Row>
-                </ListGroup.Item>
-              ))}
-            </ListGroup>
-
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={() => this.toggleModal()}>
