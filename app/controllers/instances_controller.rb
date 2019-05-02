@@ -97,7 +97,25 @@ class InstancesController < ApplicationController
   def load_conditions
     instance = @instanceable.components.find_by(node_id: params[:node_id])
     available_conditions = (@instanceable.components.questions.includes(node:[:answers]).map(&:node).map(&:answers) + @instanceable.components.predefined_syndromes.includes(node:[:answers]).map(&:node).map(&:answers) + instance.conditions).flatten
-    render json: {instance: instance.as_json(include: {conditions: { include: [first_conditionable: { include: [node: { include: [:answers]}]}, second_conditionable: { include: [node: { include: [:answers]}]}]}}), available_conditions: available_conditions.as_json(methods: [:display_condition]), operators: Condition.operators.map { |k, v| [t("conditions.operators.#{k}"), k] }.as_json}
+    render json: {
+      instance: instance.as_json(
+        include: {
+          conditions: {
+            include: [
+              first_conditionable: {
+                include: [node: { include: [:answers]}]
+              },
+              second_conditionable: {
+                include: [
+                  node: { include: [:answers]}
+                ]
+              }
+            ],
+            methods: [:display_condition]
+          },
+        }
+      ),
+      available_conditions: available_conditions.as_json(methods: [:display_condition]), operators: Condition.operators.map { |k, v| [t("conditions.operators.#{k}"), k] }.as_json}
   end
 
   # POST /diagnostics/:diagnostic_id/instances/:node_id/remove_from_diagram

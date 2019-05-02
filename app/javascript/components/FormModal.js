@@ -5,7 +5,8 @@ import {
   ListGroup,
   Row,
   Col,
-  Form
+  Form,
+  Alert
 } from "react-bootstrap";
 import * as _ from "lodash";
 import { withDiagram } from "../context/Diagram.context";
@@ -64,6 +65,7 @@ class FormModal extends React.Component {
   render() {
     const { modalIsOpen } = this.props;
     const { instance, available_conditions, operators } = this.state;
+
     return (
       modalIsOpen && instance.conditions !== null ? (
         <Modal show={modalIsOpen} onHide={() => this.toggleModal()} size="lg">
@@ -71,18 +73,22 @@ class FormModal extends React.Component {
             <Modal.Title>{instance.instanceable_type}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-
-            <h2>Conditions</h2>
+            {instance.conditions.length > 0 ? (
             <ListGroup>
               {instance.conditions.map((condition, index) => (
                 <ListGroup.Item key={index}>
                   <Row>
-                    <Col>{condition.first_conditionable_type}: {condition.first_conditionable.node.reference}</Col>
+                    <Col>{condition.display_condition}</Col>
                     <Col className="text-right"><Button onClick={() => this.removeCondition(condition.id)} variant="outline-danger">Remove</Button></Col>
                   </Row>
                 </ListGroup.Item>
               ))}
             </ListGroup>
+            ) : (
+              <Alert variant="info">
+                there are no conditions
+              </Alert>
+            )}
 
             <hr/>
 
@@ -91,9 +97,10 @@ class FormModal extends React.Component {
                 <Col>
                   <Form.Group controlId="exampleForm.ControlSelect1">
                     <Form.Control as="select">
+                      <option>Select</option>
                       {
                         available_conditions.map((cond) => (
-                          <option>{cond.display_condition}</option>
+                          <option value={cond.id}>{cond.display_condition}</option>
                         ))
                       }
                     </Form.Control>
@@ -102,7 +109,7 @@ class FormModal extends React.Component {
                 <Col>
                   <Form.Group controlId="exampleForm.ControlSelect1">
                     <Form.Control as="select">
-                      <option></option>
+                      <option>Select</option>
                       {
                         operators.map((operator) => (
                           <option>{operator[0]}</option>
@@ -114,10 +121,10 @@ class FormModal extends React.Component {
                 <Col>
                   <Form.Group controlId="exampleForm.ControlSelect1">
                     <Form.Control as="select">
-                      <option></option>
+                      <option>Select</option>
                       {
                         available_conditions.map((cond) => (
-                          <option>{cond.display_condition}</option>
+                          <option value={cond.id}>{cond.display_condition}</option>
                         ))
                       }
                     </Form.Control>
