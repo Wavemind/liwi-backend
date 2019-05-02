@@ -68,7 +68,6 @@ export default class Http {
     if (!request.ok) {
       console.log(response.errors);
     }
-    console.log('response', response);
     return await response;
   };
 

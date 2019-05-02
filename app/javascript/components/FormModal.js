@@ -1,53 +1,131 @@
-import React from 'react';
+import React from "react";
 import {
   Button,
   Modal,
-} from 'react-bootstrap';
-import { withDiagram } from '../context/Diagram.context';
-import Http from '../http';
+  ListGroup,
+  Row,
+  Col,
+  Form
+} from "react-bootstrap";
+import { withDiagram } from "../context/Diagram.context";
+import Http from "../http";
 
 class FormModal extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {instance: {}};
+    this.state = {
+      instance: {
+        conditions: []
+      }
+    };
   }
 
   async shouldComponentUpdate(nextProps, nextState) {
-    if (nextProps.currentNodeId !== this.props.currentNodeId && nextProps.modalIsOpen) {
-      const { currentNodeId } = nextProps;
-      const http = new Http();
-      let instance = await http.getInstanceConditions(currentNodeId);
-      this.setState({instance});
-      return true;
-    }
-    return false;
+    return nextProps.currentNodeId !== this.props.currentNodeId && nextProps.modalIsOpen;
   }
 
-  toggleModal = () => {
+  async componentWillReceiveProps(nextProps) {
+    const { currentNodeId } = nextProps;
+    const http = new Http();
+    let instance = await http.getInstanceConditions(currentNodeId);
+    await this.setState({ instance });
+  }
+
+  toggleModal = async () => {
     const { set, modalIsOpen } = this.props;
-    set('modalIsOpen', !modalIsOpen)
+    await set("modalIsOpen", !modalIsOpen);
   };
 
   render() {
-    const { modalIsOpen, currentNodeId } = this.props;
-
-console.log(this.state)
-
+    const { modalIsOpen } = this.props;
+    const { instance } = this.state;
     return (
-      <Modal show={modalIsOpen} onHide={() => this.toggleModal()}>
-        <Modal.Header closeButton>
-          <Modal.Title>{currentNodeId}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => this.toggleModal()}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={() => this.toggleModal()}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      modalIsOpen && instance.conditions.length > 0 ? (
+        <Modal show={modalIsOpen} onHide={() => this.toggleModal()} size="lg">
+          <Modal.Header closeButton>
+            <Modal.Title>{instance.instanceable_type}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+
+            <h2>Conditions</h2>
+            <ListGroup>
+              {instance.conditions.map((condition, index) => (
+                <ListGroup.Item key={index}>
+                  <Row>
+                    <Col>{condition.first_conditionable_type}: {condition.first_conditionable.node.reference}</Col>
+                    <Col className="text-right"><Button variant="outline-danger">Remove</Button></Col>
+                  </Row>
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
+
+            <hr/>
+
+            <Form>
+              <Row>
+                <Col>
+                  <Form.Group controlId="exampleForm.ControlSelect1">
+                    <Form.Control as="select">
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                      <option>4</option>
+                      <option>5</option>
+                    </Form.Control>
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group controlId="exampleForm.ControlSelect1">
+                    <Form.Control as="select">
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                      <option>4</option>
+                      <option>5</option>
+                    </Form.Control>
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group controlId="exampleForm.ControlSelect1">
+                    <Form.Control as="select">
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                      <option>4</option>
+                      <option>5</option>
+                    </Form.Control>
+                  </Form.Group>
+                </Col>
+                <Col className="text-right">
+                  <Button variant="success">
+                    Save
+                  </Button>
+                </Col>
+              </Row>
+            </Form>
+
+            <hr/>
+
+            <h2>Children</h2>
+            <ListGroup>
+              {instance.conditions.map((condition, index) => (
+                <ListGroup.Item key={index}>
+                  <Row>
+                    <Col>{condition.first_conditionable_type}: {condition.first_conditionable.node.reference}</Col>
+                    <Col className="text-right"><Button variant="outline-danger">Remove</Button></Col>
+                  </Row>
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
+
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => this.toggleModal()}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      ) : null
     );
   }
 }
