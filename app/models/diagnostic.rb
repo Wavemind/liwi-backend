@@ -121,13 +121,13 @@ class Diagnostic < ApplicationRecord
   # @return [Json]
   # Return final diagnostics in json format
   def final_diagnostics_json
-    components.final_diagnostics.as_json(include: [ node: {methods: [:type]}, conditions: { include: [first_conditionable: { include: [node: { include: [:answers]}]}, second_conditionable: { include: [node: { include: [:answers]}]}]}])
+    components.final_diagnostics.as_json(include: [ node: {methods: [:type]}, conditions: { include: [first_conditionable: { include: [node: { include: [:answers]}]}, second_conditionable: { include: [node: { include: [:answers], methods: [:type]}]}]}])
   end
 
   # @return [Json]
   # Return treatments and managements in json format
   def health_cares_json
-    components.treatments.as_json(include: [node: {methods: [:type]}, conditions: { include: [first_conditionable: { include: [node: { include: [:answers]}]}]}]) + components.managements.as_json(include: [ :node, conditions: { include: [first_conditionable: { include: [:node]}]}])
+    components.treatments.as_json(include: [node: {methods: [:type]}, conditions: { include: [first_conditionable: { include: [node: { include: [:answers], methods: [:type]}]}]}]) + components.managements.as_json(include: [node: {methods: [:type]}, conditions: { include: [first_conditionable: { include: [node: {methods: [:type]}]}]}])
   end
 
   # @return [Json]
