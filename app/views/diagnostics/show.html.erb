@@ -2,7 +2,7 @@
 
 <ul class="nav nav-tabs" id="myTab" role="tablist">
   <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:panel].blank? || params[:panel] == 'instances'%>" id="home-tab" data-toggle="tab" href="#instances" role="tab" aria-controls="home" aria-selected="false"><%= t('.instances') %></a>
+    <a class="nav-link <%= 'active' if params[:panel].blank? || params[:panel] == 'diagram'%>" id="diagram-tab" data-toggle="tab" href="#diagram" role="tab" aria-controls="diagram" aria-selected="false"><%= t('.diagram') %></a>
   </li>
   <li class="nav-item">
     <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'final_diagnostics'%>" id="final_diagnostics-tab" data-toggle="tab" href="#final_diagnostics" role="tab" aria-controls="final_diagnostics" aria-selected="false"><%= t('.subtitle_final_diagnostics')  %> </a>
@@ -13,23 +13,16 @@
   <li class="nav-item">
     <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'translations'%>" id="translations-tab" data-toggle="tab" href="#translations" role="tab" aria-controls="translations" aria-selected="false"><%= t('.translations') %></a>
   </li>
-  <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'diagram'%>" id="diagram-tab" data-toggle="tab" href="#diagram" role="tab" aria-controls="diagram" aria-selected="true"><%= t('.diagram') %></a>
-  </li>
 </ul>
 
 
 <div class="tab-content mt-4 ml-4" id="diagnostic-table">
-  <div class="tab-pane fade <%= 'show active' if params[:panel].blank? ||params[:panel] == 'instances'%>" id="instances" role="tabpanel" aria-labelledby="home-tab">
-    <h3><%= t('.instances') %></h3>
-
+  <div class="tab-pane fade  <%= 'show active' if params[:panel].blank? || params[:panel] == 'diagram'%>" id="diagram" role="tabpanel" aria-labelledby="diagram-tab">
     <div class="row">
-      <div class="col">
-        <%= render 'select_node' %>
+      <div class="col text-right">
+        <%= link_to(I18n.t('open_diagram'), diagram_algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], params[:id]), class: 'btn btn-primary') %>
       </div>
     </div>
-
-    <%= render 'instances/table' %>
   </div>
 
   <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'final_diagnostics'%>" id="final_diagnostics" role="tabpanel" aria-labelledby="final_diagnostics-tab">
@@ -50,14 +43,6 @@
 
   <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'translations'%>" id="translations" role="tabpanel" aria-labelledby="translations-tab">
     <%= render 'translations' %>
-  </div>
-
-  <div class="tab-pane fade  <%= 'show active' if params[:panel].present? && params[:panel] == 'diagram'%>" id="diagram" role="tabpanel" aria-labelledby="diagram-tab">
-    <div class="row">
-      <div class="col text-right">
-        <%= link_to(I18n.t('open_diagram'), diagram_algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], params[:id]), class: 'btn btn-primary') %>
-      </div>
-    </div>
   </div>
 </div>
 

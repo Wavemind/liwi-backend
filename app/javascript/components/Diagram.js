@@ -89,7 +89,7 @@ class Diagram extends React.Component {
         let mainDF = _.find(dfLevel, ["node.id", excludingDF.id]);
         let excludedDF = _.find(dfLevel, ["node.id", excludingDF.final_diagnostic_id]);
 
-        let link = mainDF.getOutPort().link(excludedDF.getInPort());
+        let link = mainDF.getOutPort().link(excludedDF.getInPorts()[1]);
         link.displaySeparator(true);
 
         model.addAll(link);
@@ -205,12 +205,9 @@ class Diagram extends React.Component {
               }
             });
 
-            console.log('fesse', eventLink);
-            console.log('fesse', eventModel);
             if (eventLink.entity.sourcePort.parent.node.type === 'FinalDiagnostic'){
               if (eventLink.entity.targetPort.parent.node.type === 'FinalDiagnostic') {
-                console.log('fesstoyer');
-
+                http.excludeDiagnostic(eventLink.entity.sourcePort.parent.node.id, eventLink.entity.targetPort.parent.node.id);
               } else {
                 model.removeLink(eventModel.link.id)
               }
@@ -258,18 +255,6 @@ class Diagram extends React.Component {
 
     return (
       <div className="content">
-        <ul className="nav">
-          <li className="nav-item">
-            <div className="pt-2"
-                 draggable={true}
-                 onDragStart={event => {
-                   event.dataTransfer.setData("node", JSON.stringify('AND'));
-                 }}
-            >
-              AND
-            </div>
-          </li>
-        </ul>
         <div className="row">
           <div className="col-md-2 px-0">
             <NodeList/>
