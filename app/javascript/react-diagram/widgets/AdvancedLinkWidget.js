@@ -36,14 +36,14 @@ class AdvancedLinkWidget extends DefaultLinkWidget {
 
     // let inversed = this.getDirection(link.sourcePort, link.targetPort);
 
-    const Link = React.cloneElement(
+    const Top = React.cloneElement(
       diagramEngine
         .getFactoryForLink(link)
         .generateLinkSegment(
           link,
           this,
           selected || link.isSelected(),
-          path
+          path,
         ),
       {
         ...extraProps,
@@ -59,7 +59,7 @@ class AdvancedLinkWidget extends DefaultLinkWidget {
     );
 
     // Needed for the creating Labels
-    const LinkClone = (
+    const Bottom = (
       <path
         strokeWidth={0}
         stroke="rgba(0,0,0,0)"
@@ -70,8 +70,8 @@ class AdvancedLinkWidget extends DefaultLinkWidget {
 
     return (
       <g key={"link-" + id}>
-        {LinkClone}
-        {Link}
+        {Bottom}
+        {Top}
       </g>
     );
   }
