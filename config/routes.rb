@@ -42,8 +42,8 @@ Rails.application.routes.draw do
 
         resources :final_diagnostics, only: [:index, :show, :new, :create, :edit, :update, :delete, :destroy, :update_translations] do
           member do
-            post 'add_excluded_diagnostic'
-            delete 'remove_excluded_diagnostic'
+            put 'add_excluded_diagnostic'
+            put 'remove_excluded_diagnostic'
             put 'update_translations'
           end
           resources :final_diagnostic_health_cares, only: [:create, :destroy]

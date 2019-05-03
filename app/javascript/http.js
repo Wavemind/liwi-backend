@@ -6,6 +6,8 @@ export default class Http {
   token: string;
   instanceableId;
   instanceableType;
+  version;
+  algorithm;
 
   constructor() {
     let data = document.querySelector("span");
@@ -13,6 +15,8 @@ export default class Http {
     this.url = window.location.origin;
     this.instanceableId = data.dataset.id;
     this.instanceableType = data.dataset.type === "Diagnostic" ? "diagnostics" : "predefined_syndromes";
+    this.version = data.dataset.version;
+    this.algorithm = data.dataset.algorithm;
     this.token = document.querySelector("meta[name='csrf-token']").content;
   }
 
@@ -59,6 +63,33 @@ export default class Http {
     return await response;
   };
 
+
+  excludeDiagnostic = async (df, excludedDf) => {
+    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/${df}/add_excluded_diagnostic`;
+    const body = {
+      final_diagnostic: {
+        final_diagnostic_id: excludedDf,
+      }
+    };
+    const header = await this.setHeaders('PUT', body);
+    const request = await fetch( url, header).catch(error => console.log(error));
+    let response = await request.json();
+    if (!request.ok) {
+      console.log(response.errors);
+    }
+    return await response;
+  };
+
+  removeExcluding = async (df) => {
+    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/${df}/remove_excluded_diagnostic`;
+    const header = await this.setHeaders('PUT');
+    const request = await fetch( url, header).catch(error => console.log(error));
+    let response = await request.json();
+    if (!request.ok) {
+      console.log(response.errors);
+    }
+    return await response;
+  };
 
   // @params [Integer] nodeId
   // @return [Object] body of request
@@ -110,7 +141,7 @@ export default class Http {
       method: method,
       headers: {},
     };
-    if (method === 'POST' || method === 'PATCH' || method === 'DELETE') {
+    if (method === 'POST' || method === 'PATCH' || method === 'PUT' || method === 'DELETE') {
       header.body = JSON.stringify(body);
       header.headers['Accept'] = 'application/json, text/plain';
       header.headers['Content-Type'] = 'application/json';
