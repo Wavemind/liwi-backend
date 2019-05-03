@@ -2,7 +2,6 @@ import * as React from "react";
 import {BaseWidget} from "storm-react-diagrams";
 import AdvancedNodeModel from "../models/AdvancedNodeModel";
 
-
 export interface AdvancedNodeWidgetProps {
   diagramNode: AdvancedNodeModel;
   size?: number;
@@ -34,6 +33,13 @@ class AdvancedNodeWidget extends BaseWidget<AdvancedNodeWidgetProps, AdvancedNod
       </div>
     );
   }
+
+  setContextState = (id) => {
+    const {set} = this.props;
+
+    set("currentNodeId", id);
+    set("modalIsOpen", true);
+  };
 
   render() {
     const {diagramNode} = this.props;
@@ -103,4 +109,4 @@ class AdvancedNodeWidget extends BaseWidget<AdvancedNodeWidgetProps, AdvancedNod
   }
 }
 
-export default AdvancedNodeWidget;
+export default withDiagram(AdvancedNodeWidget);

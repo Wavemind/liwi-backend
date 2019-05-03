@@ -10,7 +10,7 @@ export default class Http {
   algorithm;
 
   constructor() {
-    let data = document.querySelector("span");
+    let data = document.querySelector("p");
 
     this.url = window.location.origin;
     this.instanceableId = data.dataset.id;
@@ -63,6 +63,35 @@ export default class Http {
     return await response;
   };
 
+  // @params [Integer] nodeId
+  // @return [Object] response
+  // Get a condition with its conditions
+  getInstanceConditions = async (nodeId) => {
+    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/load_conditions?node_id=${nodeId}`;
+    const header = await this.setHeaders('GET');
+    const request = await fetch( url, header).catch(error => console.log(error));
+    let response = await request.json();
+    if (!request.ok) {
+      console.log(response.errors);
+    }
+    return await response;
+  };
+
+  removeCondition = async (instanceId, condID) => {
+    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/${instanceId}/conditions/${condID}`;
+    const body = {
+      instance: {
+        instanceable_id: this.instanceableId,
+        instanceable_type: this.instanceableType
+      }
+    };
+    const header = await this.setHeaders('DELETE', body);
+    const request = await fetch(url, header).catch(error => console.log(error));
+    if (!request.ok) {
+      console.log(body.errors);
+    }
+    return await body;
+  };
 
   excludeDiagnostic = async (df, excludedDf) => {
     const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/${df}/add_excluded_diagnostic`;

@@ -1,7 +1,7 @@
 class InstancesController < ApplicationController
 
   before_action :authenticate_user!
-  before_action :set_instanceable, only: [:show, :create, :destroy, :by_reference, :create_from_diagram, :remove_from_diagram, :create_link, :remove_link]
+  before_action :set_instanceable, only: [:show, :create, :destroy, :by_reference, :create_from_diagram, :remove_from_diagram, :create_link, :remove_link, :load_conditions]
   before_action :set_instance, only: [:show, :destroy]
   before_action :set_child, only: [:create_link, :remove_link]
   before_action :set_parent, only: [:create_link, :remove_link]
@@ -86,11 +86,37 @@ class InstancesController < ApplicationController
     @child_instance.conditions.new(first_conditionable: @parent_answer, top_level: true)
     @parent_instance.children.new(node: @child_node)
 
-    if @parent_instance.save && @child_instance.save
+    if @child_instance.save
       render json: { status: 'success', message: t('flash_message.success_created')}
     else
       render json: { status: 'alert', message: @child_instance.errors.full_messages }
     end
+  end
+
+  # @params [Diagnostic] Current diagnostic [Node] child of the link
+  # Create link in both way from diagram
+  def load_conditions
+    instance = @instanceable.components.find_by(node_id: params[:node_id])
+    available_conditions = (@instanceable.components.questions.includes(node:[:answers]).map(&:node).map(&:answers) + @instanceable.components.predefined_syndromes.includes(node:[:answers]).map(&:node).map(&:answers) + instance.conditions).flatten
+    render json: {
+      instance: instance.as_json(
+        include: {
+          conditions: {
+            include: [
+              first_conditionable: {
+                include: [node: { include: [:answers]}]
+              },
+              second_conditionable: {
+                include: [
+                  node: { include: [:answers]}
+                ]
+              }
+            ],
+            methods: [:display_condition]
+          },
+        }
+      ),
+      available_conditions: available_conditions.as_json(methods: [:display_condition]), operators: Condition.operators.map { |k, v| [t("conditions.operators.#{k}"), k] }.as_json}
   end
 
   # POST /diagnostics/:diagnostic_id/instances/:node_id/remove_from_diagram
@@ -113,11 +139,7 @@ class InstancesController < ApplicationController
       Instance.remove_condition(cond, @parent_instance)
     end
 
-    if @parent_instance.children.find_by(node: @child_node).destroy
-      render json: { status: 'success', message: t('flash_message.success_deleted')}
-    else
-      render json: { status: 'alert', message: t('flash_message.delete_fail')}
-    end
+    render json: { status: 'success', message: t('flash_message.success_deleted')}
   end
 
   private

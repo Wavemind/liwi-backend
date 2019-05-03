@@ -224,7 +224,6 @@ td {
 
 
 .docs-preview-wrapper {
-  //background: #3c3c3c;
   border-radius: 10px;
   overflow: hidden;
   padding: 10px;
@@ -232,8 +231,8 @@ td {
   margin-bottom: 20px;
 }
 
-.srd-demo-canvas {
-  height: 100vh;
+.srd-canvas {
+  height: 95vh;
 }
 
 .srd-default-node {
@@ -392,4 +391,27 @@ td {
   top: 50%;
   bottom: 50%;
   left: -10px;
+}
+
+.node-list {
+  overflow-x: hidden;
+  overflow-y: auto;
+  height:90vh;
+}
+
+.manage-conditions {
+  z-index: 15;
+  color: blue;
+  margin-left: auto;
+  margin-right: auto;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  &:hover {
+    font-weight: bold;
+  }
+}
+
+.condition-container {
+  text-align: center
 }

@@ -13,7 +13,9 @@ import AdvancedNodeModel from "../react-diagram/models/AdvancedNodeModel";
 import NodeList from "../react-diagram/lists/NodeList";
 import Http from "../http";
 
-import {withDiagram} from '../context/Diagram.context';
+import FormModal from "./FormModal";
+
+import { withDiagram } from '../context/Diagram.context';
 
 class Diagram extends React.Component {
 
@@ -25,6 +27,10 @@ class Diagram extends React.Component {
   }
 
   componentWillMount() {
+    this.initDiagram();
+  }
+
+  initDiagram = () => {
     const {
       instanceableType,
       questions,
@@ -32,7 +38,7 @@ class Diagram extends React.Component {
       healthCares,
     } = this.props;
 
-    const {engine} = this.state;
+    const { engine } = this.state;
 
     // Setup the diagram model
     let model = new DiagramModel();
@@ -107,7 +113,7 @@ class Diagram extends React.Component {
         // Get condition nodes of treatments and managements
         if (healthCare.conditions != null && healthCare.conditions.length > 0) {
           healthCare.conditions.map((condition) => {
-            let answerNode = condition.first_conditionable.node;
+            let answerNode = condition.first_conditionable.get_node;
             let condNode;
             if (!(answerNode.reference in conditionRefs)) {
               condNode = this.createNode(answerNode, answerNode.answers);
@@ -155,11 +161,11 @@ class Diagram extends React.Component {
     nodes.map((node, index) => {
       instances[index].conditions.map((condition) => {
         let firstAnswer = condition.first_conditionable;
-        let firstNodeAnswer = _.find(nodes, ["reference", firstAnswer.node.reference]);
+        let firstNodeAnswer = _.find(nodes, ["reference", firstAnswer.get_node.reference]);
 
         if (condition.second_conditionable_id !== null && condition.operator === "and_operator") {
           let secondAnswer = condition.second_conditionable;
-          let secondNodeAnswer = _.find(nodes, ["reference", secondAnswer.node.reference]);
+          let secondNodeAnswer = _.find(nodes, ["reference", secondAnswer.get_node.reference]);
 
           let andNode = new AdvancedNodeModel("AND", "", "", "");
           andNode.addInPort(" ");
@@ -224,8 +230,10 @@ class Diagram extends React.Component {
     // load model into engine
     engine.setDiagramModel(model);
     this.updateEngine(engine);
-  }
+  };
 
+  // @params engine
+  // Set state of engine
   updateEngine = (engine) => {
     this.setState({engine});
   };
@@ -304,7 +312,7 @@ class Diagram extends React.Component {
             }}
           >
             <DiagramWidget
-              className="srd-demo-canvas"
+              className="srd-canvas"
               diagramEngine={engine}
               allowCanvasZoom={false}
               maxNumberPointsPerLink={0}

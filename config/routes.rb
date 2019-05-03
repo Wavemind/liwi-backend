@@ -105,6 +105,7 @@ Rails.application.routes.draw do
     resources :instances, only: [:show, :destroy, :create, :by_reference] do
       collection do
         get 'by_reference'
+        get 'load_conditions'
         post 'create_from_diagram'
         post 'create_link'
         delete 'remove_from_diagram'
