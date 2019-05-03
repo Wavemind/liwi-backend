@@ -13,7 +13,7 @@ import AdvancedNodeModel from "../react-diagram/models/AdvancedNodeModel";
 import NodeList from "../react-diagram/lists/NodeList";
 import Http from "../http";
 
-import { withDiagram } from '../context/Diagram.context';
+import {withDiagram} from '../context/Diagram.context';
 
 class Diagram extends React.Component {
 
@@ -32,7 +32,7 @@ class Diagram extends React.Component {
       healthCares,
     } = this.props;
 
-    const { engine } = this.state;
+    const {engine} = this.state;
 
     // Setup the diagram model
     let model = new DiagramModel();
@@ -72,9 +72,11 @@ class Diagram extends React.Component {
       finalDiagnostics.map((instance) => {
         let df = instance.node;
         let node = this.createNode(df);
+        node.addInPort(" ");
+
+        node.addOutPort(" ", df.reference, df.id);
         if (df.final_diagnostic_id !== null) {
           excludingDF = df;
-          node.addOutPort(this.getFullLabel(_.find(finalDiagnostics, ["id", df.final_diagnostic_id])), df.reference, df.id);
         }
         dfLevel.push(node);
         nodes.push(node);
@@ -138,7 +140,7 @@ class Diagram extends React.Component {
       let nbNodes = level.length;
       let totalSpace = width - (nbNodes * 200);
       let marges = totalSpace - ((nbNodes - 1) * 120);
-      x += marges / 2
+      x += marges / 2;
       level.map((node) => {
         node.setPosition(x, y);
         x += 200 + 120;
@@ -182,7 +184,7 @@ class Diagram extends React.Component {
 
     // Set eventListener for create link
     model.addListener({
-      linksUpdated: function(eventModel) {
+      linksUpdated: function (eventModel) {
         // Disable link from inPort
         if (eventModel.link.sourcePort.in) {
           if (model.getLink(eventModel.link.id) !== null) {
@@ -191,7 +193,7 @@ class Diagram extends React.Component {
         }
 
         eventModel.link.addListener({
-          targetPortChanged: function(eventLink) {
+          targetPortChanged: function (eventLink) {
             let exists = false;
 
             // Verify if link is already set
@@ -203,9 +205,20 @@ class Diagram extends React.Component {
               }
             });
 
-            let nodeId = eventLink.port.parent.node.id;
-            let answerId = eventModel.link.sourcePort.dbId;
-            http.createLink(nodeId, answerId);
+            console.log('fesse', eventLink);
+            console.log('fesse', eventModel);
+            if (eventLink.entity.sourcePort.parent.node.type === 'FinalDiagnostic'){
+              if (eventLink.entity.targetPort.parent.node.type === 'FinalDiagnostic') {
+                console.log('fesstoyer');
+
+              } else {
+                model.removeLink(eventModel.link.id)
+              }
+            } else {
+              let nodeId = eventLink.port.parent.node.id;
+              let answerId = eventModel.link.sourcePort.dbId;
+              http.createLink(nodeId, answerId);
+            }
           }
         });
       },
@@ -217,7 +230,7 @@ class Diagram extends React.Component {
   }
 
   updateEngine = (engine) => {
-    this.setState({ engine });
+    this.setState({engine});
   };
 
   // @params node
@@ -228,7 +241,7 @@ class Diagram extends React.Component {
 
   // Create a node from label with its inport
   createNode = (node, outPorts = [], color = "rgb(255,255,255)") => {
-    const { addNode } = this.props;
+    const {addNode} = this.props;
 
     let advancedNode = new AdvancedNodeModel(node, node.reference, outPorts, color, addNode);
     advancedNode.addInPort(" ");
@@ -236,8 +249,8 @@ class Diagram extends React.Component {
   };
 
   render = () => {
-    const { engine } = this.state;
-    const { removeNode } = this.props;
+    const {engine} = this.state;
+    const {removeNode} = this.props;
 
     const http = new Http();
 
@@ -259,7 +272,7 @@ class Diagram extends React.Component {
         </ul>
         <div className="row">
           <div className="col-md-2 px-0">
-            <NodeList />
+            <NodeList/>
           </div>
           <div
             className="col-md-10 mt-2"
@@ -271,7 +284,19 @@ class Diagram extends React.Component {
               // Create new node
               // else
               // create AND node
-              if (nodeDb !== 'AND') {
+              if (nodeDb === 'AND') {
+                nodeDiagram = new AdvancedNodeModel("AND", "", "", "");
+                nodeDiagram.addInPort(" ");
+                nodeDiagram.addOutPort(" ");
+              } else if (nodeDb.type === 'FinalDiagnostic') {
+                nodeDiagram = this.createNode(nodeDb);
+                nodeDiagram.addInPort(" ");
+                nodeDiagram.addOutPort(" ");
+
+                await http.createInstance(nodeDb.id);
+                removeNode(nodeDb);
+              } else {
+
                 if (nodeDb.get_answers !== null) {
                   nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers);
                   nodeDb.get_answers.map((answer) => (nodeDiagram.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
@@ -281,10 +306,6 @@ class Diagram extends React.Component {
 
                 await http.createInstance(nodeDb.id);
                 removeNode(nodeDb);
-              } else {
-                nodeDiagram = new AdvancedNodeModel("AND", "", "", "");
-                nodeDiagram.addInPort(" ");
-                nodeDiagram.addOutPort(" ");
               }
 
               nodeDiagram.x = points.x;

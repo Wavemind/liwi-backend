@@ -1,6 +1,7 @@
 import * as React from "react";
-import { BaseWidget } from "storm-react-diagrams";
+import {BaseWidget} from "storm-react-diagrams";
 import AdvancedNodeModel from "../models/AdvancedNodeModel";
+
 
 export interface AdvancedNodeWidgetProps {
   diagramNode: AdvancedNodeModel;
@@ -8,6 +9,7 @@ export interface AdvancedNodeWidgetProps {
 }
 
 export interface AdvancedNodeWidgetState {
+
 }
 
 /**
@@ -26,7 +28,7 @@ class AdvancedNodeWidget extends BaseWidget<AdvancedNodeWidgetProps, AdvancedNod
 
   generateOutPort(port) {
     return (
-      <div key={port.getID()} className="col px-0" style={{ position: "relative" }}>
+      <div key={port.getID()} className="col px-0" style={{position: "relative"}}>
         <div className="py-1 text-center answer-split">{port.label}</div>
         <div className="port out-port" data-name={port.name} data-nodeid={port.parent.id}/>
       </div>
@@ -34,19 +36,29 @@ class AdvancedNodeWidget extends BaseWidget<AdvancedNodeWidgetProps, AdvancedNod
   }
 
   render() {
-    const { diagramNode } = this.props;
+    const {diagramNode} = this.props;
     let outPorts = [];
 
-    diagramNode.getOutPorts().map((outPort) => {
-      outPorts.push(this.generateOutPort(outPort));
-    });
 
-    let inPort = diagramNode.getInPort();
+    let inPort = diagramNode.getInPorts()[0];
+    let excludingInPort = null;
+    let outPort = null;
+
+    if (diagramNode.node.type === "FinalDiagnostic") {
+      excludingInPort = diagramNode.getInPorts()[1];
+      outPort = diagramNode.getOutPort();
+    } else {
+      diagramNode.getOutPorts().map((outPort) => {
+        outPorts.push(this.generateOutPort(outPort));
+      });
+    }
 
 
-    switch('Node') {
+    switch ('Node') {
       case 'Node':
+
         return (
+
           <div className={`node ${diagramNode.node === "AND" ? "and" : ""}`}>
             <div className="port py-2 node-category">
               <div className="port srd-port in-port" data-name={inPort.name} data-nodeid={inPort.parent.id}/>
@@ -60,7 +72,7 @@ class AdvancedNodeWidget extends BaseWidget<AdvancedNodeWidgetProps, AdvancedNod
             {diagramNode.node === "AND" ? (
               <div>
                 <div className="node-answers">
-                  <div className="port srd-port" style={{ top: 28, left: 8 }} data-name={diagramNode.getOutPort().name}
+                  <div className="port srd-port" style={{top: 28, left: 8}} data-name={diagramNode.getOutPort().name}
                        data-nodeid={diagramNode.getOutPort().parent.id}/>
                 </div>
               </div>
@@ -76,14 +88,15 @@ class AdvancedNodeWidget extends BaseWidget<AdvancedNodeWidgetProps, AdvancedNod
                 </div>
               </div>
             )}
-            {diagramNode.node.reference === "DF7" ? (
+            {diagramNode.node.type === "FinalDiagnostic" ? (
               <div>
-                <div className="inExcluded"/>
-                <div className="outExcluded"/>
+                <div className="port inExcluded" data-name={excludingInPort.name} data-nodeid={excludingInPort.parent.id}/>
+                <div className="port outExcluded" data-name={outPort.name} data-nodeid={outPort.parent.id}/>
               </div>
             ) : null}
           </div>
-        );
+        )
+          ;
       case 'Diagnostic':
     }
 
