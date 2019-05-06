@@ -11,7 +11,7 @@ class Condition < ApplicationRecord
   belongs_to :second_conditionable, polymorphic: true, optional: true
 
   before_destroy :remove_children, unless: Proc.new { self.referenceable.is_a?(Diagnostic) }
-  before_validation :prevent_loop, unless: Proc.new { self.referenceable.is_a?(Diagnostic) }
+  # before_validation :prevent_loop, unless: Proc.new { self.referenceable.is_a?(Diagnostic) }
 
   validates_presence_of :first_conditionable
 
@@ -27,21 +27,17 @@ class Condition < ApplicationRecord
     "(#{first_conditionable.display_condition} #{I18n.t("conditions.operators.#{operator}") unless operator.nil?} #{second_conditionable.display_condition unless second_conditionable.nil?})"
   end
 
-  def create_children
-    create_child(self)
-  end
-
-  def create_child(condition)
-    if condition.first_conditionable.is_a?(Answer) && (!condition.first_conditionable.node.is_a?(Treatment) || !condition.first_conditionable.node.is_a?(Management))
-      Child.create!(instance: condition.first_conditionable.node.instances.find_by(instanceable: condition.referenceable.instanceable), node: condition.referenceable.node)
+  def new_children
+    if first_conditionable.is_a?(Answer) && (!first_conditionable.node.is_a?(Treatment) || !first_conditionable.node.is_a?(Management))
+      referenceable.children.new(node: referenceable.node)
     elsif first_conditionable.is_a?(Condition)
-      create_child(condition.first_conditionable)
+      first_conditionable.new_children
     end
 
-    if condition.second_conditionable.is_a?(Answer) && (!condition.second_conditionable.node.is_a?(Treatment) || !condition.second_conditionable.node.is_a?(Management))
-      Child.create!(instance: condition.second_conditionable.node.instances.find_by(instanceable: condition.referenceable.instanceable), node: condition.referenceable.node)
+    if second_conditionable.is_a?(Answer) && (!second_conditionable.node.is_a?(Treatment) || !second_conditionable.node.is_a?(Management))
+      referenceable.children.new(node: referenceable.node)
     elsif second_conditionable.is_a?(Condition)
-      create_child(condition.second_conditionable)
+      second_conditionable.new_children
     end
   end
 
@@ -62,18 +58,19 @@ class Condition < ApplicationRecord
     "#{self.id},#{self.class.name}"
   end
 
-  def is_child(children)
-    children.each do |child|
-      current_instance = child.node.instances.find_by(instanceable: referenceable.instanceable)
-      return true if current_instance == referenceable || (current_instance.children.any? && is_child(current_instance.children))
+  def is_child(instance)
+    instance.children.each do |child|
+      # Gets child instance for the same instanceable (PS OR Diagnostic)
+      child_instance = referenceable.instanceable.components.select{ |c| c.node == child.node }.first
+      return true if child_instance == referenceable || (child_instance.children.any? && is_child(child_instance.children))
     end
     false
   end
 
   def prevent_loop
     ActiveRecord::Base.transaction(requires_new: true) do
-      self.create_children unless referenceable.is_a?(Diagnostic)
-      if referenceable.children.any? && is_child(referenceable.children)
+      self.new_children unless referenceable.is_a?(Diagnostic)
+      if referenceable.children.any? && is_child(referenceable)
         self.errors.add(:base, I18n.t('conditions.validation.loop'))
         raise ActiveRecord::Rollback, I18n.t('conditions.validation.loop')
       end

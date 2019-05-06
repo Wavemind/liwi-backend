@@ -78,6 +78,7 @@ module ModelMacros
       @dd7_p3 = Instance.create!(instanceable: @dd7, node: p3)
       @dd7_p13 = Instance.create!(instanceable: @dd7, node: p13)
       @dd7_s2 = Instance.create!(instanceable: @dd7, node: s2)
+      @dd7_df7 = Instance.create!(instanceable: @dd7, node: @df7)
 
       # PS
       ps_category = Category.create!(reference_prefix: 'PS', name_en: 'Predefined syndrome', parent: 'PredefinedSyndrome')

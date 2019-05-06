@@ -10,8 +10,6 @@ class FinalDiagnostic < Node
   has_many :final_diagnostic_health_cares, dependent: :destroy
   has_many :nodes, through: :final_diagnostic_health_cares
 
-  after_create :create_instance
-
   # Enable recursive duplicating
   # https://github.com/amoeba-rb/amoeba#usage
   amoeba do
@@ -21,10 +19,6 @@ class FinalDiagnostic < Node
   end
 
   private
-
-  def create_instance
-    diagnostic.components.create!(node: self)
-  end
 
   # {Node#unique_reference}
   def unique_reference

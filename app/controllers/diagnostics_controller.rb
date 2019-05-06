@@ -72,6 +72,7 @@ class DiagnosticsController < ApplicationController
   def duplicate
     diagnostic = Diagnostic.includes(components: [:conditions, :children]).find(params[:id])
     duplicated_diagnostic = diagnostic.amoeba_dup
+
     if duplicated_diagnostic.save
       duplicated_diagnostic.relink_instance
       redirect_to algorithm_version_url(@algorithm, @version), notice: t('flash_message.success_deleted')

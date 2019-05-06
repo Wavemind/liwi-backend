@@ -42,6 +42,7 @@ class FinalDiagnosticsController < ApplicationController
     @final_diagnostic = @diagnostic.final_diagnostics.new(final_diagnostic_params)
 
     if @final_diagnostic.save
+      @diagnostic.components.create!(node: @final_diagnostic)
       redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'final_diagnostics'), notice: t('flash_message.success_created')
     else
       render :new

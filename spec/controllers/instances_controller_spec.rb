@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe InstancesController, type: :controller do
+RSpec.describe InstancesController, type: :controller, focus: true do
   login_user
   create_algorithm
   create_category
@@ -18,12 +18,12 @@ RSpec.describe InstancesController, type: :controller do
       }
     }
 
-    expect(@dd7_df7.conditions.where(first_conditionable: @s2_1).or(@dd7_df7.conditions.where(second_conditionable: @s2_1)).count).to equal(1)
+    expect(@df7.instances.first.conditions.where(first_conditionable: @s2_1).or(@df7.instances.first.conditions.where(second_conditionable: @s2_1)).count).to equal(1)
     expect(Child.where(instance: @dd7_s2, node: @df7).count).to equal(1)
   end
 
   it 'removes a link in both instances' do
-    @dd7_df7.conditions.create!(first_conditionable: @p1_1, top_level: true)
+    @df7.instances.first.conditions.create!(first_conditionable: @p1_1, top_level: true)
 
     delete :remove_link, params: {
       diagnostic_id: @dd7.id,
@@ -35,7 +35,7 @@ RSpec.describe InstancesController, type: :controller do
       }
     }
 
-    expect(@dd7_df7.conditions.where(first_conditionable: @p1_1).or(@dd7_df7.conditions.where(second_conditionable: @p1_1)).count).to equal(0)
+    expect(@df7.instances.first.conditions.where(first_conditionable: @p1_1).or(@df7.instances.first.conditions.where(second_conditionable: @p1_1)).count).to equal(0)
     expect(Child.where(instance: @dd7_p1, node: @df7).count).to equal(0)
   end
 
