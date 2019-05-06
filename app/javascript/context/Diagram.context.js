@@ -11,7 +11,6 @@ export default class DiagramProvider extends React.Component {
     this.state = {...this.state, ...props.value }
   }
 
-
   async componentWillMount() {
     await this.orderNodes();
   }

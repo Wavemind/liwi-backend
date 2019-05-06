@@ -1,7 +1,7 @@
 import {
   DiagramEngine,
   DiagramModel,
-  DiagramWidget
+  DiagramWidget,
 } from "storm-react-diagrams";
 import * as React from "react";
 import * as _ from "lodash";
@@ -12,8 +12,6 @@ import AdvancedNodeModel from "../react-diagram/models/AdvancedNodeModel";
 
 import NodeList from "../react-diagram/lists/NodeList";
 import Http from "../http";
-
-import FormModal from "./FormModal";
 
 import { withDiagram } from '../context/Diagram.context';
 
