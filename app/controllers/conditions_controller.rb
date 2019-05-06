@@ -23,9 +23,6 @@ class ConditionsController < ApplicationController
   end
 
   def destroy
-    puts '***'
-    puts 'Viva algeria'
-    puts '***'
     if @condition.destroy
       respond_to do |format|
         format.html {}

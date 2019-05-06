@@ -143,8 +143,8 @@ class Diagram extends React.Component {
     nodeLevels.map((level) => {
       let nbNodes = level.length;
       let totalSpace = width - (nbNodes * 200);
-      let marges = totalSpace - ((nbNodes - 1) * 120);
-      x += marges / 2;
+      let margin = totalSpace - ((nbNodes - 1) * 120);
+      x += margin / 2;
       level.map((node) => {
         node.setPosition(x, y);
         x += 200 + 120;
