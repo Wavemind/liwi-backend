@@ -27,10 +27,13 @@ class Condition < ApplicationRecord
     "(#{first_conditionable.display_condition} #{I18n.t("conditions.operators.#{operator}") unless operator.nil?} #{second_conditionable.display_condition unless second_conditionable.nil?})"
   end
 
+  # Call create_child method for recursivity
   def create_children
     create_child(self)
   end
 
+  # @params [Object] condition
+  # Create child if type of first_conditionable or second_conditionable is an Answer, otherwise call create_child again
   def create_child(condition)
     if condition.first_conditionable.is_a?(Answer) && (!condition.first_conditionable.node.is_a?(Treatment) || !condition.first_conditionable.node.is_a?(Management))
       Child.create!(instance: condition.first_conditionable.node.instances.find_by(instanceable: condition.referenceable.instanceable), node: condition.referenceable.node)
@@ -45,6 +48,7 @@ class Condition < ApplicationRecord
     end
   end
 
+  # Remove child by instanceable type and first/second conditionable id
   def remove_children
     Child.find_by(instance: first_conditionable.node.instances.find_by(instanceable: referenceable.instanceable),
                 node: referenceable.node).destroy! if first_conditionable.is_a?(Answer) && (!first_conditionable.node.is_a?(Treatment) || !first_conditionable.node.is_a?(Management))
@@ -52,6 +56,8 @@ class Condition < ApplicationRecord
                 node: referenceable.node).destroy! if second_conditionable.is_a?(Answer) && (!second_conditionable.node.is_a?(Treatment) || !second_conditionable.node.is_a?(Management))
   end
 
+  # Used for rendering json to react. Unavailable if first / second conditionable type is a condition
+  # @return nil
   def get_node
     nil
   end
@@ -62,6 +68,9 @@ class Condition < ApplicationRecord
     "#{self.id},#{self.class.name}"
   end
 
+  # @param [Object] child
+  # Verify if current instance is a child of himself
+  # @return [Boolean]
   def is_child(children)
     children.each do |child|
       current_instance = child.node.instances.find_by(instanceable: referenceable.instanceable)
@@ -70,6 +79,7 @@ class Condition < ApplicationRecord
     false
   end
 
+  # After creating a Child, verify if he's calling himself. In this case, rollback create
   def prevent_loop
     ActiveRecord::Base.transaction(requires_new: true) do
       self.create_children unless referenceable.is_a?(Diagnostic)
