@@ -69,20 +69,20 @@ class Diagram extends React.Component {
     let instances = questions.flat();
 
     // Create nodes for final diagnostics
-    let dfLevel = [];
+    let finalDiagnosticLevel = [];
     let excludingDF = null;
 
     if (instanceableType === 'Diagnostic') {
       finalDiagnostics.map((instance) => {
-        let df = instance.node;
-        let node = this.createNode(df);
+        let finalDiagnostic = instance.node;
+        let node = this.createNode(finalDiagnostic);
         node.addInPort(" ");
 
-        node.addOutPort(" ", df.reference, df.id);
-        if (df.final_diagnostic_id !== null) {
-          excludingDF = df;
+        node.addOutPort(" ", finalDiagnostic.reference, finalDiagnostic.id);
+        if (finalDiagnostic.final_diagnostic_id !== null) {
+          excludingDF = finalDiagnostic;
         }
-        dfLevel.push(node);
+        finalDiagnosticLevel.push(node);
         nodes.push(node);
         model.addAll(node);
         instances.push(instance);
@@ -90,8 +90,8 @@ class Diagram extends React.Component {
 
       // Excluded diagnostic
       if (excludingDF !== null) {
-        let mainDF = _.find(dfLevel, ["node.id", excludingDF.id]);
-        let excludedDF = _.find(dfLevel, ["node.id", excludingDF.final_diagnostic_id]);
+        let mainDF = _.find(finalDiagnosticLevel, ["node.id", excludingDF.id]);
+        let excludedDF = _.find(finalDiagnosticLevel, ["node.id", excludingDF.final_diagnostic_id]);
 
         let link = mainDF.getOutPort().link(excludedDF.getInPorts()[1]);
         link.displaySeparator(true);
@@ -99,7 +99,7 @@ class Diagram extends React.Component {
         model.addAll(link);
       }
 
-      nodeLevels.push(dfLevel);
+      nodeLevels.push(finalDiagnosticLevel);
 
       let hcLevel = [];
       let hcConditions = [];
@@ -143,8 +143,8 @@ class Diagram extends React.Component {
     nodeLevels.map((level) => {
       let nbNodes = level.length;
       let totalSpace = width - (nbNodes * 200);
-      let marges = totalSpace - ((nbNodes - 1) * 120);
-      x += marges / 2;
+      let margin = totalSpace - ((nbNodes - 1) * 120);
+      x += margin / 2;
       level.map((node) => {
         node.setPosition(x, y);
         x += 200 + 120;

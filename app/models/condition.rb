@@ -11,7 +11,7 @@ class Condition < ApplicationRecord
   belongs_to :second_conditionable, polymorphic: true, optional: true
 
   before_destroy :remove_children, unless: Proc.new { self.referenceable.is_a?(Diagnostic) }
-  # before_validation :prevent_loop, unless: Proc.new { self.referenceable.is_a?(Diagnostic) }
+  before_validation :prevent_loop, unless: Proc.new { self.referenceable.is_a?(Diagnostic) }
 
   validates_presence_of :first_conditionable
 
@@ -41,6 +41,7 @@ class Condition < ApplicationRecord
     end
   end
 
+  # Remove child by instanceable type and first/second conditionable id
   def remove_children
     Child.find_by(instance: first_conditionable.node.instances.find_by(instanceable: referenceable.instanceable),
                 node: referenceable.node).destroy! if first_conditionable.is_a?(Answer) && (!first_conditionable.node.is_a?(Treatment) || !first_conditionable.node.is_a?(Management))
@@ -48,6 +49,8 @@ class Condition < ApplicationRecord
                 node: referenceable.node).destroy! if second_conditionable.is_a?(Answer) && (!second_conditionable.node.is_a?(Treatment) || !second_conditionable.node.is_a?(Management))
   end
 
+  # Used for rendering json to react. Unavailable if first / second conditionable type is a condition
+  # @return nil
   def get_node
     nil
   end
@@ -58,6 +61,9 @@ class Condition < ApplicationRecord
     "#{self.id},#{self.class.name}"
   end
 
+  # @param [Object] child
+  # Verify if current instance is a child of himself
+  # @return [Boolean]
   def is_child(instance)
     instance.children.each do |child|
       # Gets child instance for the same instanceable (PS OR Diagnostic)
@@ -67,6 +73,7 @@ class Condition < ApplicationRecord
     false
   end
 
+  # After creating a Child, verify if he's calling himself. In this case, rollback create
   def prevent_loop
     ActiveRecord::Base.transaction(requires_new: true) do
       self.new_children unless referenceable.is_a?(Diagnostic)

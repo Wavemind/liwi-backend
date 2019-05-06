@@ -133,10 +133,8 @@ class InstancesController < ApplicationController
   # @params [Diagnostic] Current diagnostic, [Answer] Answer from parent of the link, [Node] child of the link
   # Remove a link from diagram and remove from both child and parent concerned
   def remove_link
-    @child_instance.conditions.each do |cond|
-      Instance.remove_condition(cond, @parent_instance)
-    end
-
+    condition = Condition.find_by(referenceable: @child_instance, first_conditionable: @parent_answer)
+    Instance.remove_condition(condition, @parent_instance)
     render json: { status: 'success', message: t('flash_message.success_deleted')}
   end
 
