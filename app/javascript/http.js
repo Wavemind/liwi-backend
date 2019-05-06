@@ -63,6 +63,7 @@ export default class Http {
     return await response;
   };
 
+
   // @params [Integer] nodeId
   // @return [Object] response
   // Get a condition with its conditions
@@ -77,6 +78,10 @@ export default class Http {
     return await response;
   };
 
+
+  // @params [Integer] instanceId, [Integer] condID
+  // @return [Object] body of request
+  // Remove condition
   removeCondition = async (instanceId, condID) => {
     const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/${instanceId}/conditions/${condID}`;
     const body = {
@@ -93,11 +98,15 @@ export default class Http {
     return await body;
   };
 
-  excludeDiagnostic = async (df, excludedDf) => {
-    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/${df}/add_excluded_diagnostic`;
+
+  // @params [Integer] dfId, [Integer] excludedDfId
+  // @return [Object] body of request
+  // Exclude a final diagnostic
+  excludeDiagnostic = async (dfId, excludedDfId) => {
+    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/${dfId}/add_excluded_diagnostic`;
     const body = {
       final_diagnostic: {
-        final_diagnostic_id: excludedDf,
+        final_diagnostic_id: excludedDfId,
       }
     };
     const header = await this.setHeaders('PUT', body);
@@ -109,8 +118,12 @@ export default class Http {
     return await response;
   };
 
-  removeExcluding = async (df) => {
-    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/${df}/remove_excluded_diagnostic`;
+
+  // @params [Integer] dfId
+  // @return [Object] body of request
+  // Remove excluding diagnostic
+  removeExcluding = async (dfId) => {
+    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/${dfId}/remove_excluded_diagnostic`;
     const header = await this.setHeaders('PUT');
     const request = await fetch( url, header).catch(error => console.log(error));
     let response = await request.json();
@@ -119,6 +132,7 @@ export default class Http {
     }
     return await response;
   };
+
 
   // @params [Integer] nodeId
   // @return [Object] body of request
