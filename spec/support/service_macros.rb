@@ -86,27 +86,6 @@ module ServiceMacros
       ps6_ps6 = Instance.create!(instanceable: ps6, node: ps6)
 
 
-      Child.create!(instance: ps6_s4, node: ps6)
-      Child.create!(instance: ps6_s4, node: p25)
-      Child.create!(instance: ps6_p25, node: ps6)
-
-      Child.create!(instance: dd7_s2, node: p14)
-      Child.create!(instance: dd7_s2, node: p13)
-      Child.create!(instance: dd7_s2, node: p1)
-      Child.create!(instance: dd7_s2, node: p3)
-
-      Child.create!(instance: dd7_p14, node: df7)
-      Child.create!(instance: dd7_p1, node: df7)
-      Child.create!(instance: dd7_p3, node: df7)
-      Child.create!(instance: dd7_p13, node: df7)
-
-      Child.create!(instance: dd7_df7, node: ps6)
-
-      Child.create!(instance: dd7_ps6, node: t9)
-      Child.create!(instance: dd7_ps6, node: t1)
-      Child.create!(instance: dd7_ps6, node: t2)
-
-
       Condition.create!(referenceable: ps6_p25, first_conditionable: s4_2, operator: nil, second_conditionable: nil)
       Condition.create!(referenceable: ps6_ps6, first_conditionable: s4_1, operator: nil, second_conditionable: nil)
       Condition.create!(referenceable: ps6_ps6, first_conditionable: p25_1, operator: nil, second_conditionable: nil)
@@ -120,7 +99,6 @@ module ServiceMacros
       Condition.create!(referenceable: dd7_df7, first_conditionable: p3_2, operator: Condition.operators[:and_operator], second_conditionable: p13_1)
       Condition.create!(referenceable: dd7_df7, first_conditionable: p1_1, operator: nil, second_conditionable: nil)
 
-      Condition.create!(referenceable: dd7_ps6, first_conditionable: df7, operator: nil, second_conditionable: nil)
       Condition.create!(referenceable: dd7_t9, first_conditionable: ps6_1, operator: nil, second_conditionable: nil)
       Condition.create!(referenceable: dd7_t1, first_conditionable: ps6_1, operator: nil, second_conditionable: nil)
       Condition.create!(referenceable: dd7_t2, first_conditionable: ps6_2, operator: nil, second_conditionable: nil)

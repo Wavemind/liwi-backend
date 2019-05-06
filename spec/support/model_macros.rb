@@ -75,16 +75,13 @@ module ModelMacros
 
       # Instances
       @dd7_p1 = Instance.create!(instanceable: @dd7, node: @p1)
+      @dd7_p3 = Instance.create!(instanceable: @dd7, node: p3)
+      @dd7_p13 = Instance.create!(instanceable: @dd7, node: p13)
       @dd7_s2 = Instance.create!(instanceable: @dd7, node: s2)
-      @dd7_df7 = Instance.create!(instanceable: @dd7, node: @df7)
 
       # PS
       ps_category = Category.create!(reference_prefix: 'PS', name_en: 'Predefined syndrome', parent: 'PredefinedSyndrome')
       ps6 = PredefinedSyndrome.create!(algorithm: @algorithm, reference: '6', label_en: 'Able to drink', category: ps_category)
-
-      # Children
-      Child.create!(instance: @dd7_p1, node: @df7)
-      Child.create!(instance: @dd7_df7, node: ps6)
     end
   end
 

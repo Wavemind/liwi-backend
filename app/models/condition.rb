@@ -34,7 +34,7 @@ class Condition < ApplicationRecord
   def create_child(condition)
     if condition.first_conditionable.is_a?(Answer) && (!condition.first_conditionable.node.is_a?(Treatment) || !condition.first_conditionable.node.is_a?(Management))
       Child.create!(instance: condition.first_conditionable.node.instances.find_by(instanceable: condition.referenceable.instanceable), node: condition.referenceable.node)
-    else
+    elsif first_conditionable.is_a?(Condition)
       create_child(condition.first_conditionable)
     end
 

@@ -84,17 +84,6 @@ RSpec.describe FinalDiagnosticsController, type: :controller do
     expect(flash[:alert]).to eq I18n.t('dependencies')
   end
 
-  it 'returns success full message when removing a final diagnostic hasn\'t instance dependecy' do
-    delete :destroy, params: {
-      algorithm_id: @algorithm.id,
-      version_id: @dd7.version.id,
-      diagnostic_id: @dd7.id,
-      id: @df1.id,
-    }
-
-    expect(flash[:notice]).to eq I18n.t('flash_message.success_updated')
-  end
-
   it 'creates a language then be able to translate in that language' do
     Language.create!(name: 'Hebrew', code: 'he')
 

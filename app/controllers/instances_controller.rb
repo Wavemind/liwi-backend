@@ -85,11 +85,8 @@ class InstancesController < ApplicationController
   def create_link
     condition = Condition.new(referenceable: @child_instance, first_conditionable: @parent_answer, top_level: true)
     if condition.save
-      puts '*** SAVED'
       render json: { status: 'success', message: t('flash_message.success_created')}
     else
-      puts '*** NOT SAVED'
-
       render json: { status: 'alert', message: @child_instance.errors.full_messages }
     end
   end
