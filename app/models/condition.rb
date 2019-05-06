@@ -10,15 +10,13 @@ class Condition < ApplicationRecord
   belongs_to :first_conditionable, polymorphic: true
   belongs_to :second_conditionable, polymorphic: true, optional: true
 
-  after_create :create_children, unless: Proc.new { self.referenceable.is_a?(Diagnostic) }
   before_destroy :remove_children, unless: Proc.new { self.referenceable.is_a?(Diagnostic) }
-
-  scope :top_level, -> { where(top_level: true) }
-  scope :low_level, -> { where(top_level: false) }
+  before_validation :prevent_loop, unless: Proc.new { self.referenceable.is_a?(Diagnostic) }
 
   validates_presence_of :first_conditionable
 
-  before_validation :prevent_loop, unless: Proc.new { self.referenceable.is_a?(Diagnostic) }
+  scope :top_level, -> { where(top_level: true) }
+  scope :low_level, -> { where(top_level: false) }
 
   # Puts nil instead of empty string when operator is not set in the view.
   nilify_blanks only: [:operator]
@@ -37,13 +35,13 @@ class Condition < ApplicationRecord
     if condition.first_conditionable.is_a?(Answer) && (!condition.first_conditionable.node.is_a?(Treatment) || !condition.first_conditionable.node.is_a?(Management))
       Child.create!(instance: condition.first_conditionable.node.instances.find_by(instanceable: condition.referenceable.instanceable), node: condition.referenceable.node)
     else
-      create_link(condition.first_conditionable)
+      create_child(condition.first_conditionable)
     end
 
     if condition.second_conditionable.is_a?(Answer) && (!condition.second_conditionable.node.is_a?(Treatment) || !condition.second_conditionable.node.is_a?(Management))
       Child.create!(instance: condition.second_conditionable.node.instances.find_by(instanceable: condition.referenceable.instanceable), node: condition.referenceable.node)
     elsif second_conditionable.is_a?(Condition)
-      create_link(condition.second_conditionable)
+      create_child(condition.second_conditionable)
     end
   end
 
@@ -73,7 +71,13 @@ class Condition < ApplicationRecord
   end
 
   def prevent_loop
-    referenceable.errors.add(:base, I18n.t('conditions.validation.loop')) if referenceable.children.any? && is_child(referenceable.children)
+    ActiveRecord::Base.transaction(requires_new: true) do
+      self.create_children unless referenceable.is_a?(Diagnostic)
+      if referenceable.children.any? && is_child(referenceable.children)
+        self.errors.add(:base, I18n.t('conditions.validation.loop'))
+        raise ActiveRecord::Rollback, I18n.t('conditions.validation.loop')
+      end
+    end
   end
 
   # @params [String, String]

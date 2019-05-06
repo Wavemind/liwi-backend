@@ -83,12 +83,13 @@ class InstancesController < ApplicationController
   # @params [Diagnostic] Current diagnostic, [Answer] Answer from parent of the link, [Node] child of the link
   # Create link in both way from diagram
   def create_link
-    @child_instance.conditions.new(first_conditionable: @parent_answer, top_level: true)
-    @parent_instance.children.new(node: @child_node)
-
-    if @child_instance.save
+    condition = Condition.new(referenceable: @child_instance, first_conditionable: @parent_answer, top_level: true)
+    if condition.save
+      puts '*** SAVED'
       render json: { status: 'success', message: t('flash_message.success_created')}
     else
+      puts '*** NOT SAVED'
+
       render json: { status: 'alert', message: @child_instance.errors.full_messages }
     end
   end
