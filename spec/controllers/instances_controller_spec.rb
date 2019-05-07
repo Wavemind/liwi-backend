@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe InstancesController, type: :controller, focus: true do
+RSpec.describe InstancesController, type: :controller do
   login_user
   create_algorithm
   create_category

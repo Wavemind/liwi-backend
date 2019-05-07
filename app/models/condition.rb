@@ -29,13 +29,13 @@ class Condition < ApplicationRecord
 
   def new_children
     if first_conditionable.is_a?(Answer) && (!first_conditionable.node.is_a?(Treatment) || !first_conditionable.node.is_a?(Management))
-      referenceable.children.new(node: referenceable.node)
+      first_conditionable.node.instances.find_by(instanceable: referenceable.instanceable).children.create!(node: referenceable.node)
     elsif first_conditionable.is_a?(Condition)
       first_conditionable.new_children
     end
 
     if second_conditionable.is_a?(Answer) && (!second_conditionable.node.is_a?(Treatment) || !second_conditionable.node.is_a?(Management))
-      referenceable.children.new(node: referenceable.node)
+      second_conditionable.node.instances.find_by(instanceable: referenceable.instanceable).children.create!(node: referenceable.node)
     elsif second_conditionable.is_a?(Condition)
       second_conditionable.new_children
     end
@@ -76,7 +76,7 @@ class Condition < ApplicationRecord
   # After creating a Child, verify if he's calling himself. In this case, rollback create
   def prevent_loop
     ActiveRecord::Base.transaction(requires_new: true) do
-      self.new_children unless referenceable.is_a?(Diagnostic)
+      self.new_children
       if referenceable.children.any? && is_child(referenceable)
         self.errors.add(:base, I18n.t('conditions.validation.loop'))
         raise ActiveRecord::Rollback, I18n.t('conditions.validation.loop')

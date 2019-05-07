@@ -18,7 +18,7 @@ class Diagnostic < ApplicationRecord
   # https://github.com/amoeba-rb/amoeba#usage
   amoeba do
     enable
-
+    include_association :components
     include_association :final_diagnostics
     include_association :conditions
     append reference: I18n.t('duplicated')
@@ -58,7 +58,7 @@ class Diagnostic < ApplicationRecord
   # After a duplicate, link DF instances to the duplicated ones instead of the source ones
   def relink_instance
     components.final_diagnostics.each do |df_instance|
-      df_instance.node = Node.includes(:category).find_by(reference: "#{df_instance.node.reference}#{I18n.t('duplicated')}")
+      df_instance.node = Node.find_by(reference: "#{df_instance.node.reference}#{I18n.t('duplicated')}")
       df_instance.save
     end
   end
