@@ -377,7 +377,7 @@ td {
   position: absolute;
   width: 15px;
   height: 15px;
-  background-color: pink;
+  background-color: cadetblue;
   top: 50%;
   bottom: 50%;
   right: -10px;
@@ -387,10 +387,11 @@ td {
   position: absolute;
   width: 15px;
   height: 15px;
-  background-color: red;
+  background-color: lightgreen;
   top: 50%;
   bottom: 50%;
   left: -10px;
+  border-radius: 10px;
 }
 
 .node-list {
