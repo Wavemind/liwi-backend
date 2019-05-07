@@ -51,6 +51,7 @@ class Diagram extends React.Component {
 
     let nodes = []; // Save nodes to link them at the end
     let nodeLevels = []; // Save nodes level to position them at the end
+    let self = this;
 
     // Create nodes for PS and questions
     questions.map((levels) => {
@@ -222,8 +223,7 @@ class Diagram extends React.Component {
               http.createLink(nodeId, answerId).then((response) => {
                 if (response.status === 'alert'){
                   model.removeLink(eventModel.link.id);
-                  engine.setDiagramModel(model);
-                  this.updateEngine(engine);
+                  self.updateEngine(engine);
                 }
               }).catch((err) => {
                 console.log(err);
