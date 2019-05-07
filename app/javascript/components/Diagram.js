@@ -12,6 +12,7 @@ import AdvancedNodeModel from "../react-diagram/models/AdvancedNodeModel";
 
 import NodeList from "../react-diagram/lists/NodeList";
 import Http from "../http";
+import FlashMessages from "./FlashMessages";
 
 import { withDiagram } from '../context/Diagram.context';
 
@@ -34,6 +35,7 @@ class Diagram extends React.Component {
       questions,
       finalDiagnostics,
       healthCares,
+      addMessage,
     } = this.props;
 
     const { engine } = this.state;
@@ -197,6 +199,8 @@ class Diagram extends React.Component {
           }
         }
 
+        // Add event listener on port change
+        // Trigger exclude diagnostic and remove link
         eventModel.link.addListener({
           targetPortChanged: function (eventLink) {
             let exists = false;
@@ -210,24 +214,33 @@ class Diagram extends React.Component {
               }
             });
 
-            if (eventLink.entity.sourcePort.parent.node.type === 'FinalDiagnostic'){
-              if (eventLink.entity.targetPort.parent.node.type === 'FinalDiagnostic') {
-                http.excludeDiagnostic(eventLink.entity.sourcePort.parent.node.id, eventLink.entity.targetPort.parent.node.id);
-              } else {
-                model.removeLink(eventModel.link.id)
-              }
-            } else {
-              let nodeId = eventLink.port.parent.node.id;
-              let answerId = eventModel.link.sourcePort.dbId;
 
-              http.createLink(nodeId, answerId).then((response) => {
-                if (response.status === 'alert'){
-                  model.removeLink(eventModel.link.id);
-                  self.updateEngine(engine);
+            // Don't create an another link in DB if it already exist
+            if (!exists) {
+              if (eventLink.entity.sourcePort.parent.node.type === 'FinalDiagnostic') {
+                if (eventLink.entity.targetPort.parent.node.type === 'FinalDiagnostic') {
+                  http.excludeDiagnostic(eventLink.entity.sourcePort.parent.node.id, eventLink.entity.targetPort.parent.node.id);
+                } else {
+                  model.removeLink(eventModel.link.id)
                 }
-              }).catch((err) => {
-                console.log(err);
-              });
+              } else {
+                let nodeId = eventLink.port.parent.node.id;
+                let answerId = eventModel.link.sourcePort.dbId;
+
+                // Create link in DB
+                http.createLink(nodeId, answerId).then((response) => {
+                  if (response.status !== 'success') {
+                    // if throw an error, remove link in diagram
+                    if (model.getLink(eventModel.link.id) !== null) {
+                      model.removeLink(eventModel.link.id);
+                      self.updateEngine(engine);
+                    }
+                    addMessage(response)
+                  }
+                }).catch((err) => {
+                  console.log(err);
+                });
+              }
             }
           }
         });
@@ -270,6 +283,7 @@ class Diagram extends React.Component {
 
     return (
       <div className="content">
+        <FlashMessages/>
         <div className="row">
           <div className="col-md-2 px-0">
             <NodeList/>

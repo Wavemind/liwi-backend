@@ -67,10 +67,24 @@ export default class DiagramProvider extends React.Component {
     });
   };
 
+  addMessage = async (message) => {
+    const { messages } = this.state;
+    messages.push(message);
+    this.setState({messages});
+  };
+
+  removeMessage = async (index) => {
+    const { messages } = this.state;
+    messages.splice(index, 1);
+    this.setState({messages});
+  };
+
   state = {
     set: this.setValState,
     removeNode: this.removeNode,
     addNode: this.addNode,
+    addMessage: this.addMessage,
+    removeMessage: this.removeMessage,
     instanceable: null,
     instanceableType: null,
     questions: null,
@@ -80,6 +94,7 @@ export default class DiagramProvider extends React.Component {
     orderedNodes: [],
     modalIsOpen: false,
     currentNodeId: null,
+    messages: [],
   };
 
   render() {
