@@ -42,7 +42,7 @@ class Answer < ApplicationRecord
 
   # Return the parent node with all the answers in order to include it in a json if the condition is an answer and not a condition
   def get_node
-    node.as_json(include: [:answers])
+    node.as_json(include: [:answers], methods: [:type])
   end
 
   private
