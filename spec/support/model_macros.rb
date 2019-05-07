@@ -81,7 +81,7 @@ module ModelMacros
       @dd7_df7 = Instance.create!(instanceable: @dd7, node: @df7)
 
       # Conditions
-      Condition.create!(referenceable: @dd7_df7, first_conditionable: @p3_2, top_level: true)
+      @cond1 = Condition.create!(referenceable: @dd7_df7, first_conditionable: @p3_2, top_level: true)
 
       # PS
       ps_category = Category.create!(reference_prefix: 'PS', name_en: 'Predefined syndrome', parent: 'PredefinedSyndrome')
