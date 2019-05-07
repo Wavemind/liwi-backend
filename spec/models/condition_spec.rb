@@ -27,4 +27,17 @@ RSpec.describe Condition, type: :model do
     expect(condition).to_not be_valid
   end
 
+  it 'is not a loop' do
+    is_child = @cond1.is_child(@dd7_df7)
+
+    expect(is_child).to eq(false)
+  end
+
+  it 'is a loop and its not valid' do
+    Condition.create!(referenceable: @dd7_p3, first_conditionable: @p1_1, top_level: true)
+    cond2 = Condition.create(referenceable: @dd7_p1, first_conditionable: @p3_2, top_level: false)
+
+    expect(cond2.valid?).to eq(false)
+  end
+
 end
