@@ -70,8 +70,7 @@ class InstancesController < ApplicationController
   # @return JSON of instance
   # Create an instances and return json format
   def create_from_diagram
-    instance = Instance.new(instance_params)
-    instance.instanceable = @instanceable
+    instance = @instanceable.instances.new(instance_params)
     instance.save
 
     respond_to do |format|
@@ -87,7 +86,7 @@ class InstancesController < ApplicationController
     if condition.save
       render json: { status: 'success', message: t('flash_message.success_created')}
     else
-      render json: { status: 'alert', message: @child_instance.errors.full_messages }
+      render json: { status: 'alert', message: condition.errors.full_messages }
     end
   end
 

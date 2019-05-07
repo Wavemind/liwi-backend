@@ -68,7 +68,7 @@ class Condition < ApplicationRecord
     instance.children.each do |child|
       # Gets child instance for the same instanceable (PS OR Diagnostic)
       child_instance = referenceable.instanceable.components.select{ |c| c.node == child.node }.first
-      return true if child_instance == referenceable || (child_instance.children.any? && is_child(child_instance.children))
+      return true if child_instance == referenceable || (child_instance.children.any? && is_child(child_instance))
     end
     false
   end

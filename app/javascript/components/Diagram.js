@@ -218,7 +218,16 @@ class Diagram extends React.Component {
             } else {
               let nodeId = eventLink.port.parent.node.id;
               let answerId = eventModel.link.sourcePort.dbId;
-              http.createLink(nodeId, answerId);
+
+              http.createLink(nodeId, answerId).then((response) => {
+                if (response.status === 'alert'){
+                  model.removeLink(eventModel.link.id);
+                  engine.setDiagramModel(model);
+                  this.updateEngine(engine);
+                }
+              }).catch((err) => {
+                console.log(err);
+              });
             }
           }
         });
