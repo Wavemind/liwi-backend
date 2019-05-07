@@ -274,9 +274,23 @@ class Diagram extends React.Component {
     return advancedNode;
   };
 
+  // @params [String] status, [String] message
+  // Call context method to display flash message
+  addFlashMessage = async (status, response) => {
+    const {addMessage} = this.props;
+    let message = {
+      status: status,
+      message: [`An error occured: ${response.status} - ${response.statusText}`],
+    };
+    await addMessage(message);
+  };
+
   render = () => {
     const {engine} = this.state;
-    const {removeNode} = this.props;
+    const {
+      removeNode,
+      addMessage,
+    } = this.props;
 
     const http = new Http();
 
@@ -295,6 +309,7 @@ class Diagram extends React.Component {
               let nodeDb = JSON.parse(event.dataTransfer.getData("node"));
               let points = engine.getRelativeMousePoint(event);
               let nodeDiagram = {};
+              let result;
 
               // Create AND node
               if (nodeDb === 'AND') {
@@ -303,29 +318,38 @@ class Diagram extends React.Component {
                 nodeDiagram.addOutPort(" ");
                 // Create Final Diagnostic node
               } else if (nodeDb.type === 'FinalDiagnostic') {
-                nodeDiagram = this.createNode(nodeDb);
-                nodeDiagram.addInPort(" ");
-                nodeDiagram.addOutPort(" ");
+                result = await http.createInstance(nodeDb.id);
 
-                await http.createInstance(nodeDb.id);
-                removeNode(nodeDb);
-                // Create regular node
-              } else {
-
-                if (nodeDb.get_answers !== null) {
-                  nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers);
-                  nodeDb.get_answers.map((answer) => (nodeDiagram.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
-                } else {
+                if (result.ok) {
                   nodeDiagram = this.createNode(nodeDb);
+                  nodeDiagram.addInPort(" ");
+                  nodeDiagram.addOutPort(" ");
+                  removeNode(nodeDb);
+                } else  {
+                  this.addFlashMessage('danger', result);
                 }
 
-                await http.createInstance(nodeDb.id);
-                removeNode(nodeDb);
+              } else {
+                // Create regular node
+                result = await http.createInstance(nodeDb.id);
+                if (result.ok) {
+                  if (nodeDb.get_answers !== null) {
+                    nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers);
+                    nodeDb.get_answers.map((answer) => (nodeDiagram.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
+                  } else {
+                    nodeDiagram = this.createNode(nodeDb);
+                  }
+                  removeNode(nodeDb);
+                } else {
+                  this.addFlashMessage('danger', result);
+                }
               }
 
+              // Set position of node in canevas
               nodeDiagram.x = points.x;
               nodeDiagram.y = points.y;
 
+              // Update diagram nodes
               model.addAll(nodeDiagram);
               this.updateEngine(engine);
             }}
