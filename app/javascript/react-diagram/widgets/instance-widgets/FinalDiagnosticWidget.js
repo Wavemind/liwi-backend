@@ -1,15 +1,12 @@
 import * as React from "react";
 
-
-/**
- * @author Arya Stark
- */
 class FinalDiagnosticWidget extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
 
+  // Generate out ports for final diagnostic node
   generateOutPort(port) {
     return (
       <div key={port.getID()} className="col px-0" style={{position: "relative"}}>

@@ -82,6 +82,8 @@ class Diagram extends React.Component {
         node.addInPort(" ");
 
         node.addOutPort(" ", finalDiagnostic.reference, finalDiagnostic.id);
+
+        // Manage excluding final diagnostics
         if (finalDiagnostic.final_diagnostic_id !== null) {
           excludingDF = finalDiagnostic;
         }
@@ -294,13 +296,12 @@ class Diagram extends React.Component {
               let points = engine.getRelativeMousePoint(event);
               let nodeDiagram = {};
 
-              // Create new node
-              // else
-              // create AND node
+              // Create AND node
               if (nodeDb === 'AND') {
                 nodeDiagram = new AdvancedNodeModel("AND", "", "", "");
                 nodeDiagram.addInPort(" ");
                 nodeDiagram.addOutPort(" ");
+                // Create Final Diagnostic node
               } else if (nodeDb.type === 'FinalDiagnostic') {
                 nodeDiagram = this.createNode(nodeDb);
                 nodeDiagram.addInPort(" ");
@@ -308,6 +309,7 @@ class Diagram extends React.Component {
 
                 await http.createInstance(nodeDb.id);
                 removeNode(nodeDb);
+                // Create regular node
               } else {
 
                 if (nodeDb.get_answers !== null) {

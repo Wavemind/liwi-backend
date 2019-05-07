@@ -113,7 +113,9 @@ class InstancesController < ApplicationController
           },
         }
       ),
-      available_conditions: available_conditions.as_json(methods: [:display_condition]), operators: Condition.operators.map { |k, v| [t("conditions.operators.#{k}"), k] }.as_json}
+      available_conditions: available_conditions.as_json(methods: [:display_condition]),
+      operators: Condition.operators.map { |k, v| [t("conditions.operators.#{k}"), k] }.as_json
+    }
   end
 
   # POST /diagnostics/:diagnostic_id/instances/:node_id/remove_from_diagram

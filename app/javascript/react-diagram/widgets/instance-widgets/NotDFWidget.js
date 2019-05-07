@@ -1,14 +1,12 @@
 import * as React from "react";
 
-/**
- * @author Bran Stark
- */
 class NotDFWidget extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
 
+  // Generate out ports for regular node
   generateOutPort(port) {
     return (
       <div key={port.getID()} className="col px-0" style={{ position: "relative" }}>

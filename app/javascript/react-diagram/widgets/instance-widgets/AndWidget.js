@@ -1,8 +1,6 @@
 import * as React from "react";
 
-/**
- * @author Manu Barchchat with <3
- */
+// AND logic related
 class AndWidget extends React.Component {
   constructor(props) {
     super(props);
