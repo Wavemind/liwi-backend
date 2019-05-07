@@ -134,9 +134,6 @@ class Diagram extends React.Component {
         hcLevel.push(node);
         model.addAll(node);
       });
-
-      console.log(hcConditions);
-
       nodeLevels.push(hcConditions);
       nodeLevels.push(hcLevel);
     }
