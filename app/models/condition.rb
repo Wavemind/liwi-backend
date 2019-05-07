@@ -27,17 +27,18 @@ class Condition < ApplicationRecord
     "(#{first_conditionable.display_condition} #{I18n.t("conditions.operators.#{operator}") unless operator.nil?} #{second_conditionable.display_condition unless second_conditionable.nil?})"
   end
 
-  def new_children
+  # Create children from conditions automatically
+  def create_children
     if first_conditionable.is_a?(Answer) && (!first_conditionable.node.is_a?(Treatment) || !first_conditionable.node.is_a?(Management))
       first_conditionable.node.instances.find_by(instanceable: referenceable.instanceable).children.create!(node: referenceable.node)
     elsif first_conditionable.is_a?(Condition)
-      first_conditionable.new_children
+      first_conditionable.create_children
     end
 
     if second_conditionable.is_a?(Answer) && (!second_conditionable.node.is_a?(Treatment) || !second_conditionable.node.is_a?(Management))
       second_conditionable.node.instances.find_by(instanceable: referenceable.instanceable).children.create!(node: referenceable.node)
     elsif second_conditionable.is_a?(Condition)
-      second_conditionable.new_children
+      second_conditionable.create_children
     end
   end
 
@@ -73,10 +74,10 @@ class Condition < ApplicationRecord
     false
   end
 
-  # After creating a Child, verify if he's calling himself. In this case, rollback create
+  # Before creating a condition, verify that it is not doing a loop. Create the Child in the opposite way in the process
   def prevent_loop
     ActiveRecord::Base.transaction(requires_new: true) do
-      self.new_children
+      self.create_children
       if referenceable.children.any? && is_child(referenceable)
         self.errors.add(:base, I18n.t('conditions.validation.loop'))
         raise ActiveRecord::Rollback, I18n.t('conditions.validation.loop')
