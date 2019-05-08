@@ -1,8 +1,14 @@
 import * as React from "react";
 import { DefaultLinkWidget } from "storm-react-diagrams";
 
+import { withDiagram } from "../../context/Diagram.context";
 
+/**
+ * @author Alain Fresco
+ * Extended because we needed to handle the direction of the links
+ */
 class AdvancedLinkWidget extends DefaultLinkWidget {
+
   /**
    * Get direction of the link
    * Useful for animation
@@ -11,10 +17,12 @@ class AdvancedLinkWidget extends DefaultLinkWidget {
    * @param target - target port
    * @return true if direction should be reversed
    */
-  getDirection(source: Object, target: Object): boolean {
+  getDirection(link: Object): boolean {
+    const source = link.points[0];
+    const target = link.points[link.points.length - 1];
     const difX = source.x - target.x,
-      difY = source.y - target.y,
-      isHorisontal = Math.abs(difX) > Math.abs(difY);
+          difY = source.y - target.y,
+          isHorisontal = Math.abs(difX) > Math.abs(difY);
     return isHorisontal ? difX > 0 : difY > 0;
   }
 
@@ -34,16 +42,16 @@ class AdvancedLinkWidget extends DefaultLinkWidget {
     const { diagramEngine, link } = this.props;
     const { selected } = this.state;
 
-    // let inversed = this.getDirection(link.sourcePort, link.targetPort);
 
-    const Link = React.cloneElement(
+    const Top = React.cloneElement(
       diagramEngine
         .getFactoryForLink(link)
         .generateLinkSegment(
           link,
           this,
           selected || link.isSelected(),
-          path
+          path,
+          this.getDirection(link)
         ),
       {
         ...extraProps,
@@ -58,23 +66,12 @@ class AdvancedLinkWidget extends DefaultLinkWidget {
       }
     );
 
-    // Needed for the creating Labels
-    const LinkClone = (
-      <path
-        strokeWidth={0}
-        stroke="rgba(0,0,0,0)"
-        d={path}
-        ref={ref => ref && this.refPaths.push(ref)}
-      />
-    );
-
     return (
       <g key={"link-" + id}>
-        {LinkClone}
-        {Link}
+        {Top}
       </g>
     );
   }
 }
 
-export default AdvancedLinkWidget;
+export default withDiagram(AdvancedLinkWidget);

@@ -14,6 +14,7 @@
 @import "bootstrap";
 @import "datatables";
 @import "storm-react-diagrams/src/sass/main";
+@import "diagram";
 /*
     DEMO STYLEa
 */
@@ -71,6 +72,7 @@ a:focus {
   width: 100%;
   align-items: stretch;
 }
+
 
 #sidebar {
   min-width: 250px;
@@ -335,12 +337,11 @@ td {
   color: #000;
   border-top: 1px solid gray;
   font-size: 12px;
-}
-
-.answer-split {
-  border-right: 1px solid gray;
-
-  &:last-child {
+  .answer-split {
+    border-right: 1px solid gray;
+    height: 100%;
+  }
+  div:last-child .answer-split {
     border-right: none;
   }
 }
@@ -354,22 +355,24 @@ td {
 
 .out-port {
   background-color: lightgreen;
-  width: 15px;
-  height: 15px;
+  width: 18px;
+  height: 12px;
   margin-left: auto;
   margin-right: auto;
   position: absolute;
   left: 0;
   right: 0;
-  bottom: -15px;
-  border-radius: 10px;
-
+  bottom: -12px;
+  border: 2px solid #808080;
   &:hover {
     background-color: green;
   }
 }
 
 .in-port {
-  background-color:cadetblue;
+  height: 10px;
+  width: 18px;
+  background-color: #FFCACA;
   top: -10px;
+  border: 2px solid #808080;
 }
