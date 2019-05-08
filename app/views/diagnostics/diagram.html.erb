@@ -5,7 +5,7 @@
 </div>
 <div class="row">
   <div class="col-md-12">
-    <span data-type="<%= @diagnostic.class.name %>" data-id="<%= @diagnostic.id %>"></span>
+    <p data-type="<%= @diagnostic.class.name %>" data-id="<%= @diagnostic.id %>" data-version="<%= @diagnostic.version.id %>"  data-algorithm="<%= @diagnostic.version.algorithm.id %>"></p>
     <%= react_component('Provider', {
     render: 'Diagram',
     context: {

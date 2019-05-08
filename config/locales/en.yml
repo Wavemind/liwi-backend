@@ -58,6 +58,8 @@ en:
     operators:
       and_operator: "AND"
       or_operator: "OR"
+    validation:
+      loop: "You are trying to do a loop in your diagnostic which is impossible."
   deactivated: "Deactivate"
   delete: "Delete"
   destroy: "Remove"

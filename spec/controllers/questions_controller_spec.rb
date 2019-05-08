@@ -44,7 +44,7 @@ RSpec.describe QuestionsController, type: :controller do
         reference: '5',
         category_id: @symptom.id,
         priority: 'basic',
-        answer_type_id: @input_integer.id
+        answer_type_id: @input_float.id
       }
     }
     expect(response).to render_template(:new)
@@ -169,7 +169,7 @@ RSpec.describe QuestionsController, type: :controller do
     expect(flash[:alert]).to eq I18n.t('dependencies')
   end
 
-  it 'returns success full message when removing a question hasn\'t instance dependecy' do
+  it 'returns success full message when removing a question hasn\'t instance dependency' do
     delete :destroy, params: {
       algorithm_id: @algorithm.id,
       id: @question.id,
@@ -178,5 +178,11 @@ RSpec.describe QuestionsController, type: :controller do
     expect(response).to redirect_to algorithm_url(@algorithm, panel: 'questions')
     expect(response).to have_attributes(status: 302)
     expect(flash[:notice]).to eq I18n.t('flash_message.success_updated')
+  end
+
+  it 'create an unavailable answer if category is an assessment' do
+    @question = Question.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', category: @assessment, priority: Question.priorities[:mandatory], answer_type: @boolean, unavailable: '1')
+
+    expect(@question.answers.count).to equal(3)
   end
 end

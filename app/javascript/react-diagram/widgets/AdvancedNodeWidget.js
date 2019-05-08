@@ -2,12 +2,18 @@ import * as React from "react";
 import { BaseWidget } from "storm-react-diagrams";
 import AdvancedNodeModel from "../models/AdvancedNodeModel";
 
+import FinalDiagnosticWidget from "./instance-widgets/FinalDiagnosticWidget";
+import NotDFWidget from "./instance-widgets/NotDFWidget";
+import AndWidget from "./instance-widgets/AndWidget";
+
+
 export interface AdvancedNodeWidgetProps {
   diagramNode: AdvancedNodeModel;
   size?: number;
 }
 
-export interface AdvancedNodeWidgetState {}
+export interface AdvancedNodeWidgetState {
+}
 
 /**
  * @author Jean Neige
@@ -23,57 +29,18 @@ class AdvancedNodeWidget extends BaseWidget<AdvancedNodeWidgetProps, AdvancedNod
     this.state = {};
   }
 
-  generateOutPort(port) {
-    return (
-      <div key={port.getID()} className="col px-0" style={{position: 'relative'}}>
-          <div className="py-1 text-center answer-split">{port.label}</div>
-          <div className="port out-port" data-name={port.name} data-nodeid={port.parent.id} />
-      </div>
-    );
-  }
-
-
   render() {
     const { diagramNode } = this.props;
-    let outPorts = [];
 
-    diagramNode.getOutPorts().map((outPort) => {
-      outPorts.push(this.generateOutPort(outPort));
-    });
+    const type = diagramNode.node.type;
 
-    let inPort = diagramNode.getInPort();
-
-    return (
-      <div className={`node ${(diagramNode.node === 'AND') ? 'and' : ''}`}>
-        <div className="port py-2 node-category">
-          <div className="port srd-port in-port" data-name={inPort.name} data-nodeid={inPort.parent.id} />
-          <div className="col pl-2 pr-0 text-left">
-            {(diagramNode.node === 'AND') ? 'AND' : diagramNode.node.reference}
-          </div>
-          <div className="col pl-0 pr-2 text-right">
-            {(diagramNode.node === 'AND') ? '' : diagramNode.node.priority}
-          </div>
-        </div>
-        {(diagramNode.node === 'AND') ? (
-          <div>
-            <div className="node-answers">
-              <div className="port srd-port" style={{top: 28, left: 8}} data-name={diagramNode.getOutPort().name} data-nodeid={diagramNode.getOutPort().parent.id} />
-            </div>
-          </div>
-          ) : (
-          <div>
-            <div className="py-2 node-label">
-              <div className="col text-center">
-                {diagramNode.node.label_translations['en']}
-              </div>
-            </div>
-            <div className="node-answers">
-                {outPorts}
-            </div>
-          </div>
-          )}
-      </div>
-    );
+    if (type === "FinalDiagnostic") {
+      return <FinalDiagnosticWidget diagramNode={diagramNode}/>;
+    } else if (type === "Management" || type === "Treatment" || type === "PredefinedSyndrome" || type === "Question") {
+      return <NotDFWidget diagramNode={diagramNode}/>;
+    } else {
+      return <AndWidget diagramNode={diagramNode}/>;
+    }
   }
 }
 

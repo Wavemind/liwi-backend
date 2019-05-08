@@ -47,12 +47,12 @@ RSpec.describe DiagnosticsController, type: :controller do
 
     duplicated = Diagnostic.last
 
-    expect(duplicated.final_diagnostics).to contain_exactly(Instance.where(instanceable: duplicated, node: duplicated.final_diagnostics.first).first.node)
     expect(@dd7.final_diagnostics.count).to equal(duplicated.final_diagnostics.count)
     expect(@dd7.conditions.count).to equal(duplicated.conditions.count)
     expect(@dd7.components.count).to equal(duplicated.components.count)
     expect(@dd7.components.map(&:children).count).to equal(duplicated.components.map(&:children).count)
     expect(@dd7.components.map(&:conditions).count).to equal(duplicated.components.map(&:conditions).count)
     expect(@dd7.reference + I18n.t('duplicated')).to eq(duplicated.reference)
+    expect(duplicated.components.where(node: duplicated.final_diagnostics.first).count).to eq(1)
   end
 end

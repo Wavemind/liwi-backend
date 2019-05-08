@@ -2,7 +2,7 @@
 class Question < Node
 
   after_create :create_boolean, if: Proc.new { answer_type.value == 'Boolean' }
-  after_create :create_unavailable_answer, if: Proc.new { unavailable == '1' }
+  after_create :create_unavailable_answer, if: Proc.new { unavailable == '1' && category.reference_prefix == 'A' } # Ensure unavailable is checked and the category is Assessment
 
   attr_accessor :unavailable
 
@@ -22,7 +22,7 @@ class Question < Node
   # {Node#unique_reference}
   # Scoped by the current algorithm
   def unique_reference
-    if algorithm.questions.where(reference: "#{category.reference_prefix}#{reference}").any?
+    if category.present? && algorithm.questions.where(reference: "#{category.reference_prefix}#{reference}").any?
       errors.add(:reference, I18n.t('nodes.validation.reference_used'))
     end
   end

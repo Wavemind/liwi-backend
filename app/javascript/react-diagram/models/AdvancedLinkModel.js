@@ -23,13 +23,17 @@ class AdvancedLinkModel extends DefaultLinkModel {
 
     this.addListener({
       entityRemoved: function(removedLink) {
-        let nodeId = removedLink.entity.targetPort.parent.node.id;
-        let answerId = removedLink.entity.sourcePort.dbId;
-        let selected = removedLink.entity.selected;
 
         // Don't trigger automatic removing link since node does it already
-        if (selected) {
-          http.removeLink(nodeId, answerId);
+        if (removedLink.entity.selected) {
+          if (removedLink.entity.sourcePort.parent.node.type === "FinalDiagnostic") {
+            http.removeExcluding(removedLink.entity.sourcePort.parent.node.id);
+          } else {
+            let nodeId = removedLink.entity.targetPort.parent.node.id;
+            let answerId = removedLink.entity.sourcePort.dbId;
+
+            http.removeLink(nodeId, answerId);
+          }
         }
       },
     });

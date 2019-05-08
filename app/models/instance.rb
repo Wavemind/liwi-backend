@@ -4,7 +4,7 @@ class Instance < ApplicationRecord
   belongs_to :node
   belongs_to :instanceable, polymorphic: true
 
-  has_many :children, dependent: :destroy
+  has_many :children
   has_many :nodes, through: :children
 
   has_many :conditions, as: :referenceable, dependent: :destroy
@@ -21,7 +21,6 @@ class Instance < ApplicationRecord
   # https://github.com/amoeba-rb/amoeba#usage
   amoeba do
     enable
-    include_association :children
     include_association :conditions
   end
 

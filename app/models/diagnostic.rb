@@ -54,7 +54,7 @@ class Diagnostic < ApplicationRecord
     Node.joins(:instances).where('type = ? AND instances.instanceable_id = ? AND instances.instanceable_type = ?', 'Treatment', id, self.class.name)
   end
 
-  # @params [Diagnostic]
+  # @param [Diagnostic]
   # After a duplicate, link DF instances to the duplicated ones instead of the source ones
   def relink_instance
     components.final_diagnostics.each do |df_instance|
@@ -67,7 +67,7 @@ class Diagnostic < ApplicationRecord
   # Generate the ordered questions
   def generate_questions_order
     nodes = []
-    first_instances = components.includes(:node, :conditions, :children).where(conditions: { referenceable_id: nil }).where('nodes.type = ? OR nodes.type = ?', 'Question', 'PredefinedSyndrome')
+    first_instances = components.includes(:conditions, :children, :node).where(conditions: { referenceable_id: nil }).where('nodes.type = ? OR nodes.type = ?', 'Question', 'PredefinedSyndrome')
 
     health_cares = components.treatments + components.managements
     # Excluding health cares conditions
@@ -87,7 +87,7 @@ class Diagnostic < ApplicationRecord
   # Get children question nodes
   def get_children(instances, nodes)
     current_nodes = []
-    instances.includes(children: [:node]).map(&:children).flatten.each do |child|
+    instances.includes(:conditions, children: [:node]).map(&:children).flatten.each do |child|
       current_nodes << child.node if child.node.is_a?(Question) || child.node.is_a?(PredefinedSyndrome)
     end
 
@@ -102,7 +102,7 @@ class Diagnostic < ApplicationRecord
   end
 
   # @params [Array][Array][Instances] instances before delete, [Instance] instance to delete
-  # @@return [Array][Array][Instances] instances after delete
+  # @return [Array][Array][Instances] instances after delete
   # Remove the duplicated node if it was already set before. We keep the last one in order to be coherent in the diagram.
   def remove_old_node(instances, instance)
     instances.each_with_index do |level, index|
@@ -115,25 +115,25 @@ class Diagnostic < ApplicationRecord
   # @return [Json]
   # Return questions in json format
   def questions_json
-    generate_questions_order.as_json(include: [conditions: { include: [first_conditionable: { include: [:node] }, second_conditionable: { include: [:node] }] }, node: { include: [:answers] }])
+    generate_questions_order.as_json(include: [conditions: { include: [first_conditionable: { methods: [:get_node] }, second_conditionable: { methods: [:get_node] }] }, node: { include: [:answers], methods: [:type] }])
   end
 
   # @return [Json]
   # Return final diagnostics in json format
   def final_diagnostics_json
-    components.final_diagnostics.as_json(include: [ :node, conditions: { include: [first_conditionable: { include: [node: { include: [:answers]}]}, second_conditionable: { include: [node: { include: [:answers]}]}]}])
+    components.final_diagnostics.as_json(include: [ node: {methods: [:type]}, conditions: { include: [first_conditionable: { include: [node: { include: [:answers]}], methods: [:get_node]}, second_conditionable: { methods: [:get_node]}]}])
   end
 
   # @return [Json]
   # Return treatments and managements in json format
   def health_cares_json
-    components.treatments.as_json(include: [ :node, conditions: { include: [first_conditionable: { include: [node: { include: [:answers]}]}]}]) + components.managements.as_json(include: [ :node, conditions: { include: [first_conditionable: { include: [:node]}]}])
+    components.treatments.as_json(include: [node: {methods: [:type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}]) + components.managements.as_json(include: [node: {methods: [:type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}])
   end
 
   # @return [Json]
   # Return available nodes in the algorithm in json format
   def available_nodes_json
-    (version.algorithm.nodes.where.not(id: components.select(:node_id)) + final_diagnostics).as_json(methods: [:category_name, :type, :get_answers])
+    (version.algorithm.nodes.where.not(id: components.select(:node_id)) + final_diagnostics.where.not(id: components.select(:node_id))).as_json(methods: [:category_name, :type, :get_answers])
   end
 
   private

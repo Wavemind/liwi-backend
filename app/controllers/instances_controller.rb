@@ -1,7 +1,7 @@
 class InstancesController < ApplicationController
 
   before_action :authenticate_user!
-  before_action :set_instanceable, only: [:show, :create, :destroy, :by_reference, :create_from_diagram, :remove_from_diagram, :create_link, :remove_link]
+  before_action :set_instanceable, only: [:show, :create, :destroy, :by_reference, :create_from_diagram, :remove_from_diagram, :create_link, :remove_link, :load_conditions]
   before_action :set_instance, only: [:show, :destroy]
   before_action :set_child, only: [:create_link, :remove_link]
   before_action :set_parent, only: [:create_link, :remove_link]
@@ -70,8 +70,7 @@ class InstancesController < ApplicationController
   # @return JSON of instance
   # Create an instances and return json format
   def create_from_diagram
-    instance = Instance.new(instance_params)
-    instance.instanceable = @instanceable
+    instance = @instanceable.components.new(instance_params)
     instance.save
 
     respond_to do |format|
@@ -83,14 +82,40 @@ class InstancesController < ApplicationController
   # @params [Diagnostic] Current diagnostic, [Answer] Answer from parent of the link, [Node] child of the link
   # Create link in both way from diagram
   def create_link
-    @parent_instance.children.new(node: @child_node)
-    @child_instance.conditions.new(first_conditionable: @parent_answer, top_level: true)
-
-    if @parent_instance.save && @child_instance.save
+    condition = Condition.new(referenceable: @child_instance, first_conditionable: @parent_answer, top_level: true)
+    if condition.save
       render json: { status: 'success', message: t('flash_message.success_created')}
     else
-      render json: { status: 'alert', message: t('flash_message.update_fail')}
+      render json: { status: 'danger', message: condition.errors.full_messages }
     end
+  end
+
+  # @params [Diagnostic] Current diagnostic [Node] child of the link
+  # Create link in both way from diagram
+  def load_conditions
+    instance = @instanceable.components.find_by(node_id: params[:node_id])
+    available_conditions = (@instanceable.components.questions.includes(node:[:answers]).map(&:node).map(&:answers) + @instanceable.components.predefined_syndromes.includes(node:[:answers]).map(&:node).map(&:answers) + instance.conditions).flatten
+    render json: {
+      instance: instance.as_json(
+        include: {
+          conditions: {
+            include: [
+              first_conditionable: {
+                include: [node: { include: [:answers]}]
+              },
+              second_conditionable: {
+                include: [
+                  node: { include: [:answers]}
+                ]
+              }
+            ],
+            methods: [:display_condition]
+          },
+        }
+      ),
+      available_conditions: available_conditions.as_json(methods: [:display_condition]),
+      operators: Condition.operators.map { |k, v| [t("conditions.operators.#{k}"), k] }.as_json
+    }
   end
 
   # POST /diagnostics/:diagnostic_id/instances/:node_id/remove_from_diagram
@@ -109,15 +134,9 @@ class InstancesController < ApplicationController
   # @params [Diagnostic] Current diagnostic, [Answer] Answer from parent of the link, [Node] child of the link
   # Remove a link from diagram and remove from both child and parent concerned
   def remove_link
-    @child_instance.conditions.each do |cond|
-      Instance.remove_condition(cond, @parent_instance)
-    end
-
-    if @parent_instance.children.find_by(node: @child_node).destroy
-      render json: { status: 'success', message: t('flash_message.success_deleted')}
-    else
-      render json: { status: 'alert', message: t('flash_message.delete_fail')}
-    end
+    condition = Condition.find_by(referenceable: @child_instance, first_conditionable: @parent_answer)
+    Instance.remove_condition(condition, @parent_instance)
+    render json: { status: 'success', message: t('flash_message.success_deleted')}
   end
 
   private

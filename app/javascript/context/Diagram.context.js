@@ -11,7 +11,6 @@ export default class DiagramProvider extends React.Component {
     this.state = {...this.state, ...props.value }
   }
 
-
   async componentWillMount() {
     await this.orderNodes();
   }
@@ -62,16 +61,30 @@ export default class DiagramProvider extends React.Component {
 
   addNode = async (node) => {
     const { availableNodes } = this.state;
-    availableNodes.push(node)
+    availableNodes.push(node);
     this.setState({availableNodes}, async () => {
       await this.orderNodes();
     });
+  };
+
+  addMessage = async (message) => {
+    const { messages } = this.state;
+    messages.push(message);
+    this.setState({messages});
+  };
+
+  removeMessage = async (index) => {
+    const { messages } = this.state;
+    messages.splice(index, 1);
+    this.setState({messages});
   };
 
   state = {
     set: this.setValState,
     removeNode: this.removeNode,
     addNode: this.addNode,
+    addMessage: this.addMessage,
+    removeMessage: this.removeMessage,
     instanceable: null,
     instanceableType: null,
     questions: null,
@@ -79,6 +92,9 @@ export default class DiagramProvider extends React.Component {
     healthCares: null,
     availableNodes: null,
     orderedNodes: [],
+    modalIsOpen: false,
+    currentNodeId: null,
+    messages: [],
   };
 
   render() {

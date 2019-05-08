@@ -8,7 +8,7 @@ class FinalDiagnosticsController < ApplicationController
   def index
     respond_to do |format|
       format.html
-      format.json { render json: FinalDiagnosticDatatable.new(params, view_context: view_context) }
+      format.json {render json: FinalDiagnosticDatatable.new(params, view_context: view_context)}
     end
   end
 
@@ -42,6 +42,7 @@ class FinalDiagnosticsController < ApplicationController
     @final_diagnostic = @diagnostic.final_diagnostics.new(final_diagnostic_params)
 
     if @final_diagnostic.save
+      @diagnostic.components.create!(node: @final_diagnostic)
       redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'final_diagnostics'), notice: t('flash_message.success_created')
     else
       render :new
@@ -74,9 +75,9 @@ class FinalDiagnosticsController < ApplicationController
   # Add excluded diagnostic to final diagnostic
   def add_excluded_diagnostic
     if @final_diagnostic.update(final_diagnostic_params)
-      redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'final_diagnostics'), notice: t('flash_message.success_updated')
+      render json: {status: 'success', message: t('flash_message.success_updated')}
     else
-      redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'final_diagnostics'), alert: t('flash_message.update_fail')
+      render json: {status: 'alert', message: t('flash_message.update_fail')}
     end
   end
 
@@ -86,9 +87,9 @@ class FinalDiagnosticsController < ApplicationController
   def remove_excluded_diagnostic
     @final_diagnostic.excluded_diagnostic = nil
     if @final_diagnostic.save
-      redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'final_diagnostics'), notice: t('flash_message.success_updated')
+      render json: {status: 'success', message: t('flash_message.success_updated')}
     else
-      redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'final_diagnostics'), alert: t('flash_message.update_fail')
+      render json: {status: 'alert', message: t('flash_message.update_fail')}
     end
   end
 
@@ -96,10 +97,10 @@ class FinalDiagnosticsController < ApplicationController
   # Update the object with its translation without
   def update_translations
     if @final_diagnostic.update(final_diagnostic_params)
-      @json = { status: 'success', message: t('flash_message.success_updated')}
+      @json = {status: 'success', message: t('flash_message.success_updated')}
       render 'diagnostics/update_translations', formats: :js, status: :ok
     else
-      @json = { status: 'alert', message: t('flash_message.update_fail')}
+      @json = {status: 'alert', message: t('flash_message.update_fail')}
       render 'diagnostics/update_translations', formats: :js, status: :unprocessable_entity
     end
   end

@@ -25,7 +25,7 @@ class Answer < ApplicationRecord
   # Return the reference of the answer. This function is needed to do a recursive functional call
   # with conditions or answers, answer being the last level
   def display_condition
-    "answer: #{reference}"
+    "#{reference}"
   end
 
   # @return [String]
@@ -37,7 +37,12 @@ class Answer < ApplicationRecord
   # @param [Integer] node id to link to questions
   # Create 1 automatic answer for tests/assessments if attr_accessor :unavailable in question is checked
   def self.create_unavailable(node_id)
-    Answer.create!(node_id: node_id, reference: '100', label_en: I18n.t('answers.unavailable'))
+    Answer.create!(node_id: node_id, reference: '0', label_en: I18n.t('answers.unavailable'))
+  end
+
+  # Return the parent node with all the answers in order to include it in a json if the condition is an answer and not a condition
+  def get_node
+    node.as_json(include: [:answers], methods: [:type])
   end
 
   private
@@ -47,9 +52,7 @@ class Answer < ApplicationRecord
     if node.is_a?(Question) && node.answer_type.display == 'Input'
       if between?
         errors.add(:value, I18n.t('answers.validation.value_missing')) unless value.include?(',')
-        value.split(',').each do |val|
-          validate_value_type(val)
-        end
+        value.split(',').each(&method(:validate_value_type))
       else
         validate_value_type(value)
       end
