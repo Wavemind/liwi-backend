@@ -5,9 +5,9 @@ RSpec.describe Diagnostic, type: :model do
   before(:each) do
     role = Role.new(name: 'administrator')
     user = User.new(first_name: 'Foo', last_name: 'Bar', email: 'foo.bar@gmail.com', role: role)
-    algorithm = Algorithm.new(name: 'EPOCT', description: 'MedicalCenter1', user: user)
+    @algorithm = Algorithm.new(name: 'EPOCT', description: 'MedicalCenter1', user: user)
 
-    @version = Version.create!(name: '1.3.2', user: user, algorithm: algorithm)
+    @version = Version.create!(name: '1.3.2', user: user, algorithm: @algorithm)
   end
 
   it 'is valid with valid attributes' do
@@ -27,5 +27,41 @@ RSpec.describe Diagnostic, type: :model do
     diagnostic = Diagnostic.new(version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)')
 
     expect(diagnostic).to_not be_valid
+  end
+
+  it 'generates diagram properly' do
+    @ps_category = Category.create!(reference_prefix: 'PS', name_en: 'Predefined syndrome', parent: 'PredefinedSyndrome')
+    dd1 = Diagnostic.create!(version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)')
+    dd1.final_diagnostics.create!(reference: '1', label_en: 'Df')
+    t1 = Treatment.create!(reference: '1', label_en: 'Treat', algorithm: @algorithm)
+    m1 = Management.create!(reference: '1', label_en: 'Manage', algorithm: @algorithm)
+    ps5 = PredefinedSyndrome.create!(reference: '5', label_en: 'dia', algorithm: @algorithm, category: @ps_category)
+    ps9 = PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm, category: @ps_category)
+    dd1_df1 = Instance.create!(instanceable: dd1, node: dd1.final_diagnostics.first)
+    dd1_ps5 = Instance.create!(instanceable: dd1, node: ps5)
+    dd1_ps9 = Instance.create!(instanceable: dd1, node: ps9)
+    dd1_t1 = Instance.create!(instanceable: dd1, node: t1)
+    dd1_m1 = Instance.create!(instanceable: dd1, node: m1)
+
+    Condition.create!(referenceable: dd1_ps9, first_conditionable: ps5.answers.first, operator: nil, second_conditionable: nil)
+    Condition.create!(referenceable: dd1_df1, first_conditionable: ps9.answers.first, operator: nil, second_conditionable: nil)
+
+    expect(dd1.generate_questions_order[0][0]['id']).to eq(dd1_ps5.id)
+    expect(dd1.generate_questions_order[1][0]['id']).to eq(dd1_ps9.id)
+    expect(dd1.final_diagnostics_json[0]['id']).to eq(dd1_df1.id)
+    expect(dd1.health_cares_json[0]['id']).to eq(dd1_t1.id)
+    expect(dd1.health_cares_json[1]['id']).to eq(dd1_m1.id)
+    expect(dd1.questions_json[1][0]['conditions'][0]['first_conditionable_id']).to eq(ps5.answers.first.id)
+  end
+
+  it 'returns correct list of available nodes' do
+    dd1 = Diagnostic.create!(version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)')
+    @ps_category = Category.create!(reference_prefix: 'PS', name_en: 'Predefined syndrome', parent: 'PredefinedSyndrome')
+
+    ps9 = PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm, category: @ps_category)
+    ps5 = PredefinedSyndrome.create!(reference: '5', label_en: 'diarrhea', algorithm: @algorithm, category: @ps_category)
+
+    expect(dd1.available_nodes_json[0]['id']).to eq(ps9.id)
+    expect(dd1.available_nodes_json[1]['id']).to eq(ps5.id)
   end
 end
