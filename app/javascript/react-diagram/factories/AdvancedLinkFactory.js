@@ -66,7 +66,7 @@ class AdvancedLinkFactory extends DefaultLinkFactory {
           <marker id={markerIdInverse} markerWidth="6" markerHeight="4" refX="-2" refY="2" orient="auto">
             <path d="M8,0 L4,4 L0,2 Z" style={{fill: "#000", stroke: 'none'}} />
           </marker>
-        </defs>) : ''}
+        </defs>) : null}
         <path
           className={selected ? widget.bem("--path-selected") : ""}
           fill= "none"

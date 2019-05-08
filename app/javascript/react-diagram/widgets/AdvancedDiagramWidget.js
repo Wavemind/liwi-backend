@@ -10,13 +10,23 @@ import {
 } from "storm-react-diagrams";
 import AdvancedNodeLayerWidget from "./AdvancedNodeLayerWidget";
 
+/**
+ * @author Alain Fresco
+ * Extended because we needed to override AdvancedNodeLayerWidget
+ */
 class AdvancedDiagramWidget extends DiagramWidget {
 
   render() {
-    let diagramEngine = this.props.diagramEngine;
-    diagramEngine.setMaxNumberPointsPerLink(this.props.maxNumberPointsPerLink);
-    diagramEngine.setSmartRoutingStatus(this.props.smartRouting);
+    let {
+      diagramEngine,
+      maxNumberPointsPerLink,
+      smartRouting
+    } = this.props;
+
     let diagramModel = diagramEngine.getDiagramModel();
+
+    diagramEngine.setMaxNumberPointsPerLink(maxNumberPointsPerLink);
+    diagramEngine.setSmartRoutingStatus(smartRouting);
 
     return (
       <div

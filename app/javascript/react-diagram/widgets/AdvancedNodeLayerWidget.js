@@ -8,6 +8,7 @@ import { withDiagram } from "../../context/Diagram.context";
 
 /**
  * @author Alain Fresco
+ * Extended because we needed to position the node after the dimension of the node have been calculated
  */
 class AdvancedNodeLayerWidget extends NodeLayerWidget {
 
@@ -38,13 +39,13 @@ class AdvancedNodeLayerWidget extends NodeLayerWidget {
       finalDiagnostics,
       healthCares
     } = this.props;
-    const HMargin = 80; // Horizontal Margin between boxes
-    const VMargin = 210; // Vertical Margin between boxes
+    const hMargin = 80; // Horizontal Margin between boxes
+    const vMargin = 210; // Vertical Margin between boxes
     const nodes = questions.concat([finalDiagnostics]).concat([healthCares]); // List of all the medical nodes
 
     let width = 1400; // Screen Width TODO Should be calculated not brut
     let x = 0;
-    let y = 0;
+    let y = 50;
 
     // Positioning questions
     nodes.map((level) => {
@@ -54,7 +55,7 @@ class AdvancedNodeLayerWidget extends NodeLayerWidget {
       level.map((question) => {
         let node = this.getNode(question);
         levelWidth += node.width;
-        levelWidth += HMargin;
+        levelWidth += hMargin;
       });
 
       // Set X position for node in level
@@ -62,14 +63,14 @@ class AdvancedNodeLayerWidget extends NodeLayerWidget {
       level.map((question) => {
         let node = this.getNode(question);
         node.setPosition(x, y);
-        x += node.width + HMargin;
+        x += node.width + vMargin;
       });
 
       // Preparing next level
       x = 0;
       levelWidth = 0;
       if (level.length > 0) {
-        y += VMargin;
+        y += vMargin;
       }
     });
   };

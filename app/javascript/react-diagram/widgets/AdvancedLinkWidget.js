@@ -3,8 +3,12 @@ import { DefaultLinkWidget } from "storm-react-diagrams";
 
 import { withDiagram } from "../../context/Diagram.context";
 
-
+/**
+ * @author Alain Fresco
+ * Extended because we needed to handle the direction of the links
+ */
 class AdvancedLinkWidget extends DefaultLinkWidget {
+
   /**
    * Get direction of the link
    * Useful for animation
