@@ -4,6 +4,9 @@ import { DefaultLinkFactory, DiagramEngine, Toolkit } from "storm-react-diagrams
 import AdvancedLinkModel from "../models/AdvancedLinkModel";
 import AdvancedLinkWidget from "../widgets/AdvancedLinkWidget";
 
+/**
+ * @author Alain Fresco
+ */
 class AdvancedLinkFactory extends DefaultLinkFactory {
   constructor() {
     super("advanced");
@@ -16,13 +19,39 @@ class AdvancedLinkFactory extends DefaultLinkFactory {
     });
   }
 
-  getNewInstance(initialConfig?: any): AdvancedLinkModel {
-    return new AdvancedLinkModel();
-  }
+  /**
+   * Set link path marker head regarding to the link path direction
+   * @method setPathMarker
+   * @param inversed - is the path inversed
+   * @return style object with marker
+   */
+  setPathMarker(inversed){
+    if(inversed) {
+      return {
+        markerStart: `url(#${markerHeadInversed})`
+      };
+    } else {
+      return {
+        markerEnd: `url(#${markerHead})`
+      };
+    }
+  };
 
-  generateLinkSegment(model: AdvancedLinkModel, widget: AdvancedLinkWidget, selected: boolean, path: string, startMarkerId: string = "-", endMarkerId: string = "-") {
-    let markerId= Toolkit.UID();
-    let markerEndUrl = "url(#"+markerId+")";
+
+  generateLinkSegment(
+    model: AdvancedLinkModel,
+    widget: AdvancedLinkWidget,
+    selected: boolean,
+    path: string,
+    inversed: boolean,
+  ): JSX.Element {
+
+    let markerId = Toolkit.UID();
+    let markerIdInverse = Toolkit.UID();
+
+    let markerEndUrl = (!inversed ? ("url(#"+markerId+")"): "");
+    let markerStartUrl = (inversed ? ("url(#"+markerIdInverse+")"): "");
+
     let displayArrow = widget.props.link.arrow;
     let displaySeparator = widget.props.link.separator;
 
@@ -34,8 +63,8 @@ class AdvancedLinkFactory extends DefaultLinkFactory {
             <path d="M0,0 L0,4 L5,2 Z" style={{fill: "#000", stroke: 'none'}} />
           </marker>
 
-          <marker id={markerEndUrl} markerWidth="6" markerHeight="4" refX="-1" refY="2" orient="auto">
-            <path d="M4,0 L4,4 L0,2 Z" style={{fill: "#000", stroke: 'none'}} />
+          <marker id={markerIdInverse} markerWidth="6" markerHeight="4" refX="-2" refY="2" orient="auto">
+            <path d="M8,0 L4,4 L0,2 Z" style={{fill: "#000", stroke: 'none'}} />
           </marker>
         </defs>) : ''}
         <path
@@ -45,10 +74,11 @@ class AdvancedLinkFactory extends DefaultLinkFactory {
           stroke={model.color}
           d={path}
           markerEnd={markerEndUrl}
+          markerStart={markerStartUrl}
         />
       </g>
     );
-  }
+  };
 }
 
 export default AdvancedLinkFactory;
