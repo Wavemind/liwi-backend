@@ -228,24 +228,13 @@ class Diagram extends React.Component {
     return (
       <div className="content">
         {/**************************** LEFT PANEL NAVIGATION ********************************/}
-        <ul className="nav">
-          <li className="nav-item">
-            <div className="pt-2"
-                 draggable={true}
-                 onDragStart={event => {
-                   event.dataTransfer.setData("node", JSON.stringify('AND'));
-                 }}
-            >
-              AND
-            </div>
-          </li>
-        </ul>
         <div className="row">
-          <div className="col-md-2 px-0">
+          <div className="col-md-2 px-0 liwi-sidebar">
             <NodeList />
           </div>
+         {/**************************** DIAGRAM CONTAINER ********************************/}
           <div
-            className="col-md-10 mt-2"
+            className="col-md-10 diagram-wrapper"
             onDrop={async event => {
               let nodeDb = JSON.parse(event.dataTransfer.getData("node"));
               let points = engine.getRelativeMousePoint(event);

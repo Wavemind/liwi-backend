@@ -14,6 +14,7 @@
 @import "bootstrap";
 @import "datatables";
 @import "storm-react-diagrams/src/sass/main";
+@import "diagram";
 /*
     DEMO STYLEa
 */
@@ -71,6 +72,7 @@ a:focus {
   width: 100%;
   align-items: stretch;
 }
+
 
 #sidebar {
   min-width: 250px;
