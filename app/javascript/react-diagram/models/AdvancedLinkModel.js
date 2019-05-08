@@ -26,8 +26,8 @@ class AdvancedLinkModel extends DefaultLinkModel {
 
         // Don't trigger automatic removing link since node does it already
         if (removedLink.entity.selected) {
-          if (removedLink.entity.sourcePort.parent.node.type === 'FinalDiagnostic') {
-            http.removeExcluding(removedLink.entity.sourcePort.parent.node.id)
+          if (removedLink.entity.sourcePort.parent.node.type === "FinalDiagnostic") {
+            http.removeExcluding(removedLink.entity.sourcePort.parent.node.id);
           } else {
             let nodeId = removedLink.entity.targetPort.parent.node.id;
             let answerId = removedLink.entity.sourcePort.dbId;

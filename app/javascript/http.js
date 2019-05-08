@@ -34,7 +34,7 @@ export default class Http {
         instanceable_type: this.instanceableType
       }
     };
-    const header = await this.setHeaders('POST', body);
+    const header = await this.setHeaders("POST", body);
     const request = await fetch( url, header).catch(error => console.log(error));
 
     // Display error or parse json
@@ -59,7 +59,7 @@ export default class Http {
         answer_id: answerId,
       }
     };
-    const header = await this.setHeaders('POST', body);
+    const header = await this.setHeaders("POST", body);
     const request = await fetch( url, header).catch(error => console.log(error));
 
     // Display error or parse json
@@ -78,7 +78,7 @@ export default class Http {
   getInstanceConditions = async (nodeId) => {
     let response;
     const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/load_conditions?node_id=${nodeId}`;
-    const header = await this.setHeaders('GET');
+    const header = await this.setHeaders("GET");
     const request = await fetch( url, header).catch(error => console.log(error));
 
     // Display error or parse json
@@ -103,7 +103,7 @@ export default class Http {
         instanceable_type: this.instanceableType
       }
     };
-    const header = await this.setHeaders('DELETE', body);
+    const header = await this.setHeaders("DELETE", body);
     const request = await fetch(url, header).catch(error => console.log(error));
 
     // Display error or parse json
@@ -127,7 +127,7 @@ export default class Http {
         final_diagnostic_id: excludedDfId,
       }
     };
-    const header = await this.setHeaders('PUT', body);
+    const header = await this.setHeaders("PUT", body);
     const request = await fetch( url, header).catch(error => console.log(error));
     // Display error or parse json
     if (request.ok) {
@@ -146,7 +146,7 @@ export default class Http {
     let response;
 
     const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/${dfId}/remove_excluded_diagnostic`;
-    const header = await this.setHeaders('PUT');
+    const header = await this.setHeaders("PUT");
     const request = await fetch( url, header).catch(error => console.log(error));
 
     // Display error or parse json
@@ -172,7 +172,7 @@ export default class Http {
         instanceable_type: this.instanceableType
       }
     };
-    const header = await this.setHeaders('DELETE', body);
+    const header = await this.setHeaders("DELETE", body);
     const request = await fetch(url, header).catch(error => console.log(error));
 
     // Display error or parse json
@@ -197,7 +197,7 @@ export default class Http {
         answer_id: answerId,
       }
     };
-    const header = await this.setHeaders('DELETE', body);
+    const header = await this.setHeaders("DELETE", body);
     const request = await fetch( url, header).catch(error => console.log(error));
 
     // Display error or parse json
@@ -213,15 +213,15 @@ export default class Http {
   // @params [String] method, [Object] body
   // @return [Object] header
   // Set header credentials to communicate with server
-  setHeaders = async (method = 'GET', body = false) => {
+  setHeaders = async (method = "GET", body = false) => {
     let header = {
       method: method,
       headers: {},
     };
-    if (method === 'POST' || method === 'PATCH' || method === 'PUT' || method === 'DELETE') {
+    if (method === "POST" || method === "PATCH" || method === "PUT" || method === "DELETE") {
       header.body = JSON.stringify(body);
-      header.headers['Accept'] = 'application/json, text/plain';
-      header.headers['Content-Type'] = 'application/json';
+      header.headers["Accept"] = "application/json, text/plain";
+      header.headers["Content-Type"] = "application/json";
       header.headers["X-CSRF-Token"] = this.token;
     }
     return header;

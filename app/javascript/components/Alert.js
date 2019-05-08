@@ -5,10 +5,10 @@ class Alert extends React.Component {
 
   alertClass (type) {
     let classes = {
-      danger: 'alert-danger',
-      warning: 'alert-warning',
-      notice: 'alert-info',
-      success: 'alert-success'
+      danger: "alert-danger",
+      warning: "alert-warning",
+      notice: "alert-info",
+      success: "alert-success"
     };
     return classes[type] || classes.success;
   }
