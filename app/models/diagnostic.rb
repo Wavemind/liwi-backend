@@ -67,18 +67,7 @@ class Diagnostic < ApplicationRecord
   # Generate the ordered questions
   def generate_questions_order
     nodes = []
-    first_instances = components.includes(:conditions, :children, :node).where(conditions: { referenceable_id: nil }).where('nodes.type = ? OR nodes.type = ?', 'Question', 'PredefinedSyndrome')
-
-    health_cares = components.treatments + components.managements
-    # Excluding health cares conditions
-    first_instances.each do |instance|
-      isHcCondition = false
-      health_cares.map(&:conditions).flatten.each do |cond|
-        isHcCondition = true if ((cond.first_conditionable.is_a?(Answer) && cond.first_conditionable.node.id == instance.node.id) || (cond.second_conditionable.is_a?(Answer) && cond.second_conditionable.node.id == instance.node.id))
-      end
-      first_instances = first_instances.where.not(id: instance.id) if isHcCondition
-    end
-
+    first_instances = components.not_health_care_conditions.includes(:conditions, :children, :node).where(conditions: { referenceable_id: nil }).where('nodes.type = ? OR nodes.type = ?', 'Question', 'PredefinedSyndrome')
     nodes << first_instances
     get_children(first_instances, nodes)
   end
@@ -133,13 +122,13 @@ class Diagnostic < ApplicationRecord
   # @return [Json]
   # Return available nodes in the algorithm in json format
   def available_nodes_json
-    (version.algorithm.nodes.where.not(id: components.select(:node_id)).where.not(type: 'Treatment').where.not(type: 'Management') + final_diagnostics.where.not(id: components.select(:node_id))).as_json(methods: [:category_name, :type, :get_answers])
+    (version.algorithm.nodes.where.not(id: components.not_health_care_conditions.select(:node_id)).where.not(type: 'Treatment').where.not(type: 'Management') + final_diagnostics.where.not(id: components.select(:node_id))).as_json(methods: [:category_name, :type, :get_answers])
   end
 
   # @return [Json]
   # Return available nodes for health cares diagram in the algorithm in json format
   def available_nodes_health_cares_json
-    (version.algorithm.nodes.where.not(id: components.select(:node_id))).as_json(methods: [:category_name, :type, :get_answers])
+    (version.algorithm.nodes.where.not(id: components.health_care_conditions.select(:node_id))).as_json(methods: [:category_name, :type, :get_answers])
   end
 
   private

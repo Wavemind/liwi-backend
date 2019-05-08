@@ -14,6 +14,9 @@ class Instance < ApplicationRecord
   scope :predefined_syndromes, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'PredefinedSyndrome') }
   scope :treatments, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'Treatment') }
   scope :final_diagnostics, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'FinalDiagnostic') }
+  # Allow to filter if the node is used as a health care condition or as a final diagnostic condition. A node can be used in both of them.
+  scope :health_care_conditions, ->() { joins(:node).includes(:conditions).where(is_condition: true).or(joins(:node).includes(:conditions).where("nodes.type = 'Treatment'")).or(joins(:node).includes(:conditions).where("nodes.type = 'Management'")) }
+  scope :not_health_care_conditions, ->() { includes(:conditions).where(is_condition: false) }
 
   before_destroy :remove_children_from_parents, :remove_condition_from_children
 

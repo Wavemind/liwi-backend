@@ -95,6 +95,7 @@ export default class DiagramProvider extends React.Component {
     modalIsOpen: false,
     currentNodeId: null,
     messages: [],
+    type: null,
   };
 
   render() {

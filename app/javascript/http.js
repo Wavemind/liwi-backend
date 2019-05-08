@@ -8,12 +8,14 @@ export default class Http {
   instanceableType;
   version;
   algorithm;
+  finalDiagnostic;
 
   constructor() {
     let data = document.querySelector("p");
 
     this.url = window.location.origin;
     this.instanceableId = data.dataset.id;
+    this.finalDiagnostic = data.dataset.final_diagnostic;
     this.instanceableType = data.dataset.type === "Diagnostic" ? "diagnostics" : "predefined_syndromes";
     this.version = data.dataset.version;
     this.algorithm = data.dataset.algorithm;
@@ -31,8 +33,34 @@ export default class Http {
       instance: {
         node_id: nodeId,
         instanceable_id: this.instanceableId,
-        instanceable_type: this.instanceableType
+        instanceable_type: this.instanceableType,
       }
+    };
+    const header = await this.setHeaders("POST", body);
+    const request = await fetch( url, header).catch(error => console.log(error));
+
+    // Display error or parse json
+    if (request.ok) {
+      response = await request.json();
+    } else {
+      response = request;
+    }
+    return await response;
+  };
+
+  // @params [Integer] nodeId
+  // @return [Object] body of request
+  // Create an instance of a health care or a condition of it
+  createHealthCareInstance = async (nodeId) => {
+    let response;
+    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/create_from_final_diagnostic_diagram`;
+    const body = {
+      instance: {
+        node_id: nodeId,
+        instanceable_id: this.instanceableId,
+        instanceable_type: this.instanceableType,
+      },
+      final_diagnostic_id: this.finalDiagnostic
     };
     const header = await this.setHeaders("POST", body);
     const request = await fetch( url, header).catch(error => console.log(error));
@@ -148,6 +176,32 @@ export default class Http {
     const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/${dfId}/remove_excluded_diagnostic`;
     const header = await this.setHeaders("PUT");
     const request = await fetch( url, header).catch(error => console.log(error));
+
+    // Display error or parse json
+    if (request.ok) {
+      response = await request.json();
+    } else {
+      response = request;
+    }
+    return await response;
+  };
+
+
+  // @params [Integer] nodeId
+  // @return [Object] body of request
+  // Delete an instance
+  removeHealthCaresInstance = async (nodeId) => {
+    let response;
+    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/remove_from_diagram`;
+    const body = {
+      instance: {
+        node_id: nodeId,
+        instanceable_id: this.instanceableId,
+        instanceable_type: this.instanceableType
+      }
+    };
+    const header = await this.setHeaders("DELETE", body);
+    const request = await fetch(url, header).catch(error => console.log(error));
 
     // Display error or parse json
     if (request.ok) {

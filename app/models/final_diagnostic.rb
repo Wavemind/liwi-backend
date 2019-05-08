@@ -18,6 +18,12 @@ class FinalDiagnostic < Node
     append reference: I18n.t('duplicated')
   end
 
+  # @return [Json]
+  # Return treatments and managements in json format
+  def health_cares_json
+    diagnostic.components.where(node_id: nodes.map(&:id)).as_json(include: [node: {methods: [:type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}])
+  end
+
   private
 
   # {Node#unique_reference}

@@ -1,6 +1,7 @@
 import React from "react"
 import DiagramContext from '../context/Diagram.context';
 import Diagram from '../components/Diagram';
+import FinalDiagnosticDiagram from '../components/FinalDiagnosticDiagram';
 
 class Provider extends React.Component {
   render () {
@@ -11,7 +12,7 @@ class Provider extends React.Component {
 
     return (
       <DiagramContext value={{...context}}>
-        {render === 'Diagram' ? <Diagram/> : null}
+        {render === 'Diagram' ? <Diagram/> : <FinalDiagnosticDiagram/>}
       </DiagramContext>
     );
   }

@@ -107,6 +107,7 @@ en:
       subtitle_final_diagnostics: "Finals diagnostics"
       title: "Details of %{name}"
       translations: "Translations"
+      subtitle_health_cares: "Health cares diagram"
     translations:
       diagnostic: "Diagnostic"
       final_diagnostics: "Final diagnostics"
