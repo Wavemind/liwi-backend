@@ -20,6 +20,7 @@ module ModelMacros
   def create_answer_type
     before(:each) do
       @input_integer = AnswerType.create!(value: 'Integer', display: 'Input')
+      @input_float = AnswerType.create!(value: 'Float', display: 'Float')
       @boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
     end
   end
@@ -28,6 +29,7 @@ module ModelMacros
     before(:each) do
       @physical_exam = Category.create!(name_en: 'Physical exam', reference_prefix: 'P')
       @symptom = Category.create!(name_en: 'Symptom', reference_prefix: 'S')
+      @assessment = Category.create!(name_en: 'Assessment', reference_prefix: 'A')
     end
   end
 

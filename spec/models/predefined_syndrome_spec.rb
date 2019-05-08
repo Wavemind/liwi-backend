@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe PredefinedSyndrome, type: :model, focus: true do
+RSpec.describe PredefinedSyndrome, type: :model do
   create_algorithm
   create_predefined_syndrome_category
 
@@ -13,7 +13,7 @@ RSpec.describe PredefinedSyndrome, type: :model, focus: true do
     predefined_syndrome = PredefinedSyndrome.new(reference: '9', label_en: nil, algorithm: @algorithm, category: @ps_category)
     expect(predefined_syndrome).to_not be_valid
   end
-  
+
   it 'generates answers automatically' do
     predefined_syndrome = PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm, category: @ps_category)
     expect(predefined_syndrome.answers.count).to eq(2)

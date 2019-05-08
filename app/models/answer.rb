@@ -52,9 +52,7 @@ class Answer < ApplicationRecord
     if node.is_a?(Question) && node.answer_type.display == 'Input'
       if between?
         errors.add(:value, I18n.t('answers.validation.value_missing')) unless value.include?(',')
-        value.split(',').each do |val|
-          validate_value_type(val)
-        end
+        value.split(',').each(&method(:validate_value_type))
       else
         validate_value_type(value)
       end

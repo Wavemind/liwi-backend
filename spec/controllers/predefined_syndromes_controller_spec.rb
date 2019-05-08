@@ -54,7 +54,7 @@ RSpec.describe PredefinedSyndromesController, type: :controller do
     expect(flash[:alert]).to eq I18n.t('dependencies')
   end
 
-  it 'returns success full message when removing a question hasn\'t instance dependecy' do
+  it 'returns success full message when removing a question hasn\'t instance dependency' do
     delete :destroy, params: {
       algorithm_id: @algorithm.id,
       id: @predefined_syndrome.id,
