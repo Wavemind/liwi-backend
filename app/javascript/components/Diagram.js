@@ -287,10 +287,7 @@ class Diagram extends React.Component {
 
   render = () => {
     const {engine} = this.state;
-    const {
-      removeNode,
-      addMessage,
-    } = this.props;
+    const {removeNode} = this.props;
 
     const http = new Http();
 
