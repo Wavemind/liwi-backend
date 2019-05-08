@@ -1,7 +1,6 @@
 import {
   DiagramEngine,
   DiagramModel,
-  DiagramWidget
 } from "storm-react-diagrams";
 import * as React from "react";
 import * as _ from "lodash";
@@ -9,6 +8,7 @@ import * as _ from "lodash";
 import AdvancedLinkFactory from "../react-diagram/factories/AdvancedLinkFactory";
 import AdvancedNodeFactory from "../react-diagram/factories/AdvancedNodeFactory";
 import AdvancedNodeModel from "../react-diagram/models/AdvancedNodeModel";
+import AdvancedDiagramWidget from "../react-diagram/widgets/AdvancedDiagramWidget";
 
 import NodeList from "../react-diagram/lists/NodeList";
 import Http from "../http";
@@ -24,12 +24,12 @@ class Diagram extends React.Component {
     };
   }
 
-  componentWillMount() {
+  async componentWillMount() {
     const {
       instanceableType,
       questions,
       finalDiagnostics,
-      healthCares,
+      healthCares
     } = this.props;
 
     const { engine } = this.state;
@@ -131,25 +131,6 @@ class Diagram extends React.Component {
       nodeLevels.push(hcLevel);
     }
 
-    // Positions nodes in a horizontal way
-    let width = 1400;
-    let x = 0;
-    let y = 60;
-    nodeLevels.map((level) => {
-      let nbNodes = level.length;
-      let totalSpace = width - (nbNodes * 200);
-      let marges = totalSpace - ((nbNodes - 1) * 120);
-      x += marges / 2
-      level.map((node) => {
-        node.setPosition(x, y);
-        x += 200 + 120;
-      });
-      x = 0;
-      if (level.length > 0) {
-        y += 200;
-      }
-    });
-
     // Create links between nodes
     nodes.map((node, index) => {
       instances[index].conditions.map((condition) => {
@@ -246,24 +227,14 @@ class Diagram extends React.Component {
 
     return (
       <div className="content">
-        <ul className="nav">
-          <li className="nav-item">
-            <div className="pt-2"
-                 draggable={true}
-                 onDragStart={event => {
-                   event.dataTransfer.setData("node", JSON.stringify('AND'));
-                 }}
-            >
-              AND
-            </div>
-          </li>
-        </ul>
+        {/**************************** LEFT PANEL NAVIGATION ********************************/}
         <div className="row">
-          <div className="col-md-2 px-0">
+          <div className="col-md-2 px-0 liwi-sidebar">
             <NodeList />
           </div>
+         {/**************************** DIAGRAM CONTAINER ********************************/}
           <div
-            className="col-md-10 mt-2"
+            className="col-md-10 diagram-wrapper"
             onDrop={async event => {
               let nodeDb = JSON.parse(event.dataTransfer.getData("node"));
               let points = engine.getRelativeMousePoint(event);
@@ -290,7 +261,6 @@ class Diagram extends React.Component {
 
               nodeDiagram.x = points.x;
               nodeDiagram.y = points.y;
-
               model.addAll(nodeDiagram);
               this.updateEngine(engine);
             }}
@@ -298,7 +268,7 @@ class Diagram extends React.Component {
               event.preventDefault();
             }}
           >
-            <DiagramWidget
+            <AdvancedDiagramWidget
               className="srd-demo-canvas"
               diagramEngine={engine}
               allowCanvasZoom={false}
