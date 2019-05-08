@@ -218,8 +218,8 @@ class Diagram extends React.Component {
 
             // Don't create an another link in DB if it already exist
             if (!exists) {
-              if (eventLink.entity.sourcePort.parent.node.type === 'FinalDiagnostic') {
-                if (eventLink.entity.targetPort.parent.node.type === 'FinalDiagnostic') {
+              if (eventLink.entity.sourcePort.parent.node.type === "FinalDiagnostic") {
+                if (eventLink.entity.targetPort.parent.node.type === "FinalDiagnostic") {
                   http.excludeDiagnostic(eventLink.entity.sourcePort.parent.node.id, eventLink.entity.targetPort.parent.node.id);
                 } else {
                   model.removeLink(eventModel.link.id)
@@ -230,13 +230,13 @@ class Diagram extends React.Component {
 
                 // Create link in DB
                 http.createLink(nodeId, answerId).then((response) => {
-                  if (response.status !== 'success') {
+                  if (response.status !== "success") {
                     // if throw an error, remove link in diagram
                     if (model.getLink(eventModel.link.id) !== null) {
                       model.removeLink(eventModel.link.id);
                       self.updateEngine(engine);
                     }
-                    addMessage(response)
+                    addMessage(response);
                   }
                 }).catch((err) => {
                   console.log(err);
@@ -279,7 +279,7 @@ class Diagram extends React.Component {
   addFlashMessage = async (status, response) => {
     const {addMessage} = this.props;
     let message = {
-      status: status,
+      status,
       message: [`An error occured: ${response.status} - ${response.statusText}`],
     };
     await addMessage(message);
@@ -312,12 +312,12 @@ class Diagram extends React.Component {
               let result;
 
               // Create AND node
-              if (nodeDb === 'AND') {
+              if (nodeDb === "AND") {
                 nodeDiagram = new AdvancedNodeModel("AND", "", "", "");
                 nodeDiagram.addInPort(" ");
                 nodeDiagram.addOutPort(" ");
                 // Create Final Diagnostic node
-              } else if (nodeDb.type === 'FinalDiagnostic') {
+              } else if (nodeDb.type === "FinalDiagnostic") {
                 result = await http.createInstance(nodeDb.id);
 
                 if (result.ok) {
@@ -326,7 +326,7 @@ class Diagram extends React.Component {
                   nodeDiagram.addOutPort(" ");
                   removeNode(nodeDb);
                 } else  {
-                  this.addFlashMessage('danger', result);
+                  this.addFlashMessage("danger", result);
                 }
 
               } else {
@@ -341,7 +341,7 @@ class Diagram extends React.Component {
                   }
                   removeNode(nodeDb);
                 } else {
-                  this.addFlashMessage('danger', result);
+                  this.addFlashMessage("danger", result);
                 }
               }
 

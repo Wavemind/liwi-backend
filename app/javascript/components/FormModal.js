@@ -12,7 +12,7 @@ class FormModal extends React.Component {
       instance: {
         conditions: null
       },
-      available_conditions: [],
+      availableConditions: [],
       operators: []
     };
   }
