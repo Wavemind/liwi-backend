@@ -34,7 +34,6 @@ class Diagram extends React.Component {
       instanceableType,
       questions,
       finalDiagnostics,
-      healthCares,
       addMessage,
     } = this.props;
 
@@ -108,34 +107,7 @@ class Diagram extends React.Component {
 
       let hcLevel = [];
       let hcConditions = [];
-      let conditionRefs = {};
 
-      // Create nodes for treatments and managements
-      healthCares.map((healthCare) => {
-        let node = this.createNode(healthCare.node);
-        // Get condition nodes of treatments and managements
-        if (healthCare.conditions != null && healthCare.conditions.length > 0) {
-          healthCare.conditions.map((condition) => {
-            let answerNode = condition.first_conditionable.get_node;
-            let condNode;
-            if (!(answerNode.reference in conditionRefs)) {
-              condNode = this.createNode(answerNode, answerNode.answers);
-
-              answerNode.answers.map((answer) => (condNode.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
-
-              hcConditions.push(condNode);
-              conditionRefs[answerNode.reference] = condNode;
-              model.addAll(condNode);
-            } else {
-              condNode = _.find(hcConditions, ["reference", answerNode.reference]);
-            }
-            model.addAll(_.find(condNode.getOutPorts(), ["label", this.getFullLabel(condition.first_conditionable)]).link(node.getInPort()));
-          });
-        }
-
-        hcLevel.push(node);
-        model.addAll(node);
-      });
       nodeLevels.push(hcConditions);
       nodeLevels.push(hcLevel);
     }
