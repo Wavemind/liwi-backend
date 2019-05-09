@@ -41,8 +41,6 @@ class AdvancedNodeLayerWidget extends NodeLayerWidget {
       type,
     } = this.props;
 
-    console.log(this.props);
-
     const hMargin = 80; // Horizontal Margin between boxes
     const vMargin = 210; // Vertical Margin between boxes
     let nodes;
@@ -59,14 +57,18 @@ class AdvancedNodeLayerWidget extends NodeLayerWidget {
     let width = 1400; // Screen Width TODO Should be calculated not brut
     let x = 0;
     let y = 50;
+    console.log(type);
 
-    // Positioning questions
     nodes.map((level) => {
+      // Positioning questions
+      console.log(level);
       let levelWidth = 0; // The width of each level
 
       // Calculating current level width
       level.map((question) => {
         let node = this.getNode(question);
+        console.log(node);
+        console.log(node.width);
         levelWidth += node.width;
         levelWidth += hMargin;
       });

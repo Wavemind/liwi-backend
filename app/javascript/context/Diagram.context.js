@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unused-state */
 import * as React from "react";
 import * as _ from "lodash";
+import Http from "../http";
 
 const defaultValue = {};
 const DiagramContext = React.createContext(defaultValue);
@@ -8,7 +9,10 @@ const DiagramContext = React.createContext(defaultValue);
 export default class DiagramProvider extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {...this.state, ...props.value }
+
+    // Init http class
+    const http = new Http();
+    this.state = {...this.state, ...props.value, http }
   }
 
   async componentWillMount() {

@@ -256,4 +256,10 @@ export default class Http {
     return header;
   };
 
+  // @params [Integer] dfId
+  // @return [Object] body of request
+  // Remove excluding diagnostic
+  showFinalDiagnosticDiagram = async (dfId) => {
+    window.location = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/${dfId}/diagram`;
+  };
 }

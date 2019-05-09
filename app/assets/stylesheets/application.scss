@@ -403,16 +403,10 @@ td {
   height:90vh;
 }
 
-.manage-conditions {
-  z-index: 15;
-  color: blue;
-  margin-left: auto;
-  margin-right: auto;
-  position: absolute;
-  left: 0px;
-  right: 0px;
+.manage-df {
   &:hover {
     font-weight: bold;
+    font-size: 14px;
   }
 }
 

@@ -1,7 +1,6 @@
 import {
   DiagramEngine,
   DiagramModel,
-  DiagramWidget
 } from "storm-react-diagrams";
 import * as React from "react";
 import * as _ from "lodash";
@@ -9,11 +8,12 @@ import * as _ from "lodash";
 import AdvancedLinkFactory from "../react-diagram/factories/AdvancedLinkFactory";
 import AdvancedNodeFactory from "../react-diagram/factories/AdvancedNodeFactory";
 import AdvancedNodeModel from "../react-diagram/models/AdvancedNodeModel";
+import AdvancedDiagramWidget from "../react-diagram/widgets/AdvancedDiagramWidget";
 
 import NodeList from "../react-diagram/lists/NodeList";
 import Http from "../http";
-import FlashMessages from "./FlashMessages";
 
+import FlashMessages from "./FlashMessages";
 import {withDiagram} from "../context/Diagram.context";
 
 class FinalDiagnosticDiagram extends React.Component {
@@ -220,14 +220,13 @@ class FinalDiagnosticDiagram extends React.Component {
 
     return (
       <div className="content">
-        <h1>{this.getFullLabel(finalDiagnostic)}</h1>
         <FlashMessages/>
         <div className="row">
-          <div className="col-md-2 px-0">
-            <NodeList/>
+          <div className="col-md-2 px-0 liwi-sidebar">
+            <NodeList />
           </div>
           <div
-            className="col-md-10 mt-2"
+            className="col-md-10 diagram-wrapper"
             onDrop={async event => {
               let nodeDb = JSON.parse(event.dataTransfer.getData("node"));
               let points = engine.getRelativeMousePoint(event);
@@ -261,7 +260,7 @@ class FinalDiagnosticDiagram extends React.Component {
               event.preventDefault();
             }}
           >
-            <DiagramWidget
+            <AdvancedDiagramWidget
               className="srd-canvas"
               diagramEngine={engine}
               allowCanvasZoom={false}
