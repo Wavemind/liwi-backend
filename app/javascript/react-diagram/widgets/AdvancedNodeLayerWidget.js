@@ -50,7 +50,7 @@ class AdvancedNodeLayerWidget extends NodeLayerWidget {
       nodes = questions.concat([finalDiagnostics]);
     } else if (type === 'PredefinedSyndrome') {
       nodes = questions;
-    } else {
+    } else if (type === 'FinalDiagnostic') {
       nodes = questions.concat([healthCares]);
     }
 

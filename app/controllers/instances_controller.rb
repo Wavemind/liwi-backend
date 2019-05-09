@@ -81,7 +81,7 @@ class InstancesController < ApplicationController
 
   # POST /diagnostics/:diagnostic_id/instances/diagram_create
   # @return JSON of instance
-  # Create an instances and return json format
+  # Create an instances of node for final diagnostic diagram and return json format
   def create_from_final_diagnostic_diagram
     instance = @instanceable.components.new(instance_params)
 
