@@ -15,7 +15,7 @@ class NodeListItem extends React.Component {
     const { node } = this.props;
 
     return (
-      <div className="pt-2"
+      <div className="p-2"
            draggable={true}
            onDragStart={event => {
              event.dataTransfer.setData("node", JSON.stringify(node));

@@ -1,7 +1,6 @@
 import {
   DiagramEngine,
   DiagramModel,
-  DiagramWidget,
 } from "storm-react-diagrams";
 import * as React from "react";
 import * as _ from "lodash";
@@ -9,6 +8,7 @@ import * as _ from "lodash";
 import AdvancedLinkFactory from "../react-diagram/factories/AdvancedLinkFactory";
 import AdvancedNodeFactory from "../react-diagram/factories/AdvancedNodeFactory";
 import AdvancedNodeModel from "../react-diagram/models/AdvancedNodeModel";
+import AdvancedDiagramWidget from "../react-diagram/widgets/AdvancedDiagramWidget";
 
 import NodeList from "../react-diagram/lists/NodeList";
 import Http from "../http";
@@ -111,25 +111,6 @@ class Diagram extends React.Component {
       nodeLevels.push(hcConditions);
       nodeLevels.push(hcLevel);
     }
-
-    // Positions nodes in a horizontal way
-    let width = 1400;
-    let x = 0;
-    let y = 60;
-    nodeLevels.map((level) => {
-      let nbNodes = level.length;
-      let totalSpace = width - (nbNodes * 200);
-      let margin = totalSpace - ((nbNodes - 1) * 120);
-      x += margin / 2;
-      level.map((node) => {
-        node.setPosition(x, y);
-        x += 200 + 120;
-      });
-      x = 0;
-      if (level.length > 0) {
-        y += 200;
-      }
-    });
 
     // Create links between nodes
     nodes.map((node, index) => {
@@ -269,11 +250,11 @@ class Diagram extends React.Component {
       <div className="content">
         <FlashMessages/>
         <div className="row">
-          <div className="col-md-2 px-0">
-            <NodeList/>
+          <div className="col-md-2 px-0 liwi-sidebar">
+            <NodeList />
           </div>
           <div
-            className="col-md-10 mt-2"
+            className="col-md-10 diagram-wrapper"
             onDrop={async event => {
               let nodeDb = JSON.parse(event.dataTransfer.getData("node"));
               let points = engine.getRelativeMousePoint(event);
@@ -325,7 +306,7 @@ class Diagram extends React.Component {
               event.preventDefault();
             }}
           >
-            <DiagramWidget
+            <AdvancedDiagramWidget
               className="srd-canvas"
               diagramEngine={engine}
               allowCanvasZoom={false}

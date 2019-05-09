@@ -29,12 +29,13 @@ RSpec.describe PredefinedSyndrome, type: :model do
   it 'generates questions properly' do
     ps9 = PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm, category: @ps_category)
     ps5 = PredefinedSyndrome.create!(reference: '5', label_en: 'diarrhea', algorithm: @algorithm, category: @ps_category)
-    Instance.create!(instanceable: ps9, node: ps5)
+    ps9_ps5 = Instance.create!(instanceable: ps9, node: ps5)
     ps9_ps9 = Instance.create!(instanceable: ps9, node: ps9)
     Condition.create!(referenceable: ps9_ps9, first_conditionable: ps5.answers.first, operator: nil, second_conditionable: nil)
 
-    expect(ps9.generate_questions_order[0][0].node).to eq(ps5)
-    expect(ps9.generate_questions_order[1][0].node).to eq(ps9)
+    expect(ps9.generate_questions_order[0][0]['id']).to eq(ps9_ps5.id)
+    expect(ps9.generate_questions_order[1][0]['id']).to eq(ps9_ps9.id)
+    expect(ps9.questions_json[1][0]['conditions'][0]['first_conditionable_id']).to eq(ps5.answers.first.id)
   end
 
   it 'returns correct list of available nodes' do
