@@ -26,6 +26,8 @@ class FinalDiagnostic < Node
     diagnostic.components.where(node_id: nodes.map(&:id)).as_json(include: [node: {methods: [:type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}])
   end
 
+  # @params [FinalDiagnostic]
+  # Generate the ordered conditions of health cares
   def generate_health_care_conditions_order
     nodes = []
     first_instances = components.joins(:node).includes(:conditions, :children).where(conditions: { referenceable_id: nil }).where('nodes.type = ? OR nodes.type = ?', 'Question', 'PredefinedSyndrome')
@@ -33,8 +35,15 @@ class FinalDiagnostic < Node
     diagnostic.get_children(first_instances, nodes)
   end
 
+  # Return all questions for Final Diagnostic diagram as json
   def health_care_questions_json
     generate_health_care_conditions_order.as_json(include: [conditions: { include: [first_conditionable: { methods: [:get_node] }, second_conditionable: { methods: [:get_node] }] }, node: { include: [:answers], methods: [:type] }])
+  end
+
+  # @return [Json]
+  # Return available nodes for health cares diagram in the algorithm in json format
+  def available_nodes_health_cares_json
+    (diagnostic.version.algorithm.nodes.where.not(id: components.select(:node_id))).as_json(methods: [:category_name, :type, :get_answers])
   end
 
   private

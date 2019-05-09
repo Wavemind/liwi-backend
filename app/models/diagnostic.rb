@@ -126,12 +126,6 @@ class Diagnostic < ApplicationRecord
     (version.algorithm.nodes.where.not(id: components.not_health_care_conditions.select(:node_id)).where.not(type: 'Treatment').where.not(type: 'Management') + final_diagnostics.where.not(id: components.select(:node_id))).as_json(methods: [:category_name, :type, :get_answers])
   end
 
-  # @return [Json]
-  # Return available nodes for health cares diagram in the algorithm in json format
-  def available_nodes_health_cares_json
-    (version.algorithm.nodes.where.not(id: components.health_care_conditions.select(:node_id))).as_json(methods: [:category_name, :type, :get_answers])
-  end
-
   private
 
   # {Node#unique_reference}

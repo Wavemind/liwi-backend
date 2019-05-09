@@ -16,20 +16,47 @@ export default class DiagramProvider extends React.Component {
   }
 
   orderNodes = async () => {
-    const { availableNodes } = this.state;
+    const {
+      availableNodes,
+      type
+    } = this.state;
 
-    let orderedNodes = {
-      exposure: [],
-      symptom: [],
-      assessmentTest: [],
-      physicalExam: [],
-      predefinedSyndrome: [],
-      comorbidity: [],
-      predefinedCondition: [],
-      treatment: [],
-      management: [],
-      finalDiagnostic: []
-    };
+    let orderedNodes = {};
+
+    if (type === 'Diagnostic') {
+      orderedNodes = {
+        exposure: [],
+        symptom: [],
+        assessmentTest: [],
+        physicalExam: [],
+        predefinedSyndrome: [],
+        comorbidity: [],
+        predefinedCondition: [],
+        finalDiagnostic: []
+      };
+    } else if (type === 'FinalDiagnostic') {
+      orderedNodes = {
+        exposure: [],
+        symptom: [],
+        assessmentTest: [],
+        physicalExam: [],
+        predefinedSyndrome: [],
+        comorbidity: [],
+        predefinedCondition: [],
+        treatment: [],
+        management: [],
+      };
+    } else {
+      orderedNodes = {
+        exposure: [],
+        symptom: [],
+        assessmentTest: [],
+        physicalExam: [],
+        predefinedSyndrome: [],
+        comorbidity: [],
+        predefinedCondition: [],
+      };
+    }
 
     // Assign node to correct array
     availableNodes.map((node) => {

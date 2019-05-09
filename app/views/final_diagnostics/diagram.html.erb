@@ -11,11 +11,10 @@
       render: 'FinalDiagnosticDiagram',
       context: {
         instanceable: @diagnostic,
-        instanceableType: @diagnostic.class.name,
         questions: @final_diagnostic.health_care_questions_json,
         finalDiagnostic: @final_diagnostic,
         healthCares: @final_diagnostic.health_cares_json,
-        availableNodes: @diagnostic.available_nodes_health_cares_json,
+        availableNodes: @final_diagnostic.available_nodes_health_cares_json,
         type: 'FinalDiagnostic'
       }
     }) %>
