@@ -14,7 +14,7 @@ import NodeList from "../react-diagram/lists/NodeList";
 import Http from "../http";
 import FlashMessages from "./FlashMessages";
 
-import { withDiagram } from "../context/Diagram.context";
+import {withDiagram} from "../context/Diagram.context";
 
 class FinalDiagnosticDiagram extends React.Component {
 
@@ -31,15 +31,12 @@ class FinalDiagnosticDiagram extends React.Component {
 
   initDiagram = () => {
     const {
-      instanceableType,
       questions,
       healthCares,
       addMessage
     } = this.props;
 
-    console.log(this.props);
-
-    const { engine } = this.state;
+    const {engine} = this.state;
 
     // Setup the diagram model
     let model = new DiagramModel();
@@ -56,43 +53,35 @@ class FinalDiagnosticDiagram extends React.Component {
     let nodeLevels = []; // Save nodes level to position them at the end
     let self = this;
 
-    let instances = questions.flat();
+    let instances = questions.flat().concat(healthCares);
 
-    if (instanceableType === "Diagnostic") {
-      let hcLevel = [];
-      let hcConditions = [];
-      let conditionRefs = {};
+    let hcLevel = [];
+    let hcConditions = [];
 
-      // Create nodes for treatments and managements
-      healthCares.map((healthCare) => {
-        let node = this.createNode(healthCare.node);
-        // Get condition nodes of treatments and managements
-        if (healthCare.conditions != null && healthCare.conditions.length > 0) {
-          healthCare.conditions.map((condition) => {
-            let answerNode = condition.first_conditionable.get_node;
-            let condNode;
-            if (!(answerNode.reference in conditionRefs)) {
-              condNode = this.createNode(answerNode, answerNode.answers);
-
-              answerNode.answers.map((answer) => (condNode.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
-
-              hcConditions.push(condNode);
-              conditionRefs[answerNode.reference] = condNode;
-              model.addAll(condNode);
-            } else {
-              condNode = _.find(hcConditions, ["reference", answerNode.reference]);
-            }
-            model.addAll(_.find(condNode.getOutPorts(), ["label", this.getFullLabel(condition.first_conditionable)]).link(node.getInPort()));
-          });
-        }
-
-        hcLevel.push(node);
+    // Create nodes for PS and questions
+    questions.map((levels) => {
+      let currentLevel = [];
+      levels.map((instance) => {
+        let node = this.createNode(instance.node, instance.node.answers);
+        currentLevel.push(node);
+        instance.node.answers.map((answer) => (node.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
+        nodes.push(node);
         model.addAll(node);
       });
 
-      nodeLevels.push(hcConditions);
-      nodeLevels.push(hcLevel);
-    }
+      nodeLevels.push(currentLevel);
+    });
+
+    // Create nodes for treatments and managements
+    healthCares.map((healthCare) => {
+      let node = this.createNode(healthCare.node);
+      nodes.push(node);
+      hcLevel.push(node);
+      model.addAll(node);
+    });
+
+    nodeLevels.push(hcLevel);
+    nodeLevels.push(hcConditions);
 
     // Positions nodes in a horizontal way
     let width = 1400;
@@ -146,7 +135,7 @@ class FinalDiagnosticDiagram extends React.Component {
 
     // Set eventListener for create link
     model.addListener({
-      linksUpdated: function(eventModel) {
+      linksUpdated: function (eventModel) {
         // Disable link from inPort
         if (eventModel.link.sourcePort.in) {
           if (model.getLink(eventModel.link.id) !== null) {
@@ -157,7 +146,7 @@ class FinalDiagnosticDiagram extends React.Component {
         // Add event listener on port change
         // Trigger exclude diagnostic and remove link
         eventModel.link.addListener({
-          targetPortChanged: function(eventLink) {
+          targetPortChanged: function (eventLink) {
             let exists = false;
 
             // Verify if link is already set
@@ -209,7 +198,7 @@ class FinalDiagnosticDiagram extends React.Component {
   // @params engine
   // Set state of engine
   updateEngine = (engine) => {
-    this.setState({ engine });
+    this.setState({engine});
   };
 
   // @params node
@@ -220,7 +209,7 @@ class FinalDiagnosticDiagram extends React.Component {
 
   // Create a node from label with its inport
   createNode = (node, outPorts = [], color = "rgb(255,255,255)") => {
-    const { addNode } = this.props;
+    const {addNode} = this.props;
 
     let advancedNode = new AdvancedNodeModel(node, node.reference, outPorts, color, addNode);
     advancedNode.addInPort(" ");
@@ -230,7 +219,7 @@ class FinalDiagnosticDiagram extends React.Component {
   // @params [String] status, [String] message
   // Call context method to display flash message
   addFlashMessage = async (status, response) => {
-    const { addMessage } = this.props;
+    const {addMessage} = this.props;
     let message = {
       status,
       message: [`An error occured: ${response.status} - ${response.statusText}`]
@@ -239,7 +228,7 @@ class FinalDiagnosticDiagram extends React.Component {
   };
 
   render = () => {
-    const { engine } = this.state;
+    const {engine} = this.state;
     const {
       removeNode,
       finalDiagnostic

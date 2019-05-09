@@ -10,6 +10,8 @@ class FinalDiagnostic < Node
   has_many :final_diagnostic_health_cares, dependent: :destroy
   has_many :nodes, through: :final_diagnostic_health_cares
 
+  has_many :components, class_name: 'Instance', dependent: :destroy
+
   # Enable recursive duplicating
   # https://github.com/amoeba-rb/amoeba#usage
   amoeba do
@@ -22,6 +24,17 @@ class FinalDiagnostic < Node
   # Return treatments and managements in json format
   def health_cares_json
     diagnostic.components.where(node_id: nodes.map(&:id)).as_json(include: [node: {methods: [:type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}])
+  end
+
+  def generate_health_care_conditions_order
+    nodes = []
+    first_instances = components.joins(:node).includes(:conditions, :children).where(conditions: { referenceable_id: nil }).where('nodes.type = ? OR nodes.type = ?', 'Question', 'PredefinedSyndrome')
+    nodes << first_instances
+    diagnostic.get_children(first_instances, nodes)
+  end
+
+  def health_care_questions_json
+    generate_health_care_conditions_order.as_json(include: [conditions: { include: [first_conditionable: { methods: [:get_node] }, second_conditionable: { methods: [:get_node] }] }, node: { include: [:answers], methods: [:type] }])
   end
 
   private

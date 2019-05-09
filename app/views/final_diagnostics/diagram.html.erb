@@ -12,7 +12,7 @@
       context: {
         instanceable: @diagnostic,
         instanceableType: @diagnostic.class.name,
-        questions: @diagnostic.questions_json,
+        questions: @final_diagnostic.health_care_questions_json,
         finalDiagnostic: @final_diagnostic,
         healthCares: @final_diagnostic.health_cares_json,
         availableNodes: @diagnostic.available_nodes_health_cares_json,

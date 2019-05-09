@@ -3,6 +3,7 @@ class Instance < ApplicationRecord
 
   belongs_to :node
   belongs_to :instanceable, polymorphic: true
+  belongs_to :final_diagnostic, optional: true
 
   has_many :children
   has_many :nodes, through: :children
@@ -15,8 +16,8 @@ class Instance < ApplicationRecord
   scope :treatments, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'Treatment') }
   scope :final_diagnostics, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'FinalDiagnostic') }
   # Allow to filter if the node is used as a health care condition or as a final diagnostic condition. A node can be used in both of them.
-  scope :health_care_conditions, ->() { joins(:node).includes(:conditions).where(is_condition: true).or(joins(:node).includes(:conditions).where("nodes.type = 'Treatment'")).or(joins(:node).includes(:conditions).where("nodes.type = 'Management'")) }
-  scope :not_health_care_conditions, ->() { includes(:conditions).where(is_condition: false) }
+  scope :health_care_conditions, ->() { joins(:node).includes(:conditions).where.not(final_diagnostic: nil).or(joins(:node).includes(:conditions).where("nodes.type = 'Treatment'")).or(joins(:node).includes(:conditions).where("nodes.type = 'Management'")) }
+  scope :not_health_care_conditions, ->() { includes(:conditions).where(final_diagnostic: nil) }
 
   before_destroy :remove_children_from_parents, :remove_condition_from_children
 

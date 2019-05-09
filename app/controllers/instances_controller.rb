@@ -87,8 +87,6 @@ class InstancesController < ApplicationController
 
     if instance.node.is_a?(Treatment) || instance.node.is_a?(Management)
       FinalDiagnosticHealthCare.create!(final_diagnostic: FinalDiagnostic.find(params[:final_diagnostic_id]), node: instance.node)
-    else
-      instance.is_condition = true
     end
 
     instance.save
@@ -143,9 +141,9 @@ class InstancesController < ApplicationController
   # Delete an instances and json format
   def remove_from_diagram
     # Remove from HealthCare diagram (in case there are 2 instances of one node for one diagnostic, one df condition and one hc condition)
-    if params[:final_diagnostic_id].present?
+    if instance_params[:final_diagnostic_id].present?
       instance = @instanceable.components.health_care_conditions.find_by(node_id: instance_params[:node_id])
-      FinalDiagnosticHealthCare.find_by(final_diagnostic_id: params[:final_diagnostic_id], node_id: instance.node_id).destroy! if (instance.node.is_a?(Treatment) || instance.node.is_a?(Management))
+      FinalDiagnosticHealthCare.find_by(final_diagnostic_id: instance_params[:final_diagnostic_id], node_id: instance.node_id).destroy! if (instance.node.is_a?(Treatment) || instance.node.is_a?(Management))
     else
       instance = @instanceable.components.not_health_care_conditions.find_by(node_id: instance_params[:node_id])
     end
@@ -197,7 +195,8 @@ class InstancesController < ApplicationController
       :node_id,
       :instanceable_id,
       :instanceable_type,
-      :answer_id
+      :answer_id,
+      :final_diagnostic_id
     )
   end
 end

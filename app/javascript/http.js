@@ -59,8 +59,8 @@ export default class Http {
         node_id: nodeId,
         instanceable_id: this.instanceableId,
         instanceable_type: this.instanceableType,
-      },
-      final_diagnostic_id: this.finalDiagnostic
+        final_diagnostic_id: this.finalDiagnostic
+      }
     };
     const header = await this.setHeaders("POST", body);
     const request = await fetch( url, header).catch(error => console.log(error));
@@ -197,9 +197,9 @@ export default class Http {
       instance: {
         node_id: nodeId,
         instanceable_id: this.instanceableId,
-        instanceable_type: this.instanceableType
+        instanceable_type: this.instanceableType,
+        final_diagnostic_id: this.finalDiagnostic
       },
-      final_diagnostic_id: this.finalDiagnostic
     };
     const header = await this.setHeaders("DELETE", body);
     const request = await fetch(url, header).catch(error => console.log(error));

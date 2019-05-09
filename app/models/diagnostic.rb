@@ -72,6 +72,7 @@ class Diagnostic < ApplicationRecord
     get_children(first_instances, nodes)
   end
 
+
   # @params [Array][Instance], [Array][Node]
   # Get children question nodes
   def get_children(instances, nodes)

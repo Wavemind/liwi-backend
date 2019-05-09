@@ -144,9 +144,10 @@ ActiveRecord::Schema.define(version: 2019_03_20_100004) do
     t.bigint "node_id"
     t.string "instanceable_type"
     t.bigint "instanceable_id"
-    t.boolean "is_condition", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "final_diagnostic_id"
+    t.index ["final_diagnostic_id"], name: "index_instances_on_final_diagnostic_id"
     t.index ["instanceable_type", "instanceable_id"], name: "index_instances_on_instanceable_type_and_instanceable_id"
     t.index ["node_id"], name: "index_instances_on_node_id"
   end
