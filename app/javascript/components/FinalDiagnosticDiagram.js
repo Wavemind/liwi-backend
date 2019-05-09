@@ -83,25 +83,6 @@ class FinalDiagnosticDiagram extends React.Component {
     nodeLevels.push(hcLevel);
     nodeLevels.push(hcConditions);
 
-    // Positions nodes in a horizontal way
-    let width = 1400;
-    let x = 0;
-    let y = 60;
-    nodeLevels.map((level) => {
-      let nbNodes = level.length;
-      let totalSpace = width - (nbNodes * 200);
-      let margin = totalSpace - ((nbNodes - 1) * 120);
-      x += margin / 2;
-      level.map((node) => {
-        node.setPosition(x, y);
-        x += 200 + 120;
-      });
-      x = 0;
-      if (level.length > 0) {
-        y += 200;
-      }
-    });
-
     // Create links between nodes
     nodes.map((node, index) => {
       instances[index].conditions.map((condition) => {
