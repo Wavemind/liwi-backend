@@ -142,8 +142,14 @@ class InstancesController < ApplicationController
   # @return JSON of instance
   # Delete an instances and json format
   def remove_from_diagram
-    node = @instanceable.components.find_by(node_id: instance_params[:node_id])
-    node.destroy
+    # Remove from HealthCare diagram (in case there are 2 instances of one node for one diagnostic, one df condition and one hc condition)
+    if params[:final_diagnostic_id].present?
+      instance = @instanceable.components.health_care_conditions.find_by(node_id: instance_params[:node_id])
+      FinalDiagnosticHealthCare.find_by(final_diagnostic_id: params[:final_diagnostic_id], node_id: instance.node_id).destroy! if (instance.node.is_a?(Treatment) || instance.node.is_a?(Management))
+    else
+      instance = @instanceable.components.not_health_care_conditions.find_by(node_id: instance_params[:node_id])
+    end
+    instance.destroy!
 
     respond_to do |format|
       format.html {}

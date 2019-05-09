@@ -190,32 +190,6 @@ export default class Http {
   // @params [Integer] nodeId
   // @return [Object] body of request
   // Delete an instance
-  removeHealthCaresInstance = async (nodeId) => {
-    let response;
-    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/remove_from_diagram`;
-    const body = {
-      instance: {
-        node_id: nodeId,
-        instanceable_id: this.instanceableId,
-        instanceable_type: this.instanceableType
-      }
-    };
-    const header = await this.setHeaders("DELETE", body);
-    const request = await fetch(url, header).catch(error => console.log(error));
-
-    // Display error or parse json
-    if (request.ok) {
-      response = await request.json();
-    } else {
-      response = request;
-    }
-    return await response;
-  };
-
-
-  // @params [Integer] nodeId
-  // @return [Object] body of request
-  // Delete an instance
   removeInstance = async (nodeId) => {
     let response;
     const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/remove_from_diagram`;
@@ -224,7 +198,8 @@ export default class Http {
         node_id: nodeId,
         instanceable_id: this.instanceableId,
         instanceable_type: this.instanceableType
-      }
+      },
+      final_diagnostic_id: this.finalDiagnostic
     };
     const header = await this.setHeaders("DELETE", body);
     const request = await fetch(url, header).catch(error => console.log(error));
