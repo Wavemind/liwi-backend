@@ -45,11 +45,6 @@ class Condition < ApplicationRecord
 
   # Remove child by instanceable type and first/second conditionable id
   def remove_children
-
-    puts '######################'
-    puts first_conditionable.node.id
-    puts '######################'
-
     if (first_conditionable.is_a?(Answer) && (!first_conditionable.node.is_a?(Treatment) || !first_conditionable.node.is_a?(Management)))
       child = Child.find_by(instance: first_conditionable.node.instances.find_by(instanceable: referenceable.instanceable, final_diagnostic: referenceable.final_diagnostic), node: referenceable.node)
       child.destroy!
