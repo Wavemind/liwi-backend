@@ -32,12 +32,30 @@ class FinalDiagnostic < Node
     nodes = []
     first_instances = components.joins(:node).includes(:conditions, :children).where(conditions: { referenceable_id: nil }).where('nodes.type = ? OR nodes.type = ?', 'Question', 'PredefinedSyndrome')
     nodes << first_instances
-    diagnostic.get_children(first_instances, nodes)
+    get_children(first_instances, nodes)
+  end
+
+  # @params [Array][Instance], [Array][Node]
+  # Get children question nodes
+  def get_children(instances, nodes)
+    current_nodes = []
+    instances.includes(:conditions, children: [:node]).map(&:children).flatten.each do |child|
+      current_nodes << child.node if child.node.is_a?(Question) || child.node.is_a?(PredefinedSyndrome)
+    end
+
+    if current_nodes.any?
+      current_instances = Instance.health_care_conditions.where('instanceable_id = ? AND instanceable_type = ? AND node_id IN (?)', id, self.class.name, current_nodes.map(&:id).flatten)
+      current_instances.each { |instance| nodes = remove_old_node(nodes, instance) }
+      nodes << current_instances
+      get_children(current_instances, nodes)
+    else
+      nodes
+    end
   end
 
   # Return all questions for Final Diagnostic diagram as json
   def health_care_questions_json
-    generate_health_care_conditions_order.as_json(include: [conditions: { include: [first_conditionable: { methods: [:get_node] }, second_conditionable: { methods: [:get_node] }] }, node: { include: [:answers], methods: [:type] }])
+    generate_health_care_conditions_order.as_json(include: [conditions: { include: [first_conditionable: { methods: [:get_node] }, second_conditionable: { methods: [:get_node] }] }, node: { include: [:answers], methods: [:type, :category_name] }])
   end
 
   # @return [Json]

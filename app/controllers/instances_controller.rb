@@ -167,12 +167,12 @@ class InstancesController < ApplicationController
 
   def set_child
     @child_node = Node.find(instance_params[:node_id])
-    @child_instance = @instanceable.components.find_by(node_id: @child_node.id)
+    @child_instance = @instanceable.components.find_by(node_id: @child_node.id, final_diagnostic_id: instance_params[:final_diagnostic_id])
   end
 
   def set_parent
     @parent_answer = Answer.find(instance_params[:answer_id])
-    @parent_instance = @instanceable.components.find_by(node_id: @parent_answer.node_id)
+    @parent_instance = @instanceable.components.find_by(node_id: @parent_answer.node_id, final_diagnostic_id: instance_params[:final_diagnostic_id])
   end
 
   def set_instance

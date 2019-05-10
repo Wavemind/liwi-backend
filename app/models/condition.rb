@@ -30,14 +30,14 @@ class Condition < ApplicationRecord
   # Create children from conditions automatically
   def create_children
     if first_conditionable.is_a?(Answer) && (!first_conditionable.node.is_a?(Treatment) || !first_conditionable.node.is_a?(Management))
-      parent = first_conditionable.node.instances.find_by(instanceable: referenceable.instanceable)
+      parent = first_conditionable.node.instances.find_by(instanceable: referenceable.instanceable, final_diagnostic: referenceable.final_diagnostic)
       parent.children.create!(node: referenceable.node) unless parent.nil?
     elsif first_conditionable.is_a?(Condition)
       first_conditionable.create_children
     end
 
     if second_conditionable.is_a?(Answer) && (!second_conditionable.node.is_a?(Treatment) || !second_conditionable.node.is_a?(Management))
-      second_conditionable.node.instances.find_by(instanceable: referenceable.instanceable).children.create!(node: referenceable.node)
+      second_conditionable.node.instances.find_by(instanceable: referenceable.instanceable, final_diagnostic: referenceable.final_diagnostic).children.create!(node: referenceable.node)
     elsif second_conditionable.is_a?(Condition)
       second_conditionable.create_children
     end
@@ -45,10 +45,22 @@ class Condition < ApplicationRecord
 
   # Remove child by instanceable type and first/second conditionable id
   def remove_children
-    Child.find_by(instance: first_conditionable.node.instances.find_by(instanceable: referenceable.instanceable),
-                node: referenceable.node).destroy! if first_conditionable.is_a?(Answer) && (!first_conditionable.node.is_a?(Treatment) || !first_conditionable.node.is_a?(Management))
-    Child.find_by(instance: second_conditionable.node.instances.find_by(instanceable: referenceable.instanceable),
-                node: referenceable.node).destroy! if second_conditionable.is_a?(Answer) && (!second_conditionable.node.is_a?(Treatment) || !second_conditionable.node.is_a?(Management))
+
+    puts '######################'
+    puts first_conditionable.node.id
+    puts '######################'
+
+    if (first_conditionable.is_a?(Answer) && (!first_conditionable.node.is_a?(Treatment) || !first_conditionable.node.is_a?(Management)))
+      child = Child.find_by(instance: first_conditionable.node.instances.find_by(instanceable: referenceable.instanceable, final_diagnostic: referenceable.final_diagnostic), node: referenceable.node)
+      child.destroy!
+    end
+
+
+    if (second_conditionable.is_a?(Answer) && (!second_conditionable.node.is_a?(Treatment) || !second_conditionable.node.is_a?(Management)))
+      child = Child.find_by(instance: second_conditionable.node.instances.find_by(instanceable: referenceable.instanceable, final_diagnostic: referenceable.final_diagnostic), node: referenceable.node)
+      child.destroy!
+    end
+
   end
 
   # Used for rendering json to react. Unavailable if first / second conditionable type is a condition
@@ -69,7 +81,7 @@ class Condition < ApplicationRecord
   def is_child(instance)
     instance.children.each do |child|
       # Gets child instance for the same instanceable (PS OR Diagnostic)
-      child_instance = referenceable.instanceable.components.select{ |c| c.node == child.node }.first
+      child_instance = referenceable.instanceable.components.includes(:node).select{ |c| c.node == child.node }.first
       return true if child_instance == referenceable || (child_instance.children.any? && is_child(child_instance))
     end
     false

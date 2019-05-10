@@ -85,6 +85,7 @@ export default class Http {
       instance: {
         node_id: nodeId,
         answer_id: answerId,
+        final_diagnostic_id: this.finalDiagnostic
       }
     };
     const header = await this.setHeaders("POST", body);
@@ -224,6 +225,7 @@ export default class Http {
       instance: {
         node_id: nodeId,
         answer_id: answerId,
+        final_diagnostic_id: this.finalDiagnostic,
       }
     };
     const header = await this.setHeaders("DELETE", body);

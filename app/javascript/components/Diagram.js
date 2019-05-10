@@ -180,20 +180,26 @@ class Diagram extends React.Component {
               } else {
                 let nodeId = eventLink.port.parent.node.id;
                 let answerId = eventModel.link.sourcePort.dbId;
-
-                // Create link in DB
-                http.createLink(nodeId, answerId).then((response) => {
-                  if (response.status !== "success") {
-                    // if throw an error, remove link in diagram
-                    if (model.getLink(eventModel.link.id) !== null) {
-                      model.removeLink(eventModel.link.id);
-                      self.updateEngine(engine);
+                if (eventModel.link.targetPort.in) {
+                  // Create link in DB
+                  http.createLink(nodeId, answerId).then((response) => {
+                    if (response.status !== "success") {
+                      // if throw an error, remove link in diagram
+                      if (model.getLink(eventModel.link.id) !== null) {
+                        model.removeLink(eventModel.link.id);
+                        self.updateEngine(engine);
+                      }
+                      addMessage(response);
                     }
-                    addMessage(response);
+                  }).catch((err) => {
+                    console.log(err);
+                  });
+                } else {
+                  if (model.getLink(eventModel.link.id) !== null) {
+                    model.removeLink(eventModel.link.id);
+                    self.updateEngine(engine);
                   }
-                }).catch((err) => {
-                  console.log(err);
-                });
+                }
               }
             }
           }

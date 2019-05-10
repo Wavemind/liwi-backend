@@ -56,7 +56,7 @@ class DiagnosticsController < ApplicationController
 
   def destroy
     diagnostic = Diagnostic.includes(components: [:node, :conditions, children: [:node]]).find(params[:id])
-    if diagnostic.destroy
+    if diagnostic.controlled_destroy
       redirect_to algorithm_version_url(@algorithm, @version), notice: t('flash_message.success_deleted')
     else
       render :new

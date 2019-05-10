@@ -67,11 +67,15 @@ export default class DiagramProvider extends React.Component {
       let category = "";
 
       if (node.type === "Question" || node.type === "PredefinedSyndrome") {
+        console.log(node)
         category = _.camelCase(node.category_name);
       } else {
         category = _.camelCase(node.type);
       }
+      console.log(node.type)
+      console.log(category);
       orderedNodes[category].push(node);
+
     });
 
     this.setState({ orderedNodes });
