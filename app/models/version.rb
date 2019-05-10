@@ -5,6 +5,7 @@ class Version < ApplicationRecord
   belongs_to :user
 
   has_many :diagnostics, dependent: :destroy
+  has_many :medical_case_answers
 
   has_many :group_accesses
   has_many :groups, through: :group_accesses

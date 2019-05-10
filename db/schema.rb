@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_20_100004) do
+ActiveRecord::Schema.define(version: 2019_05_10_113703) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -163,6 +163,16 @@ ActiveRecord::Schema.define(version: 2019_03_20_100004) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["fileable_type", "fileable_id"], name: "index_medias_on_fileable_type_and_fileable_id"
+  end
+
+  create_table "medical_case_answers", force: :cascade do |t|
+    t.string "value"
+    t.bigint "medical_case_id"
+    t.bigint "version_id"
+    t.bigint "answer_id"
+    t.index ["answer_id"], name: "index_medical_case_answers_on_answer_id"
+    t.index ["medical_case_id"], name: "index_medical_case_answers_on_medical_case_id"
+    t.index ["version_id"], name: "index_medical_case_answers_on_version_id"
   end
 
   create_table "medical_case_final_diagnostics", force: :cascade do |t|
