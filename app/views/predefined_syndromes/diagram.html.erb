@@ -5,7 +5,7 @@
 </div>
 <div class="row">
   <div class="col-md-12">
-    <p class="mx-0 my-0"data-type="<%= @predefined_syndrome.class.name %>" data-id="<%= @predefined_syndrome.id %>"></p>
+    <p class="mx-0 my-0 metadata"data-type="<%= @predefined_syndrome.class.name %>" data-id="<%= @predefined_syndrome.id %>"></p>
     <%= react_component('Provider', {
       render: 'Diagram',
       context: {

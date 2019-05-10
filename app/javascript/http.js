@@ -11,7 +11,7 @@ export default class Http {
   finalDiagnostic;
 
   constructor() {
-    let data = document.querySelector("p");
+    let data = document.querySelector(".metadata");
 
     this.url = window.location.origin;
     this.instanceableId = data.dataset.id;

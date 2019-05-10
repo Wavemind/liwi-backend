@@ -80,7 +80,6 @@ predefined_condition = Category.create!(name_en: 'Predefined condition', referen
 e1 = Question.create!(algorithm: epoct, answer_type: input_integer, label_en: 'Age', reference: '1', category: exposure, priority: Question.priorities[:triage])
 s3 = Question.create!(algorithm: epoct, answer_type: input_integer, label_en: 'Convulsions in current illness', reference: '3', category: symptom, priority: Question.priorities[:mandatory])
 s45 = Question.create!(algorithm: epoct, answer_type: boolean, label_en: 'Is the patient able to tolerate PO liquid ?', reference: '45', category: symptom, priority: Question.priorities[:mandatory])
-s5 = Question.create!(algorithm: epoct, answer_type: input_integer, label_en: 'How many time did you loose stool or emesis last 24 hours ?', reference: '5', category: symptom, priority: Question.priorities[:mandatory])
 p6 = Question.create!(algorithm: epoct, answer_type: input_float, label_en: 'What is MUAC size ?', reference: '6', category: physical_exam, priority: Question.priorities[:triage])
 p21 = Question.create!(algorithm: epoct, answer_type: input_float, label_en: 'What is the size of the skin lesion ?', reference: '21', category: physical_exam, priority: Question.priorities[:basic])
 
@@ -91,8 +90,6 @@ e1_3 = Answer.create!(node: e1, reference: '3', label_en: 'between 6 and 12 mont
 e1_4 = Answer.create!(node: e1, reference: '4', label_en: 'more than 12 months', value: '12', operator: Answer.operators[:more_or_equal])
 s3_1 = Answer.create!(node: s3, reference: '1', label_en: '2 or more', value: '2', operator: Answer.operators[:more_or_equal])
 s3_2 = Answer.create!(node: s3, reference: '2', label_en: 'less than 2', value: '2', operator: Answer.operators[:less])
-s5_1 = Answer.create!(node: s5, reference: '1', label_en: '3 or more', value: '3', operator: Answer.operators[:more_or_equal])
-s5_2 = Answer.create!(node: s5, reference: '2', label_en: 'less than 3', value: '3', operator: Answer.operators[:less])
 p6_1 = Answer.create!(node: p6, reference: '1', label_en: 'less than 11.5', value: '11.5', operator: Answer.operators[:less])
 p6_2 = Answer.create!(node: p6, reference: '2', label_en: 'between 11.5 and 12.5', value: '11.5, 12.5', operator: Answer.operators[:between])
 p6_3 = Answer.create!(node: p6, reference: '3', label_en: '12.5 or more', value: '12.5', operator: Answer.operators[:more_or_equal])

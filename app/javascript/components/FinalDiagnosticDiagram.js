@@ -41,9 +41,6 @@ class FinalDiagnosticDiagram extends React.Component {
     // Setup the diagram model
     let model = new DiagramModel();
 
-    // Init http class
-    const http = new Http();
-
     // Setup the diagram engine
     engine.installDefaultFactories();
     engine.registerLinkFactory(new AdvancedLinkFactory());
@@ -212,9 +209,9 @@ class FinalDiagnosticDiagram extends React.Component {
     const {engine} = this.state;
     const {
       removeNode,
-      finalDiagnostic
+      finalDiagnostic,
+      http
     } = this.props;
-    const http = new Http();
 
     let model = engine.getDiagramModel();
 

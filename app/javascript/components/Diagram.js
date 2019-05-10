@@ -35,15 +35,13 @@ class Diagram extends React.Component {
       questions,
       finalDiagnostics,
       addMessage,
+      http
     } = this.props;
 
     const { engine } = this.state;
 
     // Setup the diagram model
     let model = new DiagramModel();
-
-    // Init http class
-    const http = new Http();
 
     // Setup the diagram engine
     engine.installDefaultFactories();
@@ -247,8 +245,6 @@ class Diagram extends React.Component {
   render = () => {
     const {engine} = this.state;
     const {removeNode} = this.props;
-
-    const http = new Http();
 
     let model = engine.getDiagramModel();
 

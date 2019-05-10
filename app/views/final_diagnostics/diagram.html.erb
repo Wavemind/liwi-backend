@@ -8,14 +8,7 @@
 </div>
 <div class="row">
   <div class="col-md-12">
-    <p
-      class="mx-0 my-0"
-      data-type="<%= @diagnostic.class.name %>"
-      data-id="<%= @diagnostic.id %>"
-      data-version="<%= @diagnostic.version.id %>"
-      data-algorithm="<%= @diagnostic.version.algorithm.id %>"
-      data-final_diagnostic="<%= @final_diagnostic.id %>"
-    ></p>
+    <p class="mx-0 my-0 metadata" data-type="<%= @diagnostic.class.name %>" data-id="<%= @diagnostic.id %>" data-version="<%= @diagnostic.version.id %>" data-algorithm="<%= @diagnostic.version.algorithm.id %>" data-final_diagnostic="<%= @final_diagnostic.id %>"></p>
     <%= react_component('Provider', {
       render: 'FinalDiagnosticDiagram',
       context: {
