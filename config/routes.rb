@@ -45,6 +45,7 @@ Rails.application.routes.draw do
             put 'add_excluded_diagnostic'
             put 'remove_excluded_diagnostic'
             put 'update_translations'
+            get 'diagram'
           end
           resources :final_diagnostic_health_cares, only: [:create, :destroy]
         end
@@ -107,6 +108,7 @@ Rails.application.routes.draw do
         get 'by_reference'
         get 'load_conditions'
         post 'create_from_diagram'
+        post 'create_from_final_diagnostic_diagram'
         post 'create_link'
         delete 'remove_from_diagram'
         delete 'remove_link'

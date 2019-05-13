@@ -12,11 +12,11 @@ import AdvancedDiagramWidget from "../react-diagram/widgets/AdvancedDiagramWidge
 
 import NodeList from "../react-diagram/lists/NodeList";
 import Http from "../http";
+
 import FlashMessages from "./FlashMessages";
+import {withDiagram} from "../context/Diagram.context";
 
-import { withDiagram } from '../context/Diagram.context';
-
-class Diagram extends React.Component {
+class FinalDiagnosticDiagram extends React.Component {
 
   constructor() {
     super();
@@ -31,14 +31,12 @@ class Diagram extends React.Component {
 
   initDiagram = () => {
     const {
-      instanceableType,
       questions,
-      finalDiagnostics,
-      addMessage,
-      http
+      healthCares,
+      addMessage
     } = this.props;
 
-    const { engine } = this.state;
+    const {engine} = this.state;
 
     // Setup the diagram model
     let model = new DiagramModel();
@@ -51,6 +49,11 @@ class Diagram extends React.Component {
     let nodes = []; // Save nodes to link them at the end
     let nodeLevels = []; // Save nodes level to position them at the end
     let self = this;
+
+    let instances = questions.flat().concat(healthCares);
+
+    let hcLevel = [];
+    let hcConditions = [];
 
     // Create nodes for PS and questions
     questions.map((levels) => {
@@ -66,49 +69,16 @@ class Diagram extends React.Component {
       nodeLevels.push(currentLevel);
     });
 
-    let instances = questions.flat();
+    // Create nodes for treatments and managements
+    healthCares.map((healthCare) => {
+      let node = this.createNode(healthCare.node);
+      nodes.push(node);
+      hcLevel.push(node);
+      model.addAll(node);
+    });
 
-    // Create nodes for final diagnostics
-    let finalDiagnosticLevel = [];
-    let excludingDF = null;
-
-    if (instanceableType === 'Diagnostic') {
-      finalDiagnostics.map((instance) => {
-        let finalDiagnostic = instance.node;
-        let node = this.createNode(finalDiagnostic);
-        node.addInPort(" ");
-
-        node.addOutPort(" ", finalDiagnostic.reference, finalDiagnostic.id);
-
-        // Manage excluding final diagnostics
-        if (finalDiagnostic.final_diagnostic_id !== null) {
-          excludingDF = finalDiagnostic;
-        }
-        finalDiagnosticLevel.push(node);
-        nodes.push(node);
-        model.addAll(node);
-        instances.push(instance);
-      });
-
-      // Excluded diagnostic
-      if (excludingDF !== null) {
-        let mainDF = _.find(finalDiagnosticLevel, ["node.id", excludingDF.id]);
-        let excludedDF = _.find(finalDiagnosticLevel, ["node.id", excludingDF.final_diagnostic_id]);
-
-        let link = mainDF.getOutPort().link(excludedDF.getInPorts()[1]);
-        link.displaySeparator(true);
-
-        model.addAll(link);
-      }
-
-      nodeLevels.push(finalDiagnosticLevel);
-
-      let hcLevel = [];
-      let hcConditions = [];
-
-      nodeLevels.push(hcConditions);
-      nodeLevels.push(hcLevel);
-    }
+    nodeLevels.push(hcLevel);
+    nodeLevels.push(hcConditions);
 
     // Create links between nodes
     nodes.map((node, index) => {
@@ -147,7 +117,7 @@ class Diagram extends React.Component {
         // Disable link from inPort
         if (eventModel.link.sourcePort.in) {
           if (model.getLink(eventModel.link.id) !== null) {
-            model.removeLink(eventModel.link.id)
+            model.removeLink(eventModel.link.id);
           }
         }
 
@@ -166,43 +136,36 @@ class Diagram extends React.Component {
               }
             });
 
-
             // Don't create an another link in DB if it already exist
             if (!exists) {
               if (eventLink.entity.sourcePort.parent.node.type === "FinalDiagnostic") {
                 if (eventLink.entity.targetPort.parent.node.type === "FinalDiagnostic") {
                   http.excludeDiagnostic(eventLink.entity.sourcePort.parent.node.id, eventLink.entity.targetPort.parent.node.id);
                 } else {
-                  model.removeLink(eventModel.link.id)
+                  model.removeLink(eventModel.link.id);
                 }
               } else {
                 let nodeId = eventLink.port.parent.node.id;
                 let answerId = eventModel.link.sourcePort.dbId;
-                if (eventModel.link.targetPort.in) {
-                  // Create link in DB
-                  http.createLink(nodeId, answerId).then((response) => {
-                    if (response.status !== "success") {
-                      // if throw an error, remove link in diagram
-                      if (model.getLink(eventModel.link.id) !== null) {
-                        model.removeLink(eventModel.link.id);
-                        self.updateEngine(engine);
-                      }
-                      addMessage(response);
+
+                // Create link in DB
+                http.createLink(nodeId, answerId).then((response) => {
+                  if (response.status !== "success") {
+                    // if throw an error, remove link in diagram
+                    if (model.getLink(eventModel.link.id) !== null) {
+                      model.removeLink(eventModel.link.id);
+                      self.updateEngine(engine);
                     }
-                  }).catch((err) => {
-                    console.log(err);
-                  });
-                } else {
-                  if (model.getLink(eventModel.link.id) !== null) {
-                    model.removeLink(eventModel.link.id);
-                    self.updateEngine(engine);
+                    addMessage(response);
                   }
-                }
+                }).catch((err) => {
+                  console.log(err);
+                });
               }
             }
           }
         });
-      },
+      }
     });
 
     // load model into engine
@@ -237,14 +200,18 @@ class Diagram extends React.Component {
     const {addMessage} = this.props;
     let message = {
       status,
-      message: [`An error occured: ${response.status} - ${response.statusText}`],
+      message: [`An error occured: ${response.status} - ${response.statusText}`]
     };
     await addMessage(message);
   };
 
   render = () => {
     const {engine} = this.state;
-    const {removeNode} = this.props;
+    const {
+      removeNode,
+      finalDiagnostic,
+      http
+    } = this.props;
 
     let model = engine.getDiagramModel();
 
@@ -263,37 +230,19 @@ class Diagram extends React.Component {
               let nodeDiagram = {};
               let result;
 
-              // Create AND node
-              if (nodeDb === "AND") {
-                nodeDiagram = new AdvancedNodeModel("AND", "", "", "");
-                nodeDiagram.addInPort(" ");
-                nodeDiagram.addOutPort(" ");
-                // Create Final Diagnostic node
-              } else if (nodeDb.type === "FinalDiagnostic") {
-                result = await http.createInstance(nodeDb.id);
-                if (result.ok === undefined || result.ok) {
-                  nodeDiagram = this.createNode(nodeDb);
-                  nodeDiagram.addInPort(" ");
-                  nodeDiagram.addOutPort(" ");
-                  removeNode(nodeDb);
-                } else  {
-                  this.addFlashMessage("danger", result);
-                }
 
-              } else {
-                // Create regular node
-                result = await http.createInstance(nodeDb.id);
-                if (result.ok === undefined || result.ok) {
-                  if (nodeDb.get_answers !== null) {
-                    nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers);
-                    nodeDb.get_answers.map((answer) => (nodeDiagram.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
-                  } else {
-                    nodeDiagram = this.createNode(nodeDb);
-                  }
-                  removeNode(nodeDb);
+              // Create node
+              result = await http.createHealthCareInstance(nodeDb.id);
+              if (result.ok === undefined || result.ok) {
+                if (nodeDb.get_answers !== null) {
+                  nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers);
+                  nodeDb.get_answers.map((answer) => (nodeDiagram.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
                 } else {
-                  this.addFlashMessage("danger", result);
+                  nodeDiagram = this.createNode(nodeDb);
                 }
+                removeNode(nodeDb);
+              } else {
+                this.addFlashMessage("danger", result);
               }
 
               // Set position of node in canevas
@@ -321,4 +270,4 @@ class Diagram extends React.Component {
   };
 }
 
-export default withDiagram(Diagram);
+export default withDiagram(FinalDiagnosticDiagram);

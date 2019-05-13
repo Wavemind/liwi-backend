@@ -22,12 +22,20 @@ class NodeList extends React.Component {
         {Object.keys(orderedNodes).map(index => (
           <div className="card" key={index}>
             <div className="card-header" id={`heading-${index}`}>
-              <h2 className="mb-0">
-                <button className="btn btn-link" type="button" data-toggle="collapse" data-target={`#collapse-${index}`}
-                        aria-expanded="true" aria-controls={`collapse-${index}`}>
-                  {_.startCase(index)}
-                </button>
-              </h2>
+              <div className="row">
+                <div className="col">
+                  <button className="btn btn-link p-0" type="button" data-toggle="collapse"
+                          data-target={`#collapse-${index}`}
+                          aria-expanded="true" aria-controls={`collapse-${index}`}>
+                    {_.startCase(index)}
+                  </button>
+                </div>
+                <div className="col text-right">
+                     <span className="badge badge-secondary text-right">
+                  {orderedNodes[index].length}
+                </span>
+                </div>
+              </div>
             </div>
 
             <div id={`collapse-${index}`} className={`collapse ${index === 0 ? `show` : ``}`}

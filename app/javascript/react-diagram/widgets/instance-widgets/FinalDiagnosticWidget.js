@@ -1,4 +1,5 @@
 import * as React from "react";
+import {withDiagram} from "../../../context/Diagram.context";
 
 class FinalDiagnosticWidget extends React.Component {
   constructor(props) {
@@ -6,22 +7,20 @@ class FinalDiagnosticWidget extends React.Component {
     this.state = {};
   }
 
-  // Generate out ports for final diagnostic node
-  generateOutPort(port) {
-    return (
-      <div key={port.getID()} className="col px-0" style={{position: "relative"}}>
-        <div className="py-1 text-center answer-split">{port.label}</div>
-        <div className="port out-port" data-name={port.name} data-nodeid={port.parent.id}/>
-      </div>
-    );
-  }
+  openDiagram = (dfId) => {
+    const { http } = this.props;
+    http.showFinalDiagnosticDiagram(dfId);
+  };
 
   render() {
-    const { diagramNode } = this.props;
+    const {
+      diagramNode,
+    } = this.props;
 
     let inPort = diagramNode.getInPorts()[0];
     let excludingInPort = diagramNode.getInPorts()[1];
-    let outPort = diagramNode.getOutPort();
+    let outPorts = diagramNode.getOutPorts();
+    let inExcluded = outPorts[0];
 
     return (
       <div className="node">
@@ -30,8 +29,8 @@ class FinalDiagnosticWidget extends React.Component {
           <div className="col pl-2 pr-0 text-left">
             {diagramNode.node.reference}
           </div>
-          <div className="col pl-0 pr-2 text-right">
-            {diagramNode.node.priority}
+          <div className="col pl-0 pr-2 text-right manage-df" onClick={() => this.openDiagram(inPort.parent.node.id)}>
+            <span>Manage...</span>
           </div>
         </div>
         <div>
@@ -41,11 +40,11 @@ class FinalDiagnosticWidget extends React.Component {
             </div>
           </div>
           <div className="port inExcluded" data-name={excludingInPort.name} data-nodeid={excludingInPort.parent.id}/>
-          <div className="port outExcluded" data-name={outPort.name} data-nodeid={outPort.parent.id}/>
+          <div className="port outExcluded" data-name={inExcluded.name} data-nodeid={inExcluded.parent.id}/>
         </div>
       </div>
     );
   }
 }
 
-export default FinalDiagnosticWidget;
+export default withDiagram(FinalDiagnosticWidget);

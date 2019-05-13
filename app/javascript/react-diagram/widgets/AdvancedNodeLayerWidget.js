@@ -37,18 +37,29 @@ class AdvancedNodeLayerWidget extends NodeLayerWidget {
     const {
       questions,
       finalDiagnostics,
-      healthCares
+      healthCares,
+      type,
     } = this.props;
+
     const hMargin = 80; // Horizontal Margin between boxes
     const vMargin = 210; // Vertical Margin between boxes
-    const nodes = questions.concat([finalDiagnostics]).concat([healthCares]); // List of all the medical nodes
+    let nodes;
+
+    // List of all the medical nodes dependency type of diagram displayed
+    if (type === 'Diagnostic') {
+      nodes = questions.concat([finalDiagnostics]);
+    } else if (type === 'PredefinedSyndrome') {
+      nodes = questions;
+    } else if (type === 'FinalDiagnostic') {
+      nodes = questions.concat([healthCares]);
+    }
 
     let width = 1400; // Screen Width TODO Should be calculated not brut
     let x = 0;
     let y = 50;
 
-    // Positioning questions
     nodes.map((level) => {
+      // Positioning questions
       let levelWidth = 0; // The width of each level
 
       // Calculating current level width

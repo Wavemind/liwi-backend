@@ -16,7 +16,8 @@ export interface AdvancedNodeWidgetState {
 }
 
 /**
- * @author Jean Neige
+ * @author Quentin Girard
+ * Generate node by type
  */
 class AdvancedNodeWidget extends BaseWidget<AdvancedNodeWidgetProps, AdvancedNodeWidgetState> {
   static defaultProps: AdvancedNodeWidgetProps = {

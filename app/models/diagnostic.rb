@@ -67,21 +67,11 @@ class Diagnostic < ApplicationRecord
   # Generate the ordered questions
   def generate_questions_order
     nodes = []
-    first_instances = components.includes(:conditions, :children, :node).where(conditions: { referenceable_id: nil }).where('nodes.type = ? OR nodes.type = ?', 'Question', 'PredefinedSyndrome')
-
-    health_cares = components.treatments + components.managements
-    # Excluding health cares conditions
-    first_instances.each do |instance|
-      isHcCondition = false
-      health_cares.map(&:conditions).flatten.each do |cond|
-        isHcCondition = true if ((cond.first_conditionable.is_a?(Answer) && cond.first_conditionable.node.id == instance.node.id) || (cond.second_conditionable.is_a?(Answer) && cond.second_conditionable.node.id == instance.node.id))
-      end
-      first_instances = first_instances.where.not(id: instance.id) if isHcCondition
-    end
-
+    first_instances = components.not_health_care_conditions.includes(:conditions, :children, :node).where(conditions: { referenceable_id: nil }).where('nodes.type = ? OR nodes.type = ?', 'Question', 'PredefinedSyndrome')
     nodes << first_instances
     get_children(first_instances, nodes)
   end
+
 
   # @params [Array][Instance], [Array][Node]
   # Get children question nodes
@@ -92,7 +82,7 @@ class Diagnostic < ApplicationRecord
     end
 
     if current_nodes.any?
-      current_instances = Instance.where('instanceable_id = ? AND instanceable_type = ? AND node_id IN (?)', id, self.class.name, current_nodes.map(&:id).flatten)
+      current_instances = Instance.not_health_care_conditions.where('instanceable_id = ? AND instanceable_type = ? AND node_id IN (?)', id, self.class.name, current_nodes.map(&:id).flatten)
       current_instances.each { |instance| nodes = remove_old_node(nodes, instance) }
       nodes << current_instances
       get_children(current_instances, nodes)
@@ -115,7 +105,7 @@ class Diagnostic < ApplicationRecord
   # @return [Json]
   # Return questions in json format
   def questions_json
-    generate_questions_order.as_json(include: [conditions: { include: [first_conditionable: { methods: [:get_node] }, second_conditionable: { methods: [:get_node] }] }, node: { include: [:answers], methods: [:type] }])
+    generate_questions_order.as_json(include: [conditions: { include: [first_conditionable: { methods: [:get_node] }, second_conditionable: { methods: [:get_node] }] }, node: { include: [:answers], methods: [:type, :category_name] }])
   end
 
   # @return [Json]
@@ -133,7 +123,22 @@ class Diagnostic < ApplicationRecord
   # @return [Json]
   # Return available nodes in the algorithm in json format
   def available_nodes_json
-    (version.algorithm.nodes.where.not(id: components.select(:node_id)) + final_diagnostics.where.not(id: components.select(:node_id))).as_json(methods: [:category_name, :type, :get_answers])
+    (version.algorithm.nodes.where.not(id: components.not_health_care_conditions.select(:node_id)).where.not(type: 'Treatment').where.not(type: 'Management') + final_diagnostics.where.not(id: components.select(:node_id))).as_json(methods: [:category_name, :type, :get_answers])
+  end
+
+  # @return [Boolean]
+  # Control method of destroy to avoid callback issue
+  def controlled_destroy
+    ActiveRecord::Base.transaction(requires_new: true) do
+      instances_ids = components.map(&:id)
+      Child.where(instance_id: instances_ids).map(&:delete)
+      Condition.where(referenceable_type: 'Instance', referenceable_id: instances_ids).map(&:delete)
+      components.map(&:delete)
+      final_diagnostics.map(&:delete)
+      self.delete
+      return true
+    end
+    false
   end
 
   private

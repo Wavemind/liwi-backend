@@ -3,6 +3,7 @@ class Instance < ApplicationRecord
 
   belongs_to :node
   belongs_to :instanceable, polymorphic: true
+  belongs_to :final_diagnostic, optional: true
 
   has_many :children
   has_many :nodes, through: :children
@@ -14,8 +15,11 @@ class Instance < ApplicationRecord
   scope :predefined_syndromes, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'PredefinedSyndrome') }
   scope :treatments, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'Treatment') }
   scope :final_diagnostics, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'FinalDiagnostic') }
+  # Allow to filter if the node is used as a health care condition or as a final diagnostic condition. A node can be used in both of them.
+  scope :health_care_conditions, ->() { joins(:node).includes(:conditions).where.not(final_diagnostic: nil).or(joins(:node).includes(:conditions).where("nodes.type = 'Treatment'")).or(joins(:node).includes(:conditions).where("nodes.type = 'Management'")) }
+  scope :not_health_care_conditions, ->() { includes(:conditions).where(final_diagnostic_id: nil) }
 
-  before_destroy :remove_children_from_parents, :remove_condition_from_children
+  before_destroy :remove_condition_from_children
 
   # Enable recursive duplicating
   # https://github.com/amoeba-rb/amoeba#usage
@@ -31,8 +35,11 @@ class Instance < ApplicationRecord
 
   # Delete properly conditions from children in the current diagnostic or predefined syndrome.
   def remove_condition_from_children
-    instanceable.components.map(&:conditions).flatten.each do |cond|
-      self.class.remove_condition(cond, self)
+    children.each do |child|
+      instance = child.node.instances.find_by(instanceable: instanceable, final_diagnostic: final_diagnostic)
+      instance.conditions.each do |cond|
+        self.class.remove_condition(cond, self)
+      end
     end
   end
 

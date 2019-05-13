@@ -2,7 +2,7 @@ class DiagnosticsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_algorithm, only: [:show, :new, :create, :edit, :update, :destroy, :duplicate]
   before_action :set_version, only: [:show, :new, :create, :edit, :update, :destroy, :duplicate]
-  before_action :set_diagnostic, only: [:show, :edit, :update, :diagram, :update_translations]
+  before_action :set_diagnostic, only: [:show, :edit, :update, :diagram, :health_cares_diagram, :update_translations]
   layout 'diagram', only: [:diagram]
 
   def index
@@ -56,7 +56,7 @@ class DiagnosticsController < ApplicationController
 
   def destroy
     diagnostic = Diagnostic.includes(components: [:node, :conditions, children: [:node]]).find(params[:id])
-    if diagnostic.destroy
+    if diagnostic.controlled_destroy
       redirect_to algorithm_version_url(@algorithm, @version), notice: t('flash_message.success_deleted')
     else
       render :new

@@ -1,7 +1,7 @@
 class InstancesController < ApplicationController
 
   before_action :authenticate_user!
-  before_action :set_instanceable, only: [:show, :create, :destroy, :by_reference, :create_from_diagram, :remove_from_diagram, :create_link, :remove_link, :load_conditions]
+  before_action :set_instanceable, only: [:show, :create, :destroy, :by_reference, :create_from_diagram, :remove_from_diagram, :create_link, :remove_link, :load_conditions, :create_from_final_diagnostic_diagram]
   before_action :set_instance, only: [:show, :destroy]
   before_action :set_child, only: [:create_link, :remove_link]
   before_action :set_parent, only: [:create_link, :remove_link]
@@ -79,12 +79,30 @@ class InstancesController < ApplicationController
     end
   end
 
+  # POST /diagnostics/:diagnostic_id/instances/diagram_create
+  # @return JSON of instance
+  # Create an instances of node for final diagnostic diagram and return json format
+  def create_from_final_diagnostic_diagram
+    instance = @instanceable.components.new(instance_params)
+
+    if instance.node.is_a?(Treatment) || instance.node.is_a?(Management)
+      FinalDiagnosticHealthCare.create!(final_diagnostic: FinalDiagnostic.find(instance_params[:final_diagnostic_id]), node: instance.node)
+    end
+
+    instance.save
+
+    respond_to do |format|
+      format.html {}
+      format.json { render json: instance }
+    end
+  end
+
   # @params [Diagnostic] Current diagnostic, [Answer] Answer from parent of the link, [Node] child of the link
   # Create link in both way from diagram
   def create_link
     condition = Condition.new(referenceable: @child_instance, first_conditionable: @parent_answer, top_level: true)
     if condition.save
-      render json: { status: 'success', message: t('flash_message.success_created')}
+      render json: { status: 'success', message: t('flash_message.success_created') }
     else
       render json: { status: 'danger', message: condition.errors.full_messages }
     end
@@ -94,18 +112,18 @@ class InstancesController < ApplicationController
   # Create link in both way from diagram
   def load_conditions
     instance = @instanceable.components.find_by(node_id: params[:node_id])
-    available_conditions = (@instanceable.components.questions.includes(node:[:answers]).map(&:node).map(&:answers) + @instanceable.components.predefined_syndromes.includes(node:[:answers]).map(&:node).map(&:answers) + instance.conditions).flatten
+    available_conditions = (@instanceable.components.questions.includes(node: [:answers]).map(&:node).map(&:answers) + @instanceable.components.predefined_syndromes.includes(node: [:answers]).map(&:node).map(&:answers) + instance.conditions).flatten
     render json: {
       instance: instance.as_json(
         include: {
           conditions: {
             include: [
               first_conditionable: {
-                include: [node: { include: [:answers]}]
+                include: [node: { include: [:answers] }]
               },
               second_conditionable: {
                 include: [
-                  node: { include: [:answers]}
+                  node: { include: [:answers] }
                 ]
               }
             ],
@@ -122,8 +140,14 @@ class InstancesController < ApplicationController
   # @return JSON of instance
   # Delete an instances and json format
   def remove_from_diagram
-    node = @instanceable.components.find_by(node_id: instance_params[:node_id])
-    node.destroy
+    # Remove from HealthCare diagram (in case there are 2 instances of one node for one diagnostic, one df condition and one hc condition)
+    if instance_params[:final_diagnostic_id].present?
+      instance = @instanceable.components.health_care_conditions.find_by(node_id: instance_params[:node_id])
+      FinalDiagnosticHealthCare.find_by(final_diagnostic_id: instance_params[:final_diagnostic_id], node_id: instance.node_id).destroy! if (instance.node.is_a?(Treatment) || instance.node.is_a?(Management))
+    else
+      instance = @instanceable.components.not_health_care_conditions.find_by(node_id: instance_params[:node_id])
+    end
+    instance.destroy!
 
     respond_to do |format|
       format.html {}
@@ -136,19 +160,19 @@ class InstancesController < ApplicationController
   def remove_link
     condition = Condition.find_by(referenceable: @child_instance, first_conditionable: @parent_answer)
     Instance.remove_condition(condition, @parent_instance)
-    render json: { status: 'success', message: t('flash_message.success_deleted')}
+    render json: { status: 'success', message: t('flash_message.success_deleted') }
   end
 
   private
 
   def set_child
     @child_node = Node.find(instance_params[:node_id])
-    @child_instance = @instanceable.components.find_by(node_id: @child_node.id)
+    @child_instance = @instanceable.components.find_by(node_id: @child_node.id, final_diagnostic_id: instance_params[:final_diagnostic_id])
   end
 
   def set_parent
     @parent_answer = Answer.find(instance_params[:answer_id])
-    @parent_instance = @instanceable.components.find_by(node_id: @parent_answer.node_id)
+    @parent_instance = @instanceable.components.find_by(node_id: @parent_answer.node_id, final_diagnostic_id: instance_params[:final_diagnostic_id])
   end
 
   def set_instance
@@ -171,7 +195,8 @@ class InstancesController < ApplicationController
       :node_id,
       :instanceable_id,
       :instanceable_type,
-      :answer_id
+      :answer_id,
+      :final_diagnostic_id
     )
   end
 end

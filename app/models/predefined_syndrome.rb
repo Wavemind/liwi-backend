@@ -25,7 +25,7 @@ class PredefinedSyndrome < Node
       current_nodes << child.node if child.node.is_a?(Question) || child.node.is_a?(PredefinedSyndrome)
     end
     if current_nodes.any?
-      current_instances = Instance.where('instanceable_id = ? AND instanceable_type = ? AND node_id IN (?)', id, 'Node', current_nodes.map(&:id).flatten)
+      current_instances = Instance.not_health_care_conditions.where('instanceable_id = ? AND instanceable_type = ? AND node_id IN (?)', id, 'Node', current_nodes.map(&:id).flatten)
       current_instances.each { |instance| nodes = remove_old_node(nodes, instance) }
       nodes << current_instances
       get_children(current_instances, nodes)
@@ -48,13 +48,13 @@ class PredefinedSyndrome < Node
   # @return [Json]
   # Return questions in json format
   def questions_json
-    generate_questions_order.as_json(include: [conditions: { include: [first_conditionable: { methods: [:get_node] }, second_conditionable: { methods: [:get_node] }] }, node: { include: [:answers], methods: [:type] }])
+    generate_questions_order.as_json(include: [conditions: { include: [first_conditionable: { methods: [:get_node] }, second_conditionable: { methods: [:get_node] }] }, node: { include: [:answers], methods: [:type, :category_name] }])
   end
 
   # @return [Json]
   # Return available nodes in the algorithm in json format
   def available_nodes_json
-    algorithm.nodes.where.not(id: components.select(:node_id)).as_json(methods: [:category_name, :type, :get_answers])
+    (algorithm.nodes.where.not(id: components.not_health_care_conditions.select(:node_id)).where.not(type: 'Treatment').where.not(type: 'Management')).as_json(methods: [:category_name, :type, :get_answers])
   end
 
   private

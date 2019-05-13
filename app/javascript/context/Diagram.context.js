@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unused-state */
 import * as React from "react";
 import * as _ from "lodash";
+import Http from "../http";
 
 const defaultValue = {};
 const DiagramContext = React.createContext(defaultValue);
@@ -8,7 +9,10 @@ const DiagramContext = React.createContext(defaultValue);
 export default class DiagramProvider extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {...this.state, ...props.value }
+
+    // Init http class
+    const http = new Http();
+    this.state = {...this.state, ...props.value, http }
   }
 
   async componentWillMount() {
@@ -16,20 +20,47 @@ export default class DiagramProvider extends React.Component {
   }
 
   orderNodes = async () => {
-    const { availableNodes } = this.state;
+    const {
+      availableNodes,
+      type
+    } = this.state;
 
-    let orderedNodes = {
-      exposure: [],
-      symptom: [],
-      assessmentTest: [],
-      physicalExam: [],
-      predefinedSyndrome: [],
-      comorbidity: [],
-      predefinedCondition: [],
-      treatment: [],
-      management: [],
-      finalDiagnostic: []
-    };
+    let orderedNodes = {};
+
+    if (type === 'Diagnostic') {
+      orderedNodes = {
+        exposure: [],
+        symptom: [],
+        assessmentTest: [],
+        physicalExam: [],
+        predefinedSyndrome: [],
+        comorbidity: [],
+        predefinedCondition: [],
+        finalDiagnostic: []
+      };
+    } else if (type === 'FinalDiagnostic') {
+      orderedNodes = {
+        exposure: [],
+        symptom: [],
+        assessmentTest: [],
+        physicalExam: [],
+        predefinedSyndrome: [],
+        comorbidity: [],
+        predefinedCondition: [],
+        treatment: [],
+        management: [],
+      };
+    } else {
+      orderedNodes = {
+        exposure: [],
+        symptom: [],
+        assessmentTest: [],
+        physicalExam: [],
+        predefinedSyndrome: [],
+        comorbidity: [],
+        predefinedCondition: [],
+      };
+    }
 
     // Assign node to correct array
     availableNodes.map((node) => {
@@ -41,6 +72,7 @@ export default class DiagramProvider extends React.Component {
         category = _.camelCase(node.type);
       }
       orderedNodes[category].push(node);
+
     });
 
     this.setState({ orderedNodes });
@@ -95,6 +127,7 @@ export default class DiagramProvider extends React.Component {
     modalIsOpen: false,
     currentNodeId: null,
     messages: [],
+    type: null,
   };
 
   render() {
