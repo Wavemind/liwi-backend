@@ -46,11 +46,11 @@ class AdvancedNodeLayerWidget extends NodeLayerWidget {
     let nodes;
 
     // List of all the medical nodes dependency type of diagram displayed
-    if (type === 'Diagnostic') {
+    if (type === "Diagnostic") {
       nodes = questions.concat([finalDiagnostics]);
-    } else if (type === 'PredefinedSyndrome') {
+    } else if (type === "PredefinedSyndrome") {
       nodes = questions;
-    } else if (type === 'FinalDiagnostic') {
+    } else if (type === "FinalDiagnostic") {
       nodes = questions.concat([healthCares]);
     }
 

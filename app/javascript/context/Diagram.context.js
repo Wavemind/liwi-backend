@@ -12,7 +12,7 @@ export default class DiagramProvider extends React.Component {
 
     // Init http class
     const http = new Http();
-    this.state = {...this.state, ...props.value, http }
+    this.state = {...this.state, ...props.value, http };
   }
 
   async componentWillMount() {
@@ -27,7 +27,7 @@ export default class DiagramProvider extends React.Component {
 
     let orderedNodes = {};
 
-    if (type === 'Diagnostic') {
+    if (type === "Diagnostic") {
       orderedNodes = {
         exposure: [],
         symptom: [],
@@ -38,7 +38,7 @@ export default class DiagramProvider extends React.Component {
         predefinedCondition: [],
         finalDiagnostic: []
       };
-    } else if (type === 'FinalDiagnostic') {
+    } else if (type === "FinalDiagnostic") {
       orderedNodes = {
         exposure: [],
         symptom: [],
