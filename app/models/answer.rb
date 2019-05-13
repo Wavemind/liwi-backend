@@ -5,6 +5,7 @@ class Answer < ApplicationRecord
 
   belongs_to :node
   has_many :children
+  has_many :medical_case_answers
 
   validates_presence_of :reference
   validates_presence_of :label

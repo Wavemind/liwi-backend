@@ -11,8 +11,8 @@ module ModelMacros
   def create_version
     before(:each) do
       role_administrator = Role.create!(name: 'Administrator')
-      user = User.create!(first_name: 'Alain', last_name: 'Fresco', email: 'alain.fresco@wavemind.ch', password: '123456', password_confirmation: '123456', role: role_administrator)
-      algorithm = Algorithm.create!(name: 'ePoct', user: user)
+      user = User.create!(first_name: 'Alain', last_name: 'Fresco', email: 'manu.barchichat@wavemind.ch', password: '123456', password_confirmation: '123456', role: role_administrator)
+      algorithm = Algorithm.create!(name: 'Liwi', user: user)
       @version = Version.create!(name: 'first_trial', algorithm: algorithm, user: user)
     end
   end
