@@ -244,7 +244,7 @@ class Diagram extends React.Component {
 
   render = () => {
     const {engine} = this.state;
-    const {removeNode} = this.props;
+    const {removeNode, http} = this.props;
 
     let model = engine.getDiagramModel();
 

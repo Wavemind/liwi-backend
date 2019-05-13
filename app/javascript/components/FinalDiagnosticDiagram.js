@@ -33,7 +33,8 @@ class FinalDiagnosticDiagram extends React.Component {
     const {
       questions,
       healthCares,
-      addMessage
+      addMessage,
+      http
     } = this.props;
 
     const {engine} = this.state;

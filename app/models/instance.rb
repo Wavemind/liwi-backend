@@ -28,11 +28,6 @@ class Instance < ApplicationRecord
     include_association :conditions
   end
 
-  # Delete children as well using this instance
-  def remove_children_from_parents
-    instanceable.components.select { |i| i.children.select { |c| c.destroy if c.node == self.node } }
-  end
-
   # Delete properly conditions from children in the current diagnostic or predefined syndrome.
   def remove_condition_from_children
     children.each do |child|

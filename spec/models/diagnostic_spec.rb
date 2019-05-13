@@ -5,7 +5,7 @@ RSpec.describe Diagnostic, type: :model do
   before(:each) do
     role = Role.new(name: 'administrator')
     user = User.new(first_name: 'Foo', last_name: 'Bar', email: 'foo.bar@gmail.com', role: role)
-    @algorithm = Algorithm.new(name: 'EPOCT', description: 'MedicalCenter1', user: user)
+    @algorithm = Algorithm.create!(name: 'EPOCT', description: 'MedicalCenter1', user: user)
 
     @version = Version.create!(name: '1.3.2', user: user, algorithm: @algorithm)
   end
@@ -63,5 +63,45 @@ RSpec.describe Diagnostic, type: :model do
 
     expect(dd1.available_nodes_json[0]['id']).to eq(ps9.id)
     expect(dd1.available_nodes_json[1]['id']).to eq(ps5.id)
+  end
+
+  context 'destroys correctly a complet diagnostic' do
+    before(:each) do
+      @ps_category = Category.create!(reference_prefix: 'PS', name_en: 'Predefined syndrome', parent: 'PredefinedSyndrome')
+      @dd1 = Diagnostic.create!(version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)')
+      @dd1.final_diagnostics.create!(reference: '1', label_en: 'Df')
+      t1 = Treatment.create!(reference: '1', label_en: 'Treat', algorithm: @algorithm)
+      m1 = Management.create!(reference: '1', label_en: 'Manage', algorithm: @algorithm)
+      ps5 = PredefinedSyndrome.create!(reference: '5', label_en: 'dia', algorithm: @algorithm, category: @ps_category)
+      ps9 = PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm, category: @ps_category)
+      dd1_df1 = Instance.create!(instanceable: @dd1, node: @dd1.final_diagnostics.first)
+      dd1_ps5 = Instance.create!(instanceable: @dd1, node: ps5)
+      dd1_ps9 = Instance.create!(instanceable: @dd1, node: ps9)
+      dd1_t1 = Instance.create!(instanceable: @dd1, node: t1)
+      dd1_m1 = Instance.create!(instanceable: @dd1, node: m1)
+
+      Condition.create!(referenceable: dd1_ps9, first_conditionable: ps5.answers.first, operator: nil, second_conditionable: nil)
+      Condition.create!(referenceable: dd1_df1, first_conditionable: ps9.answers.first, operator: nil, second_conditionable: nil)
+    end
+
+    it 'removes the diagnostic' do
+      expect {@dd1.controlled_destroy}.to change(Diagnostic.all, :count).by(-1)
+    end
+
+    it 'removes instances' do
+      expect {@dd1.controlled_destroy}.to change(Instance.all, :count).by(-5)
+    end
+
+    it 'removes conditions' do
+      expect {@dd1.controlled_destroy}.to change(Condition.all, :count).by(-2)
+    end
+
+    it 'removes children' do
+      expect {@dd1.controlled_destroy}.to change(Child.all, :count).by(-2)
+    end
+
+    it 'removes final diagnostics' do
+      expect {@dd1.controlled_destroy}.to change(Node.all, :count).by(-1)
+    end
   end
 end

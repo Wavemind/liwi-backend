@@ -54,7 +54,7 @@ class AdvancedNodeLayerWidget extends NodeLayerWidget {
       nodes = questions.concat([healthCares]);
     }
 
-    let width = 1400; // Screen Width TODO Should be calculated not brut
+    let width = ($(window).width() - $('.liwi-sidebar').width() - 50);
     let x = 0;
     let y = 50;
 

@@ -17,4 +17,13 @@ RSpec.describe Instance, type: :model do
     expect(instance2).to_not be_valid
   end
 
+  it 'removes condition from children' do
+    @q2 = Question.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2457', category: @symptom, priority: Question.priorities[:mandatory], answer_type: @boolean)
+    instance = Instance.create!(instanceable: @dd7, node: @question)
+    instance2 = Instance.create!(instanceable: @dd7, node: @q2)
+    instance2.conditions.create!(first_conditionable: @question.answers.first)
+
+    instance.remove_condition_from_children
+    expect(instance.conditions.count).to eq(0)
+  end
 end

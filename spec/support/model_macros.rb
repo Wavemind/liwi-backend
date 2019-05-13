@@ -42,9 +42,9 @@ module ModelMacros
 
   def create_question
     before(:each) do
-      symptom = Category.create!(name_en: 'Symptom', reference_prefix: 'S', parent: 'Question')
-      boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
-      @question = Question.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2456', category: symptom, priority: Question.priorities[:mandatory], answer_type: boolean)
+      @symptom = Category.create!(name_en: 'Symptom', reference_prefix: 'S', parent: 'Question')
+      @boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
+      @question = Question.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2456', category: @symptom, priority: Question.priorities[:mandatory], answer_type: @boolean)
     end
   end
 
