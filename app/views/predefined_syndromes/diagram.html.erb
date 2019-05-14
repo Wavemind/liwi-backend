@@ -1,11 +1,11 @@
 <div class="row my-1">
   <div class="col align-self-center breadcrumbs"><%= render_breadcrumbs %></div>
   <div class="col align-self-center text-center text-uppercase font-weight-light"><%= @predefined_syndrome.label %></div>
-  <div class="col align-self-center text-right"><%= link_to(I18n.t('close'), predefined_syndrome_url(params[:id]), class: 'btn btn-danger mr-2') %></div>
+  <div class="col align-self-center text-right"><%= link_to(I18n.t('save'), algorithm_url(@predefined_syndrome.algorithm, panel: 'predefined_syndromes'), class: 'btn btn-warning mr-2') %></div>
 </div>
 <div class="row">
   <div class="col-md-12">
-    <p class="mx-0 my-0 metadata"data-type="<%= @predefined_syndrome.class.name %>" data-id="<%= @predefined_syndrome.id %>"></p>
+    <p class="mx-0 my-0 metadata" data-type="<%= @predefined_syndrome.class.name %>" data-id="<%= @predefined_syndrome.id %>"></p>
     <%= react_component('Provider', {
       render: 'Diagram',
       context: {

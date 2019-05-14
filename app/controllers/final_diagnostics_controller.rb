@@ -1,9 +1,9 @@
 class FinalDiagnosticsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:show, :new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic]
-  before_action :set_version, only: [:show, :new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic]
-  before_action :set_diagnostic, only: [:show, :new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic, :diagram]
-  before_action :set_final_diagnostic, only: [:show, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic, :update_translations, :diagram]
+  before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic]
+  before_action :set_version, only: [:new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic]
+  before_action :set_diagnostic, only: [:new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic, :diagram]
+  before_action :set_final_diagnostic, only: [:edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic, :update_translations, :diagram]
   layout 'diagram', only: [:diagram]
 
   def index
@@ -11,17 +11,6 @@ class FinalDiagnosticsController < ApplicationController
       format.html
       format.json {render json: FinalDiagnosticDatatable.new(params, view_context: view_context)}
     end
-  end
-
-  def show
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
-    add_breadcrumb @version.name, algorithm_version_url(@algorithm, @version)
-    add_breadcrumb @diagnostic.reference, algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'final_diagnostics')
-    add_breadcrumb @final_diagnostic.reference
-
-    @final_diagnostic_health_care = FinalDiagnosticHealthCare.new
-    @treatments = @final_diagnostic.final_diagnostic_health_cares.treatments.includes(:node)
-    @managements = @final_diagnostic.final_diagnostic_health_cares.managements
   end
 
   def new
