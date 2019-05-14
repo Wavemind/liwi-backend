@@ -13,6 +13,9 @@
 
     button {
       color: #d2d2d2;
+      padding: 0.75rem 1.25rem;
+      width: 100%;
+      text-align: left;
     }
   }
 }
@@ -30,8 +33,6 @@
 
 .srd-canvas {
   height: 95vh;
-  overflow-x: hidden;
-  overflow-y: auto;
 }
 
 .srd-default-node {

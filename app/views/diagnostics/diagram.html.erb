@@ -1,7 +1,7 @@
-<div class="row">
-  <div class="col my-1"><%= render_breadcrumbs %></div>
-  <div class="col my-1 text-center"><p><%= @diagnostic.label %></p></div>
-  <div class="col my-1 text-right">
+<div class="row my-1">
+  <div class="col align-self-center breadcrumbs"><%= render_breadcrumbs %></div>
+  <div class="col align-self-center text-center text-uppercase font-weight-light"><%= @diagnostic.label %></div>
+  <div class="col align-self-center text-right">
     <%= link_to(I18n.t('close'), algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], params[:id]), class: 'btn btn-danger mr-2') %>
   </div>
 </div>
