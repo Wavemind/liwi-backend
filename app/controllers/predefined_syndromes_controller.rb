@@ -1,18 +1,8 @@
 class PredefinedSyndromesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_predefined_syndrome, only: [:edit, :update, :destroy, :show, :update_translations, :diagram]
+  before_action :set_predefined_syndrome, only: [:edit, :update, :destroy, :update_translations, :diagram]
   before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy]
   layout 'diagram', only: [:diagram]
-
-  def show
-    # Retrieve algorithm, since the show is not in the same route
-    @algorithm = @predefined_syndrome.algorithm
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'predefined_syndromes')
-    add_breadcrumb @predefined_syndrome.label
-
-    @instance = Instance.new
-    @instanceable = @predefined_syndrome
-  end
 
   def new
     add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'predefined_syndromes')
@@ -70,6 +60,7 @@ class PredefinedSyndromesController < ApplicationController
 
   # React Diagram
   def diagram
+    add_breadcrumb @predefined_syndrome.algorithm.name, algorithm_url(@predefined_syndrome.algorithm, panel: 'predefined_syndromes')
   end
 
   private

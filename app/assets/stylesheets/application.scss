@@ -228,4 +228,10 @@ td {
   display:inline;
 }
 
-
+.breadcrumbs {
+  a {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

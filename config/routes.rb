@@ -40,7 +40,7 @@ Rails.application.routes.draw do
           get 'diagram'
         end
 
-        resources :final_diagnostics, only: [:index, :show, :new, :create, :edit, :update, :delete, :destroy, :update_translations] do
+        resources :final_diagnostics, only: [:index, :new, :create, :edit, :update, :delete, :destroy, :update_translations] do
           member do
             put 'add_excluded_diagnostic'
             put 'remove_excluded_diagnostic'
@@ -84,7 +84,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :predefined_syndromes, only: [:show] do
+  resources :predefined_syndromes, only: [] do
     resources :instances, only: [:show, :destroy, :create, :by_reference] do
       collection do
         get 'by_reference'
