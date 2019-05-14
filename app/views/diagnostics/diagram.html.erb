@@ -2,6 +2,7 @@
   <div class="col my-1">
     <h2><%= @diagnostic.label %></h2>
   </div>
+  <div class="col text-center"><%= render_breadcrumbs %></div>
   <div class="col my-1 text-right">
     <%= link_to(I18n.t('close'), algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], params[:id]), class: 'btn btn-danger mr-2') %>
   </div>

@@ -20,8 +20,7 @@ class FinalDiagnosticDatatable < AjaxDatatablesRails::ActiveRecord
 
   def data
     records.map do |record|
-      actions = link_to(I18n.t('show'), algorithm_version_diagnostic_final_diagnostic_url(params[:algorithm_id], params[:version_id], record.diagnostic, record), class: 'btn btn-outline-primary') + " "
-      actions += link_to(I18n.t('edit'), edit_algorithm_version_diagnostic_final_diagnostic_url(params[:algorithm_id], params[:version_id], record.diagnostic, record), class: 'btn btn-outline-info') + " "
+      actions = link_to(I18n.t('edit'), edit_algorithm_version_diagnostic_final_diagnostic_url(params[:algorithm_id], params[:version_id], record.diagnostic, record), class: 'btn btn-outline-info') + " "
       actions += link_to(I18n.t('delete'), algorithm_version_diagnostic_final_diagnostic_url(params[:algorithm_id], params[:version_id], record.diagnostic, record), class: "btn btn-outline-danger #{record.dependencies? ? 'disabled' : ''}", method: :delete, data: { confirm: 'Are you sure?' })
       {
         reference: record.reference,

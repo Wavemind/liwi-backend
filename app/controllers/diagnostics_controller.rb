@@ -65,6 +65,9 @@ class DiagnosticsController < ApplicationController
 
   # Generate react diagram
   def diagram
+    add_breadcrumb @diagnostic.version.algorithm.name, algorithm_url(@diagnostic.version.algorithm)
+    add_breadcrumb @diagnostic.version.name, algorithm_version_url(@diagnostic.version.algorithm, @diagnostic.version)
+    add_breadcrumb @diagnostic.label
   end
 
   # @params [Diagnostic] diagnostic to duplicate
