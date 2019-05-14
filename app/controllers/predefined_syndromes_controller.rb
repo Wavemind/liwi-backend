@@ -70,6 +70,7 @@ class PredefinedSyndromesController < ApplicationController
 
   # React Diagram
   def diagram
+    add_breadcrumb @predefined_syndrome.algorithm.name, algorithm_url(@predefined_syndrome.algorithm, panel: 'predefined_syndromes')
   end
 
   private
