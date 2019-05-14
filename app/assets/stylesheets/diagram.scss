@@ -229,3 +229,7 @@
   margin-bottom 500ms ease-in,
   height 500ms ease-in;
 }
+
+.dropdown-toggle::after {
+  right: 9px!important;
+}
