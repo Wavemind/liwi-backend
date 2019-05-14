@@ -308,4 +308,5 @@ en:
       predefined_syndromes: "Predefined Syndromes"
   warning_dependency: "Warning ! Editing this node will affect :"
   close: "Close"
+  back: "Back"
   open_diagram: "Open diagram editor"

@@ -74,7 +74,7 @@ class AdvancedNodeLayerWidget extends NodeLayerWidget {
       level.map((question) => {
         let node = this.getNode(question);
         node.setPosition(x, y);
-        x += node.width + vMargin;
+        x += node.width + hMargin;
       });
 
       // Preparing next level
