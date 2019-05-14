@@ -146,7 +146,6 @@
   position: absolute;
   z-index: 10;
   top: -8px;
-  align-item: center;
 }
 
 .out-port {
@@ -194,13 +193,6 @@
   border-radius: 10px;
 }
 
-.manage-df {
-  &:hover {
-    font-weight: bold;
-    font-size: 14px;
-  }
-}
-
 .condition-container {
   text-align: center
 }
@@ -217,10 +209,10 @@
 .alerts-leave.alerts-leave-active {
   overflow: hidden;
   opacity: 0.01;
-  padding-top: 0px;
-  padding-bottom: 0px;
-  margin-bottom: 0px;
-  height: 0px;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-bottom: 0;
+  height: 0;
   transition: opacity 300ms ease-in,
   padding-top 500ms ease-in,
   padding-bottom 500ms ease-in,
