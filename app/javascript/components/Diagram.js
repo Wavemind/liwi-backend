@@ -172,6 +172,8 @@ class Diagram extends React.Component {
               if (eventLink.entity.sourcePort.parent.node.type === "FinalDiagnostic") {
                 if (eventLink.entity.targetPort.parent.node.type === "FinalDiagnostic") {
                   http.excludeDiagnostic(eventLink.entity.sourcePort.parent.node.id, eventLink.entity.targetPort.parent.node.id);
+                  eventModel.link.displaySeparator(true);
+
                 } else {
                   model.removeLink(eventModel.link.id)
                 }
