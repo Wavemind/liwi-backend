@@ -61,7 +61,6 @@ ft_1_2 = Version.create!(name: '1.2', algorithm: fever_travel, user: vincent)
 # Answer types
 boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
 dropdown_list = AnswerType.create!(value: 'Array', display: 'DropDownList')
-checkbox = AnswerType.create!(value: 'Array', display: 'Checkbox')
 input_integer = AnswerType.create!(value: 'Integer', display: 'Input')
 input_float = AnswerType.create!(value: 'Float', display: 'Input')
 
