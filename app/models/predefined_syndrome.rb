@@ -12,7 +12,7 @@ class PredefinedSyndrome < Node
   # Generate the ordered questions
   def generate_questions_order
     nodes = []
-    first_nodes = components.includes(:node, :conditions, :children).where(conditions: { referenceable_id: nil }).where.not(children: { node_id: nil })
+    first_nodes = components.includes(:node, :conditions, :children).where(conditions: { referenceable_id: nil })
     nodes << first_nodes
     get_children(first_nodes, nodes)
   end
