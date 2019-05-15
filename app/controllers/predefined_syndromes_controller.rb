@@ -29,6 +29,7 @@ class PredefinedSyndromesController < ApplicationController
     @predefined_syndrome = @algorithm.predefined_syndromes.new(predefined_syndrome_params)
 
     if @predefined_syndrome.save
+      @predefined_syndrome.components.create!(node: @predefined_syndrome)
       redirect_to @predefined_syndrome, notice: t('flash_message.success_updated')
     else
       render :new
