@@ -64,6 +64,7 @@ class Diagnostic < ApplicationRecord
       Child.where(instance_id: components_ids, node: df_instance.node).each do |child|
         child.update!(node: new_df)
       end
+
       Instance.where(id: components_ids, final_diagnostic: df_instance.node).each do |instance|
         instance.update!(final_diagnostic: new_df)
       end
