@@ -22,6 +22,22 @@
       <div class="col text-right">
         <%= link_to(I18n.t('open_diagram'), diagram_algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], params[:id]), class: 'btn btn-primary') %>
       </div>
+
+      <div class="col-md-12 diagram-container scrollable">
+        <p class="mx-0 my-0 metadata" data-type="<%= @diagnostic.class.name %>" data-id="<%= @diagnostic.id %>" data-version="<%= @diagnostic.version.id %>"  data-algorithm="<%= @diagnostic.version.algorithm.id %>"></p>
+        <%= react_component('Provider', {
+          render: 'Diagram',
+          context: {
+            instanceable: @diagnostic,
+            instanceableType: @diagnostic.class.name,
+            questions: @diagnostic.questions_json,
+            finalDiagnostics: @diagnostic.final_diagnostics_json,
+            availableNodes: @diagnostic.available_nodes_json,
+            type: 'Diagnostic',
+            readOnly: true
+          }
+        }) %>
+      </div>
     </div>
   </div>
 

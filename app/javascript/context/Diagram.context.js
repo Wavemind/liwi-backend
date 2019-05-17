@@ -128,6 +128,7 @@ export default class DiagramProvider extends React.Component {
     currentNodeId: null,
     messages: [],
     type: null,
+    readOnly: false
   };
 
   render() {

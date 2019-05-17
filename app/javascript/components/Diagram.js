@@ -251,7 +251,7 @@ class Diagram extends React.Component {
 
   render = () => {
     const {engine} = this.state;
-    const {removeNode, http} = this.props;
+    const {removeNode, http, readOnly} = this.props;
 
     let model = engine.getDiagramModel();
 
@@ -259,11 +259,13 @@ class Diagram extends React.Component {
       <div className="content">
         <FlashMessages/>
         <div className="row">
-          <div className="col-md-2 px-0 liwi-sidebar">
-            <NodeList />
-          </div>
+          {(!readOnly) ? (
+            <div className="col-md-2 px-0 liwi-sidebar">
+              <NodeList />
+            </div>
+           ) : null}
           <div
-            className="col-md-10 diagram-wrapper"
+            className="col diagram-wrapper"
             onDrop={async event => {
               let nodeDb = JSON.parse(event.dataTransfer.getData("node"));
               let points = engine.getRelativeMousePoint(event);
@@ -319,6 +321,7 @@ class Diagram extends React.Component {
               className="srd-canvas"
               diagramEngine={engine}
               allowCanvasZoom={false}
+              allowCanvasTranslation={!readOnly}
               maxNumberPointsPerLink={0}
             />
           </div>
