@@ -7,25 +7,18 @@ import NotDFWidget from "./instance-widgets/NotDFWidget";
 import AndWidget from "./instance-widgets/AndWidget";
 
 
-export interface AdvancedNodeWidgetProps {
-  diagramNode: AdvancedNodeModel;
-  size?: number;
-}
-
-export interface AdvancedNodeWidgetState {
-}
 
 /**
  * @author Quentin Girard
  * Generate node by type
  */
-class AdvancedNodeWidget extends BaseWidget<AdvancedNodeWidgetProps, AdvancedNodeWidgetState> {
-  static defaultProps: AdvancedNodeWidgetProps = {
+class AdvancedNodeWidget extends BaseWidget {
+  static defaultProps = {
     size: 150,
     node: null
   };
 
-  constructor(props: AdvancedNodeWidgetProps) {
+  constructor(props) {
     super(props);
     this.state = {};
   }

@@ -142,7 +142,7 @@ class AdvancedDiagramWidget extends DiagramWidget {
         {this.state.renderedNodes && (
           <LinkLayerWidget
             diagramEngine={diagramEngine}
-            pointAdded={(point: PointModel, event) => {
+            pointAdded={(point, event) => {
               this.state.document.addEventListener("mousemove", this.onMouseMove);
               this.state.document.addEventListener("mouseup", this.onMouseUp);
               event.stopPropagation();

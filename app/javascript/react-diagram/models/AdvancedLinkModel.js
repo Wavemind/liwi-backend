@@ -3,14 +3,14 @@ import * as _ from "lodash";
 import Http from "../../http";
 
 class AdvancedLinkModel extends DefaultLinkModel {
-  width: number;
-  color: string;
-  curvyness: number;
-  markers: any;
-  arrow: boolean;
-  separator: boolean;
+  width;
+  color;
+  curvyness;
+  markers;
+  arrow;
+  separator;
 
-  constructor(type: string = "default") {
+  constructor(type = "default") {
     super(type);
     this.color = "rgba(255,255,255,0.5)";
     this.width = 2;
@@ -49,14 +49,14 @@ class AdvancedLinkModel extends DefaultLinkModel {
     });
   }
 
-  deSerialize(ob, engine: DiagramEngine) {
+  deSerialize(ob, engine) {
     super.deSerialize(ob, engine);
     this.color = ob.color;
     this.width = ob.width;
     this.curvyness = ob.curvyness;
   }
 
-  addLabel(label: LabelModel | string) {
+  addLabel(label) {
     if (label instanceof LabelModel) {
       return super.addLabel(label);
     }
@@ -65,33 +65,33 @@ class AdvancedLinkModel extends DefaultLinkModel {
     return super.addLabel(labelOb);
   }
 
-  setWidth(width: number) {
+  setWidth(width) {
     this.width = width;
-    this.iterateListeners((listener: DefaultLinkModelListener, event: BaseEvent) => {
+    this.iterateListeners((listener, event) => {
       if (listener.widthChanged) {
         listener.widthChanged({ ...event, width: width });
       }
     });
   }
 
-  setColor(color: string) {
+  setColor(color) {
     this.color = color;
-    this.iterateListeners((listener: DefaultLinkModelListener, event: BaseEvent) => {
+    this.iterateListeners((listener, event) => {
       if (listener.colorChanged) {
         listener.colorChanged({ ...event, color: color });
       }
     });
   }
 
-  setMarkers(startMarker: boolean, endMarker: boolean) {
+  setMarkers(startMarker, endMarker) {
     this.markers = { startMarker: startMarker, endMarker: endMarker };
   }
 
-  displayArrow(arrow: boolean) {
+  displayArrow(arrow) {
     this.arrow = arrow;
   }
 
-  displaySeparator(separator: boolean) {
+  displaySeparator(separator) {
     this.separator = separator;
   }
 }

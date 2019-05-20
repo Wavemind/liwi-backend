@@ -12,7 +12,7 @@ class AdvancedLinkFactory extends DefaultLinkFactory {
     super("advanced");
   }
 
-  generateReactWidget(diagramEngine: DiagramEngine, link: AdvancedLinkModel): JSX.Element {
+  generateReactWidget(diagramEngine, link) {
     return React.createElement(AdvancedLinkWidget, {
       link: link,
       diagramEngine: diagramEngine
@@ -39,12 +39,12 @@ class AdvancedLinkFactory extends DefaultLinkFactory {
 
 
   generateLinkSegment(
-    model: AdvancedLinkModel,
-    widget: AdvancedLinkWidget,
-    selected: boolean,
-    path: string,
-    inversed: boolean,
-  ): JSX.Element {
+    model,
+    widget,
+    selected,
+    path,
+    inversed,
+  ) {
 
     let markerId = Toolkit.UID();
     let markerIdInverse = Toolkit.UID();

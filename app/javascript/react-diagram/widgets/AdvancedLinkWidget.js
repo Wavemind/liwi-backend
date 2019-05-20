@@ -17,7 +17,7 @@ class AdvancedLinkWidget extends DefaultLinkWidget {
    * @param target - target port
    * @return true if direction should be reversed
    */
-  getDirection(link: Object): boolean {
+  getDirection(link) {
     const source = link.points[0];
     const target = link.points[link.points.length - 1];
     const difX = source.x - target.x,
@@ -35,10 +35,10 @@ class AdvancedLinkWidget extends DefaultLinkWidget {
    * @return Link path
    */
   generateLink(
-    path: string,
-    extraProps: any,
-    id: string | number
-  ): Element<"g"> {
+    path,
+    extraProps,
+    id
+  ) {
     const { diagramEngine, link } = this.props;
     const { selected } = this.state;
 

@@ -4,14 +4,8 @@ import * as _ from "lodash";
 import Http from "../../http";
 
 class AdvancedNodeModel extends DefaultNodeModel {
-  node;
-  reference: string;
-  color: string;
-  outPorts: array;
-  ports: { [s: string]: AdvancedPortModel };
-  addNode;
 
-  constructor(node, reference: string, color: string, outPorts, addNode) {
+  constructor(node, reference, color, outPorts, addNode) {
     super("advanced");
     this.node = node;
     this.reference = reference;
@@ -31,19 +25,19 @@ class AdvancedNodeModel extends DefaultNodeModel {
     }
   }
 
-  addInPort(label: string, reference: string = '', id: string = ''): AdvancedPortModel {
+  addInPort(label, reference = '', id = '') {
     let inPort = new AdvancedPortModel(true, Toolkit.UID(), label);
     inPort.setData(reference, id);
     return this.addPort(inPort);
   }
 
-  addOutPort(label: string, reference: string = '', id: string = ''): AdvancedPortModel {
+  addOutPort(label, reference = '', id = '') {
     let outPort = new AdvancedPortModel(false, Toolkit.UID(), label);
     outPort.setData(reference, id);
     return this.addPort(outPort);
   }
 
-  deSerialize(object, engine: DiagramEngine) {
+  deSerialize(object, engine) {
     super.deSerialize(object, engine);
     this.node = object.node;
     this.reference = object.reference;
@@ -60,25 +54,25 @@ class AdvancedNodeModel extends DefaultNodeModel {
     });
   }
 
-  getInPorts(): AdvancedPortModel[] {
+  getInPorts() {
     return _.filter(this.ports, portModel => {
       return portModel.in;
     });
   }
 
-  getInPort(): AdvancedPortModel[] {
+  getInPort() {
     return _.find(this.ports, portModel => {
       return portModel.in;
     });
   }
 
-  getOutPorts(): AdvancedPortModel[] {
+  getOutPorts() {
     return _.filter(this.ports, portModel => {
       return !portModel.in;
     });
   }
 
-  getOutPort(): AdvancedPortModel[] {
+  getOutPort() {
     return _.find(this.ports, portModel => {
       return !portModel.in;
     });

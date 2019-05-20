@@ -23,6 +23,23 @@
         <%= link_to(I18n.t('open_diagram'), diagram_algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], params[:id]), class: 'btn btn-primary') %>
       </div>
     </div>
+    <div class="row">
+      <div class="col-md-12">
+        <p class="mx-0 my-0 metadata" data-type="<%= @diagnostic.class.name %>" data-id="<%= @diagnostic.id %>" data-version="<%= @diagnostic.version.id %>"  data-algorithm="<%= @diagnostic.version.algorithm.id %>"></p>
+        <%= react_component('Provider', {
+          render: 'Diagram',
+          context: {
+            instanceable: @diagnostic,
+            instanceableType: @diagnostic.class.name,
+            questions: @diagnostic.questions_json,
+            finalDiagnostics: @diagnostic.final_diagnostics_json,
+            availableNodes: @diagnostic.available_nodes_json,
+            type: 'Diagnostic'
+          }
+        }) %>
+      </div>
+    </div>
+
   </div>
 
   <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'final_diagnostics'%>" id="final_diagnostics" role="tabpanel" aria-labelledby="final_diagnostics-tab">

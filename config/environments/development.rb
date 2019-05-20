@@ -72,7 +72,7 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = true
 
   config.after_initialize do
-    Bullet.enable = true
+  #  Bullet.enable = true
     # Bullet.alert = true
     Bullet.rails_logger = true
     # Bullet.raise = true

@@ -2,14 +2,6 @@ import * as React from "react";
 
 export default class Http {
 
-  url: string;
-  token: string;
-  instanceableId;
-  instanceableType;
-  version;
-  algorithm;
-  finalDiagnostic;
-
   constructor() {
     let data = document.querySelector(".metadata");
 
