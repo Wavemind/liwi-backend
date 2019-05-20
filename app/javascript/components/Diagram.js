@@ -11,7 +11,6 @@ import AdvancedNodeModel from "../react-diagram/models/AdvancedNodeModel";
 import AdvancedDiagramWidget from "../react-diagram/widgets/AdvancedDiagramWidget";
 
 import NodeList from "../react-diagram/lists/NodeList";
-import Http from "../http";
 import FlashMessages from "./FlashMessages";
 
 import { withDiagram } from '../context/Diagram.context';
