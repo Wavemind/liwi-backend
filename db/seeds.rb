@@ -73,6 +73,7 @@ physical_exam = Category.create!(name_en: 'Physical exam', reference_prefix: 'P'
 predefined_syndrome = Category.create!(name_en: 'Predefined syndrome', reference_prefix: 'PS', parent: 'PredefinedSyndrome')
 comorbidity = Category.create!(name_en: 'Comorbidity', reference_prefix: 'DC', parent: 'PredefinedSyndrome')
 predefined_condition = Category.create!(name_en: 'Predefined condition', reference_prefix: 'C', parent: 'PredefinedSyndrome')
+predefined_syndrome_scored = Category.create!(name_en: 'Predefined syndrome scored', reference_prefix: 'PSS', parent: 'PredefinedSyndrome')
 
 
 # Questions

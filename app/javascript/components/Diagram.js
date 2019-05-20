@@ -1,12 +1,13 @@
 import {
   DiagramEngine,
-  DiagramModel,
+  DiagramModel
 } from "storm-react-diagrams";
 import * as React from "react";
 import * as _ from "lodash";
 
 import AdvancedLinkFactory from "../react-diagram/factories/AdvancedLinkFactory";
 import AdvancedNodeFactory from "../react-diagram/factories/AdvancedNodeFactory";
+import AdvancedLinkModel from "../react-diagram/models/AdvancedLinkModel";
 import AdvancedNodeModel from "../react-diagram/models/AdvancedNodeModel";
 import AdvancedDiagramWidget from "../react-diagram/widgets/AdvancedDiagramWidget";
 
@@ -140,6 +141,9 @@ class Diagram extends React.Component {
           model.addAll(andNode, firstLink, secondLink, andLink);
         } else {
           let link = _.find(firstNodeAnswer.getOutPorts(), ["label", this.getFullLabel(firstAnswer)]).link(node.getInPort());
+          if (type === "PredefinedSyndrome" && instanceable.category.reference_prefix === "PSS") {
+            link.addLabel(condition.score);
+          }
           model.addAll(link);
         }
       });
@@ -171,7 +175,6 @@ class Diagram extends React.Component {
               }
             });
 
-
             // Don't create an another link in DB if it already exist
             if (!exists) {
               if (eventLink.entity.sourcePort.parent.node.type === "FinalDiagnostic") {
@@ -186,19 +189,36 @@ class Diagram extends React.Component {
                 let nodeId = eventLink.port.parent.node.id;
                 let answerId = eventModel.link.sourcePort.dbId;
                 if (eventModel.link.targetPort.in) {
-                  // Create link in DB
-                  http.createLink(nodeId, answerId).then((response) => {
-                    if (response.status !== "success") {
-                      // if throw an error, remove link in diagram
-                      if (model.getLink(eventModel.link.id) !== null) {
-                        model.removeLink(eventModel.link.id);
-                        self.updateEngine(engine);
+                  if (type === "PredefinedSyndrome" && instanceable.category.reference_prefix === "PSS") {
+
+                    // Create link in DB
+                    http.createLink(nodeId, answerId).then((response) => {
+                      if (response.status !== "success") {
+                        // if throw an error, remove link in diagram
+                        if (model.getLink(eventModel.link.id) !== null) {
+                          model.removeLink(eventModel.link.id);
+                          self.updateEngine(engine);
+                        }
+                        addMessage(response);
                       }
-                      addMessage(response);
-                    }
-                  }).catch((err) => {
-                    console.log(err);
-                  });
+                    }).catch((err) => {
+                      console.log(err);
+                    });
+                  } else {
+                    // Create link in DB
+                    http.createLink(nodeId, answerId).then((response) => {
+                      if (response.status !== "success") {
+                        // if throw an error, remove link in diagram
+                        if (model.getLink(eventModel.link.id) !== null) {
+                          model.removeLink(eventModel.link.id);
+                          self.updateEngine(engine);
+                        }
+                        addMessage(response);
+                      }
+                    }).catch((err) => {
+                      console.log(err);
+                    });
+                  }
                 } else {
                   if (model.getLink(eventModel.link.id) !== null) {
                     model.removeLink(eventModel.link.id);

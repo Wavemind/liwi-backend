@@ -1,4 +1,9 @@
-import { DefaultLinkModel, DiagramEngine } from "storm-react-diagrams";
+import {
+  DefaultLinkModel,
+  DiagramEngine,
+  LabelModel,
+  DefaultLabelModel
+} from "storm-react-diagrams";
 import * as _ from "lodash";
 import Http from "../../http";
 
