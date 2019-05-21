@@ -34,7 +34,9 @@ class Diagram extends React.Component {
       questions,
       finalDiagnostics,
       addMessage,
-      http
+      http,
+      type,
+      instanceable
     } = this.props;
 
     const { engine } = this.state;
@@ -57,7 +59,11 @@ class Diagram extends React.Component {
       levels.map((instance) => {
         let node = this.createNode(instance.node, instance.node.answers);
         currentLevel.push(node);
-        instance.node.answers.map((answer) => (node.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
+
+        if (!(type === instance.node.type && instanceable.id === instance.node.id)) { // Don't put outports if this is the current PS
+          instance.node.answers.map((answer) => (node.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
+        }
+
         nodes.push(node);
         model.addAll(node);
       });
@@ -171,6 +177,8 @@ class Diagram extends React.Component {
               if (eventLink.entity.sourcePort.parent.node.type === "FinalDiagnostic") {
                 if (eventLink.entity.targetPort.parent.node.type === "FinalDiagnostic") {
                   http.excludeDiagnostic(eventLink.entity.sourcePort.parent.node.id, eventLink.entity.targetPort.parent.node.id);
+                  eventModel.link.displaySeparator(true);
+
                 } else {
                   model.removeLink(eventModel.link.id)
                 }

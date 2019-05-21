@@ -24,6 +24,13 @@ en:
       subtitle_treatments: "Treatments"
       subtitle_versions: "Versions list"
       title: "Details of %{name}"
+  answer_type:
+    labels:
+      - ~
+      - "True/False"
+      - "Dropdown list"
+      - "Input integer"
+      - "Input decimal"
   answers:
     edit:
       title: "Edit related answers of %{name} question"

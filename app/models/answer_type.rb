@@ -10,6 +10,6 @@ class AnswerType < ApplicationRecord
   # @return [String]
   # Return a displayable string for the view
   def display_name
-    "#{display} : #{value}"
+    I18n.t('answer_type.labels')[id]
   end
 end

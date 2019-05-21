@@ -12,14 +12,15 @@ class PredefinedSyndromesController < ApplicationController
 
   def edit
     add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'predefined_syndromes')
-    add_breadcrumb @predefined_syndrome.label, predefined_syndrome_url(@predefined_syndrome)
+    add_breadcrumb @predefined_syndrome.label
   end
 
   def create
     @predefined_syndrome = @algorithm.predefined_syndromes.new(predefined_syndrome_params)
 
     if @predefined_syndrome.save
-      redirect_to @predefined_syndrome, notice: t('flash_message.success_updated')
+      @predefined_syndrome.components.create!(node: @predefined_syndrome)
+      redirect_to diagram_predefined_syndrome_url(@predefined_syndrome), notice: t('flash_message.success_updated')
     else
       render :new
     end
