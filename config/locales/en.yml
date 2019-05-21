@@ -115,12 +115,6 @@ en:
       predefined_syndromes: "Predefined syndromes"
       questions: "Questions"
       treatments: "Treatments"
-    help:
-      arrow: "Arrow"
-      dashed-arrow: "Dashed arrow"
-      in-port: "In port"
-      out-port: "Out port"
-      excluded-diagnostic: "Excluded diagnostic"
   duplicate: "Duplicate"
   duplicated: "_duplicated"
   edit: "Edit"
@@ -178,6 +172,18 @@ en:
   group_accesses:
     new:
       title: "New release"
+  helps:
+    diagram:
+      arrow: "Arrow"
+      dashed-arrow: "Dashed arrow"
+      in-port: "In port"
+      out-port: "Out port"
+      excluded-diagnostic: "Excluded diagnostic"
+      arrow-content: "Define links between questions"
+      dashed-arrow-content: "Define which final diagnostic has priority. The final diagnostic who is targeted by the arrow is excluded."
+      in-port-content: "Blue box in the top of the nodes. Inport where the link begins"
+      out-port-content: "Green box below the nodes : Outport where the link ends"
+      excluded-diagnostic-content: "The green box on the left of the nodes is the outport for excluding final diagnostics. The blue box is the inport for excluding final diagnostics."
   instances:
     table:
       columns:
