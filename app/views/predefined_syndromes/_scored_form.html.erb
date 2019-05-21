@@ -1,0 +1,10 @@
+<%= simple_form_for [@algorithm, @predefined_syndrome], html: { class: 'form-horizontal' }, wrapper: :input_group do |f| %>
+  <%= f.input :category_id, as: :hidden, input_html: { value: @category.id } %>
+
+  <%= f.input :reference, prepend: (f.object.persisted? ? false : (@category.reference_prefix)), disabled: f.object.persisted? %>
+  <%= f.input :label_en %>
+  <%= f.input :min_score %>
+  <%= f.input :description_en %>
+
+  <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
+<% end %>

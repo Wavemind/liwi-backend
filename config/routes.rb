@@ -78,14 +78,18 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :predefined_syndromes, only: [:index, :new, :create, :edit, :update, :destroy] do
+    resources :predefined_syndromes, only: [:index, :new, :create, :edit, :update, :destroy, :new_scored, :edit_scored] do
+      collection do
+        get 'new_scored'
+      end
       member do
+        get 'edit_scored'
         put 'update_translations'
       end
     end
 
-    resources :predefined_syndromes_scored, only: [:index, :new, :create, :edit, :update, :destroy] do
-    end
+    # resources :predefined_syndromes_scored, only: [:index, :new, :create, :edit, :update, :destroy] do
+    # end
   end
 
   resources :predefined_syndromes, only: [] do

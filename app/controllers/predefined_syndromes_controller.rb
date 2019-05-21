@@ -1,7 +1,9 @@
 class PredefinedSyndromesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_predefined_syndrome, only: [:edit, :update, :destroy, :update_translations, :diagram]
-  before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy]
+  before_action :set_predefined_syndrome, only: [:edit, :edit_scored, :update, :destroy, :update_translations, :diagram]
+  before_action :set_algorithm, only: [:new, :new_scored, :create, :edit, :edit_scored, :update, :destroy]
+  before_action :set_score_category, only: [:new_scored, :edit_scored]
+
   layout 'diagram', only: [:diagram]
 
   def new
@@ -47,6 +49,17 @@ class PredefinedSyndromesController < ApplicationController
     end
   end
 
+  def edit_scored
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'predefined_syndromes_scored')
+    add_breadcrumb @predefined_syndrome.label
+  end
+
+  def new_scored
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'predefined_syndromes_scored')
+
+    @predefined_syndrome = PredefinedSyndrome.new
+  end
+
   # @params PredefinedSyndrome with the translations
   # Update the object with its translation without
   def update_translations
@@ -70,6 +83,10 @@ class PredefinedSyndromesController < ApplicationController
     @predefined_syndrome = PredefinedSyndrome.find(params[:id])
   end
 
+  def set_score_category
+    @category = Category.all.find_by(reference_prefix: 'PSS')
+  end
+
   def predefined_syndrome_params
     params.require(:predefined_syndrome).permit(
       :id,
@@ -80,6 +97,7 @@ class PredefinedSyndromesController < ApplicationController
       Language.description_params,
       :category_id,
       :algorithm_id,
+      :min_score
       )
   end
 
