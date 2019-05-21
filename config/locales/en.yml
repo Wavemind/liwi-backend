@@ -20,6 +20,7 @@ en:
     show:
       subtitle_managements: "Managements"
       subtitle_predefined_syndromes: "Predefined syndromes"
+      subtitle_predefined_syndromes_scored: "Predefined syndromes scored"
       subtitle_questions: "Questions"
       subtitle_treatments: "Treatments"
       subtitle_versions: "Versions list"

@@ -1,4 +1,4 @@
-class PredefinedSyndromeDatatable < AjaxDatatablesRails::ActiveRecord
+class PredefinedSyndromeScoredDatatable < AjaxDatatablesRails::ActiveRecord
   extend Forwardable
 
   # Helpers
@@ -17,6 +17,7 @@ class PredefinedSyndromeDatatable < AjaxDatatablesRails::ActiveRecord
     @view_columns ||= {
       reference: { source: 'PredefinedSyndrome.reference' },
       label: { source: 'PredefinedSyndrome.label_translations' },
+      min_score: { soruce: 'PredefinedSyndrome.min_score' },
       description: { source: 'PredefinedSyndrome.description_translations' },
     }
   end
@@ -29,6 +30,7 @@ class PredefinedSyndromeDatatable < AjaxDatatablesRails::ActiveRecord
         reference: record.reference,
         category: record.category.name,
         label: record.label,
+        min_score: record.min_score,
         description: record.description,
         actions: actions
       }
@@ -37,6 +39,6 @@ class PredefinedSyndromeDatatable < AjaxDatatablesRails::ActiveRecord
 
   # Activerecord request
   def get_raw_records
-    Algorithm.find(params[:id]).predefined_syndromes.not_scored.includes(:instances, :category, :algorithm)
+    Algorithm.find(params[:id]).predefined_syndromes.scored.includes(:instances, :category, :algorithm)
   end
 end

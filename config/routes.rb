@@ -25,6 +25,7 @@ Rails.application.routes.draw do
       get 'treatments', to: 'algorithms#treatments', as: 'treatment'
       get 'managements', to: 'algorithms#managements', as: 'management'
       get 'predefined_syndromes', to: 'algorithms#predefined_syndromes', as: 'predefined_syndrome'
+      get 'predefined_syndromes_scored', to: 'algorithms#predefined_syndromes_scored', as: 'predefined_syndrome_scored'
     end
 
     resources :versions, only: [:index, :show, :new, :create, :edit, :update] do
@@ -81,6 +82,9 @@ Rails.application.routes.draw do
       member do
         put 'update_translations'
       end
+    end
+
+    resources :predefined_syndromes_scored, only: [:index, :new, :create, :edit, :update, :destroy] do
     end
   end
 

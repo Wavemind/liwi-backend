@@ -78,7 +78,7 @@ export default class Http {
   // @params [Integer] nodeId, [Integer] answerId
   // @return [Object] body of request
   // Create a Link
-  createLink = async (nodeId, answerId) => {
+  createLink = async (nodeId, answerId, score = 0) => {
     let response;
     const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/create_link`;
     const body = {
@@ -86,7 +86,8 @@ export default class Http {
         node_id: nodeId,
         answer_id: answerId,
         final_diagnostic_id: this.finalDiagnostic
-      }
+      },
+      score: score
     };
     const header = await this.setHeaders("POST", body);
     const request = await fetch( url, header).catch(error => console.log(error));

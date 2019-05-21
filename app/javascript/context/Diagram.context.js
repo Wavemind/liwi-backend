@@ -36,6 +36,7 @@ export default class DiagramProvider extends React.Component {
         predefinedSyndrome: [],
         comorbidity: [],
         predefinedCondition: [],
+        predefinedSyndromeScored: [],
         finalDiagnostic: []
       };
     } else if (type === "FinalDiagnostic") {
@@ -47,6 +48,7 @@ export default class DiagramProvider extends React.Component {
         predefinedSyndrome: [],
         comorbidity: [],
         predefinedCondition: [],
+        predefinedSyndromeScored: [],
         treatment: [],
         management: [],
       };
@@ -59,6 +61,7 @@ export default class DiagramProvider extends React.Component {
         predefinedSyndrome: [],
         comorbidity: [],
         predefinedCondition: [],
+        predefinedSyndromeScored: [],
       };
     }
 
@@ -128,7 +131,10 @@ export default class DiagramProvider extends React.Component {
     currentNodeId: null,
     messages: [],
     type: null,
-    readOnly: false
+    readOnly: false,
+    currentScore: 0,
+    currentLinkId: null,
+    currentAnswerId: null
   };
 
   render() {

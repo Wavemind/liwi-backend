@@ -28,7 +28,9 @@ class NotDFWidget extends React.Component {
     return (
       <div className="node">
         <div className="port py-2 node-category">
-          <div className="port srd-port in-port" data-name={inPort.name} data-nodeid={inPort.parent.id}/>
+          {(inPort !== undefined) ? (
+            <div className="port srd-port in-port" data-name={inPort.name} data-nodeid={inPort.parent.id}/>
+          ) : null}
           <div className="col pl-2 pr-0 text-left">
             {diagramNode.node.reference}
           </div>

@@ -214,6 +214,7 @@ ActiveRecord::Schema.define(version: 2019_05_10_113703) do
     t.bigint "category_id"
     t.bigint "diagnostic_id"
     t.hstore "description_translations"
+    t.integer "min_score", default: 0
     t.bigint "algorithm_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

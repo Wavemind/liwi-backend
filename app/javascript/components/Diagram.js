@@ -13,6 +13,7 @@ import AdvancedDiagramWidget from "../react-diagram/widgets/AdvancedDiagramWidge
 
 import NodeList from "../react-diagram/lists/NodeList";
 import FlashMessages from "./FlashMessages";
+import FormModal from "./FormModal";
 
 import { withDiagram } from '../context/Diagram.context';
 
@@ -29,6 +30,37 @@ class Diagram extends React.Component {
     this.initDiagram();
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.props.currentScore !== nextProps.currentScore) {
+      const { engine } = this.state;
+      const { addMessage, http, currentNodeId, currentAnswerId, currentLinkId, currentScore } = nextProps;
+      const model = engine.getDiagramModel();
+
+      if (nextProps.currentScore === null){
+        model.removeLink(currentLinkId);
+      } else {
+        http.createLink(currentNodeId, currentAnswerId, currentScore).then((response) => {
+          if (response.status !== "success") {
+            // if throw an error, remove link in diagram
+            if (model.getLink(currentLinkId) !== null) {
+              model.removeLink(currentLinkId);
+              this.updateEngine(engine);
+            }
+            addMessage(response);
+          } else {
+            model.getLink(currentLinkId).addLabel(currentScore);
+            this.updateEngine(engine);
+          }
+        }).catch((err) => {
+          console.log(err);
+        });
+        return true;
+      }
+      return false;
+    }
+    return true;
+  }
+
   initDiagram = () => {
     const {
       instanceableType,
@@ -37,7 +69,8 @@ class Diagram extends React.Component {
       addMessage,
       http,
       type,
-      instanceable
+      instanceable,
+      set
     } = this.props;
 
     const { engine } = this.state;
@@ -58,7 +91,12 @@ class Diagram extends React.Component {
     questions.map((levels) => {
       let currentLevel = [];
       levels.map((instance) => {
-        let node = this.createNode(instance.node, instance.node.answers);
+        let node = null;
+        if (type === "PredefinedSyndrome" && instanceable.category.reference_prefix === "PSS") {
+          node = this.createNode(instance.node, instance.node.answers, "rgb(255,255,255)", (type === instance.node.type && instanceable.id === instance.node.id));
+        } else {
+          node = this.createNode(instance.node, instance.node.answers);
+        }
         currentLevel.push(node);
 
         if (!(type === instance.node.type && instanceable.id === instance.node.id)) { // Don't put outports if this is the current PS
@@ -190,20 +228,10 @@ class Diagram extends React.Component {
                 let answerId = eventModel.link.sourcePort.dbId;
                 if (eventModel.link.targetPort.in) {
                   if (type === "PredefinedSyndrome" && instanceable.category.reference_prefix === "PSS") {
-
-                    // Create link in DB
-                    http.createLink(nodeId, answerId).then((response) => {
-                      if (response.status !== "success") {
-                        // if throw an error, remove link in diagram
-                        if (model.getLink(eventModel.link.id) !== null) {
-                          model.removeLink(eventModel.link.id);
-                          self.updateEngine(engine);
-                        }
-                        addMessage(response);
-                      }
-                    }).catch((err) => {
-                      console.log(err);
-                    });
+                    set('currentNodeId', nodeId)
+                    set('currentAnswerId', answerId)
+                    set('currentLinkId', eventModel.link.id)
+                    set('modalIsOpen', true)
                   } else {
                     // Create link in DB
                     http.createLink(nodeId, answerId).then((response) => {
@@ -219,6 +247,7 @@ class Diagram extends React.Component {
                       console.log(err);
                     });
                   }
+
                 } else {
                   if (model.getLink(eventModel.link.id) !== null) {
                     model.removeLink(eventModel.link.id);
@@ -250,12 +279,18 @@ class Diagram extends React.Component {
   };
 
   // Create a node from label with its inport
-  createNode = (node, outPorts = [], color = "rgb(255,255,255)") => {
+  createNode = (node, outPorts = [], color = "rgb(255,255,255)", inPort = true) => {
     const {addNode} = this.props;
 
     let advancedNode = new AdvancedNodeModel(node, node.reference, outPorts, color, addNode);
-    advancedNode.addInPort(" ");
+    if (inPort) {
+      advancedNode.addInPort(" ");
+    }
     return advancedNode;
+  };
+
+  createLink = (node, answer, linkId) => {
+
   };
 
   // @params [String] status, [String] message
@@ -277,6 +312,7 @@ class Diagram extends React.Component {
 
     return (
       <div className="content">
+        <FormModal/>
         <FlashMessages/>
         <div className="row">
           {(!readOnly) ? (

@@ -10,6 +10,7 @@ class CreateNodes < ActiveRecord::Migration[5.2]
       t.belongs_to :category
       t.belongs_to :diagnostic
       t.hstore :description_translations
+      t.integer :min_score, default: 0
 
       t.references :algorithm, foreign_key: true, index: true
 
