@@ -19,5 +19,10 @@
       type: 'Diagnostic'
     }
   }) %>
+    <button type="button" class="btn btn-sm btn-info help" data-toggle="popover" data-placement="top" title="<%= t('help') %>" data-html="true" data-content="<%= render 'diagnostics/help' %>">
+      <i class="material-icons">
+        help_outline
+      </i>
+    </button>
   </div>
 </div>

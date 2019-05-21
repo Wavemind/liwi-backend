@@ -115,6 +115,12 @@ en:
       predefined_syndromes: "Predefined syndromes"
       questions: "Questions"
       treatments: "Treatments"
+    help:
+      arrow: "Arrow"
+      dashed-arrow: "Dashed arrow"
+      in-port: "In port"
+      out-port: "Out port"
+      excluded-diagnostic: "Excluded diagnostic"
   duplicate: "Duplicate"
   duplicated: "_duplicated"
   edit: "Edit"
@@ -310,3 +316,4 @@ en:
   close: "Close"
   back: "Back"
   open_diagram: "Open diagram editor"
+  help: "Help"
