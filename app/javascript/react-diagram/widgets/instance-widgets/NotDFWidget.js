@@ -18,6 +18,7 @@ class NotDFWidget extends React.Component {
 
   render() {
     const { diagramNode } = this.props;
+
     let outPorts = [];
     let inPort = diagramNode.getInPorts()[0];
 
@@ -35,7 +36,7 @@ class NotDFWidget extends React.Component {
             {diagramNode.node.reference}
           </div>
           <div className="col pl-0 pr-2 text-right">
-            {diagramNode.node.priority}
+            {(diagramNode.node.category_name === 'Predefined syndrome scored') ? diagramNode.node.min_score : diagramNode.node.priority}
           </div>
         </div>
         <div>

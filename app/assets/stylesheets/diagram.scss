@@ -246,3 +246,12 @@
   position: unset !important;
 }
 
+.srd-default-label {
+  pointer-events: all !important;
+}
+
+
+.srd-default-label:hover  {
+  cursor: pointer;
+}
+

@@ -128,13 +128,14 @@ export default class DiagramProvider extends React.Component {
     availableNodes: null,
     orderedNodes: [],
     modalIsOpen: false,
+    modalToOpen: null,
     currentNodeId: null,
     messages: [],
     type: null,
     readOnly: false,
     currentScore: 0,
     currentLinkId: null,
-    currentAnswerId: null
+    currentAnswerId: null,
   };
 
   render() {

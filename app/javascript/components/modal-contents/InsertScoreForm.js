@@ -7,7 +7,7 @@ import {
 import {withDiagram} from "../../context/Diagram.context";
 import Diagram from "../Diagram";
 
-class ScoreForm extends React.Component {
+class InsertScoreForm extends React.Component {
   constructor(props) {
     super(props);
 
@@ -15,8 +15,13 @@ class ScoreForm extends React.Component {
   }
 
   state = {
-    score: ''
+    score: '',
+    scoreInput: null
   };
+
+  componentWillUpdate() {
+    this.scoreInput.focus();
+  }
 
   createLink = async () => {
     const { set, toggleModal } = this.props;
@@ -46,6 +51,7 @@ class ScoreForm extends React.Component {
             type="number"
             value={this.state.score}
             onChange={this.handleScore}
+            ref={(input) => { this.scoreInput = input; }}
           />
         </Modal.Body>
         <Modal.Footer>
@@ -61,4 +67,4 @@ class ScoreForm extends React.Component {
   }
 }
 
-export default withDiagram(ScoreForm);
+export default withDiagram(InsertScoreForm);

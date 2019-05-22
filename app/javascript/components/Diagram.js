@@ -6,6 +6,7 @@ import * as React from "react";
 import * as _ from "lodash";
 
 import AdvancedLinkFactory from "../react-diagram/factories/AdvancedLinkFactory";
+import AdvancedLabelFactory from "../react-diagram/factories/AdvancedLabelFactory";
 import AdvancedNodeFactory from "../react-diagram/factories/AdvancedNodeFactory";
 import AdvancedLinkModel from "../react-diagram/models/AdvancedLinkModel";
 import AdvancedNodeModel from "../react-diagram/models/AdvancedNodeModel";
@@ -31,7 +32,7 @@ class Diagram extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (this.props.currentScore !== nextProps.currentScore) {
+    if (this.props.currentScore !== nextProps.currentScore && nextProps.modalToOpen === 'InsertScore') {
       const { engine } = this.state;
       const { addMessage, http, currentNodeId, currentAnswerId, currentLinkId, currentScore } = nextProps;
       const model = engine.getDiagramModel();
@@ -81,6 +82,7 @@ class Diagram extends React.Component {
     // Setup the diagram engine
     engine.installDefaultFactories();
     engine.registerLinkFactory(new AdvancedLinkFactory());
+    engine.registerLabelFactory(new AdvancedLabelFactory());
     engine.registerNodeFactory(new AdvancedNodeFactory());
 
     let nodes = []; // Save nodes to link them at the end
@@ -231,6 +233,7 @@ class Diagram extends React.Component {
                     set('currentNodeId', nodeId)
                     set('currentAnswerId', answerId)
                     set('currentLinkId', eventModel.link.id)
+                    set('modalToOpen', 'InsertScore')
                     set('modalIsOpen', true)
                   } else {
                     // Create link in DB
