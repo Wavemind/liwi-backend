@@ -7,7 +7,7 @@ import {
 import {withDiagram} from "../../context/Diagram.context";
 import Diagram from "../Diagram";
 
-class InsertScoreForm extends React.Component {
+class UpdateScoreForm extends React.Component {
   constructor(props) {
     super(props);
 
@@ -15,7 +15,7 @@ class InsertScoreForm extends React.Component {
   }
 
   state = {
-    score: '',
+    score: this.props.updatingScore,
     scoreInput: null
   };
 
@@ -24,20 +24,40 @@ class InsertScoreForm extends React.Component {
   }
 
   updateScore = async () => {
-    const { set, toggleModal } = this.props;
-    await set("currentScore", this.state.score);
+    const {
+      set,
+      toggleModal,
+      http,
+      currentAnswerId,
+      currentNodeId,
+      addMessage
+    } = this.props;
+
+    const {score} = this.state;
     toggleModal();
-  };
+    let result = await http.updateConditionScore(currentAnswerId, currentNodeId, score);
+
+    if (result.ok === undefined || result.ok) {
+      await set("currentScore", score);
+    } else {
+      let message = {
+        status: 'danger',
+        message: [`An error occured: ${result.status} - ${result.statusText}`],
+      };
+      await addMessage(message);
+    }
+  }
 
   handleScore = (event) => {
     this.setState({score: event.target.value});
   };
 
   render() {
+    const {toggleModal} = this.props;
     return (
       <React.Fragment>
         <Modal.Header closeButton>
-          <Modal.Title>Insert a score</Modal.Title>
+          <Modal.Title>Update the score</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <FormControl
@@ -45,14 +65,16 @@ class InsertScoreForm extends React.Component {
             type="number"
             value={this.state.score}
             onChange={this.handleScore}
-            ref={(input) => { this.scoreInput = input; }}
+            ref={(input) => {
+              this.scoreInput = input;
+            }}
           />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="primary" onClick={() => this.updateScore()}>
             Update
           </Button>
-          <Button variant="secondary" onClick={() => this.cancelLink()()}>
+          <Button variant="secondary" onClick={() => toggleModal()}>
             Close
           </Button>
         </Modal.Footer>
@@ -61,4 +83,4 @@ class InsertScoreForm extends React.Component {
   }
 }
 
-export default withDiagram(InsertScoreForm);
+export default withDiagram(UpdateScoreForm);

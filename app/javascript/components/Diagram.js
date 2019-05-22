@@ -31,33 +31,36 @@ class Diagram extends React.Component {
     this.initDiagram();
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (this.props.currentScore !== nextProps.currentScore && nextProps.modalToOpen === 'InsertScore') {
+  async shouldComponentUpdate(nextProps, nextState) {
+    if (this.props.currentScore !== nextProps.currentScore) {
+      const { http, currentNodeId, currentAnswerId, currentLinkId, currentScore } = nextProps;
       const { engine } = this.state;
-      const { addMessage, http, currentNodeId, currentAnswerId, currentLinkId, currentScore } = nextProps;
       const model = engine.getDiagramModel();
 
-      if (nextProps.currentScore === null){
-        model.removeLink(currentLinkId);
-      } else {
-        http.createLink(currentNodeId, currentAnswerId, currentScore).then((response) => {
-          if (response.status !== "success") {
-            // if throw an error, remove link in diagram
-            if (model.getLink(currentLinkId) !== null) {
-              model.removeLink(currentLinkId);
-              this.updateEngine(engine);
+      if (nextProps.modalToOpen === 'InsertScore') {
+        if (nextProps.currentScore === null){
+          model.removeLink(currentLinkId);
+        } else {
+          http.createLink(currentNodeId, currentAnswerId, currentScore).then((result) => {
+            if (result.ok === undefined || result.ok) {
+              model.getLink(currentLinkId).addLabel(currentScore);
+            } else {
+              this.addFlashMessage("danger", result);
+              // if throw an error, remove link in diagram
+              if (model.getLink(currentLinkId) !== null) {
+                model.removeLink(currentLinkId);
+              }
             }
-            addMessage(response);
-          } else {
-            model.getLink(currentLinkId).addLabel(currentScore);
             this.updateEngine(engine);
-          }
-        }).catch((err) => {
-          console.log(err);
-        });
-        return true;
+          });
+          return true;
+        }
+        return false;
+      } else if (nextProps.modalToOpen === 'UpdateScore') {
+        const label = model.getLink(currentLinkId).labels[0];
+        label.setLabel(currentScore);
+        this.updateEngine(engine);
       }
-      return false;
     }
     return true;
   }
@@ -230,22 +233,25 @@ class Diagram extends React.Component {
                 let answerId = eventModel.link.sourcePort.dbId;
                 if (eventModel.link.targetPort.in) {
                   if (type === "PredefinedSyndrome" && instanceable.category.reference_prefix === "PSS") {
-                    set('currentNodeId', nodeId)
-                    set('currentAnswerId', answerId)
-                    set('currentLinkId', eventModel.link.id)
-                    set('modalToOpen', 'InsertScore')
+                    set('currentNodeId', nodeId);
+                    set('currentAnswerId', answerId);
+                    set('currentLinkId', eventModel.link.id);
+                    set('modalToOpen', 'InsertScore');
                     set('modalIsOpen', true)
                   } else {
                     // Create link in DB
                     http.createLink(nodeId, answerId).then((response) => {
-                      if (response.status !== "success") {
+                      if (response.ok === undefined || response.ok) {
+                        model.getLink(currentLinkId).addLabel(currentScore);
+                      } else {
+                        this.addFlashMessage("danger", result);
                         // if throw an error, remove link in diagram
                         if (model.getLink(eventModel.link.id) !== null) {
                           model.removeLink(eventModel.link.id);
                           self.updateEngine(engine);
                         }
-                        addMessage(response);
                       }
+                      this.updateEngine(engine);
                     }).catch((err) => {
                       console.log(err);
                     });
@@ -292,10 +298,6 @@ class Diagram extends React.Component {
     return advancedNode;
   };
 
-  createLink = (node, answer, linkId) => {
-
-  };
-
   // @params [String] status, [String] message
   // Call context method to display flash message
   addFlashMessage = async (status, response) => {
@@ -309,7 +311,13 @@ class Diagram extends React.Component {
 
   render = () => {
     const {engine} = this.state;
-    const {removeNode, http, readOnly} = this.props;
+    const {
+      removeNode,
+      http,
+      readOnly,
+      instanceable,
+      type
+    } = this.props;
 
     let model = engine.getDiagramModel();
 
@@ -347,13 +355,17 @@ class Diagram extends React.Component {
                 } else  {
                   this.addFlashMessage("danger", result);
                 }
-
               } else {
                 // Create regular node
                 result = await http.createInstance(nodeDb.id);
                 if (result.ok === undefined || result.ok) {
                   if (nodeDb.get_answers !== null) {
-                    nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers);
+                    // Don't add an inPort for PSS node
+                    if (type === "PredefinedSyndrome" && instanceable.category.reference_prefix === "PSS") {
+                      nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers, "rgb(255,255,255)", (type === nodeDb.type && instanceable.id === instance.node.id));
+                    } else {
+                      nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers);
+                    }
                     nodeDb.get_answers.map((answer) => (nodeDiagram.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
                   } else {
                     nodeDiagram = this.createNode(nodeDb);

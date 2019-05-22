@@ -265,4 +265,27 @@ export default class Http {
   showFinalDiagnosticDiagram = async (dfId) => {
     window.location = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/${dfId}/diagram`;
   };
+
+  updateConditionScore = async (answerId, nodeId, score) => {
+    let response;
+    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/update_score`;
+    const body = {
+      instance: {
+        node_id: nodeId,
+        answer_id: answerId,
+        final_diagnostic_id: this.finalDiagnostic
+      },
+      score: score
+    };
+    const header = await this.setHeaders("PUT", body);
+    const request = await fetch( url, header).catch(error => console.log(error));
+
+    // Display error or parse json
+    if (request.ok) {
+      response = await request.json();
+    } else {
+      response = request;
+    }
+    return await response;
+  };
 }

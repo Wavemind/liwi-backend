@@ -100,6 +100,7 @@ Rails.application.routes.draw do
         post 'create_link'
         delete 'remove_from_diagram'
         delete 'remove_link'
+        put 'update_score'
       end
       resources :children, only: [:create, :destroy]
       resources :conditions, only: [:create, :destroy]
