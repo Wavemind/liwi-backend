@@ -23,6 +23,10 @@
   background-color: #e6e6e6;
 }
 
+.diagram-wrapper-white {
+  background-color: #fff;
+}
+
 .docs-preview-wrapper {
   border-radius: 10px;
   overflow: hidden;
@@ -33,6 +37,10 @@
 
 .srd-canvas {
   height: 95vh;
+}
+
+.srd-canvas-read-only {
+  position: initial;
 }
 
 .srd-default-node {
