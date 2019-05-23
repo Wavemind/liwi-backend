@@ -7,6 +7,10 @@ import {
 import {withDiagram} from "../../context/Diagram.context";
 import Diagram from "../Diagram";
 
+/**
+ * @author Roger Federer
+ * Modal content to define the score in PS scored
+ */
 class UpdateScoreForm extends React.Component {
   constructor(props) {
     super(props);
@@ -23,6 +27,7 @@ class UpdateScoreForm extends React.Component {
     this.scoreInput.focus();
   }
 
+  // Update the score in DB then set score props in order to trigger listener in Diagram.js that will update diagram dynamically
   updateScore = async () => {
     const {
       set,
@@ -48,6 +53,7 @@ class UpdateScoreForm extends React.Component {
     }
   }
 
+  // Set state for the input changes
   handleScore = (event) => {
     this.setState({score: event.target.value});
   };

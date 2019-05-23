@@ -5,8 +5,11 @@ import {
   FormControl
 } from "react-bootstrap";
 import {withDiagram} from "../../context/Diagram.context";
-import Diagram from "../Diagram";
 
+/**
+ * @author Emmanuel Barchichat
+ * Modal content to define the score in PS scored
+ */
 class InsertScoreForm extends React.Component {
   constructor(props) {
     super(props);
@@ -23,18 +26,21 @@ class InsertScoreForm extends React.Component {
     this.scoreInput.focus();
   }
 
+  // Set the score props from input, so it triggers listener in Diagram.js and execute http request
   createLink = async () => {
     const { set, toggleModal } = this.props;
     await set("currentScore", this.state.score);
     toggleModal();
   };
 
+  // Close diagram and triggers listener in Diagram.js so it can delete the link (since the score has not been set)
   cancelLink = async () => {
     const { set, toggleModal } = this.props;
     await set("currentScore", null);
     toggleModal();
   };
 
+  // Set state for the input changes
   handleScore = (event) => {
     this.setState({score: event.target.value});
   };

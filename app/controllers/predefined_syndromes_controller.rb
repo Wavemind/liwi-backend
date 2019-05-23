@@ -49,11 +49,15 @@ class PredefinedSyndromesController < ApplicationController
     end
   end
 
+  # @params PredefinedSyndrome with the translations
+  # Update the object with its translation without
   def edit_scored
     add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'predefined_syndromes_scored')
     add_breadcrumb @predefined_syndrome.label
   end
 
+  # @params PredefinedSyndrome with the translations
+  # Update the object with its translation without
   def new_scored
     add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'predefined_syndromes_scored')
 

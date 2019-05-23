@@ -32,11 +32,13 @@ class Diagram extends React.Component {
   }
 
   async shouldComponentUpdate(nextProps, nextState) {
+    // Listen to the change of the props score in order to update the model in the proper way
     if (this.props.currentScore !== nextProps.currentScore) {
       const { http, currentNodeId, currentAnswerId, currentLinkId, currentScore } = nextProps;
       const { engine } = this.state;
       const model = engine.getDiagramModel();
 
+      // Handle inserting a link with a score
       if (nextProps.modalToOpen === 'InsertScore') {
         if (nextProps.currentScore === null){
           model.removeLink(currentLinkId);
@@ -56,6 +58,7 @@ class Diagram extends React.Component {
           return true;
         }
         return false;
+        // Handle what happens after an update of a score
       } else if (nextProps.modalToOpen === 'UpdateScore') {
         const label = model.getLink(currentLinkId).labels[0];
         label.setLabel(currentScore);
@@ -97,6 +100,7 @@ class Diagram extends React.Component {
       let currentLevel = [];
       levels.map((instance) => {
         let node = null;
+        // If this is a PS score diagram, don't put an inport on the nodes, since there is only one level
         if (type === "PredefinedSyndrome" && instanceable.category.reference_prefix === "PSS") {
           node = this.createNode(instance.node, instance.node.answers, "rgb(255,255,255)", (type === instance.node.type && instanceable.id === instance.node.id));
         } else {

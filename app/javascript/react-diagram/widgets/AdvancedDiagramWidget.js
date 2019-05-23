@@ -21,6 +21,7 @@ class AdvancedDiagramWidget extends DiagramWidget {
   }
 
   onMouseMove(event) {
+    // Override props allowCanvasTranslation handling so it can be read only
     if (this.props.allowCanvasTranslation){
       super.onMouseMove(event);
     } else {
