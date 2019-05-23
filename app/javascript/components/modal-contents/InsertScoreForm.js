@@ -2,7 +2,8 @@ import React from "react";
 import {
   Button,
   Modal,
-  FormControl
+  FormControl,
+  Form
 } from "react-bootstrap";
 import {withDiagram} from "../../context/Diagram.context";
 
@@ -13,7 +14,6 @@ import {withDiagram} from "../../context/Diagram.context";
 class InsertScoreForm extends React.Component {
   constructor(props) {
     super(props);
-
     this.handleScore = this.handleScore.bind(this);
   }
 
@@ -40,6 +40,7 @@ class InsertScoreForm extends React.Component {
     toggleModal();
   };
 
+
   // Set state for the input changes
   handleScore = (event) => {
     this.setState({score: event.target.value});
@@ -47,7 +48,7 @@ class InsertScoreForm extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
+      <Form onSubmit={() => this.createLink()}>
         <Modal.Header closeButton>
           <Modal.Title>Insert a score</Modal.Title>
         </Modal.Header>
@@ -68,7 +69,7 @@ class InsertScoreForm extends React.Component {
             Close
           </Button>
         </Modal.Footer>
-      </React.Fragment>
+      </Form>
     );
   }
 }
