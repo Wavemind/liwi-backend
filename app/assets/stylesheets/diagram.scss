@@ -40,7 +40,7 @@
 }
 
 .srd-canvas-read-only {
-  position: initial;
+  position: static;
 }
 
 .srd-default-node {
@@ -106,10 +106,6 @@
 
 .srd-port {
   font-weight: bold;
-}
-
-.srd-diagram {
-  //position: unset;
 }
 
 .name {
@@ -246,12 +242,17 @@
   right: 9px!important;
 }
 
-.scrollable {
-  height: 100%;
-  min-height: 95vh;
+.help {
+  position:absolute;
+  bottom:10px;
+  right:10px;
+  padding-top: 8px;
+}
+
+.popover-body {
   overflow-x: hidden;
   overflow-y: auto;
-  position: unset !important;
+  height:85vh;
 }
 
 .srd-default-label {
@@ -262,4 +263,3 @@
 .srd-default-label:hover  {
   cursor: pointer;
 }
-

@@ -56,7 +56,9 @@ class AdvancedNodeLayerWidget extends NodeLayerWidget {
     }
 
     let width = ($(window).width());
-    if (!readOnly) {
+    if (readOnly) {
+      width -= $('#sidebar').width();
+    } else {
       width -= $('.liwi-sidebar').width();
     }
 

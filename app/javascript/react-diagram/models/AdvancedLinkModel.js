@@ -7,6 +7,7 @@ import {
 import * as _ from "lodash";
 import Http from "../../http";
 
+
 class AdvancedLinkModel extends DefaultLinkModel {
   width: number;
   color: string;
@@ -14,8 +15,9 @@ class AdvancedLinkModel extends DefaultLinkModel {
   markers: any;
   arrow: boolean;
   separator: boolean;
+  isReadOnly: boolean;
 
-  constructor(type: string = "default") {
+  constructor(isReadOnly, type: string = "default") {
     super(type);
     this.color = "rgba(255,255,255,0.5)";
     this.width = 2;
@@ -23,6 +25,7 @@ class AdvancedLinkModel extends DefaultLinkModel {
     this.markers = { startMarker: true, endMarker: false };
     this.arrow = true;
     this.separator = false;
+    this.isReadOnly = isReadOnly;
 
     const http = new Http();
 
@@ -98,6 +101,10 @@ class AdvancedLinkModel extends DefaultLinkModel {
 
   displaySeparator(separator: boolean) {
     this.separator = separator;
+  }
+
+  isLocked() {
+    return this.isReadOnly;
   }
 }
 

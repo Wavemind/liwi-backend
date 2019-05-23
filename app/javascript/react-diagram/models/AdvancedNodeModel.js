@@ -10,13 +10,15 @@ class AdvancedNodeModel extends DefaultNodeModel {
   outPorts: array;
   ports: { [s: string]: AdvancedPortModel };
   addNode;
+  isReadOnly: boolean;
 
-  constructor(node, reference: string, color: string, outPorts, addNode) {
+  constructor(node, reference: string, color: string, outPorts, addNode, isReadOnly) {
     super("advanced");
     this.node = node;
     this.reference = reference;
     this.color = color;
     this.outPorts = outPorts;
+    this.isReadOnly = isReadOnly
     const http = new Http();
 
     // Don't trigger entity removed for AND node
@@ -33,13 +35,13 @@ class AdvancedNodeModel extends DefaultNodeModel {
 
   addInPort(label: string, reference: string = '', id: string = ''): AdvancedPortModel {
     let inPort = new AdvancedPortModel(true, Toolkit.UID(), label);
-    inPort.setData(reference, id);
+    inPort.setData(reference, id, this.isReadOnly);
     return this.addPort(inPort);
   }
 
   addOutPort(label: string, reference: string = '', id: string = ''): AdvancedPortModel {
     let outPort = new AdvancedPortModel(false, Toolkit.UID(), label);
-    outPort.setData(reference, id);
+    outPort.setData(reference, id, this.isReadOnly);
     return this.addPort(outPort);
   }
 
@@ -82,6 +84,9 @@ class AdvancedNodeModel extends DefaultNodeModel {
     return _.find(this.ports, portModel => {
       return !portModel.in;
     });
+  }
+  isLocked() {
+    return this.isReadOnly;
   }
 }
 

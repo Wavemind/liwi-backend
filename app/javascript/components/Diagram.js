@@ -16,7 +16,7 @@ import NodeList from "../react-diagram/lists/NodeList";
 import FlashMessages from "./FlashMessages";
 import FormModal from "./FormModal";
 
-import { withDiagram } from '../context/Diagram.context';
+import {withDiagram} from '../context/Diagram.context';
 
 class Diagram extends React.Component {
 
@@ -34,13 +34,13 @@ class Diagram extends React.Component {
   async shouldComponentUpdate(nextProps, nextState) {
     // Listen to the change of the props score in order to update the model in the proper way
     if (this.props.currentScore !== nextProps.currentScore) {
-      const { http, currentNodeId, currentAnswerId, currentLinkId, currentScore } = nextProps;
-      const { engine } = this.state;
+      const {http, currentNodeId, currentAnswerId, currentLinkId, currentScore} = nextProps;
+      const {engine} = this.state;
       const model = engine.getDiagramModel();
 
       // Handle inserting a link with a score
       if (nextProps.modalToOpen === 'InsertScore') {
-        if (nextProps.currentScore === null){
+        if (nextProps.currentScore === null) {
           model.removeLink(currentLinkId);
         } else {
           http.createLink(currentNodeId, currentAnswerId, currentScore).then((result) => {
@@ -80,7 +80,7 @@ class Diagram extends React.Component {
       set
     } = this.props;
 
-    const { engine } = this.state;
+    const {engine} = this.state;
 
     // Setup the diagram model
     let model = new DiagramModel();
@@ -293,9 +293,9 @@ class Diagram extends React.Component {
 
   // Create a node from label with its inport
   createNode = (node, outPorts = [], color = "rgb(255,255,255)", inPort = true) => {
-    const {addNode} = this.props;
+    const {addNode, readOnly} = this.props;
 
-    let advancedNode = new AdvancedNodeModel(node, node.reference, outPorts, color, addNode);
+    let advancedNode = new AdvancedNodeModel(node, node.reference, outPorts, color, addNode, readOnly);
     if (inPort) {
       advancedNode.addInPort(" ");
     }
@@ -334,9 +334,9 @@ class Diagram extends React.Component {
         <div className="row">
           {(!readOnly) ? (
             <div className="col-md-2 px-0 liwi-sidebar">
-              <NodeList />
+              <NodeList/>
             </div>
-           ) : null}
+          ) : null}
           <div
             className={diagramStyle}
             onDrop={async event => {
@@ -358,7 +358,7 @@ class Diagram extends React.Component {
                   nodeDiagram.addInPort(" ");
                   nodeDiagram.addOutPort(" ");
                   removeNode(nodeDb);
-                } else  {
+                } else {
                   this.addFlashMessage("danger", result);
                 }
               } else {
@@ -399,6 +399,7 @@ class Diagram extends React.Component {
               diagramEngine={engine}
               allowCanvasZoom={false}
               allowCanvasTranslation={!readOnly}
+              allowLooseLinks={!readOnly}
               maxNumberPointsPerLink={0}
             />
           </div>

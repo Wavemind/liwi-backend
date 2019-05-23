@@ -19,3 +19,7 @@
 //= require moment
 //= require cocoon
 //= require_tree .
+
+$(function () {
+  $('[data-toggle="popover"]').popover()
+});
