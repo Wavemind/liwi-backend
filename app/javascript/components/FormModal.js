@@ -1,8 +1,5 @@
 import React from "react";
-import {
-  Button,
-  Modal,
-} from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import { withDiagram } from "../context/Diagram.context";
 import InsertScoreForm from "./modal-contents/InsertScoreForm";
 import UpdateScoreForm from "./modal-contents/UpdateScoreForm";
@@ -28,10 +25,6 @@ class FormModal extends React.Component {
     return nextProps.modalIsOpen;
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { http } = this.props;
-  }
-
   toggleModal = async () => {
     const { set, modalIsOpen } = this.props;
     await set("modalIsOpen", !modalIsOpen);
@@ -41,13 +34,13 @@ class FormModal extends React.Component {
     const { modalIsOpen, modalToOpen } = this.props;
     return (
       modalIsOpen ? (
-        <Modal show={true} onHide={() => this.toggleModal()} size="sm">
+        <Modal show={true} size="sm">
           {(() => {
             switch(modalToOpen) {
               case 'InsertScore':
-                return <InsertScoreForm toggleModal={this.toggleModal} />
+                return <InsertScoreForm toggleModal={this.toggleModal} />;
               case 'UpdateScore':
-                return <UpdateScoreForm toggleModal={this.toggleModal} />
+                return <UpdateScoreForm toggleModal={this.toggleModal} />;
               default:
                 return null;
             }

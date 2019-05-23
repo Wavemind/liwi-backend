@@ -2,10 +2,10 @@ import React from "react";
 import {
   Button,
   Modal,
-  FormControl
+  FormControl,
+  Form
 } from "react-bootstrap";
 import {withDiagram} from "../../context/Diagram.context";
-import Diagram from "../Diagram";
 
 /**
  * @author Roger Federer
@@ -51,7 +51,7 @@ class UpdateScoreForm extends React.Component {
       };
       await addMessage(message);
     }
-  }
+  };
 
   // Set state for the input changes
   handleScore = (event) => {
@@ -61,7 +61,7 @@ class UpdateScoreForm extends React.Component {
   render() {
     const {toggleModal} = this.props;
     return (
-      <React.Fragment>
+      <Form onSubmit={() => this.updateScore()}>
         <Modal.Header closeButton>
           <Modal.Title>Update the score</Modal.Title>
         </Modal.Header>
@@ -84,7 +84,7 @@ class UpdateScoreForm extends React.Component {
             Close
           </Button>
         </Modal.Footer>
-      </React.Fragment>
+      </Form>
     );
   }
 }
