@@ -3,13 +3,25 @@ class DevicesController < ApplicationController
   before_action :set_device, only: [:show]
 
   def index
+    add_breadcrumb t('breadcrumbs.home'), root_url
+    add_breadcrumb t('breadcrumbs.devices')
+
     respond_to do |format|
       format.html
       format.json { render json: DeviceDatatable.new(params, view_context: view_context) }
     end
   end
 
+  def show
+    add_breadcrumb t('breadcrumbs.home'), root_url
+    add_breadcrumb t('breadcrumbs.devices'), devices_url
+    add_breadcrumb @device.label
+  end
+
   def new
+    add_breadcrumb t('breadcrumbs.home'), root_url
+    add_breadcrumb t('breadcrumbs.devices'), devices_url
+    add_breadcrumb t('breadcrumbs.new')
     @device = Device.new
   end
 

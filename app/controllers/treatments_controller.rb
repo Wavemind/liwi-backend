@@ -4,14 +4,22 @@ class TreatmentsController < ApplicationController
   before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy]
 
   def new
+    add_breadcrumb t('breadcrumbs.home'), root_url
+    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
     add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'treatments')
+    add_breadcrumb t('breadcrumbs.treatments')
+    add_breadcrumb t('breadcrumbs.new')
 
     @treatment = Treatment.new
   end
 
   def edit
+    add_breadcrumb t('breadcrumbs.home'), root_url
+    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
     add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'treatments')
-    add_breadcrumb @treatment.reference
+    add_breadcrumb t('breadcrumbs.treatments')
+    add_breadcrumb @treatment.label
+    add_breadcrumb t('breadcrumbs.edit')
   end
 
   def create

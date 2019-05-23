@@ -13,8 +13,12 @@ class DiagnosticsController < ApplicationController
   end
 
   def show
+    add_breadcrumb t('breadcrumbs.home'), root_url
+    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
     add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
+    add_breadcrumb t('breadcrumbs.versions')
     add_breadcrumb @version.name, algorithm_version_url(@algorithm, @version)
+    add_breadcrumb t('breadcrumbs.diagnostics')
     add_breadcrumb @diagnostic.label
 
     @instance = Instance.new
@@ -24,16 +28,26 @@ class DiagnosticsController < ApplicationController
   end
 
   def new
+    add_breadcrumb t('breadcrumbs.home'), root_url
+    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
     add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
+    add_breadcrumb t('breadcrumbs.versions')
     add_breadcrumb @version.name, algorithm_version_url(@algorithm, @version)
+    add_breadcrumb t('breadcrumbs.diagnostics')
+    add_breadcrumb t('breadcrumbs.new')
 
     @diagnostic = Diagnostic.new
   end
 
   def edit
+    add_breadcrumb t('breadcrumbs.home'), root_url
+    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
     add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
+    add_breadcrumb t('breadcrumbs.versions')
     add_breadcrumb @version.name, algorithm_version_url(@algorithm, @version)
-    add_breadcrumb @diagnostic.reference, algorithm_version_diagnostic_url(@algorithm, @version)
+    add_breadcrumb t('breadcrumbs.diagnostics')
+    add_breadcrumb @diagnostic.label, algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic)
+    add_breadcrumb t('breadcrumbs.edit')
   end
 
   def create
@@ -65,8 +79,12 @@ class DiagnosticsController < ApplicationController
 
   # Generate react diagram
   def diagram
+    add_breadcrumb t('breadcrumbs.home'), root_url
+    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
     add_breadcrumb @diagnostic.version.algorithm.name, algorithm_url(@diagnostic.version.algorithm)
+    add_breadcrumb t('breadcrumbs.versions')
     add_breadcrumb @diagnostic.version.name, algorithm_version_url(@diagnostic.version.algorithm, @diagnostic.version)
+    add_breadcrumb t('breadcrumbs.diagnostics')
   end
 
   # @params [Diagnostic] diagnostic to duplicate

@@ -11,17 +11,29 @@ class VersionsController < ApplicationController
   end
 
   def show
+    add_breadcrumb t('breadcrumbs.home'), root_url
+    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
     add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'versions')
+    add_breadcrumb t('breadcrumbs.versions')
     add_breadcrumb @version.name
   end
 
   def new
+    add_breadcrumb t('breadcrumbs.home'), root_url
+    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'versions')
+    add_breadcrumb t('breadcrumbs.new')
+
     @version = Version.new
   end
 
   def edit
+    add_breadcrumb t('breadcrumbs.home'), root_url
+    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
     add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'versions')
+    add_breadcrumb t('breadcrumbs.versions')
     add_breadcrumb @version.name, algorithm_version_url(@algorithm, @version)
+    add_breadcrumb t('breadcrumbs.edit')
   end
 
   def create

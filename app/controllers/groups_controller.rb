@@ -3,6 +3,9 @@ class GroupsController < ApplicationController
   before_action :set_group, only: [:show, :edit, :update]
 
   def index
+    add_breadcrumb t('breadcrumbs.home'), root_url
+    add_breadcrumb t('breadcrumbs.groups')
+
     respond_to do |format|
       format.html
       format.json { render json: GroupDatatable.new(params, view_context: view_context) }
@@ -10,13 +13,27 @@ class GroupsController < ApplicationController
   end
 
   def show
+    add_breadcrumb t('breadcrumbs.home'), root_url
+    add_breadcrumb t('breadcrumbs.groups'), groups_url
+    add_breadcrumb @group.name
+
     @device = Device.new
     @group_access = GroupAccess.new
     @current_group_access = GroupAccess.find_by(group_id: params[:id], end_date: nil)
   end
 
   def new
+    add_breadcrumb t('breadcrumbs.home'), root_url
+    add_breadcrumb t('breadcrumbs.groups'), groups_url
+    add_breadcrumb t('breadcrumbs.new')
     @group = Group.new
+  end
+
+  def edit
+    add_breadcrumb t('breadcrumbs.home'), root_url
+    add_breadcrumb t('breadcrumbs.groups'), groups_url
+    add_breadcrumb @group.name, group_url(@group)
+    add_breadcrumb t('breadcrumbs.edit')
   end
 
   def create

@@ -5,14 +5,22 @@ class PredefinedSyndromesController < ApplicationController
   layout 'diagram', only: [:diagram]
 
   def new
+    add_breadcrumb t('breadcrumbs.home'), root_url
+    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
     add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'predefined_syndromes')
+    add_breadcrumb t('breadcrumbs.predefined_syndromes')
+    add_breadcrumb t('breadcrumbs.new')
 
     @predefined_syndrome = PredefinedSyndrome.new
   end
 
   def edit
+    add_breadcrumb t('breadcrumbs.home'), root_url
+    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
     add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'predefined_syndromes')
-    add_breadcrumb @predefined_syndrome.label
+    add_breadcrumb t('breadcrumbs.predefined_syndromes')
+    add_breadcrumb @predefined_syndrome.label, diagram_predefined_syndrome_url(@predefined_syndrome)
+    add_breadcrumb t('breadcrumbs.edit')
   end
 
   def create
@@ -61,7 +69,10 @@ class PredefinedSyndromesController < ApplicationController
 
   # React Diagram
   def diagram
+    add_breadcrumb t('breadcrumbs.home'), root_url
+    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
     add_breadcrumb @predefined_syndrome.algorithm.name, algorithm_url(@predefined_syndrome.algorithm, panel: 'predefined_syndromes')
+    add_breadcrumb t('breadcrumbs.predefined_syndromes')
   end
 
   private

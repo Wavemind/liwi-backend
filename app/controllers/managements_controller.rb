@@ -4,14 +4,22 @@ class ManagementsController < ApplicationController
   before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy]
 
   def new
+    add_breadcrumb t('breadcrumbs.home'), root_url
+    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
     add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'managements')
+    add_breadcrumb t('breadcrumbs.managements')
+    add_breadcrumb t('breadcrumbs.new')
 
     @management = Management.new
   end
 
   def edit
+    add_breadcrumb t('breadcrumbs.home'), root_url
+    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
     add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'managements')
-    add_breadcrumb @management.reference
+    add_breadcrumb t('breadcrumbs.managements')
+    add_breadcrumb @management.label
+    add_breadcrumb t('breadcrumbs.edit')
   end
 
   def create

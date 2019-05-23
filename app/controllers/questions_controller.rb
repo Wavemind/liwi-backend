@@ -4,14 +4,22 @@ class QuestionsController < ApplicationController
   before_action :set_algorithm, only: [:new, :create, :edit, :update, :answers, :destroy]
 
   def new
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
+    add_breadcrumb t('breadcrumbs.home'), root_url
+    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'questions')
+    add_breadcrumb t('breadcrumbs.questions')
+    add_breadcrumb t('breadcrumbs.new')
 
     @question = Question.new
   end
 
   def edit
+    add_breadcrumb t('breadcrumbs.home'), root_url
+    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
     add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'questions')
+    add_breadcrumb t('breadcrumbs.questions')
     add_breadcrumb @question.label
+    add_breadcrumb t('breadcrumbs.edit')
   end
 
   def create

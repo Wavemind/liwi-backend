@@ -3,6 +3,9 @@ class AlgorithmsController < ApplicationController
   before_action :set_algorithm, only: [:show, :edit, :update, :archive, :unarchive, :questions]
 
   def index
+    add_breadcrumb t('breadcrumbs.home'), root_url
+    add_breadcrumb t('breadcrumbs.algorithms')
+
     respond_to do |format|
       format.html
       format.json { render json: AlgorithmDatatable.new(params, view_context: view_context) }
@@ -10,15 +13,24 @@ class AlgorithmsController < ApplicationController
   end
 
   def show
+    add_breadcrumb t('breadcrumbs.home'), root_url
+    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
     add_breadcrumb @algorithm.name
   end
 
   def new
+    add_breadcrumb t('breadcrumbs.home'), root_url
+    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
+    add_breadcrumb t('breadcrumbs.new')
     @algorithm = Algorithm.new
   end
 
   def edit
+    add_breadcrumb t('breadcrumbs.home'), root_url
+    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
     add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
+    add_breadcrumb t('breadcrumbs.edit')
+
   end
 
   def create
