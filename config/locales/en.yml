@@ -213,13 +213,17 @@ en:
     validation:
       reference_used: "This reference is already used"
   predefined_syndromes:
+    edit:
+      title: "Update the predefined syndrome"
+    edit_scored:
+      title: "Update a predefined syndrome scored"
+    new:
+      title: "Create predefined syndrome"
+    new_scored:
+      title: "Create a predefined syndrome scored"
     show:
       title: "Details of %{name}"
       children: "Children"
-    new:
-      title: "Create predefined syndrome"
-    edit:
-      title: "Update the predefined syndrome"
   prompt: "Select"
   questions:
     categories:
