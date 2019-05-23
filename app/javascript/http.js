@@ -78,7 +78,7 @@ export default class Http {
   // @params [Integer] nodeId, [Integer] answerId, [Integer] score
   // @return [Object] body of request
   // Create a Link
-  createLink = async (nodeId, answerId, score = 0) => {
+  createLink = async (nodeId, answerId, score = null) => {
     let response;
     const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/create_link`;
     const body = {
