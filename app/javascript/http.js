@@ -75,7 +75,7 @@ export default class Http {
   };
 
 
-  // @params [Integer] nodeId, [Integer] answerId
+  // @params [Integer] nodeId, [Integer] answerId, [Integer] score
   // @return [Object] body of request
   // Create a Link
   createLink = async (nodeId, answerId, score = 0) => {
@@ -266,6 +266,9 @@ export default class Http {
     window.location = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/${dfId}/diagram`;
   };
 
+  // @params [Integer] nodeId, [Integer] answerId, [Integer] score
+  // @return [Object] body of request
+  // Update a condition to change its score
   updateConditionScore = async (answerId, nodeId, score) => {
     let response;
     const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/update_score`;

@@ -87,9 +87,6 @@ Rails.application.routes.draw do
         put 'update_translations'
       end
     end
-
-    # resources :predefined_syndromes_scored, only: [:index, :new, :create, :edit, :update, :destroy] do
-    # end
   end
 
   resources :predefined_syndromes, only: [] do

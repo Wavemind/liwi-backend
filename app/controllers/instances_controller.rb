@@ -164,7 +164,7 @@ class InstancesController < ApplicationController
   end
 
   # @params [Diagnostic] Current diagnostic, [Answer] Answer from parent of the link, [Node] child of the link
-  # Update the score of a condition of a PSS
+  # Update the score of a condition in a PSS
   def update_score
     condition = Condition.find_by(first_conditionable: @parent_answer, referenceable: @child_instance)
 
