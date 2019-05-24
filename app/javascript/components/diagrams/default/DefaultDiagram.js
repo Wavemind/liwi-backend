@@ -4,18 +4,19 @@ import {
 } from "storm-react-diagrams";
 import * as React from "react";
 import * as _ from "lodash";
+import { ActionCreators } from 'redux-undo';
 
-import AdvancedLinkFactory from "../react-diagram/factories/AdvancedLinkFactory";
-import AdvancedNodeFactory from "../react-diagram/factories/AdvancedNodeFactory";
-import AdvancedNodeModel from "../react-diagram/models/AdvancedNodeModel";
-import AdvancedDiagramWidget from "../react-diagram/widgets/AdvancedDiagramWidget";
+import AdvancedLinkFactory from "../../../react-diagram/factories/AdvancedLinkFactory";
+import AdvancedNodeFactory from "../../../react-diagram/factories/AdvancedNodeFactory";
+import AdvancedNodeModel from "../../../react-diagram/models/AdvancedNodeModel";
+import AdvancedDiagramWidget from "../../../react-diagram/widgets/AdvancedDiagramWidget";
 
-import NodeList from "../react-diagram/lists/NodeList";
-import FlashMessages from "./FlashMessages";
+import NodeList from "../../../react-diagram/lists/NodeList";
+import FlashMessages from "../../utils/FlashMessages";
+import store from "../../../state-manager";
+import { removeLink } from "../../../state-manager/creators.actions";
 
-import { withDiagram } from '../context/Diagram.context';
-
-class Diagram extends React.Component {
+export default class DefaultDiagram extends React.Component {
 
   constructor() {
     super();
@@ -36,7 +37,7 @@ class Diagram extends React.Component {
       addMessage,
       http,
       type,
-      instanceable
+      instanceable,
     } = this.props;
 
     const { engine } = this.state;
@@ -192,10 +193,10 @@ class Diagram extends React.Component {
                       // if throw an error, remove link in diagram
                       if (model.getLink(eventModel.link.id) !== null) {
                         model.removeLink(eventModel.link.id);
-                        self.updateEngine(engine);
                       }
                       addMessage(response);
                     }
+                    self.updateEngine(engine);
                   }).catch((err) => {
                     console.log(err);
                   });
@@ -221,7 +222,19 @@ class Diagram extends React.Component {
   // Set state of engine
   updateEngine = (engine) => {
     this.setState({engine});
+    this.props.setEngine(engine)
   };
+
+
+  // Ask mick
+  setTimelineEngine() {
+    console.log('set engine !!')
+    const { engine } = this.props
+    this.state.engine.diagramModel.nodes = engine.present.diagramModel.nodes;
+    this.state.engine.diagramModel.links = engine.present.diagramModel.links;
+    this.forceUpdate();
+    this.props.unsetDiagram();
+  }
 
   // @params node
   // Get full label of an object
@@ -249,9 +262,17 @@ class Diagram extends React.Component {
     await addMessage(message);
   };
 
+
+
   render = () => {
     const {engine} = this.state;
-    const {removeNode, http} = this.props;
+    const {removeNode, http } = this.props;
+
+     console.log(this.props.engine)
+
+    if (this.props.engine.present.setDiagram) {
+      this.setTimelineEngine();
+    }
 
     let model = engine.getDiagramModel();
 
@@ -260,6 +281,8 @@ class Diagram extends React.Component {
         <FlashMessages/>
         <div className="row">
           <div className="col-md-2 px-0 liwi-sidebar">
+            <button className="btn btn-default" onClick={() => this.props.redo()}> redo </button>
+            <button className="btn btn-default" onClick={() => this.props.undo()}> undo </button>
             <NodeList />
           </div>
           <div
@@ -328,4 +351,3 @@ class Diagram extends React.Component {
   };
 }
 
-export default withDiagram(Diagram);

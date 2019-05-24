@@ -5,18 +5,17 @@ import {
 import * as React from "react";
 import * as _ from "lodash";
 
-import AdvancedLinkFactory from "../react-diagram/factories/AdvancedLinkFactory";
-import AdvancedNodeFactory from "../react-diagram/factories/AdvancedNodeFactory";
-import AdvancedNodeModel from "../react-diagram/models/AdvancedNodeModel";
-import AdvancedDiagramWidget from "../react-diagram/widgets/AdvancedDiagramWidget";
+import AdvancedLinkFactory from "../../../react-diagram/factories/AdvancedLinkFactory";
+import AdvancedNodeFactory from "../../../react-diagram/factories/AdvancedNodeFactory";
+import AdvancedNodeModel from "../../../react-diagram/models/AdvancedNodeModel";
+import AdvancedDiagramWidget from "../../../react-diagram/widgets/AdvancedDiagramWidget";
 
-import NodeList from "../react-diagram/lists/NodeList";
-import Http from "../http";
+import NodeList from "../../../react-diagram/lists/NodeList";
 
-import FlashMessages from "./FlashMessages";
-import {withDiagram} from "../context/Diagram.context";
+import FlashMessages from "../../utils/FlashMessages";
+import {withDiagram} from "../../../context/Diagram.context";
 
-class FinalDiagnosticDiagram extends React.Component {
+export default class FinalDiagnosticDiagram extends React.Component {
 
   constructor() {
     super();
@@ -270,5 +269,3 @@ class FinalDiagnosticDiagram extends React.Component {
     );
   };
 }
-
-export default withDiagram(FinalDiagnosticDiagram);

@@ -3,7 +3,7 @@ import {
   Button,
   Modal,
 } from "react-bootstrap";
-import { withDiagram } from "../context/Diagram.context";
+import { withDiagram } from "../../context/Diagram.context";
 
 class FormModal extends React.Component {
   constructor(props) {

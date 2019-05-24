@@ -2,6 +2,8 @@ import { DefaultNodeModel, DiagramEngine, Toolkit } from "storm-react-diagrams";
 import AdvancedPortModel from "../models/AdvancedPortModel";
 import * as _ from "lodash";
 import Http from "../../http";
+import store from "../../state-manager";
+import { removedNodeState } from "../../state-manager/creators.actions";
 
 class AdvancedNodeModel extends DefaultNodeModel {
   node;
@@ -26,6 +28,7 @@ class AdvancedNodeModel extends DefaultNodeModel {
           // Delete node in DB
           http.removeInstance(removedNode.entity.node.id);
           addNode(removedNode.entity.node)
+          store.dispatch(removedNodeState(removedNode))
         },
       });
     }

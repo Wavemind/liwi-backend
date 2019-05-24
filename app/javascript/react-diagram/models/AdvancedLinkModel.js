@@ -1,6 +1,8 @@
 import { DefaultLinkModel, DiagramEngine } from "storm-react-diagrams";
 import * as _ from "lodash";
 import Http from "../../http";
+import { removedLinkState } from "../../state-manager/creators.actions";
+import store from '../../state-manager';
 
 class AdvancedLinkModel extends DefaultLinkModel {
   width: number;
@@ -23,6 +25,7 @@ class AdvancedLinkModel extends DefaultLinkModel {
 
     this.addListener({
       entityRemoved: function(removedLink) {
+        store.dispatch(removedLinkState(removedLink))
 
         // Don't trigger automatic removing link since node does it already
         if (removedLink.entity.selected) {
