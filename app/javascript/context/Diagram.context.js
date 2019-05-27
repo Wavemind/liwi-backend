@@ -12,12 +12,14 @@ export default class DiagramProvider extends React.Component {
 
     // Init http class
     const http = new Http();
-    this.state = {...this.state, ...props.value, http };
+    this.state = { ...this.state, ...props.value, http };
   }
+
 
   async componentWillMount() {
     await this.orderNodes();
   }
+
 
   orderNodes = async () => {
     const {
@@ -25,79 +27,69 @@ export default class DiagramProvider extends React.Component {
       type
     } = this.state;
 
-    let orderedNodes = {};
+    let orderedNodes = {
+      exposure: [],
+      symptom: [],
+      assessmentTest: [],
+      physicalExam: [],
+      predefinedSyndrome: [],
+      comorbidity: [],
+      predefinedCondition: [],
+    };
 
     if (type === "Diagnostic") {
-      orderedNodes = {
-        exposure: [],
-        symptom: [],
-        assessmentTest: [],
-        physicalExam: [],
-        predefinedSyndrome: [],
-        comorbidity: [],
-        predefinedCondition: [],
-        finalDiagnostic: []
-      };
+      orderedNodes.finalDiagnostic = [];
     } else if (type === "FinalDiagnostic") {
-      orderedNodes = {
-        exposure: [],
-        symptom: [],
-        assessmentTest: [],
-        physicalExam: [],
-        predefinedSyndrome: [],
-        comorbidity: [],
-        predefinedCondition: [],
-        treatment: [],
-        management: [],
-      };
-    } else {
-      orderedNodes = {
-        exposure: [],
-        symptom: [],
-        assessmentTest: [],
-        physicalExam: [],
-        predefinedSyndrome: [],
-        comorbidity: [],
-        predefinedCondition: [],
-      };
+      orderedNodes.treatment = [];
+      orderedNodes.management = [];
     }
 
     // Assign node to correct array
     availableNodes.map((node) => {
-      let category = "";
-
-      if (node.type === "Question" || node.type === "PredefinedSyndrome") {
-        category = _.camelCase(node.category_name);
-      } else {
-        category = _.camelCase(node.type);
-      }
+      let category = this.getCategoryNode(node);
       orderedNodes[category].push(node);
-
     });
 
     this.setState({ orderedNodes });
   };
 
+
+  // @params node
+  // Find category
+  getCategoryNode = (node) => {
+    let category = null;
+
+    if (node.type === "Question" || node.type === "PredefinedSyndrome") {
+      category = _.camelCase(node.category_name);
+    } else {
+      category = _.camelCase(node.type);
+    }
+    return category
+  };
+
+
   setValState = async (prop, value) => {
     await this.setState({ [prop]: value });
   };
 
+
   removeNode = async (node) => {
-    const { availableNodes } = this.state;
-    let index = _.findIndex(availableNodes, {'id': node.id});
-    availableNodes.splice(index, 1);
-    this.setState({availableNodes}, async () => {
-      await this.orderNodes();
-    });
+    const { orderedNodes } = this.state;
+    let category = this.getCategoryNode(node);
+
+    _.remove(orderedNodes[category], {'id': node.id});
+    this.setState({ orderedNodes });
   };
 
+
   addNode = async (node) => {
-    const { availableNodes } = this.state;
-    availableNodes.push(node);
-    this.setState({availableNodes}, async () => {
-      await this.orderNodes();
-    });
+    const { orderedNodes } = this.state;
+    let category = this.getCategoryNode(node);
+
+    orderedNodes[category].push(node);
+    this.setState({orderedNodes});
   };
+
 
   addMessage = async (message) => {
     const { messages } = this.state;
@@ -105,11 +97,13 @@ export default class DiagramProvider extends React.Component {
     this.setState({messages});
   };
 
+
   removeMessage = async (index) => {
     const { messages } = this.state;
     messages.splice(index, 1);
     this.setState({messages});
   };
+
 
   state = {
     set: this.setValState,
@@ -132,6 +126,7 @@ export default class DiagramProvider extends React.Component {
 
   render() {
     const { children } = this.props;
+    console.log(this.state.orderedNodes, this.state.availableNodes )
     return (
       <DiagramContext.Provider value={this.state}>
         {children}

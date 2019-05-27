@@ -267,17 +267,67 @@ export default class DefaultDiagram extends React.Component {
   };
 
 
+  onDropAction = async (event) => {
+    const {removeNode, http } = this.props;
+    const {engine} = this.state;
+
+    let model = engine.getDiagramModel();
+    let nodeDb = JSON.parse(event.dataTransfer.getData("node"));
+    let points = engine.getRelativeMousePoint(event);
+    let nodeDiagram = {};
+    let result;
+
+    // Create AND node
+    if (nodeDb === "AND") {
+      nodeDiagram = new AdvancedNodeModel("AND", "", "", "");
+      nodeDiagram.addInPort(" ");
+      nodeDiagram.addOutPort(" ");
+      // Create Final Diagnostic node
+    } else if (nodeDb.type === "FinalDiagnostic") {
+      result = await http.createInstance(nodeDb.id);
+      if (result.ok === undefined || result.ok) {
+        nodeDiagram = this.createNode(nodeDb);
+        nodeDiagram.addInPort(" ");
+        nodeDiagram.addOutPort(" ");
+        removeNode(nodeDb);
+      } else  {
+        this.addFlashMessage("danger", result);
+      }
+
+    } else {
+      // Create regular node
+      result = await http.createInstance(nodeDb.id);
+      if (result.ok === undefined || result.ok) {
+        if (nodeDb.get_answers !== null) {
+          nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers);
+          nodeDb.get_answers.map((answer) => (nodeDiagram.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
+        } else {
+          nodeDiagram = this.createNode(nodeDb);
+        }
+        removeNode(nodeDb);
+      } else {
+        this.addFlashMessage("danger", result);
+      }
+    }
+
+    // Set position of node in canevas
+    nodeDiagram.x = points.x;
+    nodeDiagram.y = points.y;
+
+    // Update diagram nodes
+    model.addAll(nodeDiagram);
+    this.updateEngine(engine);
+  };
 
   render = () => {
     const {engine} = this.state;
-    const {removeNode, http } = this.props;
 
     // Update history of engine
     if (this.props.engine.present.forceUpdate) {
       this.setUndoRedo();
     }
 
-    let model = engine.getDiagramModel();
+    console.log(this.props)
 
     return (
       <div className="content">
@@ -291,51 +341,7 @@ export default class DefaultDiagram extends React.Component {
           <div
             className="col-md-10 diagram-wrapper"
             onDrop={async event => {
-              let nodeDb = JSON.parse(event.dataTransfer.getData("node"));
-              let points = engine.getRelativeMousePoint(event);
-              let nodeDiagram = {};
-              let result;
-
-              // Create AND node
-              if (nodeDb === "AND") {
-                nodeDiagram = new AdvancedNodeModel("AND", "", "", "");
-                nodeDiagram.addInPort(" ");
-                nodeDiagram.addOutPort(" ");
-                // Create Final Diagnostic node
-              } else if (nodeDb.type === "FinalDiagnostic") {
-                result = await http.createInstance(nodeDb.id);
-                if (result.ok === undefined || result.ok) {
-                  nodeDiagram = this.createNode(nodeDb);
-                  nodeDiagram.addInPort(" ");
-                  nodeDiagram.addOutPort(" ");
-                  removeNode(nodeDb);
-                } else  {
-                  this.addFlashMessage("danger", result);
-                }
-
-              } else {
-                // Create regular node
-                result = await http.createInstance(nodeDb.id);
-                if (result.ok === undefined || result.ok) {
-                  if (nodeDb.get_answers !== null) {
-                    nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers);
-                    nodeDb.get_answers.map((answer) => (nodeDiagram.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
-                  } else {
-                    nodeDiagram = this.createNode(nodeDb);
-                  }
-                  removeNode(nodeDb);
-                } else {
-                  this.addFlashMessage("danger", result);
-                }
-              }
-
-              // Set position of node in canevas
-              nodeDiagram.x = points.x;
-              nodeDiagram.y = points.y;
-
-              // Update diagram nodes
-              model.addAll(nodeDiagram);
-              this.updateEngine(engine);
+              this.onDropAction(event);
             }}
             onDragOver={event => {
               event.preventDefault();
