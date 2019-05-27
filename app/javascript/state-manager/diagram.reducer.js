@@ -5,9 +5,9 @@ import { actions } from "./types.actions";
 
 export default function DiagramReducer(state = initialState, action) {
 
-  console.log(action)
-
   switch (action.type) {
+
+    // Set engine in redux store
     case actions.SET_ENGINE: {
       const { engine } = action.payload;
 
@@ -28,15 +28,17 @@ export default function DiagramReducer(state = initialState, action) {
       };
     }
 
-    case actions.SET_DIAGRAM: {
+    // Force updating diagram
+    case actions.FORCE_UPDATE: {
       const { boolean } = action.payload;
 
       return {
         ...state,
-        setDiagram: boolean
+        forceUpdate: boolean
       };
     }
 
+    // Remove link
     case actions.REMOVED_LINK_STATE: {
       const { link } = action.payload;
 
@@ -54,6 +56,7 @@ export default function DiagramReducer(state = initialState, action) {
       };
     }
 
+    // Remove node
     case actions.REMOVED_NODE_STATE: {
       const { node } = action.payload;
 
@@ -68,16 +71,6 @@ export default function DiagramReducer(state = initialState, action) {
             ...nodes,
           },
         }
-      };
-    }
-
-    case 'UNDO': {
-      const {  } = action.payload;
-
-     console.log(action)
-
-      return {
-        ...state,
       };
     }
 

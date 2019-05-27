@@ -1,7 +1,7 @@
 import DefaultDiagram from './DefaultDiagram';
 import { withDiagram } from "../../../context/Diagram.context";
 import { connect } from 'react-redux';
-import { setEngine, setDiagram } from '../../../state-manager/creators.actions'
+import { setEngine, forceUpdate } from '../../../state-manager/creators.actions'
 import { ActionCreators } from 'redux-undo';
 
 const mapStateToProps = (engine, ownProps) => {
@@ -13,15 +13,15 @@ const mapStateToProps = (engine, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     setEngine: (engine) => dispatch(setEngine(engine)),
-    unsetDiagram: (engine) => dispatch(setDiagram(false)),
+    forceUpdate: (engine) => dispatch(forceUpdate(false)),
     undo: () => {
       dispatch(ActionCreators.undo());
       // TODO flag to know when inject state into diagram
-      dispatch(setDiagram(true));
+      dispatch(forceUpdate(true));
     },
     redo: () => {
       dispatch(ActionCreators.redo());
-      dispatch(setDiagram(true));
+      dispatch(forceUpdate(true));
     },
   };
 };

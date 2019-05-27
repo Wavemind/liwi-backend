@@ -7,8 +7,8 @@ export const setEngine = (engine) => ({
   }
 });
 
-export const setDiagram = (boolean) => ({
-  type: actions.SET_DIAGRAM,
+export const forceUpdate = (boolean) => ({
+  type: actions.FORCE_UPDATE,
   payload: {
     boolean
   }

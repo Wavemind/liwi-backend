@@ -4,17 +4,14 @@ import {
 } from "storm-react-diagrams";
 import * as React from "react";
 import * as _ from "lodash";
-import { ActionCreators } from 'redux-undo';
 
 import AdvancedLinkFactory from "../../../react-diagram/factories/AdvancedLinkFactory";
 import AdvancedNodeFactory from "../../../react-diagram/factories/AdvancedNodeFactory";
 import AdvancedNodeModel from "../../../react-diagram/models/AdvancedNodeModel";
 import AdvancedDiagramWidget from "../../../react-diagram/widgets/AdvancedDiagramWidget";
 
-import NodeList from "../../../react-diagram/lists/NodeList";
+import NodeList from "../../lists/NodeList";
 import FlashMessages from "../../utils/FlashMessages";
-import store from "../../../state-manager";
-import { removeLink } from "../../../state-manager/creators.actions";
 
 export default class DefaultDiagram extends React.Component {
 
@@ -226,14 +223,21 @@ export default class DefaultDiagram extends React.Component {
   };
 
 
-  // Ask mick
-  setTimelineEngine() {
-    console.log('set engine !!')
-    const { engine } = this.props
+  // Update diagram node/link depending on undo/redo actions
+  setUndoRedo() {
+    const { engine, forceUpdate } = this.props;
+
+    // Can't undo action if there is no history of diagram
+    if (engine.present.diagramModel === undefined) {
+      return false
+    }
+
     this.state.engine.diagramModel.nodes = engine.present.diagramModel.nodes;
     this.state.engine.diagramModel.links = engine.present.diagramModel.links;
     this.forceUpdate();
-    this.props.unsetDiagram();
+
+    // Set flag in redux
+    forceUpdate();
   }
 
   // @params node
@@ -268,10 +272,9 @@ export default class DefaultDiagram extends React.Component {
     const {engine} = this.state;
     const {removeNode, http } = this.props;
 
-     console.log(this.props.engine)
-
-    if (this.props.engine.present.setDiagram) {
-      this.setTimelineEngine();
+    // Update history of engine
+    if (this.props.engine.present.forceUpdate) {
+      this.setUndoRedo();
     }
 
     let model = engine.getDiagramModel();
