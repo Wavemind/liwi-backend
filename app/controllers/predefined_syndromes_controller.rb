@@ -1,24 +1,17 @@
 class PredefinedSyndromesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_predefined_syndrome, only: [:edit, :update, :destroy, :update_translations, :diagram]
   before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy]
+  before_action :set_breadcrumb, only: [:new, :edit]
+  before_action :set_predefined_syndrome, only: [:edit, :update, :destroy, :update_translations, :diagram]
   layout 'diagram', only: [:diagram]
 
   def new
-    add_breadcrumb t('breadcrumbs.home'), root_url
-    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'predefined_syndromes')
-    add_breadcrumb t('breadcrumbs.predefined_syndromes')
     add_breadcrumb t('breadcrumbs.new')
 
     @predefined_syndrome = PredefinedSyndrome.new
   end
 
   def edit
-    add_breadcrumb t('breadcrumbs.home'), root_url
-    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'predefined_syndromes')
-    add_breadcrumb t('breadcrumbs.predefined_syndromes')
     add_breadcrumb @predefined_syndrome.label, diagram_predefined_syndrome_url(@predefined_syndrome)
     add_breadcrumb t('breadcrumbs.edit')
   end
@@ -59,23 +52,29 @@ class PredefinedSyndromesController < ApplicationController
   # Update the object with its translation without
   def update_translations
     if @predefined_syndrome.update(predefined_syndrome_params)
-      @json = { status: 'success', message: t('flash_message.success_updated')}
+      @json = { status: 'success', message: t('flash_message.success_updated') }
       render 'diagnostics/update_translations', formats: :js, status: :ok
     else
-      @json = { status: 'alert', message: t('flash_message.update_fail')}
+      @json = { status: 'alert', message: t('flash_message.update_fail') }
       render 'diagnostics/update_translations', formats: :js, status: :unprocessable_entity
     end
   end
 
   # React Diagram
   def diagram
-    add_breadcrumb t('breadcrumbs.home'), root_url
+
     add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
     add_breadcrumb @predefined_syndrome.algorithm.name, algorithm_url(@predefined_syndrome.algorithm, panel: 'predefined_syndromes')
     add_breadcrumb t('breadcrumbs.predefined_syndromes')
   end
 
   private
+
+  def set_breadcrumb
+    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'predefined_syndromes')
+    add_breadcrumb t('breadcrumbs.predefined_syndromes')
+  end
 
   def set_predefined_syndrome
     @predefined_syndrome = PredefinedSyndrome.find(params[:id])
@@ -91,7 +90,7 @@ class PredefinedSyndromesController < ApplicationController
       Language.description_params,
       :category_id,
       :algorithm_id,
-      )
+    )
   end
 
 end

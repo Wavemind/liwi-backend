@@ -1,9 +1,9 @@
 class GroupsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group, only: [:show, :edit, :update]
+  before_action :set_breadcrumb, only: [:show, :new, :edit]
 
   def index
-    add_breadcrumb t('breadcrumbs.home'), root_url
     add_breadcrumb t('breadcrumbs.groups')
 
     respond_to do |format|
@@ -13,8 +13,6 @@ class GroupsController < ApplicationController
   end
 
   def show
-    add_breadcrumb t('breadcrumbs.home'), root_url
-    add_breadcrumb t('breadcrumbs.groups'), groups_url
     add_breadcrumb @group.name
 
     @device = Device.new
@@ -23,15 +21,11 @@ class GroupsController < ApplicationController
   end
 
   def new
-    add_breadcrumb t('breadcrumbs.home'), root_url
-    add_breadcrumb t('breadcrumbs.groups'), groups_url
     add_breadcrumb t('breadcrumbs.new')
     @group = Group.new
   end
 
   def edit
-    add_breadcrumb t('breadcrumbs.home'), root_url
-    add_breadcrumb t('breadcrumbs.groups'), groups_url
     add_breadcrumb @group.name, group_url(@group)
     add_breadcrumb t('breadcrumbs.edit')
   end
@@ -91,6 +85,10 @@ class GroupsController < ApplicationController
   end
 
   private
+
+  def set_breadcrumb
+    add_breadcrumb t('breadcrumbs.groups'), groups_url
+  end
 
   def set_group
     @group = Group.find(params[:id])

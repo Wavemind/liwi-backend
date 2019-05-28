@@ -1,9 +1,10 @@
 class FinalDiagnosticsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic]
-  before_action :set_version, only: [:new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic]
+  before_action :set_breadcrumb, only: [:new, :edit]
   before_action :set_diagnostic, only: [:new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic, :diagram]
   before_action :set_final_diagnostic, only: [:edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic, :update_translations, :diagram]
+  before_action :set_version, only: [:new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic]
   layout 'diagram', only: [:diagram]
 
   def index
@@ -14,12 +15,6 @@ class FinalDiagnosticsController < ApplicationController
   end
 
   def new
-    add_breadcrumb t('breadcrumbs.home'), root_url
-    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
-    add_breadcrumb t('breadcrumbs.versions')
-    add_breadcrumb @version.name, algorithm_version_url(@algorithm, @version)
-    add_breadcrumb t('breadcrumbs.diagnostics')
     add_breadcrumb @diagnostic.label, algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'final_diagnostics')
     add_breadcrumb t('breadcrumbs.new')
 
@@ -27,12 +22,6 @@ class FinalDiagnosticsController < ApplicationController
   end
 
   def edit
-    add_breadcrumb t('breadcrumbs.home'), root_url
-    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
-    add_breadcrumb t('breadcrumbs.versions')
-    add_breadcrumb @version.name, algorithm_version_url(@algorithm, @version)
-    add_breadcrumb t('breadcrumbs.diagnostics')
     add_breadcrumb @diagnostic.label, algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'final_diagnostics')
     add_breadcrumb t('breadcrumbs.final_diagnostics')
     add_breadcrumb @final_diagnostic.label
@@ -84,11 +73,9 @@ class FinalDiagnosticsController < ApplicationController
 
   # Generate react diagram
   def diagram
-    add_breadcrumb t('breadcrumbs.home'), root_url
     add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
-    add_breadcrumb  @final_diagnostic.diagnostic.version.algorithm.name, algorithm_url(@final_diagnostic.diagnostic.version.algorithm)
-    add_breadcrumb t('breadcrumbs.versions')
-    add_breadcrumb @final_diagnostic.diagnostic.version.name, algorithm_version_url(@final_diagnostic.diagnostic.version.algorithm, @final_diagnostic.diagnostic.version)
+    add_breadcrumb @final_diagnostic.diagnostic.version.algorithm.name, algorithm_url(@final_diagnostic.diagnostic.version.algorithm)
+    add_breadcrumb "#{t('breadcrumbs.versions')} : #{@final_diagnostic.diagnostic.version.name}", algorithm_version_url(@final_diagnostic.diagnostic.version.algorithm, @final_diagnostic.diagnostic.version)
     add_breadcrumb t('breadcrumbs.diagnostics')
     add_breadcrumb @diagnostic.reference, algorithm_version_diagnostic_url(@final_diagnostic.diagnostic.version.algorithm, @final_diagnostic.diagnostic.version, @diagnostic, panel: 'final_diagnostics')
   end
@@ -118,6 +105,14 @@ class FinalDiagnosticsController < ApplicationController
   end
 
   private
+
+  def set_breadcrumb
+    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
+    add_breadcrumb t('breadcrumbs.versions')
+    add_breadcrumb @version.name, algorithm_version_url(@algorithm, @version)
+    add_breadcrumb t('breadcrumbs.diagnostics')
+  end
 
   def set_diagnostic
     @diagnostic = Diagnostic.find(params[:diagnostic_id])

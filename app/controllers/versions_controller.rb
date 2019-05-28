@@ -1,6 +1,7 @@
 class VersionsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive]
+  before_action :set_breadcrumb, only: [:show, :new, :edit]
   before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive]
 
   def index
@@ -11,27 +12,16 @@ class VersionsController < ApplicationController
   end
 
   def show
-    add_breadcrumb t('breadcrumbs.home'), root_url
-    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'versions')
-    add_breadcrumb t('breadcrumbs.versions')
     add_breadcrumb @version.name
   end
 
   def new
-    add_breadcrumb t('breadcrumbs.home'), root_url
-    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'versions')
     add_breadcrumb t('breadcrumbs.new')
 
     @version = Version.new
   end
 
   def edit
-    add_breadcrumb t('breadcrumbs.home'), root_url
-    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'versions')
-    add_breadcrumb t('breadcrumbs.versions')
     add_breadcrumb @version.name, algorithm_version_url(@algorithm, @version)
     add_breadcrumb t('breadcrumbs.edit')
   end
@@ -84,6 +74,12 @@ class VersionsController < ApplicationController
   end
 
   private
+
+  def set_breadcrumb
+    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'versions')
+    add_breadcrumb t('breadcrumbs.versions')
+  end
 
   def set_version
     @version = Version.find(params[:id])

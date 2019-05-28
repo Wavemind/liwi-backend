@@ -3,7 +3,6 @@ class RolesController < ApplicationController
   before_action :set_role, only: [:show, :edit, :update]
 
   def index
-    add_breadcrumb t('breadcrumbs.home'), root_url
     add_breadcrumb t('breadcrumbs.roles')
 
     respond_to do |format|
