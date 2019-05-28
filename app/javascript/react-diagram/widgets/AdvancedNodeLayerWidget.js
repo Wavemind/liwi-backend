@@ -39,6 +39,7 @@ class AdvancedNodeLayerWidget extends NodeLayerWidget {
       finalDiagnostics,
       healthCares,
       type,
+      readOnly
     } = this.props;
 
     const hMargin = 80; // Horizontal Margin between boxes
@@ -54,7 +55,11 @@ class AdvancedNodeLayerWidget extends NodeLayerWidget {
       nodes = questions.concat([healthCares]);
     }
 
-    let width = ($(window).width() - $('.liwi-sidebar').width() - 50);
+    let width = ($(window).width());
+    if (!readOnly) {
+      width -= $('.liwi-sidebar').width();
+    }
+
     let x = 0;
     let y = 50;
 
