@@ -1,0 +1,44 @@
+import * as React from "react";
+import * as _ from "lodash";
+import NodeListItem from "../node-list-item";
+
+export default class NodeListCategory extends React.Component {
+
+  shouldComponentUpdate(nextProps) {
+    return this.props.nodes.length !== nextProps.nodes.length
+  }
+
+  render = () => {
+    const { nodes, index } = this.props;
+
+    return (
+      <div className="card" key={index}>
+        <div className="card-header p-0" id={`heading-${index}`}>
+          <div className="row">
+            <div className="col">
+              <button className="btn btn-link" type="button" data-toggle="collapse"
+                      data-target={`#collapse-${index}`}
+                      aria-expanded="true" aria-controls={`collapse-${index}`}>
+                {_.startCase(index)}
+                <span className="badge badge-secondary float-right">
+              {nodes.length}
+            </span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id={`collapse-${index}`} className={`collapse ${index === 0 ? `show` : ``}`}
+             aria-labelledby={`heading-${index}`}
+             data-parent="#accordionNodes">
+          <div className="card-body p-0">
+            {nodes.map((node) => (
+              <NodeListItem node={node} key={node.reference}/>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  };
+}
+

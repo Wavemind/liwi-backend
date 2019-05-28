@@ -1,5 +1,5 @@
 export const initialState = {
-  setDiagram: false
+  forceUpdate: false
 };
 import { actions } from "./types.actions";
 
@@ -11,10 +11,7 @@ export default function DiagramReducer(state = initialState, action) {
     case actions.SET_ENGINE: {
       const { engine } = action.payload;
 
-      console.log(action)
-
       return {
-        setDiagram: state.setDiagram,
         ...engine,
         diagramModel: {
           ...engine.diagramModel,
@@ -24,7 +21,8 @@ export default function DiagramReducer(state = initialState, action) {
           nodes: {
             ...engine.diagramModel.nodes
           }
-        }
+        },
+        forceUpdate: state.forceUpdate,
       };
     }
 
@@ -32,8 +30,19 @@ export default function DiagramReducer(state = initialState, action) {
     case actions.FORCE_UPDATE: {
       const { boolean } = action.payload;
 
+      // console.log(action);
+
       return {
         ...state,
+        diagramModel: {
+          ...state.diagramModel,
+          links: {
+            ...state.diagramModel.links,
+          },
+          nodes: {
+            ...state.diagramModel.nodes,
+          },
+        },
         forceUpdate: boolean
       };
     }
@@ -42,8 +51,8 @@ export default function DiagramReducer(state = initialState, action) {
     case actions.REMOVED_LINK_STATE: {
       const { link } = action.payload;
 
-      let links = state.diagramModel.links;
-      delete links[link.entity.id];
+      let links = { ...state.diagramModel.links };
+      delete links[link.id];
 
       return {
         ...state,
@@ -52,16 +61,22 @@ export default function DiagramReducer(state = initialState, action) {
           links: {
             ...links,
           },
+          nodes: {
+            ...state.diagramModel.nodes,
+          },
         }
       };
     }
 
     // Remove node
-    case actions.REMOVED_NODE_STATE: {
-      const { node } = action.payload;
+    case actions.REMOVED_ENTITIES: {
+      const { node, links } = action.payload;
 
-      let nodes = state.diagramModel.nodes;
-      delete nodes[node.entity.id];
+      let nodes = { ...state.diagramModel.nodes };
+      delete nodes[node.id];
+
+      let originalLinks = { ...state.diagramModel.links };
+      links.map(link => delete originalLinks[link.id]);
 
       return {
         ...state,
@@ -69,6 +84,9 @@ export default function DiagramReducer(state = initialState, action) {
           ...state.diagramModel,
           nodes: {
             ...nodes,
+          },
+          links: {
+            ...originalLinks,
           },
         }
       };

@@ -21,7 +21,7 @@ export default class DiagramProvider extends React.Component {
   }
 
 
-  orderNodes = async () => {
+  orderNodes = async (blackList = []) => {
     const {
       availableNodes,
       type
@@ -46,8 +46,10 @@ export default class DiagramProvider extends React.Component {
 
     // Assign node to correct array
     availableNodes.map((node) => {
-      let category = this.getCategoryNode(node);
-      orderedNodes[category].push(node);
+      if (_.find(blackList, i => i.node.id === node.id) === undefined) {
+        let category = this.getCategoryNode(node);
+        orderedNodes[category].push(node);
+      }
     });
 
     this.setState({ orderedNodes });
@@ -76,9 +78,15 @@ export default class DiagramProvider extends React.Component {
   removeNode = async (node) => {
     const { orderedNodes } = this.state;
     let category = this.getCategoryNode(node);
+    let categoryItem = [ ...orderedNodes[category] ];
 
-    _.remove(orderedNodes[category], {'id': node.id});
-    this.setState({ orderedNodes });
+    _.remove(categoryItem, {'id': node.id});
+
+    const newNodesInstance =  {
+      ...orderedNodes,
+      [category]: categoryItem
+    }
+    this.setState({ orderedNodes: newNodesInstance });
   };
 
 
@@ -86,8 +94,14 @@ export default class DiagramProvider extends React.Component {
     const { orderedNodes } = this.state;
     let category = this.getCategoryNode(node);
 
-    orderedNodes[category].push(node);
-    this.setState({orderedNodes});
+    let updatedCategory = [ ...orderedNodes[category], node ]
+
+    const newNodesInstance =  {
+      ...orderedNodes,
+      [category]: updatedCategory
+    }
+
+    this.setState({ orderedNodes: newNodesInstance });
   };
 
 
@@ -122,11 +136,12 @@ export default class DiagramProvider extends React.Component {
     currentNodeId: null,
     messages: [],
     type: null,
+    orderNodes: this.orderNodes,
   };
 
   render() {
     const { children } = this.props;
-    console.log(this.state.orderedNodes, this.state.availableNodes )
+
     return (
       <DiagramContext.Provider value={this.state}>
         {children}

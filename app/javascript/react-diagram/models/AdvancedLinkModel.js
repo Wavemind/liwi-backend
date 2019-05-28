@@ -25,8 +25,6 @@ class AdvancedLinkModel extends DefaultLinkModel {
 
     this.addListener({
       entityRemoved: function(removedLink) {
-        store.dispatch(removedLinkState(removedLink))
-
         // Don't trigger automatic removing link since node does it already
         if (removedLink.entity.selected) {
           if (removedLink.entity.sourcePort.parent.node.type === "FinalDiagnostic") {
@@ -84,6 +82,19 @@ class AdvancedLinkModel extends DefaultLinkModel {
         listener.colorChanged({ ...event, color: color });
       }
     });
+  }
+
+  remove(allowed = true) {
+    if (this.sourcePort) {
+      this.sourcePort.removeLink(this);
+    }
+    if (this.targetPort) {
+      this.targetPort.removeLink(this);
+    }
+    if (allowed) {
+      store.dispatch(removedLinkState(this));
+    }
+    super.remove();
   }
 
   setMarkers(startMarker: boolean, endMarker: boolean) {

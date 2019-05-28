@@ -1,11 +1,6 @@
 import * as React from "react";
-import { withDiagram } from '../../context/Diagram.context';
 
-class NodeListItem extends React.Component {
-
-  constructor(props) {
-    super(props);
-  }
+export default class NodeListItem extends React.Component {
 
   getFullLabel = (obj) => {
     return obj.reference + " - " + obj.label_translations["en"];
@@ -41,4 +36,3 @@ class NodeListItem extends React.Component {
   };
 }
 
-export default withDiagram(NodeListItem);

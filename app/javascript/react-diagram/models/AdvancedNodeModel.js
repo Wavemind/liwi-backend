@@ -3,7 +3,7 @@ import AdvancedPortModel from "../models/AdvancedPortModel";
 import * as _ from "lodash";
 import Http from "../../http";
 import store from "../../state-manager";
-import { removedNodeState } from "../../state-manager/creators.actions";
+import { removedEntities } from "../../state-manager/creators.actions";
 
 class AdvancedNodeModel extends DefaultNodeModel {
   node;
@@ -27,8 +27,7 @@ class AdvancedNodeModel extends DefaultNodeModel {
         entityRemoved: function(removedNode) {
           // Delete node in DB
           http.removeInstance(removedNode.entity.node.id);
-          addNode(removedNode.entity.node)
-          store.dispatch(removedNodeState(removedNode))
+          addNode(removedNode.entity.node);
         },
       });
     }
@@ -81,10 +80,56 @@ class AdvancedNodeModel extends DefaultNodeModel {
     });
   }
 
+  getSelectedEntities() {
+    let entities = super.getSelectedEntities();
+
+    // add the points of each link that are selected here
+    if (this.isSelected()) {
+      _.forEach(this.ports, port => {
+        entities = entities.concat(
+          _.map(port.getLinks(), link => {
+            return link.getPointForPort(port);
+          })
+        );
+      });
+    }
+    return entities;
+  }
+
+  setPosition(x, y) {
+    //store position
+    let oldX = this.x;
+    let oldY = this.y;
+    _.forEach(this.ports, port => {
+      _.forEach(port.getLinks(), link => {
+        let point = link.getPointForPort(port);
+        point.x = point.x + x - oldX;
+        point.y = point.y + y - oldY;
+      });
+    });
+    this.x = x;
+    this.y = y;
+  }
+
   getOutPort(): AdvancedPortModel[] {
     return _.find(this.ports, portModel => {
       return !portModel.in;
     });
+  }
+
+  remove() {
+    let links = [];
+    let currentNode = this;
+
+    _.forEach(this.ports, port => {
+      _.forEach(port.getLinks(), link => {
+        links.push(link);
+        link.remove(false);
+      });
+    });
+
+    store.dispatch(removedEntities(currentNode, links));
+    super.remove();
   }
 }
 

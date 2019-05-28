@@ -21,10 +21,10 @@ export const removedLinkState = (link) => ({
   }
 });
 
-export const removedNodeState = ( node ) => ({
-  type: actions.REMOVED_NODE_STATE,
+export const removedEntities = ( node, links ) => ({
+  type: actions.REMOVED_ENTITIES,
   payload: {
-    node
+    node, links
   }
 });
 

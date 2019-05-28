@@ -1,6 +1,6 @@
 import {
   DiagramEngine,
-  DiagramModel,
+  DiagramModel
 } from "storm-react-diagrams";
 import * as React from "react";
 import * as _ from "lodash";
@@ -10,7 +10,7 @@ import AdvancedNodeFactory from "../../../react-diagram/factories/AdvancedNodeFa
 import AdvancedNodeModel from "../../../react-diagram/models/AdvancedNodeModel";
 import AdvancedDiagramWidget from "../../../react-diagram/widgets/AdvancedDiagramWidget";
 
-import NodeList from "../../lists/NodeList";
+import NodeList from "../../lists/node-list";
 import FlashMessages from "../../utils/FlashMessages";
 
 export default class DefaultDiagram extends React.Component {
@@ -22,9 +22,11 @@ export default class DefaultDiagram extends React.Component {
     };
   }
 
+
   componentWillMount() {
     this.initDiagram();
   }
+
 
   initDiagram = () => {
     const {
@@ -34,7 +36,7 @@ export default class DefaultDiagram extends React.Component {
       addMessage,
       http,
       type,
-      instanceable,
+      instanceable
     } = this.props;
 
     const { engine } = this.state;
@@ -75,7 +77,7 @@ export default class DefaultDiagram extends React.Component {
     let finalDiagnosticLevel = [];
     let excludingDF = null;
 
-    if (instanceableType === 'Diagnostic') {
+    if (instanceableType === "Diagnostic") {
       finalDiagnostics.map((instance) => {
         let finalDiagnostic = instance.node;
         let node = this.createNode(finalDiagnostic);
@@ -146,18 +148,18 @@ export default class DefaultDiagram extends React.Component {
 
     // Set eventListener for create link
     model.addListener({
-      linksUpdated: function (eventModel) {
+      linksUpdated: function(eventModel) {
         // Disable link from inPort
         if (eventModel.link.sourcePort.in) {
           if (model.getLink(eventModel.link.id) !== null) {
-            model.removeLink(eventModel.link.id)
+            model.removeLink(eventModel.link.id);
           }
         }
 
         // Add event listener on port change
         // Trigger exclude diagnostic and remove link
         eventModel.link.addListener({
-          targetPortChanged: function (eventLink) {
+          targetPortChanged: function(eventLink) {
             let exists = false;
 
             // Verify if link is already set
@@ -178,7 +180,7 @@ export default class DefaultDiagram extends React.Component {
                   eventModel.link.displaySeparator(true);
 
                 } else {
-                  model.removeLink(eventModel.link.id)
+                  model.removeLink(eventModel.link.id);
                 }
               } else {
                 let nodeId = eventLink.port.parent.node.id;
@@ -207,7 +209,7 @@ export default class DefaultDiagram extends React.Component {
             }
           }
         });
-      },
+      }
     });
 
     // load model into engine
@@ -215,29 +217,71 @@ export default class DefaultDiagram extends React.Component {
     this.updateEngine(engine);
   };
 
+
   // @params engine
   // Set state of engine
   updateEngine = (engine) => {
-    this.setState({engine});
-    this.props.setEngine(engine)
+    this.setState({ engine });
+    this.props.setEngine(engine);
   };
 
 
   // Update diagram node/link depending on undo/redo actions
   setUndoRedo() {
-    const { engine, forceUpdate } = this.props;
+    const {
+      engine,
+      forceUpdate,
+      orderNodes
+    } = this.props;
 
     // Can't undo action if there is no history of diagram
     if (engine.present.diagramModel === undefined) {
-      return false
+      return false;
     }
 
-    this.state.engine.diagramModel.nodes = engine.present.diagramModel.nodes;
-    this.state.engine.diagramModel.links = engine.present.diagramModel.links;
-    this.forceUpdate();
+    // New value
+    let links = engine.present.diagramModel.links;
+    let nodes = engine.present.diagramModel.nodes;
+
+    console.log("Old nodes", this.state.engine.diagramModel.nodes);
+    // console.log('Old links', this.state.engine.diagramModel.links)
+
+    // Update diagram
+    this.state.engine.diagramModel.nodes = nodes;
+    this.state.engine.diagramModel.links = links;
+
+
+    console.log("New nodes", nodes);
+
+    Object.keys(nodes).map((index) => {
+      _.forEach(nodes[index].ports, port => {
+        _.forEach(port.getLinks(), link => {
+          console.log('Dans le new les links', link);
+        });
+      });
+    });
+
+    // console.log('New link', links)
+
+    Object.keys(links).map(linkId => {
+      //   // this.state.engine.diagramModel.nodes[sourceParentId].ports[sourcePortId].links = this.state.engine.diagramModel.links[linkId];
+      //   // this.state.engine.diagramModel.nodes[targetParentId].ports[targetePortId].links = this.state.engine.diagramModel.links[linkId];
+      //
+      //   this.state.engine.diagramModel.links[linkId].sourcePort.parent =  this.state.engine.diagramModel.nodes[sourceParentId];
+      //   this.state.engine.diagramModel.links[linkId].targetPort.parent =  this.state.engine.diagramModel.nodes[targetParentId];
+      //
+      //   console.log(this.state.engine.diagramModel.nodes[sourceParentId].ports[sourcePortId].links, this.state.engine.diagramModel.links[linkId].sourcePort.parent )
+      //
+    });
+
+    // Update available nodes list
+    orderNodes(engine.present.diagramModel.nodes);
 
     // Set flag in redux
     forceUpdate();
+
+    // react forceUpdate
+    this.forceUpdate();
   }
 
   // @params node
@@ -246,30 +290,32 @@ export default class DefaultDiagram extends React.Component {
     return node.label_translations["en"];
   };
 
+
   // Create a node from label with its inport
   createNode = (node, outPorts = [], color = "rgb(255,255,255)") => {
-    const {addNode} = this.props;
+    const { addNode } = this.props;
 
     let advancedNode = new AdvancedNodeModel(node, node.reference, outPorts, color, addNode);
     advancedNode.addInPort(" ");
     return advancedNode;
   };
 
+
   // @params [String] status, [String] message
   // Call context method to display flash message
   addFlashMessage = async (status, response) => {
-    const {addMessage} = this.props;
+    const { addMessage } = this.props;
     let message = {
       status,
-      message: [`An error occured: ${response.status} - ${response.statusText}`],
+      message: [`An error occured: ${response.status} - ${response.statusText}`]
     };
     await addMessage(message);
   };
 
 
   onDropAction = async (event) => {
-    const {removeNode, http } = this.props;
-    const {engine} = this.state;
+    const { removeNode, http } = this.props;
+    const { engine } = this.state;
 
     let model = engine.getDiagramModel();
     let nodeDb = JSON.parse(event.dataTransfer.getData("node"));
@@ -290,7 +336,7 @@ export default class DefaultDiagram extends React.Component {
         nodeDiagram.addInPort(" ");
         nodeDiagram.addOutPort(" ");
         removeNode(nodeDb);
-      } else  {
+      } else {
         this.addFlashMessage("danger", result);
       }
 
@@ -320,23 +366,28 @@ export default class DefaultDiagram extends React.Component {
   };
 
   render = () => {
-    const {engine} = this.state;
+    const { engine } = this.state;
+    const {
+      undo,
+      redo,
+      engine: reduxEngine
+    } = this.props;
 
     // Update history of engine
-    if (this.props.engine.present.forceUpdate) {
+    if (reduxEngine.present.forceUpdate) {
       this.setUndoRedo();
     }
-
-    console.log(this.props)
 
     return (
       <div className="content">
         <FlashMessages/>
         <div className="row">
           <div className="col-md-2 px-0 liwi-sidebar">
-            <button className="btn btn-default" onClick={() => this.props.redo()}> redo </button>
-            <button className="btn btn-default" onClick={() => this.props.undo()}> undo </button>
-            <NodeList />
+            <button className="btn btn-default" onClick={() => redo()} disabled={reduxEngine.future.length <= 0}> redo
+            </button>
+            <button className="btn btn-default" onClick={() => undo()} disabled={reduxEngine.past.length <= 1}> undo
+            </button>
+            <NodeList/>
           </div>
           <div
             className="col-md-10 diagram-wrapper"

@@ -10,7 +10,7 @@ import AdvancedNodeFactory from "../../../react-diagram/factories/AdvancedNodeFa
 import AdvancedNodeModel from "../../../react-diagram/models/AdvancedNodeModel";
 import AdvancedDiagramWidget from "../../../react-diagram/widgets/AdvancedDiagramWidget";
 
-import NodeList from "../../lists/NodeList";
+import NodeList from "../../lists/node-list";
 
 import FlashMessages from "../../utils/FlashMessages";
 
