@@ -9,13 +9,13 @@
 
   <!-- Page Content  -->
   <div id="content">
+    <div class="breadcrumb"><%= render_breadcrumbs %></div>
 
-    <div class="breadcrumb mb-4"><%= render_breadcrumbs %></div>
-
+    <div class="px-4 py-4">
     <%= render 'layouts/flash' %>
 
     <%= yield %>
-
+    </div>
   </div>
 </div>
 

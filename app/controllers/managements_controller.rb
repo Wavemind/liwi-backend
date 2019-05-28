@@ -2,16 +2,17 @@ class ManagementsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_management, only: [:edit, :update, :update_translations, :destroy]
   before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy]
+  before_action :set_breadcrumb, only: [:new, :edit]
 
   def new
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'managements')
+    add_breadcrumb t('breadcrumbs.new')
 
     @management = Management.new
   end
 
   def edit
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'managements')
-    add_breadcrumb @management.reference
+    add_breadcrumb @management.label
+    add_breadcrumb t('breadcrumbs.edit')
   end
 
   def create
@@ -58,6 +59,11 @@ class ManagementsController < ApplicationController
   end
 
   private
+  def set_breadcrumb
+    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'managements')
+    add_breadcrumb t('breadcrumbs.managements')
+  end
 
   def set_management
     @management = Management.find(params[:id])

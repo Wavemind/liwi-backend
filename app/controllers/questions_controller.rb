@@ -1,17 +1,18 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_question, only: [:edit, :update, :answers, :category_reference, :update_translations, :destroy]
   before_action :set_algorithm, only: [:new, :create, :edit, :update, :answers, :destroy]
+  before_action :set_breadcrumb, only: [:new, :edit]
+  before_action :set_question, only: [:edit, :update, :answers, :category_reference, :update_translations, :destroy]
 
   def new
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
+    add_breadcrumb t('breadcrumbs.new')
 
     @question = Question.new
   end
 
   def edit
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'questions')
     add_breadcrumb @question.label
+    add_breadcrumb t('breadcrumbs.edit')
   end
 
   def create
@@ -80,6 +81,12 @@ class QuestionsController < ApplicationController
   end
 
   private
+
+  def set_breadcrumb
+    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'questions')
+    add_breadcrumb t('breadcrumbs.questions')
+  end
 
   def set_question
     @question = Question.find(params[:id])

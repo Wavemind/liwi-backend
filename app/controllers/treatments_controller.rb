@@ -1,17 +1,18 @@
 class TreatmentsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_treatment, only: [:edit, :update, :update_translations, :destroy]
   before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy]
+  before_action :set_breadcrumb, only: [:new, :edit]
+  before_action :set_treatment, only: [:edit, :update, :update_translations, :destroy]
 
   def new
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'treatments')
+    add_breadcrumb t('breadcrumbs.new')
 
     @treatment = Treatment.new
   end
 
   def edit
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'treatments')
-    add_breadcrumb @treatment.reference
+    add_breadcrumb @treatment.label
+    add_breadcrumb t('breadcrumbs.edit')
   end
 
   def create
@@ -58,6 +59,12 @@ class TreatmentsController < ApplicationController
   end
 
   private
+
+  def set_breadcrumb
+    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'treatments')
+    add_breadcrumb t('breadcrumbs.treatments')
+  end
 
   def set_treatment
     @treatment = Treatment.find(params[:id])

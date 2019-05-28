@@ -3,6 +3,7 @@ class DiagnosticsController < ApplicationController
   before_action :set_algorithm, only: [:show, :new, :create, :edit, :update, :destroy, :duplicate]
   before_action :set_version, only: [:show, :new, :create, :edit, :update, :destroy, :duplicate]
   before_action :set_diagnostic, only: [:show, :edit, :update, :diagram, :health_cares_diagram, :update_translations]
+  before_action :set_breadcrumb, only: [:show,:new,:edit]
   layout 'diagram', only: [:diagram]
 
   def index
@@ -13,8 +14,6 @@ class DiagnosticsController < ApplicationController
   end
 
   def show
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
-    add_breadcrumb @version.name, algorithm_version_url(@algorithm, @version)
     add_breadcrumb @diagnostic.label
 
     @instance = Instance.new
@@ -24,16 +23,14 @@ class DiagnosticsController < ApplicationController
   end
 
   def new
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
-    add_breadcrumb @version.name, algorithm_version_url(@algorithm, @version)
+    add_breadcrumb t('breadcrumbs.new')
 
     @diagnostic = Diagnostic.new
   end
 
   def edit
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
-    add_breadcrumb @version.name, algorithm_version_url(@algorithm, @version)
-    add_breadcrumb @diagnostic.reference, algorithm_version_diagnostic_url(@algorithm, @version)
+    add_breadcrumb @diagnostic.label, algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic)
+    add_breadcrumb t('breadcrumbs.edit')
   end
 
   def create
@@ -65,8 +62,11 @@ class DiagnosticsController < ApplicationController
 
   # Generate react diagram
   def diagram
+    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
     add_breadcrumb @diagnostic.version.algorithm.name, algorithm_url(@diagnostic.version.algorithm)
+    add_breadcrumb t('breadcrumbs.versions')
     add_breadcrumb @diagnostic.version.name, algorithm_version_url(@diagnostic.version.algorithm, @diagnostic.version)
+    add_breadcrumb t('breadcrumbs.diagnostics')
   end
 
   # @params [Diagnostic] diagnostic to duplicate
@@ -96,6 +96,14 @@ class DiagnosticsController < ApplicationController
   end
 
   private
+
+  def set_breadcrumb
+    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
+    add_breadcrumb t('breadcrumbs.versions')
+    add_breadcrumb @diagnostic.version.name, algorithm_version_url(@algorithm, @version)
+    add_breadcrumb t('breadcrumbs.diagnostics'), algorithm_version_url(@algorithm, @version)
+  end
 
   def set_diagnostic
     @diagnostic = Diagnostic.find(params[:id])

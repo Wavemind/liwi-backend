@@ -1,8 +1,11 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_breadcrumb, only: [:index, :show, :new]
   before_action :set_user, only: [:show, :edit, :update, :activated, :deactivated]
 
   def index
+    add_breadcrumb t('breadcrumbs.users')
+
     respond_to do |format|
       format.html
       format.json { render json: UserDatatable.new(params, view_context: view_context) }
@@ -10,9 +13,12 @@ class UsersController < ApplicationController
   end
 
   def show
+    add_breadcrumb @user.full_name
   end
 
   def new
+    add_breadcrumb t('breadcrumbs.new')
+
     @user = User.new
   end
 
@@ -25,6 +31,13 @@ class UsersController < ApplicationController
     else
       render :new
     end
+  end
+
+  def edit
+
+    add_breadcrumb t('breadcrumbs.users'), users_url
+    add_breadcrumb @user.full_name, user_url(@user)
+    add_breadcrumb t('breadcrumbs.edit')
   end
 
   def update
@@ -64,6 +77,9 @@ class UsersController < ApplicationController
   end
 
   private
+  def set_breadcrumb
+    add_breadcrumb t('breadcrumbs.users'), users_url
+  end
 
   def set_user
     @user = User.find(params[:id])

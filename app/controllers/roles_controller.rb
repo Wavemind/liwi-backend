@@ -3,6 +3,8 @@ class RolesController < ApplicationController
   before_action :set_role, only: [:show, :edit, :update]
 
   def index
+    add_breadcrumb t('breadcrumbs.roles')
+
     respond_to do |format|
       format.html
       format.json { render json: UserDatatable.new(params, view_context: view_context) }
