@@ -3,6 +3,8 @@ class PredefinedSyndromesController < ApplicationController
   before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_breadcrumb, only: [:new, :edit]
   before_action :set_predefined_syndrome, only: [:edit, :update, :destroy, :update_translations, :diagram]
+  before_action :set_score_category, only: [:new_scored, :edit_scored]
+
   layout 'diagram', only: [:diagram]
 
   def new
@@ -50,6 +52,21 @@ class PredefinedSyndromesController < ApplicationController
 
   # @params PredefinedSyndrome with the translations
   # Update the object with its translation without
+  def edit_scored
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'predefined_syndromes_scored')
+    add_breadcrumb @predefined_syndrome.label
+  end
+
+  # @params PredefinedSyndrome with the translations
+  # Update the object with its translation without
+  def new_scored
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'predefined_syndromes_scored')
+
+    @predefined_syndrome = PredefinedSyndrome.new
+  end
+
+  # @params PredefinedSyndrome with the translations
+  # Update the object with its translation without
   def update_translations
     if @predefined_syndrome.update(predefined_syndrome_params)
       @json = { status: 'success', message: t('flash_message.success_updated') }
@@ -62,7 +79,6 @@ class PredefinedSyndromesController < ApplicationController
 
   # React Diagram
   def diagram
-
     add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
     add_breadcrumb @predefined_syndrome.algorithm.name, algorithm_url(@predefined_syndrome.algorithm, panel: 'predefined_syndromes')
     add_breadcrumb t('breadcrumbs.predefined_syndromes')
@@ -80,6 +96,10 @@ class PredefinedSyndromesController < ApplicationController
     @predefined_syndrome = PredefinedSyndrome.find(params[:id])
   end
 
+  def set_score_category
+    @category = Category.all.find_by(reference_prefix: 'PSS')
+  end
+
   def predefined_syndrome_params
     params.require(:predefined_syndrome).permit(
       :id,
@@ -90,7 +110,8 @@ class PredefinedSyndromesController < ApplicationController
       Language.description_params,
       :category_id,
       :algorithm_id,
-    )
+      :min_score
+      )
   end
 
 end

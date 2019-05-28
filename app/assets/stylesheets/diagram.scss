@@ -40,7 +40,7 @@
 }
 
 .srd-canvas-read-only {
-  position: initial;
+  position: static;
 }
 
 .srd-default-node {
@@ -263,3 +263,10 @@
   position: unset !important;
 }
 
+.srd-default-label {
+  pointer-events: all !important;
+}
+
+.srd-default-label:hover  {
+  cursor: pointer;
+}

@@ -9,6 +9,7 @@ class AdvancedPortModel extends DefaultPortModel {
   reference: string;
   dbId: string;
   links: { [id: string]: AdvancedLinkModel };
+  isReadOnly: boolean;
 
   deSerialize(object, engine: DiagramEngine) {
     super.deSerialize(object, engine);
@@ -37,13 +38,18 @@ class AdvancedPortModel extends DefaultPortModel {
     return true;
   }
 
-  setData(reference, id) {
+  setData(reference, id, isReadOnly) {
     this.reference = reference;
     this.dbId = id;
+    this.isReadOnly = isReadOnly;
   }
 
   createLinkModel(): AdvancedLinkModel | null {
-    return new AdvancedLinkModel();
+    return new AdvancedLinkModel(this.isReadOnly);
+  }
+
+  isLocked() {
+    return this.isReadOnly;
   }
 }
 

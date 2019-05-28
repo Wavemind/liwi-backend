@@ -1,20 +1,28 @@
 import React from "react";
-import {
-  Button,
-  Modal,
-} from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import { withDiagram } from "../context/Diagram.context";
+import InsertScoreForm from "./modal-contents/InsertScoreForm";
+import UpdateScoreForm from "./modal-contents/UpdateScoreForm";
 
 class FormModal extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      instance: {
-        conditions: null
-      },
-      availableConditions: [],
-      operators: []
-    };
+  }
+
+  static defaultProps = {
+    modalIsOpen: false
+  };
+
+  state = {
+    instance: {
+      conditions: null
+    },
+    availableConditions: [],
+    operators: []
+  };
+
+  async shouldComponentUpdate(nextProps, nextState) {
+    return nextProps.modalIsOpen;
   }
 
   toggleModal = async () => {
@@ -23,22 +31,20 @@ class FormModal extends React.Component {
   };
 
   render() {
-    const { modalIsOpen } = this.props;
-
+    const { modalIsOpen, modalToOpen } = this.props;
     return (
       modalIsOpen ? (
-        <Modal show={modalIsOpen} onHide={() => this.toggleModal()} size="lg">
-          <Modal.Header closeButton>
-            <Modal.Title>Modal title</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={() => this.toggleModal()}>
-              Close
-            </Button>
-          </Modal.Footer>
+        <Modal show={true} size="sm">
+          {(() => {
+            switch(modalToOpen) {
+              case 'InsertScore':
+                return <InsertScoreForm toggleModal={this.toggleModal} />;
+              case 'UpdateScore':
+                return <UpdateScoreForm toggleModal={this.toggleModal} />;
+              default:
+                return null;
+            }
+          })()}
         </Modal>
       ) : null
     );

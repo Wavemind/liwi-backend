@@ -7,7 +7,7 @@ class Category < ApplicationRecord
   validates_presence_of :reference_prefix
 
   scope :question_categories, ->() { where(parent: 'Question') }
-  scope :predefined_syndrome_categories, ->() { where(parent: 'PredefinedSyndrome') }
+  scope :predefined_syndrome_categories, ->() { where(parent: 'PredefinedSyndrome').where.not(reference_prefix: 'PSS') }
 
   translates :name
 

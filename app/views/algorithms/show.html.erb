@@ -16,6 +16,9 @@
   <li class="nav-item">
     <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'predefined_syndromes'%>" id="contact-tab" data-toggle="tab" href="#predefined_syndromes" role="tab" aria-controls="contact" aria-selected="false"><%= t('.subtitle_predefined_syndromes') %></a>
   </li>
+  <li class="nav-item">
+    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'predefined_syndromes_scored'%>" id="contact-tab" data-toggle="tab" href="#predefined_syndromes_scored" role="tab" aria-controls="contact" aria-selected="false"><%= t('.subtitle_predefined_syndromes_scored') %></a>
+  </li>
 </ul>
 
 <div class="tab-content mt-4 ml-4" id="algorithm-table">
@@ -63,6 +66,16 @@
     <% end %>
 
     <%= render 'predefined_syndromes/table' %>
+
+  </div>
+  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'predefined_syndromes_scored'%>" id="predefined_syndromes_scored" role="tabpanel" aria-labelledby="predefined_syndromes_scored-tab">
+    <h3><%= t('.subtitle_predefined_syndromes_scored') %></h3>
+
+    <%= link_to new_scored_algorithm_predefined_syndromes_url(@algorithm) do %>
+      <button type="button" class="btn btn-outline-primary"><%= t('add') %></button>
+    <% end %>
+
+    <%= render 'predefined_syndromes/scored_table' %>
 
   </div>
 </div>

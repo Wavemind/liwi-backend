@@ -17,26 +17,12 @@ import AdvancedNodeLayerWidget from "./AdvancedNodeLayerWidget";
 class AdvancedDiagramWidget extends DiagramWidget {
 
   constructor(props) {
+    console.log("123213 COOUUCOOUUUC !!!!!!!!!!!!!!!",props);
     super(props);
   }
 
-  onMouseMove(event) {
-    if (this.props.allowCanvasTranslation){
-      super.onMouseMove(event);
-    } else {
-      _.forEach(this.state.action.selectionModels, model => {
-        //only care about points connecting to things
-        if (!(model.model instanceof PointModel)) {
-          return;
-        }
-
-        let selectedPoint = model.model;
-        let link = selectedPoint.getLink();
-        if (link.getSourcePort() === null || link.getTargetPort() === null) {
-          link.remove();
-        }
-      });
-    }
+  isLocked(){
+    return true;
   }
 
   render() {

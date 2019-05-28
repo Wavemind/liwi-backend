@@ -25,6 +25,7 @@ Rails.application.routes.draw do
       get 'treatments', to: 'algorithms#treatments', as: 'treatment'
       get 'managements', to: 'algorithms#managements', as: 'management'
       get 'predefined_syndromes', to: 'algorithms#predefined_syndromes', as: 'predefined_syndrome'
+      get 'predefined_syndromes_scored', to: 'algorithms#predefined_syndromes_scored', as: 'predefined_syndrome_scored'
     end
 
     resources :versions, only: [:index, :show, :new, :create, :edit, :update] do
@@ -77,8 +78,12 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :predefined_syndromes, only: [:index, :new, :create, :edit, :update, :destroy] do
+    resources :predefined_syndromes, only: [:index, :new, :create, :edit, :update, :destroy, :new_scored, :edit_scored] do
+      collection do
+        get 'new_scored'
+      end
       member do
+        get 'edit_scored'
         put 'update_translations'
       end
     end
@@ -92,6 +97,7 @@ Rails.application.routes.draw do
         post 'create_link'
         delete 'remove_from_diagram'
         delete 'remove_link'
+        put 'update_score'
       end
       resources :children, only: [:create, :destroy]
       resources :conditions, only: [:create, :destroy]

@@ -84,6 +84,7 @@ ActiveRecord::Schema.define(version: 2019_05_10_113703) do
     t.string "second_conditionable_type"
     t.bigint "second_conditionable_id"
     t.boolean "top_level", default: true
+    t.integer "score", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["first_conditionable_type", "first_conditionable_id"], name: "index_first_conditionable_id"
@@ -213,6 +214,7 @@ ActiveRecord::Schema.define(version: 2019_05_10_113703) do
     t.bigint "category_id"
     t.bigint "diagnostic_id"
     t.hstore "description_translations"
+    t.integer "min_score", default: 0
     t.bigint "algorithm_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

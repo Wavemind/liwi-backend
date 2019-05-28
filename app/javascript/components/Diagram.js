@@ -1,19 +1,22 @@
 import {
   DiagramEngine,
-  DiagramModel,
+  DiagramModel
 } from "storm-react-diagrams";
 import * as React from "react";
 import * as _ from "lodash";
 
 import AdvancedLinkFactory from "../react-diagram/factories/AdvancedLinkFactory";
+import AdvancedLabelFactory from "../react-diagram/factories/AdvancedLabelFactory";
 import AdvancedNodeFactory from "../react-diagram/factories/AdvancedNodeFactory";
+import AdvancedLinkModel from "../react-diagram/models/AdvancedLinkModel";
 import AdvancedNodeModel from "../react-diagram/models/AdvancedNodeModel";
 import AdvancedDiagramWidget from "../react-diagram/widgets/AdvancedDiagramWidget";
 
 import NodeList from "../react-diagram/lists/NodeList";
 import FlashMessages from "./FlashMessages";
+import FormModal from "./FormModal";
 
-import { withDiagram } from '../context/Diagram.context';
+import {withDiagram} from '../context/Diagram.context';
 
 class Diagram extends React.Component {
 
@@ -28,6 +31,43 @@ class Diagram extends React.Component {
     this.initDiagram();
   }
 
+  async shouldComponentUpdate(nextProps, nextState) {
+    // Listen to the change of the props score in order to update the model in the proper way
+    if (this.props.currentScore !== nextProps.currentScore) {
+      const {http, currentNodeId, currentAnswerId, currentLinkId, currentScore} = nextProps;
+      const {engine} = this.state;
+      const model = engine.getDiagramModel();
+
+      // Handle inserting a link with a score
+      if (nextProps.modalToOpen === 'InsertScore') {
+        if (nextProps.currentScore === null) {
+          model.removeLink(currentLinkId);
+        } else {
+          http.createLink(currentNodeId, currentAnswerId, currentScore).then((result) => {
+            if (result.ok === undefined || result.ok) {
+              model.getLink(currentLinkId).addLabel(currentScore);
+            } else {
+              this.addFlashMessage("danger", result);
+              // if throw an error, remove link in diagram
+              if (model.getLink(currentLinkId) !== null) {
+                model.removeLink(currentLinkId);
+              }
+            }
+            this.updateEngine(engine);
+          });
+          return true;
+        }
+        return false;
+        // Handle what happens after an update of a score
+      } else if (nextProps.modalToOpen === 'UpdateScore') {
+        const label = model.getLink(currentLinkId).labels[0];
+        label.setLabel(currentScore);
+        this.updateEngine(engine);
+      }
+    }
+    return true;
+  }
+
   initDiagram = () => {
     const {
       instanceableType,
@@ -36,10 +76,11 @@ class Diagram extends React.Component {
       addMessage,
       http,
       type,
-      instanceable
+      instanceable,
+      set
     } = this.props;
 
-    const { engine } = this.state;
+    const {engine} = this.state;
 
     // Setup the diagram model
     let model = new DiagramModel();
@@ -47,6 +88,7 @@ class Diagram extends React.Component {
     // Setup the diagram engine
     engine.installDefaultFactories();
     engine.registerLinkFactory(new AdvancedLinkFactory());
+    engine.registerLabelFactory(new AdvancedLabelFactory());
     engine.registerNodeFactory(new AdvancedNodeFactory());
 
     let nodes = []; // Save nodes to link them at the end
@@ -57,7 +99,13 @@ class Diagram extends React.Component {
     questions.map((levels) => {
       let currentLevel = [];
       levels.map((instance) => {
-        let node = this.createNode(instance.node, instance.node.answers);
+        let node = null;
+        // If this is a PS score diagram, don't put an inport on the nodes, since there is only one level
+        if (type === "PredefinedSyndrome" && instanceable.category.reference_prefix === "PSS") {
+          node = this.createNode(instance.node, instance.node.answers, "rgb(255,255,255)", (type === instance.node.type && instanceable.id === instance.node.id));
+        } else {
+          node = this.createNode(instance.node, instance.node.answers);
+        }
         currentLevel.push(node);
 
         if (!(type === instance.node.type && instanceable.id === instance.node.id)) { // Don't put outports if this is the current PS
@@ -140,6 +188,9 @@ class Diagram extends React.Component {
           model.addAll(andNode, firstLink, secondLink, andLink);
         } else {
           let link = _.find(firstNodeAnswer.getOutPorts(), ["label", this.getFullLabel(firstAnswer)]).link(node.getInPort());
+          if (type === "PredefinedSyndrome" && instanceable.category.reference_prefix === "PSS") {
+            link.addLabel(condition.score);
+          }
           model.addAll(link);
         }
       });
@@ -171,7 +222,6 @@ class Diagram extends React.Component {
               }
             });
 
-
             // Don't create an another link in DB if it already exist
             if (!exists) {
               if (eventLink.entity.sourcePort.parent.node.type === "FinalDiagnostic") {
@@ -186,19 +236,31 @@ class Diagram extends React.Component {
                 let nodeId = eventLink.port.parent.node.id;
                 let answerId = eventModel.link.sourcePort.dbId;
                 if (eventModel.link.targetPort.in) {
-                  // Create link in DB
-                  http.createLink(nodeId, answerId).then((response) => {
-                    if (response.status !== "success") {
-                      // if throw an error, remove link in diagram
-                      if (model.getLink(eventModel.link.id) !== null) {
-                        model.removeLink(eventModel.link.id);
-                        self.updateEngine(engine);
+                  if (type === "PredefinedSyndrome" && instanceable.category.reference_prefix === "PSS") {
+                    set('currentNodeId', nodeId);
+                    set('currentAnswerId', answerId);
+                    set('currentLinkId', eventModel.link.id);
+                    set('modalToOpen', 'InsertScore');
+                    set('modalIsOpen', true)
+                  } else {
+                    // Create link in DB
+                    http.createLink(nodeId, answerId).then((response) => {
+                      if (response.ok === undefined || response.ok) {
+                        model.getLink(currentLinkId).addLabel(currentScore);
+                      } else {
+                        this.addFlashMessage("danger", result);
+                        // if throw an error, remove link in diagram
+                        if (model.getLink(eventModel.link.id) !== null) {
+                          model.removeLink(eventModel.link.id);
+                          self.updateEngine(engine);
+                        }
                       }
-                      addMessage(response);
-                    }
-                  }).catch((err) => {
-                    console.log(err);
-                  });
+                      this.updateEngine(engine);
+                    }).catch((err) => {
+                      console.log(err);
+                    });
+                  }
+
                 } else {
                   if (model.getLink(eventModel.link.id) !== null) {
                     model.removeLink(eventModel.link.id);
@@ -230,11 +292,13 @@ class Diagram extends React.Component {
   };
 
   // Create a node from label with its inport
-  createNode = (node, outPorts = [], color = "rgb(255,255,255)") => {
-    const {addNode} = this.props;
+  createNode = (node, outPorts = [], color = "rgb(255,255,255)", inPort = true) => {
+    const {addNode, readOnly} = this.props;
 
-    let advancedNode = new AdvancedNodeModel(node, node.reference, outPorts, color, addNode);
-    advancedNode.addInPort(" ");
+    let advancedNode = new AdvancedNodeModel(node, node.reference, outPorts, color, addNode, readOnly);
+    if (inPort) {
+      advancedNode.addInPort(" ");
+    }
     return advancedNode;
   };
 
@@ -251,7 +315,13 @@ class Diagram extends React.Component {
 
   render = () => {
     const {engine} = this.state;
-    const {removeNode, http, readOnly} = this.props;
+    const {
+      removeNode,
+      http,
+      readOnly,
+      instanceable,
+      type
+    } = this.props;
 
     let model = engine.getDiagramModel();
     let diagramStyle = readOnly ? 'col diagram-wrapper-white' : 'col diagram-wrapper';
@@ -259,13 +329,14 @@ class Diagram extends React.Component {
 
     return (
       <div className="content">
+        <FormModal/>
         <FlashMessages/>
         <div className="row">
           {(!readOnly) ? (
             <div className="col-md-2 px-0 liwi-sidebar">
-              <NodeList />
+              <NodeList/>
             </div>
-           ) : null}
+          ) : null}
           <div
             className={diagramStyle}
             onDrop={async event => {
@@ -287,16 +358,20 @@ class Diagram extends React.Component {
                   nodeDiagram.addInPort(" ");
                   nodeDiagram.addOutPort(" ");
                   removeNode(nodeDb);
-                } else  {
+                } else {
                   this.addFlashMessage("danger", result);
                 }
-
               } else {
                 // Create regular node
                 result = await http.createInstance(nodeDb.id);
                 if (result.ok === undefined || result.ok) {
                   if (nodeDb.get_answers !== null) {
-                    nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers);
+                    // Don't add an inPort for PSS node
+                    if (type === "PredefinedSyndrome" && instanceable.category.reference_prefix === "PSS") {
+                      nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers, "rgb(255,255,255)", (type === nodeDb.type && instanceable.id === instance.node.id));
+                    } else {
+                      nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers);
+                    }
                     nodeDb.get_answers.map((answer) => (nodeDiagram.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
                   } else {
                     nodeDiagram = this.createNode(nodeDb);
@@ -324,6 +399,7 @@ class Diagram extends React.Component {
               diagramEngine={engine}
               allowCanvasZoom={false}
               allowCanvasTranslation={!readOnly}
+              allowLooseLinks={!readOnly}
               maxNumberPointsPerLink={0}
             />
           </div>
