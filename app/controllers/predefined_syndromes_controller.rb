@@ -1,6 +1,6 @@
 class PredefinedSyndromesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy]
+  before_action :set_algorithm, only: [:new_scored,:new, :create, :edit, :update, :destroy]
   before_action :set_breadcrumb, only: [:new, :edit]
   before_action :set_predefined_syndrome, only: [:edit, :update, :destroy, :update_translations, :diagram]
   before_action :set_score_category, only: [:new_scored, :edit_scored]
