@@ -3,7 +3,7 @@
 
   <%= f.input :reference, prepend: (f.object.persisted? ? false : (@predefined_syndrome.category.nil? ? '' : @predefined_syndrome.category.reference_prefix)), disabled: f.object.persisted? %>
   <%= f.input :label_en %>
-  <%= f.input :description_en %>
+  <%= f.input :description_en, as: :text %>
 
   <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
 <% end %>

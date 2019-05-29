@@ -1,13 +1,16 @@
 class PredefinedSyndromesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:new_scored,:new, :create, :edit, :update, :destroy]
-  before_action :set_breadcrumb, only: [:new, :edit]
+  before_action :set_algorithm, only: [:new_scored, :new, :create, :edit, :update, :destroy]
   before_action :set_predefined_syndrome, only: [:edit, :update, :destroy, :update_translations, :diagram]
   before_action :set_score_category, only: [:new_scored, :edit_scored]
+  before_action :set_breadcrumb, only: [:edit, :diagram]
 
   layout 'diagram', only: [:diagram]
 
   def new
+    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'predefined_syndromes')
+    add_breadcrumb t('breadcrumbs.predefined_syndromes')
     add_breadcrumb t('breadcrumbs.new')
 
     @predefined_syndrome = PredefinedSyndrome.new
@@ -79,16 +82,14 @@ class PredefinedSyndromesController < ApplicationController
 
   # React Diagram
   def diagram
-    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
-    add_breadcrumb @predefined_syndrome.algorithm.name, algorithm_url(@predefined_syndrome.algorithm, panel: 'predefined_syndromes')
-    add_breadcrumb t('breadcrumbs.predefined_syndromes')
   end
 
   private
 
   def set_breadcrumb
+    panel = (@predefined_syndrome.category.reference_prefix === 'PSS') ? 'predefined_syndromes_scored' : 'predefined_syndromes'
     add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'predefined_syndromes')
+    add_breadcrumb @predefined_syndrome.algorithm.name, algorithm_url(@predefined_syndrome.algorithm, panel: panel)
     add_breadcrumb t('breadcrumbs.predefined_syndromes')
   end
 
