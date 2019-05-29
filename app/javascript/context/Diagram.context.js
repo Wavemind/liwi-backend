@@ -22,7 +22,8 @@ export default class DiagramProvider extends React.Component {
   orderNodes = async () => {
     const {
       availableNodes,
-      type
+      type,
+      instanceable
     } = this.state;
 
     let orderedNodes = {};
@@ -52,17 +53,29 @@ export default class DiagramProvider extends React.Component {
         treatment: [],
         management: [],
       };
-    } else {
-      orderedNodes = {
-        exposure: [],
-        symptom: [],
-        assessmentTest: [],
-        physicalExam: [],
-        predefinedSyndrome: [],
-        comorbidity: [],
-        predefinedCondition: [],
-        predefinedSyndromeScored: [],
-      };
+    } else if (type === "PredefinedSyndrome") {
+      if (instanceable.category.id === 8) {
+        orderedNodes = {
+          exposure: [],
+          symptom: [],
+          assessmentTest: [],
+          physicalExam: [],
+          predefinedSyndrome: [],
+          comorbidity: [],
+          predefinedCondition: [],
+        };
+      } else {
+        orderedNodes = {
+          exposure: [],
+          symptom: [],
+          assessmentTest: [],
+          physicalExam: [],
+          predefinedSyndrome: [],
+          comorbidity: [],
+          predefinedCondition: [],
+          predefinedSyndromeScored: [],
+        };
+      }
     }
 
     // Assign node to correct array
