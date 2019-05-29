@@ -368,7 +368,7 @@ class Diagram extends React.Component {
                   if (nodeDb.get_answers !== null) {
                     // Don't add an inPort for PSS node
                     if (type === "PredefinedSyndrome" && instanceable.category.reference_prefix === "PSS") {
-                      nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers, "rgb(255,255,255)", (type === nodeDb.type && instanceable.id === instance.node.id));
+                      nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers, "rgb(255,255,255)", (type === nodeDb.type && instanceable.id === nodeDb.id));
                     } else {
                       nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers);
                     }
