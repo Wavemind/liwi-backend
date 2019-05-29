@@ -169,6 +169,8 @@ Rails.application.routes.draw do
       mount_devise_token_auth_for 'User', at: 'auth'
       resources :activities, only: [:create]
       resources :versions, only: [:index]
+
+      get 'is_available', to: 'application#is_available'
     end
   end
 end
