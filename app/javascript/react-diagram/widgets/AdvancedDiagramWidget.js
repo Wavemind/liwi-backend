@@ -17,7 +17,6 @@ import AdvancedNodeLayerWidget from "./AdvancedNodeLayerWidget";
 class AdvancedDiagramWidget extends DiagramWidget {
 
   constructor(props) {
-    console.log("123213 COOUUCOOUUUC !!!!!!!!!!!!!!!",props);
     super(props);
   }
 
