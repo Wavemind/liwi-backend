@@ -21,7 +21,7 @@ class AdvancedLinkModel extends DefaultLinkModel {
     super(type);
     this.color = "rgba(255,255,255,0.5)";
     this.width = 2;
-    this.curvyness = 60;
+    this.curvyness = 0;
     this.markers = { startMarker: true, endMarker: false };
     this.arrow = true;
     this.separator = false;
