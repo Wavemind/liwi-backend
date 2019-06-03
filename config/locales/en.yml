@@ -330,6 +330,7 @@ en:
       last_account_connection: "Last account connection "
       role: "Role "
       title: "Details of %{name}"
+  validate: "Validate"
   versions:
     table:
       columns:

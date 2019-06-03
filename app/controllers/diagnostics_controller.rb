@@ -2,14 +2,14 @@ class DiagnosticsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_algorithm, only: [:show, :new, :create, :edit, :update, :destroy, :duplicate]
   before_action :set_version, only: [:show, :new, :create, :edit, :update, :destroy, :duplicate]
-  before_action :set_diagnostic, only: [:show, :edit, :update, :diagram, :health_cares_diagram, :update_translations]
-  before_action :set_breadcrumb, only: [:show,:new,:edit]
+  before_action :set_diagnostic, only: [:show, :edit, :update, :diagram, :health_cares_diagram, :update_translations, :validate]
+  before_action :set_breadcrumb, only: [:show, :new, :edit]
   layout 'diagram', only: [:diagram]
 
   def index
     respond_to do |format|
       format.html
-      format.json { render json: DiagnosticDatatable.new(params, view_context: view_context) }
+      format.json {render json: DiagnosticDatatable.new(params, view_context: view_context)}
     end
   end
 
@@ -87,11 +87,24 @@ class DiagnosticsController < ApplicationController
   # Update the object with its translation without
   def update_translations
     if @diagnostic.update(diagnostic_params)
-      @json = { status: 'success', message: t('flash_message.success_updated') }
+      @json = {status: 'success', message: t('flash_message.success_updated')}
       render 'update_translations', formats: :js, status: :ok
     else
-      @json = { status: 'alert', message: t('flash_message.update_fail') }
+      @json = {status: 'alert', message: t('flash_message.update_fail')}
       render 'update_translations', formats: :js, status: :unprocessable_entity
+    end
+  end
+
+  def validate
+    @diagnostic.manual_validate
+    if @diagnostic.errors.messages.any?
+      respond_to do |format|
+        format.html {redirect_to request.referer, alert: "<ul><li>#{@diagnostic.errors.messages[:basic].join('</li><li>')}</li></ul>"}
+      end
+    else
+      respond_to do |format|
+        format.html {redirect_to request.referer, notice: 'This diagnostic is valid!'}
+      end
     end
   end
 
@@ -101,7 +114,7 @@ class DiagnosticsController < ApplicationController
     add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
     add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
     add_breadcrumb t('breadcrumbs.versions')
-    add_breadcrumb @diagnostic.version.name, algorithm_version_url(@algorithm, @version)
+    add_breadcrumb @version.name, algorithm_version_url(@algorithm, @version)
     add_breadcrumb t('breadcrumbs.diagnostics'), algorithm_version_url(@algorithm, @version)
   end
 

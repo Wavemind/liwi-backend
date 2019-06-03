@@ -152,6 +152,21 @@ class Diagnostic < ApplicationRecord
     false
   end
 
+  # Add errors to a diagnostic for its components
+  def manual_validate
+    components.each do |instance|
+      if instance.node.is_a? FinalDiagnostic
+        unless instance.conditions.any?
+          errors.add(:basic, "The Final Diagnostic #{instance.node.reference} has no condition.")
+        end
+      elsif instance.node.is_a?(Question) || instance.node.is_a?(PredefinedSyndrome)
+        unless instance.children.any?
+          errors.add(:basic, "The #{instance.node.type} #{instance.node.reference} is not linked to any children.")
+        end
+      end
+    end
+  end
+
   private
 
   # {Node#unique_reference}

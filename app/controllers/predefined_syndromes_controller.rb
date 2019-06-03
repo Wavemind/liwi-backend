@@ -1,7 +1,7 @@
 class PredefinedSyndromesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:new_scored, :new, :create, :edit, :update, :destroy]
-  before_action :set_predefined_syndrome, only: [:edit, :update, :destroy, :update_translations, :diagram]
+  before_action :set_algorithm, only: [:new_scored, :edit_scored, :new, :create, :edit, :update, :destroy]
+  before_action :set_predefined_syndrome, only: [:edit, :edit_scored, :update, :destroy, :update_translations, :diagram, :validate]
   before_action :set_score_category, only: [:new_scored, :edit_scored]
   before_action :set_breadcrumb, only: [:edit, :diagram]
 
@@ -53,6 +53,10 @@ class PredefinedSyndromesController < ApplicationController
     end
   end
 
+  # React Diagram
+  def diagram
+  end
+
   # @params PredefinedSyndrome with the translations
   # Update the object with its translation without
   def edit_scored
@@ -80,8 +84,17 @@ class PredefinedSyndromesController < ApplicationController
     end
   end
 
-  # React Diagram
-  def diagram
+  def validate
+    @predefined_syndrome.manual_validate
+    if @predefined_syndrome.errors.messages.any?
+      respond_to do |format|
+        format.html {redirect_to request.referer, alert: "<ul><li>#{@predefined_syndrome.errors.messages[:basic].join('</li><li>')}</li></ul>"}
+      end
+    else
+      respond_to do |format|
+        format.html {redirect_to request.referer, notice: 'This predefined syndrome is valid!'}
+      end
+    end
   end
 
   private

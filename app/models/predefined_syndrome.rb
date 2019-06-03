@@ -59,6 +59,36 @@ class PredefinedSyndrome < Node
     (algorithm.nodes.where.not(id: components.not_health_care_conditions.select(:node_id)).where.not(type: 'Treatment').where.not(type: 'Management')).as_json(methods: [:category_name, :type, :get_answers])
   end
 
+  # Add errors to a predefined syndrome for its components
+  def manual_validate
+    validate_score if category.id == 8
+    components.each do |instance|
+      if instance.node == self
+        unless instance.conditions.any?
+          errors.add(:basic, "The Predefined syndrome you are describing has no condition.")
+        end
+      else
+        unless instance.children.any?
+          errors.add(:basic, "The #{instance.node.type} #{instance.node.reference} is not linked to any children.")
+        end
+      end
+    end
+  end
+
+  # Add errors to a predefined syndrome scored for its components
+  def validate_score
+    higher_node_score = {}
+    components.find_by(node: self).conditions.each do |condition|
+      score = higher_node_score[condition.first_conditionable.node.id]
+      higher_node_score[condition.first_conditionable.node.id] = condition.score if score.nil? || higher_node_score[condition.first_conditionable.node.id] < condition.score
+    end
+
+    higher_score = higher_node_score.values.inject { |a, b| a + b }
+    if higher_score < min_score
+      errors.add(:basic, "There is no combination for this Predefined syndrome to be true.")
+    end
+  end
+
   private
 
   # {Node#unique_reference}

@@ -39,6 +39,7 @@ Rails.application.routes.draw do
           put 'update_translations'
           post 'duplicate'
           get 'diagram'
+          get 'validate'
         end
 
         resources :final_diagnostics, only: [:index, :new, :create, :edit, :update, :delete, :destroy, :update_translations] do
@@ -105,6 +106,7 @@ Rails.application.routes.draw do
     end
     member do
       get 'diagram'
+      get 'validate'
     end
   end
 
