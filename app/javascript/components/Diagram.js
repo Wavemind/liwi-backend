@@ -12,9 +12,9 @@ import AdvancedLinkModel from "../react-diagram/models/AdvancedLinkModel";
 import AdvancedNodeModel from "../react-diagram/models/AdvancedNodeModel";
 import AdvancedDiagramWidget from "../react-diagram/widgets/AdvancedDiagramWidget";
 
-import NodeList from "../react-diagram/lists/NodeList";
-import FlashMessages from "./FlashMessages";
-import FormModal from "./FormModal";
+import NodeList from "./lists/NodeList";
+import FlashMessages from "./utils/FlashMessages";
+import FormModal from "./modal/FormModal";
 
 import {withDiagram} from '../context/Diagram.context';
 
@@ -215,57 +215,57 @@ class Diagram extends React.Component {
 
             // Verify if link is already set
             Object.keys(eventModel.entity.links).map(index => {
-              let link = eventModel.entity.links[index];
-              let portEntity = eventLink.entity;
-              if (link.id !== portEntity.id && (link.sourcePort.id === portEntity.sourcePort.id && link.targetPort.parent.id === portEntity.targetPort.parent.id)) {
-                exists = true;
-              }
-            });
+                  let link = eventModel.entity.links[index];
+                  let portEntity = eventLink.entity;
+                  if (link.id !== portEntity.id && (link.sourcePort.id === portEntity.sourcePort.id && link.targetPort.parent.id === portEntity.targetPort.parent.id)) {
+                    exists = true;
+                  }
+                });
 
-            // Don't create an another link in DB if it already exist
-            if (!exists) {
-              if (eventLink.entity.sourcePort.parent.node.type === "FinalDiagnostic") {
-                if (eventLink.entity.targetPort.parent.node.type === "FinalDiagnostic") {
-                  http.excludeDiagnostic(eventLink.entity.sourcePort.parent.node.id, eventLink.entity.targetPort.parent.node.id);
-                  eventModel.link.displaySeparator(true);
+        // Don't create an another link in DB if it already exist
+        if (!exists) {
+          if (eventLink.entity.sourcePort.parent.node.type === "FinalDiagnostic") {
+            if (eventLink.entity.targetPort.parent.node.type === "FinalDiagnostic") {
+              http.excludeDiagnostic(eventLink.entity.sourcePort.parent.node.id, eventLink.entity.targetPort.parent.node.id);
+              eventModel.link.displaySeparator(true);
 
-                } else {
-                  model.removeLink(eventModel.link.id)
-                }
+            } else {
+              model.removeLink(eventModel.link.id)
+            }
+          } else {
+            let nodeId = eventLink.port.parent.node.id;
+            let answerId = eventModel.link.sourcePort.dbId;
+            if (eventModel.link.targetPort.in) {
+              if (type === "PredefinedSyndrome" && instanceable.category.reference_prefix === "PSS") {
+                set('currentNodeId', nodeId);
+                set('currentAnswerId', answerId);
+                set('currentLinkId', eventModel.link.id);
+                set('modalToOpen', 'InsertScore');
+                set('modalIsOpen', true)
               } else {
-                let nodeId = eventLink.port.parent.node.id;
-                let answerId = eventModel.link.sourcePort.dbId;
-                if (eventModel.link.targetPort.in) {
-                  if (type === "PredefinedSyndrome" && instanceable.category.reference_prefix === "PSS") {
-                    set('currentNodeId', nodeId);
-                    set('currentAnswerId', answerId);
-                    set('currentLinkId', eventModel.link.id);
-                    set('modalToOpen', 'InsertScore');
-                    set('modalIsOpen', true)
+                // Create link in DB
+                http.createLink(nodeId, answerId).then((response) => {
+                  if (response.ok === undefined || response.ok) {
+                    model.getLink(eventModel.link.id).addLabel(currentScore);
                   } else {
-                    // Create link in DB
-                    http.createLink(nodeId, answerId).then((response) => {
-                      if (response.ok === undefined || response.ok) {
-                        model.getLink(currentLinkId).addLabel(currentScore);
-                      } else {
-                        this.addFlashMessage("danger", result);
-                        // if throw an error, remove link in diagram
-                        if (model.getLink(eventModel.link.id) !== null) {
-                          model.removeLink(eventModel.link.id);
-                          self.updateEngine(engine);
-                        }
-                      }
-                      this.updateEngine(engine);
-                    }).catch((err) => {
-                      console.log(err);
-                    });
+                    this.addFlashMessage("danger", result);
+                    // if throw an error, remove link in diagram
+                    if (model.getLink(eventModel.link.id) !== null) {
+                      model.removeLink(eventModel.link.id);
+                      self.updateEngine(engine);
+                    }
                   }
+                  this.updateEngine(engine);
+                }).catch((err) => {
+                  console.log(err);
+                });
+              }
 
-                } else {
-                  if (model.getLink(eventModel.link.id) !== null) {
-                    model.removeLink(eventModel.link.id);
-                    self.updateEngine(engine);
-                  }
+            } else {
+              if (model.getLink(eventModel.link.id) !== null) {
+                model.removeLink(eventModel.link.id);
+                self.updateEngine(engine);
+              }
                 }
               }
             }

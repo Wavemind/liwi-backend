@@ -1,8 +1,8 @@
 import React from "react";
 import { Modal } from "react-bootstrap";
-import { withDiagram } from "../context/Diagram.context";
-import InsertScoreForm from "./modal-contents/InsertScoreForm";
-import UpdateScoreForm from "./modal-contents/UpdateScoreForm";
+import { withDiagram } from "../../context/Diagram.context";
+import InsertScoreForm from "./contents/InsertScoreForm";
+import UpdateScoreForm from "./contents/UpdateScoreForm";
 
 class FormModal extends React.Component {
   constructor(props) {

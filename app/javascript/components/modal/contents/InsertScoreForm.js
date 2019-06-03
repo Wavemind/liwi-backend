@@ -5,7 +5,7 @@ import {
   FormControl,
   Form
 } from "react-bootstrap";
-import {withDiagram} from "../../context/Diagram.context";
+import {withDiagram} from "../../../context/Diagram.context";
 
 /**
  * @author Emmanuel Barchichat
@@ -17,14 +17,17 @@ class InsertScoreForm extends React.Component {
     this.handleScore = this.handleScore.bind(this);
   }
 
+
   state = {
     score: '',
     scoreInput: null
   };
 
+
   componentWillUpdate() {
     this.scoreInput.focus();
   }
+
 
   // Set the score props from input, so it triggers listener in Diagram.js and execute http request
   createLink = async () => {
@@ -32,6 +35,7 @@ class InsertScoreForm extends React.Component {
     await set("currentScore", this.state.score);
     toggleModal();
   };
+
 
   // Close diagram and triggers listener in Diagram.js so it can delete the link (since the score has not been set)
   cancelLink = async () => {
@@ -45,6 +49,7 @@ class InsertScoreForm extends React.Component {
   handleScore = (event) => {
     this.setState({score: event.target.value});
   };
+
 
   render() {
     return (
