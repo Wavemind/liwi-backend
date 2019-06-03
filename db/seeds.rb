@@ -65,10 +65,10 @@ input_integer = AnswerType.create!(value: 'Integer', display: 'Input')
 input_float = AnswerType.create!(value: 'Float', display: 'Input')
 
 # Categories
-exposure = Category.create!(name_en: 'Exposure', reference_prefix: 'E', parent: 'Question')
-symptom = Category.create!(name_en: 'Symptom', reference_prefix: 'S', parent: 'Question')
 assessment_test = Category.create!(name_en: 'Assessment/Test', reference_prefix: 'A', parent: 'Question')
+exposure = Category.create!(name_en: 'Exposure', reference_prefix: 'E', parent: 'Question')
 physical_exam = Category.create!(name_en: 'Physical exam', reference_prefix: 'P', parent: 'Question')
+symptom = Category.create!(name_en: 'Symptom', reference_prefix: 'S', parent: 'Question')
 
 predefined_syndrome = Category.create!(name_en: 'Predefined syndrome', reference_prefix: 'PS', parent: 'PredefinedSyndrome')
 comorbidity = Category.create!(name_en: 'Comorbidity', reference_prefix: 'DC', parent: 'PredefinedSyndrome')

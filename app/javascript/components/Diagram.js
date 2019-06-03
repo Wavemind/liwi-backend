@@ -101,7 +101,7 @@ class Diagram extends React.Component {
       levels.map((instance) => {
         let node = null;
         // If this is a PS score diagram, don't put an inport on the nodes, since there is only one level
-        if (type === "PredefinedSyndrome" && instanceable.category.reference_prefix === "PSS") {
+        if (type === "PredefinedSyndrome" && instanceable.category.id === 8) {
           node = this.createNode(instance.node, instance.node.answers, "rgb(255,255,255)", (type === instance.node.type && instanceable.id === instance.node.id));
         } else {
           node = this.createNode(instance.node, instance.node.answers);
@@ -188,7 +188,7 @@ class Diagram extends React.Component {
           model.addAll(andNode, firstLink, secondLink, andLink);
         } else {
           let link = _.find(firstNodeAnswer.getOutPorts(), ["label", this.getFullLabel(firstAnswer)]).link(node.getInPort());
-          if (type === "PredefinedSyndrome" && instanceable.category.reference_prefix === "PSS") {
+          if (type === "PredefinedSyndrome" && instanceable.category.id === 8) { // Check if it is a diagram PSS
             link.addLabel(condition.score);
           }
           model.addAll(link);
@@ -236,7 +236,7 @@ class Diagram extends React.Component {
                 let nodeId = eventLink.port.parent.node.id;
                 let answerId = eventModel.link.sourcePort.dbId;
                 if (eventModel.link.targetPort.in) {
-                  if (type === "PredefinedSyndrome" && instanceable.category.reference_prefix === "PSS") {
+                  if (type === "PredefinedSyndrome" && instanceable.category.id === 8) { // Check if it is a diagram PSS
                     set('currentNodeId', nodeId);
                     set('currentAnswerId', answerId);
                     set('currentLinkId', eventModel.link.id);
@@ -367,7 +367,7 @@ class Diagram extends React.Component {
                 if (result.ok === undefined || result.ok) {
                   if (nodeDb.get_answers !== null) {
                     // Don't add an inPort for PSS node
-                    if (type === "PredefinedSyndrome" && instanceable.category.reference_prefix === "PSS") {
+                    if (type === "PredefinedSyndrome" && instanceable.category.id === 8) { // Check if it is a diagram PSS
                       nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers, "rgb(255,255,255)", (type === nodeDb.type && instanceable.id === nodeDb.id));
                     } else {
                       nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers);
