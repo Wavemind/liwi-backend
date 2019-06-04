@@ -100,7 +100,7 @@ class PredefinedSyndromesController < ApplicationController
   private
 
   def set_breadcrumb
-    panel = (@predefined_syndrome.category.reference_prefix === 'PSS') ? 'predefined_syndromes_scored' : 'predefined_syndromes'
+    panel = (@predefined_syndrome.category.id === 8) ? 'predefined_syndromes_scored' : 'predefined_syndromes'
     add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
     add_breadcrumb @predefined_syndrome.algorithm.name, algorithm_url(@predefined_syndrome.algorithm, panel: panel)
     add_breadcrumb t('breadcrumbs.predefined_syndromes')
@@ -111,7 +111,7 @@ class PredefinedSyndromesController < ApplicationController
   end
 
   def set_score_category
-    @category = Category.all.find_by(reference_prefix: 'PSS')
+    @category = Category.find(8)
   end
 
   def predefined_syndrome_params

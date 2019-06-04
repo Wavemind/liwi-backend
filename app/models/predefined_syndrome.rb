@@ -7,8 +7,8 @@ class PredefinedSyndrome < Node
   has_many :answers, foreign_key: 'node_id', dependent: :destroy
   has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy
 
-  scope :scored, ->() { joins(:category).where('categories.reference_prefix = ?', 'PSS') }
-  scope :not_scored, ->() { joins(:category).where.not('categories.reference_prefix = ?', 'PSS') }
+  scope :scored, ->() { where('category_id = ?', 8) }
+  scope :not_scored, ->() { where.not('category_id = ?', 8) }
 
   # @params [PredefinedSyndrome]
   # Generate the ordered questions
