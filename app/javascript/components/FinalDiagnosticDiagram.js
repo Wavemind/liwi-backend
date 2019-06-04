@@ -10,10 +10,9 @@ import AdvancedNodeFactory from "../react-diagram/factories/AdvancedNodeFactory"
 import AdvancedNodeModel from "../react-diagram/models/AdvancedNodeModel";
 import AdvancedDiagramWidget from "../react-diagram/widgets/AdvancedDiagramWidget";
 
-import NodeList from "../react-diagram/lists/NodeList";
-import Http from "../http";
+import NodeList from "./lists/NodeList";
 
-import FlashMessages from "./FlashMessages";
+import FlashMessages from "./utils/FlashMessages";
 import {withDiagram} from "../context/Diagram.context";
 
 class FinalDiagnosticDiagram extends React.Component {

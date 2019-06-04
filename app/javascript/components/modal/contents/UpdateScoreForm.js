@@ -5,10 +5,10 @@ import {
   FormControl,
   Form
 } from "react-bootstrap";
-import {withDiagram} from "../../context/Diagram.context";
+import {withDiagram} from "../../../context/Diagram.context";
 
 /**
- * @author Roger Federer
+ * @author Emmanuel Barchichat
  * Modal content to define the score in PS scored
  */
 class UpdateScoreForm extends React.Component {
@@ -18,14 +18,17 @@ class UpdateScoreForm extends React.Component {
     this.handleScore = this.handleScore.bind(this);
   }
 
+
   state = {
     score: this.props.updatingScore,
     scoreInput: null
   };
 
+
   componentWillUpdate() {
     this.scoreInput.focus();
   }
+
 
   // Update the score in DB then set score props in order to trigger listener in Diagram.js that will update diagram dynamically
   updateScore = async () => {
@@ -53,10 +56,12 @@ class UpdateScoreForm extends React.Component {
     }
   };
 
+
   // Set state for the input changes
   handleScore = (event) => {
     this.setState({score: event.target.value});
   };
+
 
   render() {
     const {toggleModal} = this.props;

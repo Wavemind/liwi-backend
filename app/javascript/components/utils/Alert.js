@@ -1,5 +1,5 @@
 import React from "react";
-import { withDiagram } from "../context/Diagram.context";
+import { withDiagram } from "../../context/Diagram.context";
 
 /**
  * @author Quentin Girard
