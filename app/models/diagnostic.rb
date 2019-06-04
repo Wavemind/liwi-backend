@@ -1,5 +1,6 @@
 # How a disease is diagnosed -> Differential diagnostics
 # Contains the actual logic from its relations
+include Rails.application.routes.url_helpers
 class Diagnostic < ApplicationRecord
   before_create :complete_reference
   after_validation :unique_reference
@@ -161,7 +162,11 @@ class Diagnostic < ApplicationRecord
         end
       elsif instance.node.is_a?(Question) || instance.node.is_a?(PredefinedSyndrome)
         unless instance.children.any?
-          errors.add(:basic, I18n.t('flash_message.diagnostic.question_no_children', type: instance.node.type, reference: instance.node.reference))
+          if instance.final_diagnostic.nil?
+            errors.add(:basic, I18n.t('flash_message.diagnostic.question_no_children', type: instance.node.type, reference: instance.node.reference))
+          else
+            errors.add(:basic, I18n.t('flash_message.diagnostic.hc_question_no_children', type: instance.node.type, reference: instance.node.reference, url: diagram_algorithm_version_diagnostic_final_diagnostic_url(version.algorithm.id, version.id, id, instance.final_diagnostic_id).to_s, df_reference: instance.final_diagnostic.reference))
+          end
         end
       end
     end

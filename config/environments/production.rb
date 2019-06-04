@@ -94,6 +94,7 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 end
+Rails.application.routes.default_url_options[:host] = 'https://liwi.wavelab.top'
 
 ActionMailer::Base.smtp_settings = {
   address: 'email-smtp.eu-west-1.amazonaws.com',

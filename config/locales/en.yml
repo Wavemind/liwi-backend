@@ -171,6 +171,7 @@ en:
     diagnostic:
       final_diagnostic_no_condition: "The Final Diagnostic %{reference} has no condition."
       question_no_children: "The %{type} %{reference} is not linked to any children."
+      hc_question_no_children: "The %{type} %{reference}, which is in <u><a href='%{url}'>%{df_reference}</a></u> is not linked to any children."
       valid: "This diagnostic is valid!"
     predefined_syndrome:
       ps_no_condition: "The Predefined syndrome you are describing has no condition."

@@ -51,3 +51,4 @@ Rails.application.configure do
   config.action_mailer.default_url_options = {host: 'https://liwi.wavelab.top'}
   config.action_mailer.raise_delivery_errors = true
 end
+Rails.application.routes.default_url_options[:host] = 'https://liwi.wavelab.top'
