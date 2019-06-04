@@ -245,17 +245,15 @@ class Diagram extends React.Component {
                   } else {
                     // Create link in DB
                     http.createLink(nodeId, answerId).then((response) => {
-                      if (response.ok === undefined || response.ok) {
-                        model.getLink(currentLinkId).addLabel(currentScore);
-                      } else {
-                        this.addFlashMessage("danger", result);
+                      if (response.ok !== undefined && !response.ok) {
+                        self.addFlashMessage("danger", response);
                         // if throw an error, remove link in diagram
                         if (model.getLink(eventModel.link.id) !== null) {
                           model.removeLink(eventModel.link.id);
                           self.updateEngine(engine);
                         }
                       }
-                      this.updateEngine(engine);
+                      self.updateEngine(engine);
                     }).catch((err) => {
                       console.log(err);
                     });
@@ -308,7 +306,7 @@ class Diagram extends React.Component {
     const {addMessage} = this.props;
     let message = {
       status,
-      message: [`An error occured: ${response.status} - ${response.statusText}`],
+      message: [`${response.statusText}`],
     };
     await addMessage(message);
   };
