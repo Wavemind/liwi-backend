@@ -258,7 +258,6 @@ class Diagram extends React.Component {
                       console.log(err);
                     });
                   }
-
                 } else {
                   if (model.getLink(eventModel.link.id) !== null) {
                     model.removeLink(eventModel.link.id);

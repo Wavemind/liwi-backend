@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Diagnostic, type: :model do
+  create_category
 
   before(:each) do
     role = Role.new(name: 'administrator')
@@ -30,7 +31,6 @@ RSpec.describe Diagnostic, type: :model do
   end
 
   it 'generates diagram properly' do
-    @ps_category = Category.create!(reference_prefix: 'PS', name_en: 'Predefined syndrome', parent: 'PredefinedSyndrome')
     dd1 = Diagnostic.create!(version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)')
     dd1.final_diagnostics.create!(reference: '1', label_en: 'Df')
     t1 = Treatment.create!(reference: '1', label_en: 'Treat', algorithm: @algorithm)
@@ -56,7 +56,6 @@ RSpec.describe Diagnostic, type: :model do
 
   it 'returns correct list of available nodes' do
     dd1 = Diagnostic.create!(version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)')
-    @ps_category = Category.create!(reference_prefix: 'PS', name_en: 'Predefined syndrome', parent: 'PredefinedSyndrome')
 
     ps9 = PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm, category: @ps_category)
     ps5 = PredefinedSyndrome.create!(reference: '5', label_en: 'diarrhea', algorithm: @algorithm, category: @ps_category)
@@ -67,7 +66,6 @@ RSpec.describe Diagnostic, type: :model do
 
   context 'destroys correctly a complet diagnostic' do
     before(:each) do
-      @ps_category = Category.create!(reference_prefix: 'PS', name_en: 'Predefined syndrome', parent: 'PredefinedSyndrome')
       @dd1 = Diagnostic.create!(version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)')
       @dd1.final_diagnostics.create!(reference: '1', label_en: 'Df')
       t1 = Treatment.create!(reference: '1', label_en: 'Treat', algorithm: @algorithm)
@@ -102,6 +100,29 @@ RSpec.describe Diagnostic, type: :model do
 
     it 'removes final diagnostics' do
       expect {@dd1.controlled_destroy}.to change(Node.all, :count).by(-1)
+    end
+  end
+
+  context 'manual validation' do
+    before(:each) do
+      @dd1 = Diagnostic.create!(version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)')
+      @dd1.final_diagnostics.create!(reference: '1', label_en: 'Df')
+      dd1_df1 = Instance.create!(instanceable: @dd1, node: @dd1.final_diagnostics.first)
+      ps9 = PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm, category: @ps_category)
+      Instance.create!(instanceable: @dd1, node: ps9)
+      Condition.create!(referenceable: dd1_df1, first_conditionable: ps9.answers.first, operator: nil, second_conditionable: nil)
+    end
+
+    it 'manual validation validates a valid diagnostic' do
+      @dd1.manual_validate
+      expect(@dd1.errors.messages.any?).to be(false)
+    end
+
+    it 'manual validation returns errors for an invalid diagnostic' do
+      Instance.create!(instanceable: @dd1, node: PredefinedSyndrome.create!(reference: '18', label_en: 'skin issue', algorithm: @algorithm, category: @ps_category))
+      @dd1.manual_validate
+
+      expect(@dd1.errors.messages.any?).to be(true)
     end
   end
 end

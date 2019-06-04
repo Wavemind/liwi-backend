@@ -65,11 +65,11 @@ class PredefinedSyndrome < Node
     components.each do |instance|
       if instance.node == self
         unless instance.conditions.any?
-          errors.add(:basic, "The Predefined syndrome you are describing has no condition.")
+          errors.add(:basic, I18n.t('flash_message.predefined_syndrome.ps_no_condition'))
         end
       else
         unless instance.children.any?
-          errors.add(:basic, "The #{instance.node.type} #{instance.node.reference} is not linked to any children.")
+          errors.add(:basic, I18n.t('flash_message.predefined_syndrome.question_no_children', type: instance.node.type, reference: instance.node.reference))
         end
       end
     end
@@ -85,7 +85,7 @@ class PredefinedSyndrome < Node
 
     higher_score = higher_node_score.values.inject { |a, b| a + b }
     if higher_score < min_score
-      errors.add(:basic, "There is no combination for this Predefined syndrome to be true.")
+      errors.add(:basic, I18n.t('flash_message.predefined_syndrome.pss_no_combination'))
     end
   end
 

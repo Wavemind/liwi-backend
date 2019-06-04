@@ -3,7 +3,6 @@ require 'rails_helper'
 RSpec.describe PredefinedSyndromesController, type: :controller do
   login_user
   create_algorithm
-  create_predefined_syndrome_category
   create_answer_type
   create_category
   create_instances

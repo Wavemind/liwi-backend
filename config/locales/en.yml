@@ -168,6 +168,15 @@ en:
     success_deleted: "Data was successfully deleted"
     success_updated: "Data was successfully updated"
     update_fail: "Error will updating value"
+    diagnostic:
+      final_diagnostic_no_condition: "The Final Diagnostic %{reference} has no condition."
+      question_no_children: "The %{type} %{reference} is not linked to any children."
+      valid: "This diagnostic is valid!"
+    predefined_syndrome:
+      ps_no_condition: "The Predefined syndrome you are describing has no condition."
+      question_no_children: "The %{type} %{reference} is not linked to any children."
+      pss_no_combination: "There is no combination for this Predefined syndrome to be true."
+      valid: "This predefined syndrome is valid!"
   groups:
     add_device:
       success_add_device: "Device was successfully added to group"

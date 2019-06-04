@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe MedicalCase, type: :model do
   create_algorithm
-  create_predefined_syndrome_category
+  create_category
 
   before(:each) do
     @version = Version.create!(name: '1.0', user: @user, algorithm: @algorithm)

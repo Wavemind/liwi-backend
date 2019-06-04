@@ -83,7 +83,7 @@ class DiagnosticsController < ApplicationController
     end
   end
 
-  # @params Diagnostic with the translations
+  # @params [Diagnostic] with the translations
   # Update the object with its translation without
   def update_translations
     if @diagnostic.update(diagnostic_params)
@@ -95,6 +95,8 @@ class DiagnosticsController < ApplicationController
     end
   end
 
+  # @params [Diagnostic]
+  # Manually validate a diagnostic and return flash messages to display in the view
   def validate
     @diagnostic.manual_validate
     if @diagnostic.errors.messages.any?
@@ -103,7 +105,7 @@ class DiagnosticsController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html {redirect_to request.referer, notice: 'This diagnostic is valid!'}
+        format.html {redirect_to request.referer, notice: t('flash_message.diagnostic.valid')}
       end
     end
   end
