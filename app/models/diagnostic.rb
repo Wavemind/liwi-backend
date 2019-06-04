@@ -157,11 +157,11 @@ class Diagnostic < ApplicationRecord
     components.each do |instance|
       if instance.node.is_a? FinalDiagnostic
         unless instance.conditions.any?
-          errors.add(:basic, "The Final Diagnostic #{instance.node.reference} has no condition.")
+          errors.add(:basic, I18n.t('flash_message.diagnostic.final_diagnostic_no_condition', reference: instance.node.reference))
         end
       elsif instance.node.is_a?(Question) || instance.node.is_a?(PredefinedSyndrome)
         unless instance.children.any?
-          errors.add(:basic, "The #{instance.node.type} #{instance.node.reference} is not linked to any children.")
+          errors.add(:basic, I18n.t('flash_message.diagnostic.question_no_children', type: instance.node.type, reference: instance.node.reference))
         end
       end
     end

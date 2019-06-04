@@ -181,7 +181,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   it 'create an unavailable answer if category is an assessment' do
-    @question = Question.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', category: @assessment, priority: Question.priorities[:mandatory], answer_type: @boolean, unavailable: '1')
+    @question = Question.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', category: @assessment_test, priority: Question.priorities[:mandatory], answer_type: @boolean, unavailable: '1')
 
     expect(@question.answers.count).to equal(3)
   end

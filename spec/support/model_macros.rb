@@ -1,4 +1,5 @@
 module ModelMacros
+
   def create_algorithm
     before(:each) do
       Language.create!(name: 'French', code: 'fr')
@@ -27,9 +28,15 @@ module ModelMacros
 
   def create_category
     before(:each) do
-      @physical_exam = Category.create!(name_en: 'Physical exam', reference_prefix: 'P')
-      @symptom = Category.create!(name_en: 'Symptom', reference_prefix: 'S')
-      @assessment = Category.create!(name_en: 'Assessment', reference_prefix: 'A')
+      @exposure = Category.create!(name_en: 'Exposure', reference_prefix: 'E', parent: 'Question')
+      @symptom = Category.create!(name_en: 'Symptom', reference_prefix: 'S', parent: 'Question')
+      @assessment_test = Category.create!(name_en: 'Assessment/Test', reference_prefix: 'A', parent: 'Question')
+      @physical_exam = Category.create!(name_en: 'Physical exam', reference_prefix: 'P', parent: 'Question')
+
+      @ps_category = Category.create!(name_en: 'Predefined syndrome', reference_prefix: 'PS', parent: 'PredefinedSyndrome')
+      @comorbidity = Category.create!(name_en: 'Comorbidity', reference_prefix: 'DC', parent: 'PredefinedSyndrome')
+      @predefined_condition = Category.create!(name_en: 'Predefined condition', reference_prefix: 'C', parent: 'PredefinedSyndrome')
+      @pss_category = Category.create!(name_en: 'Predefined syndrome scored', reference_prefix: 'PSS', parent: 'PredefinedSyndrome')
     end
   end
 
@@ -42,15 +49,8 @@ module ModelMacros
 
   def create_question
     before(:each) do
-      @symptom = Category.create!(name_en: 'Symptom', reference_prefix: 'S', parent: 'Question')
       @boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
       @question = Question.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2456', category: @symptom, priority: Question.priorities[:mandatory], answer_type: @boolean)
-    end
-  end
-
-  def create_predefined_syndrome_category
-    before(:each) do
-      @ps_category = Category.create!(reference_prefix: 'PS', name_en: 'Predefined syndrome', parent: 'PredefinedSyndrome')
     end
   end
 
@@ -86,8 +86,7 @@ module ModelMacros
       @cond1 = Condition.create!(referenceable: @dd7_df7, first_conditionable: @p3_2, top_level: true)
 
       # PS
-      ps_category = Category.create!(reference_prefix: 'PS', name_en: 'Predefined syndrome', parent: 'PredefinedSyndrome')
-      ps6 = PredefinedSyndrome.create!(algorithm: @algorithm, reference: '6', label_en: 'Able to drink', category: ps_category)
+      ps6 = PredefinedSyndrome.create!(algorithm: @algorithm, reference: '6', label_en: 'Able to drink', category: @ps_category)
     end
   end
 

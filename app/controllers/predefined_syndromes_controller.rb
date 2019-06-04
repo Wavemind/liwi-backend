@@ -84,6 +84,8 @@ class PredefinedSyndromesController < ApplicationController
     end
   end
 
+  # @params [PredefinedSyndrome]
+  # Manually validate a predefined syndrome and return flash messages to display in the view
   def validate
     @predefined_syndrome.manual_validate
     if @predefined_syndrome.errors.messages.any?
@@ -92,7 +94,7 @@ class PredefinedSyndromesController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html {redirect_to request.referer, notice: 'This predefined syndrome is valid!'}
+        format.html {redirect_to request.referer, notice: t('flash_message.predefined_syndrome.valid')}
       end
     end
   end

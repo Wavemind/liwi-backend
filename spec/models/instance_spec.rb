@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Instance, type: :model do
   create_algorithm
+  create_category
   create_diagnostic
   create_question
 
