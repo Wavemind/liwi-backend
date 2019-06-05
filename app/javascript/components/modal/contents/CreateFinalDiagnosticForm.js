@@ -4,7 +4,8 @@ import {
   Modal,
   FormControl,
   Form,
-  InputGroup
+  InputGroup,
+  Col
 } from "react-bootstrap";
 import {withDiagram} from "../../../context/Diagram.context";
 
@@ -86,7 +87,7 @@ class CreateFinalDiagnosticForm extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <Form.Row>
-            <Form.Group>
+            <Form.Group as={Col}>
               <Form.Label>Reference</Form.Label>
               <InputGroup>
                 <InputGroup.Prepend>
@@ -108,7 +109,7 @@ class CreateFinalDiagnosticForm extends React.Component {
           </Form.Row>
 
           <Form.Row>
-            <Form.Group>
+            <Form.Group as={Col}>
               <Form.Label>Label</Form.Label>
               <InputGroup>
                 <Form.Control
@@ -127,12 +128,15 @@ class CreateFinalDiagnosticForm extends React.Component {
           </Form.Row>
 
           <Form.Row>
-            <Form.Group>
+            <Form.Group as={Col}>
               <Form.Label>Description</Form.Label>
               <InputGroup>
                 <Form.Control
                   type="text"
+                  as="textarea"
+                  rows="3"
                   name="description"
+                  width="100%"
                   value={this.state.description}
                   onChange={this.handleDescription}
                 />
