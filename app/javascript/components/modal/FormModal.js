@@ -35,7 +35,7 @@ class FormModal extends React.Component {
     const { modalIsOpen, modalToOpen } = this.props;
     return (
       modalIsOpen ? (
-        <Modal show={true} size="sm">
+        <Modal show={true} size="md" onHide={() => {return false;}}>
           {(() => {
             switch(modalToOpen) {
               case 'InsertScore':

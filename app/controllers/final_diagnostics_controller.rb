@@ -76,9 +76,14 @@ class FinalDiagnosticsController < ApplicationController
 
     if final_diagnostic.save
       @diagnostic.components.create!(node: final_diagnostic)
-      render json: {status: 'success', statusText: t('flash_message.success_created')}
+      puts '***'
+      puts final_diagnostic.inspect
+      puts '***'
+      puts final_diagnostic.as_json
+      puts '***'
+      render json: {status: 'success', message: t('flash_message.success_created'), node: final_diagnostic.as_json(methods: [:type])}
     else
-      render json: {status: 'danger', statusText: "<ul><li>#{final_diagnostic.errors.messages[:basic].join('</li><li>')}</li></ul>", ok: false}
+      render json: {status: 'danger', errors: final_diagnostic.errors.messages, ok: false}
     end
   end
 

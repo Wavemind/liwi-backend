@@ -3,7 +3,8 @@ import {
   Button,
   Modal,
   FormControl,
-  Form
+  Form,
+  InputGroup
 } from "react-bootstrap";
 import {withDiagram} from "../../../context/Diagram.context";
 
@@ -21,9 +22,10 @@ class CreateFinalDiagnosticForm extends React.Component {
   }
 
   state = {
-    reference: null,
-    label: null,
-    description: null,
+    reference: '',
+    label: '',
+    description: '',
+    errors: {},
   };
 
   // Update the score in DB then set score props in order to trigger listener in Diagram.js that will update diagram dynamically
@@ -31,7 +33,8 @@ class CreateFinalDiagnosticForm extends React.Component {
     const {
       toggleModal,
       http,
-      addMessage
+      addMessage,
+      set
     } = this.props;
 
     const {
@@ -43,14 +46,20 @@ class CreateFinalDiagnosticForm extends React.Component {
     let result = await http.createFinalDiagnostic(reference, label, description);
     if (result.ok === undefined || result.ok) {
       toggleModal();
-    }
-    let message = {
-        status: result.status,
-        message: [result.statusText],
-    };
-    await addMessage(message);
-  };
+      await addMessage({status: result.status, message: [result.message]});
+      set('currentDbNode', result.node)
+    } else {
+      let newErrors = {};
+      if (result.errors.reference !== undefined) {
+        newErrors.reference = result.errors.reference[0];
+      }
 
+      if (result.errors.label !== undefined) {
+        newErrors.label = result.errors.label[0];
+      }
+      this.setState({errors: newErrors});
+    }
+  };
 
   // Set state for the input changes
   handleReference = (event) => {
@@ -71,28 +80,66 @@ class CreateFinalDiagnosticForm extends React.Component {
   render() {
     const {toggleModal} = this.props;
     return (
-      <Form onSubmit={() => this.updateScore()}>
+      <Form onSubmit={() => this.create()}>
         <Modal.Header closeButton>
           <Modal.Title>Create a Final diagnostic</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <FormControl
-            placeholder="Reference"
-            value={this.state.reference}
-            onChange={this.handleReference}
-          />
-          <FormControl
-            placeholder="Label"
-            type="text"
-            value={this.state.label}
-            onChange={this.handleLabel}
-          />
-          <FormControl
-            placeholder="Description"
-            type="text"
-            value={this.state.description}
-            onChange={this.handleDescription}
-          />
+          <Form.Row>
+            <Form.Group>
+              <Form.Label>Reference</Form.Label>
+              <InputGroup>
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="inputGroupPrepend">DF</InputGroup.Text>
+                </InputGroup.Prepend>
+                <Form.Control
+                  type="text"
+                  aria-describedby="inputGroupPrepend"
+                  name="reference"
+                  value={this.state.reference}
+                  onChange={this.handleReference}
+                  isInvalid={!!this.state.errors.reference}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {this.state.errors.reference}
+                </Form.Control.Feedback>
+              </InputGroup>
+            </Form.Group>
+          </Form.Row>
+
+          <Form.Row>
+            <Form.Group>
+              <Form.Label>Label</Form.Label>
+              <InputGroup>
+                <Form.Control
+                  type="text"
+                  aria-describedby="inputGroupPrepend"
+                  name="label"
+                  value={this.state.label}
+                  onChange={this.handleLabel}
+                  isInvalid={!!this.state.errors.label}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {this.state.errors.label}
+                </Form.Control.Feedback>
+              </InputGroup>
+            </Form.Group>
+          </Form.Row>
+
+          <Form.Row>
+            <Form.Group>
+              <Form.Label>Description</Form.Label>
+              <InputGroup>
+                <Form.Control
+                  type="text"
+                  name="description"
+                  value={this.state.description}
+                  onChange={this.handleDescription}
+                />
+              </InputGroup>
+            </Form.Group>
+          </Form.Row>
+
         </Modal.Body>
         <Modal.Footer>
           <Button variant="primary" onClick={() => this.create()}>

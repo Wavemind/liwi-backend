@@ -18,7 +18,7 @@ class AdvancedNodeModel extends DefaultNodeModel {
     this.reference = reference;
     this.color = color;
     this.outPorts = outPorts;
-    this.isReadOnly = isReadOnly
+    this.isReadOnly = isReadOnly;
     const http = new Http();
 
     // Don't trigger entity removed for AND node
