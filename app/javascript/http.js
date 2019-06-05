@@ -22,18 +22,18 @@ export default class Http {
     this.token = document.querySelector("meta[name='csrf-token']").content;
   }
 
-
   // @params [Integer] nodeId
   // @return [Object] body of request
   // Create an instance
-  createInstance = async (nodeId) => {
+  createFinalDiagnostic = async (reference, label, description) => {
     let response;
-    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/create_from_diagram`;
+    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/create_from_diagram`;
     const body = {
-      instance: {
-        node_id: nodeId,
-        instanceable_id: this.instanceableId,
-        instanceable_type: this.instanceableType,
+      final_diagnostic: {
+        reference: reference,
+        label_en: label,
+        description_en: description,
+        diagnostic_id: this.instanceableId
       }
     };
     const header = await this.setHeaders("POST", body);
@@ -60,6 +60,32 @@ export default class Http {
         instanceable_id: this.instanceableId,
         instanceable_type: this.instanceableType,
         final_diagnostic_id: this.finalDiagnostic
+      }
+    };
+    const header = await this.setHeaders("POST", body);
+    const request = await fetch( url, header).catch(error => console.log(error));
+
+    // Display error or parse json
+    if (request.ok) {
+      response = await request.json();
+    } else {
+      response = request;
+    }
+    return await response;
+  };
+
+
+  // @params [Integer] nodeId
+  // @return [Object] body of request
+  // Create an instance
+  createInstance = async (nodeId) => {
+    let response;
+    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/create_from_diagram`;
+    const body = {
+      instance: {
+        node_id: nodeId,
+        instanceable_id: this.instanceableId,
+        instanceable_type: this.instanceableType,
       }
     };
     const header = await this.setHeaders("POST", body);

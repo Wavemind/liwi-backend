@@ -43,6 +43,9 @@ Rails.application.routes.draw do
         end
 
         resources :final_diagnostics, only: [:index, :new, :create, :edit, :update, :delete, :destroy, :update_translations] do
+          collection do
+            post 'create_from_diagram'
+          end
           member do
             put 'add_excluded_diagnostic'
             put 'remove_excluded_diagnostic'
