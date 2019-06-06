@@ -14,6 +14,14 @@ class NodeList extends React.Component {
     super(props);
   }
 
+  // Button to open modal with new final diagnostic node form
+  createDf = () => {
+    const { set } = this.props;
+    set('modalToOpen', 'CreateFinalDiagnostic');
+    set('modalIsOpen', true)
+  };
+
+
   render = () => {
     const { orderedNodes } = this.props;
 
@@ -47,6 +55,8 @@ class NodeList extends React.Component {
             </div>
           </div>
         ))}
+        <button onClick={() => {this.createDf()}}>Create final diagnostic</button>
+
       </div>
     );
   };

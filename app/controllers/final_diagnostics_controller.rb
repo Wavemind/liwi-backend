@@ -1,7 +1,7 @@
 class FinalDiagnosticsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic]
-  before_action :set_diagnostic, only: [:new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic, :diagram]
+  before_action :set_diagnostic, only: [:new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic, :diagram, :create_from_diagram]
   before_action :set_final_diagnostic, only: [:edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic, :update_translations, :diagram]
   before_action :set_version, only: [:new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic]
   before_action :set_breadcrumb, only: [:new, :edit]
@@ -68,6 +68,20 @@ class FinalDiagnosticsController < ApplicationController
       render json: {status: 'success', message: t('flash_message.success_updated')}
     else
       render json: {status: 'alert', message: t('flash_message.update_fail')}
+    end
+  end
+
+  # POST
+  # @return final_diagnostic node
+  # Create a final diagnostic node from diagram
+  def create_from_diagram
+    final_diagnostic = @diagnostic.final_diagnostics.new(final_diagnostic_params)
+
+    if final_diagnostic.save
+      @diagnostic.components.create!(node: final_diagnostic)
+      render json: {status: 'success', message: t('flash_message.success_created'), node: final_diagnostic.as_json(methods: [:type])}
+    else
+      render json: {status: 'danger', errors: final_diagnostic.errors.messages, ok: false}
     end
   end
 

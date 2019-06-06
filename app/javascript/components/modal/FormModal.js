@@ -3,6 +3,7 @@ import { Modal } from "react-bootstrap";
 import { withDiagram } from "../../context/Diagram.context";
 import InsertScoreForm from "./contents/InsertScoreForm";
 import UpdateScoreForm from "./contents/UpdateScoreForm";
+import CreateFinalDiagnosticForm from "./contents/CreateFinalDiagnosticForm";
 
 class FormModal extends React.Component {
   constructor(props) {
@@ -34,13 +35,15 @@ class FormModal extends React.Component {
     const { modalIsOpen, modalToOpen } = this.props;
     return (
       modalIsOpen ? (
-        <Modal show={true} size="sm">
+        <Modal show={true} size="md" onHide={() => {return false;}}>
           {(() => {
             switch(modalToOpen) {
               case 'InsertScore':
                 return <InsertScoreForm toggleModal={this.toggleModal} />;
               case 'UpdateScore':
                 return <UpdateScoreForm toggleModal={this.toggleModal} />;
+              case 'CreateFinalDiagnostic':
+                return <CreateFinalDiagnosticForm toggleModal={this.toggleModal} />;
               default:
                 return null;
             }

@@ -64,7 +64,21 @@ class Diagram extends React.Component {
         label.setLabel(currentScore);
         this.updateEngine(engine);
       }
+    } else if (this.props.currentDbNode !== nextProps.currentDbNode) {
+      // Generate node in diagram when creating a new one from modal
+      if (nextProps.modalToOpen === 'CreateFinalDiagnostic') {
+        const { currentDbNode } = nextProps;
+        const { engine } = this.state;
+        const model = engine.getDiagramModel();
+        let node = this.createNode(currentDbNode);
+        node.addInPort(" ");
+
+        node.addOutPort(" ", currentDbNode.reference, currentDbNode.id);
+        model.addAll(node);
+        this.updateEngine(engine);
+      }
     }
+
     return true;
   }
 
