@@ -231,6 +231,7 @@ ActiveRecord::Schema.define(version: 2019_05_10_113703) do
     t.string "first_name"
     t.string "last_name"
     t.date "birth_date"
+    t.bigint "got_homis_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
