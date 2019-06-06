@@ -76,3 +76,6 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 end
+
+# Needed because we rewritte default_url_options[:host] in test env file
+Rails.application.routes.default_url_options[:host] = 'http://test.host'
