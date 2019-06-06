@@ -65,6 +65,7 @@ class Diagram extends React.Component {
         this.updateEngine(engine);
       }
     } else if (this.props.currentDbNode !== nextProps.currentDbNode) {
+      // Generate node in diagram when creating a new one from modal
       if (nextProps.modalToOpen === 'CreateFinalDiagnostic') {
         const { currentDbNode } = nextProps;
         const { engine } = this.state;

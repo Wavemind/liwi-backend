@@ -14,12 +14,12 @@ class NodeList extends React.Component {
     super(props);
   }
 
+  // Button to open modal with new final diagnostic node form
   createDf = () => {
     const { set } = this.props;
     set('modalToOpen', 'CreateFinalDiagnostic');
     set('modalIsOpen', true)
   };
-
 
 
   render = () => {
