@@ -14,10 +14,11 @@ class FinalDiagnosticWidget extends React.Component {
   };
 
   // Open modal to edit final diagnostic
-  editFinalDiagnostic = (node) => {
+  editFinalDiagnostic = (diagramNode) => {
     const { set } = this.props;
     set('modalToOpen', 'UpdateFinalDiagnostic');
-    set('currentNode', node);
+    set('currentNode', diagramNode.node);
+    set('currentDiagramNode', diagramNode);
     set('modalIsOpen', true)
   };
 
@@ -45,7 +46,7 @@ class FinalDiagnosticWidget extends React.Component {
               </button>
               <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a className="dropdown-item" href="#" onClick={() => this.openDiagram(inPort.parent.node.id)}>Manage final diagnostic</a>
-                <a className="dropdown-item" href="#" onClick={() => this.editFinalDiagnostic(inPort.parent.node)}>Edit</a>
+                <a className="dropdown-item" href="#" onClick={() => this.editFinalDiagnostic(inPort.parent)}>Edit</a>
               </div>
             </div>
           </div>

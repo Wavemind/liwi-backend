@@ -85,8 +85,17 @@ class AdvancedNodeModel extends DefaultNodeModel {
       return !portModel.in;
     });
   }
+
   isLocked() {
     return this.isReadOnly;
+  }
+
+  setReference(reference) {
+    return this.reference = reference
+  }
+
+  setNode(node) {
+    return this.node = node
   }
 }
 

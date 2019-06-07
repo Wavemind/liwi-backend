@@ -66,16 +66,20 @@ class Diagram extends React.Component {
         this.updateEngine(engine);
       }
     } else if (this.props.currentDbNode !== nextProps.currentDbNode) {
-      // Generate node in diagram when creating a new one from modal
+      const { engine } = this.state;
+      const { currentDbNode, currentDiagramNode } = nextProps;
+      const model = engine.getDiagramModel();
+
+      // Create or update node in diagram
       if (nextProps.modalToOpen === 'CreateFinalDiagnostic') {
-        const { currentDbNode } = nextProps;
-        const { engine } = this.state;
-        const model = engine.getDiagramModel();
         let node = this.createNode(currentDbNode);
         node.addInPort(" ");
-
         node.addOutPort(" ", currentDbNode.reference, currentDbNode.id);
         model.addAll(node);
+        this.updateEngine(engine);
+      } else if (nextProps.modalToOpen === 'UpdateFinalDiagnostic') {
+        currentDiagramNode.setReference(currentDbNode.reference);
+        currentDiagramNode.setNode(currentDbNode);
         this.updateEngine(engine);
       }
     }

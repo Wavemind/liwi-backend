@@ -6,7 +6,8 @@ import {
   InputGroup,
   Col
 } from "react-bootstrap";
-import {withDiagram} from "../../../../context/Diagram.context";
+import * as _ from 'lodash';
+import { withDiagram } from "../../../../context/Diagram.context";
 
 /**
  * @author Quentin Girard
@@ -15,18 +16,29 @@ import {withDiagram} from "../../../../context/Diagram.context";
 class UpdateFinalDiagnosticForm extends React.Component {
   constructor(props) {
     super(props);
-
-    this.handleReference = this.handleReference.bind(this);
-    this.handleLabel = this.handleLabel.bind(this);
-    this.handleDescription = this.handleDescription.bind(this);
   }
 
   state = {
-    reference: this.props.reference,
-    label: this.props.label,
-    description: this.props.description,
-    errors: {},
+    id: null,
+    reference: null,
+    label: null,
+    description: null,
+    final_diagnostic_id: null,
+    errors: {}
   };
+
+  componentWillMount() {
+    const { currentNode } = this.props;
+    const newCurrentNode = _.cloneDeep(currentNode);
+
+    this.setState({
+      id: newCurrentNode.id,
+      reference: newCurrentNode.reference,
+      label: newCurrentNode.label_translations["en"],
+      description: newCurrentNode.description,
+      final_diagnostic_id: newCurrentNode.final_diagnostic_id
+    });
+  }
 
   // Update the score in DB then set score props in order to trigger listener in Diagram.js that will update diagram dynamically
   update = async () => {
@@ -38,16 +50,18 @@ class UpdateFinalDiagnosticForm extends React.Component {
     } = this.props;
 
     const {
+      id,
       reference,
       label,
-      description
+      description,
+      final_diagnostic_id
     } = this.state;
 
-    let result = await http.createFinalDiagnostic(reference, label, description);
+    let result = await http.updateFinalDiagnostic(id, reference, label, description, final_diagnostic_id);
     if (result.ok === undefined || result.ok) {
       toggleModal();
-      await addMessage({status: result.status, messages: result.messages});
-      set('currentDbNode', result.node)
+      await addMessage({ status: result.status, messages: result.messages });
+      set("currentDbNode", result.node);
     } else {
       let newErrors = {};
       if (result.errors.reference !== undefined) {
@@ -57,23 +71,23 @@ class UpdateFinalDiagnosticForm extends React.Component {
       if (result.errors.label !== undefined) {
         newErrors.label = result.errors.label[0];
       }
-      this.setState({errors: newErrors});
+      this.setState({ errors: newErrors });
     }
   };
 
   // Set state for the input changes
   handleReference = (event) => {
-    this.setState({reference: event.target.value});
+    this.setState({ reference: event.target.value });
   };
 
   // Set state for the input changes
   handleLabel = (event) => {
-    this.setState({label: event.target.value});
+    this.setState({ label: event.target.value });
   };
 
   // Set state for the input changes
   handleDescription = (event) => {
-    this.setState({description: event.target.value});
+    this.setState({ description: event.target.value });
   };
 
 
@@ -83,22 +97,19 @@ class UpdateFinalDiagnosticForm extends React.Component {
       reference,
       label,
       description,
-      errors,
+      errors
     } = this.state;
 
     return (
       <Form onSubmit={() => this.create()}>
         <Modal.Header closeButton>
-          <Modal.Title>Create a Final diagnostic</Modal.Title>
+          <Modal.Title>Update a Final diagnostic</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form.Row>
             <Form.Group as={Col}>
               <Form.Label>Reference</Form.Label>
               <InputGroup>
-                <InputGroup.Prepend>
-                  <InputGroup.Text id="inputGroupPrepend">DF</InputGroup.Text>
-                </InputGroup.Prepend>
                 <Form.Control
                   type="text"
                   aria-describedby="inputGroupPrepend"

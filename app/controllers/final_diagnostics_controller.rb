@@ -2,7 +2,7 @@ class FinalDiagnosticsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic]
   before_action :set_diagnostic, only: [:new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic, :diagram, :create_from_diagram]
-  before_action :set_final_diagnostic, only: [:edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic, :update_translations, :diagram]
+  before_action :set_final_diagnostic, only: [:edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic, :update_translations, :diagram, :update_from_diagram]
   before_action :set_version, only: [:new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic]
   before_action :set_breadcrumb, only: [:new, :edit]
   layout 'diagram', only: [:diagram]
@@ -79,7 +79,7 @@ class FinalDiagnosticsController < ApplicationController
 
     if final_diagnostic.save
       @diagnostic.components.create!(node: final_diagnostic)
-      render json: {status: 'success', message: t('flash_message.success_created'), node: final_diagnostic.as_json(methods: [:type])}
+      render json: {status: 'success', messages: [t('flash_message.success_created')], node: final_diagnostic.as_json(methods: [:type])}
     else
       render json: {status: 'danger', errors: final_diagnostic.errors.messages, ok: false}
     end
@@ -103,6 +103,17 @@ class FinalDiagnosticsController < ApplicationController
       render json: {status: 'success', messages: [t('flash_message.success_updated')]}
     else
       render json: {status: 'alert', messages: t('flash_message.update_fail')}
+    end
+  end
+
+  # PUT
+  # @return final_diagnostic node
+  # Create a final diagnostic node from diagram
+  def update_from_diagram
+    if @final_diagnostic.update(final_diagnostic_params)
+      render json: {status: 'success', messages: [t('flash_message.success_created')], node: @final_diagnostic.as_json(methods: [:type])}
+    else
+      render json: {status: 'danger', errors: @final_diagnostic.errors.messages, ok: false}
     end
   end
 

@@ -315,6 +315,34 @@ export default class Http {
   };
 
 
+  // @params [Integer] id, [String] reference, [String] label, [String] description, [Integer] final_diagnostic_id
+  // @return [Object] body of request
+  // Update final diagnostic node
+  updateFinalDiagnostic = async (id, reference, label, description, final_diagnostic_id) => {
+    let response;
+    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/${id}/update_from_diagram`;
+    const body = {
+      final_diagnostic: {
+        id: id,
+        reference: reference,
+        label_en: label,
+        description_en: description,
+        final_diagnostic_id: final_diagnostic_id
+      }
+    };
+    const header = await this.setHeaders("PUT", body);
+    const request = await fetch( url, header).catch(error => console.log(error));
+
+    // Display error or parse json
+    if (request.ok) {
+      response = await request.json();
+    } else {
+      response = request;
+    }
+    return await response;
+  };
+
+
   // @return [Object] flash message
   // Validate diagnostic
   validateDiagnostic = async () => {
