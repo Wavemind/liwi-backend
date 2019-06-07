@@ -2,18 +2,17 @@ import React from "react";
 import {
   Button,
   Modal,
-  FormControl,
   Form,
   InputGroup,
   Col
 } from "react-bootstrap";
-import {withDiagram} from "../../../context/Diagram.context";
+import {withDiagram} from "../../../../context/Diagram.context";
 
 /**
- * @author Emmanuel Barchichat
- * Modal content to create a final diagnostic
+ * @author Quentin Girard
+ * Modal content to update a final diagnostic
  */
-class CreateFinalDiagnosticForm extends React.Component {
+class UpdateFinalDiagnosticForm extends React.Component {
   constructor(props) {
     super(props);
 
@@ -23,14 +22,14 @@ class CreateFinalDiagnosticForm extends React.Component {
   }
 
   state = {
-    reference: '',
-    label: '',
-    description: '',
+    reference: this.props.reference,
+    label: this.props.label,
+    description: this.props.description,
     errors: {},
   };
 
   // Update the score in DB then set score props in order to trigger listener in Diagram.js that will update diagram dynamically
-  create = async () => {
+  update = async () => {
     const {
       toggleModal,
       http,
@@ -47,7 +46,7 @@ class CreateFinalDiagnosticForm extends React.Component {
     let result = await http.createFinalDiagnostic(reference, label, description);
     if (result.ok === undefined || result.ok) {
       toggleModal();
-      await addMessage({status: result.status, message: [result.message]});
+      await addMessage({status: result.status, messages: result.messages});
       set('currentDbNode', result.node)
     } else {
       let newErrors = {};
@@ -79,7 +78,14 @@ class CreateFinalDiagnosticForm extends React.Component {
 
 
   render() {
-    const {toggleModal} = this.props;
+    const { toggleModal } = this.props;
+    const {
+      reference,
+      label,
+      description,
+      errors,
+    } = this.state;
+
     return (
       <Form onSubmit={() => this.create()}>
         <Modal.Header closeButton>
@@ -97,12 +103,12 @@ class CreateFinalDiagnosticForm extends React.Component {
                   type="text"
                   aria-describedby="inputGroupPrepend"
                   name="reference"
-                  value={this.state.reference}
+                  value={reference}
                   onChange={this.handleReference}
-                  isInvalid={!!this.state.errors.reference}
+                  isInvalid={!!errors.reference}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {this.state.errors.reference}
+                  {errors.reference}
                 </Form.Control.Feedback>
               </InputGroup>
             </Form.Group>
@@ -116,12 +122,12 @@ class CreateFinalDiagnosticForm extends React.Component {
                   type="text"
                   aria-describedby="inputGroupPrepend"
                   name="label"
-                  value={this.state.label}
+                  value={label}
                   onChange={this.handleLabel}
-                  isInvalid={!!this.state.errors.label}
+                  isInvalid={!!errors.label}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {this.state.errors.label}
+                  {errors.label}
                 </Form.Control.Feedback>
               </InputGroup>
             </Form.Group>
@@ -137,7 +143,7 @@ class CreateFinalDiagnosticForm extends React.Component {
                   rows="3"
                   name="description"
                   width="100%"
-                  value={this.state.description}
+                  value={description}
                   onChange={this.handleDescription}
                 />
               </InputGroup>
@@ -146,8 +152,8 @@ class CreateFinalDiagnosticForm extends React.Component {
 
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={() => this.create()}>
-            Create
+          <Button variant="primary" onClick={() => this.update()}>
+            Save
           </Button>
           <Button variant="secondary" onClick={() => toggleModal()}>
             Close
@@ -158,4 +164,4 @@ class CreateFinalDiagnosticForm extends React.Component {
   }
 }
 
-export default withDiagram(CreateFinalDiagnosticForm);
+export default withDiagram(UpdateFinalDiagnosticForm);

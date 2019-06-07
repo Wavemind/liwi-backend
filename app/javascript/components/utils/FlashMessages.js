@@ -20,7 +20,7 @@ class FlashMessages extends React.Component {
 
     if (messages.length > 0) {
       alerts = messages.map((message, key) =>
-        <Alert key={key} message={message} index={key}/>
+        <Alert alert={message} key={key} />
       );
     }
 

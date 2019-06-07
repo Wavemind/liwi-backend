@@ -37,20 +37,20 @@ class UpdateScoreForm extends React.Component {
       toggleModal,
       http,
       currentAnswerId,
-      currentNodeId,
+      currentNode,
       addMessage
     } = this.props;
 
     const {score} = this.state;
     toggleModal();
-    let result = await http.updateConditionScore(currentAnswerId, currentNodeId, score);
+    let result = await http.updateConditionScore(currentAnswerId, currentNode.id, score);
 
     if (result.ok === undefined || result.ok) {
       await set("currentScore", score);
     } else {
       let message = {
         status: 'danger',
-        message: [`An error occured: ${result.status} - ${result.statusText}`],
+        messages: [`An error occured: ${result.status} - ${result.statusText}`],
       };
       await addMessage(message);
     }

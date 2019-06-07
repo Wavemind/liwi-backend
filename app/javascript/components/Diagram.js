@@ -17,6 +17,7 @@ import FlashMessages from "./utils/FlashMessages";
 import FormModal from "./modal/FormModal";
 
 import {withDiagram} from '../context/Diagram.context';
+import Toolbar from "./utils/Toolbar";
 
 class Diagram extends React.Component {
 
@@ -34,7 +35,7 @@ class Diagram extends React.Component {
   async shouldComponentUpdate(nextProps, nextState) {
     // Listen to the change of the props score in order to update the model in the proper way
     if (this.props.currentScore !== nextProps.currentScore) {
-      const {http, currentNodeId, currentAnswerId, currentLinkId, currentScore} = nextProps;
+      const {http, currentNode, currentAnswerId, currentLinkId, currentScore} = nextProps;
       const {engine} = this.state;
       const model = engine.getDiagramModel();
 
@@ -43,7 +44,7 @@ class Diagram extends React.Component {
         if (nextProps.currentScore === null) {
           model.removeLink(currentLinkId);
         } else {
-          http.createLink(currentNodeId, currentAnswerId, currentScore).then((result) => {
+          http.createLink(currentNode.id, currentAnswerId, currentScore).then((result) => {
             if (result.ok === undefined || result.ok) {
               model.getLink(currentLinkId).addLabel(currentScore);
             } else {
@@ -247,18 +248,18 @@ class Diagram extends React.Component {
                   model.removeLink(eventModel.link.id)
                 }
               } else {
-                let nodeId = eventLink.port.parent.node.id;
+                let node = eventLink.port.parent.node;
                 let answerId = eventModel.link.sourcePort.dbId;
                 if (eventModel.link.targetPort.in) {
                   if (type === "PredefinedSyndrome" && instanceable.category.id === 8) { // Check if it is a diagram PSS
-                    set('currentNodeId', nodeId);
+                    set('currentNode', node);
                     set('currentAnswerId', answerId);
                     set('currentLinkId', eventModel.link.id);
                     set('modalToOpen', 'InsertScore');
                     set('modalIsOpen', true)
                   } else {
                     // Create link in DB
-                    http.createLink(nodeId, answerId).then((response) => {
+                    http.createLink(node.id, answerId).then((response) => {
                       if (response.ok !== undefined && !response.ok) {
                         self.addFlashMessage("danger", response);
                         // if throw an error, remove link in diagram
@@ -319,22 +320,71 @@ class Diagram extends React.Component {
     const {addMessage} = this.props;
     let message = {
       status,
-      message: [`${response.statusText}`],
+      messages: [`${response.statusText}`],
     };
     await addMessage(message);
   };
 
-  render = () => {
-    const {engine} = this.state;
-    const {
-      removeNode,
-      http,
-      readOnly,
-      instanceable,
-      type
-    } = this.props;
+  onDropAction = async (event) => {
+    const { removeNode, http, type, instanceable } = this.props;
+    const { engine } = this.state;
 
     let model = engine.getDiagramModel();
+    let nodeDb = JSON.parse(event.dataTransfer.getData("node"));
+    let points = engine.getRelativeMousePoint(event);
+    let nodeDiagram = {};
+    let result;
+
+    // Create AND node
+    if (nodeDb === "AND") {
+      nodeDiagram = new AdvancedNodeModel("AND", "", "", "");
+      nodeDiagram.addInPort(" ");
+      nodeDiagram.addOutPort(" ");
+      // Create Final Diagnostic node
+    } else if (nodeDb.type === "FinalDiagnostic") {
+      result = await http.createInstance(nodeDb.id);
+      if (result.ok === undefined || result.ok) {
+        nodeDiagram = this.createNode(nodeDb);
+        nodeDiagram.addInPort(" ");
+        nodeDiagram.addOutPort(" ");
+        removeNode(nodeDb);
+      } else {
+        this.addFlashMessage("danger", result);
+      }
+    } else {
+      // Create regular node
+      result = await http.createInstance(nodeDb.id);
+      if (result.ok === undefined || result.ok) {
+        if (nodeDb.get_answers !== null) {
+          // Don't add an inPort for PSS node
+          if (type === "PredefinedSyndrome" && instanceable.category.id === 8) { // Check if it is a diagram PSS
+            nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers, "rgb(255,255,255)", (type === nodeDb.type && instanceable.id === nodeDb.id));
+          } else {
+            nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers);
+          }
+          nodeDb.get_answers.map((answer) => (nodeDiagram.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
+        } else {
+          nodeDiagram = this.createNode(nodeDb);
+        }
+        removeNode(nodeDb);
+      } else {
+        this.addFlashMessage("danger", result);
+      }
+    }
+
+    // Set position of node in canevas
+    nodeDiagram.x = points.x;
+    nodeDiagram.y = points.y;
+
+    // Update diagram nodes
+    model.addAll(nodeDiagram);
+    this.updateEngine(engine);
+  };
+
+  render = () => {
+    const {engine} = this.state;
+    const { readOnly } = this.props;
+
     let diagramStyle = readOnly ? 'col diagram-wrapper-white' : 'col diagram-wrapper';
     let canvasStyle = readOnly ? 'srd-canvas-read-only' : 'srd-canvas';
 
@@ -343,63 +393,14 @@ class Diagram extends React.Component {
         <FormModal/>
         <FlashMessages/>
         <div className="row">
-          {(!readOnly) ? (
-            <div className="col-md-2 px-0 liwi-sidebar">
-              <NodeList/>
-            </div>
-          ) : null}
+          {(!readOnly) ? ([
+            <Toolbar/>,
+            <NodeList/>
+          ]) : null}
           <div
             className={diagramStyle}
             onDrop={async event => {
-              let nodeDb = JSON.parse(event.dataTransfer.getData("node"));
-              let points = engine.getRelativeMousePoint(event);
-              let nodeDiagram = {};
-              let result;
-
-              // Create AND node
-              if (nodeDb === "AND") {
-                nodeDiagram = new AdvancedNodeModel("AND", "", "", "");
-                nodeDiagram.addInPort(" ");
-                nodeDiagram.addOutPort(" ");
-                // Create Final Diagnostic node
-              } else if (nodeDb.type === "FinalDiagnostic") {
-                result = await http.createInstance(nodeDb.id);
-                if (result.ok === undefined || result.ok) {
-                  nodeDiagram = this.createNode(nodeDb);
-                  nodeDiagram.addInPort(" ");
-                  nodeDiagram.addOutPort(" ");
-                  removeNode(nodeDb);
-                } else {
-                  this.addFlashMessage("danger", result);
-                }
-              } else {
-                // Create regular node
-                result = await http.createInstance(nodeDb.id);
-                if (result.ok === undefined || result.ok) {
-                  if (nodeDb.get_answers !== null) {
-                    // Don't add an inPort for PSS node
-                    if (type === "PredefinedSyndrome" && instanceable.category.id === 8) { // Check if it is a diagram PSS
-                      nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers, "rgb(255,255,255)", (type === nodeDb.type && instanceable.id === nodeDb.id));
-                    } else {
-                      nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers);
-                    }
-                    nodeDb.get_answers.map((answer) => (nodeDiagram.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
-                  } else {
-                    nodeDiagram = this.createNode(nodeDb);
-                  }
-                  removeNode(nodeDb);
-                } else {
-                  this.addFlashMessage("danger", result);
-                }
-              }
-
-              // Set position of node in canevas
-              nodeDiagram.x = points.x;
-              nodeDiagram.y = points.y;
-
-              // Update diagram nodes
-              model.addAll(nodeDiagram);
-              this.updateEngine(engine);
+              this.onDropAction(event);
             }}
             onDragOver={event => {
               event.preventDefault();

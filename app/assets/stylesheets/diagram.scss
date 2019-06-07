@@ -2,7 +2,7 @@
   background-color: #343434;
   overflow-x: hidden;
   overflow-y: auto;
-  height:95vh;
+  height:91vh;
 
   .card {
     background-color: #343434;
@@ -36,7 +36,7 @@
 }
 
 .srd-canvas {
-  height: 95vh;
+  height: 91vh;
 }
 
 .srd-canvas-read-only {
@@ -238,9 +238,12 @@
   height 500ms ease-in;
 }
 
-.dropdown-toggle::after {
-  right: 9px!important;
+.node-category {
+  .dropdown-toggle::after {
+    right: 9px!important;
+  }
 }
+
 
 .help {
   position:absolute;
@@ -269,4 +272,20 @@
 
 .srd-default-label:hover  {
   cursor: pointer;
+}
+
+.liwi-toolbar {
+  background-color: #808080;
+
+  .btn-group {
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    &:hover {
+      background-color: #404040;
+    }
+  }
+}
+
+.btn-transparent {
+  background-color: transparent;
+  color: #fff;
 }

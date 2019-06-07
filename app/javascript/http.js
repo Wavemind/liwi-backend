@@ -267,29 +267,25 @@ export default class Http {
     return await response;
   };
 
+  // @params [Integer] dfId
+  // @return [Object] body of request
+  // Redirect to final diagnostic diagram
+  showFinalDiagnosticDiagram = async (dfId) => {
+    window.location = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/${dfId}/diagram`;
+  };
 
-  // @params [String] method, [Object] body
-  // @return [Object] header
-  // Set header credentials to communicate with server
-  setHeaders = async (method = "GET", body = false) => {
-    let header = {
-      method: method,
-      headers: {},
-    };
-    if (method === "POST" || method === "PATCH" || method === "PUT" || method === "DELETE") {
-      header.body = JSON.stringify(body);
-      header.headers["Accept"] = "application/json, text/plain";
-      header.headers["Content-Type"] = "application/json";
-      header.headers["X-CSRF-Token"] = this.token;
-    }
-    return header;
+  // @params [String] panel
+  // @return [Object] body of request
+  // Redirect to algorithm panel
+  redirectToAlgorithm = async (panel) => {
+    window.location = `${this.url}/algorithms/${this.algorithm}?panel=${panel}`;
   };
 
   // @params [Integer] dfId
   // @return [Object] body of request
-  // Remove excluding diagnostic
-  showFinalDiagnosticDiagram = async (dfId) => {
-    window.location = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/${dfId}/diagram`;
+  // Redirect to diagnostic
+  redirectToDiagnostic = async () => {
+    window.location = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}`;
   };
 
   // @params [Integer] nodeId, [Integer] answerId, [Integer] score
@@ -307,7 +303,7 @@ export default class Http {
       score: score
     };
     const header = await this.setHeaders("PUT", body);
-    const request = await fetch( url, header).catch(error => console.log(error));
+    const request = await fetch(url, header).catch(error => console.log(error));
 
     // Display error or parse json
     if (request.ok) {
@@ -316,5 +312,62 @@ export default class Http {
       response = request;
     }
     return await response;
+  };
+
+
+  // @return [Object] flash message
+  // Validate diagnostic
+  validateDiagnostic = async () => {
+   let response;
+   const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/validate`;
+   const body = null;
+   const header = await this.setHeaders("GET", body);
+   const request = await fetch(url, header).catch(error => console.log(error));
+
+   // Display error or parse json
+   if (request.ok) {
+     response = await request.json();
+   } else {
+     response = request;
+   }
+   return await response;
+  };
+
+
+  // @return [Object] flash message
+  // Validate predefined syndrome scored
+  validatePredefinedSyndromeScored = async () => {
+    let response;
+    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/validate`;
+    const body = null;
+    const header = await this.setHeaders("GET", body);
+    const request = await fetch(url, header).catch(error => console.log(error));
+
+    // Display error or parse json
+    if (request.ok) {
+      response = await request.json();
+    } else {
+      response = request;
+    }
+    return await response;
+  };
+
+
+
+  // @params [String] method, [Object] body
+  // @return [Object] header
+  // Set header credentials to communicate with server
+  setHeaders = async (method = "GET", body = false) => {
+    let header = {
+      method: method,
+      headers: {},
+    };
+    if (method === "POST" || method === "PATCH" || method === "PUT" || method === "DELETE") {
+      header.body = JSON.stringify(body);
+      header.headers["Accept"] = "application/json, text/plain";
+      header.headers["Content-Type"] = "application/json";
+      header.headers["X-CSRF-Token"] = this.token;
+    }
+    return header;
   };
 }

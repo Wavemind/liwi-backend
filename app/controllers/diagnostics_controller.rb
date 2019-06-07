@@ -87,10 +87,10 @@ class DiagnosticsController < ApplicationController
   # Update the object with its translation without
   def update_translations
     if @diagnostic.update(diagnostic_params)
-      @json = {status: 'success', message: t('flash_message.success_updated')}
+      @json = {status: 'success', messages: t('flash_message.success_updated')}
       render 'update_translations', formats: :js, status: :ok
     else
-      @json = {status: 'alert', message: t('flash_message.update_fail')}
+      @json = {status: 'alert', messages: t('flash_message.update_fail')}
       render 'update_translations', formats: :js, status: :unprocessable_entity
     end
   end
@@ -100,13 +100,9 @@ class DiagnosticsController < ApplicationController
   def validate
     @diagnostic.manual_validate
     if @diagnostic.errors.messages.any?
-      respond_to do |format|
-        format.html {redirect_to request.referer, alert: "<ul><li>#{@diagnostic.errors.messages[:basic].join('</li><li>')}</li></ul>"}
-      end
+      render json: {status: 'danger', messages: @diagnostic.errors.messages[:basic]}
     else
-      respond_to do |format|
-        format.html {redirect_to request.referer, notice: t('flash_message.diagnostic.valid')}
-      end
+      render json: {status: 'success', messages: [t('flash_message.diagnostic.valid')]}
     end
   end
 

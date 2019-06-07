@@ -65,9 +65,9 @@ class FinalDiagnosticsController < ApplicationController
   # Add excluded diagnostic to final diagnostic
   def add_excluded_diagnostic
     if @final_diagnostic.update(final_diagnostic_params)
-      render json: {status: 'success', message: t('flash_message.success_updated')}
+      render json: {status: 'success', messages: [t('flash_message.success_updated')]}
     else
-      render json: {status: 'alert', message: t('flash_message.update_fail')}
+      render json: {status: 'alert', messages: [t('flash_message.update_fail')]}
     end
   end
 
@@ -100,9 +100,9 @@ class FinalDiagnosticsController < ApplicationController
   def remove_excluded_diagnostic
     @final_diagnostic.excluded_diagnostic = nil
     if @final_diagnostic.save
-      render json: {status: 'success', message: t('flash_message.success_updated')}
+      render json: {status: 'success', messages: [t('flash_message.success_updated')]}
     else
-      render json: {status: 'alert', message: t('flash_message.update_fail')}
+      render json: {status: 'alert', messages: t('flash_message.update_fail')}
     end
   end
 

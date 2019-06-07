@@ -14,6 +14,7 @@ import NodeList from "./lists/NodeList";
 
 import FlashMessages from "./utils/FlashMessages";
 import {withDiagram} from "../context/Diagram.context";
+import Toolbar from "./utils/Toolbar";
 
 class FinalDiagnosticDiagram extends React.Component {
 
@@ -200,7 +201,7 @@ class FinalDiagnosticDiagram extends React.Component {
     const {addMessage} = this.props;
     let message = {
       status,
-      message: [`An error occured: ${response.status} - ${response.statusText}`]
+      messages: [`An error occured: ${response.status} - ${response.statusText}`]
     };
     await addMessage(message);
   };
@@ -219,9 +220,8 @@ class FinalDiagnosticDiagram extends React.Component {
       <div className="content">
         <FlashMessages/>
         <div className="row">
-          <div className="col-md-2 px-0 liwi-sidebar">
-            <NodeList />
-          </div>
+          <Toolbar/>
+          <NodeList/>
           <div
             className="col-md-10 diagram-wrapper"
             onDrop={async event => {
