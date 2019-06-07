@@ -71,7 +71,7 @@ class Toolbar extends React.Component {
               </button>
               <div className="dropdown-menu">
                 <a className="dropdown-item" href="#">Question</a>
-                <a className="dropdown-item" href="#" onClick={() => {this.newFinalDiagnostic()}}>Final diagnostic</a>
+                {type === 'Diagnostic' ? (<a className="dropdown-item" href="#" onClick={() => {this.newFinalDiagnostic()}}>Final diagnostic</a>) : null}
                 <a className="dropdown-item" href="#">Treatment / Management</a>
               </div>
             </div>
