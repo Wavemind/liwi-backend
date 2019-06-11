@@ -89,13 +89,9 @@ class PredefinedSyndromesController < ApplicationController
   def validate
     @predefined_syndrome.manual_validate
     if @predefined_syndrome.errors.messages.any?
-      respond_to do |format|
-        format.html {redirect_to request.referer, alert: "<ul><li>#{@predefined_syndrome.errors.messages[:basic].join('</li><li>')}</li></ul>"}
-      end
+      render json: {status: 'danger', messages: @predefined_syndrome.errors.messages[:basic]}
     else
-      respond_to do |format|
-        format.html {redirect_to request.referer, notice: t('flash_message.predefined_syndrome.valid')}
-      end
+      render json: {status: 'success', messages: [t('flash_message.diagnostic.valid')]}
     end
   end
 

@@ -3,7 +3,8 @@ import { Modal } from "react-bootstrap";
 import { withDiagram } from "../../context/Diagram.context";
 import InsertScoreForm from "./contents/InsertScoreForm";
 import UpdateScoreForm from "./contents/UpdateScoreForm";
-import CreateFinalDiagnosticForm from "./contents/CreateFinalDiagnosticForm";
+import CreateFinalDiagnosticForm from "./contents/final-diagnostic/CreateFinalDiagnosticForm";
+import UpdateFinalDiagnosticForm from "./contents/final-diagnostic/UpdateFinalDiagnosticForm";
 
 class FormModal extends React.Component {
   constructor(props) {
@@ -44,6 +45,8 @@ class FormModal extends React.Component {
                 return <UpdateScoreForm toggleModal={this.toggleModal} />;
               case 'CreateFinalDiagnostic':
                 return <CreateFinalDiagnosticForm toggleModal={this.toggleModal} />;
+              case 'UpdateFinalDiagnostic':
+                return <UpdateFinalDiagnosticForm toggleModal={this.toggleModal} />;
               default:
                 return null;
             }

@@ -13,7 +13,7 @@ class Alert extends React.Component {
    * @param type - type of alert
    * @return css class
    */
-  alertClass (type) {
+  alertClass(type) {
     let classes = {
       danger: "alert-danger",
       warning: "alert-warning",
@@ -25,20 +25,25 @@ class Alert extends React.Component {
 
   render() {
     const {
-      message,
+      alert,
       removeMessage,
-      index,
+      index
     } = this.props;
 
-    const alertClassName = `alert ${ this.alertClass(message.status) } alert-dismissible fade show`;
+    const alertClassName = `alert ${this.alertClass(alert.status)} alert-dismissible fade show`;
 
-    return(
-      <div className={ alertClassName }>
+    return (
+      <div className={alertClassName}>
         <button className='close' data-dismiss="alert" aria-label="Close"
-                onClick={ () => removeMessage(index) }>
+                onClick={() => removeMessage(index)}>
           &times;
         </button>
-        { message.message[0] }
+        <ul>
+          {alert.messages.map((message, key) =>
+            <li key={key}>{message}</li>
+          )}
+        </ul>
+
       </div>
     );
   }

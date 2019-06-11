@@ -1,7 +1,6 @@
 <div class="row my-1">
   <div class="col align-self-center"><%= render_breadcrumbs %></div>
-  <div class="col align-self-center text-center text-uppercase font-weight-light breadcrumbs"><%= link_to @diagnostic.label, diagram_algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], params[:diagnostic_id]) %> - <%= @final_diagnostic.label %></div>
-  <div class="col align-self-center text-right"><%= link_to(I18n.t('back'), diagram_algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], params[:diagnostic_id]), class: 'btn btn-primary') %></div>
+  <div class="col align-self-center text-right text-uppercase font-weight-light breadcrumbs"><%= link_to @diagnostic.label, diagram_algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], params[:diagnostic_id]) %> - <%= @final_diagnostic.label %></div>
 </div>
 <div class="row">
   <div class="col-md-12">

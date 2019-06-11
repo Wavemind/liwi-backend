@@ -1,5 +1,6 @@
 import * as React from "react";
 import {withDiagram} from "../../../context/Diagram.context";
+import Alert from "../../../components/utils/FlashMessages";
 
 class FinalDiagnosticWidget extends React.Component {
   constructor(props) {
@@ -7,9 +8,21 @@ class FinalDiagnosticWidget extends React.Component {
     this.state = {};
   }
 
+  // Open final diagnostic diagram
   openDiagram = (dfId) => {
     const { http } = this.props;
     http.showFinalDiagnosticDiagram(dfId);
+  };
+
+  // Open modal to edit final diagnostic
+  editFinalDiagnostic = (diagramNode) => {
+    diagramNode.setSelected(false);
+
+    const { set } = this.props;
+    set('modalToOpen', 'UpdateFinalDiagnostic');
+    set('currentNode', diagramNode.node);
+    set('currentDiagramNode', diagramNode);
+    set('modalIsOpen', true);
   };
 
   render() {
@@ -36,6 +49,7 @@ class FinalDiagnosticWidget extends React.Component {
               </button>
               <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a className="dropdown-item" href="#" onClick={() => this.openDiagram(inPort.parent.node.id)}>Manage final diagnostic</a>
+                <a className="dropdown-item" href="#" onClick={() => this.editFinalDiagnostic(inPort.parent)}>Edit</a>
               </div>
             </div>
           </div>

@@ -108,7 +108,7 @@ export default class DiagramProvider extends React.Component {
   // @params message
   // Add message to flash message methods
   addMessage = async (message) => {
-    const { messages } = this.state;
+    let messages = [];
     messages.push(message);
     this.setState({ messages });
   };
@@ -138,7 +138,7 @@ export default class DiagramProvider extends React.Component {
     orderedNodes: [],
     modalIsOpen: false,
     modalToOpen: null,
-    currentNodeId: null,
+    currentNode: null,
     messages: [],
     type: null,
     readOnly: false,
@@ -146,7 +146,8 @@ export default class DiagramProvider extends React.Component {
     currentLinkId: null,
     currentAnswerId: null,
     updatingScore: 0,
-    currentDbNode: null
+    currentDbNode: null,
+    currentDiagramNode: null
   };
 
 

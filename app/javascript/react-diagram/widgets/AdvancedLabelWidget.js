@@ -14,16 +14,16 @@ class AdvancedLabelWidget extends DefaultLabelWidget {
   editScore = (labelModel) => {
     const { set } = this.props;
 
-    set('currentNodeId', labelModel.parent.targetPort.parent.node.id)
-    set('currentLinkId', labelModel.parent.id)
-    set('currentAnswerId', labelModel.parent.sourcePort.dbId)
+    set('currentNode', labelModel.parent.targetPort.parent.node);
+    set('currentLinkId', labelModel.parent.id);
+    set('currentAnswerId', labelModel.parent.sourcePort.dbId);
     set('modalToOpen', 'UpdateScore');
     set('updatingScore', labelModel.label);
     set('modalIsOpen', true);
   };
 
   render() {
-    const { model } = this.props
+    const { model } = this.props;
 
     return <div onClick={() => this.editScore(model)} {...this.getProps()}>{model.label}</div>;
   }

@@ -82,8 +82,8 @@ class PredefinedSyndrome < Node
       score = higher_node_score[condition.first_conditionable.node.id]
       higher_node_score[condition.first_conditionable.node.id] = condition.score if score.nil? || higher_node_score[condition.first_conditionable.node.id] < condition.score
     end
+    higher_score = higher_node_score.values.inject(0) { |a, b| a + b }
 
-    higher_score = higher_node_score.values.inject { |a, b| a + b }
     if higher_score < min_score
       errors.add(:basic, I18n.t('flash_message.predefined_syndrome.pss_no_combination'))
     end

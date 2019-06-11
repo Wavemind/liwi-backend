@@ -14,49 +14,41 @@ class NodeList extends React.Component {
     super(props);
   }
 
-  // Button to open modal with new final diagnostic node form
-  createDf = () => {
-    const { set } = this.props;
-    set('modalToOpen', 'CreateFinalDiagnostic');
-    set('modalIsOpen', true)
-  };
-
-
   render = () => {
     const { orderedNodes } = this.props;
 
     return (
-      <div className="accordion" id="accordionNodes">
-        {Object.keys(orderedNodes).map(index => (
-          <div className="card" key={index}>
-            <div className="card-header p-0" id={`heading-${index}`}>
-              <div className="row">
-                <div className="col">
-                  <button className="btn btn-link" type="button" data-toggle="collapse"
-                          data-target={`#collapse-${index}`}
-                          aria-expanded="true" aria-controls={`collapse-${index}`}>
-                    {_.startCase(index)}
-                    <span className="badge badge-secondary float-right">
-                  {orderedNodes[index].length}
-                </span>
-                  </button>
-                </div>
-               </div>
-            </div>
+      <div className="col-md-2 px-0 liwi-sidebar">
+        <div className="accordion" id="accordionNodes">
+          {Object.keys(orderedNodes).map(index => (
+            <div className="card" key={index}>
+              <div className="card-header p-0" id={`heading-${index}`}>
+                <div className="row">
+                  <div className="col">
+                    <button className="btn btn-link" type="button" data-toggle="collapse"
+                            data-target={`#collapse-${index}`}
+                            aria-expanded="true" aria-controls={`collapse-${index}`}>
+                      {_.startCase(index)}
+                      <span className="badge badge-secondary float-right">
+                    {orderedNodes[index].length}
+                  </span>
+                    </button>
+                  </div>
+                 </div>
+              </div>
 
-            <div id={`collapse-${index}`} className={`collapse ${index === 0 ? `show` : ``}`}
-                 aria-labelledby={`heading-${index}`}
-                 data-parent="#accordionNodes">
-              <div className="card-body p-0">
-                {orderedNodes[index].map((node) => (
-                  <NodeListItem node={node} key={node.reference}/>
-                ))}
+              <div id={`collapse-${index}`} className={`collapse ${index === 0 ? `show` : ``}`}
+                   aria-labelledby={`heading-${index}`}
+                   data-parent="#accordionNodes">
+                <div className="card-body p-0">
+                  {orderedNodes[index].map((node) => (
+                    <NodeListItem node={node} key={node.reference}/>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-        <button onClick={() => {this.createDf()}}>Create final diagnostic</button>
-
+          ))}
+        </div>
       </div>
     );
   };
