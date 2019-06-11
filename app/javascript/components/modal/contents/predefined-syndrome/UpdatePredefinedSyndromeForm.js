@@ -43,7 +43,6 @@ class UpdatePredefinedSyndromeForm extends React.Component {
 
   // Update the score in DB then set score props in order to trigger listener in Diagram.js that will update diagram dynamically
   update = async () => {
-    console.log('fesse')
     const {
       toggleModal,
       http,

@@ -131,7 +131,6 @@ class Diagram extends React.Component {
         } else {
           node = this.createNode(instance.node, instance.node.answers);
         }
-        console.log(instance.node);
         currentLevel.push(node);
 
         if (!(type === instance.node.type && instanceable.id === instance.node.id)) { // Don't put outports if this is the current PS
