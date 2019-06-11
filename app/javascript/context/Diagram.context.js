@@ -108,7 +108,7 @@ export default class DiagramProvider extends React.Component {
   // @params message
   // Add message to flash message methods
   addMessage = async (message) => {
-    const { messages } = this.state;
+    let messages = [];
     messages.push(message);
     this.setState({ messages });
   };

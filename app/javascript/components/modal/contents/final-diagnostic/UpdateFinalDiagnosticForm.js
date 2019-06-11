@@ -4,7 +4,7 @@ import {
   Modal,
   Form,
   InputGroup,
-  Col
+  Col, FormControl
 } from "react-bootstrap";
 import * as _ from 'lodash';
 import { withDiagram } from "../../../../context/Diagram.context";
@@ -24,7 +24,7 @@ class UpdateFinalDiagnosticForm extends React.Component {
     label: null,
     description: null,
     final_diagnostic_id: null,
-    errors: {}
+    errors: {},
   };
 
   componentWillMount() {
@@ -35,7 +35,7 @@ class UpdateFinalDiagnosticForm extends React.Component {
       id: newCurrentNode.id,
       reference: newCurrentNode.reference,
       label: newCurrentNode.label_translations["en"],
-      description: newCurrentNode.description,
+      description: newCurrentNode.description_translations === null ? '' : newCurrentNode.description_translations["en"],
       final_diagnostic_id: newCurrentNode.final_diagnostic_id
     });
   }
