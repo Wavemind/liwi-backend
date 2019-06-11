@@ -1,5 +1,6 @@
 import * as React from "react";
 import {withDiagram} from "../../../context/Diagram.context";
+import Alert from "../../../components/utils/FlashMessages";
 
 class FinalDiagnosticWidget extends React.Component {
   constructor(props) {
@@ -15,11 +16,13 @@ class FinalDiagnosticWidget extends React.Component {
 
   // Open modal to edit final diagnostic
   editFinalDiagnostic = (diagramNode) => {
+    diagramNode.setSelected(false);
+
     const { set } = this.props;
     set('modalToOpen', 'UpdateFinalDiagnostic');
     set('currentNode', diagramNode.node);
     set('currentDiagramNode', diagramNode);
-    set('modalIsOpen', true)
+    set('modalIsOpen', true);
   };
 
   render() {
