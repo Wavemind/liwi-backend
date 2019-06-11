@@ -90,6 +90,7 @@ Rails.application.routes.draw do
       end
       member do
         get 'edit_scored'
+        put 'update_from_diagram'
         put 'update_translations'
       end
     end

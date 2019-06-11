@@ -6,6 +6,7 @@ import UpdateScoreForm from "./contents/UpdateScoreForm";
 import CreateFinalDiagnosticForm from "./contents/final-diagnostic/CreateFinalDiagnosticForm";
 import UpdateFinalDiagnosticForm from "./contents/final-diagnostic/UpdateFinalDiagnosticForm";
 import CreatePredefinedSyndromeForm from './contents/predefined-syndrome/CreatePredefinedSyndromeForm';
+import UpdatePredefinedSyndromeForm from './contents/predefined-syndrome/UpdatePredefinedSyndromeForm';
 
 class FormModal extends React.Component {
   constructor(props) {
@@ -50,6 +51,8 @@ class FormModal extends React.Component {
                 return <UpdateFinalDiagnosticForm toggleModal={this.toggleModal} />;
               case 'CreatePredefinedSyndrome':
                 return <CreatePredefinedSyndromeForm toggleModal={this.toggleModal} />;
+              case 'UpdatePredefinedSyndrome':
+                return <UpdatePredefinedSyndromeForm toggleModal={this.toggleModal} />;
               default:
                 return null;
             }

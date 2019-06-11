@@ -1,7 +1,7 @@
 class PredefinedSyndromesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:new_scored, :edit_scored, :new, :create, :edit, :update, :destroy, :predefined_syndrome, :create_from_diagram]
-  before_action :set_predefined_syndrome, only: [:edit, :edit_scored, :update, :destroy, :update_translations, :diagram, :validate]
+  before_action :set_algorithm, only: [:new_scored, :edit_scored, :new, :create, :edit, :update, :destroy, :predefined_syndrome, :create_from_diagram, :update_from_diagram]
+  before_action :set_predefined_syndrome, only: [:edit, :edit_scored, :update, :destroy, :update_translations, :diagram, :validate, :update_from_diagram]
   before_action :set_score_category, only: [:new_scored, :edit_scored]
   before_action :set_breadcrumb, only: [:edit, :diagram]
 
@@ -84,6 +84,14 @@ class PredefinedSyndromesController < ApplicationController
     add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'predefined_syndromes_scored')
 
     @predefined_syndrome = PredefinedSyndrome.new
+  end
+
+  def update_from_diagram
+    if @predefined_syndrome.update(predefined_syndrome_params)
+      render json: {status: 'success', messages: [t('flash_message.success_updated')], node: @predefined_syndrome.as_json(include: :answers, methods: :type)}
+    else
+      render json: {status: 'danger', errors: @predefined_syndrome.errors.messages, ok: false}
+    end
   end
 
   # @params PredefinedSyndrome with the translations

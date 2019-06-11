@@ -23,6 +23,18 @@ class NotDFWidget extends React.Component {
     http.showPredefinedSyndromeDiagram(nodeId);
   };
 
+  editNode = (node) => {
+    if (node.node.type === 'PredefinedSyndrome') {
+      node.setSelected(false);
+
+      const { set } = this.props;
+      set('modalToOpen', 'UpdatePredefinedSyndrome');
+      set('currentNode', node.node);
+      set('currentDiagramNode', node);
+      set('modalIsOpen', true);
+    }
+  };
+
   render() {
     const { diagramNode } = this.props;
 
@@ -52,7 +64,7 @@ class NotDFWidget extends React.Component {
               </button>
               <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 {(diagramNode.node.type === "PredefinedSyndrome") ? (<a className="dropdown-item" href="#" onClick={() => this.openDiagram(diagramNode.node.id)}>Open diagram</a>) : null}
-                <a className="dropdown-item" href="#" onClick={() => this.editFinalDiagnostic(diagramNode)}>Edit</a>
+                <a className="dropdown-item" href="#" onClick={() => this.editNode(diagramNode)}>Edit</a>
               </div>
             </div>
           </div>

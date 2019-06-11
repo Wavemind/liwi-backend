@@ -394,6 +394,31 @@ export default class Http {
     return await response;
   };
 
+  // @params [Integer] id, [String] reference, [String] label, [String] description
+  // @return [Object] body of request
+  // Update predefined syndrome node
+  updatePredefinedSyndrome = async (id, reference, label, description) => {
+    let response;
+    const url = `${this.url}/algorithms/${this.algorithm}/predefined_syndromes/${id}/update_from_diagram`;
+    const body = {
+      predefined_syndrome: {
+        id: id,
+        reference: reference,
+        label_en: label,
+        description_en: description,
+      }
+    };
+    const header = await this.setHeaders("PUT", body);
+    const request = await fetch(url, header).catch(error => console.log(error));
+
+    // Display error or parse json
+    if (request.ok) {
+      response = await request.json();
+    } else {
+      response = request;
+    }
+    return await response;
+  };
 
   // @return [Object] flash message
   // Validate diagnostic

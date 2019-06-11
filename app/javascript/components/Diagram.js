@@ -83,6 +83,9 @@ class Diagram extends React.Component {
         let node = this.createNode(currentDbNode, currentDbNode.answers);
         currentDbNode.answers.map((answer) => (node.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
         model.addAll(node);
+      } else if (nextProps.modalToOpen === 'UpdatePredefinedSyndrome') {
+        currentDiagramNode.setReference(currentDbNode.reference);
+        currentDiagramNode.setNode(currentDbNode);
       }
       this.updateEngine(engine);
     }
