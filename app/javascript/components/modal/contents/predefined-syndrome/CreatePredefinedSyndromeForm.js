@@ -9,10 +9,10 @@ import {
 import { withDiagram } from "../../../../context/Diagram.context";
 
 /**
- * @author Emmanuel Barchichat
- * Modal content to create a final diagnostic
+ * @author Quentin Girard
+ * Modal content to create a predefined syndrome
  */
-class CreateFinalDiagnosticForm extends React.Component {
+class CreatePredefinedSyndromeForm extends React.Component {
   constructor(props) {
     super(props);
 
@@ -43,7 +43,7 @@ class CreateFinalDiagnosticForm extends React.Component {
       description
     } = this.state;
 
-    let result = await http.createFinalDiagnostic(reference, label, description);
+    let result = await http.createPredefinedSyndrome(reference, label, description);
     if (result.ok === undefined || result.ok) {
       toggleModal();
       await addMessage({ status: result.status, messages: result.messages });
@@ -89,7 +89,7 @@ class CreateFinalDiagnosticForm extends React.Component {
     return (
       <Form onSubmit={() => this.create()}>
         <Modal.Header closeButton>
-          <Modal.Title>Create a final diagnostic</Modal.Title>
+          <Modal.Title>Create a predefined syndrome</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form.Row>
@@ -97,7 +97,7 @@ class CreateFinalDiagnosticForm extends React.Component {
               <Form.Label>Reference</Form.Label>
               <InputGroup>
                 <InputGroup.Prepend>
-                  <InputGroup.Text id="inputGroupPrepend">DF</InputGroup.Text>
+                  <InputGroup.Text id="inputGroupPrepend">PS</InputGroup.Text>
                 </InputGroup.Prepend>
                 <Form.Control
                   type="text"
@@ -164,4 +164,4 @@ class CreateFinalDiagnosticForm extends React.Component {
   }
 }
 
-export default withDiagram(CreateFinalDiagnosticForm);
+export default withDiagram(CreatePredefinedSyndromeForm);

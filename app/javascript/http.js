@@ -49,6 +49,33 @@ export default class Http {
   };
 
   // @params [Integer] nodeId
+  // @return [Object] body of requestc
+  // Create an instance
+  createPredefinedSyndrome = async (reference, label, description) => {
+    let response;
+    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/create_from_diagram`;
+    const body = {
+      final_diagnostic: {
+        reference: reference,
+        label_en: label,
+        description_en: description,
+        diagnostic_id: this.instanceableId
+      }
+    };
+    const header = await this.setHeaders("POST", body);
+    const request = await fetch( url, header).catch(error => console.log(error));
+
+    // Display error or parse json
+    if (request.ok) {
+      response = await request.json();
+    } else {
+      response = request;
+    }
+    return await response;
+  };
+
+
+  // @params [Integer] nodeId
   // @return [Object] body of request
   // Create an instance of a health care or a condition of it
   createHealthCareInstance = async (nodeId) => {

@@ -1,6 +1,6 @@
 class PredefinedSyndromesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:new_scored, :edit_scored, :new, :create, :edit, :update, :destroy]
+  before_action :set_algorithm, only: [:new_scored, :edit_scored, :new, :create, :edit, :update, :destroy, :predefined_syndrome]
   before_action :set_predefined_syndrome, only: [:edit, :edit_scored, :update, :destroy, :update_translations, :diagram, :validate]
   before_action :set_score_category, only: [:new_scored, :edit_scored]
   before_action :set_breadcrumb, only: [:edit, :diagram]
@@ -50,6 +50,21 @@ class PredefinedSyndromesController < ApplicationController
       else
         redirect_to algorithm_url(@algorithm, panel: 'predefined_syndromes'), alert: t('error')
       end
+    end
+  end
+
+  # POST
+  # @return  node
+  # Create a predefined syndrome node from diagram and instance it
+  def create_from_diagram
+    predefined_syndrome = @algorithm.predefined_syndromes.new(predefined_syndrome_params)
+
+    if predefined_syndrome.save
+      diagnostic = Diagnostic.find(params[:diagnostic_id])
+      diagnostic.components.create!(node: predefined_syndrome)
+      render json: {status: 'success', messages: [t('flash_message.success_created')], node: predefined_syndrome.as_json(methods: [:type])}
+    else
+      render json: {status: 'danger', errors: predefined_syndrome.errors.messages, ok: false}
     end
   end
 

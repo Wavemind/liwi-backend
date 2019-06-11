@@ -21,6 +21,13 @@ class Toolbar extends React.Component {
     set('modalIsOpen', true)
   };
 
+  // Button to open modal with new predefined syndrome node form
+  newPredefinedSyndrome = () => {
+    const { set } = this.props;
+    set('modalToOpen', 'CreatePredefinedSyndrome');
+    set('modalIsOpen', true)
+  };
+
   // Launch validation of diagram and display flash message
   validate = async () => {
     const {
@@ -46,6 +53,7 @@ class Toolbar extends React.Component {
     this.setState({isLoading: false})
   };
 
+  // Close and redirect user to list of...
   save = async () => {
     const { http, type, instanceable } = this.props;
     if (type === 'Diagnostic') {
@@ -70,6 +78,9 @@ class Toolbar extends React.Component {
                 New
               </button>
               <div className="dropdown-menu">
+                <a className="dropdown-item" href="#">Question</a>
+                <a className="dropdown-item" href="#" onClick={() => {this.newPredefinedSyndrome()}}>Predefined Syndrome</a>
+                <a className="dropdown-item" href="#">Predefined Syndrome Scored</a>
                 <a className="dropdown-item" href="#">Question</a>
                 {type === 'Diagnostic' ? (<a className="dropdown-item" href="#" onClick={() => {this.newFinalDiagnostic()}}>Final diagnostic</a>) : null}
                 <a className="dropdown-item" href="#">Treatment / Management</a>
