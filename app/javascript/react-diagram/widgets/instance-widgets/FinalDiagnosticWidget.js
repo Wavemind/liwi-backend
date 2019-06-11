@@ -48,7 +48,7 @@ class FinalDiagnosticWidget extends React.Component {
                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               </button>
               <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a className="dropdown-item" href="#" onClick={() => this.openDiagram(inPort.parent.node.id)}>Manage final diagnostic</a>
+                <a className="dropdown-item" href="#" onClick={() => this.openDiagram(inPort.parent.node.id)}>Open diagramc</a>
                 <a className="dropdown-item" href="#" onClick={() => this.editFinalDiagnostic(inPort.parent)}>Edit</a>
               </div>
             </div>

@@ -1,4 +1,5 @@
 import * as React from "react";
+import {withDiagram} from "../../../context/Diagram.context";
 
 class NotDFWidget extends React.Component {
   constructor(props) {
@@ -15,6 +16,12 @@ class NotDFWidget extends React.Component {
       </div>
     );
   }
+
+  // Open final diagnostic diagram
+  openDiagram = (nodeId) => {
+    const { http } = this.props;
+    http.showPredefinedSyndromeDiagram(nodeId);
+  };
 
   render() {
     const { diagramNode } = this.props;
@@ -35,8 +42,19 @@ class NotDFWidget extends React.Component {
           <div className="col pl-2 pr-0 text-left">
             {diagramNode.node.reference}
           </div>
-          <div className="col pl-0 pr-2 text-right">
+          <div className="col pl-0 pr-2 text-center">
             {(diagramNode.node.category_name === 'Predefined syndrome scored') ? diagramNode.node.min_score : diagramNode.node.priority}
+          </div>
+          <div className="col pl-0 pr-2 text-right">
+            <div className="dropdown">
+              <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              </button>
+              <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                {(diagramNode.node.type === "PredefinedSyndrome") ? (<a className="dropdown-item" href="#" onClick={() => this.openDiagram(diagramNode.node.id)}>Open diagram</a>) : null}
+                <a className="dropdown-item" href="#" onClick={() => this.editFinalDiagnostic(diagramNode)}>Edit</a>
+              </div>
+            </div>
           </div>
         </div>
         <div>
@@ -54,4 +72,4 @@ class NotDFWidget extends React.Component {
   }
 }
 
-export default NotDFWidget;
+export default withDiagram(NotDFWidget);

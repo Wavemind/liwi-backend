@@ -296,13 +296,6 @@ export default class Http {
     return await response;
   };
 
-  // @params [Integer] dfId
-  // @return [Object] body of request
-  // Redirect to final diagnostic diagram
-  showFinalDiagnosticDiagram = async (dfId) => {
-    window.location = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/${dfId}/diagram`;
-  };
-
   // @params [String] panel
   // @return [Object] body of request
   // Redirect to algorithm panel
@@ -315,6 +308,37 @@ export default class Http {
   // Redirect to diagnostic
   redirectToDiagnostic = async () => {
     window.location = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}`;
+  };
+
+  // @params [String] method, [Object] body
+  // @return [Object] header
+  // Set header credentials to communicate with server
+  setHeaders = async (method = "GET", body = false) => {
+    let header = {
+      method: method,
+      headers: {},
+    };
+    if (method === "POST" || method === "PATCH" || method === "PUT" || method === "DELETE") {
+      header.body = JSON.stringify(body);
+      header.headers["Accept"] = "application/json, text/plain";
+      header.headers["Content-Type"] = "application/json";
+      header.headers["X-CSRF-Token"] = this.token;
+    }
+    return header;
+  };
+
+  // @params [Integer] dfId
+  // @return [Object] body of request
+  // Redirect to final diagnostic diagram
+  showFinalDiagnosticDiagram = async (dfId) => {
+    window.location = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/${dfId}/diagram`;
+  };
+
+  // @params [Integer] psId
+  // @return [Object] body of request
+  // Redirect to predefined syndrome diagram
+  showPredefinedSyndromeDiagram = async (psId) => {
+    window.location = `${this.url}/predefined_syndromes/${psId}/diagram`;
   };
 
   // @params [Integer] nodeId, [Integer] answerId, [Integer] score
@@ -342,7 +366,6 @@ export default class Http {
     }
     return await response;
   };
-
 
   // @params [Integer] id, [String] reference, [String] label, [String] description, [Integer] final_diagnostic_id
   // @return [Object] body of request
@@ -409,22 +432,4 @@ export default class Http {
     return await response;
   };
 
-
-
-  // @params [String] method, [Object] body
-  // @return [Object] header
-  // Set header credentials to communicate with server
-  setHeaders = async (method = "GET", body = false) => {
-    let header = {
-      method: method,
-      headers: {},
-    };
-    if (method === "POST" || method === "PATCH" || method === "PUT" || method === "DELETE") {
-      header.body = JSON.stringify(body);
-      header.headers["Accept"] = "application/json, text/plain";
-      header.headers["Content-Type"] = "application/json";
-      header.headers["X-CSRF-Token"] = this.token;
-    }
-    return header;
-  };
 }
