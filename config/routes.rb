@@ -86,6 +86,7 @@ Rails.application.routes.draw do
     resources :predefined_syndromes, only: [:index, :new, :create, :edit, :update, :destroy, :new_scored, :edit_scored] do
       collection do
         get 'new_scored'
+        post 'create_from_diagram'
       end
       member do
         get 'edit_scored'

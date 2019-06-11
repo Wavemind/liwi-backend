@@ -76,12 +76,15 @@ class Diagram extends React.Component {
         node.addInPort(" ");
         node.addOutPort(" ", currentDbNode.reference, currentDbNode.id);
         model.addAll(node);
-        this.updateEngine(engine);
       } else if (nextProps.modalToOpen === 'UpdateFinalDiagnostic') {
         currentDiagramNode.setReference(currentDbNode.reference);
         currentDiagramNode.setNode(currentDbNode);
-        this.updateEngine(engine);
+      } else if (nextProps.modalToOpen === 'CreatePredefinedSyndrome') {
+        let node = this.createNode(currentDbNode, currentDbNode.answers);
+        currentDbNode.answers.map((answer) => (node.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
+        model.addAll(node);
       }
+      this.updateEngine(engine);
     }
 
     return true;
@@ -125,6 +128,7 @@ class Diagram extends React.Component {
         } else {
           node = this.createNode(instance.node, instance.node.answers);
         }
+        console.log(instance.node);
         currentLevel.push(node);
 
         if (!(type === instance.node.type && instanceable.id === instance.node.id)) { // Don't put outports if this is the current PS
