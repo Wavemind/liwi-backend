@@ -48,6 +48,32 @@ export default class Http {
     return await response;
   };
 
+  // @params [Integer] nodeId
+  // @return [Object] body of request
+  // Create an instance
+  createHealthCare = async (type, reference, label, description) => {
+    let response;
+    const url = `${this.url}/algorithms/${this.algorithm}/${type}/create_from_diagram`;
+    const body = {
+      diagnostic_id: this.instanceableId,
+      final_diagnostic_id: this.finalDiagnostic
+    };
+    body[type.substring(0, type.length-1)] = {
+      reference: reference,
+      label_en: label,
+      description_en: description
+    };
+    const header = await this.setHeaders("POST", body);
+    const request = await fetch( url, header).catch(error => console.log(error));
+
+    // Display error or parse json
+    if (request.ok) {
+      response = await request.json();
+    } else {
+      response = request;
+    }
+    return await response;
+  };
 
   // @params [Integer] nodeId
   // @return [Object] body of request
@@ -308,6 +334,13 @@ export default class Http {
   // Redirect to diagnostic
   redirectToDiagnostic = async () => {
     window.location = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}`;
+  };
+
+  // @params [Integer] dfId
+  // @return [Object] body of request
+  // Redirect to diagnostic
+  redirectToFinalDiagnostic = async () => {
+    window.location = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics`;
   };
 
   // @params [String] method, [Object] body

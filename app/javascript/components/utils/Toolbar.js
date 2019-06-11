@@ -18,14 +18,21 @@ class Toolbar extends React.Component {
   newFinalDiagnostic = () => {
     const { set } = this.props;
     set('modalToOpen', 'CreateFinalDiagnostic');
-    set('modalIsOpen', true)
+    set('modalIsOpen', true);
   };
 
   // Button to open modal with new predefined syndrome node form
   newPredefinedSyndrome = () => {
     const { set } = this.props;
     set('modalToOpen', 'CreatePredefinedSyndrome');
-    set('modalIsOpen', true)
+    set('modalIsOpen', true);
+  };
+
+  newHealthCare = (type) => {
+    const { set } = this.props;
+    set('currentHealthCareType', type);
+    set('modalToOpen', 'CreateHealthCare');
+    set('modalIsOpen', true);
   };
 
   // Launch validation of diagram and display flash message
@@ -58,7 +65,10 @@ class Toolbar extends React.Component {
     const { http, type, instanceable } = this.props;
     if (type === 'Diagnostic') {
       await http.redirectToDiagnostic();
-    } else {
+    } else if (type === 'FinalDiagnostic') {
+      // await http.redirectToDiagnosticDiagram();
+    }
+    else {
       let panel = instanceable.category.id === 8 ? 'predefined_syndromes_scored' : 'predefined_syndromes';
       await http.redirectToAlgorithm(panel);
     }
@@ -80,10 +90,10 @@ class Toolbar extends React.Component {
               <div className="dropdown-menu">
                 <a className="dropdown-item" href="#">Question</a>
                 <a className="dropdown-item" href="#" onClick={() => {this.newPredefinedSyndrome()}}>Predefined Syndrome</a>
-                <a className="dropdown-item" href="#">Predefined Syndrome Scored</a>
-                <a className="dropdown-item" href="#">Question</a>
+                {/*<a className="dropdown-item" href="#">Predefined Syndrome Scored</a>*/}
                 {type === 'Diagnostic' ? (<a className="dropdown-item" href="#" onClick={() => {this.newFinalDiagnostic()}}>Final diagnostic</a>) : null}
-                {type === 'FinalDiagnostic' ? (<a className="dropdown-item" href="#">Treatment / Management</a>) : null}
+                {type === 'FinalDiagnostic' ? (<a className="dropdown-item" href="#" onClick={() => {this.newHealthCare('treatments')}}>Treatment</a>) : null}
+                {type === 'FinalDiagnostic' ? (<a className="dropdown-item" href="#" onClick={() => {this.newHealthCare('managements')}}>Management</a>) : null}
               </div>
             </div>
           </div>

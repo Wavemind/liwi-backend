@@ -1,7 +1,7 @@
 class ManagementsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_management, only: [:edit, :update, :update_translations, :destroy]
-  before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy]
+  before_action :set_management, only: [:edit, :update, :update_translations, :destroy, :update_from_diagram]
+  before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy, :create_from_diagram, :update_from_diagram]
   before_action :set_breadcrumb, only: [:new, :edit]
 
   def new
@@ -46,6 +46,34 @@ class ManagementsController < ApplicationController
     end
   end
 
+  # POST
+  # @return final_diagnostic node
+  # Create a final diagnostic node from diagram
+  def create_from_diagram
+    management = @algorithm.managements.new(management_params)
+
+    if management.save
+      diagnostic = Diagnostic.find(params[:diagnostic_id])
+      final_diagnostic = FinalDiagnostic.find(params[:final_diagnostic_id])
+      final_diagnostic.nodes << management
+      diagnostic.components.create!(node: management, final_diagnostic: final_diagnostic)
+      render json: {status: 'success', messages: [t('flash_message.success_created')], node: management.as_json(methods: [:type])}
+    else
+      render json: {status: 'danger', errors: management.errors.messages, ok: false}
+    end
+  end
+
+  # PUT
+  # @return final_diagnostic node
+  # Create a final diagnostic node from diagram
+  def update_from_diagram
+    if @management.update(management_params)
+      render json: {status: 'success', messages: [t('flash_message.success_created')], node: @management.as_json(methods: [:type])}
+    else
+      render json: {status: 'danger', errors: @management.errors.messages, ok: false}
+    end
+  end
+
   # @params Management with the translations
   # Update the object with its translation without
   def update_translations
@@ -77,7 +105,7 @@ class ManagementsController < ApplicationController
       Language.label_params,
       :description_en,
       Language.description_params,
-      :algorithm_id,
+      :algorithm_id
     )
   end
 end

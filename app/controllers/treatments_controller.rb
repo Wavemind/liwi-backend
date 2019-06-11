@@ -1,8 +1,8 @@
 class TreatmentsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy]
+  before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy, :create_from_diagram, :update_from_diagram]
+  before_action :set_treatment, only: [:edit, :update, :update_translations, :destroy, :update_from_diagram]
   before_action :set_breadcrumb, only: [:new, :edit]
-  before_action :set_treatment, only: [:edit, :update, :update_translations, :destroy]
 
   def new
     add_breadcrumb t('breadcrumbs.new')
@@ -46,6 +46,34 @@ class TreatmentsController < ApplicationController
     end
   end
 
+  # POST
+  # @return final_diagnostic node
+  # Create a final diagnostic node from diagram
+  def create_from_diagram
+    treatment = @algorithm.treatments.new(treatment_params)
+
+    if treatment.save
+      diagnostic = Diagnostic.find(params[:diagnostic_id])
+      final_diagnostic = FinalDiagnostic.find(params[:final_diagnostic_id])
+      final_diagnostic.nodes << treatment
+      diagnostic.components.create!(node: treatment, final_diagnostic: final_diagnostic)
+      render json: {status: 'success', messages: [t('flash_message.success_created')], node: treatment.as_json(methods: [:type])}
+    else
+      render json: {status: 'danger', errors: treatment.errors.messages, ok: false}
+    end
+  end
+
+  # PUT
+  # @return final_diagnostic node
+  # Create a final diagnostic node from diagram
+  def update_from_diagram
+    if @treatment.update(treatment_params)
+      render json: {status: 'success', messages: [t('flash_message.success_created')], node: @treatment.as_json(methods: [:type])}
+    else
+      render json: {status: 'danger', errors: @treatment.errors.messages, ok: false}
+    end
+  end
+
   # @params Treatment with the translations
   # Update the object with its translation without
   def update_translations
@@ -78,7 +106,7 @@ class TreatmentsController < ApplicationController
       Language.label_params,
       :description_en,
       Language.description_params,
-      :algorithm_id,
+      :algorithm_id
     )
   end
 end

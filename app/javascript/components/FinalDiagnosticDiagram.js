@@ -15,6 +15,7 @@ import NodeList from "./lists/NodeList";
 import FlashMessages from "./utils/FlashMessages";
 import {withDiagram} from "../context/Diagram.context";
 import Toolbar from "./utils/Toolbar";
+import FormModal from "./modal/FormModal";
 
 class FinalDiagnosticDiagram extends React.Component {
 
@@ -218,6 +219,7 @@ class FinalDiagnosticDiagram extends React.Component {
 
     return (
       <div className="content">
+        <FormModal/>
         <FlashMessages/>
         <div className="row">
           <Toolbar/>
