@@ -24,8 +24,8 @@ Rails.application.routes.draw do
       get 'questions', to: 'algorithms#questions', as: 'question'
       get 'treatments', to: 'algorithms#treatments', as: 'treatment'
       get 'managements', to: 'algorithms#managements', as: 'management'
-      get 'predefined_syndromes', to: 'algorithms#predefined_syndromes', as: 'predefined_syndrome'
-      get 'predefined_syndromes_scored', to: 'algorithms#predefined_syndromes_scored', as: 'predefined_syndrome_scored'
+      get 'questions_sequences', to: 'algorithms#questions_sequences', as: 'questions_sequence'
+      get 'questions_sequences_scored', to: 'algorithms#questions_sequences_scored', as: 'questions_sequence_scored'
     end
 
     resources :versions, only: [:index, :show, :new, :create, :edit, :update] do
@@ -91,7 +91,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :predefined_syndromes, only: [:index, :new, :create, :edit, :update, :destroy, :new_scored, :edit_scored] do
+    resources :questions_sequences, only: [:index, :new, :create, :edit, :update, :destroy, :new_scored, :edit_scored] do
       collection do
         get 'new_scored'
         post 'create_from_diagram'
@@ -104,7 +104,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :predefined_syndromes, only: [] do
+  resources :questions_sequences, only: [] do
     resources :instances, only: [:show, :destroy, :create, :by_reference] do
       collection do
         get 'by_reference'
@@ -117,6 +117,9 @@ Rails.application.routes.draw do
       resources :children, only: [:create, :destroy]
       resources :conditions, only: [:create, :destroy]
 
+    end
+    collection do
+      get 'reference_prefix'
     end
     member do
       get 'diagram'
@@ -173,9 +176,9 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :categories, only: [:index, :show, :new, :create, :edit, :update] do
-    member do
-      get 'reference'
+  resources :questions, only: [:reference_prefix] do
+    collection do
+      get 'reference_prefix'
     end
   end
 

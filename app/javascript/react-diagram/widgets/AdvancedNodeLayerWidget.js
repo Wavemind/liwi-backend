@@ -49,7 +49,7 @@ class AdvancedNodeLayerWidget extends NodeLayerWidget {
     // List of all the medical nodes dependency type of diagram displayed
     if (type === "Diagnostic") {
       nodes = questions.concat([finalDiagnostics]);
-    } else if (type === "PredefinedSyndrome") {
+    } else if (type === "QuestionsSequence") {
       nodes = questions;
     } else if (type === "FinalDiagnostic") {
       nodes = questions.concat([healthCares]);

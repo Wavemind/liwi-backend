@@ -19,14 +19,15 @@ jQuery(document).ready(function() {
   });
 
   // Update the prepend every time the user pick another category
-  $("#question_category_id").change(function() {
+  $("#question_type").change(function() {
     let prepend = $(this).closest("form").find(".input-group-text");
     let questionUnavailable = $(this).closest("form").find("fieldset.question_unavailable");
-    let id = $("#question_category_id option:selected").val();
+    let type = $("#question_type option:selected").val();
 
-    if (id.trim()) {
+    if (type.trim()) {
       $.ajax({
-        url: window.location.origin + "/categories/" + id + "/reference",
+        url: window.location.origin + "/questions/reference_prefix",
+        data: {type: type},
         complete: function(response) {
           prepend.text(response.responseText);
 

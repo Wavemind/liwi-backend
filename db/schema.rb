@@ -57,14 +57,6 @@ ActiveRecord::Schema.define(version: 2019_05_10_113703) do
     t.index ["node_id"], name: "index_answers_on_node_id"
   end
 
-  create_table "categories", force: :cascade do |t|
-    t.hstore "name_translations"
-    t.string "parent"
-    t.string "reference_prefix"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "children", force: :cascade do |t|
     t.float "weight"
     t.bigint "node_id"
@@ -210,8 +202,8 @@ ActiveRecord::Schema.define(version: 2019_05_10_113703) do
     t.hstore "label_translations"
     t.string "reference"
     t.integer "priority"
+    t.integer "stage"
     t.string "type"
-    t.bigint "category_id"
     t.bigint "diagnostic_id"
     t.hstore "description_translations"
     t.integer "min_score", default: 0
@@ -222,7 +214,6 @@ ActiveRecord::Schema.define(version: 2019_05_10_113703) do
     t.bigint "answer_type_id"
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
-    t.index ["category_id"], name: "index_nodes_on_category_id"
     t.index ["diagnostic_id"], name: "index_nodes_on_diagnostic_id"
     t.index ["final_diagnostic_id"], name: "index_nodes_on_final_diagnostic_id"
   end

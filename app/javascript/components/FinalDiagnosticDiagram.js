@@ -140,8 +140,8 @@ class FinalDiagnosticDiagram extends React.Component {
 
             // Don't create an another link in DB if it already exist
             if (!exists) {
-              if (eventLink.entity.sourcePort.parent.node.type === "FinalDiagnostic") {
-                if (eventLink.entity.targetPort.parent.node.type === "FinalDiagnostic") {
+              if (eventLink.entity.sourcePort.parent.node.node_type === "FinalDiagnostic") {
+                if (eventLink.entity.targetPort.parent.node.node_type === "FinalDiagnostic") {
                   http.excludeDiagnostic(eventLink.entity.sourcePort.parent.node.id, eventLink.entity.targetPort.parent.node.id);
                 } else {
                   model.removeLink(eventModel.link.id);

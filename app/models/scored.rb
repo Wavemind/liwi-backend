@@ -1,4 +1,4 @@
 # Define every treatments for a diagnostic
-class PredefinedSyndrome < QuestionsSequence
+class Scored < QuestionsSequence
 
 end

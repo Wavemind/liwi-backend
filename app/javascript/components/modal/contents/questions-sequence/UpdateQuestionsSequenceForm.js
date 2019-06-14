@@ -7,12 +7,13 @@ import {
   Col
 } from "react-bootstrap";
 import { withDiagram } from "../../../../context/Diagram.context";
+import * as _ from "lodash";
 
 /**
  * @author Quentin Girard
- * Modal content to create a predefined syndrome
+ * Modal content to create a questions sequence
  */
-class CreatePredefinedSyndromeForm extends React.Component {
+class UpdateQuestionsSequenceForm extends React.Component {
   constructor(props) {
     super(props);
 
@@ -28,13 +29,26 @@ class CreatePredefinedSyndromeForm extends React.Component {
     errors: {}
   };
 
+  componentWillMount() {
+    const { currentNode } = this.props;
+    const newCurrentNode = _.cloneDeep(currentNode);
+
+    this.setState({
+      id: newCurrentNode.id,
+      reference: newCurrentNode.reference,
+      label: newCurrentNode.label_translations["en"],
+      description: newCurrentNode.description_translations === null ? '' : newCurrentNode.description_translations["en"],
+    });
+  }
+
   // Update the score in DB then set score props in order to trigger listener in Diagram.js that will update diagram dynamically
-  create = async () => {
+  update = async () => {
     const {
       toggleModal,
       http,
       addMessage,
-      set
+      set,
+      currentNode
     } = this.props;
 
     const {
@@ -43,7 +57,7 @@ class CreatePredefinedSyndromeForm extends React.Component {
       description
     } = this.state;
 
-    let result = await http.createPredefinedSyndrome(reference, label, description);
+    let result = await http.updateQuestionsSequence(currentNode.id, reference, label, description);
     if (result.ok === undefined || result.ok) {
       toggleModal();
       await addMessage({ status: result.status, messages: result.messages });
@@ -87,18 +101,15 @@ class CreatePredefinedSyndromeForm extends React.Component {
     } = this.state;
 
     return (
-      <Form onSubmit={() => this.create()}>
+      <Form onSubmit={() => this.update()}>
         <Modal.Header closeButton>
-          <Modal.Title>Create a predefined syndrome</Modal.Title>
+          <Modal.Title>Create a questions sequence</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form.Row>
             <Form.Group as={Col}>
               <Form.Label>Reference</Form.Label>
               <InputGroup>
-                <InputGroup.Prepend>
-                  <InputGroup.Text id="inputGroupPrepend">PS</InputGroup.Text>
-                </InputGroup.Prepend>
                 <Form.Control
                   type="text"
                   aria-describedby="inputGroupPrepend"
@@ -152,8 +163,8 @@ class CreatePredefinedSyndromeForm extends React.Component {
 
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={() => this.create()}>
-            Create
+          <Button variant="primary" onClick={() => this.update()}>
+            Update
           </Button>
           <Button variant="secondary" onClick={() => toggleModal()}>
             Close
@@ -164,4 +175,4 @@ class CreatePredefinedSyndromeForm extends React.Component {
   }
 }
 
-export default withDiagram(CreatePredefinedSyndromeForm);
+export default withDiagram(UpdateQuestionsSequenceForm);

@@ -23,14 +23,14 @@ class FinalDiagnostic < Node
   # @return [Json]
   # Return treatments and managements in json format
   def health_cares_json
-    diagnostic.components.where(node_id: nodes.map(&:id), final_diagnostic_id: id).as_json(include: [node: {methods: [:type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}])
+    diagnostic.components.where(node_id: nodes.map(&:id), final_diagnostic_id: id).as_json(include: [node: {methods: [:node_type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}])
   end
 
   # @params [FinalDiagnostic]
   # Generate the ordered conditions of health cares
   def generate_health_care_conditions_order
     nodes = []
-    first_instances = components.joins(:node).includes(:conditions, :children).where(conditions: { referenceable_id: nil }).where('nodes.type = ? OR nodes.type = ?', 'Question', 'PredefinedSyndrome')
+    first_instances = components.joins(:node).includes(:conditions, :children).where(conditions: { referenceable_id: nil }).where('nodes.type IN (?) OR nodes.type IN (?)', Question.descendants.map(&:name), QuestionsSequence.descendants.map(&:name))
     nodes << first_instances
     get_children(first_instances, nodes)
   end
@@ -40,7 +40,7 @@ class FinalDiagnostic < Node
   def get_children(instances, nodes)
     current_nodes = []
     instances.includes(:conditions, children: [:node]).map(&:children).flatten.each do |child|
-      current_nodes << child.node if child.node.is_a?(Question) || child.node.is_a?(PredefinedSyndrome)
+      current_nodes << child.node if child.node.is_a?(Question) || child.node.is_a?(QuestionsSequence)
     end
 
     if current_nodes.any?
@@ -55,13 +55,13 @@ class FinalDiagnostic < Node
 
   # Return all questions for Final Diagnostic diagram as json
   def health_care_questions_json
-    generate_health_care_conditions_order.as_json(include: [conditions: { include: [first_conditionable: { methods: [:get_node] }, second_conditionable: { methods: [:get_node] }] }, node: { include: [:answers], methods: [:type, :category_name] }])
+    generate_health_care_conditions_order.as_json(include: [conditions: { include: [first_conditionable: { methods: [:get_node] }, second_conditionable: { methods: [:get_node] }] }, node: { include: [:answers], methods: [:node_type, :category_name] }])
   end
 
   # @return [Json]
   # Return available nodes for health cares diagram in the algorithm in json format
   def available_nodes_health_cares_json
-    (diagnostic.version.algorithm.nodes.where.not(id: components.select(:node_id))).as_json(methods: [:category_name, :type, :get_answers])
+    (diagnostic.version.algorithm.nodes.where.not(id: components.select(:node_id))).as_json(methods: [:category_name, :node_type, :get_answers])
   end
 
   private

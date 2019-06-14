@@ -1,0 +1,9 @@
+<%= simple_form_for [@algorithm, @questions_sequence], html: { class: 'form-horizontal' }, wrapper: :input_group do |f| %>
+  <%= f.input :type, collection: QuestionsSequence.descendants, value_method: :name, label_method: :display_label, prompt: t('select'), disabled: f.object.persisted? %>
+
+  <%= f.input :reference, prepend: (f.object.persisted? ? false : (@questions_sequence.type.nil? ? '' : @questions_sequence.reference_prefix)), disabled: f.object.persisted? %>
+  <%= f.input :label_en %>
+  <%= f.input :description_en, as: :text %>
+
+  <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
+<% end %>

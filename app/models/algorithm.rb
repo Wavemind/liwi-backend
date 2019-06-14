@@ -3,10 +3,11 @@ class Algorithm < ApplicationRecord
 
   has_many :versions
   has_many :nodes, dependent: :destroy
-  has_many :questions, -> { where type: 'Question' }, source: :node
+  has_many :questions, -> { where type: Question.descendants.map(&:name) }, source: :node
+  has_many :health_cares, -> { where type: HealthCare.descendants.map(&:name) }, source: :node
+  has_many :questions_sequences, -> { where type: QuestionsSequence.descendants.map(&:name) }, source: :node
   has_many :managements, -> { where type: 'Management' }, source: :node
   has_many :treatments, -> { where type: 'Treatment' }, source: :node
-  has_many :predefined_syndromes, -> { where type: 'PredefinedSyndrome' }, source: :node
 
   belongs_to :user
 

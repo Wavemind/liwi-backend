@@ -31,7 +31,7 @@ class InstancesController < ApplicationController
       @algorithm = @instanceable.algorithm
 
       add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
-      add_breadcrumb @instanceable.label, predefined_syndrome_url(@instanceable)
+      add_breadcrumb @instanceable.label, questions_sequence_url(@instanceable)
       add_breadcrumb @instance.node.label
     end
   end
@@ -112,7 +112,7 @@ class InstancesController < ApplicationController
   # Create link in both way from diagram
   def load_conditions
     instance = @instanceable.components.find_by(node_id: params[:node_id])
-    available_conditions = (@instanceable.components.questions.includes(node: [:answers]).map(&:node).map(&:answers) + @instanceable.components.predefined_syndromes.includes(node: [:answers]).map(&:node).map(&:answers) + instance.conditions).flatten
+    available_conditions = (@instanceable.components.questions.includes(node: [:answers]).map(&:node).map(&:answers) + @instanceable.components.questions_sequences.includes(node: [:answers]).map(&:node).map(&:answers) + instance.conditions).flatten
     render json: {
       instance: instance.as_json(
         include: {
@@ -194,8 +194,8 @@ class InstancesController < ApplicationController
   def set_instanceable
     if params[:diagnostic_id].present?
       @instanceable = Diagnostic.find(params[:diagnostic_id])
-    elsif params[:predefined_syndrome_id].present?
-      @instanceable = PredefinedSyndrome.find(params[:predefined_syndrome_id])
+    elsif params[:questions_sequence_id].present?
+      @instanceable = QuestionsSequence.find(params[:questions_sequence_id])
     else
       raise
     end

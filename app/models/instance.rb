@@ -11,8 +11,8 @@ class Instance < ApplicationRecord
   has_many :conditions, as: :referenceable, dependent: :destroy
 
   scope :managements, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'Management') }
-  scope :questions, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'Question') }
-  scope :predefined_syndromes, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'PredefinedSyndrome') }
+  scope :questions, ->() { joins(:node).includes(:conditions).where('nodes.type IN (?)', Question.descendants.map(&:name)) }
+  scope :questions_sequences, ->() { joins(:node).includes(:conditions).where('nodes.type IN (?)', QuestionsSequence.descendants.map(&:name)) }
   scope :treatments, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'Treatment') }
   scope :final_diagnostics, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'FinalDiagnostic') }
   # Allow to filter if the node is used as a health care condition or as a final diagnostic condition. A node can be used in both of them.

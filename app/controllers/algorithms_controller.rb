@@ -109,20 +109,20 @@ class AlgorithmsController < ApplicationController
   # @params algorithm [Algorithm] current algorithm
   # @return json of treatment
   # All predefined syndromes available for current algorithm
-  def predefined_syndromes
+  def questions_sequences
     respond_to do |format|
       format.html
-      format.json { render json: PredefinedSyndromeDatatable.new(params, view_context: view_context) }
+      format.json { render json: QuestionsSequenceDatatable.new(params, view_context: view_context) }
     end
   end
 
   # @params algorithm [Algorithm] current algorithm
   # @return json of treatment
   # All predefined syndromes available for current algorithm
-  def predefined_syndromes_scored
+  def questions_sequences_scored
     respond_to do |format|
       format.html
-      format.json { render json: PredefinedSyndromeScoredDatatable.new(params, view_context: view_context) }
+      format.json { render json: QuestionsSequenceScoredDatatable.new(params, view_context: view_context) }
     end
   end
 

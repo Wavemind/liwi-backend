@@ -79,11 +79,11 @@ class Diagram extends React.Component {
       } else if (nextProps.modalToOpen === 'UpdateFinalDiagnostic') {
         currentDiagramNode.setReference(currentDbNode.reference);
         currentDiagramNode.setNode(currentDbNode);
-      } else if (nextProps.modalToOpen === 'CreatePredefinedSyndrome') {
+      } else if (nextProps.modalToOpen === 'CreateQuestionsSequence') {
         let node = this.createNode(currentDbNode, currentDbNode.answers);
         currentDbNode.answers.map((answer) => (node.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
         model.addAll(node);
-      } else if (nextProps.modalToOpen === 'UpdatePredefinedSyndrome') {
+      } else if (nextProps.modalToOpen === 'UpdateQuestionsSequence') {
         currentDiagramNode.setReference(currentDbNode.reference);
         currentDiagramNode.setNode(currentDbNode);
       }
@@ -126,14 +126,14 @@ class Diagram extends React.Component {
       levels.map((instance) => {
         let node = null;
         // If this is a PS score diagram, don't put an inport on the nodes, since there is only one level
-        if (type === "PredefinedSyndrome" && instanceable.category.id === 8) {
-          node = this.createNode(instance.node, instance.node.answers, "rgb(255,255,255)", (type === instance.node.type && instanceable.id === instance.node.id));
+        if (type === "QuestionsSequence" && instanceable.category_name === 'Scored') {
+          node = this.createNode(instance.node, instance.node.answers, "rgb(255,255,255)", (type === instance.node.node_type && instanceable.id === instance.node.id));
         } else {
           node = this.createNode(instance.node, instance.node.answers);
         }
         currentLevel.push(node);
 
-        if (!(type === instance.node.type && instanceable.id === instance.node.id)) { // Don't put outports if this is the current PS
+        if (!(type === instance.node.node_type && instanceable.id === instance.node.id)) { // Don't put outports if this is the current PS
           instance.node.answers.map((answer) => (node.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
         }
 
@@ -213,7 +213,7 @@ class Diagram extends React.Component {
           model.addAll(andNode, firstLink, secondLink, andLink);
         } else {
           let link = _.find(firstNodeAnswer.getOutPorts(), ["label", this.getFullLabel(firstAnswer)]).link(node.getInPort());
-          if (type === "PredefinedSyndrome" && instanceable.category.id === 8) { // Check if it is a diagram PSS
+          if (type === "QuestionsSequence" && instanceable.category_name === 'Scored') { // Check if it is a diagram PSS
             link.addLabel(condition.score);
           }
           model.addAll(link);
@@ -249,8 +249,8 @@ class Diagram extends React.Component {
 
         // Don't create an another link in DB if it already exist
         if (!exists) {
-          if (eventLink.entity.sourcePort.parent.node.type === "FinalDiagnostic") {
-            if (eventLink.entity.targetPort.parent.node.type === "FinalDiagnostic") {
+          if (eventLink.entity.sourcePort.parent.node.node_type === "FinalDiagnostic") {
+            if (eventLink.entity.targetPort.parent.node.node_type === "FinalDiagnostic") {
               http.excludeDiagnostic(eventLink.entity.sourcePort.parent.node.id, eventLink.entity.targetPort.parent.node.id);
               eventModel.link.displaySeparator(true);
 
@@ -261,7 +261,7 @@ class Diagram extends React.Component {
                 let node = eventLink.port.parent.node;
                 let answerId = eventModel.link.sourcePort.dbId;
                 if (eventModel.link.targetPort.in) {
-                  if (type === "PredefinedSyndrome" && instanceable.category.id === 8) { // Check if it is a diagram PSS
+                  if (type === "QuestionsSequence" && instanceable.category_name === 'Scored') { // Check if it is a diagram PSS
                     set('currentNode', node);
                     set('currentAnswerId', answerId);
                     set('currentLinkId', eventModel.link.id);
@@ -351,7 +351,7 @@ class Diagram extends React.Component {
       nodeDiagram.addInPort(" ");
       nodeDiagram.addOutPort(" ");
       // Create Final Diagnostic node
-    } else if (nodeDb.type === "FinalDiagnostic") {
+    } else if (nodeDb.node_type === "FinalDiagnostic") {
       result = await http.createInstance(nodeDb.id);
       if (result.ok === undefined || result.ok) {
         nodeDiagram = this.createNode(nodeDb);
@@ -367,8 +367,8 @@ class Diagram extends React.Component {
       if (result.ok === undefined || result.ok) {
         if (nodeDb.get_answers !== null) {
           // Don't add an inPort for PSS node
-          if (type === "PredefinedSyndrome" && instanceable.category.id === 8) { // Check if it is a diagram PSS
-            nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers, "rgb(255,255,255)", (type === nodeDb.type && instanceable.id === nodeDb.id));
+          if (type === "QuestionsSequence" && instanceable.category_name === 'Scored') { // Check if it is a diagram PSS
+            nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers, "rgb(255,255,255)", (type === nodeDb.node_type && instanceable.id === nodeDb.id));
           } else {
             nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers);
           }

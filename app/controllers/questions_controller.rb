@@ -8,6 +8,7 @@ class QuestionsController < ApplicationController
     add_breadcrumb t('breadcrumbs.new')
 
     @question = Question.new
+    @question.type = nil
   end
 
   def edit
@@ -17,6 +18,11 @@ class QuestionsController < ApplicationController
 
   def create
     @question = @algorithm.questions.new(question_params)
+    puts '***'
+    puts question_params
+    puts '***'
+    puts @question.inspect
+    puts '***'
 
     if @question.save
       # Don't create answers if it is boolean type, since it is automatically created from the model
@@ -68,6 +74,10 @@ class QuestionsController < ApplicationController
     end
   end
 
+  def reference_prefix
+    render json: Question.reference_prefix_class(params[:type])
+  end
+
   # @params Question with the translations
   # Update the object with its translation without
   def update_translations
@@ -99,7 +109,7 @@ class QuestionsController < ApplicationController
       Language.label_params,
       :reference,
       :priority,
-      :category_id,
+      :type,
       :description_en,
       Language.description_params,
       :answer_type_id,

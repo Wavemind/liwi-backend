@@ -33,11 +33,11 @@ class AdvancedNodeWidget extends BaseWidget<AdvancedNodeWidgetProps, AdvancedNod
   render() {
     const { diagramNode } = this.props;
 
-    const type = diagramNode.node.type;
+    const type = diagramNode.node.node_type;
 
     if (type === "FinalDiagnostic") {
       return <FinalDiagnosticWidget diagramNode={diagramNode}/>;
-    } else if (type === "Management" || type === "Treatment" || type === "PredefinedSyndrome" || type === "Question") {
+    } else if (type === "Management" || type === "Treatment" || type === "QuestionsSequence" || type === "Question") {
       return <NotDFWidget diagramNode={diagramNode}/>;
     } else {
       return <AndWidget diagramNode={diagramNode}/>;

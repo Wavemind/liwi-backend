@@ -22,9 +22,9 @@ class Toolbar extends React.Component {
   };
 
   // Button to open modal with new predefined syndrome node form
-  newPredefinedSyndrome = () => {
+  newQuestionsSequence = () => {
     const { set } = this.props;
-    set('modalToOpen', 'CreatePredefinedSyndrome');
+    set('modalToOpen', 'CreateQuestionsSequence');
     set('modalIsOpen', true);
   };
 
@@ -49,7 +49,7 @@ class Toolbar extends React.Component {
     if (type === 'Diagnostic') {
       response = await http.validateDiagnostic();
     } else {
-      response = await http.validatePredefinedSyndromeScored();
+      response = await http.validateQuestionsSequenceScored();
     }
 
     let message = {
@@ -69,7 +69,7 @@ class Toolbar extends React.Component {
       // await http.redirectToDiagnosticDiagram();
     }
     else {
-      let panel = instanceable.category.id === 8 ? 'predefined_syndromes_scored' : 'predefined_syndromes';
+      let panel = instanceable.category.id === 8 ? 'questions_sequences_scored' : 'questions_sequences';
       await http.redirectToAlgorithm(panel);
     }
   };
@@ -89,7 +89,7 @@ class Toolbar extends React.Component {
               </button>
               <div className="dropdown-menu">
                 <a className="dropdown-item" href="#">Question</a>
-                <a className="dropdown-item" href="#" onClick={() => {this.newPredefinedSyndrome()}}>Predefined Syndrome</a>
+                <a className="dropdown-item" href="#" onClick={() => {this.newQuestionsSequence()}}>Questions Sequence</a>
                 {/*<a className="dropdown-item" href="#">Predefined Syndrome Scored</a>*/}
                 {type === 'Diagnostic' ? (<a className="dropdown-item" href="#" onClick={() => {this.newFinalDiagnostic()}}>Final diagnostic</a>) : null}
                 {type === 'FinalDiagnostic' ? (<a className="dropdown-item" href="#" onClick={() => {this.newHealthCare('treatments')}}>Treatment</a>) : null}
@@ -98,7 +98,7 @@ class Toolbar extends React.Component {
             </div>
           </div>
           <div className="col text-right">
-            {type === 'Diagnostic' || type === "PredefinedSyndrome" ? (
+            {type === 'Diagnostic' || type === "QuestionsSequence" ? (
             <button type="button" className="btn btn-transparent" onClick={() => {this.validate()}}>
               {isLoading ?
                 <span>Loading</span>: <span>Validate</span>
