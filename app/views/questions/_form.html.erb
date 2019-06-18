@@ -1,4 +1,5 @@
 <%= f.input :priority, collection: Question.priorities.map { |k, v| [t("question.priorities.#{k}"), k] }, prompt: t('select') %>
+<%= f.input :stage, collection: Question.stages.map { |k, v| [t("question.stages.#{k}"), k] }, prompt: t('select') %>
 <%= f.input :type, collection: Question.descendants, value_method: :name, label_method: :display_label, prompt: t('select'), disabled: f.object.persisted? %>
 
 <%= f.input :reference, prepend: (f.object.persisted? ? false : (@question.type.nil? ? '' : @question.reference_prefix)), disabled: f.object.persisted? %>

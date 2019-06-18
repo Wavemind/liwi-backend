@@ -107,6 +107,7 @@ class QuestionsController < ApplicationController
       Language.label_params,
       :reference,
       :priority,
+      :stage,
       :type,
       :description_en,
       Language.description_params,

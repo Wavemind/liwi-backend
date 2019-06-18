@@ -335,6 +335,11 @@ en:
       symptom: "S"
       physical_exam: "P"
       test: "T"
+    stages:
+      registration: "Registration"
+      triage: "Triage"
+      test: "Test"
+      consultation: "Consultation"
     table:
       columns:
         label: "Label"
