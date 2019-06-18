@@ -59,6 +59,9 @@ export default class DiagramProvider extends React.Component {
     // Assign node to correct array
     availableNodes.map((node) => {
       let category = this.getCategoryNode(node);
+      console.log(node)
+      console.log(category)
+
       orderedNodes[category].push(node);
     });
 

@@ -57,11 +57,11 @@ class QuestionsSequencesController < ApplicationController
   # @return  node
   # Create a predefined syndrome node from diagram and instance it
   def create_from_diagram
-    questions_sequence = @algorithm.questions_sequences.new(questions_sequence_params)
+    questions_sequence = @algorithm.questions_sequences.new(questions_sequence_params).becomes(QuestionsSequences::Scored)
     questions_sequence.type = QuestionsSequences::Scored # TODO : Do a category manager system
     if questions_sequence.save
       Object.const_get(params[:instanceable_type].camelize.singularize).find(params[:instanceable_id]).components.create!(node: questions_sequence)
-      render json: {status: 'success', messages: [t('flash_message.success_created')], node: questions_sequence.as_json(include: :answers, methods: :type)}
+      render json: {status: 'success', messages: [t('flash_message.success_created')], node: questions_sequence.as_json(include: :answers, methods: :node_type)}
     else
       render json: {status: 'danger', errors: questions_sequence.errors.messages, ok: false}
     end
