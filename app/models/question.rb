@@ -16,15 +16,15 @@ class Question < Node
   accepts_nested_attributes_for :answers, reject_if: :all_blank, allow_destroy: true
 
   def self.descendants
-    [AssessmentTest, ChiefComplain, Demographic, Exposure, PhysicalExam, Symptom, Vaccine]
+    [Questions::AssessmentTest, Questions::ChiefComplain, Questions::Demographic, Questions::Exposure, Questions::PhysicalExam, Questions::Symptom, Questions::Vaccine]
   end
 
   def reference_prefix
-    I18n.t("questions.categories.#{type.underscore}.reference_prefix")
+    I18n.t("questions.categories.#{Object.const_get(type).variable}.reference_prefix")
   end
 
   def self.reference_prefix_class(type)
-    I18n.t("questions.categories.#{type.underscore}.reference_prefix")
+    I18n.t("questions.categories.#{Object.const_get(type).variable}.reference_prefix")
   end
 
   private
@@ -43,6 +43,6 @@ class Question < Node
   end
 
   def self.display_label
-    I18n.t("questions.categories.#{self.name.underscore}.label")
+    I18n.t("questions.categories.#{self.variable}.label")
   end
 end

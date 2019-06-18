@@ -37,7 +37,7 @@ class AdvancedNodeWidget extends BaseWidget<AdvancedNodeWidgetProps, AdvancedNod
 
     if (type === "FinalDiagnostic") {
       return <FinalDiagnosticWidget diagramNode={diagramNode}/>;
-    } else if (type === "Management" || type === "Treatment" || type === "QuestionsSequence" || type === "Question") {
+    } else if (type === "HealthCare" || type === "QuestionsSequence" || type === "Question") {
       return <NotDFWidget diagramNode={diagramNode}/>;
     } else {
       return <AndWidget diagramNode={diagramNode}/>;

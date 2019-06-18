@@ -3,7 +3,6 @@ require 'rails_helper'
 RSpec.describe ConditionsController, type: :controller do
   login_user
   create_algorithm
-  create_category
   create_diagnostic
   create_question
 

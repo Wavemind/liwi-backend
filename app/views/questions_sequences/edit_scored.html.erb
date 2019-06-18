@@ -3,7 +3,7 @@
 <%= render 'utils/dependency_warning', node: @questions_sequence %>
 
 <div class="row justify-content-center">
-
-  <%= render 'scored_form' %>
-
+  <%= simple_form_for @questions_sequence.becomes(QuestionsSequence), url: algorithm_questions_sequence_url(@algorithm), html: { class: 'form-horizontal' }, wrapper: :input_group do |f| %>
+    <%= render 'scored_form', f: f %>
+  <% end %>
 </div>

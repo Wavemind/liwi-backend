@@ -58,12 +58,12 @@ class Node < ApplicationRecord
   end
 
   def node_type
-    self.is_a?(FinalDiagnostic) || self.is_a?(HealthCare) ? self.class.name : self.class.superclass.name
+    self.is_a?(FinalDiagnostic) ? self.class.name : self.class.superclass.name
   end
 
   def category_name
-    if self.is_a?(QuestionsSequence) || self.is_a?(Question)
-      type
+    if self.is_a?(QuestionsSequence) || self.is_a?(Question) || self.is_a?(HealthCare)
+      self.class.variable
     end
   end
 

@@ -71,7 +71,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :treatments, only: [:new, :create, :edit, :update, :destroy] do
+    resources :managements, only: [:new, :create, :edit, :update, :destroy] do
       collection do
         post 'create_from_diagram'
       end
@@ -81,7 +81,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :managements, only: [:new, :create, :edit, :update, :destroy] do
+    resources :treatments, only: [:new, :create, :edit, :update, :destroy] do
       collection do
         post 'create_from_diagram'
       end

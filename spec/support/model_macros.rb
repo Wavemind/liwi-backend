@@ -26,20 +26,6 @@ module ModelMacros
     end
   end
 
-  def create_category
-    before(:each) do
-      @exposure = Category.create!(name_en: 'Exposure', reference_prefix: 'E', parent: 'Question')
-      @symptom = Category.create!(name_en: 'Symptom', reference_prefix: 'S', parent: 'Question')
-      @assessment_test = Category.create!(name_en: 'Assessment/Test', reference_prefix: 'A', parent: 'Question')
-      @physical_exam = Category.create!(name_en: 'Physical exam', reference_prefix: 'P', parent: 'Question')
-
-      @ps_category = Category.create!(name_en: 'Predefined syndrome', reference_prefix: 'PS', parent: 'PredefinedSyndrome')
-      @comorbidity = Category.create!(name_en: 'Comorbidity', reference_prefix: 'DC', parent: 'PredefinedSyndrome')
-      @predefined_condition = Category.create!(name_en: 'Predefined condition', reference_prefix: 'C', parent: 'PredefinedSyndrome')
-      @pss_category = Category.create!(name_en: 'Predefined syndrome scored', reference_prefix: 'PSS', parent: 'PredefinedSyndrome')
-    end
-  end
-
   def create_diagnostic
     before(:each) do
       epoc_first = Version.create!(name: 'first_trial', algorithm: @algorithm, user: @user)
@@ -50,7 +36,7 @@ module ModelMacros
   def create_question
     before(:each) do
       @boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
-      @question = Question.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2456', category: @symptom, priority: Question.priorities[:mandatory], answer_type: @boolean)
+      @question = Question.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2456', type: Symptom, priority: Question.priorities[:mandatory], answer_type: @boolean)
     end
   end
 
@@ -60,10 +46,10 @@ module ModelMacros
       epoc_first = Version.create!(name: 'first_trial', algorithm: @algorithm, user: @user)
 
       # Questions
-      s2 = Question.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2123123', category: @symptom, priority: Question.priorities[:mandatory], answer_type: @boolean)
-      p13 = Question.create!(algorithm: @algorithm, label_en: 'Lower chest indrawing', reference: '1331231231', category: @physical_exam, priority: Question.priorities[:basic], answer_type: @boolean)
-      p3 = Question.create!(algorithm: @algorithm, label_en: 'Respiratory rate', reference: '34123123', category: @physical_exam, priority: Question.priorities[:triage], answer_type: @input_integer)
-      @p1 = Question.create!(algorithm: @algorithm, label_en: 'SAO2', reference: '1123123', category: @physical_exam, priority: Question.priorities[:triage], answer_type: @input_integer)
+      s2 = Question.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2123123', type: Symptom, priority: Question.priorities[:mandatory], answer_type: @boolean)
+      p13 = Question.create!(algorithm: @algorithm, label_en: 'Lower chest indrawing', reference: '1331231231', type: PhysicalExam, priority: Question.priorities[:basic], answer_type: @boolean)
+      p3 = Question.create!(algorithm: @algorithm, label_en: 'Respiratory rate', reference: '34123123', type: PhysicalExam, priority: Question.priorities[:mandatory], answer_type: @input_integer)
+      @p1 = Question.create!(algorithm: @algorithm, label_en: 'SAO2', reference: '1123123', type: PhysicalExam, priority: Question.priorities[:mandatory], answer_type: @input_integer)
 
       # Answers
       @s2_1 = s2.answers.first
@@ -86,7 +72,7 @@ module ModelMacros
       @cond1 = Condition.create!(referenceable: @dd7_df7, first_conditionable: @p3_2, top_level: true)
 
       # PS
-      ps6 = PredefinedSyndrome.create!(algorithm: @algorithm, reference: '6', label_en: 'Able to drink', category: @ps_category)
+      ps6 = PredefinedSyndrome.create!(algorithm: @algorithm, reference: '6', label_en: 'Able to drink', type: PredefinedSyndrome)
     end
   end
 

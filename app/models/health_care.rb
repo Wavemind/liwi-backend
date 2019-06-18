@@ -1,7 +1,18 @@
 # Define every treatments for a diagnostic
 class HealthCare < Node
 
+  scope :managements, ->() { where('type = ?', 'HealthCares::Management') }
+  scope :treatments, ->() { where('type = ?', 'HealthCares::Treatment') }
+
+  def self.descendants
+    [HealthCares::Management, HealthCares::Treatment]
+  end
+
   private
+
+  def self.variable
+
+  end
 
   # {Node#unique_reference}
   # Scoped by the current algorithm
@@ -17,10 +28,11 @@ class HealthCare < Node
   end
 
   def reference_prefix
-    I18n.t("health_cares.categories.#{type.underscore}.reference_prefix")
+    I18n.t("health_cares.categories.#{Object.const_get(type).variable}.reference_prefix")
   end
 
   def self.display_label
-    I18n.t("health_cares.categories.#{self.name.underscore}.label")
+    I18n.t("health_cares.categories.#{self.variable}.label")
   end
+
 end

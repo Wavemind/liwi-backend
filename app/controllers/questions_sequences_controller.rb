@@ -58,7 +58,7 @@ class QuestionsSequencesController < ApplicationController
   # Create a predefined syndrome node from diagram and instance it
   def create_from_diagram
     questions_sequence = @algorithm.questions_sequences.new(questions_sequence_params)
-    questions_sequence.type = Scored # TODO : Do a category manager system
+    questions_sequence.type = QuestionsSequences::Scored # TODO : Do a category manager system
     if questions_sequence.save
       Object.const_get(params[:instanceable_type].camelize.singularize).find(params[:instanceable_id]).components.create!(node: questions_sequence)
       render json: {status: 'success', messages: [t('flash_message.success_created')], node: questions_sequence.as_json(include: :answers, methods: :type)}
@@ -124,14 +124,14 @@ class QuestionsSequencesController < ApplicationController
   private
 
   def set_breadcrumb
-    panel = (@questions_sequence.is_a?(Scored)) ? 'questions_sequences_scored' : 'questions_sequences'
+    panel = (@questions_sequence.is_a?(QuestionsSequences::Scored)) ? 'questions_sequences_scored' : 'questions_sequences'
     add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
     add_breadcrumb @questions_sequence.algorithm.name, algorithm_url(@questions_sequence.algorithm, panel: panel)
     add_breadcrumb t('breadcrumbs.questions_sequences')
   end
 
   def set_questions_sequence
-    @questions_sequence = QuestionsSequence.find(params[:id])
+    @questions_sequence = Node.find(params[:id])
   end
 
   def questions_sequence_params

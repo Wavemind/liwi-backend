@@ -1,8 +1,6 @@
-<%= simple_form_for [@algorithm, @treatment], html: { class: 'form-horizontal' }, wrapper: :input_group do |f| %>
+<%= f.input :type, as: :hidden %>
+<%= f.input :reference, prepend: (f.object.persisted? ? false : t('treatments.reference')) %>
+<%= f.input :label_en %>
+<%= f.input :description_en, as: :text %>
 
-  <%= f.input :reference, prepend: (f.object.persisted? ? false : t('treatments.reference')), disabled: f.object.persisted? %>
-  <%= f.input :label_en %>
-  <%= f.input :description_en, as: :text %>
-
-  <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
-<% end %>
+<%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>

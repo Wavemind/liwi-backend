@@ -85,7 +85,7 @@ class InstancesController < ApplicationController
   def create_from_final_diagnostic_diagram
     instance = @instanceable.components.new(instance_params)
 
-    if instance.node.is_a?(Treatment) || instance.node.is_a?(Management)
+    if instance.node.is_a?(HealthCare)
       FinalDiagnosticHealthCare.create!(final_diagnostic: FinalDiagnostic.find(instance_params[:final_diagnostic_id]), node: instance.node)
     end
 
@@ -143,7 +143,7 @@ class InstancesController < ApplicationController
     # Remove from HealthCare diagram (in case there are 2 instances of one node for one diagnostic, one df condition and one hc condition)
     if instance_params[:final_diagnostic_id].present?
       instance = @instanceable.components.health_care_conditions.find_by(node_id: instance_params[:node_id])
-      FinalDiagnosticHealthCare.find_by(final_diagnostic_id: instance_params[:final_diagnostic_id], node_id: instance.node_id).destroy! if (instance.node.is_a?(Treatment) || instance.node.is_a?(Management))
+      FinalDiagnosticHealthCare.find_by(final_diagnostic_id: instance_params[:final_diagnostic_id], node_id: instance.node_id).destroy! if instance.node.is_a?(HealthCare)
     else
       instance = @instanceable.components.not_health_care_conditions.find_by(node_id: instance_params[:node_id])
     end

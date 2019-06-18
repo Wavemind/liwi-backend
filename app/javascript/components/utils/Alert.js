@@ -40,7 +40,7 @@ class Alert extends React.Component {
         </button>
         <ul>
           {alert.messages.map((message, key) =>
-            <li key={key}>{message}</li>
+            <li key={key}><div dangerouslySetInnerHTML={{__html: message}} /></li>
           )}
         </ul>
 

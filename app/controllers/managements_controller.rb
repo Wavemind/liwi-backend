@@ -7,7 +7,7 @@ class ManagementsController < ApplicationController
   def new
     add_breadcrumb t('breadcrumbs.new')
 
-    @management = Management.new
+    @management = HealthCares::Management.new
   end
 
   def edit
@@ -16,7 +16,7 @@ class ManagementsController < ApplicationController
   end
 
   def create
-    @management = @algorithm.managements.new(management_params)
+    @management = @algorithm.health_cares.managements.new(management_params)
 
     if @management.save
       redirect_to algorithm_url(@algorithm, panel: 'managements'), notice: t('flash_message.success_created')
@@ -50,7 +50,7 @@ class ManagementsController < ApplicationController
   # @return final_diagnostic node
   # Create a final diagnostic node from diagram
   def create_from_diagram
-    management = @algorithm.managements.new(management_params)
+    management = @algorithm.health_cares.managements.new(management_params)
 
     if management.save
       diagnostic = Diagnostic.find(params[:diagnostic_id])
@@ -94,13 +94,14 @@ class ManagementsController < ApplicationController
   end
 
   def set_management
-    @management = Management.find(params[:id])
+    @management = Node.find(params[:id])
   end
 
   def management_params
-    params.require(:management).permit(
+    params.require(:health_cares_management).permit(
       :id,
       :reference,
+      :type,
       :label_en,
       Language.label_params,
       :description_en,

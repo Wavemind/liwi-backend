@@ -7,7 +7,7 @@ class TreatmentsController < ApplicationController
   def new
     add_breadcrumb t('breadcrumbs.new')
 
-    @treatment = Treatment.new
+    @treatment = HealthCares::Treatment.new
   end
 
   def edit
@@ -16,7 +16,7 @@ class TreatmentsController < ApplicationController
   end
 
   def create
-    @treatment = @algorithm.treatments.new(treatment_params)
+    @treatment = @algorithm.health_cares.treatments.new(treatment_params)
 
     if @treatment.save
       redirect_to algorithm_url(@algorithm, panel: 'treatments'), notice: t('flash_message.success_created')
@@ -50,7 +50,7 @@ class TreatmentsController < ApplicationController
   # @return final_diagnostic node
   # Create a final diagnostic node from diagram
   def create_from_diagram
-    treatment = @algorithm.treatments.new(treatment_params)
+    treatment = @algorithm.health_cares.treatments.new(treatment_params)
 
     if treatment.save
       diagnostic = Diagnostic.find(params[:diagnostic_id])
@@ -95,13 +95,14 @@ class TreatmentsController < ApplicationController
   end
 
   def set_treatment
-    @treatment = Treatment.find(params[:id])
+    @treatment = Node.find(params[:id])
   end
 
   def treatment_params
-    params.require(:treatment).permit(
+    params.require(:health_cares_treatment).permit(
       :id,
       :reference,
+      :type,
       :label_en,
       Language.label_params,
       :description_en,

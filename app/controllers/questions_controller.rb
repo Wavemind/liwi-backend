@@ -18,12 +18,6 @@ class QuestionsController < ApplicationController
 
   def create
     @question = @algorithm.questions.new(question_params)
-    puts '***'
-    puts question_params
-    puts '***'
-    puts @question.inspect
-    puts '***'
-
     if @question.save
       # Don't create answers if it is boolean type, since it is automatically created from the model
       if @question.answer_type.value == 'Boolean'
@@ -43,7 +37,11 @@ class QuestionsController < ApplicationController
 
   def update
     if @question.update(question_params)
-      render 'answers/edit'
+      if @question.answer_type.value == 'Boolean'
+        redirect_to algorithm_url(@algorithm, panel: 'questions'), notice: t('flash_message.success_updated')
+      else
+        render 'answers/edit'
+      end
     else
       render :edit
     end
@@ -99,7 +97,7 @@ class QuestionsController < ApplicationController
   end
 
   def set_question
-    @question = Question.find(params[:id])
+    @question = Node.find(params[:id])
   end
 
   def question_params

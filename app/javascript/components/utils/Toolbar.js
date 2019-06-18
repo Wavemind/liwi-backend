@@ -41,15 +41,17 @@ class Toolbar extends React.Component {
       http,
       addMessage,
       type,
+      instanceable
     } = this.props;
 
     let response;
     this.setState({isLoading: true});
 
+    console.log(instanceable);
     if (type === 'Diagnostic') {
       response = await http.validateDiagnostic();
     } else {
-      response = await http.validateQuestionsSequenceScored();
+      response = await http.validateQuestionsSequence();
     }
 
     let message = {

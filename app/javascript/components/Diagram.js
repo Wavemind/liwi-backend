@@ -126,7 +126,7 @@ class Diagram extends React.Component {
       levels.map((instance) => {
         let node = null;
         // If this is a PS score diagram, don't put an inport on the nodes, since there is only one level
-        if (type === "QuestionsSequence" && instanceable.category_name === 'Scored') {
+        if (type === "QuestionsSequence" && instanceable.category_name === 'scored') {
           node = this.createNode(instance.node, instance.node.answers, "rgb(255,255,255)", (type === instance.node.node_type && instanceable.id === instance.node.id));
         } else {
           node = this.createNode(instance.node, instance.node.answers);
@@ -213,7 +213,7 @@ class Diagram extends React.Component {
           model.addAll(andNode, firstLink, secondLink, andLink);
         } else {
           let link = _.find(firstNodeAnswer.getOutPorts(), ["label", this.getFullLabel(firstAnswer)]).link(node.getInPort());
-          if (type === "QuestionsSequence" && instanceable.category_name === 'Scored') { // Check if it is a diagram PSS
+          if (type === "QuestionsSequence" && instanceable.category_name === 'scored') { // Check if it is a diagram PSS
             link.addLabel(condition.score);
           }
           model.addAll(link);
@@ -261,7 +261,7 @@ class Diagram extends React.Component {
                 let node = eventLink.port.parent.node;
                 let answerId = eventModel.link.sourcePort.dbId;
                 if (eventModel.link.targetPort.in) {
-                  if (type === "QuestionsSequence" && instanceable.category_name === 'Scored') { // Check if it is a diagram PSS
+                  if (type === "QuestionsSequence" && instanceable.category_name === 'scored') { // Check if it is a diagram PSS
                     set('currentNode', node);
                     set('currentAnswerId', answerId);
                     set('currentLinkId', eventModel.link.id);
@@ -367,7 +367,7 @@ class Diagram extends React.Component {
       if (result.ok === undefined || result.ok) {
         if (nodeDb.get_answers !== null) {
           // Don't add an inPort for PSS node
-          if (type === "QuestionsSequence" && instanceable.category_name === 'Scored') { // Check if it is a diagram PSS
+          if (type === "QuestionsSequence" && instanceable.category_name === 'scored') { // Check if it is a diagram PSS
             nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers, "rgb(255,255,255)", (type === nodeDb.node_type && instanceable.id === nodeDb.id));
           } else {
             nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers);

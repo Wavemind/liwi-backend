@@ -5,11 +5,11 @@ class QuestionsSequence < Node
   has_many :answers, foreign_key: 'node_id', dependent: :destroy
   has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy
 
-  scope :scored, ->() { where(type: 'Scored') }
-  scope :not_scored, ->() { where.not(type: 'Scored') }
+  scope :scored, ->() { where(type: 'QuestionsSequences::Scored') }
+  scope :not_scored, ->() { where.not(type: 'QuestionsSequences::Scored') }
 
   def self.descendants
-    [PredefinedSyndrome, Comorbidity, Triage, Scored]
+    [QuestionsSequences::PredefinedSyndrome, QuestionsSequences::Comorbidity, QuestionsSequences::Triage, QuestionsSequences::Scored]
   end
 
   # @params [PredefinedSyndrome]
@@ -58,12 +58,12 @@ class QuestionsSequence < Node
   # @return [Json]
   # Return available nodes in the algorithm in json format
   def available_nodes_json
-    (algorithm.nodes.where.not(id: components.not_health_care_conditions.select(:node_id)).where.not(type: 'Treatment').where.not(type: 'Management')).as_json(methods: [:category_name, :node_type, :get_answers])
+    (algorithm.nodes.where.not(id: components.not_health_care_conditions.select(:node_id)).where.not('type LIKE ?', 'HealthCares::%')).as_json(methods: [:category_name, :node_type, :get_answers])
   end
 
   # Add errors to a predefined syndrome for its components
   def manual_validate
-    validate_score if self.is_a? Scored
+    validate_score if self.is_a? QuestionsSequences::Scored
     components.each do |instance|
       if instance.node == self
         unless instance.conditions.any?
@@ -71,7 +71,7 @@ class QuestionsSequence < Node
         end
       else
         unless instance.children.any?
-          errors.add(:basic, I18n.t('flash_message.questions_sequence.question_no_children', type: instance.node.type, reference: instance.node.reference))
+          errors.add(:basic, I18n.t('flash_message.questions_sequence.question_no_children', type: instance.node.node_type, reference: instance.node.reference))
         end
       end
     end
@@ -92,11 +92,15 @@ class QuestionsSequence < Node
   end
 
   def reference_prefix
-    I18n.t("questions_sequences.categories.#{type.underscore}.reference_prefix")
+    I18n.t("questions_sequences.categories.#{Object.const_get(type).variable}.reference_prefix")
   end
 
   def self.reference_prefix_class(type)
-    I18n.t("questions_sequences.categories.#{type.underscore}.reference_prefix")
+    I18n.t("questions_sequences.categories.#{Object.const_get(type).variable}.reference_prefix")
+  end
+
+  def self.variable
+
   end
 
   private
@@ -115,6 +119,6 @@ class QuestionsSequence < Node
   end
 
   def self.display_label
-    I18n.t("questions_sequences.categories.#{self.name.underscore}.label")
+    I18n.t("questions_sequences.categories.#{self.variable}.label")
   end
 end

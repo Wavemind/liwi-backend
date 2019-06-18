@@ -65,11 +65,11 @@ input_integer = AnswerType.create!(value: 'Integer', display: 'Input')
 input_float = AnswerType.create!(value: 'Float', display: 'Input')
 
 # Questions
-e1 = Question.create!(algorithm: epoct, answer_type: input_integer, label_en: 'Age', reference: '1', type: Exposure, priority: Question.priorities[:mandatory])
-s3 = Question.create!(algorithm: epoct, answer_type: input_integer, label_en: 'Convulsions in current illness', reference: '3', type: Symptom, priority: Question.priorities[:mandatory])
-s45 = Question.create!(algorithm: epoct, answer_type: boolean, label_en: 'Is the patient able to tolerate PO liquid ?', reference: '45', type: Symptom, priority: Question.priorities[:mandatory])
-p6 = Question.create!(algorithm: epoct, answer_type: input_float, label_en: 'What is MUAC size ?', reference: '6', type: PhysicalExam, priority: Question.priorities[:mandatory])
-p21 = Question.create!(algorithm: epoct, answer_type: input_float, label_en: 'What is the size of the skin lesion ?', reference: '21', type: PhysicalExam, priority: Question.priorities[:basic])
+e1 = Questions::Exposure.create!(algorithm: epoct, answer_type: input_integer, label_en: 'Age', reference: '1', priority: Question.priorities[:mandatory])
+s3 = Questions::Symptom.create!(algorithm: epoct, answer_type: input_integer, label_en: 'Convulsions in current illness', reference: '3', priority: Question.priorities[:mandatory])
+s45 = Questions::Symptom.create!(algorithm: epoct, answer_type: boolean, label_en: 'Is the patient able to tolerate PO liquid ?', reference: '45', priority: Question.priorities[:mandatory])
+p6 = Questions::PhysicalExam.create!(algorithm: epoct, answer_type: input_float, label_en: 'What is MUAC size ?', reference: '6', priority: Question.priorities[:mandatory])
+p21 = Questions::PhysicalExam.create!(algorithm: epoct, answer_type: input_float, label_en: 'What is the size of the skin lesion ?', reference: '21', priority: Question.priorities[:basic])
 
 # Answers
 e1_1 = Answer.create!(node: e1, reference: '1', label_en: 'less than 2 months', value: '2', operator: Answer.operators[:less])
@@ -116,39 +116,39 @@ group_wavemind.save
 dd7 = Diagnostic.create!(version: epoc_first, label_en: 'Severe LRTI', reference: '7')
 df7 = FinalDiagnostic.create!(label_en: 'Severe lower respiratory tract infection', reference: '7', diagnostic: dd7)
 
-s2 = Question.create!(algorithm: epoct, label_en: 'Cough', reference: '2', type: Symptom, priority: Question.priorities[:mandatory], answer_type: boolean)
+s2 = Questions::Symptom.create!(algorithm: epoct, label_en: 'Cough', reference: '2', priority: Question.priorities[:mandatory], answer_type: boolean)
 s2_1 = s2.answers.first
 
-s4 = Question.create!(algorithm: epoct, label_en: 'Drink as usual', reference: '4', type: Symptom, priority: Question.priorities[:mandatory], answer_type: boolean)
+s4 = Questions::Symptom.create!(algorithm: epoct, label_en: 'Drink as usual', reference: '4', priority: Question.priorities[:mandatory], answer_type: boolean)
 s4_1 = s4.answers.first
 s4_2 = s4.answers.second
 
-p1 = Question.create!(algorithm: epoct, label_en: 'SAO2', reference: '1', type: PhysicalExam, priority: Question.priorities[:mandatory], answer_type: input_integer)
+p1 = Questions::PhysicalExam.create!(algorithm: epoct, label_en: 'SAO2', reference: '1', priority: Question.priorities[:mandatory], answer_type: input_integer)
 p1_1 = Answer.create!(node: p1, reference: '1', label_en: '>/= 90%', value: '90', operator: Answer.operators[:more_or_equal])
 p1_2 = Answer.create!(node: p1, reference: '2', label_en: '< 90%', value: '90', operator: Answer.operators[:less])
 
-p3 = Question.create!(algorithm: epoct, label_en: 'Respiratory rate', reference: '3', type: PhysicalExam, priority: Question.priorities[:mandatory], answer_type: input_integer)
+p3 = Questions::PhysicalExam.create!(algorithm: epoct, label_en: 'Respiratory rate', reference: '3', priority: Question.priorities[:mandatory], answer_type: input_integer)
 p3_1 = Answer.create!(node: p3, reference: '1', label_en: '< 97th%ile', value: '97', operator: Answer.operators[:less])
 p3_2 = Answer.create!(node: p3, reference: '2', label_en: '>/= 97th%ile', value: '97', operator: Answer.operators[:more_or_equal])
 
-p13 = Question.create!(algorithm: epoct, label_en: 'Lower chest indrawing', reference: '13', type: PhysicalExam, priority: Question.priorities[:basic], answer_type: boolean)
+p13 = Questions::PhysicalExam.create!(algorithm: epoct, label_en: 'Lower chest indrawing', reference: '13', priority: Question.priorities[:basic], answer_type: boolean)
 p13_1 = p13.answers.first
 
-p14 = Question.create!(algorithm: epoct, label_en: 'Sever respiratory distress', reference: '14', type: PhysicalExam, priority: Question.priorities[:basic], answer_type: boolean)
+p14 = Questions::PhysicalExam.create!(algorithm: epoct, label_en: 'Sever respiratory distress', reference: '14', priority: Question.priorities[:basic], answer_type: boolean)
 p14_1 = p14.answers.first
 
-p25 = Question.create!(algorithm: epoct, label_en: 'Tolerates PO liquid', reference: '25', type: PhysicalExam, priority: Question.priorities[:basic], answer_type: boolean)
+p25 = Questions::PhysicalExam.create!(algorithm: epoct, label_en: 'Tolerates PO liquid', reference: '25', priority: Question.priorities[:basic], answer_type: boolean)
 p25_1 = p25.answers.first
 
-t1 = HealthCare.create!(algorithm: epoct, label_en: 'Amoxicillin', reference: '1', type: Treatment)
-t2 = HealthCare.create!(algorithm: epoct, label_en: 'IM ceftriaxone', reference: '2', type: Treatment)
-t9 = HealthCare.create!(algorithm: epoct, label_en: 'Oral rehydration', reference: '9', type: Treatment)
+t1 = HealthCares::Treatment.create!(algorithm: epoct, label_en: 'Amoxicillin', reference: '1')
+t2 = HealthCares::Treatment.create!(algorithm: epoct, label_en: 'IM ceftriaxone', reference: '2')
+t9 = HealthCares::Treatment.create!(algorithm: epoct, label_en: 'Oral rehydration', reference: '9')
 
-m2 = HealthCare.create!(algorithm: epoct, label_en: 'Refer', reference: '2', type: Management)
+m2 = HealthCares::Management.create!(algorithm: epoct, label_en: 'Refer', reference: '2')
 
 df7.nodes << [t1, t2, t9, m2]
 
-ps6 = QuestionsSequence.create!(algorithm: epoct, reference: '6', label_en: 'Able to drink', type: PredefinedSyndrome)
+ps6 = QuestionsSequences::PredefinedSyndrome.create!(algorithm: epoct, reference: '6', label_en: 'Able to drink')
 ps6_1 = ps6.answers.first
 ps6_2 = ps6.answers.second
 
@@ -194,83 +194,83 @@ Condition.create!(referenceable: dd7_t2, first_conditionable: ps6_2, operator: n
 dd5 = Diagnostic.create!(version: epoc_first, label_en: 'Musculo-skeletal infection', reference: '5')
 df14 = FinalDiagnostic.create!(label_en: 'Osteomyelitis / septic arthritis', reference: '14', diagnostic: dd5)
 
-p7 = Question.create!(algorithm: epoct, label_en: 'Convulsing now', reference: '7', type: PhysicalExam, priority: Question.priorities[:mandatory], answer_type: boolean)
+p7 = Questions::PhysicalExam.create!(algorithm: epoct, label_en: 'Convulsing now', reference: '7', priority: Question.priorities[:mandatory], answer_type: boolean)
 p7_1 = p7.answers.first
 p7_2 = p7.answers.second
 
-p8 = Question.create!(algorithm: epoct, label_en: 'Lethargic or unconscious', reference: '8', type: PhysicalExam, priority: Question.priorities[:mandatory], answer_type: boolean)
+p8 = Questions::PhysicalExam.create!(algorithm: epoct, label_en: 'Lethargic or unconscious', reference: '8', priority: Question.priorities[:mandatory], answer_type: boolean)
 p8_1 = p8.answers.first
 p8_2 = p8.answers.second
 
-p2 = Question.create!(algorithm: epoct, label_en: 'Severe tachycardia (th %ile)', reference: '2', type: PhysicalExam, priority: Question.priorities[:mandatory], answer_type: input_integer)
+p2 = Questions::PhysicalExam.create!(algorithm: epoct, label_en: 'Severe tachycardia (th %ile)', reference: '2', priority: Question.priorities[:mandatory], answer_type: input_integer)
 p2_1 = p2.answers.create!(reference: '1', label_en: 'More than 90', value: '90', operator: Answer.operators[:more_or_equal])
 p2_2 = p2.answers.create!(reference: '2', label_en: 'Less than 90', value: '90', operator: Answer.operators[:less])
 
-p9 = Question.create!(algorithm: epoct, label_en: 'Stiff neck', reference: '9', type: PhysicalExam, priority: Question.priorities[:mandatory], answer_type: boolean)
+p9 = Questions::PhysicalExam.create!(algorithm: epoct, label_en: 'Stiff neck', reference: '9', priority: Question.priorities[:mandatory], answer_type: boolean)
 p9_1 = p9.answers.first
 p9_2 = p9.answers.second
 
-s1 = Question.create!(algorithm: epoct, label_en: 'History of fever', reference: '1', type: Symptom, priority: Question.priorities[:mandatory], answer_type: boolean)
+s1 = Questions::Symptom.create!(algorithm: epoct, label_en: 'History of fever', reference: '1', priority: Question.priorities[:mandatory], answer_type: boolean)
 s1_1 = s1.answers.first
 s1_2 = s1.answers.second
 
-p4 = Question.create!(algorithm: epoct, label_en: 'Axillary temperature', reference: '4', type: PhysicalExam, priority: Question.priorities[:mandatory], answer_type: input_float)
+p4 = Questions::PhysicalExam.create!(algorithm: epoct, label_en: 'Axillary temperature', reference: '4', priority: Question.priorities[:mandatory], answer_type: input_float)
 p4_1 = p4.answers.create!(reference: '1', label_en: 'More than 37.5', value: '37.5', operator: Answer.operators[:more_or_equal])
 p4_2 = p4.answers.create!(reference: '2', label_en: 'Less than 37.5', value: '37.5', operator: Answer.operators[:less])
 
-p5 = Question.create!(algorithm: epoct, label_en: 'Weight for age (z-score)', reference: '5', type: PhysicalExam, priority: Question.priorities[:mandatory], answer_type: input_float)
+p5 = Questions::PhysicalExam.create!(algorithm: epoct, label_en: 'Weight for age (z-score)', reference: '5', priority: Question.priorities[:mandatory], answer_type: input_float)
 p5_1 = p5.answers.create!(reference: '1', label_en: 'less than -3', value: '-3', operator: Answer.operators[:less])
 p5_2 = p5.answers.create!(reference: '2', label_en: 'Between -3 and -2', value: '-3,-2', operator: Answer.operators[:between])
 p5_3 = p5.answers.create!(reference: '3', label_en: 'More than -2', value: '-2', operator: Answer.operators[:more_or_equal])
 
-a1 = Question.create!(algorithm: epoct, label_en: 'mRDT', reference: '1', type: AssessmentTest, priority: Question.priorities[:mandatory], answer_type: dropdown_list)
+a1 = Questions::AssessmentTest.create!(algorithm: epoct, label_en: 'mRDT', reference: '1', priority: Question.priorities[:mandatory], answer_type: dropdown_list)
 a1_1 = a1.answers.create!(reference: '1', label_en: 'positive', value: nil, operator: nil)
 a1_2 = a1.answers.create!(reference: '2', label_en: 'negative', value: nil, operator: nil)
 
-a2 = Question.create!(algorithm: epoct, label_en: 'SaO2 (%)', reference: '2', type: AssessmentTest, priority: Question.priorities[:mandatory], answer_type: input_integer)
+a2 = Questions::AssessmentTest.create!(algorithm: epoct, label_en: 'SaO2 (%)', reference: '2', priority: Question.priorities[:mandatory], answer_type: input_integer)
 a2_1 = a2.answers.create!(reference: '1', label_en: 'Less than 6', value: '6', operator: Answer.operators[:less])
 a2_2 = a2.answers.create!(reference: '2', label_en: 'More than 6', value: '6', operator: Answer.operators[:more_or_equal])
 
-a3 = Question.create!(algorithm: epoct, label_en: 'CRP (mg/L)', reference: '3', type: AssessmentTest, priority: Question.priorities[:basic], answer_type: input_float)
+a3 = Questions::AssessmentTest.create!(algorithm: epoct, label_en: 'CRP (mg/L)', reference: '3', priority: Question.priorities[:basic], answer_type: input_float)
 a3_1 = a3.answers.create!(reference: '1', label_en: 'Less than 20', value: '20', operator: Answer.operators[:less])
 a3_2 = a3.answers.create!(reference: '2', label_en: 'Between 20 and 40', value: '20,40', operator: Answer.operators[:between])
 a3_3 = a3.answers.create!(reference: '3', label_en: 'More than 40', value: '40', operator: Answer.operators[:more_or_equal])
 
-a4 = Question.create!(algorithm: epoct, label_en: 'SaO2 (%)', reference: '4', type: AssessmentTest, priority: Question.priorities[:basic], answer_type: input_float)
+a4 = Questions::AssessmentTest.create!(algorithm: epoct, label_en: 'SaO2 (%)', reference: '4', priority: Question.priorities[:basic], answer_type: input_float)
 a4_1 = a4.answers.create!(reference: '1', label_en: 'Less than 3.3', value: '3.3', operator: Answer.operators[:less])
 a4_2 = a4.answers.create!(reference: '2', label_en: 'More than 3.3', value: '3.3', operator: Answer.operators[:more_or_equal])
 
-s8 = Question.create!(algorithm: epoct, label_en: 'Extremity pain', reference: '8', type: Symptom, priority: Question.priorities[:mandatory], answer_type: boolean)
+s8 = Questions::Symptom.create!(algorithm: epoct, label_en: 'Extremity pain', reference: '8', priority: Question.priorities[:mandatory], answer_type: boolean)
 s8_1 = s8.answers.first
 s8_2 = s8.answers.second
 
-p24 = Question.create!(algorithm: epoct, label_en: 'Joint swelling', reference: '24', type: PhysicalExam, priority: Question.priorities[:mandatory], answer_type: boolean)
+p24 = Questions::PhysicalExam.create!(algorithm: epoct, label_en: 'Joint swelling', reference: '24', priority: Question.priorities[:mandatory], answer_type: boolean)
 p24_1 = p24.answers.first
 p24_2 = p24.answers.second
 
-t4 = HealthCare.create!(algorithm: epoct, label_en: 'Cephalexin', reference: '4', type: Treatment)
+t4 = HealthCares::Treatment.create!(algorithm: epoct, label_en: 'Cephalexin', reference: '4')
 
 df14.nodes << [t2, t4, m2]
 
-ps1 = QuestionsSequence.create!(algorithm: epoct, reference: '1', label_en: 'Fever', type: PredefinedSyndrome)
+ps1 = QuestionsSequences::PredefinedSyndrome.create!(algorithm: epoct, reference: '1', label_en: 'Fever')
 ps1_1 = ps1.answers.first
 
-ps2 = QuestionsSequence.create!(algorithm: epoct, reference: '2', label_en: 'Danger signs', type: PredefinedSyndrome)
+ps2 = QuestionsSequences::PredefinedSyndrome.create!(algorithm: epoct, reference: '2', label_en: 'Danger signs')
 ps2_1 = ps2.answers.first
 
-dc1 = QuestionsSequence.create!(algorithm: epoct, reference: '1', label_en: 'Severe malnutrition', type: Comorbidity)
+dc1 = QuestionsSequences::Comorbidity.create!(algorithm: epoct, reference: '1', label_en: 'Severe malnutrition')
 dc1_1 = dc1.answers.first
 
-dc2 = QuestionsSequence.create!(algorithm: epoct, reference: '2', label_en: 'Moderate malnutrition', type: Comorbidity)
+dc2 = QuestionsSequences::Comorbidity.create!(algorithm: epoct, reference: '2', label_en: 'Moderate malnutrition')
 dc2_1 = dc2.answers.first
 
-dc3 = QuestionsSequence.create!(algorithm: epoct, reference: '3', label_en: 'Severe anemia', type: Comorbidity)
+dc3 = QuestionsSequences::Comorbidity.create!(algorithm: epoct, reference: '3', label_en: 'Severe anemia')
 dc3_1 = dc3.answers.first
 
-dc4 = QuestionsSequence.create!(algorithm: epoct, reference: '4', label_en: 'Hypoglycemia', type: Comorbidity)
+dc4 = QuestionsSequences::Comorbidity.create!(algorithm: epoct, reference: '4', label_en: 'Hypoglycemia')
 dc4_1 = dc4.answers.first
 
-c1 = QuestionsSequence.create!(algorithm: epoct, reference: '7', label_en: 'Severe malnutrition', type: PredefinedSyndrome)
+c1 = QuestionsSequences::PredefinedSyndrome.create!(algorithm: epoct, reference: '7', label_en: 'Severe malnutrition')
 c1_1 = c1.answers.first
 
 

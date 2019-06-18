@@ -3,7 +3,6 @@ require 'rails_helper'
 RSpec.describe AnswersController, type: :controller do
   login_user
   create_algorithm
-  create_category
   create_question
 
   it 'adds translations without rendering the view' do

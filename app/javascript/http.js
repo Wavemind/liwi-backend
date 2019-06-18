@@ -474,7 +474,7 @@ export default class Http {
 
   // @return [Object] flash message
   // Validate predefined syndrome scored
-  validateQuestionsSequenceScored = async () => {
+  validateQuestionsSequence = async () => {
     let response;
     const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/validate`;
     const body = null;

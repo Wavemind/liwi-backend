@@ -12,9 +12,9 @@ class TreatmentDatatable < AjaxDatatablesRails::ActiveRecord
 
   def view_columns
     @view_columns ||= {
-      reference: { source: 'Treatment.reference' },
-      label: { source: 'Treatment.label_translations' },
-      description: { source: 'Treatment.description_translations' },
+      reference: { source: 'HealthCares::Treatment.reference' },
+      label: { source: 'HealthCares::Treatment.label_translations' },
+      description: { source: 'HealthCares::Treatment.description_translations' },
     }
   end
 
@@ -31,6 +31,6 @@ class TreatmentDatatable < AjaxDatatablesRails::ActiveRecord
   end
 
   def get_raw_records
-    Algorithm.find(params[:id]).treatments.includes([:algorithm, :instances])
+    Algorithm.find(params[:id]).health_cares.treatments.includes([:algorithm, :instances])
   end
 end
