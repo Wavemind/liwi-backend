@@ -58,7 +58,7 @@ export default class Http {
       diagnostic_id: this.instanceableId,
       final_diagnostic_id: this.finalDiagnostic
     };
-    body[type.substring(0, type.length-1)] = {
+    body['health_cares_' + type.substring(0, type.length-1)] = {
       reference: reference,
       label_en: label,
       description_en: description

@@ -88,7 +88,7 @@ class QuestionsSequencesController < ApplicationController
 
   def update_from_diagram
     if @questions_sequence.update(questions_sequence_params)
-      render json: {status: 'success', messages: [t('flash_message.success_updated')], node: @questions_sequence.as_json(include: :answers, methods: :type)}
+      render json: {status: 'success', messages: [t('flash_message.success_updated')], node: @questions_sequence.as_json(include: :answers, methods: :node_type)}
     else
       render json: {status: 'danger', errors: @questions_sequence.errors.messages, ok: false}
     end

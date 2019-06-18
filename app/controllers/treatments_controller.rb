@@ -51,13 +51,14 @@ class TreatmentsController < ApplicationController
   # Create a final diagnostic node from diagram
   def create_from_diagram
     treatment = @algorithm.health_cares.treatments.new(treatment_params)
+    treatment.type = HealthCares::Treatment
 
     if treatment.save
       diagnostic = Diagnostic.find(params[:diagnostic_id])
       final_diagnostic = FinalDiagnostic.find(params[:final_diagnostic_id])
       final_diagnostic.nodes << treatment
       diagnostic.components.create!(node: treatment, final_diagnostic: final_diagnostic)
-      render json: {status: 'success', messages: [t('flash_message.success_created')], node: treatment.as_json(methods: [:type])}
+      render json: {status: 'success', messages: [t('flash_message.success_created')], node: treatment.as_json(methods: :node_type)}
     else
       render json: {status: 'danger', errors: treatment.errors.messages, ok: false}
     end
@@ -68,7 +69,7 @@ class TreatmentsController < ApplicationController
   # Create a final diagnostic node from diagram
   def update_from_diagram
     if @treatment.update(treatment_params)
-      render json: {status: 'success', messages: [t('flash_message.success_created')], node: @treatment.as_json(methods: [:type])}
+      render json: {status: 'success', messages: [t('flash_message.success_created')], node: @treatment.as_json(methods: :node_type)}
     else
       render json: {status: 'danger', errors: @treatment.errors.messages, ok: false}
     end

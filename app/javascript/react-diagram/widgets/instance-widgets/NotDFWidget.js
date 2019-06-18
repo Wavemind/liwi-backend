@@ -24,7 +24,7 @@ class NotDFWidget extends React.Component {
   };
 
   editNode = (node) => {
-    if (node.node.type === 'QuestionsSequence') {
+    if (node.node.node_type === 'QuestionsSequence') {
       node.setSelected(false);
 
       const { set } = this.props;
@@ -63,7 +63,7 @@ class NotDFWidget extends React.Component {
                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               </button>
               <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                {(diagramNode.node.type === "QuestionsSequence") ? (<a className="dropdown-item" href="#" onClick={() => this.openDiagram(diagramNode.node.id)}>Open diagram</a>) : null}
+                {(diagramNode.node.node_type === "QuestionsSequence") ? (<a className="dropdown-item" href="#" onClick={() => this.openDiagram(diagramNode.node.id)}>Open diagram</a>) : null}
                 <a className="dropdown-item" href="#" onClick={() => this.editNode(diagramNode)}>Edit</a>
               </div>
             </div>
