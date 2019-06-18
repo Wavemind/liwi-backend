@@ -26,8 +26,8 @@ RSpec.describe FinalDiagnostic, type: :model do
   end
 
   it 'can include health cares' do
-    treatment = Treatment.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
-    management = Management.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
+    treatment = HealthCares::Treatment.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
+    management = HealthCares::Management.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
 
     final_diagnostic = FinalDiagnostic.new(label_en: 'Severe lower respiratory tract infection', description_en: 'A shot description',reference: '7', diagnostic: @dd7)
     final_diagnostic.nodes << [management, treatment]
@@ -36,7 +36,7 @@ RSpec.describe FinalDiagnostic, type: :model do
   end
 
   it 'cannot include a node which is not a health care (Management/Treatment)' do
-    predefined_syndrome = PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
+    predefined_syndrome = QuestionsSequences::PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
 
     final_diagnostic = FinalDiagnostic.new(label_en: 'Severe lower respiratory tract infection', description_en: 'A shot description',reference: '7', diagnostic: @dd7)
     final_diagnostic.nodes << predefined_syndrome
@@ -48,9 +48,9 @@ RSpec.describe FinalDiagnostic, type: :model do
   it 'returns correct list of available nodes' do
     df = FinalDiagnostic.new(label_en: 'Severe lower respiratory tract infection', description_en: 'A shot description',reference: '7', diagnostic: @dd7)
 
-    ps9 = PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
-    ps5 = PredefinedSyndrome.create!(reference: '5', label_en: 'diarrhea', algorithm: @algorithm)
-    ps6 = PredefinedSyndrome.create!(reference: '7', label_en: 'coucou', algorithm: @algorithm)
+    ps9 = QuestionsSequences::PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
+    ps5 = QuestionsSequences::PredefinedSyndrome.create!(reference: '5', label_en: 'diarrhea', algorithm: @algorithm)
+    ps6 = QuestionsSequences::PredefinedSyndrome.create!(reference: '7', label_en: 'coucou', algorithm: @algorithm)
 
     Instance.create!(node: ps6, instanceable: @dd7, final_diagnostic: df)
 
@@ -62,10 +62,10 @@ RSpec.describe FinalDiagnostic, type: :model do
   it 'generates diagram properly' do
     dd1 = Diagnostic.create!(version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)')
     dd1.final_diagnostics.create!(reference: '1', label_en: 'Df')
-    t1 = Treatment.create!(reference: '1', label_en: 'Treat', algorithm: @algorithm)
-    m1 = Management.create!(reference: '1', label_en: 'Manage', algorithm: @algorithm)
-    ps5 = PredefinedSyndrome.create!(reference: '5', label_en: 'dia', algorithm: @algorithm)
-    ps9 = PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
+    t1 = HealthCares::Treatment.create!(reference: '1', label_en: 'Treat', algorithm: @algorithm)
+    m1 = HealthCares::Management.create!(reference: '1', label_en: 'Manage', algorithm: @algorithm)
+    ps5 = QuestionsSequences::PredefinedSyndrome.create!(reference: '5', label_en: 'dia', algorithm: @algorithm)
+    ps9 = QuestionsSequences::PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
     dd1_df1 = Instance.create!(instanceable: dd1, node: dd1.final_diagnostics.first)
     dd1_ps9 = Instance.create!(instanceable: dd1, node: ps9, final_diagnostic: dd1_df1.node)
     dd1_m1 = Instance.create!(instanceable: dd1, node: m1, final_diagnostic: dd1_df1.node)

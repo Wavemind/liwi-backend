@@ -7,7 +7,7 @@ RSpec.describe QuestionsSequencesController, type: :controller do
   create_instances
 
   before(:each) do
-    @predefined_syndrome = @algorithm.questions_sequences.create!(reference: 1, label_en: 'Label en', type: PredefinedSyndrome)
+    @predefined_syndrome = @algorithm.questions_sequences.create!(reference: 1, label_en: 'Label en', type: QuestionsSequences::PredefinedSyndrome)
   end
 
   it 'adds translations without rendering the view' do

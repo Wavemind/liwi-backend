@@ -13,7 +13,7 @@ RSpec.describe QuestionsController, type: :controller do
       question: {
         label_en: 'Cough',
         reference: '5',
-        type: 'Symptom',
+        type: 'Questions::Symptom',
         priority: 'basic',
         answer_type_id: @input_integer.id
       }
@@ -27,7 +27,7 @@ RSpec.describe QuestionsController, type: :controller do
       question: {
         label_en: 'Cough',
         reference: '2',
-        type: 'Symptom',
+        type: 'Questions::Symptom',
         priority: 'basic',
         answer_type_id: @boolean.id
       }
@@ -41,7 +41,7 @@ RSpec.describe QuestionsController, type: :controller do
       question: {
         label_en: nil,
         reference: '5',
-        type: 'Symptom',
+        type: 'Questions::Symptom',
         priority: 'basic',
         answer_type_id: @input_float.id
       }

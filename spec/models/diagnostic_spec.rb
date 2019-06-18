@@ -32,10 +32,10 @@ RSpec.describe Diagnostic, type: :model do
   it 'generates diagram properly' do
     dd1 = Diagnostic.create!(version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)')
     dd1.final_diagnostics.create!(reference: '1', label_en: 'Df')
-    t1 = Treatment.create!(reference: '1', label_en: 'Treat', algorithm: @algorithm)
-    m1 = Management.create!(reference: '1', label_en: 'Manage', algorithm: @algorithm)
-    ps5 = PredefinedSyndrome.create!(reference: '5', label_en: 'dia', algorithm: @algorithm)
-    ps9 = PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
+    t1 = HealthCares::Treatment.create!(reference: '1', label_en: 'Treat', algorithm: @algorithm)
+    m1 = HealthCares::Management.create!(reference: '1', label_en: 'Manage', algorithm: @algorithm)
+    ps5 = QuestionsSequences::PredefinedSyndrome.create!(reference: '5', label_en: 'dia', algorithm: @algorithm)
+    ps9 = QuestionsSequences::PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
     dd1_df1 = Instance.create!(instanceable: dd1, node: dd1.final_diagnostics.first)
     dd1_ps5 = Instance.create!(instanceable: dd1, node: ps5)
     dd1_ps9 = Instance.create!(instanceable: dd1, node: ps9)
@@ -56,8 +56,8 @@ RSpec.describe Diagnostic, type: :model do
   it 'returns correct list of available nodes' do
     dd1 = Diagnostic.create!(version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)')
 
-    ps9 = PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
-    ps5 = PredefinedSyndrome.create!(reference: '5', label_en: 'diarrhea', algorithm: @algorithm)
+    ps9 = QuestionsSequences::PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
+    ps5 = QuestionsSequences::PredefinedSyndrome.create!(reference: '5', label_en: 'diarrhea', algorithm: @algorithm)
 
     expect(dd1.available_nodes_json[0]['id']).to eq(ps9.id)
     expect(dd1.available_nodes_json[1]['id']).to eq(ps5.id)
@@ -67,10 +67,10 @@ RSpec.describe Diagnostic, type: :model do
     before(:each) do
       @dd1 = Diagnostic.create!(version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)')
       @dd1.final_diagnostics.create!(reference: '1', label_en: 'Df')
-      t1 = Treatment.create!(reference: '1', label_en: 'Treat', algorithm: @algorithm)
-      m1 = Management.create!(reference: '1', label_en: 'Manage', algorithm: @algorithm)
-      ps5 = PredefinedSyndrome.create!(reference: '5', label_en: 'dia', algorithm: @algorithm)
-      ps9 = PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
+      t1 = HealthCares::Treatment.create!(reference: '1', label_en: 'Treat', algorithm: @algorithm)
+      m1 = HealthCares::Management.create!(reference: '1', label_en: 'Manage', algorithm: @algorithm)
+      ps5 = QuestionsSequences::PredefinedSyndrome.create!(reference: '5', label_en: 'dia', algorithm: @algorithm)
+      ps9 = QuestionsSequences::PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
       dd1_df1 = Instance.create!(instanceable: @dd1, node: @dd1.final_diagnostics.first)
       dd1_ps5 = Instance.create!(instanceable: @dd1, node: ps5)
       dd1_ps9 = Instance.create!(instanceable: @dd1, node: ps9)
@@ -107,7 +107,7 @@ RSpec.describe Diagnostic, type: :model do
       @dd1 = Diagnostic.create!(version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)')
       @dd1.final_diagnostics.create!(reference: '1', label_en: 'Df')
       dd1_df1 = Instance.create!(instanceable: @dd1, node: @dd1.final_diagnostics.first)
-      ps9 = PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
+      ps9 = QuestionsSequences::PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
       Instance.create!(instanceable: @dd1, node: ps9)
       Condition.create!(referenceable: dd1_df1, first_conditionable: ps9.answers.first, operator: nil, second_conditionable: nil)
     end
@@ -118,7 +118,7 @@ RSpec.describe Diagnostic, type: :model do
     end
 
     it 'manual validation returns errors for an invalid diagnostic' do
-      Instance.create!(instanceable: @dd1, node: PredefinedSyndrome.create!(reference: '18', label_en: 'skin issue', algorithm: @algorithm))
+      Instance.create!(instanceable: @dd1, node: QuestionsSequences::PredefinedSyndrome.create!(reference: '18', label_en: 'skin issue', algorithm: @algorithm))
       @dd1.manual_validate
 
       expect(@dd1.errors.messages.any?).to be(true)
