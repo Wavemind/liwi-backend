@@ -47,8 +47,8 @@ class ManagementsController < ApplicationController
   end
 
   # POST
-  # @return final_diagnostic node
-  # Create a final diagnostic node from diagram
+  # @return management node
+  # Create a management node from diagram
   def create_from_diagram
     management = @algorithm.health_cares.managements.new(management_params)
     management.type = HealthCares::Management
@@ -65,8 +65,8 @@ class ManagementsController < ApplicationController
   end
 
   # PUT
-  # @return final_diagnostic node
-  # Create a final diagnostic node from diagram
+  # @return management node
+  # Update a management node from diagram
   def update_from_diagram
     if @management.update(management_params)
       render json: {status: 'success', messages: [t('flash_message.success_created')], node: @management.as_json(methods: :node_type)}
@@ -76,7 +76,7 @@ class ManagementsController < ApplicationController
   end
 
   # @params Management with the translations
-  # Update the object with its translation without
+  # Update the object with its translation without rendering a new page
   def update_translations
     if @management.update(management_params)
       @json = { status: 'success', message: t('flash_message.success_updated')}

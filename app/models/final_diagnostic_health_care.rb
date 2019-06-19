@@ -11,6 +11,7 @@ class FinalDiagnosticHealthCare < ApplicationRecord
 
   private
 
+  # Throw error if the node attached to the final diagnostic is not a health care
   def node_is_management_or_treatment
     unless node.is_a?(HealthCare)
       errors.add(:node, I18n.t('medical_case.validation.wrong_node_type'))

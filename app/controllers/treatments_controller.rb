@@ -48,7 +48,7 @@ class TreatmentsController < ApplicationController
 
   # POST
   # @return final_diagnostic node
-  # Create a final diagnostic node from diagram
+  # Create a treatment node from diagram
   def create_from_diagram
     treatment = @algorithm.health_cares.treatments.new(treatment_params)
     treatment.type = HealthCares::Treatment
@@ -66,7 +66,7 @@ class TreatmentsController < ApplicationController
 
   # PUT
   # @return final_diagnostic node
-  # Create a final diagnostic node from diagram
+  # Update a treatment node from diagram
   def update_from_diagram
     if @treatment.update(treatment_params)
       render json: {status: 'success', messages: [t('flash_message.success_created')], node: @treatment.as_json(methods: :node_type)}
@@ -76,7 +76,7 @@ class TreatmentsController < ApplicationController
   end
 
   # @params Treatment with the translations
-  # Update the object with its translation without
+  # Update the object with its translation without rendering a new page
   def update_translations
     if @treatment.update(treatment_params)
       @json = { status: 'success', message: t('flash_message.success_updated')}

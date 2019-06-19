@@ -84,7 +84,7 @@ class DiagnosticsController < ApplicationController
   end
 
   # @params [Diagnostic] with the translations
-  # Update the object with its translation without
+  # Update the object with its translation without rendering a new page
   def update_translations
     if @diagnostic.update(diagnostic_params)
       @json = {status: 'success', messages: t('flash_message.success_updated')}

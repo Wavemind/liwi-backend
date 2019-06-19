@@ -4,6 +4,7 @@ class HealthCare < Node
   scope :managements, ->() { where('type = ?', 'HealthCares::Management') }
   scope :treatments, ->() { where('type = ?', 'HealthCares::Treatment') }
 
+  # Preload the children of class Question
   def self.descendants
     [HealthCares::Management, HealthCares::Treatment]
   end

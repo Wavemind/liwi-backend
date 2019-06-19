@@ -15,14 +15,17 @@ class Question < Node
 
   accepts_nested_attributes_for :answers, reject_if: :all_blank, allow_destroy: true
 
+  # Preload the children of class Question
   def self.descendants
     [Questions::AssessmentTest, Questions::ChiefComplain, Questions::Demographic, Questions::Exposure, Questions::PhysicalExam, Questions::Symptom, Questions::Vaccine]
   end
 
+  # Get the reference prefix according to the type
   def reference_prefix
     I18n.t("questions.categories.#{Object.const_get(type).variable}.reference_prefix")
   end
 
+  # Get the reference prefix according to the type
   def self.reference_prefix_class(type)
     I18n.t("questions.categories.#{Object.const_get(type).variable}.reference_prefix")
   end

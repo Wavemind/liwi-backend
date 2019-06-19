@@ -183,25 +183,6 @@ export default class Http {
   };
 
 
-  // @params [Integer] nodeId
-  // @return [Object] response
-  // Get a condition with its conditions
-  getInstanceConditions = async (nodeId) => {
-    let response;
-    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/load_conditions?node_id=${nodeId}`;
-    const header = await this.setHeaders("GET");
-    const request = await fetch( url, header).catch(error => console.log(error));
-
-    // Display error or parse json
-    if (request.ok) {
-      response = await request.json();
-    } else {
-      response = request;
-    }
-    return await response;
-  };
-
-
   // @params [Integer] instanceId, [Integer] condID
   // @return [Object] body of request
   // Remove condition

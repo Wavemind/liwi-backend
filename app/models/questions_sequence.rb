@@ -8,6 +8,7 @@ class QuestionsSequence < Node
   scope :scored, ->() { where(type: 'QuestionsSequences::Scored') }
   scope :not_scored, ->() { where.not(type: 'QuestionsSequences::Scored') }
 
+  # Preload the children of class Question
   def self.descendants
     [QuestionsSequences::PredefinedSyndrome, QuestionsSequences::Comorbidity, QuestionsSequences::Triage, QuestionsSequences::Scored]
   end

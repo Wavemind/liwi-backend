@@ -55,7 +55,7 @@ class QuestionsSequencesController < ApplicationController
 
   # POST
   # @return  node
-  # Create a predefined syndrome node from diagram and instance it
+  # Create a questions sequence node from diagram and instance it
   def create_from_diagram
     questions_sequence = @algorithm.questions_sequences.new(questions_sequence_params).becomes(QuestionsSequences::Scored)
     questions_sequence.type = QuestionsSequences::Scored # TODO : Do a category manager system
@@ -71,21 +71,30 @@ class QuestionsSequencesController < ApplicationController
   def diagram
   end
 
-  # @params PredefinedSyndrome with the translations
-  # Update the object with its translation without
+  # @params QuestionSequence scored
+  # Update a QuestionSequence scored
   def edit_scored
     add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'questions_sequences_scored')
     add_breadcrumb @questions_sequence.label
   end
 
-  # @params PredefinedSyndrome with the translations
-  # Update the object with its translation without
+  # Create a new QuestionSequence scored
   def new_scored
     add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'questions_sequences_scored')
 
     @questions_sequence = QuestionsSequence.new
   end
 
+  # GET algorithm/:algorithm_id/questions_sequences/reference_prefix/:type
+  # @params QuestionsSequence child
+  # @return json with the reference prefix of the child
+  def reference_prefix
+    render json: QuestionsSequence.reference_prefix_class(params[:type])
+  end
+
+  # PUT
+  # @return questions_sequence node
+  # Update a questions sequence node from diagram
   def update_from_diagram
     if @questions_sequence.update(questions_sequence_params)
       render json: {status: 'success', messages: [t('flash_message.success_updated')], node: @questions_sequence.as_json(include: :answers, methods: :node_type)}
@@ -94,8 +103,8 @@ class QuestionsSequencesController < ApplicationController
     end
   end
 
-  # @params PredefinedSyndrome with the translations
-  # Update the object with its translation without
+  # @params QuestionsSequence with the translations
+  # Update the object with its translation without rendering a new page
   def update_translations
     if @questions_sequence.update(questions_sequence_params)
       @json = { status: 'success', message: t('flash_message.success_updated') }
@@ -106,8 +115,8 @@ class QuestionsSequencesController < ApplicationController
     end
   end
 
-  # @params [PredefinedSyndrome]
-  # Manually validate a predefined syndrome and return flash messages to display in the view
+  # @params [QuestionsSequence]
+  # Manually validate a questions sequence and return flash messages to display in the view
   def validate
     @questions_sequence.manual_validate
     if @questions_sequence.errors.messages.any?
@@ -115,10 +124,6 @@ class QuestionsSequencesController < ApplicationController
     else
       render json: {status: 'success', messages: [t('flash_message.diagnostic.valid')]}
     end
-  end
-
-  def reference_prefix
-    render json: QuestionsSequence.reference_prefix_class(params[:type])
   end
 
   private

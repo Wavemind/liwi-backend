@@ -72,12 +72,15 @@ class QuestionsController < ApplicationController
     end
   end
 
+  # GET algorithm/:algorithm_id/version/:version_id/questions/reference_prefix/:type
+  # @params Question child
+  # @return json with the reference prefix of the child
   def reference_prefix
     render json: Question.reference_prefix_class(params[:type])
   end
 
   # @params Question with the translations
-  # Update the object with its translation without
+  # Update the object with its translation without rendering a new page
   def update_translations
     if @question.update(question_params)
       @json = { status: 'success', message: t('flash_message.success_updated') }
