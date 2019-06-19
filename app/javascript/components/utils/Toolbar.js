@@ -47,7 +47,6 @@ class Toolbar extends React.Component {
     let response;
     this.setState({isLoading: true});
 
-    console.log(instanceable);
     if (type === 'Diagnostic') {
       response = await http.validateDiagnostic();
     } else {
@@ -71,7 +70,7 @@ class Toolbar extends React.Component {
       // await http.redirectToDiagnosticDiagram();
     }
     else {
-      let panel = instanceable.category.id === 8 ? 'questions_sequences_scored' : 'questions_sequences';
+      let panel = instanceable.category_name === 'scored' ? 'questions_sequences_scored' : 'questions_sequences';
       await http.redirectToAlgorithm(panel);
     }
   };

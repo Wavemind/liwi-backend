@@ -8,7 +8,7 @@ class QuestionsController < ApplicationController
     add_breadcrumb t('breadcrumbs.new')
 
     @question = Question.new
-    @question.type = nil
+    @question.type = nil # To resolve issue that prevents to display the prompt in the form
   end
 
   def edit
@@ -24,10 +24,9 @@ class QuestionsController < ApplicationController
         redirect_to algorithm_url(@algorithm, panel: 'questions'), notice: t('flash_message.success_created')
       else
         # Create a new first answer for the form view
-        @question.answers << Answer.new
+        @question.answers.new
         # Clear the error messages to not have any validation errors before filling the form
         @question.answers.first.errors.clear
-
         render 'answers/new'
       end
     else
@@ -68,6 +67,7 @@ class QuestionsController < ApplicationController
     if @question.update(question_params)
       redirect_to algorithm_url(@algorithm, panel: 'questions'), notice: t('flash_message.success_updated')
     else
+     # raise
       render 'answers/new'
     end
   end

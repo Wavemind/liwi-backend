@@ -8,7 +8,7 @@ class Answer < ApplicationRecord
   has_many :medical_case_answers
 
   validates_presence_of :reference
-  validates_presence_of :label
+  validates_presence_of :label_en
 
   after_validation :correct_value_type
   after_validation :unique_reference

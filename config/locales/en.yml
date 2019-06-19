@@ -323,6 +323,8 @@ en:
       vaccine:
         label: "Vaccine"
         reference_prefix: "V"
+    errors:
+      no_blank: "can't be blank"
     new:
       title: "New question"
     priorities:

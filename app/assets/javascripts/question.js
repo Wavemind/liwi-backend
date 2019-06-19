@@ -1,4 +1,7 @@
 jQuery(document).ready(function() {
+
+  $("#question_unavailable").closest("fieldset").addClass("d-none");
+
   $("#questions-datatable").dataTable({
     "processing": true,
     "info": false,
@@ -21,7 +24,7 @@ jQuery(document).ready(function() {
   // Update the prepend every time the user pick another category
   $("#question_type").change(function() {
     let prepend = $(this).closest("form").find(".input-group-text");
-    let questionUnavailable = $(this).closest("form").find("fieldset.question_unavailable");
+    let questionUnavailable = $("#question_unavailable").closest("fieldset");
     let type = $("#question_type option:selected").val();
 
     if (type.trim()) {
@@ -30,7 +33,7 @@ jQuery(document).ready(function() {
         data: {type: type},
         complete: function(response) {
           prepend.text(response.responseText);
-
+          console.log(response.responseText);
           if ($(questionUnavailable).hasClass("d-none") && response.responseText === "A") {
             $(questionUnavailable).removeClass("d-none");
           } else if(response.responseText !== "A") {

@@ -11,7 +11,7 @@ class Diagnostic < ApplicationRecord
   has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy
 
   validates_presence_of :reference
-  validates_presence_of :label
+  validates_presence_of :label_en
 
   translates :label
 

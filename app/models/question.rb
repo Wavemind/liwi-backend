@@ -22,11 +22,13 @@ class Question < Node
 
   # Get the reference prefix according to the type
   def reference_prefix
+    return '' unless type.present?
     I18n.t("questions.categories.#{Object.const_get(type).variable}.reference_prefix")
   end
 
   # Get the reference prefix according to the type
   def self.reference_prefix_class(type)
+    return '' unless type.present?
     I18n.t("questions.categories.#{Object.const_get(type).variable}.reference_prefix")
   end
 
@@ -35,7 +37,9 @@ class Question < Node
   # {Node#unique_reference}
   # Scoped by the current algorithm
   def unique_reference
-    if algorithm.questions.where(reference: reference_prefix + reference).any?
+    if type.blank?
+      errors.add(:type, I18n.t('questions.errors.no_blank'))
+    elsif algorithm.questions.where(reference: reference_prefix + reference).any?
       errors.add(:reference, I18n.t('nodes.validation.reference_used'))
     end
   end
