@@ -1,7 +1,8 @@
 <% form_type = @question.answer_type.display == 'Input' ? 'input' : 'multiple' %>
 
 <div class="row justify-content-center">
-  <%= simple_form_for [@algorithm, @question], html: { class: 'form-horizontal' }, url: answers_algorithm_question_url(@algorithm, @question), method: :put, wrapper: :input_group do |f| %>
+  <%= simple_form_for [@algorithm, @question.becomes(Question)], html: { class: 'form-horizontal' }, url: answers_algorithm_question_url(@algorithm, @question.becomes(Question)), method: :put, wrapper: :input_group do |f| %>
+    <% f.object = @question %>
 
     <!-- If there's no answers, question_params is empty and it crash, this is a workaround. (https://thecodinglove.com/easy-workaround-vs-correct-implementation) -->
     <%= f.input :id, html_input: { value: @question.id }, as: :hidden %>

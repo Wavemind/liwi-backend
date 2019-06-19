@@ -20,15 +20,15 @@ class NotDFWidget extends React.Component {
   // Open final diagnostic diagram
   openDiagram = (nodeId) => {
     const { http } = this.props;
-    http.showPredefinedSyndromeDiagram(nodeId);
+    http.showQuestionsSequenceDiagram(nodeId);
   };
 
   editNode = (node) => {
-    if (node.node.type === 'PredefinedSyndrome') {
+    if (node.node.node_type === 'QuestionsSequence') {
       node.setSelected(false);
 
       const { set } = this.props;
-      set('modalToOpen', 'UpdatePredefinedSyndrome');
+      set('modalToOpen', 'UpdateQuestionsSequence');
       set('currentNode', node.node);
       set('currentDiagramNode', node);
       set('modalIsOpen', true);
@@ -55,7 +55,7 @@ class NotDFWidget extends React.Component {
             {diagramNode.node.reference}
           </div>
           <div className="col pl-0 pr-2 text-center">
-            {(diagramNode.node.category_name === 'Predefined syndrome scored') ? diagramNode.node.min_score : diagramNode.node.priority}
+            {(diagramNode.node.category_name === 'Questions sequence scored') ? diagramNode.node.min_score : diagramNode.node.priority}
           </div>
           <div className="col pl-0 pr-2 text-right">
             <div className="dropdown">
@@ -63,7 +63,7 @@ class NotDFWidget extends React.Component {
                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               </button>
               <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                {(diagramNode.node.type === "PredefinedSyndrome") ? (<a className="dropdown-item" href="#" onClick={() => this.openDiagram(diagramNode.node.id)}>Open diagram</a>) : null}
+                {(diagramNode.node.node_type === "QuestionsSequence") ? (<a className="dropdown-item" href="#" onClick={() => this.openDiagram(diagramNode.node.id)}>Open diagram</a>) : null}
                 <a className="dropdown-item" href="#" onClick={() => this.editNode(diagramNode)}>Edit</a>
               </div>
             </div>

@@ -1,14 +1,13 @@
 require 'rails_helper'
 
-RSpec.describe PredefinedSyndromesController, type: :controller do
+RSpec.describe QuestionsSequencesController, type: :controller do
   login_user
   create_algorithm
   create_answer_type
-  create_category
   create_instances
 
   before(:each) do
-    @predefined_syndrome = @algorithm.predefined_syndromes.create!(reference: 1, label_en: 'Label en', category: @ps_category)
+    @predefined_syndrome = @algorithm.questions_sequences.create!(reference: 1, label_en: 'Label en', type: QuestionsSequences::PredefinedSyndrome)
   end
 
   it 'adds translations without rendering the view' do
@@ -16,7 +15,7 @@ RSpec.describe PredefinedSyndromesController, type: :controller do
     put :update_translations, params: {
       algorithm_id: @algorithm.id,
       id: @predefined_syndrome.id,
-      predefined_syndrome: {
+      questions_sequence: {
         label_fr: 'Label fr',
       }
     }
@@ -32,7 +31,7 @@ RSpec.describe PredefinedSyndromesController, type: :controller do
     put :update_translations, params: {
       algorithm_id: @algorithm.id,
       id: @predefined_syndrome.id,
-      predefined_syndrome: {
+      questions_sequence: {
         label_en: '',
       }
     }

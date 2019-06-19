@@ -62,22 +62,8 @@ class AlgorithmsController < ApplicationController
     end
   end
 
-  # PUT algorithms/:id/unarchive
-  # @params algorithm [Algorithm] algorithm to archive
-  # @return redirect to algorithms#index with flash message
-  # Unarchive an algorithm.
-  def unarchive
-    @algorithm.archived = false
-
-    if @algorithm.save
-      redirect_to algorithms_url, notice: t('flash_message.success_created')
-    else
-      redirect_to algorithms_url, danger: t('flash_message.update_fail')
-    end
-  end
-
   # @params algorithm [Algorithm] current algorithm
-  # @return json of management
+  # @return json of managements
   # All managements available for current algorithm
   def managements
     respond_to do |format|
@@ -97,7 +83,27 @@ class AlgorithmsController < ApplicationController
   end
 
   # @params algorithm [Algorithm] current algorithm
-  # @return json of treatment
+  # @return json of questions_sequences
+  # All questions sequences available for current algorithm
+  def questions_sequences
+    respond_to do |format|
+      format.html
+      format.json { render json: QuestionsSequenceDatatable.new(params, view_context: view_context) }
+    end
+  end
+
+  # @params algorithm [Algorithm] current algorithm
+  # @return json of questions_sequences_scored
+  # All questions sequences scored available for current algorithm
+  def questions_sequences_scored
+    respond_to do |format|
+      format.html
+      format.json { render json: QuestionsSequenceScoredDatatable.new(params, view_context: view_context) }
+    end
+  end
+
+  # @params algorithm [Algorithm] current algorithm
+  # @return json of treatments
   # All treatments available for current algorithm
   def treatments
     respond_to do |format|
@@ -106,23 +112,17 @@ class AlgorithmsController < ApplicationController
     end
   end
 
-  # @params algorithm [Algorithm] current algorithm
-  # @return json of treatment
-  # All predefined syndromes available for current algorithm
-  def predefined_syndromes
-    respond_to do |format|
-      format.html
-      format.json { render json: PredefinedSyndromeDatatable.new(params, view_context: view_context) }
-    end
-  end
+  # PUT algorithms/:id/unarchive
+  # @params algorithm [Algorithm] algorithm to archive
+  # @return redirect to algorithms#index with flash message
+  # Unarchive an algorithm.
+  def unarchive
+    @algorithm.archived = false
 
-  # @params algorithm [Algorithm] current algorithm
-  # @return json of treatment
-  # All predefined syndromes available for current algorithm
-  def predefined_syndromes_scored
-    respond_to do |format|
-      format.html
-      format.json { render json: PredefinedSyndromeScoredDatatable.new(params, view_context: view_context) }
+    if @algorithm.save
+      redirect_to algorithms_url, notice: t('flash_message.success_created')
+    else
+      redirect_to algorithms_url, danger: t('flash_message.update_fail')
     end
   end
 

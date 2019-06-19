@@ -7,7 +7,7 @@ class ManagementsController < ApplicationController
   def new
     add_breadcrumb t('breadcrumbs.new')
 
-    @management = Management.new
+    @management = HealthCares::Management.new
   end
 
   def edit
@@ -16,11 +16,13 @@ class ManagementsController < ApplicationController
   end
 
   def create
-    @management = @algorithm.managements.new(management_params)
+    @management = @algorithm.health_cares.managements.new(management_params)
 
     if @management.save
       redirect_to algorithm_url(@algorithm, panel: 'managements'), notice: t('flash_message.success_created')
     else
+      set_breadcrumb
+      add_breadcrumb t('breadcrumbs.new')
       render :new
     end
   end
@@ -29,6 +31,8 @@ class ManagementsController < ApplicationController
     if @management.update(management_params)
       redirect_to algorithm_url(@algorithm, panel: 'managements'), notice: t('flash_message.success_updated')
     else
+      set_breadcrumb
+      add_breadcrumb t('breadcrumbs.edit')
       render :edit
     end
   end
@@ -47,35 +51,36 @@ class ManagementsController < ApplicationController
   end
 
   # POST
-  # @return final_diagnostic node
-  # Create a final diagnostic node from diagram
+  # @return management node
+  # Create a management node from diagram
   def create_from_diagram
-    management = @algorithm.managements.new(management_params)
+    management = @algorithm.health_cares.managements.new(management_params)
+    management.type = HealthCares::Management
 
     if management.save
       diagnostic = Diagnostic.find(params[:diagnostic_id])
       final_diagnostic = FinalDiagnostic.find(params[:final_diagnostic_id])
       final_diagnostic.nodes << management
       diagnostic.components.create!(node: management, final_diagnostic: final_diagnostic)
-      render json: {status: 'success', messages: [t('flash_message.success_created')], node: management.as_json(methods: [:type])}
+      render json: {status: 'success', messages: [t('flash_message.success_created')], node: management.as_json(methods: :node_type)}
     else
       render json: {status: 'danger', errors: management.errors.messages, ok: false}
     end
   end
 
   # PUT
-  # @return final_diagnostic node
-  # Create a final diagnostic node from diagram
+  # @return management node
+  # Update a management node from diagram
   def update_from_diagram
     if @management.update(management_params)
-      render json: {status: 'success', messages: [t('flash_message.success_created')], node: @management.as_json(methods: [:type])}
+      render json: {status: 'success', messages: [t('flash_message.success_created')], node: @management.as_json(methods: :node_type)}
     else
       render json: {status: 'danger', errors: @management.errors.messages, ok: false}
     end
   end
 
   # @params Management with the translations
-  # Update the object with its translation without
+  # Update the object with its translation without rendering a new page
   def update_translations
     if @management.update(management_params)
       @json = { status: 'success', message: t('flash_message.success_updated')}
@@ -94,13 +99,14 @@ class ManagementsController < ApplicationController
   end
 
   def set_management
-    @management = Management.find(params[:id])
+    @management = Node.find(params[:id])
   end
 
   def management_params
-    params.require(:management).permit(
+    params.require(:health_cares_management).permit(
       :id,
       :reference,
+      :type,
       :label_en,
       Language.label_params,
       :description_en,

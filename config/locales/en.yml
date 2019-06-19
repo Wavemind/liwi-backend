@@ -19,8 +19,8 @@ en:
       title: "Edit this algorithm"
     show:
       subtitle_managements: "Managements"
-      subtitle_predefined_syndromes: "Predefined syndromes"
-      subtitle_predefined_syndromes_scored: "Predefined syndromes scored"
+      subtitle_questions_sequences: "Questions sequences"
+      subtitle_questions_sequences_scored: "Questions sequences scored"
       subtitle_questions: "Questions"
       subtitle_treatments: "Treatments"
       subtitle_versions: "Versions list"
@@ -72,7 +72,7 @@ en:
     versions: "Versions"
     diagnostics: "Diagnostics"
     final_diagnostics: "Final diagnostics"
-    predefined_syndromes: "Predefined syndromes"
+    questions_sequences: "Questions sequences"
     treatments: "Treatments"
     questions: "Questions"
     managements: "Managements"
@@ -128,7 +128,7 @@ en:
       diagram: "Diagram"
       differential_diagnostic_conditions: "Differential diagnostic conditions"
       instances: "Instance of nodes"
-      predefined_syndromes: "Predefined Syndromes"
+      questions_sequences: "Questions sequences"
       subtitle_final_diagnostics: "Finals diagnostics"
       title: "Details of %{name}"
       translations: "Translations"
@@ -137,7 +137,7 @@ en:
       diagnostic: "Diagnostic"
       final_diagnostics: "Final diagnostics"
       managements: "Managements"
-      predefined_syndromes: "Predefined syndromes"
+      questions_sequences: "Questions sequences"
       questions: "Questions"
       treatments: "Treatments"
   duplicate: "Duplicate"
@@ -174,11 +174,11 @@ en:
       question_no_children: "The %{type} %{reference} is not linked to any children."
       hc_question_no_children: "The %{type} %{reference}, which is in <u><a href='%{url}'>%{df_reference}</a></u> is not linked to any children."
       valid: "This diagnostic is valid!"
-    predefined_syndrome:
-      ps_no_condition: "The Predefined syndrome you are describing has no condition."
+    questions_sequence:
+      ps_no_condition: "The questions sequence you are describing has no condition."
       question_no_children: "The %{type} %{reference} is not linked to any children."
-      pss_no_combination: "There is no combination for this Predefined syndrome to be true."
-      valid: "This predefined syndrome is valid!"
+      pss_no_combination: "There is no combination for this questions sequence to be true."
+      valid: "This questions sequence is valid!"
   groups:
     add_device:
       success_add_device: "Device was successfully added to group"
@@ -208,6 +208,14 @@ en:
   group_accesses:
     new:
       title: "New release"
+  health_cares:
+    categories:
+      management:
+        label: "Management"
+        reference_prefix: "M"
+      treatment:
+        label: "Treatment"
+        reference_prefix: "T"
   helps:
     diagram:
       arrow-title: "Arrow"
@@ -252,26 +260,71 @@ en:
   nodes:
     validation:
       reference_used: "This reference is already used"
-  predefined_syndromes:
+  questions_sequences:
+    categories:
+      predefined_syndrome:
+        label: "Predefined syndrome"
+        reference_prefix: "PS"
+      scored:
+        label: "Questions sequence scored"
+        reference_prefix: "QSS"
+      comorbidity:
+        label: "Comorbidity"
+        reference_prefix: "DC"
+      triage:
+        label: "Triage"
+        reference_prefix: "TI"
     edit:
-      title: "Update the predefined syndrome"
+      title: "Update the questions sequence"
     edit_scored:
-      title: "Update a predefined syndrome scored"
+      title: "Update a questions sequence scored"
     new:
-      title: "Create predefined syndrome"
+      title: "Create questions sequence"
     new_scored:
-      title: "Create a predefined syndrome scored"
+      title: "Create a questions sequence scored"
     show:
       title: "Details of %{name}"
       children: "Children"
+    scored_table:
+      columns:
+        actions: "Actions"
+        description: "Description"
+        label: "Label"
+        min_score: "Minimal score"
+        reference: "Reference"
+    table:
+      columns:
+        actions: "Actions"
+        category: "Category"
+        description: "Description"
+        label: "Label"
+        reference: "Reference"
   prompt: "Select"
   questions:
     categories:
-      comorbidity: "Comorbidity"
-      exposure: "Exposure"
-      symptom: "Symptom"
-      physical_exam: "Physical exam"
-      test: "Test"
+      assessment_test:
+        label: "Assessment/test"
+        reference_prefix: "A"
+      chief_complain:
+        label: "Chief complain"
+        reference_prefix: "CC"
+      demographic:
+        label: "Demographics"
+        reference_prefix: "D"
+      exposure:
+        label: "Exposure"
+        reference_prefix: "E"
+      physical_exam:
+        label: "Physical exam"
+        reference_prefix: "PE"
+      symptom:
+        label: "Symptom"
+        reference_prefix: "S"
+      vaccine:
+        label: "Vaccine"
+        reference_prefix: "V"
+    errors:
+      no_blank: "can't be blank"
     new:
       title: "New question"
     priorities:
@@ -284,12 +337,17 @@ en:
       symptom: "S"
       physical_exam: "P"
       test: "T"
+    stages:
+      registration: "Registration"
+      triage: "Triage"
+      test: "Test"
+      consultation: "Consultation"
     table:
       columns:
         label: "Label"
         description: "Description"
         reference: "Reference"
-        mandatory: "Mandatory"
+        priority: "Priority"
         category: "Category"
         answers: "Answers"
         answer_type: "Type of answers"
@@ -358,7 +416,7 @@ en:
     show:
       subtitle_diagnostics: "Diagnostics"
       title: "Details of %{name} - version %{version}"
-      predefined_syndromes: "Predefined Syndromes"
+      questions_sequences: "Questions Sequences"
   warning_dependency: "Warning ! Editing this node will affect :"
   close: "Close"
   back: "Back"

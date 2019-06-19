@@ -16,7 +16,7 @@ export default class Http {
     this.url = window.location.origin;
     this.instanceableId = data.dataset.id;
     this.finalDiagnostic = data.dataset.final_diagnostic;
-    this.instanceableType = data.dataset.type === "Diagnostic" ? "diagnostics" : "predefined_syndromes";
+    this.instanceableType = data.dataset.type === "Diagnostic" ? "diagnostics" : "questions_sequences";
     this.version = data.dataset.version;
     this.algorithm = data.dataset.algorithm;
     this.token = document.querySelector("meta[name='csrf-token']").content;
@@ -58,7 +58,7 @@ export default class Http {
       diagnostic_id: this.instanceableId,
       final_diagnostic_id: this.finalDiagnostic
     };
-    body[type.substring(0, type.length-1)] = {
+    body['health_cares_' + type.substring(0, type.length-1)] = {
       reference: reference,
       label_en: label,
       description_en: description
@@ -158,11 +158,11 @@ export default class Http {
   // @params [Integer] nodeId
   // @return [Object] body of requestc
   // Create an instance
-  createPredefinedSyndrome = async (reference, label, description) => {
+  createQuestionsSequence = async (reference, label, description) => {
     let response;
-    const url = `${this.url}/algorithms/${this.algorithm}/predefined_syndromes/create_from_diagram`;
+    const url = `${this.url}/algorithms/${this.algorithm}/questions_sequences/create_from_diagram`;
     const body = {
-      predefined_syndrome: {
+      questions_sequence: {
         reference: reference,
         label_en: label,
         description_en: description,
@@ -171,25 +171,6 @@ export default class Http {
       instanceable_type: this.instanceableType
     };
     const header = await this.setHeaders("POST", body);
-    const request = await fetch( url, header).catch(error => console.log(error));
-
-    // Display error or parse json
-    if (request.ok) {
-      response = await request.json();
-    } else {
-      response = request;
-    }
-    return await response;
-  };
-
-
-  // @params [Integer] nodeId
-  // @return [Object] response
-  // Get a condition with its conditions
-  getInstanceConditions = async (nodeId) => {
-    let response;
-    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/load_conditions?node_id=${nodeId}`;
-    const header = await this.setHeaders("GET");
     const request = await fetch( url, header).catch(error => console.log(error));
 
     // Display error or parse json
@@ -338,6 +319,13 @@ export default class Http {
 
   // @params [Integer] dfId
   // @return [Object] body of request
+  // Redirect to diagnostic diagram
+  redirectToDiagnosticDiagram = async () => {
+    window.location = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/diagram`;
+  };
+
+  // @params [Integer] dfId
+  // @return [Object] body of request
   // Redirect to diagnostic
   redirectToFinalDiagnostic = async () => {
     window.location = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics`;
@@ -370,8 +358,8 @@ export default class Http {
   // @params [Integer] psId
   // @return [Object] body of request
   // Redirect to predefined syndrome diagram
-  showPredefinedSyndromeDiagram = async (psId) => {
-    window.location = `${this.url}/predefined_syndromes/${psId}/diagram`;
+  showQuestionsSequenceDiagram = async (qsId) => {
+    window.location = `${this.url}/questions_sequences/${qsId}/diagram`;
   };
 
   // @params [Integer] nodeId, [Integer] answerId, [Integer] score
@@ -430,11 +418,11 @@ export default class Http {
   // @params [Integer] id, [String] reference, [String] label, [String] description
   // @return [Object] body of request
   // Update predefined syndrome node
-  updatePredefinedSyndrome = async (id, reference, label, description) => {
+  updateQuestionsSequence = async (id, reference, label, description) => {
     let response;
-    const url = `${this.url}/algorithms/${this.algorithm}/predefined_syndromes/${id}/update_from_diagram`;
+    const url = `${this.url}/algorithms/${this.algorithm}/questions_sequences/${id}/update_from_diagram`;
     const body = {
-      predefined_syndrome: {
+      questions_sequence: {
         id: id,
         reference: reference,
         label_en: label,
@@ -474,7 +462,7 @@ export default class Http {
 
   // @return [Object] flash message
   // Validate predefined syndrome scored
-  validatePredefinedSyndromeScored = async () => {
+  validateQuestionsSequence = async () => {
     let response;
     const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/validate`;
     const body = null;

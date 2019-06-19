@@ -33,6 +33,8 @@ class VersionsController < ApplicationController
     if @version.save
       redirect_to algorithm_url(@algorithm, panel: 'versions'), notice: t('flash_message.success_created')
     else
+      set_breadcrumb
+      add_breadcrumb t('breadcrumbs.new')
       render :new
     end
   end
@@ -41,6 +43,8 @@ class VersionsController < ApplicationController
     if @version.update(version_params)
       redirect_to algorithm_url(@algorithm, panel: 'versions'), notice: t('flash_message.success_updated')
     else
+      set_breadcrumb
+      add_breadcrumb t('breadcrumbs.edit')
       render :edit
     end
   end

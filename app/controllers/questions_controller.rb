@@ -8,6 +8,7 @@ class QuestionsController < ApplicationController
     add_breadcrumb t('breadcrumbs.new')
 
     @question = Question.new
+    @question.type = nil # To resolve issue that prevents to display the prompt in the form
   end
 
   def edit
@@ -17,28 +18,36 @@ class QuestionsController < ApplicationController
 
   def create
     @question = @algorithm.questions.new(question_params)
-
     if @question.save
       # Don't create answers if it is boolean type, since it is automatically created from the model
       if @question.answer_type.value == 'Boolean'
         redirect_to algorithm_url(@algorithm, panel: 'questions'), notice: t('flash_message.success_created')
       else
         # Create a new first answer for the form view
-        @question.answers << Answer.new
+        @question.answers.new
         # Clear the error messages to not have any validation errors before filling the form
         @question.answers.first.errors.clear
-
         render 'answers/new'
       end
     else
+      set_breadcrumb
+      add_breadcrumb t('breadcrumbs.new')
+
       render :new
     end
   end
 
   def update
     if @question.update(question_params)
-      render 'answers/edit'
+      if @question.answer_type.value == 'Boolean'
+        redirect_to algorithm_url(@algorithm, panel: 'questions'), notice: t('flash_message.success_updated')
+      else
+        render 'answers/edit'
+      end
     else
+      set_breadcrumb
+      add_breadcrumb t('breadcrumbs.edit')
+
       render :edit
     end
   end
@@ -68,8 +77,15 @@ class QuestionsController < ApplicationController
     end
   end
 
+  # GET algorithm/:algorithm_id/version/:version_id/questions/reference_prefix/:type
+  # @params Question child
+  # @return json with the reference prefix of the child
+  def reference_prefix
+    render json: Question.reference_prefix_class(params[:type])
+  end
+
   # @params Question with the translations
-  # Update the object with its translation without
+  # Update the object with its translation without rendering a new page
   def update_translations
     if @question.update(question_params)
       @json = { status: 'success', message: t('flash_message.success_updated') }
@@ -89,7 +105,7 @@ class QuestionsController < ApplicationController
   end
 
   def set_question
-    @question = Question.find(params[:id])
+    @question = Node.find(params[:id])
   end
 
   def question_params
@@ -99,7 +115,8 @@ class QuestionsController < ApplicationController
       Language.label_params,
       :reference,
       :priority,
-      :category_id,
+      :stage,
+      :type,
       :description_en,
       Language.description_params,
       :answer_type_id,

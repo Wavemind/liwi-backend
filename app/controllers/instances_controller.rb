@@ -1,7 +1,7 @@
 class InstancesController < ApplicationController
 
   before_action :authenticate_user!
-  before_action :set_instanceable, only: [:show, :create, :destroy, :by_reference, :create_from_diagram, :remove_from_diagram, :create_link, :remove_link, :load_conditions, :create_from_final_diagnostic_diagram, :update_score]
+  before_action :set_instanceable, only: [:show, :create, :destroy, :by_reference, :create_from_diagram, :remove_from_diagram, :create_link, :remove_link, :create_from_final_diagnostic_diagram, :update_score]
   before_action :set_instance, only: [:show, :destroy]
   before_action :set_child, only: [:create_link, :remove_link, :update_score]
   before_action :set_parent, only: [:create_link, :remove_link, :update_score]
@@ -31,7 +31,7 @@ class InstancesController < ApplicationController
       @algorithm = @instanceable.algorithm
 
       add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
-      add_breadcrumb @instanceable.label, predefined_syndrome_url(@instanceable)
+      add_breadcrumb @instanceable.label, questions_sequence_url(@instanceable)
       add_breadcrumb @instance.node.label
     end
   end
@@ -85,7 +85,7 @@ class InstancesController < ApplicationController
   def create_from_final_diagnostic_diagram
     instance = @instanceable.components.new(instance_params)
 
-    if instance.node.is_a?(Treatment) || instance.node.is_a?(Management)
+    if instance.node.is_a?(HealthCare)
       FinalDiagnosticHealthCare.create!(final_diagnostic: FinalDiagnostic.find(instance_params[:final_diagnostic_id]), node: instance.node)
     end
 
@@ -108,34 +108,6 @@ class InstancesController < ApplicationController
     end
   end
 
-  # @params [Diagnostic] Current diagnostic [Node] child of the link
-  # Create link in both way from diagram
-  def load_conditions
-    instance = @instanceable.components.find_by(node_id: params[:node_id])
-    available_conditions = (@instanceable.components.questions.includes(node: [:answers]).map(&:node).map(&:answers) + @instanceable.components.predefined_syndromes.includes(node: [:answers]).map(&:node).map(&:answers) + instance.conditions).flatten
-    render json: {
-      instance: instance.as_json(
-        include: {
-          conditions: {
-            include: [
-              first_conditionable: {
-                include: [node: { include: [:answers] }]
-              },
-              second_conditionable: {
-                include: [
-                  node: { include: [:answers] }
-                ]
-              }
-            ],
-            methods: [:display_condition]
-          },
-        }
-      ),
-      available_conditions: available_conditions.as_json(methods: [:display_condition]),
-      operators: Condition.operators.map { |k, v| [t("conditions.operators.#{k}"), k] }.as_json
-    }
-  end
-
   # POST /diagnostics/:diagnostic_id/instances/:node_id/remove_from_diagram
   # @return JSON of instance
   # Delete an instances and json format
@@ -143,7 +115,7 @@ class InstancesController < ApplicationController
     # Remove from HealthCare diagram (in case there are 2 instances of one node for one diagnostic, one df condition and one hc condition)
     if instance_params[:final_diagnostic_id].present?
       instance = @instanceable.components.health_care_conditions.find_by(node_id: instance_params[:node_id])
-      FinalDiagnosticHealthCare.find_by(final_diagnostic_id: instance_params[:final_diagnostic_id], node_id: instance.node_id).destroy! if (instance.node.is_a?(Treatment) || instance.node.is_a?(Management))
+      FinalDiagnosticHealthCare.find_by(final_diagnostic_id: instance_params[:final_diagnostic_id], node_id: instance.node_id).destroy! if instance.node.is_a?(HealthCare)
     else
       instance = @instanceable.components.not_health_care_conditions.find_by(node_id: instance_params[:node_id])
     end
@@ -194,8 +166,8 @@ class InstancesController < ApplicationController
   def set_instanceable
     if params[:diagnostic_id].present?
       @instanceable = Diagnostic.find(params[:diagnostic_id])
-    elsif params[:predefined_syndrome_id].present?
-      @instanceable = PredefinedSyndrome.find(params[:predefined_syndrome_id])
+    elsif params[:questions_sequence_id].present?
+      @instanceable = QuestionsSequence.find(params[:questions_sequence_id])
     else
       raise
     end

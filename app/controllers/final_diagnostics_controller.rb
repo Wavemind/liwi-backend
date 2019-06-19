@@ -35,6 +35,8 @@ class FinalDiagnosticsController < ApplicationController
       @diagnostic.components.create!(node: @final_diagnostic)
       redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'final_diagnostics'), notice: t('flash_message.success_created')
     else
+      set_breadcrumb
+      add_breadcrumb t('breadcrumbs.new')
       render :new
     end
   end
@@ -43,6 +45,8 @@ class FinalDiagnosticsController < ApplicationController
     if @final_diagnostic.update(final_diagnostic_params)
       redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'final_diagnostics'), notice: t('flash_message.success_updated')
     else
+      set_breadcrumb
+      add_breadcrumb t('breadcrumbs.edit')
       render :edit
     end
   end
@@ -79,7 +83,7 @@ class FinalDiagnosticsController < ApplicationController
 
     if final_diagnostic.save
       @diagnostic.components.create!(node: final_diagnostic)
-      render json: {status: 'success', messages: [t('flash_message.success_created')], node: final_diagnostic.as_json(methods: [:type])}
+      render json: {status: 'success', messages: [t('flash_message.success_created')], node: final_diagnostic.as_json(methods: :node_type)}
     else
       render json: {status: 'danger', errors: final_diagnostic.errors.messages, ok: false}
     end
@@ -108,17 +112,17 @@ class FinalDiagnosticsController < ApplicationController
 
   # PUT
   # @return final_diagnostic node
-  # Create a final diagnostic node from diagram
+  # Update a final diagnostic node from diagram
   def update_from_diagram
     if @final_diagnostic.update(final_diagnostic_params)
-      render json: {status: 'success', messages: [t('flash_message.success_created')], node: @final_diagnostic.as_json(methods: [:type])}
+      render json: {status: 'success', messages: [t('flash_message.success_created')], node: @final_diagnostic.as_json(methods: :node_type)}
     else
       render json: {status: 'danger', errors: @final_diagnostic.errors.messages, ok: false}
     end
   end
 
   # @params FinalDiagnostic with the translations
-  # Update the object with its translation without
+  # Update the object with its translation without rendering a new page
   def update_translations
     if @final_diagnostic.update(final_diagnostic_params)
       @json = {status: 'success', message: t('flash_message.success_updated')}

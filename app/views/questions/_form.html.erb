@@ -1,25 +1,23 @@
-<%= simple_form_for [@algorithm, @question], html: { class: 'form-horizontal' }, wrapper: :input_group do |f| %>
+<%= f.input :priority, collection: Question.priorities.map { |k, v| [t("question.priorities.#{k}"), k] }, prompt: t('select') %>
+<%= f.input :stage, collection: Question.stages.map { |k, v| [t("question.stages.#{k}"), k] }, prompt: t('select') %>
+<%= f.input :type, collection: Question.descendants, input_html: {id: 'question_type'}, value_method: :name, label_method: :display_label, prompt: t('select'), disabled: f.object.persisted? %>
 
-  <%= f.input :priority, collection: Question.priorities.map { |k, v| [t("question.priorities.#{k}"), k] }, prompt: t('select') %>
-  <%= f.association :category, collection: Category.question_categories, label_method: :name, prompt: t('select'), disabled: f.object.persisted? %>
+<%= f.input :reference, prepend: (f.object.persisted? ? false : (@question.type.nil? ? '' : @question.reference_prefix)), disabled: f.object.persisted? %>
+<%= f.input :label_en %>
+<%= f.input :description_en, as: :text %>
 
-  <%= f.input :reference, prepend: (f.object.persisted? ? false : (@question.category.nil? ? '' : @question.category.reference_prefix)), disabled: f.object.persisted? %>
-  <%= f.input :label_en %>
-  <%= f.input :description_en, as: :text %>
+<%= f.association :answer_type, collection: AnswerType.all, label_method: :display_name, prompt: t('select'), disabled: @question.answers.any?  %>
 
-  <%= f.association :answer_type, collection: AnswerType.all, label_method: :display_name, prompt: t('select'), disabled: @question.answers.any?  %>
+<%= f.input :unavailable, input_html: {id: 'question_unavailable'}, as: :boolean %>
 
-  <%= f.input :unavailable, as: :boolean %>
+<hr />
 
-  <hr />
-
-  <%= f.simple_fields_for :medias do |ff| %>
-    <%= render 'medias/fields', f: ff %>
-  <% end %>
-
-  <div class="links">
-    <%= link_to_add_association "<button class='btn btn-outline-success'>#{t('add')}</button>".html_safe, f, :medias, partial: 'medias/fields' %>
-  </div>
-
-  <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
+<%= f.simple_fields_for :medias do |ff| %>
+  <%= render 'medias/fields', f: ff %>
 <% end %>
+
+<div class="links">
+  <%= link_to_add_association "<button class='btn btn-outline-success'>#{t('add')}</button>".html_safe, f, :medias, partial: 'medias/fields' %>
+</div>
+
+<%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>

@@ -39,6 +39,8 @@ class DiagnosticsController < ApplicationController
     if @diagnostic.save
       redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic), notice: t('flash_message.success_created')
     else
+      set_breadcrumb
+      add_breadcrumb t('breadcrumbs.new')
       render :new
     end
   end
@@ -47,6 +49,8 @@ class DiagnosticsController < ApplicationController
     if @diagnostic.update(diagnostic_params)
       redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic), notice: t('flash_message.success_updated')
     else
+      set_breadcrumb
+      add_breadcrumb t('breadcrumbs.edit')
       render :edit
     end
   end
@@ -84,7 +88,7 @@ class DiagnosticsController < ApplicationController
   end
 
   # @params [Diagnostic] with the translations
-  # Update the object with its translation without
+  # Update the object with its translation without rendering a new page
   def update_translations
     if @diagnostic.update(diagnostic_params)
       @json = {status: 'success', messages: t('flash_message.success_updated')}

@@ -22,9 +22,9 @@ class Toolbar extends React.Component {
   };
 
   // Button to open modal with new predefined syndrome node form
-  newPredefinedSyndrome = () => {
+  newQuestionsSequence = () => {
     const { set } = this.props;
-    set('modalToOpen', 'CreatePredefinedSyndrome');
+    set('modalToOpen', 'CreateQuestionsSequence');
     set('modalIsOpen', true);
   };
 
@@ -41,6 +41,7 @@ class Toolbar extends React.Component {
       http,
       addMessage,
       type,
+      instanceable
     } = this.props;
 
     let response;
@@ -49,7 +50,7 @@ class Toolbar extends React.Component {
     if (type === 'Diagnostic') {
       response = await http.validateDiagnostic();
     } else {
-      response = await http.validatePredefinedSyndromeScored();
+      response = await http.validateQuestionsSequence();
     }
 
     let message = {
@@ -60,16 +61,18 @@ class Toolbar extends React.Component {
     this.setState({isLoading: false})
   };
 
+  redirectToDiagnostic = () => {
+    const { http } = this.props;
+    http.redirectToDiagnosticDiagram();
+  };
+
   // Close and redirect user to list of...
   save = async () => {
     const { http, type, instanceable } = this.props;
     if (type === 'Diagnostic') {
       await http.redirectToDiagnostic();
-    } else if (type === 'FinalDiagnostic') {
-      // await http.redirectToDiagnosticDiagram();
-    }
-    else {
-      let panel = instanceable.category.id === 8 ? 'predefined_syndromes_scored' : 'predefined_syndromes';
+    } else {
+      let panel = instanceable.category_name === 'scored' ? 'questions_sequences_scored' : 'questions_sequences';
       await http.redirectToAlgorithm(panel);
     }
   };
@@ -89,7 +92,7 @@ class Toolbar extends React.Component {
               </button>
               <div className="dropdown-menu">
                 <a className="dropdown-item" href="#">Question</a>
-                <a className="dropdown-item" href="#" onClick={() => {this.newPredefinedSyndrome()}}>Predefined Syndrome</a>
+                <a className="dropdown-item" href="#" onClick={() => {this.newQuestionsSequence()}}>Questions Sequence</a>
                 {/*<a className="dropdown-item" href="#">Predefined Syndrome Scored</a>*/}
                 {type === 'Diagnostic' ? (<a className="dropdown-item" href="#" onClick={() => {this.newFinalDiagnostic()}}>Final diagnostic</a>) : null}
                 {type === 'FinalDiagnostic' ? (<a className="dropdown-item" href="#" onClick={() => {this.newHealthCare('treatments')}}>Treatment</a>) : null}
@@ -98,16 +101,22 @@ class Toolbar extends React.Component {
             </div>
           </div>
           <div className="col text-right">
-            {type === 'Diagnostic' || type === "PredefinedSyndrome" ? (
+            {type === 'Diagnostic' || type === "QuestionsSequence" ? (
             <button type="button" className="btn btn-transparent" onClick={() => {this.validate()}}>
               {isLoading ?
                 <span>Loading</span>: <span>Validate</span>
               }
             </button>
               ) : null }
-            <button type="button" className="btn btn-transparent" onClick={() => {this.save()}}>
-              Save
-            </button>
+            {type === 'FinalDiagnostic' ? (
+              <button type="button" className="btn btn-transparent" onClick={() => {this.redirectToDiagnostic()}}>
+                Diagnostic diagram
+              </button>
+            ) : (
+              <button type="button" className="btn btn-transparent" onClick={() => {this.save()}}>
+                Save
+              </button>
+            )}
           </div>
         </div>
       </div>

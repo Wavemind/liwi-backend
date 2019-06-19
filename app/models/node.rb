@@ -13,12 +13,9 @@ class Node < ApplicationRecord
   has_many :medical_case_health_cares
   has_many :medical_cases, through: :medical_case_health_cares
 
-  scope :managements, ->() { where(type: 'Management') }
-  scope :treatments, ->() { where(type: 'Treatment') }
-
   accepts_nested_attributes_for :medias, reject_if: :all_blank, allow_destroy: true
 
-  validates_presence_of :label
+  validates_presence_of :label_en
   validates_presence_of :reference
 
   after_validation :unique_reference
@@ -52,19 +49,23 @@ class Node < ApplicationRecord
     self.save
   end
 
-  # @return name of category
-  # Used as method for rendering all unused node in a diagnostic
-  def category_name
-    if category_id.present?
-      category.name
-    end
-  end
-
   # @return [Array][Answers]
   # Return answers if any
   def get_answers
     if defined? answers
       answers
+    end
+  end
+
+  # Return the parent type of node -> FinalDiagnostic/Question/QuestionsSequence/HealthCare
+  def node_type
+    self.is_a?(FinalDiagnostic) ? self.class.name : self.class.superclass.name
+  end
+
+  # Return the final type of node -> physical_exam, predefined_syndrome, treatment, ...
+  def category_name
+    if self.is_a?(QuestionsSequence) || self.is_a?(Question) || self.is_a?(HealthCare)
+      self.class.variable
     end
   end
 

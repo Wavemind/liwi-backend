@@ -1,4 +1,5 @@
 /* eslint-disable react/no-unused-state */
+
 import * as React from "react";
 import * as _ from "lodash";
 import Http from "../http";
@@ -30,26 +31,29 @@ export default class DiagramProvider extends React.Component {
     } = this.state;
 
     let orderedNodes = {
-      exposure: [],
-      symptom: [],
       assessmentTest: [],
+      exposure: [],
+      chiefComplain: [],
+      demographic: [],
       physicalExam: [],
+      symptom: [],
+      vaccine: [],
       predefinedSyndrome: [],
       comorbidity: [],
-      predefinedCondition: []
+      triage: [],
     };
 
     if (type === "Diagnostic") {
-      orderedNodes.predefinedSyndromeScored = [];
+      orderedNodes.scored = [];
       orderedNodes.finalDiagnostic = [];
     } else if (type === "FinalDiagnostic") {
-      orderedNodes.predefinedSyndromeScored = [];
+      orderedNodes.scored = [];
       orderedNodes.treatment = [];
       orderedNodes.management = [];
-    } else if (type === "PredefinedSyndrome") {
+    } else if (type === "QuestionsSequence") {
       // If different predefined syndromes scored category
-      if (instanceable.category.id !== 8) {
-        orderedNodes.predefinedSyndromeScored = [];
+      if (instanceable.category_name !== 'Scored') {
+        orderedNodes.scored = [];
       }
     }
 
@@ -66,11 +70,10 @@ export default class DiagramProvider extends React.Component {
   // Find category
   getCategoryNode = (node) => {
     let category = null;
-
-    if (node.type === "Question" || node.type === "PredefinedSyndrome") {
+    if (node.node_type === "Question" || node.node_type === "QuestionsSequence" || node.node_type === "HealthCare") {
       category = _.camelCase(node.category_name);
     } else {
-      category = _.camelCase(node.type);
+      category = _.camelCase(node.node_type);
     }
     return category;
   };

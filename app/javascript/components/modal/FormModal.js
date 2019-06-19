@@ -5,8 +5,8 @@ import InsertScoreForm from "./contents/InsertScoreForm";
 import UpdateScoreForm from "./contents/UpdateScoreForm";
 import CreateFinalDiagnosticForm from "./contents/final-diagnostic/CreateFinalDiagnosticForm";
 import UpdateFinalDiagnosticForm from "./contents/final-diagnostic/UpdateFinalDiagnosticForm";
-import CreatePredefinedSyndromeForm from './contents/predefined-syndrome/CreatePredefinedSyndromeForm';
-import UpdatePredefinedSyndromeForm from './contents/predefined-syndrome/UpdatePredefinedSyndromeForm';
+import CreateQuestionsSequenceForm from './contents/questions-sequence/CreateQuestionsSequenceForm';
+import UpdateQuestionsSequenceForm from './contents/questions-sequence/UpdateQuestionsSequenceForm';
 import CreateHealthCareForm from './contents/health-care/CreateHealthCareForm';
 
 class FormModal extends React.Component {
@@ -50,10 +50,10 @@ class FormModal extends React.Component {
                 return <CreateFinalDiagnosticForm toggleModal={this.toggleModal} />;
               case 'UpdateFinalDiagnostic':
                 return <UpdateFinalDiagnosticForm toggleModal={this.toggleModal} />;
-              case 'CreatePredefinedSyndrome':
-                return <CreatePredefinedSyndromeForm toggleModal={this.toggleModal} />;
-              case 'UpdatePredefinedSyndrome':
-                return <UpdatePredefinedSyndromeForm toggleModal={this.toggleModal} />;
+              case 'CreateQuestionsSequence':
+                return <CreateQuestionsSequenceForm toggleModal={this.toggleModal} />;
+              case 'UpdateQuestionsSequence':
+                return <UpdateQuestionsSequenceForm toggleModal={this.toggleModal} />;
               case 'CreateHealthCare':
                 return <CreateHealthCareForm toggleModal={this.toggleModal} />;
               default:

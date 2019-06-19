@@ -11,7 +11,7 @@ class Diagnostic < ApplicationRecord
   has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy
 
   validates_presence_of :reference
-  validates_presence_of :label
+  validates_presence_of :label_en
 
   translates :label
 
@@ -34,25 +34,25 @@ class Diagnostic < ApplicationRecord
   # @return [ActiveRecord::Relation] of questions
   # Get every questions asked in a diagnostic
   def questions
-    Node.joins(:instances).where('type = ? AND instances.instanceable_id = ? AND instances.instanceable_type = ?', 'Question', id, self.class.name)
+    Node.joins(:instances).where('type LIKE ? AND instances.instanceable_id = ? AND instances.instanceable_type = ?', 'Questions::%', id, self.class.name)
   end
 
   # @return [ActiveRecord::Relation] of predefined syndromes
   # Get every predefined syndromes used in a diagnostic
-  def predefined_syndromes
-    Node.joins(:instances).where('type = ? AND instances.instanceable_id = ? AND instances.instanceable_type = ?', 'PredefinedSyndrome', id, self.class.name)
+  def questions_sequences
+    Node.joins(:instances).where('type LIKE ? AND instances.instanceable_id = ? AND instances.instanceable_type = ?', 'QuestionsSequences::%', id, self.class.name)
   end
 
   # @return [ActiveRecord::Relation] of managements
   # Get every managements used in a diagnostic
   def managements
-    Node.joins(:instances).where('type = ? AND instances.instanceable_id = ? AND instances.instanceable_type = ?', 'Management', id, self.class.name)
+    Node.joins(:instances).where('type = ? AND instances.instanceable_id = ? AND instances.instanceable_type = ?', 'HealthCares::Management', id, self.class.name)
   end
 
   # @return [ActiveRecord::Relation] of treatments
   # Get every treatments used in a diagnostic
   def treatments
-    Node.joins(:instances).where('type = ? AND instances.instanceable_id = ? AND instances.instanceable_type = ?', 'Treatment', id, self.class.name)
+    Node.joins(:instances).where('type = ? AND instances.instanceable_id = ? AND instances.instanceable_type = ?', 'HealthCares::Treatment', id, self.class.name)
   end
 
   # @param [Diagnostic]
@@ -79,7 +79,7 @@ class Diagnostic < ApplicationRecord
   # Generate the ordered questions
   def generate_questions_order
     nodes = []
-    first_instances = components.not_health_care_conditions.includes(:conditions, :children, :node).where(conditions: { referenceable_id: nil }).where('nodes.type = ? OR nodes.type = ?', 'Question', 'PredefinedSyndrome')
+    first_instances = components.not_health_care_conditions.includes(:conditions, :children, :node).where(conditions: { referenceable_id: nil }).where('nodes.type IN (?) OR nodes.type IN (?)', Question.descendants.map(&:name), QuestionsSequence.descendants.map(&:name))
     nodes << first_instances
     get_children(first_instances, nodes)
   end
@@ -90,7 +90,7 @@ class Diagnostic < ApplicationRecord
   def get_children(instances, nodes)
     current_nodes = []
     instances.includes(:conditions, children: [:node]).map(&:children).flatten.each do |child|
-      current_nodes << child.node if child.node.is_a?(Question) || child.node.is_a?(PredefinedSyndrome)
+      current_nodes << child.node if child.node.is_a?(Question) || child.node.is_a?(QuestionsSequence)
     end
 
     if current_nodes.any?
@@ -117,25 +117,25 @@ class Diagnostic < ApplicationRecord
   # @return [Json]
   # Return questions in json format
   def questions_json
-    generate_questions_order.as_json(include: [conditions: { include: [first_conditionable: { methods: [:get_node] }, second_conditionable: { methods: [:get_node] }] }, node: { include: [:answers], methods: [:type, :category_name] }])
+    generate_questions_order.as_json(include: [conditions: { include: [first_conditionable: { methods: [:get_node] }, second_conditionable: { methods: [:get_node] }] }, node: { include: [:answers], methods: [:node_type, :category_name] }])
   end
 
   # @return [Json]
   # Return final diagnostics in json format
   def final_diagnostics_json
-    components.final_diagnostics.as_json(include: [ node: {methods: [:type]}, conditions: { include: [first_conditionable: { include: [node: { include: [:answers]}], methods: [:get_node]}, second_conditionable: { methods: [:get_node]}]}])
+    components.final_diagnostics.as_json(include: [ node: {methods: [:node_type]}, conditions: { include: [first_conditionable: { include: [node: { include: [:answers]}], methods: [:get_node]}, second_conditionable: { methods: [:get_node]}]}])
   end
 
   # @return [Json]
   # Return treatments and managements in json format
   def health_cares_json
-    components.treatments.as_json(include: [node: {methods: [:type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}]) + components.managements.as_json(include: [node: {methods: [:type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}])
+    components.treatments.as_json(include: [node: {methods: [:node_type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}]) + components.managements.as_json(include: [node: {methods: [:node_type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}])
   end
 
   # @return [Json]
   # Return available nodes in the algorithm in json format
   def available_nodes_json
-    (version.algorithm.nodes.where.not(id: components.not_health_care_conditions.select(:node_id)).where.not(type: 'Treatment').where.not(type: 'Management') + final_diagnostics.where.not(id: components.select(:node_id))).as_json(methods: [:category_name, :type, :get_answers])
+    (version.algorithm.nodes.where.not(id: components.not_health_care_conditions.select(:node_id)).where.not('type LIKE ?', 'HealthCares::%') + final_diagnostics.where.not(id: components.select(:node_id))).as_json(methods: [:category_name, :node_type, :get_answers])
   end
 
   # @return [Boolean]
@@ -160,12 +160,12 @@ class Diagnostic < ApplicationRecord
         unless instance.conditions.any?
           errors.add(:basic, I18n.t('flash_message.diagnostic.final_diagnostic_no_condition', reference: instance.node.reference))
         end
-      elsif instance.node.is_a?(Question) || instance.node.is_a?(PredefinedSyndrome)
+      elsif instance.node.is_a?(Question) || instance.node.is_a?(QuestionsSequence)
         unless instance.children.any?
           if instance.final_diagnostic.nil?
-            errors.add(:basic, I18n.t('flash_message.diagnostic.question_no_children', type: instance.node.type, reference: instance.node.reference))
+            errors.add(:basic, I18n.t('flash_message.diagnostic.question_no_children', type: instance.node.node_type, reference: instance.node.reference))
           else
-            errors.add(:basic, I18n.t('flash_message.diagnostic.hc_question_no_children', type: instance.node.type, reference: instance.node.reference, url: diagram_algorithm_version_diagnostic_final_diagnostic_url(version.algorithm.id, version.id, id, instance.final_diagnostic_id).to_s, df_reference: instance.final_diagnostic.reference))
+            errors.add(:basic, I18n.t('flash_message.diagnostic.hc_question_no_children', type: instance.node.node_type, reference: instance.node.reference, url: diagram_algorithm_version_diagnostic_final_diagnostic_url(version.algorithm.id, version.id, id, instance.final_diagnostic_id).to_s, df_reference: instance.final_diagnostic.reference))
           end
         end
       end

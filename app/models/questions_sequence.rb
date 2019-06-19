@@ -1,16 +1,19 @@
-# Define the children of an answer
-class PredefinedSyndrome < Node
+# Define a sequence of questions to be included in a diagnostic
+class QuestionsSequence < Node
   after_create :create_boolean
-
-  belongs_to :category
 
   has_many :answers, foreign_key: 'node_id', dependent: :destroy
   has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy
 
-  scope :scored, ->() { where('category_id = ?', 8) }
-  scope :not_scored, ->() { where.not('category_id = ?', 8) }
+  scope :scored, ->() { where(type: 'QuestionsSequences::Scored') }
+  scope :not_scored, ->() { where.not(type: 'QuestionsSequences::Scored') }
 
-  # @params [PredefinedSyndrome]
+  # Preload the children of class Question
+  def self.descendants
+    [QuestionsSequences::PredefinedSyndrome, QuestionsSequences::Comorbidity, QuestionsSequences::Triage, QuestionsSequences::Scored]
+  end
+
+  # @params [QuestionsSequence]
   # Generate the ordered questions
   def generate_questions_order
     nodes = []
@@ -24,7 +27,7 @@ class PredefinedSyndrome < Node
   def get_children(instances, nodes)
     current_nodes = []
     instances.includes(children: [:node]).map(&:children).flatten.each do |child|
-      current_nodes << child.node if child.node.is_a?(Question) || child.node.is_a?(PredefinedSyndrome)
+      current_nodes << child.node if child.node.is_a?(Question) || child.node.is_a?(QuestionsSequence)
     end
     if current_nodes.any?
       current_instances = Instance.not_health_care_conditions.where('instanceable_id = ? AND instanceable_type = ? AND node_id IN (?)', id, 'Node', current_nodes.map(&:id).flatten)
@@ -50,32 +53,32 @@ class PredefinedSyndrome < Node
   # @return [Json]
   # Return questions in json format
   def questions_json
-    generate_questions_order.as_json(include: [conditions: { include: [first_conditionable: { methods: [:get_node] }, second_conditionable: { methods: [:get_node] }] }, node: { include: [:answers], methods: [:type, :category_name] }])
+    generate_questions_order.as_json(include: [conditions: { include: [first_conditionable: { methods: [:get_node] }, second_conditionable: { methods: [:get_node] }] }, node: { include: [:answers], methods: [:node_type, :category_name] }])
   end
 
   # @return [Json]
   # Return available nodes in the algorithm in json format
   def available_nodes_json
-    (algorithm.nodes.where.not(id: components.not_health_care_conditions.select(:node_id)).where.not(type: 'Treatment').where.not(type: 'Management')).as_json(methods: [:category_name, :type, :get_answers])
+    (algorithm.nodes.where.not(id: components.not_health_care_conditions.select(:node_id)).where.not('type LIKE ?', 'HealthCares::%')).as_json(methods: [:category_name, :node_type, :get_answers])
   end
 
   # Add errors to a predefined syndrome for its components
   def manual_validate
-    validate_score if category.id == 8
+    validate_score if self.is_a? QuestionsSequences::Scored
     components.each do |instance|
       if instance.node == self
         unless instance.conditions.any?
-          errors.add(:basic, I18n.t('flash_message.predefined_syndrome.ps_no_condition'))
+          errors.add(:basic, I18n.t('flash_message.questions_sequence.ps_no_condition'))
         end
       else
         unless instance.children.any?
-          errors.add(:basic, I18n.t('flash_message.predefined_syndrome.question_no_children', type: instance.node.type, reference: instance.node.reference))
+          errors.add(:basic, I18n.t('flash_message.questions_sequence.question_no_children', type: instance.node.node_type, reference: instance.node.reference))
         end
       end
     end
   end
 
-  # Add errors to a predefined syndrome scored for its components
+  # Add errors to a questions sequence scored for its components
   def validate_score
     higher_node_score = {}
     components.find_by(node: self).conditions.each do |condition|
@@ -85,8 +88,22 @@ class PredefinedSyndrome < Node
     higher_score = higher_node_score.values.inject(0) { |a, b| a + b }
 
     if higher_score < min_score
-      errors.add(:basic, I18n.t('flash_message.predefined_syndrome.pss_no_combination'))
+      errors.add(:basic, I18n.t('flash_message.questions_sequence.pss_no_combination'))
     end
+  end
+
+  def reference_prefix
+    return '' unless type.present?
+    I18n.t("questions_sequences.categories.#{Object.const_get(type).variable}.reference_prefix")
+  end
+
+  def self.reference_prefix_class(type)
+    return '' unless type.present?
+    I18n.t("questions_sequences.categories.#{Object.const_get(type).variable}.reference_prefix")
+  end
+
+  def self.variable
+
   end
 
   private
@@ -94,13 +111,18 @@ class PredefinedSyndrome < Node
   # {Node#unique_reference}
   # Scoped by the current algorithm
   def unique_reference
-    if algorithm.predefined_syndromes.where(reference: "#{category.reference_prefix}#{reference}").any?
+    if algorithm.questions_sequences.where(reference: reference_prefix + reference).any?
       errors.add(:reference, I18n.t('nodes.validation.reference_used'))
     end
   end
 
   # {Node#complete_reference}
   def complete_reference
-    self.reference = "#{category.reference_prefix}#{reference}"
+    self.reference = reference_prefix + reference
+  end
+
+  # Return a displayable label for views
+  def self.display_label
+    I18n.t("questions_sequences.categories.#{self.variable}.label")
   end
 end

@@ -1,10 +1,10 @@
 jQuery(document).ready(function () {
-  $("#predefined_syndromes-datatable").dataTable({
+  $("#questions_sequences-datatable").dataTable({
     "processing": true,
     "info": false,
     "bLengthChange": false,
     "serverSide": true,
-    "ajax": $("#predefined_syndromes-datatable").data("source"),
+    "ajax": $("#questions_sequences-datatable").data("source"),
     "pagingType": "full_numbers",
     "columns": [
       { "data": "reference" },
@@ -15,16 +15,15 @@ jQuery(document).ready(function () {
     ]
   });
 
-  $("#predefined_syndromes_scored-datatable").dataTable({
+  $("#questions_sequences_scored-datatable").dataTable({
     "processing": true,
     "info": false,
     "bLengthChange": false,
     "serverSide": true,
-    "ajax": $("#predefined_syndromes_scored-datatable").data("source"),
+    "ajax": $("#questions_sequences_scored-datatable").data("source"),
     "pagingType": "full_numbers",
     "columns": [
       { "data": "reference" },
-      { "data": "category" },
       { "data": "label" },
       { "data": "min_score" },
       { "data": "description" },
@@ -33,13 +32,14 @@ jQuery(document).ready(function () {
   });
 
   // Update the prepend every time the user pick another category
-  $("#predefined_syndrome_category_id").change(function() {
+  $("#questions_sequence_type").change(function() {
     var prepend = $(this).closest("form").find(".input-group-text");
-    var id = $("#predefined_syndrome_category_id option:selected").val();
+    var type = $("#questions_sequence_type option:selected").val();
 
-    if (id.trim()){
+    if (type.trim()){
       $.ajax({
-        url: window.location.origin + "/categories/" + id + "/reference",
+        url: window.location.origin + "/questions_sequences/reference_prefix",
+        data: {type: type},
         complete: function(response){
           prepend.text(response.responseText);
         }

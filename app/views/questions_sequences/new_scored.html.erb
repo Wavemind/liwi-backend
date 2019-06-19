@@ -1,0 +1,7 @@
+<h1><%= t('.title') %></h1>
+
+<div class="row justify-content-center">
+  <%= simple_form_for @questions_sequence, url: algorithm_questions_sequences_url(@algorithm), html: { class: 'form-horizontal' }, wrapper: :input_group do |f| %>
+    <%= render 'scored_form', f: f %>
+  <% end %>
+</div>
