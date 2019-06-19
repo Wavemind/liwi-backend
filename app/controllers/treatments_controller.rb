@@ -21,6 +21,8 @@ class TreatmentsController < ApplicationController
     if @treatment.save
       redirect_to algorithm_url(@algorithm, panel: 'treatments'), notice: t('flash_message.success_created')
     else
+      set_breadcrumb
+      add_breadcrumb t('breadcrumbs.new')
       render :new
     end
   end
@@ -29,6 +31,8 @@ class TreatmentsController < ApplicationController
     if @treatment.update(treatment_params)
       redirect_to algorithm_url(@algorithm, panel: 'treatments'), notice: t('flash_message.success_updated')
     else
+      set_breadcrumb
+      add_breadcrumb t('breadcrumbs.edit')
       render :edit
     end
   end

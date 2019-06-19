@@ -27,6 +27,8 @@ class UsersController < ApplicationController
       User.invite!(user_params)
       redirect_to users_url, notice: t('flash_message.success_created')
     else
+      set_breadcrumb
+      add_breadcrumb t('breadcrumbs.new')
       render :new
     end
   end
@@ -40,6 +42,8 @@ class UsersController < ApplicationController
     if @user.update(user_params)
       redirect_to users_url, notice: t('flash_message.success_updated')
     else
+      set_breadcrumb
+      add_breadcrumb t('breadcrumbs.edit')
       render :edit
     end
   end

@@ -28,7 +28,14 @@ class QuestionsSequencesController < ApplicationController
       @questions_sequence.components.create!(node: @questions_sequence)
       redirect_to diagram_questions_sequence_url(@questions_sequence), notice: t('flash_message.success_updated')
     else
-      render :new
+      set_breadcrumb
+      add_breadcrumb t('breadcrumbs.new')
+
+      if @questions_sequence.is_a?(QuestionsSequences::Scored)
+        render :new_scored
+      else
+        render :new
+      end
     end
   end
 
@@ -36,6 +43,8 @@ class QuestionsSequencesController < ApplicationController
     if @questions_sequence.update(questions_sequence_params)
       redirect_to algorithm_url(@algorithm, panel: 'questions_sequences'), notice: t('flash_message.success_updated')
     else
+      set_breadcrumb
+      add_breadcrumb t('breadcrumbs.edit')
       render :edit
     end
   end
@@ -83,6 +92,7 @@ class QuestionsSequencesController < ApplicationController
     add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'questions_sequences_scored')
 
     @questions_sequence = QuestionsSequence.new
+    @questions_sequence.type = nil
   end
 
   # GET algorithm/:algorithm_id/questions_sequences/reference_prefix/:type

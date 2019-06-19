@@ -93,10 +93,12 @@ class QuestionsSequence < Node
   end
 
   def reference_prefix
+    return '' unless type.present?
     I18n.t("questions_sequences.categories.#{Object.const_get(type).variable}.reference_prefix")
   end
 
   def self.reference_prefix_class(type)
+    return '' unless type.present?
     I18n.t("questions_sequences.categories.#{Object.const_get(type).variable}.reference_prefix")
   end
 

@@ -21,6 +21,8 @@ class ManagementsController < ApplicationController
     if @management.save
       redirect_to algorithm_url(@algorithm, panel: 'managements'), notice: t('flash_message.success_created')
     else
+      set_breadcrumb
+      add_breadcrumb t('breadcrumbs.new')
       render :new
     end
   end
@@ -29,6 +31,8 @@ class ManagementsController < ApplicationController
     if @management.update(management_params)
       redirect_to algorithm_url(@algorithm, panel: 'managements'), notice: t('flash_message.success_updated')
     else
+      set_breadcrumb
+      add_breadcrumb t('breadcrumbs.edit')
       render :edit
     end
   end
