@@ -1,4 +1,4 @@
-# Define every treatments for a diagnostic
+# Category of question concerning exposures to environments at risk
 class Questions::Exposure < Question
 
   def self.variable

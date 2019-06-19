@@ -1,4 +1,4 @@
-# Define every treatments for a diagnostic
+# Category of question for the medical tests
 class Questions::AssessmentTest < Question
 
   after_create :create_unavailable_answer, if: Proc.new { unavailable == '1' } # Ensure unavailable is checked

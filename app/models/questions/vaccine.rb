@@ -1,4 +1,4 @@
-# Define every treatments for a diagnostic
+# Category of question concerning vaccines
 class Questions::Vaccine < Question
 
   def self.variable

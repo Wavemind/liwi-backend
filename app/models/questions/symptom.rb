@@ -1,4 +1,4 @@
-# Define every treatments for a diagnostic
+# Category of question concerning the symptoms of the patient
 class Questions::Symptom < Question
 
   def self.variable

@@ -1,4 +1,4 @@
-# Define every treatments for a diagnostic
+# Define a regular sequence of questions
 class QuestionsSequences::PredefinedSyndrome < QuestionsSequence
 
   def self.variable

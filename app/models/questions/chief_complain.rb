@@ -1,4 +1,4 @@
-# Define every treatments for a diagnostic
+# Category of question for the first complains of the patient
 class Questions::ChiefComplain < Question
 
   def self.variable

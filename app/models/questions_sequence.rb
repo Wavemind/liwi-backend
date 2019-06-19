@@ -1,4 +1,4 @@
-# Define the children of an answer
+# Define a sequence of questions to be included in a diagnostic
 class QuestionsSequence < Node
   after_create :create_boolean
 
@@ -13,7 +13,7 @@ class QuestionsSequence < Node
     [QuestionsSequences::PredefinedSyndrome, QuestionsSequences::Comorbidity, QuestionsSequences::Triage, QuestionsSequences::Scored]
   end
 
-  # @params [PredefinedSyndrome]
+  # @params [QuestionsSequence]
   # Generate the ordered questions
   def generate_questions_order
     nodes = []
@@ -78,7 +78,7 @@ class QuestionsSequence < Node
     end
   end
 
-  # Add errors to a predefined syndrome scored for its components
+  # Add errors to a questions sequence scored for its components
   def validate_score
     higher_node_score = {}
     components.find_by(node: self).conditions.each do |condition|
@@ -119,6 +119,7 @@ class QuestionsSequence < Node
     self.reference = reference_prefix + reference
   end
 
+  # Return a displayable label for views
   def self.display_label
     I18n.t("questions_sequences.categories.#{self.variable}.label")
   end
