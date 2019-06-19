@@ -319,6 +319,13 @@ export default class Http {
 
   // @params [Integer] dfId
   // @return [Object] body of request
+  // Redirect to diagnostic diagram
+  redirectToDiagnosticDiagram = async () => {
+    window.location = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/diagram`;
+  };
+
+  // @params [Integer] dfId
+  // @return [Object] body of request
   // Redirect to diagnostic
   redirectToFinalDiagnostic = async () => {
     window.location = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics`;

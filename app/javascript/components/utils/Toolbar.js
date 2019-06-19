@@ -61,15 +61,17 @@ class Toolbar extends React.Component {
     this.setState({isLoading: false})
   };
 
+  redirectToDiagnostic = () => {
+    const { http } = this.props;
+    http.redirectToDiagnosticDiagram();
+  };
+
   // Close and redirect user to list of...
   save = async () => {
     const { http, type, instanceable } = this.props;
     if (type === 'Diagnostic') {
       await http.redirectToDiagnostic();
-    } else if (type === 'FinalDiagnostic') {
-      // await http.redirectToDiagnosticDiagram();
-    }
-    else {
+    } else {
       let panel = instanceable.category_name === 'scored' ? 'questions_sequences_scored' : 'questions_sequences';
       await http.redirectToAlgorithm(panel);
     }
@@ -106,9 +108,15 @@ class Toolbar extends React.Component {
               }
             </button>
               ) : null }
-            <button type="button" className="btn btn-transparent" onClick={() => {this.save()}}>
-              Save
-            </button>
+            {type === 'FinalDiagnostic' ? (
+              <button type="button" className="btn btn-transparent" onClick={() => {this.redirectToDiagnostic()}}>
+                Diagnostic diagram
+              </button>
+            ) : (
+              <button type="button" className="btn btn-transparent" onClick={() => {this.save()}}>
+                Save
+              </button>
+            )}
           </div>
         </div>
       </div>
