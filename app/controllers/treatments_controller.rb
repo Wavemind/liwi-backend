@@ -54,13 +54,13 @@ class TreatmentsController < ApplicationController
   # @return final_diagnostic node
   # Create a treatment node from diagram
   def create_from_diagram
-    treatment = @algorithm.health_cares.treatments.new(treatment_params)
+    treatment = @algorithm.health_cares.treatments.new(treatment_params).becomes(HealthCares::Treatment)
     treatment.type = HealthCares::Treatment
 
     if treatment.save
       diagnostic = Diagnostic.find(params[:diagnostic_id])
       final_diagnostic = FinalDiagnostic.find(params[:final_diagnostic_id])
-      final_diagnostic.nodes << treatment
+      final_diagnostic.health_cares << treatment
       diagnostic.components.create!(node: treatment, final_diagnostic: final_diagnostic)
       render json: {status: 'success', messages: [t('flash_message.success_created')], node: treatment.as_json(methods: :node_type)}
     else

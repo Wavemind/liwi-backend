@@ -30,6 +30,30 @@ class FinalDiagnosticDiagram extends React.Component {
     this.initDiagram();
   }
 
+  async shouldComponentUpdate(nextProps, nextState) {
+    if (this.props.currentDbNode !== nextProps.currentDbNode) {
+      const { engine } = this.state;
+      const { currentDbNode, currentDiagramNode } = nextProps;
+      const model = engine.getDiagramModel();
+
+      // Create or update node in diagram
+      if (nextProps.modalToOpen === 'CreateQuestionsSequence') {
+        let node = this.createNode(currentDbNode, currentDbNode.answers);
+        currentDbNode.answers.map((answer) => (node.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
+        model.addAll(node);
+      } else if (nextProps.modalToOpen === 'UpdateQuestionsSequence') {
+        currentDiagramNode.setReference(currentDbNode.reference);
+        currentDiagramNode.setNode(currentDbNode);
+      } else if (nextProps.modalToOpen === 'CreateHealthCare') {
+        let node = this.createNode(currentDbNode);
+        model.addAll(node);
+      }
+      this.updateEngine(engine);
+    }
+
+    return true;
+  }
+
   initDiagram = () => {
     const {
       questions,
@@ -106,6 +130,7 @@ class FinalDiagnosticDiagram extends React.Component {
 
           model.addAll(andNode, firstLink, secondLink, andLink);
         } else {
+          console.log(firstNodeAnswer)
           let link = _.find(firstNodeAnswer.getOutPorts(), ["label", this.getFullLabel(firstAnswer)]).link(node.getInPort());
           model.addAll(link);
         }

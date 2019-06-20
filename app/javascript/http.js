@@ -168,7 +168,8 @@ export default class Http {
         description_en: description,
       },
       instanceable_id: this.instanceableId,
-      instanceable_type: this.instanceableType
+      instanceable_type: this.instanceableType,
+      final_diagnostic_id: this.finalDiagnostic
     };
     const header = await this.setHeaders("POST", body);
     const request = await fetch( url, header).catch(error => console.log(error));

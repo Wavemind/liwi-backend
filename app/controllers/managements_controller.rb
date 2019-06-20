@@ -54,13 +54,13 @@ class ManagementsController < ApplicationController
   # @return management node
   # Create a management node from diagram
   def create_from_diagram
-    management = @algorithm.health_cares.managements.new(management_params)
+    management = @algorithm.health_cares.managements.new(management_params).becomes(HealthCares::Management)
     management.type = HealthCares::Management
 
     if management.save
       diagnostic = Diagnostic.find(params[:diagnostic_id])
       final_diagnostic = FinalDiagnostic.find(params[:final_diagnostic_id])
-      final_diagnostic.nodes << management
+      final_diagnostic.health_cares << management
       diagnostic.components.create!(node: management, final_diagnostic: final_diagnostic)
       render json: {status: 'success', messages: [t('flash_message.success_created')], node: management.as_json(methods: :node_type)}
     else
