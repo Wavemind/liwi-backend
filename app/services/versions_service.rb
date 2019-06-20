@@ -36,8 +36,7 @@ class VersionsService
 
   def self.init
     @questions = {}
-    @treatments = {}
-    @managements = {}
+    @health_cares = {}
     @questions_sequences = {}
     @final_diagnostics = {}
 
@@ -50,8 +49,7 @@ class VersionsService
     hash = {}
     hash = hash.merge(generate_questions_sequences)
     hash = hash.merge(generate_questions)
-    hash = hash.merge(generate_managements)
-    hash = hash.merge(generate_treatments)
+    hash = hash.merge(generate_health_cares)
     hash.merge(@final_diagnostics)
   end
 
@@ -206,11 +204,7 @@ class VersionsService
     when 'Question'
       @questions[node.id] = node if @questions[node.id].nil?
     when 'HealthCare'
-      if node.category_name == 'treatment'
-        @treatments[node.id] = node if @treatments[node.id].nil?
-      else
-        @managements[node.id] = node if @managements[node.id].nil?
-      end
+      @health_cares[node.id] = node if @health_cares[node.id].nil?
     when 'QuestionsSequence'
       @questions_sequences_ids << node.id
       @questions_sequences[node.id] = node if @questions_sequences[node.id].nil?
@@ -302,31 +296,17 @@ class VersionsService
   end
 
   # @return hash
-  # Generate all treatments
-  def self.generate_treatments
+  # Generate all health cares
+  def self.generate_health_cares
     hash = {}
-    @treatments.each do |key, treatment|
-      hash[treatment.id] = {}
-      hash[treatment.id]['id'] = treatment.id
-      hash[treatment.id]['type'] = treatment.node_type
-      hash[treatment.id]['reference'] = treatment.reference
-      hash[treatment.id]['label'] = treatment.label
-      hash[treatment.id]['description'] = treatment.description
-    end
-    hash
-  end
-
-  # @return hash
-  # Generate all managements
-  def self.generate_managements
-    hash = {}
-    @managements.each do |key, management|
-      hash[management.id] = {}
-      hash[management.id]['id'] = management.id
-      hash[management.id]['type'] = management.node_type
-      hash[management.id]['reference'] = management.reference
-      hash[management.id]['label'] = management.label
-      hash[management.id]['description'] = management.description
+    @health_cares.each do |key, health_care|
+      hash[health_care.id] = {}
+      hash[health_care.id]['id'] = health_care.id
+      hash[health_care.id]['type'] = health_care.node_type
+      hash[health_care.id]['category'] = health_care.category_name
+      hash[health_care.id]['reference'] = health_care.reference
+      hash[health_care.id]['label'] = health_care.label
+      hash[health_care.id]['description'] = health_care.description
     end
     hash
   end
