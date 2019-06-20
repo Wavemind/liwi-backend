@@ -131,7 +131,7 @@ class QuestionsController < ApplicationController
       ],
       medias_attributes: [
         :id,
-        :label,
+        :label_en,
         :url,
         :fileable,
         :_destroy

@@ -8,7 +8,7 @@ class FinalDiagnostic < Node
   has_many :medical_cases, through: :medical_case_final_diagnostics
 
   has_many :final_diagnostic_health_cares, dependent: :destroy
-  has_many :nodes, through: :final_diagnostic_health_cares
+  has_many :health_cares, through: :final_diagnostic_health_cares
 
   has_many :components, class_name: 'Instance', dependent: :destroy
 
@@ -23,7 +23,7 @@ class FinalDiagnostic < Node
   # @return [Json]
   # Return treatments and managements in json format
   def health_cares_json
-    diagnostic.components.where(node_id: nodes.map(&:id), final_diagnostic_id: id).as_json(include: [node: {methods: [:node_type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}])
+    diagnostic.components.where(node_id: health_cares.map(&:id), final_diagnostic_id: id).as_json(include: [node: {methods: [:node_type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}])
   end
 
   # @params [FinalDiagnostic]

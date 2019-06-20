@@ -146,7 +146,7 @@ t9 = HealthCares::Treatment.create!(algorithm: epoct, label_en: 'Oral rehydratio
 
 m2 = HealthCares::Management.create!(algorithm: epoct, label_en: 'Refer', reference: '2')
 
-df7.nodes << [t1, t2, t9, m2]
+df7.health_cares << [t1, t2, t9, m2]
 
 ps6 = QuestionsSequences::PredefinedSyndrome.create!(algorithm: epoct, reference: '6', label_en: 'Able to drink')
 ps6_1 = ps6.answers.first
@@ -250,7 +250,7 @@ p24_2 = p24.answers.second
 
 t4 = HealthCares::Treatment.create!(algorithm: epoct, label_en: 'Cephalexin', reference: '4')
 
-df14.nodes << [t2, t4, m2]
+df14.health_cares << [t2, t4, m2]
 
 ps1 = QuestionsSequences::PredefinedSyndrome.create!(algorithm: epoct, reference: '1', label_en: 'Fever')
 ps1_1 = ps1.answers.first

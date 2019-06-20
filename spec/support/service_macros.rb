@@ -51,7 +51,7 @@ module ServiceMacros
 
       m2 = HealthCares::Management.create!(algorithm: epoct, label: 'Refer', reference: '2')
 
-      df7.nodes << [t1,t2,t9, m2]
+      df7.health_cares << [t1,t2,t9, m2]
 
       ps6 = QuestionsSequences::PredefinedSyndrome.create!(algorithm: epoct, reference: '6', label: 'Able to drink')
       ps6_1 = ps6.answers.first
