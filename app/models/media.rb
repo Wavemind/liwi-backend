@@ -6,4 +6,7 @@ class Media < ApplicationRecord
 
   validates_presence_of :label_en
   validates_presence_of :url
+
+  translates :label
+
 end

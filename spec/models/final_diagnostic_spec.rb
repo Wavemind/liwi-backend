@@ -30,20 +30,10 @@ RSpec.describe FinalDiagnostic, type: :model do
     management = HealthCares::Management.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
 
     final_diagnostic = FinalDiagnostic.new(label_en: 'Severe lower respiratory tract infection', description_en: 'A shot description',reference: '7', diagnostic: @dd7)
-    final_diagnostic.nodes << [management, treatment]
+    final_diagnostic.health_cares << [management, treatment]
 
     expect(final_diagnostic).to be_valid
   end
-
-  it 'cannot include a node which is not a health care (Management/Treatment)' do
-    predefined_syndrome = QuestionsSequences::PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
-
-    final_diagnostic = FinalDiagnostic.new(label_en: 'Severe lower respiratory tract infection', description_en: 'A shot description',reference: '7', diagnostic: @dd7)
-    final_diagnostic.nodes << predefined_syndrome
-
-    expect(final_diagnostic).to_not be_valid
-  end
-
 
   it 'returns correct list of available nodes' do
     df = FinalDiagnostic.new(label_en: 'Severe lower respiratory tract infection', description_en: 'A shot description',reference: '7', diagnostic: @dd7)
@@ -71,7 +61,7 @@ RSpec.describe FinalDiagnostic, type: :model do
     dd1_m1 = Instance.create!(instanceable: dd1, node: m1, final_diagnostic: dd1_df1.node)
     dd1_t1 = Instance.create!(instanceable: dd1, node: t1, final_diagnostic: dd1_df1.node)
 
-    dd1_df1.node.nodes << [m1, t1]
+    dd1_df1.node.health_cares << [m1, t1]
     dd1_df1.node.save
 
     Condition.create!(referenceable: dd1_m1, first_conditionable: ps9.answers.first, operator: nil, second_conditionable: nil)

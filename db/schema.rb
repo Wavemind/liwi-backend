@@ -151,7 +151,7 @@ ActiveRecord::Schema.define(version: 2019_05_10_113703) do
   end
 
   create_table "medias", force: :cascade do |t|
-    t.string "label"
+    t.hstore "label_translations"
     t.string "url"
     t.string "fileable_type"
     t.bigint "fileable_id"
