@@ -22,4 +22,3 @@ class Api::V1::VersionsController < Api::V1::ApplicationController
     end
   end
 end
-see
