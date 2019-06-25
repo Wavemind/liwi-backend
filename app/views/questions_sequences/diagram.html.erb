@@ -12,7 +12,9 @@
         instanceable_type: @questions_sequence.class.name,
         questions: @questions_sequence.questions_json,
         availableNodes: @questions_sequence.available_nodes_json,
-        type: 'QuestionsSequence'
+        type: 'QuestionsSequence',
+        questionCategories: Question.categories.as_json,
+        questionsSequenceCategories: QuestionsSequence.categories.as_json,
       }
     }) %>
   </div>

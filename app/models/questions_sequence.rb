@@ -53,13 +53,13 @@ class QuestionsSequence < Node
   # @return [Json]
   # Return questions in json format
   def questions_json
-    generate_questions_order.as_json(include: [conditions: { include: [first_conditionable: { methods: [:get_node] }, second_conditionable: { methods: [:get_node] }] }, node: { include: [:answers], methods: [:node_type, :category_name] }])
+    generate_questions_order.as_json(include: [conditions: { include: [first_conditionable: { methods: [:get_node] }, second_conditionable: { methods: [:get_node] }] }, node: { include: [:answers], methods: [:node_type, :category_name, :type] }])
   end
 
   # @return [Json]
   # Return available nodes in the algorithm in json format
   def available_nodes_json
-    (algorithm.nodes.where.not(id: components.not_health_care_conditions.select(:node_id)).where.not('type LIKE ?', 'HealthCares::%')).as_json(methods: [:category_name, :node_type, :get_answers])
+    (algorithm.nodes.where.not(id: components.not_health_care_conditions.select(:node_id)).where.not('type LIKE ?', 'HealthCares::%')).as_json(methods: [:category_name, :node_type, :get_answers, :type])
   end
 
   # Add errors to a predefined syndrome for its components
@@ -104,6 +104,18 @@ class QuestionsSequence < Node
 
   def self.variable
 
+  end
+
+  def self.categories
+    categories = []
+    self.descendants.each do |category|
+      current_category = {}
+      current_category['label'] = category.display_label
+      current_category['name'] = category.name
+      current_category['reference_prefix'] = self.reference_prefix_class(category.name)
+      categories.push(current_category)
+    end
+    categories
   end
 
   private

@@ -55,7 +55,7 @@ class NotDFWidget extends React.Component {
             {diagramNode.node.reference}
           </div>
           <div className="col pl-0 pr-2 text-center">
-            {(diagramNode.node.category_name === 'Questions sequence scored') ? diagramNode.node.min_score : diagramNode.node.priority}
+            {(diagramNode.node.category_name === 'scored') ? diagramNode.node.min_score : diagramNode.node.priority}
           </div>
           <div className="col pl-0 pr-2 text-right">
             <div className="dropdown">

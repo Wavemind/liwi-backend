@@ -54,7 +54,7 @@ class InsertScoreForm extends React.Component {
   render() {
     return (
       <Form onSubmit={() => this.createLink()}>
-        <Modal.Header closeButton>
+        <Modal.Header>
           <Modal.Title>Insert a score</Modal.Title>
         </Modal.Header>
         <Modal.Body>

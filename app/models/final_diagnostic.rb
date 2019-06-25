@@ -23,7 +23,7 @@ class FinalDiagnostic < Node
   # @return [Json]
   # Return treatments and managements in json format
   def health_cares_json
-    diagnostic.components.where(node_id: health_cares.map(&:id), final_diagnostic_id: id).as_json(include: [node: {methods: [:node_type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}])
+    diagnostic.components.where(node_id: health_cares.map(&:id), final_diagnostic_id: id).as_json(include: [node: {methods: [:node_type, :type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}])
   end
 
   # @params [FinalDiagnostic]
@@ -55,13 +55,13 @@ class FinalDiagnostic < Node
 
   # Return all questions for Final Diagnostic diagram as json
   def health_care_questions_json
-    generate_health_care_conditions_order.as_json(include: [conditions: { include: [first_conditionable: { methods: [:get_node] }, second_conditionable: { methods: [:get_node] }] }, node: { include: [:answers], methods: [:node_type, :category_name] }])
+    generate_health_care_conditions_order.as_json(include: [conditions: { include: [first_conditionable: { methods: [:get_node] }, second_conditionable: { methods: [:get_node] }] }, node: { include: [:answers], methods: [:node_type, :category_name, :type] }])
   end
 
   # @return [Json]
   # Return available nodes for health cares diagram in the algorithm in json format
   def available_nodes_health_cares_json
-    (diagnostic.version.algorithm.nodes.where.not(id: components.select(:node_id))).as_json(methods: [:category_name, :node_type, :get_answers])
+    (diagnostic.version.algorithm.nodes.where.not(id: components.select(:node_id))).as_json(methods: [:category_name, :node_type, :get_answers, :type])
   end
 
   private

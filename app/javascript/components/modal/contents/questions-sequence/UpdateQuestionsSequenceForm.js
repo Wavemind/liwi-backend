@@ -20,12 +20,16 @@ class UpdateQuestionsSequenceForm extends React.Component {
     this.handleReference = this.handleReference.bind(this);
     this.handleLabel = this.handleLabel.bind(this);
     this.handleDescription = this.handleDescription.bind(this);
+    this.handleMinScore = this.handleMinScore.bind(this);
   }
 
   state = {
     reference: "",
     label: "",
     description: "",
+    type: "",
+    minScore: "",
+    minScoreClass: "",
     errors: {}
   };
 
@@ -37,7 +41,10 @@ class UpdateQuestionsSequenceForm extends React.Component {
       id: newCurrentNode.id,
       reference: newCurrentNode.reference,
       label: newCurrentNode.label_translations["en"],
-      description: newCurrentNode.description_translations === null ? '' : newCurrentNode.description_translations["en"],
+      type: newCurrentNode.type,
+      description: newCurrentNode.description_translations === null ? "" : newCurrentNode.description_translations["en"],
+      minScore: newCurrentNode.min_score,
+      minScoreClass: newCurrentNode.category_name === "scored" ? "form-row" : "form-row d-none",
     });
   }
 
@@ -54,10 +61,11 @@ class UpdateQuestionsSequenceForm extends React.Component {
     const {
       reference,
       label,
-      description
+      description,
+      minScore
     } = this.state;
 
-    let result = await http.updateQuestionsSequence(currentNode.id, reference, label, description);
+    let result = await http.updateQuestionsSequence(currentNode.id, reference, label, description, minScore);
     if (result.ok === undefined || result.ok) {
       toggleModal();
       await addMessage({ status: result.status, messages: result.messages });
@@ -90,22 +98,45 @@ class UpdateQuestionsSequenceForm extends React.Component {
     this.setState({ description: event.target.value });
   };
 
+  // Set state for the input changes
+  handleMinScore = (event) => {
+    this.setState({ minScore: event.target.value });
+  };
+
 
   render() {
-    const { toggleModal } = this.props;
+    const {
+      toggleModal,
+      questionsSequenceCategories
+    } = this.props;
     const {
       reference,
       label,
       description,
       errors,
+      minScore,
+      type,
+      minScoreClass
     } = this.state;
 
     return (
       <Form onSubmit={() => this.update()}>
-        <Modal.Header closeButton>
-          <Modal.Title>Create a questions sequence</Modal.Title>
+        <Modal.Header>
+          <Modal.Title>Edit a questions sequence</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          <Form.Row>
+            <Form.Group as={Col} controlId="formGridState">
+              <Form.Label>State</Form.Label>
+              <Form.Control as="select" onChange={this.handleType} defaultValue={type} disabled>
+                <option value="">Select a category</option>
+                {questionsSequenceCategories.map((category) => (
+                  <option value={category.name}>{category.label}</option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+          </Form.Row>
+
           <Form.Row>
             <Form.Group as={Col}>
               <Form.Label>Reference</Form.Label>
@@ -121,6 +152,22 @@ class UpdateQuestionsSequenceForm extends React.Component {
                 <Form.Control.Feedback type="invalid">
                   {errors.reference}
                 </Form.Control.Feedback>
+              </InputGroup>
+            </Form.Group>
+          </Form.Row>
+
+          <Form.Row className={minScoreClass}>
+            <Form.Group as={Col}>
+              <Form.Label>Minimal score</Form.Label>
+              <InputGroup>
+                <Form.Control
+                  type="number"
+                  rows="3"
+                  name="minScore"
+                  width="100%"
+                  value={minScore}
+                  onChange={this.handleMinScore}
+                />
               </InputGroup>
             </Form.Group>
           </Form.Row>
@@ -160,7 +207,6 @@ class UpdateQuestionsSequenceForm extends React.Component {
               </InputGroup>
             </Form.Group>
           </Form.Row>
-
         </Modal.Body>
         <Modal.Footer>
           <Button variant="primary" onClick={() => this.update()}>

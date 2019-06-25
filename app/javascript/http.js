@@ -158,7 +158,7 @@ export default class Http {
   // @params [Integer] nodeId
   // @return [Object] body of requestc
   // Create an instance
-  createQuestionsSequence = async (reference, label, description) => {
+  createQuestionsSequence = async (reference, label, description, type, minScore) => {
     let response;
     const url = `${this.url}/algorithms/${this.algorithm}/questions_sequences/create_from_diagram`;
     const body = {
@@ -166,6 +166,8 @@ export default class Http {
         reference: reference,
         label_en: label,
         description_en: description,
+        type: type,
+        min_score: minScore
       },
       instanceable_id: this.instanceableId,
       instanceable_type: this.instanceableType,
@@ -419,7 +421,7 @@ export default class Http {
   // @params [Integer] id, [String] reference, [String] label, [String] description
   // @return [Object] body of request
   // Update predefined syndrome node
-  updateQuestionsSequence = async (id, reference, label, description) => {
+  updateQuestionsSequence = async (id, reference, label, description, minScore) => {
     let response;
     const url = `${this.url}/algorithms/${this.algorithm}/questions_sequences/${id}/update_from_diagram`;
     const body = {
@@ -428,6 +430,7 @@ export default class Http {
         reference: reference,
         label_en: label,
         description_en: description,
+        min_score: minScore
       }
     };
     const header = await this.setHeaders("PUT", body);

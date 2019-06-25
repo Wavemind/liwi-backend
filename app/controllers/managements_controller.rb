@@ -62,7 +62,7 @@ class ManagementsController < ApplicationController
       final_diagnostic = FinalDiagnostic.find(params[:final_diagnostic_id])
       final_diagnostic.health_cares << management
       diagnostic.components.create!(node: management, final_diagnostic: final_diagnostic)
-      render json: {status: 'success', messages: [t('flash_message.success_created')], node: management.as_json(methods: :node_type)}
+      render json: {status: 'success', messages: [t('flash_message.success_created')], node: management.as_json(methods: [:node_type, :type])}
     else
       render json: {status: 'danger', errors: management.errors.messages, ok: false}
     end
@@ -73,7 +73,7 @@ class ManagementsController < ApplicationController
   # Update a management node from diagram
   def update_from_diagram
     if @management.update(management_params)
-      render json: {status: 'success', messages: [t('flash_message.success_created')], node: @management.as_json(methods: :node_type)}
+      render json: {status: 'success', messages: [t('flash_message.success_created')], node: @management.as_json(methods: [:node_type, :type])}
     else
       render json: {status: 'danger', errors: @management.errors.messages, ok: false}
     end

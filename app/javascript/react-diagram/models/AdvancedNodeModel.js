@@ -6,6 +6,7 @@ import Http from "../../http";
 class AdvancedNodeModel extends DefaultNodeModel {
   node;
   reference: string;
+  minScore: number;
   color: string;
   outPorts: array;
   ports: { [s: string]: AdvancedPortModel };
@@ -49,6 +50,7 @@ class AdvancedNodeModel extends DefaultNodeModel {
     super.deSerialize(object, engine);
     this.node = object.node;
     this.reference = object.reference;
+    this.minScore = object.minScore;
     this.color = object.color;
     this.outPorts = object.outPorts;
   }
@@ -57,6 +59,7 @@ class AdvancedNodeModel extends DefaultNodeModel {
     return _.merge(super.serialize(), {
       node: this.node,
       reference: this.reference,
+      minScore: this.minScore,
       color: this.color,
       outPorts: this.outPorts,
     });
@@ -92,6 +95,10 @@ class AdvancedNodeModel extends DefaultNodeModel {
 
   setReference(reference) {
     return this.reference = reference
+  }
+
+  setMinScore(minScore) {
+    return this.minScore = minScore
   }
 
   setNode(node) {

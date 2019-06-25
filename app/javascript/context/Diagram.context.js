@@ -151,7 +151,9 @@ export default class DiagramProvider extends React.Component {
     updatingScore: 0,
     currentDbNode: null,
     currentDiagramNode: null,
-    currentHealthCareType: null
+    currentHealthCareType: null,
+    questionCategories: null,
+    questionsSequenceCategories: null
   };
 
 
