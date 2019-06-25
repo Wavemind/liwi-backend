@@ -162,6 +162,8 @@ en:
       managements: "Managements"
       excluded_diagnostic: "Excluded diagnostic"
       no_excluded_diagnostic: "There is no diagnosis excluded"
+    validation:
+      loop: "You are trying to do a loop into diagnostic excluding which is not possible."
   flash_message:
     create_fail: "Error will creating the entry"
     delete_fail: "Error will deleting the entry"
