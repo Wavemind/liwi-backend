@@ -28,6 +28,13 @@ class Toolbar extends React.Component {
     set('modalIsOpen', true);
   };
 
+  // Button to open modal with new predefined syndrome node form
+  newQuestion = () => {
+    const { set } = this.props;
+    set('modalToOpen', 'CreateQuestion');
+    set('modalIsOpen', true);
+  };
+
   newHealthCare = (type) => {
     const { set } = this.props;
     set('currentHealthCareType', type);
@@ -91,9 +98,8 @@ class Toolbar extends React.Component {
                 New
               </button>
               <div className="dropdown-menu">
-                <a className="dropdown-item" href="#">Question</a>
+                <a className="dropdown-item" href="#" onClick={() => {this.newQuestion()}}>Question</a>
                 <a className="dropdown-item" href="#" onClick={() => {this.newQuestionsSequence()}}>Questions Sequence</a>
-                {/*<a className="dropdown-item" href="#">Predefined Syndrome Scored</a>*/}
                 {type === 'Diagnostic' ? (<a className="dropdown-item" href="#" onClick={() => {this.newFinalDiagnostic()}}>Final diagnostic</a>) : null}
                 {type === 'FinalDiagnostic' ? (<a className="dropdown-item" href="#" onClick={() => {this.newHealthCare('treatments')}}>Treatment</a>) : null}
                 {type === 'FinalDiagnostic' ? (<a className="dropdown-item" href="#" onClick={() => {this.newHealthCare('managements')}}>Management</a>) : null}

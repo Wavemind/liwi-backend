@@ -152,8 +152,13 @@ export default class DiagramProvider extends React.Component {
     currentDbNode: null,
     currentDiagramNode: null,
     currentHealthCareType: null,
+    questionAnswerTypes: null,
+    questionStages: null,
+    questionPriorities: null,
     questionCategories: null,
-    questionsSequenceCategories: null
+    questionsSequenceCategories: null,
+    answersOperators: null,
+    currentQuestion: null,
   };
 
 

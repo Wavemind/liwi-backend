@@ -154,9 +154,26 @@ export default class Http {
     return await response;
   };
 
+  createQuestion = async (questionBody) => {
+    let response;
+    const url = `${this.url}/algorithms/${this.algorithm}/questions/create_from_diagram`;
+    questionBody['instanceable_id'] = this.instanceableId;
+    questionBody['instanceable_type'] = this.instanceableType;
+
+    const header = await this.setHeaders("POST", questionBody);
+    const request = await fetch( url, header).catch(error => console.log(error));
+
+    // Display error or parse json
+    if (request.ok) {
+      response = await request.json();
+    } else {
+      response = request;
+    }
+    return await response;
+  };
 
   // @params [Integer] nodeId
-  // @return [Object] body of requestc
+  // @return [Object] body of request
   // Create an instance
   createQuestionsSequence = async (reference, label, description, type, minScore) => {
     let response;

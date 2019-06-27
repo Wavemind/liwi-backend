@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:new, :create, :edit, :update, :answers, :destroy]
+  before_action :set_algorithm, only: [:new, :create, :edit, :update, :answers, :destroy, :create_from_diagram]
   before_action :set_breadcrumb, only: [:new, :edit]
   before_action :set_question, only: [:edit, :update, :answers, :category_reference, :update_translations, :destroy]
 
@@ -74,6 +74,20 @@ class QuestionsController < ApplicationController
       redirect_to algorithm_url(@algorithm, panel: 'questions'), notice: t('flash_message.success_updated')
     else
       render 'answers/new'
+    end
+  end
+
+  # POST
+  # @return  node
+  # Create a question node from diagram and instance it
+  def create_from_diagram
+    question = @algorithm.questions.new(question_params).becomes(Object.const_get(question_params[:type]))
+    if question.save
+      question.update(question_params.except(:reference)) # in order to add answers after creation (which can't be done if the question has no id)
+      Object.const_get(params[:instanceable_type].camelize.singularize).find(params[:instanceable_id]).components.create!(node: question, final_diagnostic_id: params[:final_diagnostic_id])
+      render json: {status: 'success', messages: [t('flash_message.success_created')], node: question.as_json(include: :answers, methods: [:node_type, :category_name, :type])}
+    else
+      render json: {status: 'danger', errors: question.errors.messages, ok: false}
     end
   end
 

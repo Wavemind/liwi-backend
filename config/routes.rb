@@ -59,6 +59,9 @@ Rails.application.routes.draw do
     end
 
     resources :questions, only: [:new, :create, :edit, :update, :destroy] do
+      collection do
+        post 'create_from_diagram'
+      end
       member do
         put 'answers'
         put 'update_translations'
