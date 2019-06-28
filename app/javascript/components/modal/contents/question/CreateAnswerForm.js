@@ -47,6 +47,7 @@ class CreateAnswerForm extends React.Component {
     this.pushAnswer();
   };
 
+  // Push the answer object to the container
   pushAnswer = () => {
     const {
       setAnswer,

@@ -32,6 +32,7 @@ class Question < Node
     I18n.t("questions.categories.#{Object.const_get(type).variable}.reference_prefix")
   end
 
+  # Return a hash with all question categories with their name, label and prefix
   def self.categories
     categories = []
     self.descendants.each do |category|
@@ -61,6 +62,7 @@ class Question < Node
     self.reference = reference_prefix + reference
   end
 
+  # Display the label for the current child
   def self.display_label
     I18n.t("questions.categories.#{self.variable}.label")
   end

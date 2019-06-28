@@ -154,6 +154,9 @@ export default class Http {
     return await response;
   };
 
+  // @params [Hash] body of the question with its answers
+  // @return [Object] body of request
+  // Create an instance
   createQuestion = async (questionBody) => {
     let response;
     const url = `${this.url}/algorithms/${this.algorithm}/questions/create_from_diagram`;

@@ -92,11 +92,13 @@ class QuestionsSequence < Node
     end
   end
 
+  # Return the reference prefix from a QS instance
   def reference_prefix
     return '' unless type.present?
     I18n.t("questions_sequences.categories.#{Object.const_get(type).variable}.reference_prefix")
   end
 
+  # Return the reference prefix from a QS child name
   def self.reference_prefix_class(type)
     return '' unless type.present?
     I18n.t("questions_sequences.categories.#{Object.const_get(type).variable}.reference_prefix")
@@ -106,6 +108,7 @@ class QuestionsSequence < Node
 
   end
 
+  # Return a hash with all questions sequence categories with their name, label and prefix
   def self.categories
     categories = []
     self.descendants.each do |category|
@@ -133,7 +136,7 @@ class QuestionsSequence < Node
     self.reference = reference_prefix + reference
   end
 
-  # Return a displayable label for views
+  # Display the label for the current child
   def self.display_label
     I18n.t("questions_sequences.categories.#{self.variable}.label")
   end

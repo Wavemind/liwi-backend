@@ -19,6 +19,7 @@ class AnswersContainer extends React.Component {
     super(props);
   }
 
+  // Add a new answer to the form
   newAnswer = async () => {
     let { answerComponents, answers } = this.state;
     let lastIndex = parseInt(Object.keys(answers)[Object.keys(answers).length-1]) + 1;
@@ -27,12 +28,14 @@ class AnswersContainer extends React.Component {
     this.setState({ answerComponents, answers });
   };
 
+  // Set general state of answers so the container can access to all of then
   setAnswer = (key, answer) => {
     let { answers } = this.state;
     answers[key] = answer;
     this.setState({ answers });
   };
 
+  // Remove the selected answer
   removeAnswer = async (key) => {
     let { answerComponents, answers } = this.state;
     answers[key] = null;
@@ -41,6 +44,7 @@ class AnswersContainer extends React.Component {
     await this.setState({ answers, answerComponents });
   };
 
+  // Get question hash and add answers to it to finally create the whole question
   create = async () => {
     const {
       toggleModal,
@@ -51,7 +55,6 @@ class AnswersContainer extends React.Component {
     } = this.props;
     const { answers } = this.state;
 
-    console.log(answers)
     Object.keys(answers).map(function(key) {
       if (answers[key] !== null){
         currentQuestion.question.answers_attributes[key] = answers[key];
