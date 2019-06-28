@@ -24,15 +24,13 @@ class NotDFWidget extends React.Component {
   };
 
   editNode = (node) => {
-    if (node.node.node_type === 'QuestionsSequence') {
-      node.setSelected(false);
+    node.setSelected(false);
 
-      const { set } = this.props;
-      set('modalToOpen', 'UpdateQuestionsSequence');
-      set('currentNode', node.node);
-      set('currentDiagramNode', node);
-      set('modalIsOpen', true);
-    }
+    const { set } = this.props;
+    set('modalToOpen', 'Update' + node.node.node_type);
+    set('currentNode', node.node);
+    set('currentDiagramNode', node);
+    set('modalIsOpen', true);
   };
 
   render() {
