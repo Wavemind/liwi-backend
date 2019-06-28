@@ -17,7 +17,6 @@ import CreateAnswerForm from "./CreateAnswerForm";
 class AnswersContainer extends React.Component {
   constructor(props) {
     super(props);
-
   }
 
   newAnswer = async () => {
@@ -52,8 +51,11 @@ class AnswersContainer extends React.Component {
     } = this.props;
     const { answers } = this.state;
 
+    console.log(answers)
     Object.keys(answers).map(function(key) {
-      currentQuestion.question.answers_attributes[key] = answers[key];
+      if (answers[key] !== null){
+        currentQuestion.question.answers_attributes[key] = answers[key];
+      }
     });
 
     let result = await http.createQuestion(currentQuestion);
