@@ -5,6 +5,8 @@ import {
 import * as React from "react";
 import * as _ from "lodash";
 
+
+import { hot } from 'react-hot-loader'
 import AdvancedLinkFactory from "../react-diagram/factories/AdvancedLinkFactory";
 import AdvancedLabelFactory from "../react-diagram/factories/AdvancedLabelFactory";
 import AdvancedNodeFactory from "../react-diagram/factories/AdvancedNodeFactory";
@@ -79,7 +81,7 @@ class Diagram extends React.Component {
       } else if (nextProps.modalToOpen === 'UpdateFinalDiagnostic') {
         currentDiagramNode.setReference(currentDbNode.reference);
         currentDiagramNode.setNode(currentDbNode);
-      } else if (nextProps.modalToOpen === 'CreateQuestionsSequence') {
+      } else if (nextProps.modalToOpen === 'CreateQuestionsSequence' || nextProps.modalToOpen === 'CreateQuestion' || nextProps.modalToOpen === 'CreateAnswers') {
         let node = this.createNode(currentDbNode, currentDbNode.answers);
         currentDbNode.answers.map((answer) => (node.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
         model.addAll(node);
@@ -433,4 +435,4 @@ class Diagram extends React.Component {
   };
 }
 
-export default withDiagram(Diagram);
+export default hot(module)(withDiagram(Diagram));

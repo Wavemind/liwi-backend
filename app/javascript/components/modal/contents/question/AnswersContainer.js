@@ -21,9 +21,11 @@ class AnswersContainer extends React.Component {
   }
 
   newAnswer = async () => {
-    let { answerComponents } = this.state;
-    answerComponents.push(<CreateAnswerForm setAnswer={this.setAnswer} index={answerComponents.length} />);
-    this.setState({ answerComponents });
+    let { answerComponents, answers } = this.state;
+    let lastIndex = parseInt(Object.keys(answers)[Object.keys(answers).length-1]) + 1;
+    answers[lastIndex] = {};
+    answerComponents[lastIndex] = <CreateAnswerForm setAnswer={this.setAnswer} removeAnswer={this.removeAnswer} answers={answers} index={lastIndex} />;
+    this.setState({ answerComponents, answers });
   };
 
   setAnswer = (key, answer) => {
@@ -32,8 +34,22 @@ class AnswersContainer extends React.Component {
     this.setState({ answers });
   };
 
+  removeAnswer = async (key) => {
+    let { answerComponents, answers } = this.state;
+    answers[key] = null;
+    answerComponents[key] = null;
+
+    await this.setState({ answers, answerComponents });
+  };
+
   create = async () => {
-    let { currentQuestion, http } = this.props;
+    const {
+      toggleModal,
+      http,
+      addMessage,
+      set,
+      currentQuestion
+    } = this.props;
     const { answers } = this.state;
 
     Object.keys(answers).map(function(key) {
@@ -60,8 +76,8 @@ class AnswersContainer extends React.Component {
 
   state = {
     errors: {},
-    answerComponents: [<CreateAnswerForm setAnswer={this.setAnswer} index={0} />],
-    answers: []
+    answers: {0: {}},
+    answerComponents: {0: <CreateAnswerForm setAnswer={this.setAnswer} answers={{0: {}}} removeAnswer={this.removeAnswer} index={0} />}
   };
 
   render() {
@@ -70,7 +86,7 @@ class AnswersContainer extends React.Component {
     } = this.props;
 
     const {
-      answerComponents
+      answerComponents,
     } = this.state;
 
     return (
@@ -79,11 +95,9 @@ class AnswersContainer extends React.Component {
           <Modal.Title>Create answers</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {answerComponents.map((component, index) => (
-            <React.Fragment key={index}>
-              { component }
-            </React.Fragment>
-          ))}
+          {Object.keys(answerComponents).map(function(key) {
+            return <React.Fragment> { answerComponents[key] }</React.Fragment>
+          })}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="primary" onClick={() => this.newAnswer()}>

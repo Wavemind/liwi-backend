@@ -23,14 +23,6 @@ class CreateAnswerForm extends React.Component {
     this.handleValue = this.handleValue.bind(this);
   }
 
-  state = {
-    reference: "",
-    label: "",
-    operator: "",
-    value: "",
-    errors: {}
-  };
-
   // Set state for the input changes
   handleOperator = async (event) => {
     await this.setState({ operator: event.target.value });
@@ -78,11 +70,21 @@ class CreateAnswerForm extends React.Component {
     setAnswer(index, answer);
   };
 
+  state = {
+    reference: this.props.answers[this.props.index].reference,
+    label: this.props.answers[this.props.index].label_en,
+    operator: this.props.answers[this.props.index].operator,
+    value: this.props.answers[this.props.index].value,
+    errors: {}
+  };
+
   render() {
     const {
       questionCategories,
       answersOperators,
-      currentQuestion
+      currentQuestion,
+      removeAnswer,
+      index
     } = this.props;
     const {
       reference,
@@ -170,7 +172,7 @@ class CreateAnswerForm extends React.Component {
             </Form.Group>
 
             <Form.Group as={Col}>
-              <Button variant="danger" onClick={() => this.create()}>
+              <Button variant="danger" onClick={() => removeAnswer(index)}>
                 Remove
               </Button>
             </Form.Group>
