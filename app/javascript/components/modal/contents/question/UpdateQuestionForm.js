@@ -107,32 +107,73 @@ class UpdateQuestionForm extends React.Component {
   render() {
     const {
       toggleModal,
-      questionsSequenceCategories
+      questionCategories,
+      questionAnswerTypes,
+      questionStages,
+      questionPriorities,
     } = this.props;
     const {
       reference,
       label,
       description,
       errors,
-      minScore,
       type,
-      minScoreClass
+      stage,
+      priority,
+      answerType,
+      prefix
     } = this.state;
 
     return (
-      <Form onSubmit={() => this.update()}>
+      <Form onSubmit={() => this.create()}>
         <Modal.Header>
-          <Modal.Title>Edit a questions sequence</Modal.Title>
+          <Modal.Title>Create a question</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form.Row>
             <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>State</Form.Label>
+              <Form.Label>Category</Form.Label>
               <Form.Control as="select" onChange={this.handleType} defaultValue={type} disabled>
                 <option value="">Select a category</option>
-                {questionsSequenceCategories.map((category) => (
+                {questionCategories.map((category) => (
                   <option value={category.name}>{category.label}</option>
                 ))}
+              </Form.Control>
+            </Form.Group>
+          </Form.Row>
+
+          <Form.Row>
+            <Form.Group as={Col} controlId="formGridState">
+              <Form.Label>Answer type</Form.Label>
+              <Form.Control as="select" onChange={this.handleAnswerType} defaultValue={answerType} disabled>
+                <option value="">Select a category</option>
+                {questionAnswerTypes.map((answerType) => (
+                  <option value={answerType.id}>{answerType.display_name}</option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+          </Form.Row>
+
+          <Form.Row>
+            <Form.Group as={Col} controlId="formGridState">
+              <Form.Label>Stage</Form.Label>
+              <Form.Control as="select" onChange={this.handleStage} defaultValue={stage}>
+                <option value="">Select a category</option>
+                {Object.keys(questionStages).map(function(key) {
+                  return <option value={questionStages[key]}>{key.charAt(0).toUpperCase() + key.slice(1)}</option>;
+                })}
+              </Form.Control>
+            </Form.Group>
+          </Form.Row>
+
+          <Form.Row>
+            <Form.Group as={Col} controlId="formGridState">
+              <Form.Label>Priority</Form.Label>
+              <Form.Control as="select" onChange={this.handlePriority} defaultValue={priority}>
+                <option value="">Select a category</option>
+                {Object.keys(questionPriorities).map(function(key) {
+                  return <option value={questionPriorities[key]}>{key.charAt(0).toUpperCase() + key.slice(1)}</option>;
+                })}
               </Form.Control>
             </Form.Group>
           </Form.Row>
@@ -141,6 +182,9 @@ class UpdateQuestionForm extends React.Component {
             <Form.Group as={Col}>
               <Form.Label>Reference</Form.Label>
               <InputGroup>
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="inputGroupPrepend">{prefix}</InputGroup.Text>
+                </InputGroup.Prepend>
                 <Form.Control
                   type="text"
                   aria-describedby="inputGroupPrepend"
@@ -152,22 +196,6 @@ class UpdateQuestionForm extends React.Component {
                 <Form.Control.Feedback type="invalid">
                   {errors.reference}
                 </Form.Control.Feedback>
-              </InputGroup>
-            </Form.Group>
-          </Form.Row>
-
-          <Form.Row className={minScoreClass}>
-            <Form.Group as={Col}>
-              <Form.Label>Minimal score</Form.Label>
-              <InputGroup>
-                <Form.Control
-                  type="number"
-                  rows="3"
-                  name="minScore"
-                  width="100%"
-                  value={minScore}
-                  onChange={this.handleMinScore}
-                />
               </InputGroup>
             </Form.Group>
           </Form.Row>
@@ -193,7 +221,7 @@ class UpdateQuestionForm extends React.Component {
 
           <Form.Row>
             <Form.Group as={Col}>
-              <Form.Label>Description</Form.Label>
+              <Form.Label>Description</Form.Label>a
               <InputGroup>
                 <Form.Control
                   type="text"
@@ -207,11 +235,18 @@ class UpdateQuestionForm extends React.Component {
               </InputGroup>
             </Form.Group>
           </Form.Row>
+
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={() => this.update()}>
-            Update
-          </Button>
+          {(answerType === '1') ? (
+            <Button variant="success" onClick={() => this.create()}>
+              Save
+            </Button>
+          ) : (
+            <Button variant="primary" onClick={() => this.createAnswers()}>
+              Save and create answers
+            </Button>
+          )}
           <Button variant="secondary" onClick={() => toggleModal()}>
             Close
           </Button>
