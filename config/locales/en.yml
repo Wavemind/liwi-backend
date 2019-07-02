@@ -165,6 +165,7 @@ en:
   flash_message:
     create_fail: "Error will creating the entry"
     delete_fail: "Error will deleting the entry"
+    reserved_reference: "This reference is reserved."
     success_created: "Data was successfully created"
     success_deleted: "Data was successfully deleted"
     success_updated: "Data was successfully updated"

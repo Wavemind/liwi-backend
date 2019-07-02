@@ -10,6 +10,7 @@ class Answer < ApplicationRecord
   validates_presence_of :reference
   validates_presence_of :label_en
 
+  validates :reference, exclusion: { in: %w(0), message: I18n.t('flash_message.reserved_reference') }
   after_validation :correct_value_type
   after_validation :unique_reference
   before_create :complete_reference
