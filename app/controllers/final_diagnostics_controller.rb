@@ -71,7 +71,7 @@ class FinalDiagnosticsController < ApplicationController
     if @final_diagnostic.update(final_diagnostic_params)
       render json: {status: 'success', messages: [t('flash_message.success_updated')]}
     else
-      render json: {status: 'alert', messages: [t('flash_message.update_fail')]}
+      render json: { status: 'danger', statusText: @final_diagnostic.errors.full_messages, ok: false }
     end
   end
 

@@ -66,8 +66,8 @@ class Diagram extends React.Component {
         this.updateEngine(engine);
       }
     } else if (this.props.currentDbNode !== nextProps.currentDbNode) {
-      const { engine } = this.state;
-      const { currentDbNode, currentDiagramNode } = nextProps;
+      const {engine} = this.state;
+      const {currentDbNode, currentDiagramNode} = nextProps;
       const model = engine.getDiagramModel();
 
       // Create or update node in diagram
@@ -240,19 +240,32 @@ class Diagram extends React.Component {
 
             // Verify if link is already set
             Object.keys(eventModel.entity.links).map(index => {
-                  let link = eventModel.entity.links[index];
-                  let portEntity = eventLink.entity;
-                  if (link.id !== portEntity.id && (link.sourcePort.id === portEntity.sourcePort.id && link.targetPort.parent.id === portEntity.targetPort.parent.id)) {
-                    exists = true;
-                  }
-                });
+              let link = eventModel.entity.links[index];
+              let portEntity = eventLink.entity;
+              if (link.id !== portEntity.id && (link.sourcePort.id === portEntity.sourcePort.id && link.targetPort.parent.id === portEntity.targetPort.parent.id)) {
+                exists = true;
+              }
+            });
 
-        // Don't create an another link in DB if it already exist
-        if (!exists) {
-          if (eventLink.entity.sourcePort.parent.node.node_type === "FinalDiagnostic") {
-            if (eventLink.entity.targetPort.parent.node.node_type === "FinalDiagnostic") {
-              http.excludeDiagnostic(eventLink.entity.sourcePort.parent.node.id, eventLink.entity.targetPort.parent.node.id);
-              eventModel.link.displaySeparator(true);
+            // Don't create an another link in DB if it already exist
+            if (!exists) {
+              if (eventLink.entity.sourcePort.parent.node.node_type === "FinalDiagnostic") {
+                if (eventLink.entity.targetPort.parent.node.node_type === "FinalDiagnostic") {
+                  http.excludeDiagnostic(eventLink.entity.sourcePort.parent.node.id, eventLink.entity.targetPort.parent.node.id).then((response) => {
+                    if (response.ok !== undefined && !response.ok) {
+                      self.addFlashMessage("danger", response);
+                      // if throw an error, remove link in diagram
+                      if (model.getLink(eventModel.link.id) !== null) {
+                        model.removeLink(eventModel.link.id);
+                        // self.updateEngine(engine);
+                      }
+                    } else {
+                      eventModel.link.displaySeparator(true);
+                    }
+                    self.updateEngine(engine);
+                  }).catch((err) => {
+                    console.log(err);
+                  });
 
                 } else {
                   model.removeLink(eventModel.link.id)
@@ -336,8 +349,8 @@ class Diagram extends React.Component {
   };
 
   onDropAction = async (event) => {
-    const { removeNode, http, type, instanceable } = this.props;
-    const { engine } = this.state;
+    const {removeNode, http, type, instanceable} = this.props;
+    const {engine} = this.state;
 
     let model = engine.getDiagramModel();
     let nodeDb = JSON.parse(event.dataTransfer.getData("node"));
@@ -393,7 +406,7 @@ class Diagram extends React.Component {
 
   render = () => {
     const {engine} = this.state;
-    const { readOnly } = this.props;
+    const {readOnly} = this.props;
 
     let diagramStyle = readOnly ? 'col diagram-wrapper-white' : 'col diagram-wrapper';
     let canvasStyle = readOnly ? 'srd-canvas-read-only' : 'srd-canvas';
