@@ -11,7 +11,7 @@ class Condition < ApplicationRecord
   belongs_to :second_conditionable, polymorphic: true, optional: true
 
   before_destroy :remove_children, unless: Proc.new { self.referenceable.is_a?(Diagnostic) }
-  before_validation :prevent_loop, unless: Proc.new { self.referenceable.is_a?(Diagnostic) }
+  before_validation :prevent_loop, unless: Proc.new { self.referenceable.is_a?(Diagnostic) || self.referenceable.instanceable.duplicating }
 
   validates_presence_of :first_conditionable
 

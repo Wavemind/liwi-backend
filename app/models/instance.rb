@@ -27,6 +27,7 @@ class Instance < ApplicationRecord
   amoeba do
     enable
     include_association :conditions
+    include_association :children
   end
 
   # Delete properly conditions from children in the current diagnostic or predefined syndrome.

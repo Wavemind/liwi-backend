@@ -5,6 +5,8 @@ class Diagnostic < ApplicationRecord
   before_create :complete_reference
   after_validation :unique_reference
 
+  attr_accessor :duplicating
+
   belongs_to :version
   has_many :final_diagnostics, dependent: :destroy
   has_many :conditions, as: :referenceable, dependent: :destroy
