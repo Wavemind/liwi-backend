@@ -53,10 +53,13 @@ Activity.create!(user: mickael, device: device_lenovo, latitude: -33.918861, lon
 # Algorithms
 epoct = Algorithm.create!(name: 'ePoct', description: 'loremp ipsum', user: emmanuel)
 fever_travel = Algorithm.create!(name: 'FeverTravel', description: 'loremp ipsum', user: quentin)
+ods = Algorithm.create!(name: "ePOCT_ODS_1", description: "first modellisation of ePOCT from the draw.io doc", archived: false, user: olga)
 
 epoc_first = Version.create!(name: 'first_trial', algorithm: epoct, user: emmanuel)
 ft_1_0 = Version.create!(name: '1.0', algorithm: fever_travel, user: mickael)
 ft_1_2 = Version.create!(name: '1.2', algorithm: fever_travel, user: vincent)
+ods_1 = Version.create!(name: "ePOCT_ODS_1", archived: false, user_id: 9, algorithm_id: 1)
+ods_3 = Version.create!(name: "ePOCT_ODS_1_version 1", archived: false, user_id: 9, algorithm_id: 3)
 
 # Answer types
 boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
@@ -64,33 +67,6 @@ dropdown_list = AnswerType.create!(value: 'Array', display: 'DropDownList')
 input_integer = AnswerType.create!(value: 'Integer', display: 'Input')
 input_float = AnswerType.create!(value: 'Float', display: 'Input')
 
-# Questions
-e1 = Questions::Exposure.create!(algorithm: epoct, answer_type: input_integer, label_en: 'Age', reference: '1', priority: Question.priorities[:mandatory])
-s3 = Questions::Symptom.create!(algorithm: epoct, answer_type: input_integer, label_en: 'Convulsions in current illness', reference: '3', priority: Question.priorities[:mandatory])
-s45 = Questions::Symptom.create!(algorithm: epoct, answer_type: boolean, label_en: 'Is the patient able to tolerate PO liquid ?', reference: '45', priority: Question.priorities[:mandatory])
-p6 = Questions::PhysicalExam.create!(algorithm: epoct, answer_type: input_float, label_en: 'What is MUAC size ?', reference: '6', priority: Question.priorities[:mandatory])
-p21 = Questions::PhysicalExam.create!(algorithm: epoct, answer_type: input_float, label_en: 'What is the size of the skin lesion ?', reference: '21', priority: Question.priorities[:basic])
-
-# Answers
-e1_1 = Answer.create!(node: e1, reference: '1', label_en: 'less than 2 months', value: '2', operator: Answer.operators[:less])
-e1_2 = Answer.create!(node: e1, reference: '2', label_en: 'between 2 and 6 months', value: '2, 6', operator: Answer.operators[:between])
-e1_3 = Answer.create!(node: e1, reference: '3', label_en: 'between 6 and 12 months', value: '6, 12', operator: Answer.operators[:between])
-e1_4 = Answer.create!(node: e1, reference: '4', label_en: 'more than 12 months', value: '12', operator: Answer.operators[:more_or_equal])
-s3_1 = Answer.create!(node: s3, reference: '1', label_en: '2 or more', value: '2', operator: Answer.operators[:more_or_equal])
-s3_2 = Answer.create!(node: s3, reference: '2', label_en: 'less than 2', value: '2', operator: Answer.operators[:less])
-p6_1 = Answer.create!(node: p6, reference: '1', label_en: 'less than 11.5', value: '11.5', operator: Answer.operators[:less])
-p6_2 = Answer.create!(node: p6, reference: '2', label_en: 'between 11.5 and 12.5', value: '11.5, 12.5', operator: Answer.operators[:between])
-p6_3 = Answer.create!(node: p6, reference: '3', label_en: '12.5 or more', value: '12.5', operator: Answer.operators[:more_or_equal])
-p21_1 = Answer.create!(node: p21, reference: '1', label_en: '5 or more cm', value: '5', operator: Answer.operators[:more_or_equal])
-p21_2 = Answer.create!(node: p21, reference: '2', label_en: 'between 2.5 and 5 cm', value: '2.5, 5', operator: Answer.operators[:between])
-p21_3 = Answer.create!(node: p21, reference: '3', label_en: 'less than 2.5 cm', value: '2.5', operator: Answer.operators[:less])
-
-# Diagnostics
-Diagnostic.create!(version: ft_1_0, label_en: 'Malaria', reference: '4')
-Diagnostic.create!(version: ft_1_0, label_en: 'IMPETIGO', reference: '6')
-Diagnostic.create!(version: ft_1_2, label_en: 'Chicken pox', reference: '8')
-
-# Patients
 john = Patient.create!(first_name: 'John', last_name: 'Do', birth_date: Date.new(1970,1,1))
 marc = Patient.create!(first_name: 'Marc', last_name: 'Do', birth_date: Date.new(1970,1,1))
 kantaing = Patient.create!(first_name: 'Quentin', last_name: 'Girard', birth_date: Date.new(1970,3,2))
@@ -109,44 +85,221 @@ MedicalCase.create!(patient: john, version: ft_1_2)
 group_wavemind.versions << epoc_first
 group_wavemind.save
 
-#################################################################################################
-########################################## DD7 ##################################################
-#################################################################################################
+Node.create!([
+  {label_translations: {"en"=>"mRDT"}, reference: "A1", priority: "mandatory", stage: "test", type: "Questions::AssessmentTest", diagnostic_id: nil, description_translations: {"en"=>"malaria rapid diagnostic test"}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 2, unavailable: 1},
+  {label_translations: {"en"=>"malaria microscopy"}, reference: "A10", priority: "basic", stage: "test", type: "Questions::AssessmentTest", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 2, unavailable: 1},
+  {label_translations: {"en"=>"assessment of hydration status after one hour"}, reference: "A11", priority: "basic", stage: "test", type: "Questions::AssessmentTest", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 2},
+  {label_translations: {"en"=>"CRP"}, reference: "A3bis", priority: "basic", stage: "test", type: "Questions::AssessmentTest", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 3, unavailable: 1},
+  {label_translations: {"en"=>"trail of bronchodilator"}, reference: "A5", priority: "basic", stage: "test", type: "Questions::AssessmentTest", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 2, unavailable: 1},
+  {label_translations: {"en"=>"skin lesion description and picture"}, reference: "A7", priority: "basic", stage: "triage", type: "Questions::AssessmentTest", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 2},
+  {label_translations: {"en"=>"tolerates PO liquid"}, reference: "A8", priority: "basic", stage: "test", type: "Questions::AssessmentTest", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"urinary dipstick"}, reference: "A9", priority: "basic", stage: "test", type: "Questions::AssessmentTest", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 2, unavailable: 1},
+  {label_translations: {"en"=>"Hb"}, reference: "A2", priority: "basic", stage: "test", type: "Questions::AssessmentTest", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 3},
+  {label_translations: {"en"=>"CRP"}, reference: "A3", priority: "basic", stage: "test", type: "Questions::AssessmentTest", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 3},
+  {label_translations: {"en"=>"Blood sugar"}, reference: "A4", priority: "basic", stage: "test", type: "Questions::AssessmentTest", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 4},
+  {label_translations: {"en"=>"PCT"}, reference: "A6", priority: "basic", stage: "test", type: "Questions::AssessmentTest", diagnostic_id: nil, description_translations: {"en"=>"procalcitonin"}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 3},
+  {label_translations: {"en"=>"Respiratory complaint"}, reference: "CC1", priority: "mandatory", stage: "triage", type: "Questions::ChiefComplain", diagnostic_id: nil, description_translations: {"en"=>"cough, trouble breathing"}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"Prevention"}, reference: "CC10", priority: "mandatory", stage: "triage", type: "Questions::ChiefComplain", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"Ear/Nose/Mouth/Throat complaint"}, reference: "CC2", priority: "mandatory", stage: "triage", type: "Questions::ChiefComplain", diagnostic_id: nil, description_translations: {"en"=>"ear, nose, mouth or thrat pain or secretions"}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"Digestive/gastro-intestinal complaint"}, reference: "CC3", priority: "mandatory", stage: "triage", type: "Questions::ChiefComplain", diagnostic_id: nil, description_translations: {"en"=>"eg. abdominal pain, diarrhea"}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"Genital/Urinary complaint"}, reference: "CC4", priority: "mandatory", stage: "triage", type: "Questions::ChiefComplain", diagnostic_id: nil, description_translations: {"en"=>"eg. abnormal urination or secretions from genitals, pain"}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"Eye complaint"}, reference: "CC5", priority: "mandatory", stage: "triage", type: "Questions::ChiefComplain", diagnostic_id: nil, description_translations: {"en"=>"eg. red eye, pain"}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"Neurological complaint"}, reference: "CC6", priority: "mandatory", stage: "triage", type: "Questions::ChiefComplain", diagnostic_id: nil, description_translations: {"en"=>"eg. headache, convulsion"}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"Bone or joint pain, accident, burn"}, reference: "CC7", priority: "mandatory", stage: "triage", type: "Questions::ChiefComplain", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"Skin and hair complaint"}, reference: "CC8", priority: "mandatory", stage: "triage", type: "Questions::ChiefComplain", diagnostic_id: nil, description_translations: {"en"=>"eg. rash, papules, abscess"}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"Fever"}, reference: "CC9", priority: "mandatory", stage: "triage", type: "Questions::ChiefComplain", diagnostic_id: nil, description_translations: {"en"=>"fever only"}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"Age"}, reference: "D1", priority: "mandatory", stage: "registration", type: "Questions::Demographic", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 3},
+  {label_translations: {"en"=>"village"}, reference: "D2", priority: "basic", stage: "registration", type: "Questions::Demographic", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 2},
+  {label_translations: {"en"=>"vit A in the past month"}, reference: "E1", priority: "basic", stage: "consultation", type: "Questions::Exposure", diagnostic_id: nil, description_translations: {"en"=>"the child has reveived one dose of vit A in the past month"}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"Any known disease in past medical history"}, reference: "E2", priority: "mandatory", stage: "triage", type: "Questions::Exposure", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 2},
+  {label_translations: {"en"=>"weight for age"}, reference: "PE1", priority: "mandatory", stage: "registration", type: "Questions::PhysicalExam", diagnostic_id: nil, description_translations: {"en"=>"weight for age according to WHO reference tables"}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 2},
+  {label_translations: {"en"=>"Blotchy rash"}, reference: "PE10", priority: "basic", stage: "consultation", type: "Questions::PhysicalExam", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"red, watery eyes"}, reference: "PE11", priority: "basic", stage: "consultation", type: "Questions::PhysicalExam", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"koplik spots"}, reference: "PE12", priority: "basic", stage: "consultation", type: "Questions::PhysicalExam", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"lower chest indrawing\t"}, reference: "PE13", priority: "basic", stage: "consultation", type: "Questions::PhysicalExam", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"severe respiratory distress"}, reference: "PE14", priority: "basic", stage: "consultation", type: "Questions::PhysicalExam", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"clouding of cornea"}, reference: "PE15", priority: "basic", stage: "consultation", type: "Questions::PhysicalExam", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"severe mouth ulcers"}, reference: "PE17", priority: "basic", stage: "consultation", type: "Questions::PhysicalExam", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"tender neck mass > 2cm"}, reference: "PE18", priority: "basic", stage: "consultation", type: "Questions::PhysicalExam", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"dental abscess"}, reference: "PE19", priority: "basic", stage: "consultation", type: "Questions::PhysicalExam", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"MUAC"}, reference: "PE2", priority: "mandatory", stage: "consultation", type: "Questions::PhysicalExam", diagnostic_id: nil, description_translations: {"en"=>"Mid upper arm circonference to be mesures only in children >/= 6 months of age"}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 4},
+  {label_translations: {"en"=>"skin exam: lesion description"}, reference: "PE20", priority: "basic", stage: "consultation", type: "Questions::PhysicalExam", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 2},
+  {label_translations: {"en"=>"detailled aspect of vesicles and/or crusts"}, reference: "PE20.2", priority: "basic", stage: "consultation", type: "Questions::PhysicalExam", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 2},
+  {label_translations: {"en"=>"skin exam: lesion location"}, reference: "PE22", priority: "basic", stage: "consultation", type: "Questions::PhysicalExam", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 2},
+  {label_translations: {"en"=>"skin exam: lesion associated signs"}, reference: "PE23", priority: "basic", stage: "consultation", type: "Questions::PhysicalExam", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 2},
+  {label_translations: {"en"=>"Joint swelling"}, reference: "PE24", priority: "basic", stage: "consultation", type: "Questions::PhysicalExam", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"tender cervical node"}, reference: "PE25", priority: "basic", stage: "consultation", type: "Questions::PhysicalExam", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"First Look: appearence"}, reference: "PE26", priority: "basic", stage: "consultation", type: "Questions::PhysicalExam", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 2},
+  {label_translations: {"en"=>"refer for malaria testing"}, reference: "M6", priority: nil, stage: nil, type: "HealthCares::Management", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: nil},
+  {label_translations: {"en"=>"First Look: work of breathing"}, reference: "PE27", priority: "basic", stage: "consultation", type: "Questions::PhysicalExam", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 2},
+  {label_translations: {"en"=>"First Look: circulation"}, reference: "PE28", priority: "basic", stage: "consultation", type: "Questions::PhysicalExam", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 2},
+  {label_translations: {"en"=>"axillary temperature > 37.5 °C"}, reference: "PE3", priority: "mandatory", stage: "consultation", type: "Questions::PhysicalExam", diagnostic_id: nil, description_translations: {"en"=>"axillary temperature must be measured in all children. A > 37.5 °C is considered as fever"}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 4},
+  {label_translations: {"en"=>"SaO2"}, reference: "PE4", priority: "basic", stage: "consultation", type: "Questions::PhysicalExam", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 3},
+  {label_translations: {"en"=>"heart rate (HR)"}, reference: "PE5", priority: "basic", stage: "triage", type: "Questions::PhysicalExam", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 3},
+  {label_translations: {"en"=>"respiratory rate (RR)"}, reference: "PE6", priority: "basic", stage: "triage", type: "Questions::PhysicalExam", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 3},
+  {label_translations: {"en"=>"Convulsing now"}, reference: "PE7", priority: "basic", stage: "triage", type: "Questions::PhysicalExam", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"Stiff neck"}, reference: "PE9", priority: "basic", stage: "triage", type: "Questions::PhysicalExam", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"Lethargic or unconscious"}, reference: "PE8", priority: "basic", stage: "triage", type: "Questions::PhysicalExam", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"History of fever"}, reference: "S1", priority: "mandatory", stage: "consultation", type: "Questions::Symptom", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"Unable to tolerate PO liquids"}, reference: "S10", priority: "basic", stage: "consultation", type: "Questions::Symptom", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"headache"}, reference: "S12", priority: "basic", stage: "consultation", type: "Questions::Symptom", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"abdominal pain"}, reference: "S13", priority: "basic", stage: "consultation", type: "Questions::Symptom", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"sudden onset"}, reference: "S14", priority: "basic", stage: "consultation", type: "Questions::Symptom", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"coryza"}, reference: "S15", priority: "basic", stage: "consultation", type: "Questions::Symptom", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"cough"}, reference: "S2", priority: "basic", stage: "consultation", type: "Questions::Symptom", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"fever duration"}, reference: "S11", priority: "basic", stage: "consultation", type: "Questions::Symptom", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 3},
+  {label_translations: {"en"=>">/= 2 convulsions in the present illness"}, reference: "S3", priority: "basic", stage: "consultation", type: "Questions::Symptom", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"drink as usual"}, reference: "S4", priority: "basic", stage: "consultation", type: "Questions::Symptom", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"Emesis"}, reference: "S5", priority: "basic", stage: "consultation", type: "Questions::Symptom", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"looser stools than usual"}, reference: "S6", priority: "basic", stage: "consultation", type: "Questions::Symptom", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"Blood in stool"}, reference: "S7", priority: "basic", stage: "consultation", type: "Questions::Symptom", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"extremity pain"}, reference: "S8", priority: "basic", stage: "consultation", type: "Questions::Symptom", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"Skin issue"}, reference: "S9", priority: "basic", stage: "consultation", type: "Questions::Symptom", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"MMR: 2 doses completed"}, reference: "V1", priority: "basic", stage: "registration", type: "Questions::Vaccine", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 1},
+  {label_translations: {"en"=>"nb of emesis episods"}, reference: "S5.1", priority: "basic", stage: "consultation", type: "Questions::Symptom", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 3},
+  {label_translations: {"en"=>"nb of loose stools over past 24 hours"}, reference: "S6.1", priority: "basic", stage: "consultation", type: "Questions::Symptom", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: 3},
+  {label_translations: {"en"=>"oral rehydration / severe dehydration"}, reference: "T10", priority: nil, stage: nil, type: "HealthCares::Treatment", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: nil},
+  {label_translations: {"en"=>"paracetamol"}, reference: "T11", priority: nil, stage: nil, type: "HealthCares::Treatment", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: nil},
+  {label_translations: {"en"=>"amoxicillin regular dose"}, reference: "T1.1", priority: nil, stage: nil, type: "HealthCares::Treatment", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: nil},
+  {label_translations: {"en"=>"vit A"}, reference: "T12", priority: nil, stage: nil, type: "HealthCares::Treatment", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: nil},
+  {label_translations: {"en"=>"amoxicillin high dose"}, reference: "T1.2", priority: nil, stage: nil, type: "HealthCares::Treatment", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: nil},
+  {label_translations: {"en"=>"moderate asthma protocol"}, reference: "T13", priority: nil, stage: nil, type: "HealthCares::Treatment", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: nil},
+  {label_translations: {"en"=>"abscess care, general"}, reference: "T14", priority: nil, stage: nil, type: "HealthCares::Treatment", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: nil},
+  {label_translations: {"en"=>"bronchodiator"}, reference: "T15", priority: nil, stage: nil, type: "HealthCares::Treatment", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: nil},
+  {label_translations: {"en"=>"sublingual sugar"}, reference: "T16", priority: nil, stage: nil, type: "HealthCares::Treatment", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: nil},
+  {label_translations: {"en"=>"symptomatic care"}, reference: "T17", priority: nil, stage: nil, type: "HealthCares::Treatment", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: nil},
+  {label_translations: {"en"=>"zinc"}, reference: "T18", priority: nil, stage: nil, type: "HealthCares::Treatment", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: nil},
+  {label_translations: {"en"=>"local treatment, antiseptic"}, reference: "T19", priority: nil, stage: nil, type: "HealthCares::Treatment", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: nil},
+  {label_translations: {"en"=>"ceftriaxone IM"}, reference: "T2", priority: nil, stage: nil, type: "HealthCares::Treatment", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: nil},
+  {label_translations: {"en"=>"skin, symptomatic care"}, reference: "T20", priority: nil, stage: nil, type: "HealthCares::Treatment", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: nil},
+  {label_translations: {"en"=>"local antifungal"}, reference: "T21", priority: nil, stage: nil, type: "HealthCares::Treatment", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: nil},
+  {label_translations: {"en"=>"scabies treatment"}, reference: "T22", priority: nil, stage: nil, type: "HealthCares::Treatment", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: nil},
+  {label_translations: {"en"=>"ciprofloxacin"}, reference: "T3", priority: nil, stage: nil, type: "HealthCares::Treatment", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: nil},
+  {label_translations: {"en"=>"cephalexin"}, reference: "T4", priority: nil, stage: nil, type: "HealthCares::Treatment", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: nil},
+  {label_translations: {"en"=>"erythromycin eye ointment"}, reference: "T5", priority: nil, stage: nil, type: "HealthCares::Treatment", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: nil},
+  {label_translations: {"en"=>"Alu"}, reference: "T6", priority: nil, stage: nil, type: "HealthCares::Treatment", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: nil},
+  {label_translations: {"en"=>"artesunate IM"}, reference: "T7", priority: nil, stage: nil, type: "HealthCares::Treatment", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: nil},
+  {label_translations: {"en"=>"home rehydration"}, reference: "T8", priority: nil, stage: nil, type: "HealthCares::Treatment", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: nil},
+  {label_translations: {"en"=>"oral rehydration / moderate dehydration protocol"}, reference: "T9", priority: nil, stage: nil, type: "HealthCares::Treatment", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: nil},
+  {label_translations: {"en"=>"reasons to return to clinic"}, reference: "M1", priority: nil, stage: nil, type: "HealthCares::Management", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: nil},
+  {label_translations: {"en"=>"refer"}, reference: "M2", priority: nil, stage: nil, type: "HealthCares::Management", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: nil},
+  {label_translations: {"en"=>"assessment after one hour"}, reference: "M3", priority: nil, stage: nil, type: "HealthCares::Management", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: nil},
+  {label_translations: {"en"=>"refer to the nearest nutrition program"}, reference: "M4", priority: nil, stage: nil, type: "HealthCares::Management", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: nil},
+  {label_translations: {"en"=>"return the following day to clinic for assessment"}, reference: "M5", priority: nil, stage: nil, type: "HealthCares::Management", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: nil},
+  {label_translations: {"en"=>"follow-up in 2 days is still febrile"}, reference: "M7", priority: nil, stage: nil, type: "HealthCares::Management", diagnostic_id: nil, description_translations: {"en"=>""}, min_score: 0, algorithm_id: 3, final_diagnostic_id: nil, answer_type_id: nil}
+])
+Answer.create!([
+                 {reference: "1", label_translations: {"en"=>"positive"}, operator: nil, value: nil, node_id: 1},
+                 {reference: "2", label_translations: {"en"=>"negative"}, operator: nil, value: nil, node_id: 1},
+                 {reference: "1", label_translations: {"en"=>"positive"}, operator: nil, value: nil, node_id: 2},
+                 {reference: "2", label_translations: {"en"=>"negative"}, operator: nil, value: nil, node_id: 2},
+                 {reference: "1", label_translations: {"en"=>"improvement"}, operator: nil, value: nil, node_id: 3},
+                 {reference: "2", label_translations: {"en"=>"no improvement"}, operator: nil, value: nil, node_id: 3},
+                 {reference: "1", label_translations: {"en"=>"< 10 mg/l"}, operator: "less", value: "10", node_id: 4},
+                 {reference: "2", label_translations: {"en"=>">= 10 < 40 mg/l"}, operator: "between", value: "10, 40", node_id: 4},
+                 {reference: "3", label_translations: {"en"=>">= 40 < 80 mg/l"}, operator: "between", value: "40, 80", node_id: 4},
+                 {reference: "4", label_translations: {"en"=>">= 80 mg/l"}, operator: "more_or_equal", value: "80", node_id: 4},
+                 {reference: "1", label_translations: {"en"=>"improvement"}, operator: nil, value: nil, node_id: 5},
+                 {reference: "2", label_translations: {"en"=>"no improvement"}, operator: nil, value: nil, node_id: 5},
+                 {reference: "1", label_translations: {"en"=>"cellulitis description and picture to confirm diagnosis"}, operator: nil, value: nil, node_id: 6},
+                 {reference: "2", label_translations: {"en"=>"impetigo description and picture to confirm diagnosis"}, operator: nil, value: nil, node_id: 6},
+                 {reference: "3", label_translations: {"en"=>"chicken pox description and picture to confirm diagnosis"}, operator: nil, value: nil, node_id: 6},
+                 {reference: "4", label_translations: {"en"=>"herpes description and picture to confirm diagnosis"}, operator: nil, value: nil, node_id: 6},
+                 {reference: "5", label_translations: {"en"=>"shingles description to confirm diagnosis"}, operator: nil, value: nil, node_id: 6},
+                 {reference: "6", label_translations: {"en"=>"tinea corporis description and picture to confirm diangosis"}, operator: nil, value: nil, node_id: 6},
+                 {reference: "7", label_translations: {"en"=>"scabies description and picture to confirm diagnosis"}, operator: nil, value: nil, node_id: 6},
+                 {reference: "8", label_translations: {"en"=>"urticaria description and picture to confirm diagnosis"}, operator: nil, value: nil, node_id: 6},
+                 {reference: "9", label_translations: {"en"=>"ecthyma/pyoderma description and picture to confirm diagnosis"}, operator: nil, value: nil, node_id: 6},
+                 {reference: "1", label_translations: {"en"=>"positive"}, operator: nil, value: nil, node_id: 8},
+                 {reference: "2", label_translations: {"en"=>"negative"}, operator: nil, value: nil, node_id: 8},
+                 {reference: "1", label_translations: {"en"=>"< 6 g/dl"}, operator: "less", value: "6", node_id: 9},
+                 {reference: "2", label_translations: {"en"=>">= 6 g/dl"}, operator: "more_or_equal", value: "6", node_id: 9},
+                 {reference: "1", label_translations: {"en"=>"< 10 mg/L"}, operator: "less", value: "10", node_id: 10},
+                 {reference: "2", label_translations: {"en"=>">= 10 < 40 mg/L"}, operator: "between", value: "10, 40", node_id: 10},
+                 {reference: "3", label_translations: {"en"=>">= 40 < 80 mg/L"}, operator: "between", value: "40, 80", node_id: 10},
+                 {reference: "4", label_translations: {"en"=>">= 80 mg/L"}, operator: "more_or_equal", value: "80", node_id: 10},
+                 {reference: "1", label_translations: {"en"=>"< 3.3 mmol/l"}, operator: "less", value: "3.3", node_id: 11},
+                 {reference: "2", label_translations: {"en"=>">= 3.3 mmol/l"}, operator: "more_or_equal", value: "3.3", node_id: 11},
+                 {reference: "1", label_translations: {"en"=>"Less then 4 PCT in ug/l"}, operator: "less", value: "4", node_id: 12},
+                 {reference: "2", label_translations: {"en"=>"More then 4 PCT in ug/l"}, operator: "more_or_equal", value: "4", node_id: 12},
+                 {reference: "1", label_translations: {"en"=>"< 2 months"}, operator: "less", value: "2", node_id: 23},
+                 {reference: "2", label_translations: {"en"=>">=2 < 6 months"}, operator: "between", value: "2, 6", node_id: 23},
+                 {reference: "3", label_translations: {"en"=>">=6 < 12 months"}, operator: "between", value: "6, 12", node_id: 23},
+                 {reference: "4", label_translations: {"en"=>">= 12 < 24 months"}, operator: "between", value: "12, 24", node_id: 23},
+                 {reference: "5", label_translations: {"en"=>">=24 months < 5 years"}, operator: "between", value: "24, 60", node_id: 23},
+                 {reference: "6", label_translations: {"en"=>">= 5 years"}, operator: "more_or_equal", value: "60", node_id: 23},
+                 {reference: "x", label_translations: {"en"=>"list of villages "}, operator: nil, value: nil, node_id: 24},
+                 {reference: "1", label_translations: {"en"=>"cerebral palsy"}, operator: nil, value: nil, node_id: 26},
+                 {reference: "2", label_translations: {"en"=>"HIV"}, operator: nil, value: nil, node_id: 26},
+                 {reference: "3", label_translations: {"en"=>"sickle cell"}, operator: nil, value: nil, node_id: 26},
+                 {reference: "1", label_translations: {"en"=>"< -3 z-score"}, operator: nil, value: nil, node_id: 27},
+                 {reference: "2", label_translations: {"en"=>"between -3 z-score and -2 z-score"}, operator: nil, value: nil, node_id: 27},
+                 {reference: "1", label_translations: {"en"=>"< 11.5 cm"}, operator: "less", value: "11.5", node_id: 37},
+                 {reference: "2", label_translations: {"en"=>">=11.5 < 12.5 cm"}, operator: "between", value: "11.5, 12.5", node_id: 37},
+                 {reference: "1", label_translations: {"en"=>"abscess"}, operator: nil, value: nil, node_id: 38},
+                 {reference: "2", label_translations: {"en"=>"vesicles and/or crusts"}, operator: nil, value: nil, node_id: 38},
+                 {reference: "3", label_translations: {"en"=>"hyperpigmented or hypopigmented macules and patches"}, operator: nil, value: nil, node_id: 38},
+                 {reference: "4", label_translations: {"en"=>"alopecia and scale"}, operator: nil, value: nil, node_id: 38},
+                 {reference: "5", label_translations: {"en"=>"erythematous scaly plaque"}, operator: nil, value: nil, node_id: 38},
+                 {reference: "6", label_translations: {"en"=>"red serpiginous (snake-like), curvilinear trails"}, operator: nil, value: nil, node_id: 38},
+                 {reference: "1", label_translations: {"en"=>"honey colored crusted lesions"}, operator: nil, value: nil, node_id: 39},
+                 {reference: "2", label_translations: {"en"=>"rounded erythematous plaque rounded with little vesicles"}, operator: nil, value: nil, node_id: 39},
+                 {reference: "3", label_translations: {"en"=>"other"}, operator: nil, value: nil, node_id: 39},
+                 {reference: "1", label_translations: {"en"=>"on face"}, operator: nil, value: nil, node_id: 41},
+                 {reference: "2", label_translations: {"en"=>"perioral"}, operator: nil, value: nil, node_id: 41},
+                 {reference: "3", label_translations: {"en"=>"located on one side of the body"}, operator: nil, value: nil, node_id: 41},
+                 {reference: "4", label_translations: {"en"=>"lower extremities"}, operator: nil, value: nil, node_id: 41},
+                 {reference: "5", label_translations: {"en"=>"diaper area"}, operator: nil, value: nil, node_id: 41},
+                 {reference: "6", label_translations: {"en"=>"chest"}, operator: nil, value: nil, node_id: 41},
+                 {reference: "7", label_translations: {"en"=>"back"}, operator: nil, value: nil, node_id: 41},
+                 {reference: "8", label_translations: {"en"=>"upper arms"}, operator: nil, value: nil, node_id: 41},
+                 {reference: "9", label_translations: {"en"=>"scalp"}, operator: nil, value: nil, node_id: 41},
+                 {reference: "10", label_translations: {"en"=>"flexural aspects of extremities"}, operator: nil, value: nil, node_id: 41},
+                 {reference: "1", label_translations: {"en"=>"large surrounding cellulitis (warm, red, tender)"}, operator: nil, value: nil, node_id: 42},
+                 {reference: "2", label_translations: {"en"=>"war, red, tender (cellulits)"}, operator: nil, value: nil, node_id: 42},
+                 {reference: "3", label_translations: {"en"=>"itching"}, operator: nil, value: nil, node_id: 42},
+                 {reference: "4", label_translations: {"en"=>"painful"}, operator: nil, value: nil, node_id: 42},
+                 {reference: "1", label_translations: {"en"=>"worrying "}, operator: nil, value: nil, node_id: 45},
+                 {reference: "2", label_translations: {"en"=>"not worrying"}, operator: nil, value: nil, node_id: 45},
+                 {reference: "1", label_translations: {"en"=>"worrying"}, operator: nil, value: nil, node_id: 46},
+                 {reference: "2", label_translations: {"en"=>"not worrying"}, operator: nil, value: nil, node_id: 46},
+                 {reference: "1", label_translations: {"en"=>"worrying"}, operator: nil, value: nil, node_id: 47},
+                 {reference: "2", label_translations: {"en"=>"not worrying"}, operator: nil, value: nil, node_id: 47},
+                 {reference: "1", label_translations: {"en"=>"°C"}, operator: "more_or_equal", value: "37.6", node_id: 48},
+                 {reference: "1", label_translations: {"en"=>"< 90 %"}, operator: "less", value: "90", node_id: 49},
+                 {reference: "2", label_translations: {"en"=>">= 90%"}, operator: "more_or_equal", value: "90", node_id: 49},
+                 {reference: "1", label_translations: {"en"=>"severe tachycardia >= 90 percentile"}, operator: "more_or_equal", value: "90", node_id: 50},
+                 {reference: "1", label_translations: {"en"=>"< 75 percentile"}, operator: "less", value: "75", node_id: 51},
+                 {reference: "2", label_translations: {"en"=>">= 75 < 97 percentile"}, operator: "between", value: "75, 97", node_id: 51},
+                 {reference: "3", label_translations: {"en"=>">= 97 percentile"}, operator: "more_or_equal", value: "97", node_id: 51},
+                 {reference: "4", label_translations: {"en"=>">= 40 cycle/min"}, operator: "between", value: "40, 50", node_id: 51},
+                 {reference: "5", label_translations: {"en"=>">= 50 cycle/min"}, operator: "more_or_equal", value: "50", node_id: 51},
+                 {reference: "1", label_translations: {"en"=>"fever duration in days"}, operator: "less", value: "2", node_id: 62},
+                 {reference: "2", label_translations: {"en"=>"fever duration in days"}, operator: "between", value: "2, 4", node_id: 62},
+                 {reference: "3", label_translations: {"en"=>"fever duration in days"}, operator: "between", value: "4, 6", node_id: 62},
+                 {reference: "4", label_translations: {"en"=>"fever duration in days"}, operator: "more_or_equal", value: "6", node_id: 62},
+                 {reference: "1", label_translations: {"en"=>"< 4"}, operator: "less", value: "4", node_id: 71},
+                 {reference: "2", label_translations: {"en"=>">=4"}, operator: "more_or_equal", value: "4", node_id: 71},
+                 {reference: "1", label_translations: {"en"=>">= 11 loose stools over past 24hrs"}, operator: "more_or_equal", value: "11", node_id: 72},
+                 {reference: "2", label_translations: {"en"=>">= 3 < 11 loose stools over past 24hrs"}, operator: "between", value: "3, 11", node_id: 72},
+                 {reference: "3", label_translations: {"en"=>"< 3 loose stools over past 24hrs"}, operator: "less", value: "3", node_id: 72}
+               ])
 
-dd7 = Diagnostic.create!(version: epoc_first, label_en: 'Severe LRTI', reference: '7')
-df7 = FinalDiagnostic.create!(label_en: 'Severe lower respiratory tract infection', reference: '7', diagnostic: dd7)
-
-s2 = Questions::Symptom.create!(algorithm: epoct, label_en: 'Cough', reference: '2', priority: Question.priorities[:mandatory], answer_type: boolean)
-s2_1 = s2.answers.first
-
-s4 = Questions::Symptom.create!(algorithm: epoct, label_en: 'Drink as usual', reference: '4', priority: Question.priorities[:mandatory], answer_type: boolean)
-s4_1 = s4.answers.first
-s4_2 = s4.answers.second
-
-p1 = Questions::PhysicalExam.create!(algorithm: epoct, label_en: 'SAO2', reference: '1', priority: Question.priorities[:mandatory], answer_type: input_integer)
-p1_1 = Answer.create!(node: p1, reference: '1', label_en: '>/= 90%', value: '90', operator: Answer.operators[:more_or_equal])
-p1_2 = Answer.create!(node: p1, reference: '2', label_en: '< 90%', value: '90', operator: Answer.operators[:less])
-
-p3 = Questions::PhysicalExam.create!(algorithm: epoct, label_en: 'Respiratory rate', reference: '3', priority: Question.priorities[:mandatory], answer_type: input_integer)
-p3_1 = Answer.create!(node: p3, reference: '1', label_en: '< 97th%ile', value: '97', operator: Answer.operators[:less])
-p3_2 = Answer.create!(node: p3, reference: '2', label_en: '>/= 97th%ile', value: '97', operator: Answer.operators[:more_or_equal])
-
-p13 = Questions::PhysicalExam.create!(algorithm: epoct, label_en: 'Lower chest indrawing', reference: '13', priority: Question.priorities[:basic], answer_type: boolean)
-p13_1 = p13.answers.first
-
-p14 = Questions::PhysicalExam.create!(algorithm: epoct, label_en: 'Sever respiratory distress', reference: '14', priority: Question.priorities[:basic], answer_type: boolean)
-p14_1 = p14.answers.first
-
-p25 = Questions::PhysicalExam.create!(algorithm: epoct, label_en: 'Tolerates PO liquid', reference: '25', priority: Question.priorities[:basic], answer_type: boolean)
-p25_1 = p25.answers.first
-
-t1 = HealthCares::Treatment.create!(algorithm: epoct, label_en: 'Amoxicillin', reference: '1')
-t2 = HealthCares::Treatment.create!(algorithm: epoct, label_en: 'IM ceftriaxone', reference: '2')
-t9 = HealthCares::Treatment.create!(algorithm: epoct, label_en: 'Oral rehydration', reference: '9')
-
-m2 = HealthCares::Management.create!(algorithm: epoct, label_en: 'Refer', reference: '2')
-
-df7.health_cares << [t1, t2, t9, m2]
+a2 = Node.find(9)
+a4 = Node.find(11)
+d1 = Node.find(23)
+pe1 = Node.find(27)
+pe2 = Node.find(37)
+pe4 = Node.find(49)
+pe5 = Node.find(50)
+pe6 = Node.find(51)
+pe8 = Node.find(54)
+pe9 = Node.find(53)
+pe7 = Node.find(52)
+pe25 = Node.find(43)
+s1 = Node.find(55)
+s3 = Node.find(63)
+s4 = Node.find(64)
 
 ps6 = QuestionsSequences::PredefinedSyndrome.create!(algorithm: epoct, reference: '6', label_en: 'Able to drink')
 ps6_1 = ps6.answers.first
@@ -154,103 +307,12 @@ ps6_2 = ps6.answers.second
 
 # PS6
 ps6_s4 = Instance.create!(instanceable: ps6, node: s4)
-ps6_p25 = Instance.create!(instanceable: ps6, node: p25)
+ps6_p25 = Instance.create!(instanceable: ps6, node: pe25)
 ps6_ps6 = Instance.create!(instanceable: ps6, node: ps6)
 
-# DF7
-dd7_s2 = Instance.create!(instanceable: dd7, node: s2)
-dd7_p3 = Instance.create!(instanceable: dd7, node: p3)
-dd7_p13 = Instance.create!(instanceable: dd7, node: p13)
-dd7_p14 = Instance.create!(instanceable: dd7, node: p14)
-dd7_p1 = Instance.create!(instanceable: dd7, node: p1)
-dd7_df7 = Instance.create!(instanceable: dd7, node: df7)
-dd7_ps6 = Instance.create!(instanceable: dd7, node: ps6, final_diagnostic: df7)
-dd7_t9 = Instance.create!(instanceable: dd7, node: t9, final_diagnostic: df7)
-dd7_t1 = Instance.create!(instanceable: dd7, node: t1, final_diagnostic: df7)
-dd7_t2 = Instance.create!(instanceable: dd7, node: t2, final_diagnostic: df7)
-dd7_m2 = Instance.create!(instanceable: dd7, node: m2, final_diagnostic: df7)
-
-Condition.create!(referenceable: ps6_p25, first_conditionable: s4_2, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: ps6_ps6, first_conditionable: s4_1, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: ps6_ps6, first_conditionable: p25_1, operator: nil, second_conditionable: nil)
-
-Condition.create!(referenceable: dd7_p1, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: dd7_p3, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: dd7_p13, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: dd7_p14, first_conditionable: s2_1, operator: nil, second_conditionable: nil)
-
-Condition.create!(referenceable: dd7_df7, first_conditionable: p14_1, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: dd7_df7, first_conditionable: p3_2, operator: Condition.operators[:and_operator], second_conditionable: p13_1)
-Condition.create!(referenceable: dd7_df7, first_conditionable: p1_1, operator: nil, second_conditionable: nil)
-
-Condition.create!(referenceable: dd7_t9, first_conditionable: ps6_1, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: dd7_t1, first_conditionable: ps6_1, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: dd7_t2, first_conditionable: ps6_2, operator: nil, second_conditionable: nil)
-
-#################################################################################################
-########################################## DD5 ##################################################
-#################################################################################################
-
-dd5 = Diagnostic.create!(version: epoc_first, label_en: 'Musculo-skeletal infection', reference: '5')
-df14 = FinalDiagnostic.create!(label_en: 'Osteomyelitis / septic arthritis', reference: '14', diagnostic: dd5)
-
-p7 = Questions::PhysicalExam.create!(algorithm: epoct, label_en: 'Convulsing now', reference: '7', priority: Question.priorities[:mandatory], answer_type: boolean)
-p7_1 = p7.answers.first
-p7_2 = p7.answers.second
-
-p8 = Questions::PhysicalExam.create!(algorithm: epoct, label_en: 'Lethargic or unconscious', reference: '8', priority: Question.priorities[:mandatory], answer_type: boolean)
-p8_1 = p8.answers.first
-p8_2 = p8.answers.second
-
-p2 = Questions::PhysicalExam.create!(algorithm: epoct, label_en: 'Severe tachycardia (th %ile)', reference: '2', priority: Question.priorities[:mandatory], answer_type: input_integer)
-p2_1 = p2.answers.create!(reference: '1', label_en: 'More than 90', value: '90', operator: Answer.operators[:more_or_equal])
-p2_2 = p2.answers.create!(reference: '2', label_en: 'Less than 90', value: '90', operator: Answer.operators[:less])
-
-p9 = Questions::PhysicalExam.create!(algorithm: epoct, label_en: 'Stiff neck', reference: '9', priority: Question.priorities[:mandatory], answer_type: boolean)
-p9_1 = p9.answers.first
-p9_2 = p9.answers.second
-
-s1 = Questions::Symptom.create!(algorithm: epoct, label_en: 'History of fever', reference: '1', priority: Question.priorities[:mandatory], answer_type: boolean)
-s1_1 = s1.answers.first
-s1_2 = s1.answers.second
-
-p4 = Questions::PhysicalExam.create!(algorithm: epoct, label_en: 'Axillary temperature', reference: '4', priority: Question.priorities[:mandatory], answer_type: input_float)
-p4_1 = p4.answers.create!(reference: '1', label_en: 'More than 37.5', value: '37.5', operator: Answer.operators[:more_or_equal])
-p4_2 = p4.answers.create!(reference: '2', label_en: 'Less than 37.5', value: '37.5', operator: Answer.operators[:less])
-
-p5 = Questions::PhysicalExam.create!(algorithm: epoct, label_en: 'Weight for age (z-score)', reference: '5', priority: Question.priorities[:mandatory], answer_type: input_float)
-p5_1 = p5.answers.create!(reference: '1', label_en: 'less than -3', value: '-3', operator: Answer.operators[:less])
-p5_2 = p5.answers.create!(reference: '2', label_en: 'Between -3 and -2', value: '-3,-2', operator: Answer.operators[:between])
-p5_3 = p5.answers.create!(reference: '3', label_en: 'More than -2', value: '-2', operator: Answer.operators[:more_or_equal])
-
-a1 = Questions::AssessmentTest.create!(algorithm: epoct, label_en: 'mRDT', reference: '1', priority: Question.priorities[:mandatory], answer_type: dropdown_list)
-a1_1 = a1.answers.create!(reference: '1', label_en: 'positive', value: nil, operator: nil)
-a1_2 = a1.answers.create!(reference: '2', label_en: 'negative', value: nil, operator: nil)
-
-a2 = Questions::AssessmentTest.create!(algorithm: epoct, label_en: 'SaO2 (%)', reference: '2', priority: Question.priorities[:mandatory], answer_type: input_integer)
-a2_1 = a2.answers.create!(reference: '1', label_en: 'Less than 6', value: '6', operator: Answer.operators[:less])
-a2_2 = a2.answers.create!(reference: '2', label_en: 'More than 6', value: '6', operator: Answer.operators[:more_or_equal])
-
-a3 = Questions::AssessmentTest.create!(algorithm: epoct, label_en: 'CRP (mg/L)', reference: '3', priority: Question.priorities[:basic], answer_type: input_float)
-a3_1 = a3.answers.create!(reference: '1', label_en: 'Less than 20', value: '20', operator: Answer.operators[:less])
-a3_2 = a3.answers.create!(reference: '2', label_en: 'Between 20 and 40', value: '20,40', operator: Answer.operators[:between])
-a3_3 = a3.answers.create!(reference: '3', label_en: 'More than 40', value: '40', operator: Answer.operators[:more_or_equal])
-
-a4 = Questions::AssessmentTest.create!(algorithm: epoct, label_en: 'SaO2 (%)', reference: '4', priority: Question.priorities[:basic], answer_type: input_float)
-a4_1 = a4.answers.create!(reference: '1', label_en: 'Less than 3.3', value: '3.3', operator: Answer.operators[:less])
-a4_2 = a4.answers.create!(reference: '2', label_en: 'More than 3.3', value: '3.3', operator: Answer.operators[:more_or_equal])
-
-s8 = Questions::Symptom.create!(algorithm: epoct, label_en: 'Extremity pain', reference: '8', priority: Question.priorities[:mandatory], answer_type: boolean)
-s8_1 = s8.answers.first
-s8_2 = s8.answers.second
-
-p24 = Questions::PhysicalExam.create!(algorithm: epoct, label_en: 'Joint swelling', reference: '24', priority: Question.priorities[:mandatory], answer_type: boolean)
-p24_1 = p24.answers.first
-p24_2 = p24.answers.second
-
-t4 = HealthCares::Treatment.create!(algorithm: epoct, label_en: 'Cephalexin', reference: '4')
-
-df14.health_cares << [t2, t4, m2]
+Condition.create!(referenceable: ps6_p25, first_conditionable: s4.answers.second, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: ps6_ps6, first_conditionable: s4.answers.first, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: ps6_ps6, first_conditionable: pe25.answers.first, operator: nil, second_conditionable: nil)
 
 ps1 = QuestionsSequences::PredefinedSyndrome.create!(algorithm: epoct, reference: '1', label_en: 'Fever')
 ps1_1 = ps1.answers.first
@@ -270,105 +332,78 @@ dc3_1 = dc3.answers.first
 dc4 = QuestionsSequences::Comorbidity.create!(algorithm: epoct, reference: '4', label_en: 'Hypoglycemia')
 dc4_1 = dc4.answers.first
 
-c1 = QuestionsSequences::PredefinedSyndrome.create!(algorithm: epoct, reference: '7', label_en: 'Severe malnutrition')
-c1_1 = c1.answers.first
+ps7 = QuestionsSequences::PredefinedSyndrome.create!(algorithm: epoct, reference: '7', label_en: 'Severe malnutrition')
+ps7_1 = ps7.answers.first
 
 
 # PS1
 ps1_s1 = Instance.create!(instanceable: ps1, node: s1)
-ps1_p4 = Instance.create!(instanceable: ps1, node: p4)
+ps1_p4 = Instance.create!(instanceable: ps1, node: pe4)
 ps1_ps1 = Instance.create!(instanceable: ps1, node: ps1)
 
-Condition.create!(referenceable: ps1_ps1, first_conditionable: s1_1, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: ps1_ps1, first_conditionable: p4_1, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: ps1_ps1, first_conditionable: s1.answers.first, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: ps1_ps1, first_conditionable: pe4.answers.first, operator: nil, second_conditionable: nil)
 
 # PS2
 ps2_s3 = Instance.create!(instanceable: ps2, node: s3)
-ps2_p7 = Instance.create!(instanceable: ps2, node: p7)
-ps2_p8 = Instance.create!(instanceable: ps2, node: p8)
-ps2_p9 = Instance.create!(instanceable: ps2, node: p9)
-ps2_p1 = Instance.create!(instanceable: ps2, node: p1)
-ps2_p2 = Instance.create!(instanceable: ps2, node: p2)
+ps2_p7 = Instance.create!(instanceable: ps2, node: pe7)
+ps2_p8 = Instance.create!(instanceable: ps2, node: pe8)
+ps2_p9 = Instance.create!(instanceable: ps2, node: pe9)
+ps2_p1 = Instance.create!(instanceable: ps2, node: pe1)
+ps2_p2 = Instance.create!(instanceable: ps2, node: pe2)
 ps2_ps2 = Instance.create!(instanceable: ps2, node: ps2)
 
-Condition.create!(referenceable: ps2_ps2, first_conditionable: s3_1, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: ps2_ps2, first_conditionable: p7_1, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: ps2_ps2, first_conditionable: p8_1, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: ps2_ps2, first_conditionable: p1_1, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: ps2_ps2, first_conditionable: p2_1, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: ps2_ps2, first_conditionable: p9_1, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: ps2_ps2, first_conditionable: s3.answers.first, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: ps2_ps2, first_conditionable: pe7.answers.first, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: ps2_ps2, first_conditionable: pe8.answers.first, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: ps2_ps2, first_conditionable: pe1.answers.first, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: ps2_ps2, first_conditionable: pe2.answers.first, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: ps2_ps2, first_conditionable: pe9.answers.first, operator: nil, second_conditionable: nil)
 
 # DC1
-dc1_e1 = Instance.create!(instanceable: dc1, node: e1)
-dc1_p5 = Instance.create!(instanceable: dc1, node: p5)
-dc1_p6 = Instance.create!(instanceable: dc1, node: p6)
+dc1_e1 = Instance.create!(instanceable: dc1, node: d1)
+dc1_p5 = Instance.create!(instanceable: dc1, node: pe5)
+dc1_p6 = Instance.create!(instanceable: dc1, node: pe6)
 dc1_dc1 = Instance.create!(instanceable: dc1, node: dc1)
 
-Condition.create!(referenceable: dc1_p6, first_conditionable: e1_3, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: dc1_dc1, first_conditionable: p5_1, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: dc1_dc1, first_conditionable: p6_1, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: dc1_p6, first_conditionable: d1.answers.third, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: dc1_dc1, first_conditionable: pe5.answers.first, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: dc1_dc1, first_conditionable: pe6.answers.first, operator: nil, second_conditionable: nil)
 
-# DC2
-dc2_e1 = Instance.create!(instanceable: dc2, node: e1)
-dc2_p5 = Instance.create!(instanceable: dc2, node: p5)
-dc2_p6 = Instance.create!(instanceable: dc2, node: p6)
-dc2_dc2 = Instance.create!(instanceable: dc2, node: dc2)
-
-Condition.create!(referenceable: dc2_p6, first_conditionable: e1_3, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: dc2_dc2, first_conditionable: p5_2, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: dc2_dc2, first_conditionable: p6_2, operator: nil, second_conditionable: nil)
+# # DC2
+# dc2_e1 = Instance.create!(instanceable: dc2, node: d1)
+# dc2_p5 = Instance.create!(instanceable: dc2, node: pe5)
+# dc2_p6 = Instance.create!(instanceable: dc2, node: pe6)
+# dc2_dc2 = Instance.create!(instanceable: dc2, node: dc2)
+#
+# Condition.create!(referenceable: dc2_p6, first_conditionable: d1.answers.third, operator: nil, second_conditionable: nil)
+# Condition.create!(referenceable: dc2_dc2, first_conditionable: pe5.answers.second, operator: nil, second_conditionable: nil)
+# Condition.create!(referenceable: dc2_dc2, first_conditionable: pe6.answers.second, operator: nil, second_conditionable: nil)
 
 # DC3
 dc3_a2 = Instance.create!(instanceable: dc3, node: a2)
 dc3_dc3 = Instance.create!(instanceable: dc3, node: dc3)
 
-Condition.create!(referenceable: dc3_dc3, first_conditionable: a2_1, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: dc3_dc3, first_conditionable: a2.answers.first, operator: nil, second_conditionable: nil)
 
 # DC4
 dc4_a4 = Instance.create!(instanceable: dc4, node: a4)
 dc4_dc4 = Instance.create!(instanceable: dc4, node: dc4)
 
-Condition.create!(referenceable: dc4_dc4, first_conditionable: a4_1, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: dc4_dc4, first_conditionable: a4.answers.first, operator: nil, second_conditionable: nil)
 
 # C1
-c1_ps2 = Instance.create!(instanceable: c1, node: ps2)
-c1_ps6 = Instance.create!(instanceable: c1, node: ps6)
-c1_dc1 = Instance.create!(instanceable: c1, node: dc1)
-c1_dc2 = Instance.create!(instanceable: c1, node: dc2)
-c1_dc3 = Instance.create!(instanceable: c1, node: dc3)
-c1_dc4 = Instance.create!(instanceable: c1, node: dc4)
-c1_c1 = Instance.create!(instanceable: c1, node: c1)
+ps7_ps2 = Instance.create!(instanceable: ps7, node: ps2)
+ps7_ps6 = Instance.create!(instanceable: ps7, node: ps6)
+ps7_dc1 = Instance.create!(instanceable: ps7, node: dc1)
+ps7_dc2 = Instance.create!(instanceable: ps7, node: dc2)
+ps7_dc3 = Instance.create!(instanceable: ps7, node: dc3)
+ps7_dc4 = Instance.create!(instanceable: ps7, node: dc4)
+ps7_ps7 = Instance.create!(instanceable: ps7, node: ps7)
 
-Condition.create!(referenceable: c1_c1, first_conditionable: ps2_1, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: c1_c1, first_conditionable: ps6_2, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: c1_c1, first_conditionable: dc1_1, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: c1_c1, first_conditionable: dc2_1, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: c1_c1, first_conditionable: dc3_1, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: c1_c1, first_conditionable: dc4_1, operator: nil, second_conditionable: nil)
-
-# DF7
-dd5_e1 = Instance.create!(instanceable: dd5, node: e1)
-dd5_ps1 = Instance.create!(instanceable: dd5, node: ps1)
-dd5_s8 = Instance.create!(instanceable: dd5, node: s8)
-dd5_p24 = Instance.create!(instanceable: dd5, node: p24)
-dd5_a1 = Instance.create!(instanceable: dd5, node: a1)
-dd5_a3 = Instance.create!(instanceable: dd5, node: a3)
-dd5_df14 = Instance.create!(instanceable: dd5, node: df14)
-dd5_c1 = Instance.create!(instanceable: dd5, node: c1, final_diagnostic: df14)
-dd5_t2 = Instance.create!(instanceable: dd5, node: t2, final_diagnostic: df14)
-dd5_t4 = Instance.create!(instanceable: dd5, node: t4, final_diagnostic: df14)
-dd5_m2 = Instance.create!(instanceable: dd5, node: m2, final_diagnostic: df14)
-
-Condition.create!(referenceable: dd5_ps1, first_conditionable: e1_4, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: dd5_s8, first_conditionable: ps1_1, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: dd5_p24, first_conditionable: ps1_1, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: dd5_a1, first_conditionable: s8_1, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: dd5_a1, first_conditionable: p24_1, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: dd5_a3, first_conditionable: a1_2, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: dd5_df14, first_conditionable: a3_3, operator: nil, second_conditionable: nil)
-
-Condition.create!(referenceable: dd5_t2, first_conditionable: c1_1, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: dd5_m2, first_conditionable: c1_1, operator: nil, second_conditionable: nil)
-
-Condition.create!(referenceable: dd5, first_conditionable: s8_1, operator: nil, second_conditionable: nil)
-Condition.create!(referenceable: dd5, first_conditionable: p24_1, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: ps7_ps7, first_conditionable: ps2_1, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: ps7_ps7, first_conditionable: ps6_2, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: ps7_ps7, first_conditionable: dc1_1, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: ps7_ps7, first_conditionable: dc2_1, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: ps7_ps7, first_conditionable: dc3_1, operator: nil, second_conditionable: nil)
+Condition.create!(referenceable: ps7_ps7, first_conditionable: dc4_1, operator: nil, second_conditionable: nil)
