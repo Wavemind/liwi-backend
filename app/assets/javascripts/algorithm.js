@@ -12,6 +12,10 @@ jQuery(document).ready(function () {
       { "data": "nb_versions" },
       { "data": "creator" },
       { "data": "actions", "className": "text-right" },
-    ]
+    ],
+    'columnDefs': [ {
+      'targets': [4],
+      'orderable': false,
+    }]
   });
 });

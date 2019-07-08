@@ -18,7 +18,11 @@ jQuery(document).ready(function() {
       { "data": "answers" },
       { "data": "answer_type" },
       { "data": "actions", "className": "text-right" }
-    ]
+    ],
+    'columnDefs': [ {
+      'targets': [5,6,7],
+      'orderable': false,
+    }]
   });
 
   // Update the prepend every time the user pick another category
