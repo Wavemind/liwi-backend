@@ -77,10 +77,12 @@ class DiagnosticsController < ApplicationController
   # Duplicate a diagnostic with the whole logic (Instances with their Conditions and Children), the FinalDiagnostics and Conditions attached to it
   def duplicate
     diagnostic = Diagnostic.includes(components: [:conditions, :children]).find(params[:id])
+    diagnostic.update(duplicating: true)
     duplicated_diagnostic = diagnostic.amoeba_dup
 
     if duplicated_diagnostic.save
       duplicated_diagnostic.relink_instance
+      diagnostic.update(duplicating: false)
       redirect_to algorithm_version_url(@algorithm, @version), notice: t('flash_message.success_deleted')
     else
       render :new

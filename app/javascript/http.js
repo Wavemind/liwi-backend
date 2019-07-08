@@ -438,6 +438,34 @@ export default class Http {
     return await response;
   };
 
+  // @params [Integer] id, [String] reference, [String] label, [String] description, [Integer] final_diagnostic_id
+  // @return [Object] body of request
+  // Update final diagnostic node
+  updateHealthCare = async (id, reference, label, description, type) => {
+    let response;
+    const url = `${this.url}/algorithms/${this.algorithm}/${type}/${id}/update_from_diagram`;
+    const body = {
+      diagnostic_id: this.instanceableId,
+      final_diagnostic_id: this.finalDiagnostic
+    };
+    body['health_cares_' + type.substring(0, type.length-1)] = {
+      id: id,
+      reference: reference,
+      label_en: label,
+      description_en: description
+    };
+    const header = await this.setHeaders("PUT", body);
+    const request = await fetch( url, header).catch(error => console.log(error));
+
+    // Display error or parse json
+    if (request.ok) {
+      response = await request.json();
+    } else {
+      response = request;
+    }
+    return await response;
+  };
+
   // @params [Integer] id, [String] reference, [String] label, [String] description
   // @return [Object] body of request
   // Update predefined syndrome node

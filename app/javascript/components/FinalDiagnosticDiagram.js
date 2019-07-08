@@ -41,7 +41,7 @@ class FinalDiagnosticDiagram extends React.Component {
         let node = this.createNode(currentDbNode, currentDbNode.answers);
         currentDbNode.answers.map((answer) => (node.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
         model.addAll(node);
-      } else if (nextProps.modalToOpen === 'UpdateQuestionsSequence') {
+      } else if (nextProps.modalToOpen === 'UpdateQuestionsSequence' || nextProps.modalToOpen === 'UpdateHealthCare') {
         currentDiagramNode.setReference(currentDbNode.reference);
         currentDiagramNode.setNode(currentDbNode);
       } else if (nextProps.modalToOpen === 'CreateHealthCare') {

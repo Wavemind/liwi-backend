@@ -86,7 +86,7 @@ class InstancesController < ApplicationController
     instance = @instanceable.components.new(instance_params)
 
     if instance.node.is_a?(HealthCare)
-      FinalDiagnosticHealthCare.create!(final_diagnostic: FinalDiagnostic.find(instance_params[:final_diagnostic_id]), node: instance.node)
+      FinalDiagnosticHealthCare.create!(final_diagnostic: FinalDiagnostic.find(instance_params[:final_diagnostic_id]), health_care: instance.node)
     end
 
     instance.save

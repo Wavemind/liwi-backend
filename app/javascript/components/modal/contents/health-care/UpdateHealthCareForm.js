@@ -7,6 +7,7 @@ import {
   Col
 } from "react-bootstrap";
 import { withDiagram } from "../../../../context/Diagram.context";
+import * as _ from "lodash";
 
 /**
  * @author Emmanuel Barchichat
@@ -22,29 +23,44 @@ class UpdateHealthCareForm extends React.Component {
   }
 
   state = {
+    id: null,
     reference: "",
     label: "",
     description: "",
+    type: "",
     errors: {}
   };
 
-  // Update the score in DB then set score props in order to trigger listener in Diagram.js that will update diagram dynamically
-  create = async () => {
+  componentWillMount() {
+    const { currentNode } = this.props;
+    const newCurrentNode = _.cloneDeep(currentNode);
+
+    this.setState({
+      id: newCurrentNode.id,
+      reference: newCurrentNode.reference,
+      label: newCurrentNode.label_translations["en"],
+      description: newCurrentNode.description_translations === null ? '' : newCurrentNode.description_translations["en"],
+      type: newCurrentNode.type === 'HealthCares::Management' ? 'managements' : 'treatments',
+    });
+  }
+
+  update = async () => {
     const {
       toggleModal,
       http,
       addMessage,
-      set,
-      currentHealthCareType
+      set
     } = this.props;
 
     const {
+      id,
       reference,
       label,
-      description
+      description,
+      type
     } = this.state;
 
-    let result = await http.createHealthCare(currentHealthCareType, reference, label, description);
+    let result = await http.updateHealthCare(id, reference, label, description, type);
     if (result.ok === undefined || result.ok) {
       toggleModal();
       await addMessage({ status: result.status, messages: result.messages });
@@ -100,9 +116,6 @@ class UpdateHealthCareForm extends React.Component {
             <Form.Group as={Col}>
               <Form.Label>Reference</Form.Label>
               <InputGroup>
-                <InputGroup.Prepend>
-                  <InputGroup.Text id="inputGroupPrepend">{(currentHealthCareType === 'treatments') ? 'T' : 'M'}</InputGroup.Text>
-                </InputGroup.Prepend>
                 <Form.Control
                   type="text"
                   aria-describedby="inputGroupPrepend"
@@ -156,8 +169,8 @@ class UpdateHealthCareForm extends React.Component {
 
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={() => this.create()}>
-            Create
+          <Button variant="primary" onClick={() => this.update()}>
+            Update
           </Button>
           <Button variant="secondary" onClick={() => toggleModal()}>
             Close

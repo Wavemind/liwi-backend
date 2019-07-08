@@ -33,7 +33,6 @@ jQuery(document).ready(function() {
         data: {type: type},
         complete: function(response) {
           prepend.text(response.responseText);
-          console.log(response.responseText);
           if ($(questionUnavailable).hasClass("d-none") && response.responseText === "A") {
             $(questionUnavailable).removeClass("d-none");
           } else if(response.responseText !== "A") {
