@@ -7,6 +7,7 @@ import {
   Col
 } from "react-bootstrap";
 import { withDiagram } from "../../../../context/Diagram.context";
+import NodeListItem from "../../../lists/NodeList";
 
 /**
  * @author Quentin Girard
@@ -19,12 +20,17 @@ class CreateQuestionsSequenceForm extends React.Component {
     this.handleReference = this.handleReference.bind(this);
     this.handleLabel = this.handleLabel.bind(this);
     this.handleDescription = this.handleDescription.bind(this);
+    this.handleType = this.handleType.bind(this);
   }
 
   state = {
     reference: "",
     label: "",
     description: "",
+    type: "",
+    prefix: "",
+    minScore: "",
+    minScoreClass: "form-row d-none",
     errors: {}
   };
 
@@ -40,10 +46,12 @@ class CreateQuestionsSequenceForm extends React.Component {
     const {
       reference,
       label,
-      description
+      description,
+      type,
+      minScore
     } = this.state;
 
-    let result = await http.createQuestionsSequence(reference, label, description);
+    let result = await http.createQuestionsSequence(reference, label, description, type, minScore);
     if (result.ok === undefined || result.ok) {
       toggleModal();
       await addMessage({ status: result.status, messages: result.messages });
@@ -62,6 +70,26 @@ class CreateQuestionsSequenceForm extends React.Component {
   };
 
   // Set state for the input changes
+  handleType = (event) => {
+    const {questionsSequenceCategories} = this.props;
+
+    questionsSequenceCategories.map((category) => {
+      if (category.name === event.target.value) {
+        this.setState({ prefix: category.reference_prefix });
+      }
+    });
+
+    if (event.target.value === 'QuestionsSequences::Scored') {
+      this.setState({ minScoreClass: "form-row" });
+    } else {
+      this.setState({ minScoreClass: "form-row d-none" });
+      this.setState({ minScore: 0 });
+    }
+
+    this.setState({ type: event.target.value });
+  };
+
+  // Set state for the input changes
   handleReference = (event) => {
     this.setState({ reference: event.target.value });
   };
@@ -76,28 +104,52 @@ class CreateQuestionsSequenceForm extends React.Component {
     this.setState({ description: event.target.value });
   };
 
+  // Set state for the input changes
+  handleMinScore = (event) => {
+    this.setState({ minScore: event.target.value });
+  };
+
 
   render() {
-    const { toggleModal } = this.props;
+    const {
+      toggleModal,
+      questionsSequenceCategories
+    } = this.props;
     const {
       reference,
       label,
       description,
       errors,
+      minScore,
+      minScoreClass,
+      prefix
     } = this.state;
+
 
     return (
       <Form onSubmit={() => this.create()}>
-        <Modal.Header closeButton>
+        <Modal.Header>
           <Modal.Title>Create a questions sequence</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          <Form.Row>
+            <Form.Group as={Col} controlId="formGridState">
+              <Form.Label>State</Form.Label>
+              <Form.Control as="select" onChange={this.handleType}>
+                <option value="">Select a category</option>
+                {questionsSequenceCategories.map((category) => (
+                  <option value={category.name}>{category.label}</option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+          </Form.Row>
+
           <Form.Row>
             <Form.Group as={Col}>
               <Form.Label>Reference</Form.Label>
               <InputGroup>
                 <InputGroup.Prepend>
-                  <InputGroup.Text id="inputGroupPrepend">PS</InputGroup.Text>
+                  <InputGroup.Text id="inputGroupPrepend">{prefix}</InputGroup.Text>
                 </InputGroup.Prepend>
                 <Form.Control
                   type="text"
@@ -110,6 +162,22 @@ class CreateQuestionsSequenceForm extends React.Component {
                 <Form.Control.Feedback type="invalid">
                   {errors.reference}
                 </Form.Control.Feedback>
+              </InputGroup>
+            </Form.Group>
+          </Form.Row>
+
+          <Form.Row className={minScoreClass}>
+            <Form.Group as={Col}>
+              <Form.Label>Minimal score</Form.Label>
+              <InputGroup>
+                <Form.Control
+                  type="number"
+                  rows="3"
+                  name="minScore"
+                  width="100%"
+                  value={minScore}
+                  onChange={this.handleMinScore}
+                />
               </InputGroup>
             </Form.Group>
           </Form.Row>

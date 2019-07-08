@@ -119,7 +119,7 @@ class Diagnostic < ApplicationRecord
   # @return [Json]
   # Return questions in json format
   def questions_json
-    generate_questions_order.as_json(include: [conditions: { include: [first_conditionable: { methods: [:get_node] }, second_conditionable: { methods: [:get_node] }] }, node: { include: [:answers], methods: [:node_type, :category_name] }])
+    generate_questions_order.as_json(include: [conditions: { include: [first_conditionable: { methods: [:get_node] }, second_conditionable: { methods: [:get_node] }] }, node: { include: [:answers], methods: [:node_type, :category_name, :type] }])
   end
 
   # @return [Json]
@@ -131,13 +131,13 @@ class Diagnostic < ApplicationRecord
   # @return [Json]
   # Return treatments and managements in json format
   def health_cares_json
-    components.treatments.as_json(include: [node: {methods: [:node_type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}]) + components.managements.as_json(include: [node: {methods: [:node_type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}])
+    components.treatments.as_json(include: [node: {methods: [:node_type, :type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}]) + components.managements.as_json(include: [node: {methods: [:node_type, :type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}])
   end
 
   # @return [Json]
   # Return available nodes in the algorithm in json format
   def available_nodes_json
-    (version.algorithm.nodes.where.not(id: components.not_health_care_conditions.select(:node_id)).where.not('type LIKE ?', 'HealthCares::%') + final_diagnostics.where.not(id: components.select(:node_id))).as_json(methods: [:category_name, :node_type, :get_answers])
+    (version.algorithm.nodes.where.not(id: components.not_health_care_conditions.select(:node_id)).where.not('type LIKE ?', 'HealthCares::%') + final_diagnostics.where.not(id: components.select(:node_id))).as_json(methods: [:category_name, :node_type, :get_answers, :type])
   end
 
   # @return [Boolean]

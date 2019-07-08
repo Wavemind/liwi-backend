@@ -8,6 +8,7 @@ import UpdateFinalDiagnosticForm from "./contents/final-diagnostic/UpdateFinalDi
 import CreateQuestionsSequenceForm from './contents/questions-sequence/CreateQuestionsSequenceForm';
 import UpdateQuestionsSequenceForm from './contents/questions-sequence/UpdateQuestionsSequenceForm';
 import CreateHealthCareForm from './contents/health-care/CreateHealthCareForm';
+import UpdateHealthCareForm from './contents/health-care/UpdateHealthCareForm';
 
 class FormModal extends React.Component {
   constructor(props) {
@@ -56,6 +57,8 @@ class FormModal extends React.Component {
                 return <UpdateQuestionsSequenceForm toggleModal={this.toggleModal} />;
               case 'CreateHealthCare':
                 return <CreateHealthCareForm toggleModal={this.toggleModal} />;
+              case 'UpdateHealthCare':
+                return <UpdateHealthCareForm toggleModal={this.toggleModal} />;
               default:
                 return null;
             }

@@ -102,7 +102,7 @@ class UpdateFinalDiagnosticForm extends React.Component {
 
     return (
       <Form onSubmit={() => this.create()}>
-        <Modal.Header closeButton>
+        <Modal.Header>
           <Modal.Title>Update a final diagnostic</Modal.Title>
         </Modal.Header>
         <Modal.Body>

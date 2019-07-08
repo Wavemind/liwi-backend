@@ -10,26 +10,24 @@ import { withDiagram } from "../../../../context/Diagram.context";
 import * as _ from "lodash";
 
 /**
- * @author Quentin Girard
- * Modal content to create a questions sequence
+ * @author Emmanuel Barchichat
+ * Modal content to create a final diagnostic
  */
-class UpdateQuestionsSequenceForm extends React.Component {
+class UpdateHealthCareForm extends React.Component {
   constructor(props) {
     super(props);
 
     this.handleReference = this.handleReference.bind(this);
     this.handleLabel = this.handleLabel.bind(this);
     this.handleDescription = this.handleDescription.bind(this);
-    this.handleMinScore = this.handleMinScore.bind(this);
   }
 
   state = {
+    id: null,
     reference: "",
     label: "",
     description: "",
     type: "",
-    minScore: "",
-    minScoreClass: "",
     errors: {}
   };
 
@@ -41,31 +39,28 @@ class UpdateQuestionsSequenceForm extends React.Component {
       id: newCurrentNode.id,
       reference: newCurrentNode.reference,
       label: newCurrentNode.label_translations["en"],
-      type: newCurrentNode.type,
-      description: newCurrentNode.description_translations === null ? "" : newCurrentNode.description_translations["en"],
-      minScore: newCurrentNode.min_score,
-      minScoreClass: newCurrentNode.category_name === "scored" ? "form-row" : "form-row d-none",
+      description: newCurrentNode.description_translations === null ? '' : newCurrentNode.description_translations["en"],
+      type: newCurrentNode.type === 'HealthCares::Management' ? 'managements' : 'treatments',
     });
   }
 
-  // Update the score in DB then set score props in order to trigger listener in Diagram.js that will update diagram dynamically
   update = async () => {
     const {
       toggleModal,
       http,
       addMessage,
-      set,
-      currentNode
+      set
     } = this.props;
 
     const {
+      id,
       reference,
       label,
       description,
-      minScore
+      type
     } = this.state;
 
-    let result = await http.updateQuestionsSequence(currentNode.id, reference, label, description, minScore);
+    let result = await http.updateHealthCare(id, reference, label, description, type);
     if (result.ok === undefined || result.ok) {
       toggleModal();
       await addMessage({ status: result.status, messages: result.messages });
@@ -98,45 +93,25 @@ class UpdateQuestionsSequenceForm extends React.Component {
     this.setState({ description: event.target.value });
   };
 
-  // Set state for the input changes
-  handleMinScore = (event) => {
-    this.setState({ minScore: event.target.value });
-  };
-
 
   render() {
     const {
       toggleModal,
-      questionsSequenceCategories
+      currentHealthCareType
     } = this.props;
     const {
       reference,
       label,
       description,
       errors,
-      minScore,
-      type,
-      minScoreClass
     } = this.state;
 
     return (
-      <Form onSubmit={() => this.update()}>
+      <Form onSubmit={() => this.create()}>
         <Modal.Header>
-          <Modal.Title>Edit a questions sequence</Modal.Title>
+          <Modal.Title>Create a final diagnostic</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form.Row>
-            <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>State</Form.Label>
-              <Form.Control as="select" onChange={this.handleType} defaultValue={type} disabled>
-                <option value="">Select a category</option>
-                {questionsSequenceCategories.map((category) => (
-                  <option value={category.name}>{category.label}</option>
-                ))}
-              </Form.Control>
-            </Form.Group>
-          </Form.Row>
-
           <Form.Row>
             <Form.Group as={Col}>
               <Form.Label>Reference</Form.Label>
@@ -152,22 +127,6 @@ class UpdateQuestionsSequenceForm extends React.Component {
                 <Form.Control.Feedback type="invalid">
                   {errors.reference}
                 </Form.Control.Feedback>
-              </InputGroup>
-            </Form.Group>
-          </Form.Row>
-
-          <Form.Row className={minScoreClass}>
-            <Form.Group as={Col}>
-              <Form.Label>Minimal score</Form.Label>
-              <InputGroup>
-                <Form.Control
-                  type="number"
-                  rows="3"
-                  name="minScore"
-                  width="100%"
-                  value={minScore}
-                  onChange={this.handleMinScore}
-                />
               </InputGroup>
             </Form.Group>
           </Form.Row>
@@ -207,6 +166,7 @@ class UpdateQuestionsSequenceForm extends React.Component {
               </InputGroup>
             </Form.Group>
           </Form.Row>
+
         </Modal.Body>
         <Modal.Footer>
           <Button variant="primary" onClick={() => this.update()}>
@@ -221,4 +181,4 @@ class UpdateQuestionsSequenceForm extends React.Component {
   }
 }
 
-export default withDiagram(UpdateQuestionsSequenceForm);
+export default withDiagram(UpdateHealthCareForm);

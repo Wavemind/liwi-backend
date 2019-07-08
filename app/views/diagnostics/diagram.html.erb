@@ -14,6 +14,8 @@
       finalDiagnostics: @diagnostic.final_diagnostics_json,
       availableNodes: @diagnostic.available_nodes_json,
       type: 'Diagnostic',
+      questionCategories: Question.categories.as_json,
+      questionsSequenceCategories: QuestionsSequence.categories.as_json,
       readOnly: false
     }
   }) %>

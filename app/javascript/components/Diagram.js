@@ -85,6 +85,8 @@ class Diagram extends React.Component {
         model.addAll(node);
       } else if (nextProps.modalToOpen === 'UpdateQuestionsSequence') {
         currentDiagramNode.setReference(currentDbNode.reference);
+        currentDiagramNode.setMinScore(currentDbNode.min_score);
+
         currentDiagramNode.setNode(currentDbNode);
       }
       this.updateEngine(engine);

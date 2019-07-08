@@ -158,7 +158,7 @@ export default class Http {
   // @params [Integer] nodeId
   // @return [Object] body of requestc
   // Create an instance
-  createQuestionsSequence = async (reference, label, description) => {
+  createQuestionsSequence = async (reference, label, description, type, minScore) => {
     let response;
     const url = `${this.url}/algorithms/${this.algorithm}/questions_sequences/create_from_diagram`;
     const body = {
@@ -166,9 +166,12 @@ export default class Http {
         reference: reference,
         label_en: label,
         description_en: description,
+        type: type,
+        min_score: minScore
       },
       instanceable_id: this.instanceableId,
-      instanceable_type: this.instanceableType
+      instanceable_type: this.instanceableType,
+      final_diagnostic_id: this.finalDiagnostic
     };
     const header = await this.setHeaders("POST", body);
     const request = await fetch( url, header).catch(error => console.log(error));
@@ -415,10 +418,38 @@ export default class Http {
     return await response;
   };
 
+  // @params [Integer] id, [String] reference, [String] label, [String] description, [Integer] final_diagnostic_id
+  // @return [Object] body of request
+  // Update final diagnostic node
+  updateHealthCare = async (id, reference, label, description, type) => {
+    let response;
+    const url = `${this.url}/algorithms/${this.algorithm}/${type}/${id}/update_from_diagram`;
+    const body = {
+      diagnostic_id: this.instanceableId,
+      final_diagnostic_id: this.finalDiagnostic
+    };
+    body['health_cares_' + type.substring(0, type.length-1)] = {
+      id: id,
+      reference: reference,
+      label_en: label,
+      description_en: description
+    };
+    const header = await this.setHeaders("PUT", body);
+    const request = await fetch( url, header).catch(error => console.log(error));
+
+    // Display error or parse json
+    if (request.ok) {
+      response = await request.json();
+    } else {
+      response = request;
+    }
+    return await response;
+  };
+
   // @params [Integer] id, [String] reference, [String] label, [String] description
   // @return [Object] body of request
   // Update predefined syndrome node
-  updateQuestionsSequence = async (id, reference, label, description) => {
+  updateQuestionsSequence = async (id, reference, label, description, minScore) => {
     let response;
     const url = `${this.url}/algorithms/${this.algorithm}/questions_sequences/${id}/update_from_diagram`;
     const body = {
@@ -427,6 +458,7 @@ export default class Http {
         reference: reference,
         label_en: label,
         description_en: description,
+        min_score: minScore
       }
     };
     const header = await this.setHeaders("PUT", body);

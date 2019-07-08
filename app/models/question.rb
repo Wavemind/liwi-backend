@@ -32,6 +32,18 @@ class Question < Node
     I18n.t("questions.categories.#{Object.const_get(type).variable}.reference_prefix")
   end
 
+  def self.categories
+    categories = []
+    self.descendants.each do |category|
+      current_category = {}
+      current_category['label'] = category.display_label
+      current_category['name'] = category.name
+      current_category['reference_prefix'] = self.reference_prefix_class(category.name)
+      categories.push(current_category)
+    end
+    categories
+  end
+
   private
 
   # {Node#unique_reference}

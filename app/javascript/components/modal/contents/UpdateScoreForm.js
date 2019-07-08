@@ -67,7 +67,7 @@ class UpdateScoreForm extends React.Component {
     const {toggleModal} = this.props;
     return (
       <Form onSubmit={() => this.updateScore()}>
-        <Modal.Header closeButton>
+        <Modal.Header>
           <Modal.Title>Update the score</Modal.Title>
         </Modal.Header>
         <Modal.Body>
