@@ -99,7 +99,7 @@ class CreateQuestionForm extends React.Component {
         answers_attributes: {}
       }
     };
-  }
+  };
 
 
   // Set state for the input changes

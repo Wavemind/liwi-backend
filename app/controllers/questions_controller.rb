@@ -2,7 +2,7 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_algorithm, only: [:new, :create, :edit, :update, :answers, :destroy, :create_from_diagram]
   before_action :set_breadcrumb, only: [:new, :edit]
-  before_action :set_question, only: [:edit, :update, :answers, :category_reference, :update_translations, :destroy]
+  before_action :set_question, only: [:edit, :update, :answers, :category_reference, :update_translations, :destroy, :update_from_diagram]
 
   def new
     add_breadcrumb t('breadcrumbs.new')
@@ -96,6 +96,17 @@ class QuestionsController < ApplicationController
   # @return json with the reference prefix of the child
   def reference_prefix
     render json: Question.reference_prefix_class(params[:type])
+  end
+
+  # PUT
+  # @return questions_sequence node
+  # Update a questions sequence node from diagram
+  def update_from_diagram
+    if @question.update(question_params)
+      render json: {status: 'success', messages: [t('flash_message.success_updated')], node: @question.as_json(include: :answers, methods: [:category_name, :node_type, :type])}
+    else
+      render json: {status: 'danger', errors: @question.errors.messages, ok: false}
+    end
   end
 
   # @params Question with the translations

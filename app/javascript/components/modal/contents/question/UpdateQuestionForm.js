@@ -20,21 +20,27 @@ class UpdateQuestionForm extends React.Component {
     this.handleReference = this.handleReference.bind(this);
     this.handleLabel = this.handleLabel.bind(this);
     this.handleDescription = this.handleDescription.bind(this);
-    this.handleMinScore = this.handleMinScore.bind(this);
+    this.handleStage = this.handleStage.bind(this);
+    this.handlePriority = this.handlePriority.bind(this);
   }
 
   state = {
+    id: "",
     reference: "",
     label: "",
     description: "",
     type: "",
-    minScore: "",
-    minScoreClass: "",
+    stage: "",
+    priority: "",
+    answerType: "",
     errors: {}
   };
 
   componentWillMount() {
-    const { currentNode } = this.props;
+    const {
+      currentNode,
+      questionStages,
+      questionPriorities,} = this.props;
     const newCurrentNode = _.cloneDeep(currentNode);
 
     this.setState({
@@ -43,29 +49,28 @@ class UpdateQuestionForm extends React.Component {
       label: newCurrentNode.label_translations["en"],
       type: newCurrentNode.type,
       description: newCurrentNode.description_translations === null ? "" : newCurrentNode.description_translations["en"],
-      minScore: newCurrentNode.min_score,
-      minScoreClass: newCurrentNode.category_name === "scored" ? "form-row" : "form-row d-none",
+      priority: questionPriorities[newCurrentNode.priority],
+      stage: questionStages[newCurrentNode.stage],
+      answerType: newCurrentNode.answer_type_id
     });
   }
 
+  updateAnswers = async () => {
+
+  };
+
   // Update the score in DB then set score props in order to trigger listener in Diagram.js that will update diagram dynamically
-  update = async () => {
+  create = async () => {
     const {
       toggleModal,
       http,
       addMessage,
-      set,
-      currentNode
+      set
     } = this.props;
 
-    const {
-      reference,
-      label,
-      description,
-      minScore
-    } = this.state;
+    let question = this.generateQuestionBody();
 
-    let result = await http.updateQuestionsSequence(currentNode.id, reference, label, description, minScore);
+    let result = await http.createQuestion(question);
     if (result.ok === undefined || result.ok) {
       toggleModal();
       await addMessage({ status: result.status, messages: result.messages });
@@ -81,6 +86,63 @@ class UpdateQuestionForm extends React.Component {
       }
       this.setState({ errors: newErrors });
     }
+  };
+
+  // Update the score in DB then set score props in order to trigger listener in Diagram.js that will update diagram dynamically
+  update = async () => {
+    const {
+      toggleModal,
+      http,
+      addMessage,
+      set,
+      currentNode
+    } = this.props;
+
+    const { id } = this.state;
+    let question = this.generateQuestionBody();
+
+    let result = await http.updateQuestion(id, question);
+    if (result.ok === undefined || result.ok) {
+      toggleModal();
+      await addMessage({ status: result.status, messages: result.messages });
+      set("currentDbNode", result.node);
+    } else {
+      let newErrors = {};
+      if (result.errors.reference !== undefined) {
+        newErrors.reference = result.errors.reference[0];
+      }
+
+      if (result.errors.label !== undefined) {
+        newErrors.label = result.errors.label[0];
+      }
+      this.setState({ errors: newErrors });
+    }
+  };
+
+
+  generateQuestionBody = () => {
+    const {
+      reference,
+      label,
+      description,
+      type,
+      stage,
+      priority,
+      answerType
+    } = this.state;
+
+    return {
+      question: {
+        reference: reference,
+        label_en: label,
+        description_en: description,
+        type: type,
+        stage: parseInt(stage),
+        priority: parseInt(priority),
+        answer_type_id: parseInt(answerType),
+        answers_attributes: {}
+      }
+    };
   };
 
   // Set state for the input changes
@@ -99,8 +161,13 @@ class UpdateQuestionForm extends React.Component {
   };
 
   // Set state for the input changes
-  handleMinScore = (event) => {
-    this.setState({ minScore: event.target.value });
+  handleStage = (event) => {
+    this.setState({ stage: event.target.value });
+  };
+
+  // Set state for the input changes
+  handlePriority = (event) => {
+    this.setState({ priority: event.target.value });
   };
 
 
@@ -121,13 +188,12 @@ class UpdateQuestionForm extends React.Component {
       stage,
       priority,
       answerType,
-      prefix
     } = this.state;
 
     return (
       <Form onSubmit={() => this.create()}>
         <Modal.Header>
-          <Modal.Title>Create a question</Modal.Title>
+          <Modal.Title>Update this question</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form.Row>
@@ -182,9 +248,6 @@ class UpdateQuestionForm extends React.Component {
             <Form.Group as={Col}>
               <Form.Label>Reference</Form.Label>
               <InputGroup>
-                <InputGroup.Prepend>
-                  <InputGroup.Text id="inputGroupPrepend">{prefix}</InputGroup.Text>
-                </InputGroup.Prepend>
                 <Form.Control
                   type="text"
                   aria-describedby="inputGroupPrepend"
@@ -238,12 +301,12 @@ class UpdateQuestionForm extends React.Component {
 
         </Modal.Body>
         <Modal.Footer>
-          {(answerType === '1') ? (
-            <Button variant="success" onClick={() => this.create()}>
+          {(answerType === 1) ? (
+            <Button variant="success" onClick={() => this.update()}>
               Save
             </Button>
           ) : (
-            <Button variant="primary" onClick={() => this.createAnswers()}>
+            <Button variant="primary" onClick={() => this.updateAnswers()}>
               Save and create answers
             </Button>
           )}

@@ -466,6 +466,28 @@ export default class Http {
     return await response;
   };
 
+  // @params [Hash] body of the question with its answers
+  // @return [Object] body of request
+  // Update a question
+  updateQuestion = async (id, questionBody) => {
+    let response;
+    const url = `${this.url}/algorithms/${this.algorithm}/questions/${id}/update_from_diagram`;
+    questionBody['instanceable_id'] = this.instanceableId;
+    questionBody['instanceable_type'] = this.instanceableType;
+
+    const header = await this.setHeaders("PUT", questionBody);
+    const request = await fetch( url, header).catch(error => console.log(error));
+
+    // Display error or parse json
+    if (request.ok) {
+      response = await request.json();
+    } else {
+      response = request;
+    }
+    return await response;
+  };
+
+
   // @params [Integer] id, [String] reference, [String] label, [String] description
   // @return [Object] body of request
   // Update predefined syndrome node

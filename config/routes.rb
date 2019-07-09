@@ -64,6 +64,7 @@ Rails.application.routes.draw do
       end
       member do
         put 'answers'
+        put 'update_from_diagram'
         put 'update_translations'
       end
 
