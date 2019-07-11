@@ -12,8 +12,9 @@ class Answer < ApplicationRecord
 
   validates :reference, exclusion: { in: %w(0), message: I18n.t('flash_message.reserved_reference') }
   after_validation :correct_value_type
-  after_validation :unique_reference
+  after_validation :unique_reference, on: [ :create ]
   before_create :complete_reference
+  before_destroy :remove_conditions
 
   translates :label
 
@@ -48,6 +49,10 @@ class Answer < ApplicationRecord
   end
 
   private
+
+  def remove_conditions
+    Condition.where(first_conditionable: self).or(Condition.where(second_conditionable: self)).destroy_all
+  end
 
   # Ensure that the entered values are in the correct type
   def correct_value_type

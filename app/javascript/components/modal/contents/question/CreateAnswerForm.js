@@ -54,6 +54,7 @@ class CreateAnswerForm extends React.Component {
       index
     } = this.props;
     const {
+      id,
       reference,
       label,
       operator,
@@ -61,6 +62,7 @@ class CreateAnswerForm extends React.Component {
     } = this.state;
 
     let answer = {
+      id: id,
       reference: reference,
       label_en: label,
       operator: parseInt(operator),
@@ -72,6 +74,7 @@ class CreateAnswerForm extends React.Component {
   };
 
   state = {
+    id: this.props.answers[this.props.index].id,
     reference: this.props.answers[this.props.index].reference,
     label: this.props.answers[this.props.index].label_en,
     operator: this.props.answers[this.props.index].operator,

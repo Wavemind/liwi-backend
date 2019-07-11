@@ -50,8 +50,12 @@ class AnswersContainer extends React.Component {
   // Remove the selected answer
   removeAnswer = async (key) => {
     let { answerComponents, answers } = this.state;
-    console.log(answers[key])
-    answers[key] = null;
+
+    if (answers[key].id !== undefined){
+      answers[key]._destroy = true;
+    } else {
+      answers[key] = null;
+    }
     answerComponents[key] = null;
 
     await this.setState({ answers, answerComponents });
