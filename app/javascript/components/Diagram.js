@@ -94,7 +94,7 @@ class Diagram extends React.Component {
         currentDiagramNode.setReference(currentDbNode.reference);
         currentDiagramNode.setNode(currentDbNode);
       } else if (nextProps.modalToOpen === 'UpdateAnswers') {
-        // window.location.reload();
+        window.location.reload();
       }
       this.updateEngine(engine);
     }
