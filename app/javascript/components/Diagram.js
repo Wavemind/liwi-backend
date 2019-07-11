@@ -90,6 +90,11 @@ class Diagram extends React.Component {
         currentDiagramNode.setMinScore(currentDbNode.min_score);
 
         currentDiagramNode.setNode(currentDbNode);
+      } else if (nextProps.modalToOpen === 'UpdateQuestion') {
+        currentDiagramNode.setReference(currentDbNode.reference);
+        currentDiagramNode.setNode(currentDbNode);
+      } else if (nextProps.modalToOpen === 'UpdateAnswers') {
+        window.location.reload();
       }
       this.updateEngine(engine);
     }

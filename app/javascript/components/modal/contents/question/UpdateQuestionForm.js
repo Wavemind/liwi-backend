@@ -40,7 +40,8 @@ class UpdateQuestionForm extends React.Component {
     const {
       currentNode,
       questionStages,
-      questionPriorities,} = this.props;
+      questionPriorities
+    } = this.props;
     const newCurrentNode = _.cloneDeep(currentNode);
 
     this.setState({
@@ -56,36 +57,12 @@ class UpdateQuestionForm extends React.Component {
   }
 
   updateAnswers = async () => {
+    const { set } = this.props;
+    const question = this.generateQuestionBody();
 
-  };
-
-  // Update the score in DB then set score props in order to trigger listener in Diagram.js that will update diagram dynamically
-  create = async () => {
-    const {
-      toggleModal,
-      http,
-      addMessage,
-      set
-    } = this.props;
-
-    let question = this.generateQuestionBody();
-
-    let result = await http.createQuestion(question);
-    if (result.ok === undefined || result.ok) {
-      toggleModal();
-      await addMessage({ status: result.status, messages: result.messages });
-      set("currentDbNode", result.node);
-    } else {
-      let newErrors = {};
-      if (result.errors.reference !== undefined) {
-        newErrors.reference = result.errors.reference[0];
-      }
-
-      if (result.errors.label !== undefined) {
-        newErrors.label = result.errors.label[0];
-      }
-      this.setState({ errors: newErrors });
-    }
+    set('currentQuestion', question);
+    set('modalToOpen', 'UpdateAnswers');
+    set('modalIsOpen', true);
   };
 
   // Update the score in DB then set score props in order to trigger listener in Diagram.js that will update diagram dynamically
@@ -101,7 +78,7 @@ class UpdateQuestionForm extends React.Component {
     const { id } = this.state;
     let question = this.generateQuestionBody();
 
-    let result = await http.updateQuestion(id, question);
+    let result = await http.updateQuestion(question);
     if (result.ok === undefined || result.ok) {
       toggleModal();
       await addMessage({ status: result.status, messages: result.messages });
@@ -122,6 +99,7 @@ class UpdateQuestionForm extends React.Component {
 
   generateQuestionBody = () => {
     const {
+      id,
       reference,
       label,
       description,
@@ -133,6 +111,7 @@ class UpdateQuestionForm extends React.Component {
 
     return {
       question: {
+        id: id,
         reference: reference,
         label_en: label,
         description_en: description,
@@ -284,7 +263,7 @@ class UpdateQuestionForm extends React.Component {
 
           <Form.Row>
             <Form.Group as={Col}>
-              <Form.Label>Description</Form.Label>a
+              <Form.Label>Description</Form.Label>
               <InputGroup>
                 <Form.Control
                   type="text"

@@ -17,6 +17,18 @@ import CreateAnswerForm from "./CreateAnswerForm";
 class AnswersContainer extends React.Component {
   constructor(props) {
     super(props);
+
+    this.buildAnswers = this.buildAnswers.bind(this);
+  }
+
+  state = {
+    errors: {},
+    answers: {},
+    answerComponents: {}
+  };
+
+  componentWillMount() {
+    this.buildAnswers();
   }
 
   // Add a new answer to the form
@@ -38,6 +50,7 @@ class AnswersContainer extends React.Component {
   // Remove the selected answer
   removeAnswer = async (key) => {
     let { answerComponents, answers } = this.state;
+    console.log(answers[key])
     answers[key] = null;
     answerComponents[key] = null;
 
@@ -45,7 +58,7 @@ class AnswersContainer extends React.Component {
   };
 
   // Get question hash and add answers to it to finally create the whole question
-  create = async () => {
+  save = async () => {
     const {
       toggleModal,
       http,
@@ -61,7 +74,8 @@ class AnswersContainer extends React.Component {
       }
     });
 
-    let result = await http.createQuestion(currentQuestion);
+
+    let result = currentQuestion.question.id === undefined ? await http.createQuestion(currentQuestion) : await http.updateQuestion(currentQuestion);
     if (result.ok === undefined || result.ok) {
       toggleModal();
       await addMessage({ status: result.status, messages: result.messages });
@@ -79,10 +93,41 @@ class AnswersContainer extends React.Component {
     }
   };
 
-  state = {
-    errors: {},
-    answers: {0: {}},
-    answerComponents: {0: <CreateAnswerForm setAnswer={this.setAnswer} answers={{0: {}}} removeAnswer={this.removeAnswer} index={0} />}
+  buildAnswers = () => {
+    const { currentQuestion } = this.props;
+    console.log(currentQuestion);
+    if (currentQuestion.question.id === undefined) {
+      this.setState({
+        answers: {0: {}},
+        answerComponents: {0: <CreateAnswerForm setAnswer={this.setAnswer} answers={{0: {}}} removeAnswer={this.removeAnswer} index={0} />}
+      });
+    } else {
+      const { currentNode, answersOperators } = this.props;
+      let answers = {};
+      let answerComponents = {};
+      console.log(currentNode)
+      let nodeAnswers = currentNode.answers === undefined ? currentNode.get_answers : currentNode.answers;
+      // build answers
+      nodeAnswers.map((answer, index) => {
+        answers[index] = {
+          id: answer.id,
+          reference: answer.reference,
+          label_en: answer.label_translations['en'],
+          operator: answersOperators[answer.operator],
+          value: answer.value,
+          _destroy: false
+        }
+      });
+
+      for (let i = 0; i < nodeAnswers.length; i++) {
+        answerComponents[i] = <CreateAnswerForm setAnswer={this.setAnswer} answers={answers} removeAnswer={this.removeAnswer} index={i} update={true} />
+      }
+
+      this.setState({
+        answers,
+        answerComponents
+      });
+    }
   };
 
   render() {
@@ -108,7 +153,7 @@ class AnswersContainer extends React.Component {
           <Button variant="primary" onClick={() => this.newAnswer()}>
             New answer
           </Button>
-          <Button variant="success" onClick={() => this.create()}>
+          <Button variant="success" onClick={() => this.save()}>
             Validate
           </Button>
           <Button variant="secondary" onClick={() => toggleModal()}>

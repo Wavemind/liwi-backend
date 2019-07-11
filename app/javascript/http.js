@@ -469,9 +469,9 @@ export default class Http {
   // @params [Hash] body of the question with its answers
   // @return [Object] body of request
   // Update a question
-  updateQuestion = async (id, questionBody) => {
+  updateQuestion = async (questionBody) => {
     let response;
-    const url = `${this.url}/algorithms/${this.algorithm}/questions/${id}/update_from_diagram`;
+    const url = `${this.url}/algorithms/${this.algorithm}/questions/${questionBody.question.id}/update_from_diagram`;
     questionBody['instanceable_id'] = this.instanceableId;
     questionBody['instanceable_type'] = this.instanceableType;
 

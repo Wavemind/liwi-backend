@@ -85,7 +85,8 @@ class CreateAnswerForm extends React.Component {
       answersOperators,
       currentQuestion,
       removeAnswer,
-      index
+      index,
+      update
     } = this.props;
     const {
       reference,
@@ -111,22 +112,40 @@ class CreateAnswerForm extends React.Component {
           <Form.Row>
             <Form.Group as={Col}>
               <Form.Label>Reference</Form.Label>
-              <InputGroup>
-                <InputGroup.Prepend>
-                  <InputGroup.Text id="inputGroupPrepend">{prefix}</InputGroup.Text>
-                </InputGroup.Prepend>
-                <Form.Control
-                  type="text"
-                  aria-describedby="inputGroupPrepend"
-                  name="reference"
-                  value={reference}
-                  onChange={this.handleReference}
-                  isInvalid={!!errors.reference}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.reference}
-                </Form.Control.Feedback>
-              </InputGroup>
+              {(update === false) ? (
+                <InputGroup>
+                  <InputGroup.Prepend>
+                    <InputGroup.Text id="inputGroupPrepend">{prefix}</InputGroup.Text>
+                  </InputGroup.Prepend>
+                  <Form.Control
+                    type="text"
+                    aria-describedby="inputGroupPrepend"
+                    name="reference"
+                    value={reference}
+                    onChange={this.handleReference}
+                    isInvalid={!!errors.reference}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.reference}
+                  </Form.Control.Feedback>
+                </InputGroup>
+              ) : (
+                <InputGroup>
+                  <Form.Control
+                    type="text"
+                    aria-describedby="inputGroupPrepend"
+                    name="reference"
+                    value={reference}
+                    onChange={this.handleReference}
+                    isInvalid={!!errors.reference}
+                    disabled
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.reference}
+                  </Form.Control.Feedback>
+                </InputGroup>
+              )}
+
             </Form.Group>
 
             <Form.Group as={Col}>

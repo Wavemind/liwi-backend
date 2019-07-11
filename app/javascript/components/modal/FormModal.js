@@ -66,7 +66,7 @@ class FormModal extends React.Component {
                 return <CreateQuestionForm toggleModal={this.toggleModal} />;
               case 'UpdateQuestion':
                 return <UpdateQuestionForm toggleModal={this.toggleModal} />;
-              case 'CreateAnswers':
+              case 'CreateAnswers': case 'UpdateAnswers':
                 return <AnswersContainer toggleModal={this.toggleModal} />;
               default:
                 return null;
