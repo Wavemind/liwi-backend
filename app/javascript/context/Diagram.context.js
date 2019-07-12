@@ -16,7 +16,6 @@ export default class DiagramProvider extends React.Component {
     this.state = { ...this.state, ...props.value, http };
   }
 
-
   async componentWillMount() {
     await this.orderNodes();
   }
@@ -79,10 +78,19 @@ export default class DiagramProvider extends React.Component {
   };
 
 
-  // @params prop, value
+  // @params props, values
   // Set value in state from children
-  setValState = async (prop, value) => {
-    await this.setState({ [prop]: value });
+  // Accept arrays of state to change
+  setValState = async (props, values) => {
+    let stateHash = {};
+    if (Array.isArray(props)) {
+      for (let i = 0 ; i < props.length ; i++){
+        stateHash[props[i]] = values[i];
+      }
+    } else {
+      stateHash = { [props]: values }
+    }
+    await this.setState(stateHash);
   };
 
 

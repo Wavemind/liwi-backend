@@ -17,29 +17,24 @@ class Toolbar extends React.Component {
   // Button to open modal with new final diagnostic node form
   newFinalDiagnostic = () => {
     const { set } = this.props;
-    set("modalToOpen", "CreateFinalDiagnostic");
-    set("modalIsOpen", true);
+    set(["modalToOpen", "modalIsOpen"], ["CreateFinalDiagnostic", true]);
   };
 
   // Button to open modal with new predefined syndrome node form
   newQuestionsSequence = () => {
     const { set } = this.props;
-    set("modalToOpen", "CreateQuestionsSequence");
-    set("modalIsOpen", true);
+    set(["modalToOpen", "modalIsOpen"], ["CreateQuestionsSequence", true]);
   };
 
   // Button to open modal with new predefined syndrome node form
   newQuestion = () => {
     const { set } = this.props;
-    set("modalToOpen", "CreateQuestion");
-    set("modalIsOpen", true);
+    set(["modalToOpen", "modalIsOpen"], ["CreateQuestion", true]);
   };
 
   newHealthCare = (type) => {
     const { set } = this.props;
-    set("currentHealthCareType", type);
-    set("modalToOpen", "CreateHealthCare");
-    set("modalIsOpen", true);
+    set(["currentHealthCareType", "modalToOpen", "modalIsOpen"], [type, "CreateHealthCare", true]);
   };
 
   // Launch validation of diagram and display flash message
@@ -48,6 +43,7 @@ class Toolbar extends React.Component {
       http,
       addMessage,
       type,
+      instanceable
     } = this.props;
 
     let response;

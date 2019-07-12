@@ -9,6 +9,7 @@ class Answer < ApplicationRecord
 
   validates_presence_of :reference
   validates_presence_of :label_en
+  validates_presence_of :operator, if: Proc.new { self.node.is_a?(Question) && self.node.answer_type.display == 'Input' }
 
   validates :reference, exclusion: { in: %w(0), message: I18n.t('flash_message.reserved_reference') }
   after_validation :correct_value_type
@@ -48,6 +49,16 @@ class Answer < ApplicationRecord
     node.as_json(include: [:answers], methods: [:type])
   end
 
+  # {Node#unique_reference}
+  # Scoped by the current algorithm
+  def unique_reference
+    if node.answers.where(reference: reference).where.not(id: id).any?
+      errors.add(:reference, I18n.t('nodes.validation.reference_used'))
+      return false
+    end
+    true
+  end
+
   private
 
   # Remove conditions linked to the answer when it is deleted
@@ -74,15 +85,6 @@ class Answer < ApplicationRecord
       Integer(val) rescue errors.add(:value, I18n.t('answers.validation.wrong_value_type', type: node.answer_type.value))
     elsif node.answer_type.value == 'Float'
       Float(val) rescue errors.add(:value, I18n.t('answers.validation.wrong_value_type', type: node.answer_type.value))
-    end
-  end
-
-  # {Node#unique_reference}
-  # Scoped by the current algorithm
-  def unique_reference
-    if Answer.joins(node: :algorithm)
-         .where('answers.reference = ? AND algorithms.id = ?', "#{node.reference}_#{reference}", node.algorithm.id).any?
-      errors.add(:reference, I18n.t('nodes.validation.reference_used'))
     end
   end
 
