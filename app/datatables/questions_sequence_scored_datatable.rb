@@ -17,7 +17,7 @@ class QuestionsSequenceScoredDatatable < AjaxDatatablesRails::ActiveRecord
     @view_columns ||= {
       reference: { source: 'QuestionsSequence.reference' },
       label: { source: 'QuestionsSequence.label_translations' },
-      min_score: { soruce: 'QuestionsSequence.min_score' },
+      min_score: { source: 'QuestionsSequence.min_score' },
       description: { source: 'QuestionsSequence.description_translations' },
     }
   end

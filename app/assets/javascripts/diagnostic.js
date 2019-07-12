@@ -11,7 +11,11 @@ jQuery(document).ready(function () {
       {"data": "label"},
       {"data": "last_update"},
       {"data": "actions", "className": "text-right"},
-    ]
+    ],
+    'columnDefs': [ {
+      'targets': [3],
+      'orderable': false,
+    }]
   });
 });
 

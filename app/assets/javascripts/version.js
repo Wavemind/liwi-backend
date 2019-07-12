@@ -11,6 +11,10 @@ jQuery(document).ready(function () {
       { "data": "last_update" },
       { "data": "creator" },
       { "data": "actions", "className": "text-right" },
-    ]
+    ],
+    'columnDefs': [ {
+      'targets': [3],
+      'orderable': false,
+    }]
   });
 });

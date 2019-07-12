@@ -12,7 +12,11 @@ jQuery(document).ready(function () {
       { "data": "label" },
       { "data": "description" },
       { "data": "actions", "className": "text-right" },
-    ]
+    ],
+    'columnDefs': [ {
+      'targets': [4],
+      'orderable': false,
+    }]
   });
 
   $("#questions_sequences_scored-datatable").dataTable({
@@ -28,7 +32,11 @@ jQuery(document).ready(function () {
       { "data": "min_score" },
       { "data": "description" },
       { "data": "actions", "className": "text-right" },
-    ]
+    ],
+    'columnDefs': [ {
+      'targets': [4],
+      'orderable': false,
+    }]
   });
 
   // Update the prepend every time the user pick another category
