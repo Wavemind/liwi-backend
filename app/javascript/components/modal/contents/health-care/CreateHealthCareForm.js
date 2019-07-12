@@ -10,15 +10,11 @@ import { withDiagram } from "../../../../context/Diagram.context";
 
 /**
  * @author Emmanuel Barchichat
- * Modal content to create a final diagnostic
+ * Modal content to create an health cares
  */
 class CreateHealthCareForm extends React.Component {
   constructor(props) {
     super(props);
-
-    this.handleReference = this.handleReference.bind(this);
-    this.handleLabel = this.handleLabel.bind(this);
-    this.handleDescription = this.handleDescription.bind(this);
   }
 
   state = {
@@ -62,21 +58,12 @@ class CreateHealthCareForm extends React.Component {
     }
   };
 
-  // Set state for the input changes
-  handleReference = (event) => {
-    this.setState({ reference: event.target.value });
+  // Set value of inputs in state
+  updateState = (event) => {
+    const key = event.target.name;
+    const value = event.target.value;
+    this.setState({ [key]: value });
   };
-
-  // Set state for the input changes
-  handleLabel = (event) => {
-    this.setState({ label: event.target.value });
-  };
-
-  // Set state for the input changes
-  handleDescription = (event) => {
-    this.setState({ description: event.target.value });
-  };
-
 
   render() {
     const {
@@ -91,9 +78,9 @@ class CreateHealthCareForm extends React.Component {
     } = this.state;
 
     return (
-      <Form onSubmit={() => this.create()}>
+      <Form onSubmit={this.create}>
         <Modal.Header>
-          <Modal.Title>Create a final diagnostic</Modal.Title>
+          <Modal.Title>Create an health cares</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form.Row>
@@ -108,7 +95,7 @@ class CreateHealthCareForm extends React.Component {
                   aria-describedby="inputGroupPrepend"
                   name="reference"
                   value={reference}
-                  onChange={this.handleReference}
+                  onChange={this.updateState}
                   isInvalid={!!errors.reference}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -127,7 +114,7 @@ class CreateHealthCareForm extends React.Component {
                   aria-describedby="inputGroupPrepend"
                   name="label"
                   value={label}
-                  onChange={this.handleLabel}
+                  onChange={this.updateState}
                   isInvalid={!!errors.label}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -148,7 +135,7 @@ class CreateHealthCareForm extends React.Component {
                   name="description"
                   width="100%"
                   value={description}
-                  onChange={this.handleDescription}
+                  onChange={this.updateState}
                 />
               </InputGroup>
             </Form.Group>
@@ -156,10 +143,10 @@ class CreateHealthCareForm extends React.Component {
 
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={() => this.create()}>
+          <Button variant="primary" onClick={this.create}>
             Create
           </Button>
-          <Button variant="secondary" onClick={() => toggleModal()}>
+          <Button variant="secondary" onClick={toggleModal}>
             Close
           </Button>
         </Modal.Footer>

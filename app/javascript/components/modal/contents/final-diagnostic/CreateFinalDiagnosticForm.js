@@ -74,7 +74,7 @@ class CreateFinalDiagnosticForm extends React.Component {
     } = this.state;
 
     return (
-      <Form onSubmit={() => this.create()}>
+      <Form onSubmit={this.create}>
         <Modal.Header>
           <Modal.Title>Create a final diagnostic</Modal.Title>
         </Modal.Header>
