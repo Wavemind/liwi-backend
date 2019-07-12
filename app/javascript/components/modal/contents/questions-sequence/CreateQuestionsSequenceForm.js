@@ -7,20 +7,14 @@ import {
   Col
 } from "react-bootstrap";
 import { withDiagram } from "../../../../context/Diagram.context";
-import NodeListItem from "../../../lists/NodeList";
 
 /**
  * @author Quentin Girard
- * Modal content to create a predefined syndrome
+ * Modal content to create a question sequence
  */
 class CreateQuestionsSequenceForm extends React.Component {
   constructor(props) {
     super(props);
-
-    this.handleReference = this.handleReference.bind(this);
-    this.handleLabel = this.handleLabel.bind(this);
-    this.handleDescription = this.handleDescription.bind(this);
-    this.handleType = this.handleType.bind(this);
   }
 
   state = {
@@ -69,44 +63,39 @@ class CreateQuestionsSequenceForm extends React.Component {
     }
   };
 
-  // Set state for the input changes
+  // Add score input if type is QuestionsSequences::Scored
   handleType = (event) => {
-    const {questionsSequenceCategories} = this.props;
+    const { questionsSequenceCategories } = this.props;
+    let prefix = "";
+    let minScoreClass = "";
+    let minScore = "";
 
     questionsSequenceCategories.map((category) => {
       if (category.name === event.target.value) {
-        this.setState({ prefix: category.reference_prefix });
+        prefix = category.reference_prefix;
       }
     });
 
-    if (event.target.value === 'QuestionsSequences::Scored') {
-      this.setState({ minScoreClass: "form-row" });
+    if (event.target.value === "QuestionsSequences::Scored") {
+      minScoreClass = "form-row";
     } else {
-      this.setState({ minScoreClass: "form-row d-none" });
-      this.setState({ minScore: 0 });
+      minScoreClass = "form-row d-none";
+      minScore = 0;
     }
 
-    this.setState({ type: event.target.value });
+    this.setState({
+      type: event.target.value,
+      prefix,
+      minScoreClass,
+      minScore,
+    });
   };
 
-  // Set state for the input changes
-  handleReference = (event) => {
-    this.setState({ reference: event.target.value });
-  };
-
-  // Set state for the input changes
-  handleLabel = (event) => {
-    this.setState({ label: event.target.value });
-  };
-
-  // Set state for the input changes
-  handleDescription = (event) => {
-    this.setState({ description: event.target.value });
-  };
-
-  // Set state for the input changes
-  handleMinScore = (event) => {
-    this.setState({ minScore: event.target.value });
+  // Set value of inputs in state
+  updateState = (event) => {
+    const key = event.target.name;
+    const value = event.target.value;
+    this.setState({ [key]: value });
   };
 
 
@@ -127,7 +116,7 @@ class CreateQuestionsSequenceForm extends React.Component {
 
 
     return (
-      <Form onSubmit={() => this.create()}>
+      <Form onSubmit={this.create}>
         <Modal.Header>
           <Modal.Title>Create a questions sequence</Modal.Title>
         </Modal.Header>
@@ -135,7 +124,9 @@ class CreateQuestionsSequenceForm extends React.Component {
           <Form.Row>
             <Form.Group as={Col} controlId="formGridState">
               <Form.Label>State</Form.Label>
-              <Form.Control as="select" onChange={this.handleType}>
+              <Form.Control
+                as="select"
+                onChange={this.handleType}>
                 <option value="">Select a category</option>
                 {questionsSequenceCategories.map((category) => (
                   <option value={category.name}>{category.label}</option>
@@ -156,7 +147,7 @@ class CreateQuestionsSequenceForm extends React.Component {
                   aria-describedby="inputGroupPrepend"
                   name="reference"
                   value={reference}
-                  onChange={this.handleReference}
+                  onChange={this.updateState}
                   isInvalid={!!errors.reference}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -176,7 +167,7 @@ class CreateQuestionsSequenceForm extends React.Component {
                   name="minScore"
                   width="100%"
                   value={minScore}
-                  onChange={this.handleMinScore}
+                  onChange={this.updateState}
                 />
               </InputGroup>
             </Form.Group>
@@ -191,7 +182,7 @@ class CreateQuestionsSequenceForm extends React.Component {
                   aria-describedby="inputGroupPrepend"
                   name="label"
                   value={label}
-                  onChange={this.handleLabel}
+                  onChange={this.updateState}
                   isInvalid={!!errors.label}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -212,7 +203,7 @@ class CreateQuestionsSequenceForm extends React.Component {
                   name="description"
                   width="100%"
                   value={description}
-                  onChange={this.handleDescription}
+                  onChange={this.updateState}
                 />
               </InputGroup>
             </Form.Group>
@@ -220,10 +211,10 @@ class CreateQuestionsSequenceForm extends React.Component {
 
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={() => this.create()}>
+          <Button variant="primary" onClick={this.create}>
             Create
           </Button>
-          <Button variant="secondary" onClick={() => toggleModal()}>
+          <Button variant="secondary" onClick={toggleModal}>
             Close
           </Button>
         </Modal.Footer>
