@@ -13,7 +13,7 @@ class Question < Node
 
   validates_presence_of :priority
 
-  accepts_nested_attributes_for :answers, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :answers, allow_destroy: true
 
   # Preload the children of class Question
   def self.descendants
@@ -43,6 +43,15 @@ class Question < Node
       categories.push(current_category)
     end
     categories
+  end
+
+  # After all answers have been created, ensure that they does not share the same reference
+  def validate_answers_references
+    valid = true
+    answers.map do |answer|
+      valid = false unless answer.unique_reference
+    end
+    valid
   end
 
   private

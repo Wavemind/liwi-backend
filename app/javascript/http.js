@@ -533,6 +533,26 @@ export default class Http {
    return await response;
   };
 
+  // @params [Hash] body of the question
+  // @return [Object] body of request
+  // Validate the question itself
+  validateQuestion = async (questionBody) => {
+    let response;
+    const url = `${this.url}/algorithms/${this.algorithm}/questions/validate`;
+    questionBody['instanceable_id'] = this.instanceableId;
+    questionBody['instanceable_type'] = this.instanceableType;
+
+    const header = await this.setHeaders("POST", questionBody);
+    const request = await fetch( url, header).catch(error => console.log(error));
+
+    // Display error or parse json
+    if (request.ok) {
+      response = await request.json();
+    } else {
+      response = request;
+    }
+    return await response;
+  };
 
   // @return [Object] flash message
   // Validate predefined syndrome scored

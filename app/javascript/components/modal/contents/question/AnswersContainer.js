@@ -36,7 +36,7 @@ class AnswersContainer extends React.Component {
     let { answerComponents, answers } = this.state;
     let lastIndex = parseInt(Object.keys(answers)[Object.keys(answers).length-1]) + 1;
     answers[lastIndex] = {};
-    answerComponents[lastIndex] = <CreateAnswerForm setAnswer={this.setAnswer} removeAnswer={this.removeAnswer} answers={answers} index={lastIndex} />;
+    answerComponents[lastIndex] = <CreateAnswerForm setAnswer={this.setAnswer} removeAnswer={this.removeAnswer} answers={answers} index={lastIndex} errors={{}} />;
     this.setState({ answerComponents, answers });
   };
 
@@ -70,7 +70,7 @@ class AnswersContainer extends React.Component {
       set,
       currentQuestion
     } = this.props;
-    const { answers } = this.state;
+    let { answers, answerComponents } = this.state;
 
     Object.keys(answers).map(function(key) {
       if (answers[key] !== null){
@@ -78,13 +78,21 @@ class AnswersContainer extends React.Component {
       }
     });
 
-
     let result = currentQuestion.question.id === undefined ? await http.createQuestion(currentQuestion) : await http.updateQuestion(currentQuestion);
     if (result.ok === undefined || result.ok) {
       toggleModal();
       await addMessage({ status: result.status, messages: result.messages });
       set("currentDbNode", result.node);
     } else {
+
+      let i = 0;
+      Object.keys(answerComponents).map(function(key) {
+        answerComponents[key] =  React.cloneElement(answerComponents[key], {
+          errors: result.errors[i]
+        });
+        i++;
+      });
+
       let newErrors = {};
       if (result.errors.reference !== undefined) {
         newErrors.reference = result.errors.reference[0];
@@ -93,7 +101,7 @@ class AnswersContainer extends React.Component {
       if (result.errors.label !== undefined) {
         newErrors.label = result.errors.label[0];
       }
-      this.setState({ errors: newErrors });
+      this.setState({ errors: newErrors, answerComponents });
     }
   };
 
@@ -104,7 +112,7 @@ class AnswersContainer extends React.Component {
     if (currentQuestion.question.id === undefined) {
       this.setState({
         answers: {0: {}},
-        answerComponents: {0: <CreateAnswerForm setAnswer={this.setAnswer} answers={this.state.answers} removeAnswer={this.removeAnswer} index={0} />}
+        answerComponents: {0: <CreateAnswerForm setAnswer={this.setAnswer} answers={{0: {}}} removeAnswer={this.removeAnswer} index={0} errors={{}} />}
       });
       // If this is a question updating, set answers form and answers hash
     } else {
@@ -125,7 +133,7 @@ class AnswersContainer extends React.Component {
       });
 
       for (let i = 0; i < nodeAnswers.length; i++) {
-        answerComponents[i] = <CreateAnswerForm setAnswer={this.setAnswer} answers={answers} removeAnswer={this.removeAnswer} index={i} update={true} />
+        answerComponents[i] = <CreateAnswerForm setAnswer={this.setAnswer} answers={answers} removeAnswer={this.removeAnswer} index={i} errors={{}} update={true} />
       }
 
       this.setState({
@@ -150,7 +158,7 @@ class AnswersContainer extends React.Component {
           <Modal.Title>Create answers</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {Object.keys(answerComponents).map(function(key) {
+          {Object.keys(answerComponents).map((key) => {
             return <React.Fragment> { answerComponents[key] }</React.Fragment>
           })}
         </Modal.Body>

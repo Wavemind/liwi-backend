@@ -16,12 +16,6 @@ import * as _ from "lodash";
 class UpdateQuestionForm extends React.Component {
   constructor(props) {
     super(props);
-
-    this.handleReference = this.handleReference.bind(this);
-    this.handleLabel = this.handleLabel.bind(this);
-    this.handleDescription = this.handleDescription.bind(this);
-    this.handleStage = this.handleStage.bind(this);
-    this.handlePriority = this.handlePriority.bind(this);
   }
 
   state = {
@@ -60,9 +54,10 @@ class UpdateQuestionForm extends React.Component {
     const { set } = this.props;
     const question = this.generateQuestionBody();
 
-    set('currentQuestion', question);
-    set('modalToOpen', 'UpdateAnswers');
-    set('modalIsOpen', true);
+    set(
+      ['currentQuestion', 'modalToOpen', 'modalIsOpen'],
+      [question, 'UpdateAnswers', true]
+    );
   };
 
   // Update the score in DB then set score props in order to trigger listener in Diagram.js that will update diagram dynamically
@@ -96,7 +91,7 @@ class UpdateQuestionForm extends React.Component {
     }
   };
 
-
+  // Generate the body of the question
   generateQuestionBody = () => {
     const {
       id,
@@ -124,29 +119,14 @@ class UpdateQuestionForm extends React.Component {
     };
   };
 
-  // Set state for the input changes
-  handleReference = (event) => {
-    this.setState({ reference: event.target.value });
-  };
+  // Handle change of inputs in the form
+  handleFormChange = (event) => {
+    const value = event.target.value;
+    const name = event.target.name;
 
-  // Set state for the input changes
-  handleLabel = (event) => {
-    this.setState({ label: event.target.value });
-  };
-
-  // Set state for the input changes
-  handleDescription = (event) => {
-    this.setState({ description: event.target.value });
-  };
-
-  // Set state for the input changes
-  handleStage = (event) => {
-    this.setState({ stage: event.target.value });
-  };
-
-  // Set state for the input changes
-  handlePriority = (event) => {
-    this.setState({ priority: event.target.value });
+    this.setState({
+      [name]: value
+    });
   };
 
 
@@ -178,7 +158,7 @@ class UpdateQuestionForm extends React.Component {
           <Form.Row>
             <Form.Group as={Col} controlId="formGridState">
               <Form.Label>Category</Form.Label>
-              <Form.Control as="select" onChange={this.handleType} defaultValue={type} disabled>
+              <Form.Control as="select" defaultValue={type} disabled>
                 <option value="">Select a category</option>
                 {questionCategories.map((category) => (
                   <option value={category.name}>{category.label}</option>
@@ -190,7 +170,7 @@ class UpdateQuestionForm extends React.Component {
           <Form.Row>
             <Form.Group as={Col} controlId="formGridState">
               <Form.Label>Answer type</Form.Label>
-              <Form.Control as="select" onChange={this.handleAnswerType} defaultValue={answerType} disabled>
+              <Form.Control as="select" defaultValue={answerType} disabled>
                 <option value="">Select a category</option>
                 {questionAnswerTypes.map((answerType) => (
                   <option value={answerType.id}>{answerType.display_name}</option>
@@ -202,7 +182,7 @@ class UpdateQuestionForm extends React.Component {
           <Form.Row>
             <Form.Group as={Col} controlId="formGridState">
               <Form.Label>Stage</Form.Label>
-              <Form.Control as="select" onChange={this.handleStage} defaultValue={stage}>
+              <Form.Control as="select" name="stage" onChange={this.handleFormChange} defaultValue={stage}>
                 <option value="">Select a category</option>
                 {Object.keys(questionStages).map(function(key) {
                   return <option value={questionStages[key]}>{key.charAt(0).toUpperCase() + key.slice(1)}</option>;
@@ -214,7 +194,7 @@ class UpdateQuestionForm extends React.Component {
           <Form.Row>
             <Form.Group as={Col} controlId="formGridState">
               <Form.Label>Priority</Form.Label>
-              <Form.Control as="select" onChange={this.handlePriority} defaultValue={priority}>
+              <Form.Control as="select" name="priority" onChange={this.handleFormChange} defaultValue={priority}>
                 <option value="">Select a category</option>
                 {Object.keys(questionPriorities).map(function(key) {
                   return <option value={questionPriorities[key]}>{key.charAt(0).toUpperCase() + key.slice(1)}</option>;
@@ -232,7 +212,7 @@ class UpdateQuestionForm extends React.Component {
                   aria-describedby="inputGroupPrepend"
                   name="reference"
                   value={reference}
-                  onChange={this.handleReference}
+                  onChange={this.handleFormChange}
                   isInvalid={!!errors.reference}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -251,7 +231,7 @@ class UpdateQuestionForm extends React.Component {
                   aria-describedby="inputGroupPrepend"
                   name="label"
                   value={label}
-                  onChange={this.handleLabel}
+                  onChange={this.handleFormChange}
                   isInvalid={!!errors.label}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -272,7 +252,7 @@ class UpdateQuestionForm extends React.Component {
                   name="description"
                   width="100%"
                   value={description}
-                  onChange={this.handleDescription}
+                  onChange={this.handleFormChange}
                 />
               </InputGroup>
             </Form.Group>

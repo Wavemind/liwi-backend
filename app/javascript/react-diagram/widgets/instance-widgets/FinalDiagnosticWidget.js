@@ -19,10 +19,10 @@ class FinalDiagnosticWidget extends React.Component {
     diagramNode.setSelected(false);
 
     const { set } = this.props;
-    set('modalToOpen', 'UpdateFinalDiagnostic');
-    set('currentNode', diagramNode.node);
-    set('currentDiagramNode', diagramNode);
-    set('modalIsOpen', true);
+    set(
+      ['modalToOpen', 'currentNode', 'currentDiagramNode', 'modalIsOpen'],
+      ['UpdateFinalDiagnostic', diagramNode.node, diagramNode, true]
+    );
   };
 
   render() {

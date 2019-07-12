@@ -61,6 +61,7 @@ Rails.application.routes.draw do
     resources :questions, only: [:new, :create, :edit, :update, :destroy] do
       collection do
         post 'create_from_diagram'
+        post 'validate'
       end
       member do
         put 'answers'

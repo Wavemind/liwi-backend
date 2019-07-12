@@ -285,11 +285,11 @@ class Diagram extends React.Component {
                 let answerId = eventModel.link.sourcePort.dbId;
                 if (eventModel.link.targetPort.in) {
                   if (type === "QuestionsSequence" && instanceable.category_name === 'scored') { // Check if it is a diagram PSS
-                    set('currentNode', node);
-                    set('currentAnswerId', answerId);
-                    set('currentLinkId', eventModel.link.id);
-                    set('modalToOpen', 'InsertScore');
-                    set('modalIsOpen', true)
+
+                    set(
+                      ['currentNode', 'currentAnswerId', 'currentLinkId', 'modalToOpen', 'modalIsOpen'],
+                      [node, answerId, eventModel.link.id, 'InsertScore', true]
+                    );
                   } else {
                     // Create link in DB
                     http.createLink(node.id, answerId).then((response) => {

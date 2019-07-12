@@ -16,70 +16,23 @@ import NodeListItem from "../../../lists/NodeList";
 class CreateAnswerForm extends React.Component {
   constructor(props) {
     super(props);
-
-    this.handleLabel = this.handleLabel.bind(this);
-    this.handleReference = this.handleReference.bind(this);
-    this.handleOperator = this.handleOperator.bind(this);
-    this.handleValue = this.handleValue.bind(this);
   }
 
-  // Set state for the input changes
-  handleOperator = async (event) => {
-    await this.setState({ operator: event.target.value });
-    this.pushAnswer();
-  };
-
-  // Set state for the input changes
-  handleValue = async (event) => {
-    await this.setState({ value: event.target.value });
-    this.pushAnswer();
-  };
-
-  // Set state for the input changes
-  handleLabel = async (event) => {
-    await this.setState({ label: event.target.value });
-    this.pushAnswer();
-  };
-
-  // Set state for the input changes
-  handleReference = async (event) => {
-    await this.setState({ reference: event.target.value });
-    this.pushAnswer();
-  };
-
   // Push the answer object to the container
-  pushAnswer = () => {
+  handleFormChange = () => {
+    const value = event.target.value;
+    const name = event.target.name;
+
     const {
       setAnswer,
+      answers,
       index
     } = this.props;
-    const {
-      id,
-      reference,
-      label,
-      operator,
-      value
-    } = this.state;
 
-    let answer = {
-      id: id,
-      reference: reference,
-      label_en: label,
-      operator: parseInt(operator),
-      value: value,
-      _destroy: false
-    };
+    let answer = answers[index];
+    answer[name] = name === "operator" ? parseInt(value) : value;
 
     setAnswer(index, answer);
-  };
-
-  state = {
-    id: this.props.answers[this.props.index].id,
-    reference: this.props.answers[this.props.index].reference,
-    label: this.props.answers[this.props.index].label_en,
-    operator: this.props.answers[this.props.index].operator,
-    value: this.props.answers[this.props.index].value,
-    errors: {}
   };
 
   render() {
@@ -89,15 +42,16 @@ class CreateAnswerForm extends React.Component {
       currentQuestion,
       removeAnswer,
       index,
-      update
+      answers,
+      update,
+      errors
     } = this.props;
     const {
       reference,
       label,
       operator,
       value,
-      errors,
-    } = this.state;
+    } = answers[index];
 
     let prefix = '';
 
@@ -115,7 +69,22 @@ class CreateAnswerForm extends React.Component {
           <Form.Row>
             <Form.Group as={Col}>
               <Form.Label>Reference</Form.Label>
-              {(update === false) ? (
+              {(update === true) ? (
+                <InputGroup>
+                  <Form.Control
+                    type="text"
+                    aria-describedby="inputGroupPrepend"
+                    name="reference"
+                    value={reference}
+                    onChange={this.handleFormChange}
+                    isInvalid={!!errors.reference}
+                    disabled
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.reference}
+                  </Form.Control.Feedback>
+                </InputGroup>
+              ) : (
                 <InputGroup>
                   <InputGroup.Prepend>
                     <InputGroup.Text id="inputGroupPrepend">{prefix}</InputGroup.Text>
@@ -125,23 +94,8 @@ class CreateAnswerForm extends React.Component {
                     aria-describedby="inputGroupPrepend"
                     name="reference"
                     value={reference}
-                    onChange={this.handleReference}
+                    onChange={this.handleFormChange}
                     isInvalid={!!errors.reference}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.reference}
-                  </Form.Control.Feedback>
-                </InputGroup>
-              ) : (
-                <InputGroup>
-                  <Form.Control
-                    type="text"
-                    aria-describedby="inputGroupPrepend"
-                    name="reference"
-                    value={reference}
-                    onChange={this.handleReference}
-                    isInvalid={!!errors.reference}
-                    disabled
                   />
                   <Form.Control.Feedback type="invalid">
                     {errors.reference}
@@ -157,13 +111,13 @@ class CreateAnswerForm extends React.Component {
                 <Form.Control
                   type="text"
                   aria-describedby="inputGroupPrepend"
-                  name="label"
+                  name="label_en"
                   value={label}
-                  onChange={this.handleLabel}
-                  isInvalid={!!errors.label}
+                  onChange={this.handleFormChange}
+                  isInvalid={!!errors.label_en}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {errors.label}
+                  {errors.label_en}
                 </Form.Control.Feedback>
               </InputGroup>
             </Form.Group>
@@ -172,12 +126,15 @@ class CreateAnswerForm extends React.Component {
           <Form.Row>
             <Form.Group as={Col} controlId="formGridState">
               <Form.Label>Operator</Form.Label>
-              <Form.Control as="select" onChange={this.handleOperator} defaultValue={operator}>
+              <Form.Control as="select" name="operator" onChange={this.handleFormChange} defaultValue={operator} isInvalid={!!errors.operator}>
                 <option value="">Select a category</option>
                 {Object.keys(answersOperators).map(function(key) {
                   return <option value={answersOperators[key]}>{key}</option>;
                 })}
               </Form.Control>
+              <Form.Control.Feedback type="invalid">
+                {errors.operator}
+              </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group as={Col}>
@@ -186,11 +143,15 @@ class CreateAnswerForm extends React.Component {
                 <Form.Control
                   type="text"
                   rows="3"
-                  name="description"
+                  name="value"
                   width="100%"
                   value={value}
-                  onChange={this.handleValue}
+                  onChange={this.handleFormChange}
+                  isInvalid={!!errors.value}
                 />
+                <Form.Control.Feedback type="invalid">
+                  {errors.value}
+                </Form.Control.Feedback>
               </InputGroup>
             </Form.Group>
 

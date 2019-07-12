@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:new, :create, :edit, :update, :answers, :destroy, :create_from_diagram]
+  before_action :set_algorithm, only: [:new, :create, :edit, :update, :answers, :destroy, :create_from_diagram, :validate]
   before_action :set_breadcrumb, only: [:new, :edit]
   before_action :set_question, only: [:edit, :update, :answers, :category_reference, :update_translations, :destroy, :update_from_diagram]
 
@@ -81,13 +81,17 @@ class QuestionsController < ApplicationController
   # @return  node
   # Create a question node from diagram and instance it
   def create_from_diagram
-    question = @algorithm.questions.new(question_params).becomes(Object.const_get(question_params[:type]))
-    if question.save
-      question.update(question_params.except(:reference)) # in order to add answers after creation (which can't be done if the question has no id)
-      Object.const_get(params[:instanceable_type].camelize.singularize).find(params[:instanceable_id]).components.create!(node: question, final_diagnostic_id: params[:final_diagnostic_id])
-      render json: {status: 'success', messages: [t('flash_message.success_created')], node: question.as_json(include: :answers, methods: [:node_type, :category_name, :type])}
-    else
-      render json: {status: 'danger', errors: question.errors.messages, ok: false}
+    ActiveRecord::Base.transaction(requires_new: true) do
+      question = @algorithm.questions.new(question_params).becomes(Object.const_get(question_params[:type]))
+      # in order to add answers after creation (which can't be done if the question has no id), we also remove reference from params so it will not fail validation
+      if question.save && question.update(question_params.except(:reference)) && question.validate_answers_references
+        instanceable = Object.const_get(params[:instanceable_type].camelize.singularize).find(params[:instanceable_id])
+        instanceable.components.create!(node: question, final_diagnostic_id: params[:final_diagnostic_id])
+        render json: {status: 'success', messages: [t('flash_message.success_created')], node: question.as_json(include: :answers, methods: [:node_type, :category_name, :type])}
+      else
+        render json: {status: 'danger', errors: question.answers.map(&:errors).map(&:messages), ok: false}
+        raise ActiveRecord::Rollback, 'non'
+      end
     end
   end
 
@@ -106,6 +110,18 @@ class QuestionsController < ApplicationController
       render json: {status: 'success', messages: [t('flash_message.success_updated')], node: @question.as_json(include: :answers, methods: [:category_name, :node_type, :type])}
     else
       render json: {status: 'danger', errors: @question.errors.messages, ok: false}
+    end
+  end
+
+  # GET algorithm/:algorithm_id/questions/validate
+  # @params Question
+  # @return errors messages if question is not valid
+  def validate
+    question = @algorithm.questions.new(question_params)
+    if question.valid?
+      render json: {status: 'success', messages: ['valid']}
+    else
+      render json: {status: 'danger', errors: question.errors.messages, ok: false}
     end
   end
 

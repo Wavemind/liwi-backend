@@ -60,14 +60,44 @@ class CreateQuestionForm extends React.Component {
   };
 
   createAnswers = async () => {
-    const { set } = this.props;
+    const { set, http } = this.props;
     const question = this.generateQuestionBody();
 
-    set('currentQuestion', question);
-    set('modalToOpen', 'CreateAnswers');
-    set('modalIsOpen', true);
+    let result = await http.validateQuestion(question);
+    if (result.ok === undefined || result.ok) {
+      set(
+        ['currentQuestion', 'modalToOpen', 'modalIsOpen'],
+        [question, 'CreateAnswers', true]
+      );
+    } else {
+      let newErrors = {};
+
+      // TODO map answers to generate proper errors table
+      if (result.errors.reference !== undefined) {
+        newErrors.reference = result.errors.reference[0];
+      }
+
+      if (result.errors.label_en !== undefined) {
+        newErrors.label_en = result.errors.label_en[0];
+      }
+
+      if (result.errors.priority !== undefined) {
+        newErrors.priority = result.errors.priority[0];
+      }
+
+      if (result.errors.answer_type !== undefined) {
+        newErrors.answerType = result.errors.answer_type[0];
+      }
+
+      if (result.errors.type !== undefined) {
+        newErrors.category = result.errors.type[0];
+      }
+      this.setState({ errors: newErrors });
+    }
+
   };
 
+  // Generate the body of the question
   generateQuestionBody = () => {
     const {
       reference,
@@ -141,48 +171,62 @@ class CreateQuestionForm extends React.Component {
           <Form.Row>
             <Form.Group as={Col} controlId="formGridState">
               <Form.Label>Category</Form.Label>
-              <Form.Control as="select" name="type" onChange={this.handleFormChange} defaultValue={type}>
-                <option value="">Select a category</option>
+              <Form.Control as="select" name="type" onChange={this.handleFormChange} defaultValue={type} isInvalid={!!errors.category}>
+                <option value="">Select the category</option>
                 {questionCategories.map((category) => (
                   <option value={category.name}>{category.label}</option>
                 ))}
               </Form.Control>
+
+              <Form.Control.Feedback type="invalid">
+                {errors.category}
+              </Form.Control.Feedback>
             </Form.Group>
           </Form.Row>
 
           <Form.Row>
             <Form.Group as={Col} controlId="formGridState">
               <Form.Label>Answer type</Form.Label>
-              <Form.Control as="select" name="answerType" onChange={this.handleFormChange} defaultValue={answerType}>
-                <option value="">Select a category</option>
+              <Form.Control as="select" name="answerType" onChange={this.handleFormChange} defaultValue={answerType} isInvalid={!!errors.answerType }>
+                <option value="">Select the type of answers expected</option>
                 {questionAnswerTypes.map((answerType) => (
                   <option value={answerType.id}>{answerType.display_name}</option>
                 ))}
               </Form.Control>
+
+              <Form.Control.Feedback type="invalid">
+                {errors.answerType}
+              </Form.Control.Feedback>
             </Form.Group>
           </Form.Row>
 
           <Form.Row>
             <Form.Group as={Col} controlId="formGridState">
               <Form.Label>Stage</Form.Label>
-              <Form.Control as="select" name="stage" onChange={this.handleFormChange} defaultValue={stage}>
-                <option value="">Select a category</option>
+              <Form.Control as="select" name="stage" onChange={this.handleFormChange} defaultValue={stage} isInvalid={!!errors.stage }>
+                <option value="">Select the stage</option>
                 {Object.keys(questionStages).map(function(key) {
                   return <option value={questionStages[key]}>{key.charAt(0).toUpperCase() + key.slice(1)}</option>;
                 })}
               </Form.Control>
+              <Form.Control.Feedback type="invalid">
+                {errors.stage}
+              </Form.Control.Feedback>
             </Form.Group>
           </Form.Row>
 
           <Form.Row>
             <Form.Group as={Col} controlId="formGridState">
               <Form.Label>Priority</Form.Label>
-              <Form.Control as="select" name="priority" onChange={this.handleFormChange} defaultValue={priority}>
-                <option value="">Select a category</option>
+              <Form.Control as="select" name="priority" onChange={this.handleFormChange} defaultValue={priority} isInvalid={!!errors.priority }>
+                <option value="">Select the priority</option>
                 {Object.keys(questionPriorities).map(function(key) {
                   return <option value={questionPriorities[key]}>{key.charAt(0).toUpperCase() + key.slice(1)}</option>;
                 })}
               </Form.Control>
+              <Form.Control.Feedback type="invalid">
+                {errors.priority}
+              </Form.Control.Feedback>
             </Form.Group>
           </Form.Row>
 
