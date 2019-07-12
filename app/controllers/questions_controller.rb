@@ -83,6 +83,8 @@ class QuestionsController < ApplicationController
   def create_from_diagram
     ActiveRecord::Base.transaction(requires_new: true) do
       question = @algorithm.questions.new(question_params).becomes(Object.const_get(question_params[:type]))
+      question.becomes(Object.const_get(question_params[:type])) if question_params[:type].present?
+
       # in order to add answers after creation (which can't be done if the question has no id), we also remove reference from params so it will not fail validation
       if question.save && question.update(question_params.except(:reference)) && question.validate_answers_references
         instanceable = Object.const_get(params[:instanceable_type].camelize.singularize).find(params[:instanceable_id])

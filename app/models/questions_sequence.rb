@@ -5,6 +5,8 @@ class QuestionsSequence < Node
   has_many :answers, foreign_key: 'node_id', dependent: :destroy
   has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy
 
+  validates_presence_of :type
+
   scope :scored, ->() { where(type: 'QuestionsSequences::Scored') }
   scope :not_scored, ->() { where.not(type: 'QuestionsSequences::Scored') }
 

@@ -125,10 +125,10 @@ class UpdateHealthCareForm extends React.Component {
                   name="label"
                   value={label}
                   onChange={this.updateState}
-                  isInvalid={!!errors.label}
+                  isInvalid={!!errors.label_en}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {errors.label}
+                  {errors.label_en}
                 </Form.Control.Feedback>
               </InputGroup>
             </Form.Group>

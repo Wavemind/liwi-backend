@@ -79,6 +79,10 @@ class CreateQuestionForm extends React.Component {
       newErrors.label_en = result.errors.label_en[0];
     }
 
+    if (result.errors.stage !== undefined) {
+      newErrors.stage = result.errors.stage[0];
+    }
+
     if (result.errors.priority !== undefined) {
       newErrors.priority = result.errors.priority[0];
     }

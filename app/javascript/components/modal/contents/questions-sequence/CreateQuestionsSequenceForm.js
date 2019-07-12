@@ -52,12 +52,16 @@ class CreateQuestionsSequenceForm extends React.Component {
       set("currentDbNode", result.node);
     } else {
       let newErrors = {};
+      if (result.errors.type !== undefined) {
+        newErrors.type = result.errors.type[0];
+      }
+
       if (result.errors.reference !== undefined) {
         newErrors.reference = result.errors.reference[0];
       }
 
-      if (result.errors.label !== undefined) {
-        newErrors.label = result.errors.label[0];
+      if (result.errors.label_en !== undefined) {
+        newErrors.label_en = result.errors.label_en[0];
       }
       this.setState({ errors: newErrors });
     }
@@ -123,15 +127,19 @@ class CreateQuestionsSequenceForm extends React.Component {
         <Modal.Body>
           <Form.Row>
             <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>State</Form.Label>
+              <Form.Label>Category</Form.Label>
               <Form.Control
                 as="select"
-                onChange={this.handleType}>
+                onChange={this.handleType}
+                isInvalid={!!errors.type}>
                 <option value="">Select a category</option>
                 {questionsSequenceCategories.map((category) => (
                   <option value={category.name}>{category.label}</option>
                 ))}
               </Form.Control>
+              <Form.Control.Feedback type="invalid">
+                {errors.type}
+              </Form.Control.Feedback>
             </Form.Group>
           </Form.Row>
 
@@ -183,10 +191,10 @@ class CreateQuestionsSequenceForm extends React.Component {
                   name="label"
                   value={label}
                   onChange={this.updateState}
-                  isInvalid={!!errors.label}
+                  isInvalid={!!errors.label_en}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {errors.label}
+                  {errors.label_en}
                 </Form.Control.Feedback>
               </InputGroup>
             </Form.Group>

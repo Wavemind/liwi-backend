@@ -124,21 +124,23 @@ class CreateAnswerForm extends React.Component {
           </Form.Row>
 
           <Form.Row>
-            <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>Operator</Form.Label>
-              <Form.Control as="select" name="operator" onChange={this.handleFormChange} defaultValue={operator} isInvalid={!!errors.operator}>
-                <option value="">Select a category</option>
-                {Object.keys(answersOperators).map(function(key) {
-                  return <option value={answersOperators[key]}>{key}</option>;
-                })}
-              </Form.Control>
-              <Form.Control.Feedback type="invalid">
-                {errors.operator}
-              </Form.Control.Feedback>
-            </Form.Group>
+            {/*Do not ask for value and operator if it is an array*/}
+            {(currentQuestion.question.answer_type_id !== 2) ? [
+              <Form.Group as={Col} controlId="formGridState">
+                <Form.Label>Operator</Form.Label>
+                <Form.Control as="select" name="operator" onChange={this.handleFormChange} defaultValue={operator} isInvalid={!!errors.operator}>
+                  <option value="">Select a category</option>
+                  {Object.keys(answersOperators).map(function(key) {
+                    return <option value={answersOperators[key]}>{key}</option>;
+                  })}
+                </Form.Control>
+                <Form.Control.Feedback type="invalid">
+                  {errors.operator}
+                </Form.Control.Feedback>
+              </Form.Group>,
 
-            <Form.Group as={Col}>
-              <Form.Label>Value</Form.Label>
+              <Form.Group as={Col}>
+                <Form.Label>Value</Form.Label>
               <InputGroup>
                 <Form.Control
                   type="text"
@@ -153,7 +155,8 @@ class CreateAnswerForm extends React.Component {
                   {errors.value}
                 </Form.Control.Feedback>
               </InputGroup>
-            </Form.Group>
+              </Form.Group>
+            ] : null}
 
             <Form.Group as={Col}>
               <Button variant="danger" onClick={() => removeAnswer(index)}>

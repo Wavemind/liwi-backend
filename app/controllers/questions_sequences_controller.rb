@@ -66,7 +66,8 @@ class QuestionsSequencesController < ApplicationController
   # @return  node
   # Create a questions sequence node from diagram and instance it
   def create_from_diagram
-    questions_sequence = @algorithm.questions_sequences.new(questions_sequence_params).becomes(Object.const_get(questions_sequence_params[:type]))
+    questions_sequence = @algorithm.questions_sequences.new(questions_sequence_params)
+    questions_sequence.becomes(Object.const_get(questions_sequence_params[:type])) if questions_sequence_params[:type].present?
     if questions_sequence.save
       questions_sequence.components.create!(node: questions_sequence)
       Object.const_get(params[:instanceable_type].camelize.singularize).find(params[:instanceable_id]).components.create!(node: questions_sequence, final_diagnostic_id: params[:final_diagnostic_id])

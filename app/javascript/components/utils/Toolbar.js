@@ -106,11 +106,15 @@ class Toolbar extends React.Component {
           </div>
           <div className="col text-right">
             {type === "Diagnostic" || type === "QuestionsSequence" ? (
-              <button type="button" className="btn btn-transparent" onClick={this.validate}>
-                {isLoading ?
-                  <span>Loading</span> : <span>Validate</span>
-                }
-              </button>
+              (isLoading) ? (
+                <button type="button" className="btn btn-transparent">
+                  <span>Loading</span>
+                </button>
+                  ) : (
+                <button type="button" className="btn btn-transparent" onClick={this.validate}>
+                  <span>Validate</span>
+                </button>
+              )
             ) : null}
             {type === "FinalDiagnostic" ? (
               <button type="button" className="btn btn-transparent" onClick={this.redirectToDiagnostic}>

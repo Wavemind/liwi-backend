@@ -11,7 +11,7 @@ class Question < Node
   has_many :answers, foreign_key: 'node_id', dependent: :destroy
   belongs_to :answer_type
 
-  validates_presence_of :priority
+  validates_presence_of :priority, :stage
 
   accepts_nested_attributes_for :answers, allow_destroy: true
 

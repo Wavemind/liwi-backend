@@ -68,8 +68,8 @@ class UpdateFinalDiagnosticForm extends React.Component {
         newErrors.reference = result.errors.reference[0];
       }
 
-      if (result.errors.label !== undefined) {
-        newErrors.label = result.errors.label[0];
+      if (result.errors.label_en !== undefined) {
+        newErrors.label_en = result.errors.label_en[0];
       }
       this.setState({ errors: newErrors });
     }
@@ -126,10 +126,10 @@ class UpdateFinalDiagnosticForm extends React.Component {
                   name="label"
                   value={label}
                   onChange={this.updateState}
-                  isInvalid={!!errors.label}
+                  isInvalid={!!errors.label_en}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {errors.label}
+                  {errors.label_en}
                 </Form.Control.Feedback>
               </InputGroup>
             </Form.Group>
