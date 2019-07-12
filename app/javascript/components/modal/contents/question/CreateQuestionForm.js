@@ -47,15 +47,7 @@ class CreateQuestionForm extends React.Component {
       await addMessage({ status: result.status, messages: result.messages });
       set("currentDbNode", result.node);
     } else {
-      let newErrors = {};
-      if (result.errors.reference !== undefined) {
-        newErrors.reference = result.errors.reference[0];
-      }
-
-      if (result.errors.label !== undefined) {
-        newErrors.label = result.errors.label[0];
-      }
-      this.setState({ errors: newErrors });
+      this.handleErrors(result);
     }
   };
 
@@ -70,32 +62,36 @@ class CreateQuestionForm extends React.Component {
         [question, 'CreateAnswers', true]
       );
     } else {
-      let newErrors = {};
-
-      // TODO map answers to generate proper errors table
-      if (result.errors.reference !== undefined) {
-        newErrors.reference = result.errors.reference[0];
-      }
-
-      if (result.errors.label_en !== undefined) {
-        newErrors.label_en = result.errors.label_en[0];
-      }
-
-      if (result.errors.priority !== undefined) {
-        newErrors.priority = result.errors.priority[0];
-      }
-
-      if (result.errors.answer_type !== undefined) {
-        newErrors.answerType = result.errors.answer_type[0];
-      }
-
-      if (result.errors.type !== undefined) {
-        newErrors.category = result.errors.type[0];
-      }
-      this.setState({ errors: newErrors });
+      this.handleErrors(result);
     }
 
   };
+
+  handleErrors = (result) => {
+    let newErrors = {};
+
+    // TODO map answers to generate proper errors table
+    if (result.errors.reference !== undefined) {
+      newErrors.reference = result.errors.reference[0];
+    }
+
+    if (result.errors.label_en !== undefined) {
+      newErrors.label_en = result.errors.label_en[0];
+    }
+
+    if (result.errors.priority !== undefined) {
+      newErrors.priority = result.errors.priority[0];
+    }
+
+    if (result.errors.answer_type !== undefined) {
+      newErrors.answerType = result.errors.answer_type[0];
+    }
+
+    if (result.errors.type !== undefined) {
+      newErrors.category = result.errors.type[0];
+    }
+    this.setState({ errors: newErrors });
+  }
 
   // Generate the body of the question
   generateQuestionBody = () => {
