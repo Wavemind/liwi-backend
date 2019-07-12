@@ -15,7 +15,7 @@
         type: 'QuestionsSequence',
         questionAnswerTypes: AnswerType.all.as_json(methods: :display_name),
         questionStages: Question.stages.as_json,
-        questionPriorities: Question.priorities.as_json,
+        questionPriorities: Question.priorities.as_json(methods: :display_name),
         questionCategories: Question.categories.as_json,
         questionsSequenceCategories: QuestionsSequence.categories.as_json,
       }
