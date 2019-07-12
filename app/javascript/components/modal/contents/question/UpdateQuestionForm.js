@@ -10,8 +10,8 @@ import { withDiagram } from "../../../../context/Diagram.context";
 import * as _ from "lodash";
 
 /**
- * @author Quentin Girard
- * Modal content to create a questions sequence
+ * @author Emmanuel Barchichat
+ * Modal to update a question
  */
 class UpdateQuestionForm extends React.Component {
   constructor(props) {
@@ -280,6 +280,7 @@ class UpdateQuestionForm extends React.Component {
 
         </Modal.Body>
         <Modal.Footer>
+          {/*Save directly the question if it is a boolean*/}
           {(answerType === 1) ? (
             <Button variant="success" onClick={() => this.update()}>
               Save

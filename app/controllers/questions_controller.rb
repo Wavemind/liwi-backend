@@ -102,17 +102,9 @@ class QuestionsController < ApplicationController
   # @return questions_sequence node
   # Update a questions sequence node from diagram
   def update_from_diagram
-    puts '***'
-    puts question_params
-    puts '***'
     if @question.update(question_params)
       render json: {status: 'success', messages: [t('flash_message.success_updated')], node: @question.as_json(include: :answers, methods: [:category_name, :node_type, :type])}
     else
-      puts '***'
-      puts @question.errors.messages
-      puts '***'
-      puts @question.answers.errors.messages
-      puts '***'
       render json: {status: 'danger', errors: @question.errors.messages, ok: false}
     end
   end

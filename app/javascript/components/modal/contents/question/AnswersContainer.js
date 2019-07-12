@@ -11,8 +11,8 @@ import NodeListItem from "../../../lists/NodeList";
 import CreateAnswerForm from "./CreateAnswerForm";
 
 /**
- * @author Quentin Girard
- * Modal content to create a predefined syndrome
+ * @author Emmanuel Barchichat
+ * Container for the answers of a question
  */
 class AnswersContainer extends React.Component {
   constructor(props) {
@@ -97,19 +97,20 @@ class AnswersContainer extends React.Component {
     }
   };
 
+  // Build the answers hashes, empty if this is a create form or with its answers if it is an update
   buildAnswers = () => {
     const { currentQuestion } = this.props;
-    console.log(currentQuestion);
+    // If this is a question creation, set an empty hash of answers and a new form for answers
     if (currentQuestion.question.id === undefined) {
       this.setState({
         answers: {0: {}},
-        answerComponents: {0: <CreateAnswerForm setAnswer={this.setAnswer} answers={{0: {}}} removeAnswer={this.removeAnswer} index={0} />}
+        answerComponents: {0: <CreateAnswerForm setAnswer={this.setAnswer} answers={this.state.answers} removeAnswer={this.removeAnswer} index={0} />}
       });
+      // If this is a question updating, set answers form and answers hash
     } else {
       const { currentNode, answersOperators } = this.props;
       let answers = {};
       let answerComponents = {};
-      console.log(currentNode)
       let nodeAnswers = currentNode.answers === undefined ? currentNode.get_answers : currentNode.answers;
       // build answers
       nodeAnswers.map((answer, index) => {

@@ -94,6 +94,7 @@ class Diagram extends React.Component {
         currentDiagramNode.setReference(currentDbNode.reference);
         currentDiagramNode.setNode(currentDbNode);
       } else if (nextProps.modalToOpen === 'UpdateAnswers') {
+        // Refresh the page because it would be very handy to handle every updating case of the answers (adding, destroying or updating one or several) which would need a different handling
         window.location.reload();
       }
       this.updateEngine(engine);

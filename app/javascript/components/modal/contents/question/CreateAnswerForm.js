@@ -10,8 +10,8 @@ import { withDiagram } from "../../../../context/Diagram.context";
 import NodeListItem from "../../../lists/NodeList";
 
 /**
- * @author Quentin Girard
- * Modal content to create a predefined syndrome
+ * @author Emmanuel Barchichat
+ * Form of an answer
  */
 class CreateAnswerForm extends React.Component {
   constructor(props) {
