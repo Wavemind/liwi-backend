@@ -48,7 +48,7 @@ class CreateAnswerForm extends React.Component {
     } = this.props;
     const {
       reference,
-      label,
+      label_en,
       operator,
       value,
     } = answers[index];
@@ -112,7 +112,7 @@ class CreateAnswerForm extends React.Component {
                   type="text"
                   aria-describedby="inputGroupPrepend"
                   name="label_en"
-                  value={label}
+                  value={label_en}
                   onChange={this.handleFormChange}
                   isInvalid={!!errors.label_en}
                 />

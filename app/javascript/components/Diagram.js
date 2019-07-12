@@ -388,14 +388,15 @@ class Diagram extends React.Component {
       // Create regular node
       result = await http.createInstance(nodeDb.id);
       if (result.ok === undefined || result.ok) {
-        if (nodeDb.get_answers !== null) {
+        let answers = nodeDb.get_answers !== undefined ? nodeDb.get_answers : nodeDb.answers
+        if (answers !== null || answers !== undefined) {
           // Don't add an inPort for PSS node
           if (type === "QuestionsSequence" && instanceable.category_name === 'scored') { // Check if it is a diagram PSS
-            nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers, "rgb(255,255,255)", (type === nodeDb.node_type && instanceable.id === nodeDb.id));
+            nodeDiagram = this.createNode(nodeDb, answers, "rgb(255,255,255)", (type === nodeDb.node_type && instanceable.id === nodeDb.id));
           } else {
-            nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers);
+            nodeDiagram = this.createNode(nodeDb, answers);
           }
-          nodeDb.get_answers.map((answer) => (nodeDiagram.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
+          answers.map((answer) => (nodeDiagram.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
         } else {
           nodeDiagram = this.createNode(nodeDb);
         }
