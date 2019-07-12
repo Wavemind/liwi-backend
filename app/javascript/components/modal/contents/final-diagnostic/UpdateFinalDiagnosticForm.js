@@ -75,21 +75,12 @@ class UpdateFinalDiagnosticForm extends React.Component {
     }
   };
 
-  // Set state for the input changes
-  handleReference = (event) => {
-    this.setState({ reference: event.target.value });
+  // Set value of inputs in state
+  updateState = (event) => {
+    const key = event.target.name;
+    const value = event.target.value;
+    this.setState({ [key]: value });
   };
-
-  // Set state for the input changes
-  handleLabel = (event) => {
-    this.setState({ label: event.target.value });
-  };
-
-  // Set state for the input changes
-  handleDescription = (event) => {
-    this.setState({ description: event.target.value });
-  };
-
 
   render() {
     const { toggleModal } = this.props;
@@ -115,7 +106,7 @@ class UpdateFinalDiagnosticForm extends React.Component {
                   aria-describedby="inputGroupPrepend"
                   name="reference"
                   value={reference}
-                  onChange={this.handleReference}
+                  onChange={this.updateState}
                   isInvalid={!!errors.reference}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -134,7 +125,7 @@ class UpdateFinalDiagnosticForm extends React.Component {
                   aria-describedby="inputGroupPrepend"
                   name="label"
                   value={label}
-                  onChange={this.handleLabel}
+                  onChange={this.updateState}
                   isInvalid={!!errors.label}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -155,7 +146,7 @@ class UpdateFinalDiagnosticForm extends React.Component {
                   name="description"
                   width="100%"
                   value={description}
-                  onChange={this.handleDescription}
+                  onChange={this.updateState}
                 />
               </InputGroup>
             </Form.Group>
@@ -163,10 +154,10 @@ class UpdateFinalDiagnosticForm extends React.Component {
 
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={() => this.update()}>
+          <Button variant="primary" onClick={this.update}>
             Save
           </Button>
-          <Button variant="secondary" onClick={() => toggleModal()}>
+          <Button variant="secondary" onClick={toggleModal}>
             Close
           </Button>
         </Modal.Footer>
