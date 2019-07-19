@@ -41,7 +41,8 @@ class Answer < ApplicationRecord
   # @param [Integer] node id to link to questions
   # Create 1 automatic answer for tests/assessments if attr_accessor :unavailable in question is checked
   def self.create_unavailable(node_id)
-    Answer.create!(node_id: node_id, reference: '0', label_en: I18n.t('answers.unavailable'))
+    answer = Answer.new(node_id: node_id, reference: '0', label_en: I18n.t('answers.unavailable'))
+    answer.save(validate: false)
   end
 
   # Return the parent node with all the answers in order to include it in a json if the condition is an answer and not a condition
