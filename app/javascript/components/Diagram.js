@@ -5,6 +5,8 @@ import {
 import * as React from "react";
 import * as _ from "lodash";
 
+
+import { hot } from 'react-hot-loader'
 import AdvancedLinkFactory from "../react-diagram/factories/AdvancedLinkFactory";
 import AdvancedLabelFactory from "../react-diagram/factories/AdvancedLabelFactory";
 import AdvancedNodeFactory from "../react-diagram/factories/AdvancedNodeFactory";
@@ -79,7 +81,7 @@ class Diagram extends React.Component {
       } else if (nextProps.modalToOpen === 'UpdateFinalDiagnostic') {
         currentDiagramNode.setReference(currentDbNode.reference);
         currentDiagramNode.setNode(currentDbNode);
-      } else if (nextProps.modalToOpen === 'CreateQuestionsSequence') {
+      } else if (nextProps.modalToOpen === 'CreateQuestionsSequence' || nextProps.modalToOpen === 'CreateQuestion' || nextProps.modalToOpen === 'CreateAnswers') {
         let node = this.createNode(currentDbNode, currentDbNode.answers);
         currentDbNode.answers.map((answer) => (node.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
         model.addAll(node);
@@ -88,6 +90,12 @@ class Diagram extends React.Component {
         currentDiagramNode.setMinScore(currentDbNode.min_score);
 
         currentDiagramNode.setNode(currentDbNode);
+      } else if (nextProps.modalToOpen === 'UpdateQuestion') {
+        currentDiagramNode.setReference(currentDbNode.reference);
+        currentDiagramNode.setNode(currentDbNode);
+      } else if (nextProps.modalToOpen === 'UpdateAnswers') {
+        // Refresh the page because it would be very handy to handle every updating case of the answers (adding, destroying or updating one or several) which would need a different handling
+        window.location.reload();
       }
       this.updateEngine(engine);
     }
@@ -277,11 +285,11 @@ class Diagram extends React.Component {
                 let answerId = eventModel.link.sourcePort.dbId;
                 if (eventModel.link.targetPort.in) {
                   if (type === "QuestionsSequence" && instanceable.category_name === 'scored') { // Check if it is a diagram PSS
-                    set('currentNode', node);
-                    set('currentAnswerId', answerId);
-                    set('currentLinkId', eventModel.link.id);
-                    set('modalToOpen', 'InsertScore');
-                    set('modalIsOpen', true)
+
+                    set(
+                      ['currentNode', 'currentAnswerId', 'currentLinkId', 'modalToOpen', 'modalIsOpen'],
+                      [node, answerId, eventModel.link.id, 'InsertScore', true]
+                    );
                   } else {
                     // Create link in DB
                     http.createLink(node.id, answerId).then((response) => {
@@ -380,14 +388,15 @@ class Diagram extends React.Component {
       // Create regular node
       result = await http.createInstance(nodeDb.id);
       if (result.ok === undefined || result.ok) {
-        if (nodeDb.get_answers !== null) {
+        let answers = nodeDb.get_answers !== undefined ? nodeDb.get_answers : nodeDb.answers
+        if (answers !== null || answers !== undefined) {
           // Don't add an inPort for PSS node
           if (type === "QuestionsSequence" && instanceable.category_name === 'scored') { // Check if it is a diagram PSS
-            nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers, "rgb(255,255,255)", (type === nodeDb.node_type && instanceable.id === nodeDb.id));
+            nodeDiagram = this.createNode(nodeDb, answers, "rgb(255,255,255)", (type === nodeDb.node_type && instanceable.id === nodeDb.id));
           } else {
-            nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers);
+            nodeDiagram = this.createNode(nodeDb, answers);
           }
-          nodeDb.get_answers.map((answer) => (nodeDiagram.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
+          answers.map((answer) => (nodeDiagram.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
         } else {
           nodeDiagram = this.createNode(nodeDb);
         }
@@ -446,4 +455,4 @@ class Diagram extends React.Component {
   };
 }
 
-export default withDiagram(Diagram);
+export default hot(module)(withDiagram(Diagram));
