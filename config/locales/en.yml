@@ -308,8 +308,8 @@ en:
       assessment_test:
         label: "Assessment/test"
         reference_prefix: "A"
-      chief_complain:
-        label: "Chief complain"
+      chief_complaint:
+        label: "Chief complaint"
         reference_prefix: "CC"
       demographic:
         label: "Demographics"
@@ -326,6 +326,9 @@ en:
       vaccine:
         label: "Vaccine"
         reference_prefix: "V"
+      vital_sign:
+        label: "Vital sign"
+        reference_prefix: "VS"
     errors:
       no_blank: "can't be blank"
     new:

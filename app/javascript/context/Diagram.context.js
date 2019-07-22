@@ -33,11 +33,12 @@ export default class DiagramProvider extends React.Component {
     let orderedNodes = {
       assessmentTest: [],
       exposure: [],
-      chiefComplain: [],
+      chiefComplaint: [],
       demographic: [],
       physicalExam: [],
       symptom: [],
       vaccine: [],
+      vitalSign: [],
       predefinedSyndrome: [],
       comorbidity: [],
       triage: [],
