@@ -14,6 +14,12 @@ class Version < ApplicationRecord
 
   validates_uniqueness_of :name, scope: :algorithm
 
+  amoeba do
+    enable
+    include_association :diagnostics
+    append name: I18n.t('duplicated')
+  end
+
   # @return [String]
   # Return a displayable string for this version
   def display_label

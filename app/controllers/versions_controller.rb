@@ -1,8 +1,8 @@
 class VersionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive]
+  before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :duplicate]
   before_action :set_breadcrumb, only: [:show, :new, :edit]
-  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive]
+  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :duplicate]
 
   def index
     respond_to do |format|
@@ -60,6 +60,21 @@ class VersionsController < ApplicationController
       redirect_to algorithm_url(@algorithm, panel: 'versions'), notice: t('flash_message.success_created')
     else
       redirect_to algorithm_url(@algorithm, panel: 'versions'), danger: t('flash_message.update_fail')
+    end
+  end
+
+  # @params [Version] version to duplicate
+  # Duplicate a version with every diagnostics and their logics (Instances with their Conditions and Children), the FinalDiagnostics and Conditions attached to it
+  def duplicate
+    @version.diagnostics.each { |diagnostic| diagnostic.update(duplicating: true) }
+    duplicated_version = @version.amoeba_dup
+
+    if duplicated_version.save
+      duplicated_version.diagnostics.each { |diagnostic| diagnostic.relink_instance }
+      @version.diagnostics.each { |diagnostic| diagnostic.update(duplicating: false) }
+      redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_deleted')
+    else
+      render :new
     end
   end
 
