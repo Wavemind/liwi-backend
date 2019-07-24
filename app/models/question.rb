@@ -15,8 +15,6 @@ class Question < Node
 
   validates_presence_of :priority
 
-  scope :triage, ->() { where(stage: 'triage') }
-
   accepts_nested_attributes_for :answers, reject_if: :all_blank, allow_destroy: true
 
   # Preload the children of class Question

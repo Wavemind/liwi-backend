@@ -70,6 +70,7 @@ class VersionsService
     hash['name'] = @version.algorithm.name
     hash['version'] = @version.name
     hash['description'] = @version.algorithm.description
+    hash['triage_questions_order'] = @version.triage_questions_order
     hash['author'] = @version.user.full_name
     hash['created_at'] = @version.created_at
     hash['updated_at'] = @version.updated_at
