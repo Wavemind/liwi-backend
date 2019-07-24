@@ -11,7 +11,7 @@ class Question < Node
   has_many :answers, foreign_key: 'node_id', dependent: :destroy
   belongs_to :answer_type
 
-  before_validation :validate_formula
+  before_validation :validate_formula, if: Proc.new { self.formula.present? }
   validates_presence_of :priority
 
   accepts_nested_attributes_for :answers, reject_if: :all_blank, allow_destroy: true
