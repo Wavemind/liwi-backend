@@ -418,6 +418,7 @@ en:
       title: "Edit this algorithm"
     show:
       subtitle_diagnostics: "Diagnostics"
+      subtitle_questions_order: "Triage questions order"
       title: "Details of %{name} - version %{version}"
       questions_sequences: "Questions Sequences"
   warning_dependency: "Warning ! Editing this node will affect :"

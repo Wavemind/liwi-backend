@@ -2,6 +2,8 @@
 class Question < Node
 
   after_create :create_boolean, if: Proc.new { answer_type.value == 'Boolean' }
+  after_create :push_in_versions, if: Proc.new { stage == 'triage' }
+  before_destroy :remove_from_versions, if: Proc.new { stage == 'triage' }
 
   attr_accessor :unavailable
 
@@ -12,6 +14,8 @@ class Question < Node
   belongs_to :answer_type
 
   validates_presence_of :priority
+
+  scope :triage, ->() { where(stage: 'triage') }
 
   accepts_nested_attributes_for :answers, reject_if: :all_blank, allow_destroy: true
 
@@ -32,6 +36,7 @@ class Question < Node
     I18n.t("questions.categories.#{Object.const_get(type).variable}.reference_prefix")
   end
 
+  # Return hash of categories for the front-end
   def self.categories
     categories = []
     self.descendants.each do |category|
@@ -42,6 +47,19 @@ class Question < Node
       categories.push(current_category)
     end
     categories
+  end
+
+  # When a question from triage stage is created, push it at the end of the versions order
+  def push_in_versions
+    algorithm.versions.each do |version|
+      version.update(triage_questions_order: version.triage_questions_order.push(id))
+    end
+  end
+
+  def remove_from_versions
+    algorithm.versions.each do |version|
+      version.update(triage_questions_order: version.triage_questions_order.delete(id)) if version.triage_questions_order.include?(id)
+    end
   end
 
   private
