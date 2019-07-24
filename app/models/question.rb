@@ -1,7 +1,7 @@
 # Child of Node / Questions asked to the patient
 class Question < Node
 
-  after_create :create_boolean, if: Proc.new { answer_type.value == 'Boolean' }
+  after_create :create_boolean, if: Proc.new {answer_type.value == 'Boolean'}
 
   attr_accessor :unavailable
 
@@ -11,6 +11,7 @@ class Question < Node
   has_many :answers, foreign_key: 'node_id', dependent: :destroy
   belongs_to :answer_type
 
+  before_validation :validate_formula
   validates_presence_of :priority
 
   accepts_nested_attributes_for :answers, reject_if: :all_blank, allow_destroy: true
@@ -63,5 +64,19 @@ class Question < Node
 
   def self.display_label
     I18n.t("questions.categories.#{self.variable}.label")
+  end
+
+  # Ensure that the formula is in a correct format
+  def validate_formula
+    errors.add(:formula, I18n.t('questions.errors.formula_wrong_characters')) if formula.match(/^(\[(.*?)\]|[ \(\)\*\/\+\-|0-9])*$/).nil?
+    formula.scan(/\[.*?\]/).each do |reference|
+      reference = reference.tr('[]', '')
+      question = algorithm.questions.find_by(reference: reference)
+      if question.present?
+        errors.add(:formula, I18n.t('questions.errors.formula_reference_not_numeric', reference: reference)) unless question.answer_type.display == 'Input'
+      else
+        errors.add(:formula, I18n.t('questions.errors.formula_wrong_reference', reference: reference))
+      end
+    end
   end
 end
