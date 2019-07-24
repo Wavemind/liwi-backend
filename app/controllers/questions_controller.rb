@@ -165,6 +165,7 @@ class QuestionsController < ApplicationController
       Language.description_params,
       :answer_type_id,
       :unavailable,
+      :formula,
       answers_attributes: [
         :id,
         :reference,
