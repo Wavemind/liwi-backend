@@ -5,7 +5,6 @@ import {
 import * as React from "react";
 import * as _ from "lodash";
 
-
 import { hot } from 'react-hot-loader'
 import AdvancedLinkFactory from "../react-diagram/factories/AdvancedLinkFactory";
 import AdvancedLabelFactory from "../react-diagram/factories/AdvancedLabelFactory";

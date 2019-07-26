@@ -51,6 +51,7 @@ class CreateQuestionForm extends React.Component {
     }
   };
 
+  // Validate first the question data. If it is valid, open the answers form, if not display the errors
   createAnswers = async () => {
     const { set, http } = this.props;
     const question = this.generateQuestionBody();
@@ -64,13 +65,12 @@ class CreateQuestionForm extends React.Component {
     } else {
       this.handleErrors(result);
     }
-
   };
 
+  // Display errors from response of the question validation from rails if there is any
   handleErrors = (result) => {
     let newErrors = {};
 
-    // TODO map answers to generate proper errors table
     if (result.errors.reference !== undefined) {
       newErrors.reference = result.errors.reference[0];
     }
@@ -95,7 +95,7 @@ class CreateQuestionForm extends React.Component {
       newErrors.category = result.errors.type[0];
     }
     this.setState({ errors: newErrors });
-  }
+  };
 
   // Generate the body of the question
   generateQuestionBody = () => {
