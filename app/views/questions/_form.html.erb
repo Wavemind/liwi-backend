@@ -12,10 +12,6 @@
 
 <hr />
 
-<%= f.input :formula %>
-
-<hr />
-
 <%= f.simple_fields_for :medias do |ff| %>
   <%= render 'medias/fields', f: ff %>
 <% end %>

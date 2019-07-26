@@ -331,9 +331,6 @@ en:
         reference_prefix: "VS"
     errors:
       no_blank: "can't be blank"
-      formula_wrong_characters: "Incorrect formula format. You can only use numbers, operators and questions references (between brackets)"
-      formula_wrong_reference: "The reference '%{reference}' does not match to any question in this algorithm"
-      formula_reference_not_numeric: "The question '%{reference}' is not in numeric format."
     new:
       title: "New question"
     priorities:
