@@ -8,10 +8,13 @@
     <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'final_diagnostics'%>" id="final_diagnostics-tab" data-toggle="tab" href="#final_diagnostics" role="tab" aria-controls="final_diagnostics" aria-selected="false"><%= t('.subtitle_final_diagnostics')  %> </a>
   </li>
   <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'differential_conditions'%>" id="differential_conditions-tab" data-toggle="tab" href="#differential_conditions" role="tab" aria-controls="differential_conditions" aria-selected="false"><%= t('.differential_diagnostic_conditions') %></a>
+    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'excluding_diagnostics'%>" id="excluding_diagnostics-tab" data-toggle="tab" href="#excluding_diagnostics" role="tab" aria-controls="excluding_diagnostics" aria-selected="false"><%= t('.excluding_diagnostics') %></a>
   </li>
   <li class="nav-item">
     <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'translations'%>" id="translations-tab" data-toggle="tab" href="#translations" role="tab" aria-controls="translations" aria-selected="false"><%= t('.translations') %></a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'differential_conditions'%>" id="differential_conditions-tab" data-toggle="tab" href="#differential_conditions" role="tab" aria-controls="differential_conditions" aria-selected="false"><%= t('.differential_diagnostic_conditions') %></a>
   </li>
 </ul>
 
@@ -51,14 +54,20 @@
     <%= render 'final_diagnostics/table' %>
   </div>
 
-  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'differential_conditions'%>" id="differential_conditions" role="tabpanel" aria-labelledby="differential_conditions-tab">
-    <h3><%= t('.differential_diagnostic_conditions') %></h3>
+  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'excluding_diagnostics'%>" id="excluding_diagnostics" role="tabpanel" aria-labelledby="excluding_diagnostics-tab">
+    <h3><%= t('.excluding_diagnostics') %></h3>
 
-    <%= render 'conditions/differential_table' %>
+    <%= render 'excluding' %>
   </div>
 
   <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'translations'%>" id="translations" role="tabpanel" aria-labelledby="translations-tab">
     <%= render 'translations' %>
+  </div>
+
+  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'differential_conditions'%>" id="differential_conditions" role="tabpanel" aria-labelledby="differential_conditions-tab">
+    <h3><%= t('.differential_diagnostic_conditions') %></h3>
+
+    <%= render 'conditions/differential_table' %>
   </div>
 </div>
 

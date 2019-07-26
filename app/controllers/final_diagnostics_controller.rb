@@ -2,7 +2,7 @@ class FinalDiagnosticsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic]
   before_action :set_diagnostic, only: [:new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic, :diagram, :create_from_diagram]
-  before_action :set_final_diagnostic, only: [:edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic, :update_translations, :diagram, :update_from_diagram]
+  before_action :set_final_diagnostic, only: [:edit, :update, :destroy, :remove_excluded_diagnostic, :update_translations, :diagram, :update_from_diagram]
   before_action :set_version, only: [:new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic]
   before_action :set_breadcrumb, only: [:new, :edit]
   layout 'diagram', only: [:diagram]
@@ -68,10 +68,17 @@ class FinalDiagnosticsController < ApplicationController
   # @return
   # Add excluded diagnostic to final diagnostic
   def add_excluded_diagnostic
+    @final_diagnostic = FinalDiagnostic.find(final_diagnostic_params[:id])
     if @final_diagnostic.update(final_diagnostic_params)
-      render json: {status: 'success', messages: [t('flash_message.success_updated')]}
+      respond_to do |format|
+        format.html { redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'excluding_diagnostics'), notice: t('flash_message.success_updated') }
+        format.js { render json: {status: 'success', messages: [t('flash_message.success_updated')]} }
+      end
     else
-      render json: { status: 'danger', statusText: @final_diagnostic.errors.full_messages, ok: false }
+      respond_to do |format|
+        format.html { redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'excluding_diagnostics'), alert: @final_diagnostic.errors.full_messages }
+        format.js { render json: { status: 'danger', statusText: @final_diagnostic.errors.full_messages, ok: false }}
+      end
     end
   end
 
@@ -104,9 +111,15 @@ class FinalDiagnosticsController < ApplicationController
   def remove_excluded_diagnostic
     @final_diagnostic.excluded_diagnostic = nil
     if @final_diagnostic.save
-      render json: {status: 'success', messages: [t('flash_message.success_updated')]}
+      respond_to do |format|
+        format.html { redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'excluding_diagnostics'), notice: t('flash_message.success_updated') }
+        format.js { render json: {status: 'success', messages: [t('flash_message.success_updated')]} }
+      end
     else
-      render json: {status: 'alert', messages: t('flash_message.update_fail')}
+      respond_to do |format|
+        format.html { redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'excluding_diagnostics'), alert: t('error') }
+        format.js { render json: {status: 'alert', messages: t('flash_message.update_fail')} }
+      end
     end
   end
 

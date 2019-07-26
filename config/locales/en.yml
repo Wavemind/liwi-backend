@@ -127,6 +127,7 @@ en:
     show:
       diagram: "Diagram"
       differential_diagnostic_conditions: "Differential diagnostic conditions"
+      excluding_diagnostics: "Excluding diagnostics"
       instances: "Instance of nodes"
       questions_sequences: "Questions sequences"
       subtitle_final_diagnostics: "Finals diagnostics"

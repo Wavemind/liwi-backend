@@ -236,9 +236,10 @@ export default class Http {
   // Exclude a final diagnostic
   excludeDiagnostic = async (dfId, excludedDfId) => {
     let response;
-    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/${dfId}/add_excluded_diagnostic`;
+    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/add_excluded_diagnostic`;
     const body = {
       final_diagnostic: {
+        id: dfId,
         final_diagnostic_id: excludedDfId,
       }
     };
