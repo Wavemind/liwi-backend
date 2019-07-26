@@ -231,6 +231,7 @@ class VersionsService
       hash[question.id]['description'] = question.description
       hash[question.id]['priority'] = question.priority
       hash[question.id]['stage'] = question.stage
+      hash[question.id]['formula'] = question.formula
       hash[question.id]['category'] = question.category_name
       hash[question.id]['display_format'] = question.answer_type.display
       hash[question.id]['value_format'] = question.answer_type.value
