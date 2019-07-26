@@ -14,12 +14,10 @@ class AdvancedLabelWidget extends DefaultLabelWidget {
   editScore = (labelModel) => {
     const { set } = this.props;
 
-    set('currentNode', labelModel.parent.targetPort.parent.node);
-    set('currentLinkId', labelModel.parent.id);
-    set('currentAnswerId', labelModel.parent.sourcePort.dbId);
-    set('modalToOpen', 'UpdateScore');
-    set('updatingScore', labelModel.label);
-    set('modalIsOpen', true);
+    set(
+      ['currentNode', 'currentLinkId', 'currentAnswerId', 'modalToOpen', 'updatingScore', 'modalIsOpen'],
+      [labelModel.parent.targetPort.parent.node, labelModel.parent.id, labelModel.parent.sourcePort.dbId, 'UpdateScore',  labelModel.label, true]
+    );
   };
 
   render() {

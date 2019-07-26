@@ -17,22 +17,24 @@ class Toolbar extends React.Component {
   // Button to open modal with new final diagnostic node form
   newFinalDiagnostic = () => {
     const { set } = this.props;
-    set('modalToOpen', 'CreateFinalDiagnostic');
-    set('modalIsOpen', true);
+    set(["modalToOpen", "modalIsOpen"], ["CreateFinalDiagnostic", true]);
   };
 
   // Button to open modal with new predefined syndrome node form
   newQuestionsSequence = () => {
     const { set } = this.props;
-    set('modalToOpen', 'CreateQuestionsSequence');
-    set('modalIsOpen', true);
+    set(["modalToOpen", "modalIsOpen"], ["CreateQuestionsSequence", true]);
+  };
+
+  // Button to open modal with new predefined syndrome node form
+  newQuestion = () => {
+    const { set } = this.props;
+    set(["modalToOpen", "modalIsOpen"], ["CreateQuestion", true]);
   };
 
   newHealthCare = (type) => {
     const { set } = this.props;
-    set('currentHealthCareType', type);
-    set('modalToOpen', 'CreateHealthCare');
-    set('modalIsOpen', true);
+    set(["currentHealthCareType", "modalToOpen", "modalIsOpen"], [type, "CreateHealthCare", true]);
   };
 
   // Launch validation of diagram and display flash message
@@ -45,9 +47,9 @@ class Toolbar extends React.Component {
     } = this.props;
 
     let response;
-    this.setState({isLoading: true});
+    this.setState({ isLoading: true });
 
-    if (type === 'Diagnostic') {
+    if (type === "Diagnostic") {
       response = await http.validateDiagnostic();
     } else {
       response = await http.validateQuestionsSequence();
@@ -55,10 +57,10 @@ class Toolbar extends React.Component {
 
     let message = {
       status: response.status,
-      messages: response.messages,
+      messages: response.messages
     };
     await addMessage(message);
-    this.setState({isLoading: false})
+    this.setState({ isLoading: false });
   };
 
   redirectToDiagnostic = () => {
@@ -69,17 +71,17 @@ class Toolbar extends React.Component {
   // Close and redirect user to list of...
   save = async () => {
     const { http, type, instanceable } = this.props;
-    if (type === 'Diagnostic') {
+    if (type === "Diagnostic") {
       await http.redirectToDiagnostic();
     } else {
-      let panel = instanceable.category_name === 'scored' ? 'questions_sequences_scored' : 'questions_sequences';
+      let panel = instanceable.category_name === "scored" ? "questions_sequences_scored" : "questions_sequences";
       await http.redirectToAlgorithm(panel);
     }
   };
 
   render() {
-    const { isLoading } = this.state;
     const { type } = this.props;
+    const { isLoading } = this.state;
 
     return (
       <div className="col-md-12 liwi-toolbar">
@@ -91,29 +93,35 @@ class Toolbar extends React.Component {
                 New
               </button>
               <div className="dropdown-menu">
-                <a className="dropdown-item" href="#">Question</a>
-                <a className="dropdown-item" href="#" onClick={() => {this.newQuestionsSequence()}}>Questions Sequence</a>
-                {/*<a className="dropdown-item" href="#">Predefined Syndrome Scored</a>*/}
-                {type === 'Diagnostic' ? (<a className="dropdown-item" href="#" onClick={() => {this.newFinalDiagnostic()}}>Final diagnostic</a>) : null}
-                {type === 'FinalDiagnostic' ? (<a className="dropdown-item" href="#" onClick={() => {this.newHealthCare('treatments')}}>Treatment</a>) : null}
-                {type === 'FinalDiagnostic' ? (<a className="dropdown-item" href="#" onClick={() => {this.newHealthCare('managements')}}>Management</a>) : null}
+                <a className="dropdown-item" href="#" onClick={this.newQuestion}>Question</a>
+                <a className="dropdown-item" href="#" onClick={this.newQuestionsSequence}>Questions Sequence</a>
+                {type === "Diagnostic" ? (
+                  <a className="dropdown-item" href="#" onClick={this.newFinalDiagnostic}>Final diagnostic</a>) : null}
+                {type === "FinalDiagnostic" ? (<a className="dropdown-item" href="#"
+                                                  onClick={() => this.newHealthCare("treatments")}>Treatment</a>) : null}
+                {type === "FinalDiagnostic" ? (<a className="dropdown-item" href="#"
+                                                  onClick={() => this.newHealthCare("managements")}>Management</a>) : null}
               </div>
             </div>
           </div>
           <div className="col text-right">
-            {type === 'Diagnostic' || type === "QuestionsSequence" ? (
-            <button type="button" className="btn btn-transparent" onClick={() => {this.validate()}}>
-              {isLoading ?
-                <span>Loading</span>: <span>Validate</span>
-              }
-            </button>
-              ) : null }
-            {type === 'FinalDiagnostic' ? (
-              <button type="button" className="btn btn-transparent" onClick={() => {this.redirectToDiagnostic()}}>
+            {type === "Diagnostic" || type === "QuestionsSequence" ? (
+              (isLoading) ? (
+                <button type="button" className="btn btn-transparent">
+                  <span>Loading</span>
+                </button>
+                  ) : (
+                <button type="button" className="btn btn-transparent" onClick={this.validate}>
+                  <span>Validate</span>
+                </button>
+              )
+            ) : null}
+            {type === "FinalDiagnostic" ? (
+              <button type="button" className="btn btn-transparent" onClick={this.redirectToDiagnostic}>
                 Diagnostic diagram
               </button>
             ) : (
-              <button type="button" className="btn btn-transparent" onClick={() => {this.save()}}>
+              <button type="button" className="btn btn-transparent" onClick={this.save}>
                 Save
               </button>
             )}

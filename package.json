@@ -8,6 +8,7 @@
     "react": "^16.8.6",
     "react-bootstrap": "^1.0.0-beta.8",
     "react-dom": "^16.8.6",
+    "react-hot-loader": "^4.11.1",
     "react_ujs": "^2.4.4",
     "storm-react-diagrams": "^5.2.1",
     "style-loader": "^0.23.1"
