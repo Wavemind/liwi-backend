@@ -123,6 +123,8 @@ en:
       title: "Add a diagnostic"
     edit:
       title: "Edit this diagnostic"
+    excluding:
+      excludes: "excludes"
     reference: "DD"
     show:
       diagram: "Diagram"
