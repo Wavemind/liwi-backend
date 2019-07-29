@@ -454,4 +454,4 @@ class Diagram extends React.Component {
   };
 }
 
-export default hot(module)(withDiagram(Diagram));
+export default withDiagram(Diagram);
