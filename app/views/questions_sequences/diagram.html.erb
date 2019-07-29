@@ -18,6 +18,7 @@
         questionPriorities: Question.priorities.as_json(methods: :display_name),
         questionCategories: Question.categories.as_json,
         questionsSequenceCategories: QuestionsSequence.categories.as_json,
+        answersOperators: Answer.operators.as_json,
       }
     }) %>
   </div>
