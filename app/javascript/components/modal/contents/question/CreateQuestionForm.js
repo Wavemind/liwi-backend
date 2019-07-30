@@ -26,6 +26,7 @@ class CreateQuestionForm extends React.Component {
     stage: "",
     priority: "",
     answerType: "",
+    answerTypeDisabled: false,
     prefix: "",
     errors: {}
   };
@@ -130,16 +131,25 @@ class CreateQuestionForm extends React.Component {
 
     if (name === "type") {
       const {questionCategories} = this.props;
-
+      let stateToSet = {};
+      stateToSet[name] = value;
       questionCategories.map((category) => {
         if (category.name === event.target.value) {
-          this.setState({ prefix: category.reference_prefix });
+          stateToSet['prefix'] = category.reference_prefix
         }
       });
+      if (value === "Questions::Vaccine" || value === "Questions::ChiefComplaint") {
+        stateToSet['answerType'] = "1";
+        stateToSet['answerTypeDisabled'] = true;
+      } else {
+        stateToSet['answerTypeDisabled'] = false;
+      }
+      this.setState(stateToSet);
+    } else {
+      this.setState({
+        [name]: value
+      });
     }
-    this.setState({
-      [name]: value
-    });
   };
 
   render() {
@@ -159,6 +169,7 @@ class CreateQuestionForm extends React.Component {
       stage,
       priority,
       answerType,
+      answerTypeDisabled,
       prefix
     } = this.state;
 
@@ -171,7 +182,7 @@ class CreateQuestionForm extends React.Component {
           <Form.Row>
             <Form.Group as={Col} controlId="formGridState">
               <Form.Label>Category</Form.Label>
-              <Form.Control as="select" name="type" onChange={this.handleFormChange} defaultValue={type} isInvalid={!!errors.category}>
+              <Form.Control as="select" name="type" onChange={this.handleFormChange} value={type} isInvalid={!!errors.category}>
                 <option value="">Select the category</option>
                 {questionCategories.map((category) => (
                   <option value={category.name}>{category.label}</option>
@@ -187,7 +198,7 @@ class CreateQuestionForm extends React.Component {
           <Form.Row>
             <Form.Group as={Col} controlId="formGridState">
               <Form.Label>Answer type</Form.Label>
-              <Form.Control as="select" name="answerType" onChange={this.handleFormChange} defaultValue={answerType} isInvalid={!!errors.answerType }>
+              <Form.Control as="select" name="answerType" onChange={this.handleFormChange} value={answerType} isInvalid={!!errors.answerType } disabled = { answerTypeDisabled }>
                 <option value="">Select the type of answers expected</option>
                 {questionAnswerTypes.map((answerType) => (
                   <option value={answerType.id}>{answerType.display_name}</option>
@@ -203,7 +214,7 @@ class CreateQuestionForm extends React.Component {
           <Form.Row>
             <Form.Group as={Col} controlId="formGridState">
               <Form.Label>Stage</Form.Label>
-              <Form.Control as="select" name="stage" onChange={this.handleFormChange} defaultValue={stage} isInvalid={!!errors.stage }>
+              <Form.Control as="select" name="stage" onChange={this.handleFormChange} value={stage} isInvalid={!!errors.stage }>
                 <option value="">Select the stage</option>
                 {Object.keys(questionStages).map(function(key) {
                   return <option value={questionStages[key]}>{key.charAt(0).toUpperCase() + key.slice(1)}</option>;
@@ -218,7 +229,7 @@ class CreateQuestionForm extends React.Component {
           <Form.Row>
             <Form.Group as={Col} controlId="formGridState">
               <Form.Label>Priority</Form.Label>
-              <Form.Control as="select" name="priority" onChange={this.handleFormChange} defaultValue={priority} isInvalid={!!errors.priority }>
+              <Form.Control as="select" name="priority" onChange={this.handleFormChange} value={priority} isInvalid={!!errors.priority }>
                 <option value="">Select the priority</option>
                 {Object.keys(questionPriorities).map(function(key) {
                   return <option value={questionPriorities[key]}>{key.charAt(0).toUpperCase() + key.slice(1)}</option>;
