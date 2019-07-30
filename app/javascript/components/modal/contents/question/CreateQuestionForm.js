@@ -95,7 +95,7 @@ class CreateQuestionForm extends React.Component {
       newErrors.category = result.errors.type[0];
     }
     this.setState({ errors: newErrors });
-  }
+  };
 
   // Generate the body of the question
   generateQuestionBody = () => {
@@ -128,8 +128,6 @@ class CreateQuestionForm extends React.Component {
     const value = event.target.value;
     const name = event.target.name;
 
-    console.log(this.state);
-
     if (name === "type") {
       const {questionCategories} = this.props;
       let stateToSet = {};
@@ -139,7 +137,7 @@ class CreateQuestionForm extends React.Component {
           stateToSet['prefix'] = category.reference_prefix
         }
       });
-      if (value === "Questions::Vaccine" || value === "Questions::ChiefComplain") {
+      if (value === "Questions::Vaccine" || value === "Questions::ChiefComplaint") {
         stateToSet['answerType'] = "1";
         stateToSet['answerTypeDisabled'] = true;
       } else {
