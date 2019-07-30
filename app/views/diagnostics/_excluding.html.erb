@@ -12,7 +12,7 @@
     <% end %>
   <% end %>
   <li class="list-group-item">
-    <%= simple_form_for FinalDiagnostic.new, url: add_excluded_diagnostic_algorithm_version_diagnostic_final_diagnostics_url(@diagnostic.version.algorithm, @diagnostic.version, @diagnostic), method: :put do |f| %>
+    <%= simple_form_for @final_diagnostic, url: add_excluded_diagnostic_algorithm_version_diagnostic_final_diagnostics_url(@diagnostic.version.algorithm, @diagnostic.version, @diagnostic), method: :put do |f| %>
       <div class="row">
         <div class="col">
           <%= f.input :id, collection: @diagnostic.version.diagnostics.map(&:final_diagnostics).flatten, value_method: :id, label_method: :reference_label, label: false, prompt: t('prompt') %>

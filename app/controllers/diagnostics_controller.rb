@@ -20,6 +20,8 @@ class DiagnosticsController < ApplicationController
     @instanceable = @diagnostic
     @conditions = @diagnostic.conditions
     @condition = Condition.new
+
+    @final_diagnostic = FinalDiagnostic.new
   end
 
   def new
