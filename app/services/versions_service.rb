@@ -260,6 +260,7 @@ class VersionsService
   # @return [String]
   # Format a formula in order to replace references by ids
   def format_formula(formula)
+    return nil if formula.nil?
     formula.scan(/\[.*?\]/).each do |reference|
       reference = reference.tr('[]', '')
       question = @version.algorithm.questions.find_by(reference: reference)
