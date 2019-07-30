@@ -231,6 +231,7 @@ class VersionsService
       hash[question.id]['description'] = question.description
       hash[question.id]['priority'] = question.priority
       hash[question.id]['stage'] = question.stage
+      hash[question.id]['formula'] = format_formula(question.formula)
       hash[question.id]['category'] = question.category_name
       hash[question.id]['display_format'] = question.answer_type.display
       hash[question.id]['value_format'] = question.answer_type.value
@@ -253,6 +254,18 @@ class VersionsService
       end
     end
     hash
+  end
+
+  # @params [String]
+  # @return [String]
+  # Format a formula in order to replace references by ids
+  def format_formula(formula)
+    formula.scan(/\[.*?\]/).each do |reference|
+      reference = reference.tr('[]', '')
+      question = @version.algorithm.questions.find_by(reference: reference)
+      formula.sub!(reference, question.id.to_s)
+    end
+    formula
   end
 
   # @params [Node, Array]
