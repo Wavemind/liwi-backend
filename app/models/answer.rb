@@ -53,7 +53,7 @@ class Answer < ApplicationRecord
   # {Node#unique_reference}
   # Scoped by the current algorithm
   def unique_reference
-    if node.answers.where(reference: reference).where.not(id: id).any?
+    if node.answers.where(reference: reference).or(node.answers.where(reference: "#{node.reference}_#{reference}")).where.not(id: id).any?
       errors.add(:reference, I18n.t('nodes.validation.reference_used'))
       return false
     end

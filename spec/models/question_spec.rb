@@ -40,7 +40,7 @@ RSpec.describe Question, type: :model do
 
   context 'it validates formula correctly' do
     before(:each) do
-      @question = Questions::Symptom.new(reference: '9', label: 'skin issue', priority: Question.priorities[:basic], answer_type: @answer_type, algorithm: @algorithm)
+      @question = Questions::Symptom.new(reference: '9', label: 'skin issue', priority: Question.priorities[:basic], stage: Question.stages[:triage], answer_type: @answer_type, algorithm: @algorithm)
     end
 
     it 'Pass through with a correct formula' do
@@ -57,7 +57,7 @@ RSpec.describe Question, type: :model do
 
     it 'Pass through with a correct formula within a reference' do
       integer = AnswerType.create!(value: 'Integer', display: 'Input')
-      Questions::Symptom.create!(reference: '10', label: 'skin issue', priority: Question.priorities[:basic], answer_type: integer, algorithm: @algorithm)
+      Questions::Symptom.create!(reference: '10', label: 'skin issue', priority: Question.priorities[:basic], stage: Question.stages[:triage], answer_type: integer, algorithm: @algorithm)
 
       @question.formula = "[S10] * 10"
       expect(@question).to be_valid
@@ -70,7 +70,7 @@ RSpec.describe Question, type: :model do
     end
 
     it 'Refuses if the reference used is not a numeric format' do
-      Questions::Symptom.create!(reference: '10', label: 'skin issue', priority: Question.priorities[:basic], answer_type: @answer_type, algorithm: @algorithm)
+      Questions::Symptom.create!(reference: '10', label: 'skin issue', priority: Question.priorities[:basic], stage: Question.stages[:triage], answer_type: @answer_type, algorithm: @algorithm)
       @question.formula = "[S10] * 10"
 
       expect(@question).to_not be_valid
