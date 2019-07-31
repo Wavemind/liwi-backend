@@ -56,15 +56,16 @@ class NotDFWidget extends React.Component {
             {(diagramNode.node.category_name === 'scored') ? diagramNode.node.min_score : diagramNode.node.priority}
           </div>
           <div className="col pl-0 pr-2 text-right">
-            <div className="dropdown">
-              <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              </button>
-              <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                {(diagramNode.node.node_type === "QuestionsSequence") ? (<a className="dropdown-item" href="#" onClick={() => this.openDiagram(diagramNode.node.id)}>Open diagram</a>) : null}
-                <a className="dropdown-item" href="#" onClick={() => this.editNode(diagramNode)}>Edit</a>
+            {(diagramNode.node.is_default === false) ? (
+              <div className="dropdown">
+                <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                </button>
+                <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  {(diagramNode.node.node_type === "QuestionsSequence") ? (<a className="dropdown-item" href="#" onClick={() => this.openDiagram(diagramNode.node.id)}>Open diagram</a>) : null}
+                  <a className="dropdown-item" href="#" onClick={() => this.editNode(diagramNode)}>Edit</a>
+                </div>
               </div>
-            </div>
+            ) : null}
           </div>
         </div>
         <div>

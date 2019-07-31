@@ -212,16 +212,15 @@ ActiveRecord::Schema.define(version: 2019_07_30_092654) do
     t.datetime "updated_at", null: false
     t.bigint "final_diagnostic_id"
     t.bigint "answer_type_id"
-    t.bigint "question_id"
     t.string "reference_table_male"
     t.string "reference_table_female"
+    t.boolean "is_default", default: false
     t.bigint "reference_table_x_id"
     t.bigint "reference_table_y_id"
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
     t.index ["diagnostic_id"], name: "index_nodes_on_diagnostic_id"
     t.index ["final_diagnostic_id"], name: "index_nodes_on_final_diagnostic_id"
-    t.index ["question_id"], name: "index_nodes_on_question_id"
     t.index ["reference_table_x_id"], name: "index_nodes_on_reference_table_x_id"
     t.index ["reference_table_y_id"], name: "index_nodes_on_reference_table_y_id"
   end

@@ -4,6 +4,8 @@ class AddReferenceTableMaleAndReferenceTableFemaleAndReferenceTableXAndReference
       t.string :reference_table_male
       t.string :reference_table_female
 
+      t.boolean :is_default, default: false
+
       t.references :reference_table_x
       t.references :reference_table_y
     end
