@@ -5,30 +5,25 @@ import {
   FormControl,
   Form
 } from "react-bootstrap";
-import {withDiagram} from "../../../context/Diagram.context";
+import { withDiagram } from "../../../context/Diagram.context";
 
 /**
  * @author Emmanuel Barchichat
- * Modal content to define the score in PS scored
+ * Modal content to define the score in QS scored
  */
 class UpdateScoreForm extends React.Component {
   constructor(props) {
     super(props);
-
-    this.handleScore = this.handleScore.bind(this);
   }
-
 
   state = {
     score: this.props.updatingScore,
     scoreInput: null
   };
 
-
   componentWillUpdate() {
     this.scoreInput.focus();
   }
-
 
   // Update the score in DB then set score props in order to trigger listener in Diagram.js that will update diagram dynamically
   updateScore = async () => {
@@ -41,7 +36,7 @@ class UpdateScoreForm extends React.Component {
       addMessage
     } = this.props;
 
-    const {score} = this.state;
+    const { score } = this.state;
     toggleModal();
     let result = await http.updateConditionScore(currentAnswerId, currentNode.id, score);
 
@@ -49,24 +44,22 @@ class UpdateScoreForm extends React.Component {
       await set("currentScore", score);
     } else {
       let message = {
-        status: 'danger',
-        messages: [`An error occured: ${result.status} - ${result.statusText}`],
+        status: "danger",
+        messages: [`An error occured: ${result.status} - ${result.statusText}`]
       };
       await addMessage(message);
     }
   };
 
-
   // Set state for the input changes
   handleScore = (event) => {
-    this.setState({score: event.target.value});
+    this.setState({ score: event.target.value });
   };
 
-
   render() {
-    const {toggleModal} = this.props;
+    const { toggleModal } = this.props;
     return (
-      <Form onSubmit={() => this.updateScore()}>
+      <Form onSubmit={this.updateScore}>
         <Modal.Header>
           <Modal.Title>Update the score</Modal.Title>
         </Modal.Header>
@@ -82,10 +75,10 @@ class UpdateScoreForm extends React.Component {
           />
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={() => this.updateScore()}>
+          <Button variant="primary" onClick={this.updateScore}>
             Update
           </Button>
-          <Button variant="secondary" onClick={() => toggleModal()}>
+          <Button variant="secondary" onClick={toggleModal}>
             Close
           </Button>
         </Modal.Footer>

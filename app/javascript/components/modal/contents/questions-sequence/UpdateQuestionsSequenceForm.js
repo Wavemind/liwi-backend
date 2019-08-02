@@ -16,11 +16,6 @@ import * as _ from "lodash";
 class UpdateQuestionsSequenceForm extends React.Component {
   constructor(props) {
     super(props);
-
-    this.handleReference = this.handleReference.bind(this);
-    this.handleLabel = this.handleLabel.bind(this);
-    this.handleDescription = this.handleDescription.bind(this);
-    this.handleMinScore = this.handleMinScore.bind(this);
   }
 
   state = {
@@ -83,24 +78,11 @@ class UpdateQuestionsSequenceForm extends React.Component {
     }
   };
 
-  // Set state for the input changes
-  handleReference = (event) => {
-    this.setState({ reference: event.target.value });
-  };
-
-  // Set state for the input changes
-  handleLabel = (event) => {
-    this.setState({ label: event.target.value });
-  };
-
-  // Set state for the input changes
-  handleDescription = (event) => {
-    this.setState({ description: event.target.value });
-  };
-
-  // Set state for the input changes
-  handleMinScore = (event) => {
-    this.setState({ minScore: event.target.value });
+  // Set value of inputs in state
+  updateState = (event) => {
+    const key = event.target.name;
+    const value = event.target.value;
+    this.setState({ [key]: value });
   };
 
 
@@ -128,7 +110,7 @@ class UpdateQuestionsSequenceForm extends React.Component {
           <Form.Row>
             <Form.Group as={Col} controlId="formGridState">
               <Form.Label>State</Form.Label>
-              <Form.Control as="select" onChange={this.handleType} defaultValue={type} disabled>
+              <Form.Control as="select" defaultValue={type} disabled>
                 <option value="">Select a category</option>
                 {questionsSequenceCategories.map((category) => (
                   <option value={category.name}>{category.label}</option>
@@ -146,7 +128,7 @@ class UpdateQuestionsSequenceForm extends React.Component {
                   aria-describedby="inputGroupPrepend"
                   name="reference"
                   value={reference}
-                  onChange={this.handleReference}
+                  onChange={this.updateState}
                   isInvalid={!!errors.reference}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -166,7 +148,7 @@ class UpdateQuestionsSequenceForm extends React.Component {
                   name="minScore"
                   width="100%"
                   value={minScore}
-                  onChange={this.handleMinScore}
+                  onChange={this.updateState}
                 />
               </InputGroup>
             </Form.Group>
@@ -181,7 +163,7 @@ class UpdateQuestionsSequenceForm extends React.Component {
                   aria-describedby="inputGroupPrepend"
                   name="label"
                   value={label}
-                  onChange={this.handleLabel}
+                  onChange={this.updateState}
                   isInvalid={!!errors.label}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -202,17 +184,17 @@ class UpdateQuestionsSequenceForm extends React.Component {
                   name="description"
                   width="100%"
                   value={description}
-                  onChange={this.handleDescription}
+                  onChange={this.updateState}
                 />
               </InputGroup>
             </Form.Group>
           </Form.Row>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={() => this.update()}>
+          <Button variant="primary" onClick={this.update}>
             Update
           </Button>
-          <Button variant="secondary" onClick={() => toggleModal()}>
+          <Button variant="secondary" onClick={toggleModal}>
             Close
           </Button>
         </Modal.Footer>

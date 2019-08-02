@@ -130,7 +130,6 @@ class FinalDiagnosticDiagram extends React.Component {
 
           model.addAll(andNode, firstLink, secondLink, andLink);
         } else {
-          console.log(firstNodeAnswer)
           let link = _.find(firstNodeAnswer.getOutPorts(), ["label", this.getFullLabel(firstAnswer)]).link(node.getInPort());
           model.addAll(link);
         }

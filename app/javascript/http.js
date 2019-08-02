@@ -154,9 +154,29 @@ export default class Http {
     return await response;
   };
 
+  // @params [Hash] body of the question with its answers
+  // @return [Object] body of request
+  // Create an instance
+  createQuestion = async (questionBody) => {
+    let response;
+    const url = `${this.url}/algorithms/${this.algorithm}/questions/create_from_diagram`;
+    questionBody['instanceable_id'] = this.instanceableId;
+    questionBody['instanceable_type'] = this.instanceableType;
+
+    const header = await this.setHeaders("POST", questionBody);
+    const request = await fetch( url, header).catch(error => console.log(error));
+
+    // Display error or parse json
+    if (request.ok) {
+      response = await request.json();
+    } else {
+      response = request;
+    }
+    return await response;
+  };
 
   // @params [Integer] nodeId
-  // @return [Object] body of requestc
+  // @return [Object] body of request
   // Create an instance
   createQuestionsSequence = async (reference, label, description, type, minScore) => {
     let response;
@@ -216,9 +236,10 @@ export default class Http {
   // Exclude a final diagnostic
   excludeDiagnostic = async (dfId, excludedDfId) => {
     let response;
-    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/${dfId}/add_excluded_diagnostic`;
+    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/add_excluded_diagnostic`;
     const body = {
       final_diagnostic: {
+        id: dfId,
         final_diagnostic_id: excludedDfId,
       }
     };
@@ -446,6 +467,28 @@ export default class Http {
     return await response;
   };
 
+  // @params [Hash] body of the question with its answers
+  // @return [Object] body of request
+  // Update a question and its answers
+  updateQuestion = async (questionBody) => {
+    let response;
+    const url = `${this.url}/algorithms/${this.algorithm}/questions/${questionBody.question.id}/update_from_diagram`;
+    questionBody['instanceable_id'] = this.instanceableId;
+    questionBody['instanceable_type'] = this.instanceableType;
+
+    const header = await this.setHeaders("PUT", questionBody);
+    const request = await fetch( url, header).catch(error => console.log(error));
+
+    // Display error or parse json
+    if (request.ok) {
+      response = await request.json();
+    } else {
+      response = request;
+    }
+    return await response;
+  };
+
+
   // @params [Integer] id, [String] reference, [String] label, [String] description
   // @return [Object] body of request
   // Update predefined syndrome node
@@ -491,6 +534,26 @@ export default class Http {
    return await response;
   };
 
+  // @params [Hash] body of the question
+  // @return [Object] body of request
+  // Validate the question itself
+  validateQuestion = async (questionBody) => {
+    let response;
+    const url = `${this.url}/algorithms/${this.algorithm}/questions/validate`;
+    questionBody['instanceable_id'] = this.instanceableId;
+    questionBody['instanceable_type'] = this.instanceableType;
+
+    const header = await this.setHeaders("POST", questionBody);
+    const request = await fetch( url, header).catch(error => console.log(error));
+
+    // Display error or parse json
+    if (request.ok) {
+      response = await request.json();
+    } else {
+      response = request;
+    }
+    return await response;
+  };
 
   // @return [Object] flash message
   // Validate predefined syndrome scored

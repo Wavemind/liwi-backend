@@ -11,15 +11,11 @@ import * as _ from "lodash";
 
 /**
  * @author Emmanuel Barchichat
- * Modal content to create a final diagnostic
+ * Modal content to create an health cares
  */
 class UpdateHealthCareForm extends React.Component {
   constructor(props) {
     super(props);
-
-    this.handleReference = this.handleReference.bind(this);
-    this.handleLabel = this.handleLabel.bind(this);
-    this.handleDescription = this.handleDescription.bind(this);
   }
 
   state = {
@@ -39,8 +35,8 @@ class UpdateHealthCareForm extends React.Component {
       id: newCurrentNode.id,
       reference: newCurrentNode.reference,
       label: newCurrentNode.label_translations["en"],
-      description: newCurrentNode.description_translations === null ? '' : newCurrentNode.description_translations["en"],
-      type: newCurrentNode.type === 'HealthCares::Management' ? 'managements' : 'treatments',
+      description: newCurrentNode.description_translations === null ? "" : newCurrentNode.description_translations["en"],
+      type: newCurrentNode.type === "HealthCares::Management" ? "managements" : "treatments"
     });
   }
 
@@ -78,38 +74,26 @@ class UpdateHealthCareForm extends React.Component {
     }
   };
 
-  // Set state for the input changes
-  handleReference = (event) => {
-    this.setState({ reference: event.target.value });
+  // Set value of inputs in state
+  updateState = (event) => {
+    const key = event.target.name;
+    const value = event.target.value;
+    this.setState({ [key]: value });
   };
-
-  // Set state for the input changes
-  handleLabel = (event) => {
-    this.setState({ label: event.target.value });
-  };
-
-  // Set state for the input changes
-  handleDescription = (event) => {
-    this.setState({ description: event.target.value });
-  };
-
 
   render() {
-    const {
-      toggleModal,
-      currentHealthCareType
-    } = this.props;
+    const { toggleModal } = this.props;
     const {
       reference,
       label,
       description,
-      errors,
+      errors
     } = this.state;
 
     return (
-      <Form onSubmit={() => this.create()}>
+      <Form onSubmit={this.updateState}>
         <Modal.Header>
-          <Modal.Title>Create a final diagnostic</Modal.Title>
+          <Modal.Title>Update health cares</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form.Row>
@@ -121,7 +105,7 @@ class UpdateHealthCareForm extends React.Component {
                   aria-describedby="inputGroupPrepend"
                   name="reference"
                   value={reference}
-                  onChange={this.handleReference}
+                  onChange={this.updateState}
                   isInvalid={!!errors.reference}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -140,11 +124,11 @@ class UpdateHealthCareForm extends React.Component {
                   aria-describedby="inputGroupPrepend"
                   name="label"
                   value={label}
-                  onChange={this.handleLabel}
-                  isInvalid={!!errors.label}
+                  onChange={this.updateState}
+                  isInvalid={!!errors.label_en}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {errors.label}
+                  {errors.label_en}
                 </Form.Control.Feedback>
               </InputGroup>
             </Form.Group>
@@ -161,7 +145,7 @@ class UpdateHealthCareForm extends React.Component {
                   name="description"
                   width="100%"
                   value={description}
-                  onChange={this.handleDescription}
+                  onChange={this.updateState}
                 />
               </InputGroup>
             </Form.Group>
@@ -169,10 +153,10 @@ class UpdateHealthCareForm extends React.Component {
 
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={() => this.update()}>
+          <Button variant="primary" onClick={this.update}>
             Update
           </Button>
-          <Button variant="secondary" onClick={() => toggleModal()}>
+          <Button variant="secondary" onClick={toggleModal}>
             Close
           </Button>
         </Modal.Footer>

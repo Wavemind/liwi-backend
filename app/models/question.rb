@@ -1,7 +1,7 @@
 # Child of Node / Questions asked to the patient
 class Question < Node
 
-  after_create :create_boolean, if: Proc.new { answer_type.value == 'Boolean' }
+  after_create :create_boolean, if: Proc.new {answer_type.value == 'Boolean'}
 
   attr_accessor :unavailable
 
@@ -11,13 +11,14 @@ class Question < Node
   has_many :answers, foreign_key: 'node_id', dependent: :destroy
   belongs_to :answer_type
 
-  validates_presence_of :priority
+  before_validation :validate_formula, if: Proc.new { self.formula.present? }
+  validates_presence_of :priority, :stage
 
-  accepts_nested_attributes_for :answers, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :answers, allow_destroy: true
 
   # Preload the children of class Question
   def self.descendants
-    [Questions::AssessmentTest, Questions::ChiefComplain, Questions::Demographic, Questions::Exposure, Questions::PhysicalExam, Questions::Symptom, Questions::Vaccine]
+    [Questions::AssessmentTest, Questions::ChiefComplaint, Questions::Demographic, Questions::Exposure, Questions::PhysicalExam, Questions::Symptom, Questions::Vaccine, Questions::VitalSign]
   end
 
   # Get the reference prefix according to the type
@@ -32,6 +33,7 @@ class Question < Node
     I18n.t("questions.categories.#{Object.const_get(type).variable}.reference_prefix")
   end
 
+  # Return a hash with all question categories with their name, label and prefix
   def self.categories
     categories = []
     self.descendants.each do |category|
@@ -42,6 +44,15 @@ class Question < Node
       categories.push(current_category)
     end
     categories
+  end
+
+  # After all answers have been created, ensure that they does not share the same reference
+  def validate_answers_references
+    valid = true
+    answers.map do |answer|
+      valid = false unless answer.unique_reference
+    end
+    valid
   end
 
   private
@@ -61,7 +72,22 @@ class Question < Node
     self.reference = reference_prefix + reference
   end
 
+  # Display the label for the current child
   def self.display_label
     I18n.t("questions.categories.#{self.variable}.label")
+  end
+
+  # Ensure that the formula is in a correct format
+  def validate_formula
+    errors.add(:formula, I18n.t('questions.errors.formula_wrong_characters')) if formula.match(/^(\[(.*?)\]|[ \(\)\*\/\+\-|0-9])*$/).nil?
+    formula.scan(/\[.*?\]/).each do |reference|
+      reference = reference.tr('[]', '')
+      question = algorithm.questions.find_by(reference: reference)
+      if question.present?
+        errors.add(:formula, I18n.t('questions.errors.formula_reference_not_numeric', reference: reference)) unless question.answer_type.display == 'Input'
+      else
+        errors.add(:formula, I18n.t('questions.errors.formula_wrong_reference', reference: reference))
+      end
+    end
   end
 end

@@ -2,13 +2,17 @@
 <%= f.input :stage, collection: Question.stages.map { |k, v| [t("question.stages.#{k}"), k] }, prompt: t('select') %>
 <%= f.input :type, collection: Question.descendants, input_html: {id: 'question_type'}, value_method: :name, label_method: :display_label, prompt: t('select'), disabled: f.object.persisted? %>
 
-<%= f.input :reference, prepend: (f.object.persisted? ? false : (@question.type.nil? ? '' : @question.reference_prefix)), disabled: f.object.persisted? %>
+<%= f.input :reference, prepend: (f.object.persisted? ? false : (@question.type.nil? ? '' : @question.reference_prefix)) %>
 <%= f.input :label_en %>
 <%= f.input :description_en, as: :text %>
 
 <%= f.association :answer_type, collection: AnswerType.all, label_method: :display_name, prompt: t('select'), disabled: @question.answers.any?  %>
 
 <%= f.input :unavailable, input_html: {id: 'question_unavailable'}, as: :boolean %>
+
+<hr />
+
+<%= f.input :formula %>
 
 <hr />
 

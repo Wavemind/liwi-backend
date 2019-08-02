@@ -15,10 +15,6 @@ import { withDiagram } from "../../../../context/Diagram.context";
 class CreateFinalDiagnosticForm extends React.Component {
   constructor(props) {
     super(props);
-
-    this.handleReference = this.handleReference.bind(this);
-    this.handleLabel = this.handleLabel.bind(this);
-    this.handleDescription = this.handleDescription.bind(this);
   }
 
   state = {
@@ -54,28 +50,19 @@ class CreateFinalDiagnosticForm extends React.Component {
         newErrors.reference = result.errors.reference[0];
       }
 
-      if (result.errors.label !== undefined) {
-        newErrors.label = result.errors.label[0];
+      if (result.errors.label_en !== undefined) {
+        newErrors.label_en = result.errors.label_en[0];
       }
       this.setState({ errors: newErrors });
     }
   };
 
-  // Set state for the input changes
-  handleReference = (event) => {
-    this.setState({ reference: event.target.value });
+  // Set value of inputs in state
+  updateState = (event) => {
+    const key = event.target.name;
+    const value = event.target.value;
+    this.setState({ [key]: value });
   };
-
-  // Set state for the input changes
-  handleLabel = (event) => {
-    this.setState({ label: event.target.value });
-  };
-
-  // Set state for the input changes
-  handleDescription = (event) => {
-    this.setState({ description: event.target.value });
-  };
-
 
   render() {
     const { toggleModal } = this.props;
@@ -83,11 +70,11 @@ class CreateFinalDiagnosticForm extends React.Component {
       reference,
       label,
       description,
-      errors,
+      errors
     } = this.state;
 
     return (
-      <Form onSubmit={() => this.create()}>
+      <Form onSubmit={this.create}>
         <Modal.Header>
           <Modal.Title>Create a final diagnostic</Modal.Title>
         </Modal.Header>
@@ -104,7 +91,8 @@ class CreateFinalDiagnosticForm extends React.Component {
                   aria-describedby="inputGroupPrepend"
                   name="reference"
                   value={reference}
-                  onChange={this.handleReference}
+                  index={"label"}
+                  onChange={this.updateState}
                   isInvalid={!!errors.reference}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -123,11 +111,11 @@ class CreateFinalDiagnosticForm extends React.Component {
                   aria-describedby="inputGroupPrepend"
                   name="label"
                   value={label}
-                  onChange={this.handleLabel}
-                  isInvalid={!!errors.label}
+                  onChange={this.updateState}
+                  isInvalid={!!errors.label_en}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {errors.label}
+                  {errors.label_en}
                 </Form.Control.Feedback>
               </InputGroup>
             </Form.Group>
@@ -144,7 +132,7 @@ class CreateFinalDiagnosticForm extends React.Component {
                   name="description"
                   width="100%"
                   value={description}
-                  onChange={this.handleDescription}
+                  onChange={this.updateState}
                 />
               </InputGroup>
             </Form.Group>
@@ -152,10 +140,10 @@ class CreateFinalDiagnosticForm extends React.Component {
 
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={() => this.create()}>
+          <Button variant="primary" onClick={this.create}>
             Create
           </Button>
-          <Button variant="secondary" onClick={() => toggleModal()}>
+          <Button variant="secondary" onClick={toggleModal}>
             Close
           </Button>
         </Modal.Footer>

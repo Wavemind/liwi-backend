@@ -27,10 +27,10 @@ class NotDFWidget extends React.Component {
     node.setSelected(false);
 
     const { set } = this.props;
-    set('modalToOpen', 'Update' + node.node.node_type);
-    set('currentNode', node.node);
-    set('currentDiagramNode', node);
-    set('modalIsOpen', true);
+    set(
+      ['modalToOpen', 'currentNode', 'currentDiagramNode', 'modalIsOpen'],
+      ['Update' + node.node.node_type, node.node, node, true]
+    );
   };
 
   render() {

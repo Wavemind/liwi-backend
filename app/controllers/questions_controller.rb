@@ -1,8 +1,8 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:new, :create, :edit, :update, :answers, :destroy]
+  before_action :set_algorithm, only: [:new, :create, :edit, :update, :answers, :destroy, :create_from_diagram, :validate]
   before_action :set_breadcrumb, only: [:new, :edit]
-  before_action :set_question, only: [:edit, :update, :answers, :category_reference, :update_translations, :destroy]
+  before_action :set_question, only: [:edit, :update, :answers, :category_reference, :update_translations, :destroy, :update_from_diagram]
 
   def new
     add_breadcrumb t('breadcrumbs.new')
@@ -77,11 +77,55 @@ class QuestionsController < ApplicationController
     end
   end
 
+  # POST
+  # @return  node
+  # Create a question node from diagram and instance it
+  def create_from_diagram
+    ActiveRecord::Base.transaction(requires_new: true) do
+      question = @algorithm.questions.new(question_params).becomes(Object.const_get(question_params[:type]))
+      question.becomes(Object.const_get(question_params[:type])) if question_params[:type].present?
+
+      # in order to add answers after creation (which can't be done if the question has no id), we also remove reference from params so it will not fail validation
+      if question.save && question.update(question_params.except(:reference)) && question.validate_answers_references
+        instanceable = Object.const_get(params[:instanceable_type].camelize.singularize).find(params[:instanceable_id])
+        instanceable.components.create!(node: question, final_diagnostic_id: params[:final_diagnostic_id])
+        render json: {status: 'success', messages: [t('flash_message.success_created')], node: question.as_json(include: :answers, methods: [:node_type, :category_name, :type])}
+      else
+        errors = question.answer_type.value == 'Boolean' ? question.errors.messages : question.answers.map(&:errors).map(&:messages)
+        render json: {status: 'danger', errors: errors, ok: false}
+        raise ActiveRecord::Rollback, ''
+      end
+    end
+  end
+
   # GET algorithm/:algorithm_id/version/:version_id/questions/reference_prefix/:type
   # @params Question child
   # @return json with the reference prefix of the child
   def reference_prefix
     render json: Question.reference_prefix_class(params[:type])
+  end
+
+  # PUT
+  # @return questions_sequence node
+  # Update a questions sequence node from diagram
+  def update_from_diagram
+    if @question.update(question_params)
+      render json: {status: 'success', messages: [t('flash_message.success_updated')], node: @question.as_json(include: :answers, methods: [:category_name, :node_type, :type])}
+    else
+      render json: {status: 'danger', errors: @question.errors.messages, ok: false}
+    end
+  end
+
+  # GET algorithm/:algorithm_id/questions/validate
+  # @params Question
+  # @return errors messages if question is not valid
+  def validate
+    question = @algorithm.questions.new(question_params)
+    if question.valid?
+      render json: {status: 'success', messages: ['valid']}
+    else
+      render json: {status: 'danger', errors: question.errors.messages, ok: false}
+    end
   end
 
   # @params Question with the translations
@@ -121,6 +165,7 @@ class QuestionsController < ApplicationController
       Language.description_params,
       :answer_type_id,
       :unavailable,
+      :formula,
       answers_attributes: [
         :id,
         :reference,
