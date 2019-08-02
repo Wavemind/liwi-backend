@@ -87,7 +87,7 @@ class AnswersContainer extends React.Component {
 
       let i = 0;
       Object.keys(answerComponents).map(function(key) {
-        answerComponents[key] =  React.cloneElement(answerComponents[key], {
+        answerComponents[key] = React.cloneElement(answerComponents[key], {
           errors: result.errors[i]
         });
         i++;

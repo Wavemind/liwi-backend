@@ -45,6 +45,13 @@ en:
     validation:
       value_missing: "Use coma separated values when using between operator"
       wrong_value_type: "The value is not in the correct type : %{type}"
+      between_wrong_order: "The first value has to be smaller than the second one"
+      overlap:
+        one_more_or_equal: "You have to have one (and only one) answer with more or equal operator in order to close your range."
+        one_less: "You have to have one (and only one) answer with less operator in order to open your range."
+        first_between_different_from_less: "The smallest value on your answers with between operator has to be equal to the answer with less operator."
+        last_between_different_from_more_or_equal: "The highest value on your answers with between operator has to be equal to the answer with more or equal operator."
+        between_not_following: "Two of your answers with between operators are not followed correctly."
     "yes": "Yes"
     unavailable: "Test/Assessment is unavailable"
   api:

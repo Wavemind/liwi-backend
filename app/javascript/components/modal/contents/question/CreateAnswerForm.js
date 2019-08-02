@@ -18,6 +18,14 @@ class CreateAnswerForm extends React.Component {
     super(props);
   }
 
+  shouldComponentUpdate(nextProps, nextState, nextContext) {
+    if (nextProps !== this.props) {
+      this.forceUpdate();
+      return true;
+    }
+    return false;
+  }
+
   // Push the answer object to the container
   handleFormChange = () => {
     const value = event.target.value;
@@ -33,6 +41,7 @@ class CreateAnswerForm extends React.Component {
     answer[name] = name === "operator" ? parseInt(value) : value;
 
     setAnswer(index, answer);
+    this.forceUpdate(); // Since there is no more state component does not rerender itself. I force it to make the form work. TODO better way to do so
   };
 
   render() {
