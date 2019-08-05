@@ -72,12 +72,12 @@ class FinalDiagnosticsController < ApplicationController
     if @final_diagnostic.update(final_diagnostic_params)
       respond_to do |format|
         format.html { redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'excluding_diagnostics'), notice: t('flash_message.success_updated') }
-        format.js { render json: {status: 'success', messages: [t('flash_message.success_updated')]} }
+        format.json { render json: {status: 'success', messages: [t('flash_message.success_updated')]} }
       end
     else
       respond_to do |format|
         format.html { redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'excluding_diagnostics'), alert: @final_diagnostic.errors.full_messages }
-        format.js { render json: { status: 'danger', statusText: @final_diagnostic.errors.full_messages, ok: false }}
+        format.json { render json: { status: 'danger', statusText: @final_diagnostic.errors.full_messages, ok: false }}
       end
     end
   end
@@ -113,12 +113,12 @@ class FinalDiagnosticsController < ApplicationController
     if @final_diagnostic.save
       respond_to do |format|
         format.html { redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'excluding_diagnostics'), notice: t('flash_message.success_updated') }
-        format.js { render json: {status: 'success', messages: [t('flash_message.success_updated')]} }
+        format.json { render json: {status: 'success', messages: [t('flash_message.success_updated')]} }
       end
     else
       respond_to do |format|
         format.html { redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'excluding_diagnostics'), alert: t('error') }
-        format.js { render json: {status: 'alert', messages: t('flash_message.update_fail')} }
+        format.json { render json: {status: 'alert', messages: t('flash_message.update_fail')} }
       end
     end
   end
