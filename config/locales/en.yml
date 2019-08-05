@@ -3,6 +3,7 @@ en:
     attributes:
       node:
         unavailable: "Can be unavailable ?"
+  activated: "Activate"
   add: "Add"
   algorithms:
     index:
