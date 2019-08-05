@@ -52,6 +52,7 @@ en:
         first_between_different_from_less: "The smallest value on your answers with between operator has to be equal to the answer with less operator."
         last_between_different_from_more_or_equal: "The highest value on your answers with between operator has to be equal to the answer with more or equal operator."
         between_not_following: "Two of your answers with between operators are not followed correctly."
+        less_greater_than_more_or_equal: "Your answer with less operator can't be greater than your answer with more or equal operator."
     "yes": "Yes"
     unavailable: "Test/Assessment is unavailable"
   api:
