@@ -24,7 +24,8 @@ class AnswersContainer extends React.Component {
   state = {
     errors: {},
     answers: {},
-    answerComponents: {}
+    answerComponents: {},
+    overlapErrors: []
   };
 
   componentWillMount() {
@@ -84,6 +85,7 @@ class AnswersContainer extends React.Component {
       await addMessage({ status: result.status, messages: result.messages });
       set("currentDbNode", result.node);
     } else {
+      console.log(result.overlap_errors);
 
       let i = 0;
       Object.keys(answerComponents).map(function(key) {
@@ -101,7 +103,7 @@ class AnswersContainer extends React.Component {
       if (result.errors.label !== undefined) {
         newErrors.label = result.errors.label[0];
       }
-      this.setState({ errors: newErrors, answerComponents });
+      this.setState({ errors: newErrors, overlapErrors: result.overlap_errors, answerComponents });
     }
   };
 
@@ -150,6 +152,7 @@ class AnswersContainer extends React.Component {
 
     const {
       answerComponents,
+      overlapErrors
     } = this.state;
 
     return (
@@ -158,6 +161,10 @@ class AnswersContainer extends React.Component {
           <Modal.Title>Create answers</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          {overlapErrors.map((error) => (
+            <p className="displayedErrors">{error}</p>
+          ))}
+
           {Object.keys(answerComponents).map((key) => {
             return <React.Fragment> { answerComponents[key] }</React.Fragment>
           })}

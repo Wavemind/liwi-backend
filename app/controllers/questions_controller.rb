@@ -70,10 +70,14 @@ class QuestionsController < ApplicationController
   # @return redirect to algorithms#index with flash message
   # Create answers related to the current question
   def answers
-    if @question.update(question_params)
-      redirect_to algorithm_url(@algorithm, panel: 'questions'), notice: t('flash_message.success_updated')
-    else
-      render 'answers/new'
+    ActiveRecord::Base.transaction(requires_new: true) do
+      if @question.update(question_params) && @question.validate_answers_references && @question.validate_overlap
+        redirect_to algorithm_url(@algorithm, panel: 'questions'), notice: t('flash_message.success_updated')
+      else
+        flash[:alert] = @question.errors[:answers] if @question.errors[:answers].any?
+        render 'answers/new'
+        raise ActiveRecord::Rollback, ''
+      end
     end
   end
 
@@ -91,11 +95,8 @@ class QuestionsController < ApplicationController
         instanceable.components.create!(node: question, final_diagnostic_id: params[:final_diagnostic_id])
         render json: {status: 'success', messages: [t('flash_message.success_created')], node: question.as_json(include: :answers, methods: [:node_type, :category_name, :type])}
       else
-        puts '***'
-        puts question.errors.messages
-        puts '***'
         errors = question.answer_type.value == 'Boolean' ? question.errors.messages : question.answers.map(&:errors).map(&:messages)
-        render json: {status: 'danger', errors: errors, ok: false}
+        render json: {status: 'danger', errors: errors, overlap_errors: question.errors[:answers], ok: false}
         raise ActiveRecord::Rollback, ''
       end
     end
