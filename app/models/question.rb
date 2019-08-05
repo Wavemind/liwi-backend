@@ -55,7 +55,7 @@ class Question < Node
     valid
   end
 
-  
+  # Ensure that the answers are coherent with each other, that every value the mobile user may enter match one and only one answers entered by the medal-C user
   def validate_overlap
     return true if answer_type.display != 'Input'
 
