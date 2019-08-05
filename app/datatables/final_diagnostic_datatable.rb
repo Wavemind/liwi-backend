@@ -34,6 +34,6 @@ class FinalDiagnosticDatatable < AjaxDatatablesRails::ActiveRecord
   end
 
   def get_raw_records
-    Diagnostic.find(params[:diagnostic_id]).final_diagnostics.includes(:instances)
+    Diagnostic.find(params[:diagnostic_id]).final_diagnostics
   end
 end

@@ -38,6 +38,6 @@ class QuestionsSequenceScoredDatatable < AjaxDatatablesRails::ActiveRecord
 
   # Activerecord request
   def get_raw_records
-    Algorithm.find(params[:id]).questions_sequences.scored.includes(:instances, :algorithm)
+    Algorithm.find(params[:id]).questions_sequences.scored.includes(:algorithm)
   end
 end
