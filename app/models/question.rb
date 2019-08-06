@@ -83,7 +83,7 @@ class Question < Node
       end
     end
 
-    !errors.messages.present?
+    errors.messages.blank?
   end
 
   private

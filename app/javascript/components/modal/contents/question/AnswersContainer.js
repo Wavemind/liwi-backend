@@ -85,7 +85,6 @@ class AnswersContainer extends React.Component {
       await addMessage({ status: result.status, messages: result.messages });
       set("currentDbNode", result.node);
     } else {
-      console.log(result.overlap_errors);
 
       let i = 0;
       Object.keys(answerComponents).map(function(key) {

@@ -18,14 +18,6 @@ class CreateAnswerForm extends React.Component {
     super(props);
   }
 
-  shouldComponentUpdate(nextProps, nextState, nextContext) {
-    if (nextProps !== this.props) {
-      this.forceUpdate();
-      return true;
-    }
-    return false;
-  }
-
   // Push the answer object to the container
   handleFormChange = () => {
     const value = event.target.value;
