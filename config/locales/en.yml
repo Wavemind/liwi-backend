@@ -32,6 +32,7 @@ en:
       - "Dropdown list"
       - "Input integer"
       - "Input decimal"
+      - "Formula"
   answers:
     edit:
       title: "Edit related answers of %{name} question"

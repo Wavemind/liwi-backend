@@ -1,6 +1,7 @@
 jQuery(document).ready(function() {
 
   $("#question_unavailable").closest("fieldset").addClass("d-none");
+  $("#question_formula").closest(".form-group").addClass("d-none");
 
   $("#questions-datatable").dataTable({
     "processing": true,
@@ -46,6 +47,18 @@ jQuery(document).ready(function() {
       });
     } else {
       prepend.text("_");
+    }
+  });
+
+  // Hide or show formula field if formula answer type is selected
+  $("#question_answer_type_id").change(function() {
+    let questionFormula = $("#question_formula").closest(".form-group");
+    let answerType = $("#question_answer_type_id option:selected").val();
+
+    if ($(questionFormula).hasClass("d-none") && answerType === "5") {
+      $(questionFormula).removeClass("d-none");
+    } else if(answerType !== "5") {
+      $(questionFormula).addClass("d-none");
     }
   });
 });

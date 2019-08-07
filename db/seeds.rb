@@ -66,6 +66,7 @@ boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
 dropdown_list = AnswerType.create!(value: 'Array', display: 'DropDownList')
 input_integer = AnswerType.create!(value: 'Integer', display: 'Input')
 input_float = AnswerType.create!(value: 'Float', display: 'Input')
+formula = AnswerType.create!(value: 'Float', display: 'Formula')
 
 john = Patient.create!(first_name: 'John', last_name: 'Do', birth_date: Date.new(1970,1,1))
 marc = Patient.create!(first_name: 'Marc', last_name: 'Do', birth_date: Date.new(1970,1,1))
