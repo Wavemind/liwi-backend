@@ -230,11 +230,13 @@ en:
       in-port-title: "In port"
       out-port-title: "Out port"
       excluded-diagnostic-title: "Excluded diagnostic"
+      score-title: "Questions Sequence Scored"
       arrow-content: "Define links between questions"
       dashed-arrow-content: "Define which final diagnostic has priority. The final diagnostic who is targeted by the arrow is excluded."
-      in-port-content: "Blue box in the top of the nodes. Inport where the link begins"
-      out-port-content: "Green box below the nodes : Outport where the link ends"
+      in-port-content: "Blue box in the top of the nodes. Inport where the link ends"
+      out-port-content: "Green box below the nodes : Outport where the link begins"
       excluded-diagnostic-content: "The green box on the left of the nodes is the outport for excluding final diagnostics. The blue box is the inport for excluding final diagnostics."
+      score-content: "In order to add scores to your answers, you have to make a link between an answer and the questions sequence scored. This will display a pop up asking you the score to attribute to this relation."
   instances:
     table:
       columns:
