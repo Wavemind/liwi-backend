@@ -1,8 +1,8 @@
 class VersionsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: [:change_triage_order]
   before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive]
   before_action :set_breadcrumb, only: [:show, :new, :edit]
-  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive]
+  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :change_triage_order]
 
   def index
     respond_to do |format|
@@ -63,6 +63,17 @@ class VersionsController < ApplicationController
     end
   end
 
+  # PUT algorithms/:algorithm_id/version/:id/change_triage_order
+  # @params version [Version] version of algorithm we change order of
+  # Change the order of the triage questions for this version
+  def change_triage_order
+    if @version.update(triage_questions_order: params[:triage_questions_order])
+      render json: {result: 'success'}
+    else
+      render json: {result: 'error'}
+    end
+  end
+
   # PUT algorithms/:algorithm_id/version/:id/unarchive
   # @params version [Version] version to archive
   # @return redirect to algorithms#index with flash message
@@ -93,6 +104,7 @@ class VersionsController < ApplicationController
     params.require(:version).permit(
       :id,
       :name,
+      :triage_questions_order
     )
   end
 end

@@ -289,6 +289,7 @@ ActiveRecord::Schema.define(version: 2019_07_30_092654) do
     t.bigint "algorithm_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "triage_questions_order", default: [], array: true
     t.index ["algorithm_id"], name: "index_versions_on_algorithm_id"
     t.index ["user_id"], name: "index_versions_on_user_id"
   end

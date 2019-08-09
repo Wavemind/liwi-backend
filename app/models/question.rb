@@ -1,7 +1,9 @@
 # Child of Node / Questions asked to the patient
 class Question < Node
 
-  after_create :create_boolean, if: Proc.new {answer_type.value == 'Boolean'}
+  after_create :create_boolean, if: Proc.new { answer_type.value == 'Boolean' }
+  after_create :push_in_versions, if: Proc.new { stage == 'triage' }
+  before_destroy :remove_from_versions, if: Proc.new { stage == 'triage' }
 
   attr_accessor :unavailable
 
@@ -44,6 +46,20 @@ class Question < Node
       categories.push(current_category)
     end
     categories
+  end
+
+  # When a question from triage stage is created, push it at the end of the versions order
+  def push_in_versions
+    algorithm.versions.each do |version|
+      version.update(triage_questions_order: version.triage_questions_order.push(id))
+    end
+  end
+
+  # Remove the triage question from the version triage orders
+  def remove_from_versions
+    algorithm.versions.each do |version|
+      version.update(triage_questions_order: version.triage_questions_order.delete(id)) if version.triage_questions_order.include?(id)
+    end
   end
 
   # After all answers have been created, ensure that they does not share the same reference
