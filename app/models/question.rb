@@ -109,8 +109,9 @@ class Question < Node
   def unique_reference
     if type.blank?
       errors.add(:type, I18n.t('questions.errors.no_blank'))
-    elsif algorithm.questions.where(reference: reference_prefix + reference).any?
-      errors.add(:reference, I18n.t('nodes.validation.reference_used'))
+    else
+      q = algorithm.questions.where(reference: reference_prefix + reference).first
+      errors.add(:reference, I18n.t('nodes.validation.reference_used')) if q.present? && q.id != id
     end
   end
 
