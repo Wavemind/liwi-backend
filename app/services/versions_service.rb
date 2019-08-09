@@ -8,12 +8,12 @@ class VersionsService
     @version = Version.find(id)
 
     hash = extract_version_metadata
-    hash['diseases'] = {}
+    hash['diagnostics'] = {}
 
     # Loop in each diagnostics defined in current algorithm version
     @version.diagnostics.includes(:conditions).each do |diagnostic|
       @diagnostics_ids << diagnostic.id
-      hash['diseases'][diagnostic.id] = extract_diagnostic(diagnostic)
+      hash['diagnostics'][diagnostic.id] = extract_diagnostic(diagnostic)
     end
 
     # Set all questions/treatments/managements used in this version of algorithm
@@ -120,7 +120,7 @@ class VersionsService
   def self.extract_final_diagnostic(instance)
     final_diagnostic = instance.node
     hash = extract_conditions(instance.conditions)
-    hash['disease_id'] = final_diagnostic.diagnostic.id
+    hash['diagnostic_id'] = final_diagnostic.diagnostic.id
     hash['name'] = final_diagnostic.label
     hash['id'] = final_diagnostic.id
     hash['type'] = final_diagnostic.node_type
