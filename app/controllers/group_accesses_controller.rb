@@ -11,7 +11,16 @@ class GroupAccessesController < ApplicationController
   def create
     @group_access = GroupAccess.new(group_access_params)
 
-    if @group_access.save
+    invalid_diagnostics = []
+    version = Version.find(group_access_params[:version_id])
+    version.diagnostics.each do |diagnostic|
+      diagnostic.manual_validate
+      invalid_diagnostics.push(diagnostic.reference) if diagnostic.errors.messages.any?
+    end
+
+    if invalid_diagnostics.any?
+      redirect_to @group_access.group, alert: t('flash_message.version.invalids_diagnostics', diagnostics: invalid_diagnostics)
+    elsif @group_access.save
       redirect_to @group_access.group, notice: t('flash_message.success_created')
     else
       redirect_to @group_access.group

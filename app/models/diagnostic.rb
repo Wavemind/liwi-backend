@@ -157,12 +157,19 @@ class Diagnostic < ApplicationRecord
 
   # Add errors to a diagnostic for its components
   def manual_validate
+    errors.add(:basic, I18n.t('flash_message.diagnostic.one_chief_complaint')) if components.joins(:node).where('nodes.type = ?', 'Questions::ChiefComplaint').count != 1
+
     components.includes(:node, :children, :conditions).each do |instance|
       if instance.node.is_a? FinalDiagnostic
         unless instance.conditions.any?
           errors.add(:basic, I18n.t('flash_message.diagnostic.final_diagnostic_no_condition', reference: instance.node.reference))
         end
       elsif instance.node.is_a?(Question) || instance.node.is_a?(QuestionsSequence)
+        if instance.node.is_a?(Questions::ChiefComplaint)
+          errors.add(:basic, I18n.t('flash_message.diagnostic.chief_complaint_not_at_start')) if instance.conditions.count > 0
+        elsif instance.conditions.count == 0
+          errors.add(:basic, I18n.t('flash_message.diagnostic.no_chief_complaint_at_start'))
+        end
         unless instance.children.any?
           if instance.final_diagnostic.nil?
             errors.add(:basic, I18n.t('flash_message.diagnostic.question_no_children', type: instance.node.node_type, reference: instance.node.reference))

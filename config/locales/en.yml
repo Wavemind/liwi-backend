@@ -186,15 +186,20 @@ en:
     success_updated: "Data was successfully updated"
     update_fail: "Error will updating value"
     diagnostic:
+      chief_complaint_not_at_start: "Your Chief complaint question should always be at the start of your diagram."
       final_diagnostic_no_condition: "The Final Diagnostic %{reference} has no condition."
-      question_no_children: "The %{type} %{reference} is not linked to any children."
       hc_question_no_children: "The %{type} %{reference}, which is in <u><a href='%{url}'>%{df_reference}</a></u> is not linked to any children."
+      no_chief_complaint_at_start: "Your diagram should always start with a Chief complaint question."
+      one_chief_complaint: "There should be one and only one Chief Complaint in one diagram"
+      question_no_children: "The %{type} %{reference} is not linked to any children."
       valid: "This diagnostic is valid!"
     questions_sequence:
       ps_no_condition: "The questions sequence you are describing has no condition."
       question_no_children: "The %{type} %{reference} is not linked to any children."
       pss_no_combination: "There is no combination for this questions sequence to be true."
       valid: "This questions sequence is valid!"
+    version:
+      invalids_diagnostics: "Your version contains diagnostics who are invalid : %{diagnostics}"
   groups:
     add_device:
       success_add_device: "Device was successfully added to group"
