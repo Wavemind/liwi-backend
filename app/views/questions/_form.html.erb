@@ -8,7 +8,7 @@
 
 <%= f.association :answer_type, collection: AnswerType.all, label_method: :display_name, prompt: t('select'), disabled: @question.answers.any?  %>
 
-<%= f.input :unavailable, input_html: {id: 'question_unavailable'}, as: :boolean %>
+<%= f.input :unavailable, input_html: {id: 'question_unavailable', class: (f.object.persisted? && @question.is_a?(Questions::AssessmentTest)) ? 'edit_A' : ''}, as: :boolean %>
 
 <hr />
 

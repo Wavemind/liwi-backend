@@ -1,6 +1,8 @@
 jQuery(document).ready(function() {
 
-  $("#question_unavailable").closest("fieldset").addClass("d-none");
+  if (!$("#question_unavailable").hasClass("edit_A")) {
+    $("#question_unavailable").closest("fieldset").addClass("d-none");
+  }
 
   $("#questions-datatable").dataTable({
     "processing": true,
