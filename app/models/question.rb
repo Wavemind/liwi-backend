@@ -55,6 +55,37 @@ class Question < Node
     valid
   end
 
+  # Ensure that the answers are coherent with each other, that every value the mobile user may enter match one and only one answers entered by the medal-C user
+  def validate_overlap
+    return true if answer_type.display != 'Input'
+
+    self.errors.add(:answers, I18n.t('answers.validation.overlap.one_more_or_equal')) if answers.more_or_equal.count != 1
+    self.errors.add(:answers, I18n.t('answers.validation.overlap.one_less')) if answers.less.count != 1
+
+    if answers.less.any? && answers.more_or_equal.any?
+      self.errors.add(:answers, I18n.t('answers.validation.overlap.less_greater_than_more_or_equal')) if answers.less.first.value.to_f > answers.more_or_equal.first.value.to_f
+
+      betweens = []
+      answers.between.each do |answer|
+        betweens.push(answer.value.split(',').map(&:to_f))
+      end
+      betweens = betweens.sort_by {|a| a[0]}
+
+      if betweens.any?
+        self.errors.add(:answers, I18n.t('answers.validation.overlap.first_between_different_from_less')) if answers.less.first.value.to_f != betweens[0][0]
+        self.errors.add(:answers, I18n.t('answers.validation.overlap.last_between_different_from_more_or_equal')) if answers.more_or_equal.first.value.to_f != betweens.last[1]
+
+        betweens.each_with_index do |between, i|
+          unless i == 0
+            self.errors.add(:answers, I18n.t('answers.validation.overlap.between_not_following')) if between[0] != betweens[i - 1][1]
+          end
+        end
+      end
+    end
+
+    errors.messages.blank?
+  end
+
   private
 
   # {Node#unique_reference}

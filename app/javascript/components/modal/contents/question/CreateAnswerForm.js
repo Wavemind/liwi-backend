@@ -33,6 +33,7 @@ class CreateAnswerForm extends React.Component {
     answer[name] = name === "operator" ? parseInt(value) : value;
 
     setAnswer(index, answer);
+    this.forceUpdate(); // Since there is no more state component does not rerender itself. I force it to make the form work. TODO better way to do so
   };
 
   render() {

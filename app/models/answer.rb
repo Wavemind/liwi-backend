@@ -71,7 +71,13 @@ class Answer < ApplicationRecord
   def correct_value_type
     if node.is_a?(Question) && node.answer_type.display == 'Input'
       if between?
-        errors.add(:value, I18n.t('answers.validation.value_missing')) unless value.include?(',')
+        if value.include?(',')
+          values = value.split(',').map(&:to_i)
+          errors.add(:value, I18n.t('answers.validation.between_wrong_order')) if values[0] > values[1]
+        else
+          errors.add(:value, I18n.t('answers.validation.value_missing'))
+        end
+
         value.split(',').each(&method(:validate_value_type))
       else
         validate_value_type(value)
