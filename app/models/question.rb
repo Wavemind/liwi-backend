@@ -54,6 +54,7 @@ class Question < Node
     end
   end
 
+  # Remove the triage question from the version triage orders
   def remove_from_versions
     algorithm.versions.each do |version|
       version.update(triage_questions_order: version.triage_questions_order.delete(id)) if version.triage_questions_order.include?(id)
