@@ -87,7 +87,7 @@ class VersionsService
     hash['label'] = diagnostic.label
     hash['differential'] = extract_conditions(diagnostic.conditions)
     hash['nodes'] = {}
-    hash['diagnosis'] = {}
+    hash['final_diagnostics'] = {}
 
     # Loop in each question used in current diagnostic
     diagnostic.components.questions.includes([:children, :nodes, node:[:answers, :answer_type]]).each do |question_instance|
@@ -109,7 +109,7 @@ class VersionsService
     diagnostic.components.final_diagnostics.each do |final_diagnostic_instance|
       final_diagnostic_hash = extract_final_diagnostic(final_diagnostic_instance)
       @final_diagnostics[final_diagnostic_instance.node.id] = final_diagnostic_hash
-      hash['diagnosis'][final_diagnostic_instance.node.id] = final_diagnostic_hash
+      hash['final_diagnostics'][final_diagnostic_instance.node.id] = final_diagnostic_hash
     end
 
     hash
@@ -127,7 +127,7 @@ class VersionsService
     hash['type'] = final_diagnostic.node_type
     hash['treatments'] = extract_health_cares(final_diagnostic.health_cares.treatments, instance.instanceable.id)
     hash['managements'] = extract_health_cares(final_diagnostic.health_cares.managements, instance.instanceable.id)
-    hash['excluding_diagnosis'] = final_diagnostic.final_diagnostic_id
+    hash['excluding_final_diagnostics'] = final_diagnostic.final_diagnostic_id
     hash
   end
 
