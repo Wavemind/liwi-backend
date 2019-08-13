@@ -1,8 +1,8 @@
 class VersionsController < ApplicationController
   before_action :authenticate_user!, except: [:change_triage_order]
-  before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive]
+  before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :create_triage_condition, :remove_triage_condition]
   before_action :set_breadcrumb, only: [:show, :new, :edit]
-  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :change_triage_order]
+  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :change_triage_order, :create_triage_condition, :remove_triage_condition]
 
   def index
     respond_to do |format|
@@ -74,6 +74,31 @@ class VersionsController < ApplicationController
     end
   end
 
+  # Create a condition between a triage question and a chief complaint
+  def create_triage_condition
+    instance = Instance.find(version_params[:triage_id])
+    cc_condition = Instance.find(version_params[:cc_id]).node.answers.first
+
+    condition = Condition.new(referenceable: instance, first_conditionable: cc_condition)
+
+    if condition.save
+      redirect_to algorithm_version_url(@algorithm, @version, panel: 'triage_conditions'), notice: t('flash_message.success_created')
+    else
+      redirect_to algorithm_version_url(@algorithm, @version, panel: 'triage_conditions'), notice: t('flash_message.create_fail')
+    end
+  end
+
+  # Remove a condition between a triage question and a chief complaint
+  def remove_triage_condition
+    condition = Condition.find(params[:condition_id])
+
+    if condition.destroy
+      redirect_to algorithm_version_url(@algorithm, @version, panel: 'triage_conditions'), notice: t('flash_message.success_created')
+    else
+      redirect_to algorithm_version_url(@algorithm, @version, panel: 'triage_conditions'), notice: t('flash_message.create_fail')
+    end
+  end
+
   # PUT algorithms/:algorithm_id/version/:id/unarchive
   # @params version [Version] version to archive
   # @return redirect to algorithms#index with flash message
@@ -104,7 +129,9 @@ class VersionsController < ApplicationController
     params.require(:version).permit(
       :id,
       :name,
-      :triage_questions_order
+      :triage_questions_order,
+      :triage_id,
+      :cc_id
     )
   end
 end

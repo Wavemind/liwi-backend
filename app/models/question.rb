@@ -51,6 +51,7 @@ class Question < Node
   # When a question from triage stage is created, push it at the end of the versions order
   def push_in_versions
     algorithm.versions.each do |version|
+      version.components.create!(node: self)
       version.update(triage_questions_order: version.triage_questions_order.push(id))
     end
   end
