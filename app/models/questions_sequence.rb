@@ -61,7 +61,7 @@ class QuestionsSequence < Node
   # @return [Json]
   # Return available nodes in the algorithm in json format
   def available_nodes_json
-    (algorithm.nodes.where.not(id: components.not_health_care_conditions.select(:node_id)).where.not('type LIKE ?', 'HealthCares::%')).as_json(methods: [:category_name, :node_type, :get_answers, :type])
+    (algorithm.nodes.where(stage: nil).or(algorithm.nodes.where.not(stage: Question.stages[:triage])).where.not(id: components.not_health_care_conditions.select(:node_id)).where.not('type LIKE ?', 'HealthCares::%')).as_json(methods: [:category_name, :node_type, :get_answers, :type])
   end
 
   # Add errors to a predefined syndrome for its components

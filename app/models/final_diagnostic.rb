@@ -63,7 +63,7 @@ class FinalDiagnostic < Node
   # @return [Json]
   # Return available nodes for health cares diagram in the algorithm in json format
   def available_nodes_health_cares_json
-    (diagnostic.version.algorithm.nodes.where.not(id: components.select(:node_id))).as_json(methods: [:category_name, :node_type, :get_answers, :type])
+    (diagnostic.version.algorithm.nodes.where(stage: nil).or(diagnostic.version.algorithm.nodes.where.not(stage: Question.stages[:triage])).where.not(id: components.select(:node_id))).as_json(methods: [:category_name, :node_type, :get_answers, :type])
   end
 
   # Recursive loop to make sure it is not excluding a grand child of excluded diagnostic
