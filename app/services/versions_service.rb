@@ -122,8 +122,8 @@ class VersionsService
     final_diagnostic = instance.node
     hash = extract_conditions(instance.conditions)
     hash['diagnostic_id'] = final_diagnostic.diagnostic.id
-    hash['name'] = final_diagnostic.label
     hash['id'] = final_diagnostic.id
+    hash['label'] = final_diagnostic.label
     hash['type'] = final_diagnostic.node_type
     hash['treatments'] = extract_health_cares(final_diagnostic.health_cares.treatments, instance.instanceable.id)
     hash['managements'] = extract_health_cares(final_diagnostic.health_cares.managements, instance.instanceable.id)
