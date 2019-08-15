@@ -86,7 +86,7 @@ class VersionsService
     hash['reference'] = diagnostic.reference
     hash['label'] = diagnostic.label
     hash['differential'] = extract_conditions(diagnostic.conditions)
-    hash['nodes'] = {}
+    hash['instances'] = {}
     hash['final_diagnostics'] = {}
 
     # Loop in each question used in current diagnostic
@@ -94,7 +94,7 @@ class VersionsService
       # Append the questions in order to list them all at the end of the json.
       assign_node(question_instance.node)
 
-      hash['nodes'][question_instance.node.id] = extract_instances(question_instance)
+      hash['instances'][question_instance.node.id] = extract_instances(question_instance)
     end
 
     # Loop in each predefined syndromes used in current diagnostic
@@ -102,7 +102,7 @@ class VersionsService
       # Append the predefined syndromes in order to list them all at the end of the json.
       assign_node(questions_sequence_instance.node)
 
-      hash['nodes'][questions_sequence_instance.node.id] = extract_instances(questions_sequence_instance)
+      hash['instances'][questions_sequence_instance.node.id] = extract_instances(questions_sequence_instance)
     end
 
     # Loop in each final diagnostics for set conditional acceptance and health cares related to it
@@ -337,7 +337,7 @@ class VersionsService
       hash[questions_sequence.id]['min_score'] = questions_sequence.min_score
       hash[questions_sequence.id]['type'] = questions_sequence.node_type
       hash[questions_sequence.id]['category'] = questions_sequence.category_name
-      hash[questions_sequence.id]['nodes'] = {}
+      hash[questions_sequence.id]['instances'] = {}
       hash[questions_sequence.id]['answers'] = push_questions_sequence_answers(questions_sequence)
       hash[questions_sequence.id]['qs'] = get_node_questions_sequences(questions_sequence, [])
       hash[questions_sequence.id]['dd'] = get_node_diagnostics(questions_sequence, [])
@@ -346,11 +346,11 @@ class VersionsService
       # Loop in each instance for defined condition
       questions_sequence.components.questions.includes(:conditions, :children, :nodes, node:[:answer_type, :answers]).each do |instance|
         # assign_node(instance.node)
-        hash[questions_sequence.id]['nodes'][instance.node.id] = extract_instances(instance)
+        hash[questions_sequence.id]['instances'][instance.node.id] = extract_instances(instance)
       end
 
       questions_sequence.components.questions_sequences.includes(:conditions, :children, :nodes).each do |instance|
-        hash[questions_sequence.id]['nodes'][instance.node.id] = extract_instances(instance) unless questions_sequence == instance.node
+        hash[questions_sequence.id]['instances'][instance.node.id] = extract_instances(instance) unless questions_sequence == instance.node
       end
     end
     hash
