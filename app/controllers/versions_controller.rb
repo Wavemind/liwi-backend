@@ -74,6 +74,10 @@ class VersionsController < ApplicationController
     end
   end
 
+  # PUT algorithms/:algorithm_id/version/:id/create_triage_condition
+  # @params version [Version] version of algorithm where we create a condition
+  # @params id of the triage question to put the condition on
+  # @params id of the chief complaint that condition the triage question
   # Create a condition between a triage question and a chief complaint
   def create_triage_condition
     instance = Instance.find(version_params[:triage_id])

@@ -46,14 +46,14 @@ jQuery(document).ready(function() {
             $(questionUnavailable).addClass("d-none");
           }
 
-          // Block answer type to boolean if it's ChiefComplaint or Vaccine
+          // Force answer type to boolean if it's ChiefComplaint or Vaccine
           if (response.responseText === "CC" || response.responseText === "V") {
             $("#question_answer_type_id").val("1").attr("disabled", true);
           } else {
             $("#question_answer_type_id").attr("disabled", false);
           }
 
-          // Block stage to triage if it's ChiefComplaint or VitalSign
+          // Force stage to triage if it's ChiefComplaint or VitalSign
           if (response.responseText === "CC" || response.responseText === "VS") {
             $("#question_stage").val("triage").attr("disabled", true); // Force triage for CC and V
           } else {
