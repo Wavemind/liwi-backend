@@ -1,5 +1,6 @@
 # How a disease is diagnosed -> Differential diagnostics
 # Contains the actual logic from its relations
+# Reference prefix : DD
 include Rails.application.routes.url_helpers
 class Diagnostic < ApplicationRecord
   before_create :complete_reference
@@ -138,7 +139,7 @@ class Diagnostic < ApplicationRecord
   # @return [Json]
   # Return available nodes in the algorithm in json format
   def available_nodes_json
-    
+
     ids = components.not_health_care_conditions.select(:node_id)
     (
       version.algorithm.questions.no_triage_but_other.where.not(id: ids).includes(:answers) +

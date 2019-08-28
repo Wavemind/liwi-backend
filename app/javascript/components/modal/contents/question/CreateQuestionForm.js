@@ -149,10 +149,8 @@ class CreateQuestionForm extends React.Component {
         stateToSet['answerTypeDisabled'] = false;
       }
 
+      // Force triage stage for those types
       if (value === "Questions::FirstLookAssessment" || value === "Questions::ChiefComplaint" || value === "Questions::VitalSign" || value === "Questions::ChronicalCondition") {
-        console.log(questionStages["triage"]);
-        console.log(questionStages);
-
         stateToSet['stage'] = questionStages["triage"];
         stateToSet['stageDisabled'] = true;
       } else {

@@ -46,16 +46,18 @@ jQuery(document).ready(function() {
             $(questionUnavailable).addClass("d-none");
           }
 
+          // Force answer type to boolean if it's ChiefComplaint or Vaccine
           if (response.responseText === "CC" || response.responseText === "V") {
             $("#question_answer_type_id").val("1").attr("disabled", true);
           } else {
             $("#question_answer_type_id").attr("disabled", false);
           }
 
+          // Force triage stage for ChiefComplaint, VitalSign, ChronicalCondition and FirstLookAssessment
           if (response.responseText === "CC" || response.responseText === "VS" || response.responseText === "CH" || response.responseText === "FL") {
             $("#question_stage").val("triage").attr("disabled", true);
           } else {
-            $("#question_stage  ").attr("disabled", false);
+            $("#question_stage").attr("disabled", false);
           }
         }
       });
