@@ -42,7 +42,6 @@ export default class DiagramProvider extends React.Component {
     };
 
     if (type === "Diagnostic") {
-      orderedNodes.chiefComplaint = [];
       orderedNodes.scored = [];
       orderedNodes.finalDiagnostic = [];
     } else if (type === "FinalDiagnostic") {
@@ -59,9 +58,6 @@ export default class DiagramProvider extends React.Component {
     // Assign node to correct array
     availableNodes.map((node) => {
       let category = this.getCategoryNode(node);
-      console.log(node);
-      console.log(category);
-
       orderedNodes[category].push(node);
     });
 
