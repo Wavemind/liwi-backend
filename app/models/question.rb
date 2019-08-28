@@ -20,7 +20,7 @@ class Question < Node
 
   # Preload the children of class Question
   def self.descendants
-    [Questions::AssessmentTest, Questions::ChiefComplaint, Questions::Demographic, Questions::Exposure, Questions::PhysicalExam, Questions::Symptom, Questions::Vaccine, Questions::VitalSign]
+    [Questions::AssessmentTest, Questions::ChiefComplaint, Questions::ChronicalCondition, Questions::Demographic, Questions::Exposure, Questions::FirstLookAssessment, Questions::PhysicalExam, Questions::Symptom, Questions::Vaccine, Questions::VitalSign]
   end
 
   # Get the reference prefix according to the type

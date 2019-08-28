@@ -1,4 +1,5 @@
 # Define a regular sequence of questions
+# Reference prefix : DC
 class QuestionsSequences::Comorbidity < QuestionsSequence
 
   def self.variable

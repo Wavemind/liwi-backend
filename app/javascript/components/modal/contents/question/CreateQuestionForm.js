@@ -27,6 +27,7 @@ class CreateQuestionForm extends React.Component {
     priority: "",
     answerType: "",
     answerTypeDisabled: false,
+    stageDisabled: false,
     prefix: "",
     errors: {}
   };
@@ -130,7 +131,10 @@ class CreateQuestionForm extends React.Component {
     const name = event.target.name;
 
     if (name === "type") {
-      const {questionCategories} = this.props;
+      const {
+        questionCategories,
+        questionStages
+      } = this.props;
       let stateToSet = {};
       stateToSet[name] = value;
       questionCategories.map((category) => {
@@ -143,6 +147,14 @@ class CreateQuestionForm extends React.Component {
         stateToSet['answerTypeDisabled'] = true;
       } else {
         stateToSet['answerTypeDisabled'] = false;
+      }
+
+      // Force triage stage for those types
+      if (value === "Questions::FirstLookAssessment" || value === "Questions::ChiefComplaint" || value === "Questions::VitalSign" || value === "Questions::ChronicalCondition") {
+        stateToSet['stage'] = questionStages["triage"];
+        stateToSet['stageDisabled'] = true;
+      } else {
+        stateToSet['stageDisabled'] = false;
       }
       this.setState(stateToSet);
     } else {
@@ -170,6 +182,7 @@ class CreateQuestionForm extends React.Component {
       priority,
       answerType,
       answerTypeDisabled,
+      stageDisabled,
       prefix
     } = this.state;
 
@@ -214,7 +227,7 @@ class CreateQuestionForm extends React.Component {
           <Form.Row>
             <Form.Group as={Col} controlId="formGridState">
               <Form.Label>Stage</Form.Label>
-              <Form.Control as="select" name="stage" onChange={this.handleFormChange} value={stage} isInvalid={!!errors.stage }>
+              <Form.Control as="select" name="stage" onChange={this.handleFormChange} value={stage} isInvalid={!!errors.stage } disabled = { stageDisabled }>
                 <option value="">Select the stage</option>
                 {Object.keys(questionStages).map(function(key) {
                   return <option value={questionStages[key]}>{key.charAt(0).toUpperCase() + key.slice(1)}</option>;

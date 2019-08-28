@@ -1,4 +1,5 @@
 # Define a final diagnostic
+# Reference prefix : DF
 class FinalDiagnostic < Node
 
   belongs_to :diagnostic
