@@ -8,6 +8,7 @@ class Diagnostic < ApplicationRecord
   attr_accessor :duplicating
 
   belongs_to :version
+  belongs_to :node
   has_many :final_diagnostics, dependent: :destroy
   has_many :conditions, as: :referenceable, dependent: :destroy
   has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy
@@ -137,7 +138,13 @@ class Diagnostic < ApplicationRecord
   # @return [Json]
   # Return available nodes in the algorithm in json format
   def available_nodes_json
-    (version.algorithm.nodes.where.not(id: components.not_health_care_conditions.select(:node_id)).where.not('type LIKE ?', 'HealthCares::%').includes(:answers) + final_diagnostics.where.not(id: components.select(:node_id))).as_json(methods: [:category_name, :node_type, :get_answers, :type])
+    
+    ids = components.not_health_care_conditions.select(:node_id)
+    (
+      version.algorithm.questions.no_triage_but_other.where.not(id: ids).includes(:answers) +
+      version.algorithm.questions_sequences.where.not(id: ids).includes(:answers) +
+      final_diagnostics.where.not(id: components.select(:node_id))
+    ).as_json(methods: [:category_name, :node_type, :get_answers, :type])
   end
 
   # @return [Boolean]
@@ -157,19 +164,12 @@ class Diagnostic < ApplicationRecord
 
   # Add errors to a diagnostic for its components
   def manual_validate
-    errors.add(:basic, I18n.t('flash_message.diagnostic.one_chief_complaint')) if components.joins(:node).where('nodes.type = ?', 'Questions::ChiefComplaint').count != 1
-
     components.includes(:node, :children, :conditions).each do |instance|
       if instance.node.is_a? FinalDiagnostic
         unless instance.conditions.any?
           errors.add(:basic, I18n.t('flash_message.diagnostic.final_diagnostic_no_condition', reference: instance.node.reference))
         end
       elsif instance.node.is_a?(Question) || instance.node.is_a?(QuestionsSequence)
-        if instance.node.is_a?(Questions::ChiefComplaint)
-          errors.add(:basic, I18n.t('flash_message.diagnostic.chief_complaint_not_at_start')) if instance.conditions.count > 0
-        elsif instance.conditions.count == 0
-          errors.add(:basic, I18n.t('flash_message.diagnostic.no_chief_complaint_at_start'))
-        end
         unless instance.children.any?
           if instance.final_diagnostic.nil?
             errors.add(:basic, I18n.t('flash_message.diagnostic.question_no_children', type: instance.node.node_type, reference: instance.node.reference))
