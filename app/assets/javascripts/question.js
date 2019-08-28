@@ -45,10 +45,19 @@ jQuery(document).ready(function() {
           } else if(response.responseText !== "A") {
             $(questionUnavailable).addClass("d-none");
           }
+
+          // Force answer type to boolean if it's ChiefComplaint or Vaccine
           if (response.responseText === "CC" || response.responseText === "V") {
             $("#question_answer_type_id").val("1").attr("disabled", true);
           } else {
             $("#question_answer_type_id").attr("disabled", false);
+          }
+
+          // Force stage to triage if it's ChiefComplaint or VitalSign
+          if (response.responseText === "CC" || response.responseText === "VS") {
+            $("#question_stage").val("triage").attr("disabled", true); // Force triage for CC and V
+          } else {
+            $("#question_stage").attr("disabled", false);
           }
         }
       });

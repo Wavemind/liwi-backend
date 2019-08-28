@@ -32,18 +32,17 @@ export default class DiagramProvider extends React.Component {
     let orderedNodes = {
       assessmentTest: [],
       exposure: [],
-      chiefComplaint: [],
       demographic: [],
       physicalExam: [],
       symptom: [],
       vaccine: [],
-      vitalSign: [],
       predefinedSyndrome: [],
       comorbidity: [],
       triage: [],
     };
 
     if (type === "Diagnostic") {
+      orderedNodes.chiefComplaint = [];
       orderedNodes.scored = [];
       orderedNodes.finalDiagnostic = [];
     } else if (type === "FinalDiagnostic") {

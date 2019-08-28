@@ -137,7 +137,7 @@ class Diagnostic < ApplicationRecord
   # @return [Json]
   # Return available nodes in the algorithm in json format
   def available_nodes_json
-    (version.algorithm.nodes.where.not(id: components.not_health_care_conditions.select(:node_id)).where.not('type LIKE ?', 'HealthCares::%').includes(:answers) + final_diagnostics.where.not(id: components.select(:node_id))).as_json(methods: [:category_name, :node_type, :get_answers, :type])
+    (version.algorithm.nodes.where.not(type: 'Questions::VitalSign').where.not(id: components.not_health_care_conditions.select(:node_id)).where.not('type LIKE ?', 'HealthCares::%').includes(:answers) + final_diagnostics.where.not(id: components.select(:node_id))).as_json(methods: [:category_name, :node_type, :get_answers, :type])
   end
 
   # @return [Boolean]
