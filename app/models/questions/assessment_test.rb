@@ -1,4 +1,5 @@
 # Category of question for the medical tests
+# Reference prefix : A
 class Questions::AssessmentTest < Question
 
   after_create :create_unavailable_answer, if: Proc.new { unavailable == '1' } # Ensure unavailable is checked

@@ -53,9 +53,9 @@ jQuery(document).ready(function() {
             $("#question_answer_type_id").attr("disabled", false);
           }
 
-          // Force stage to triage if it's ChiefComplaint or VitalSign
-          if (response.responseText === "CC" || response.responseText === "VS") {
-            $("#question_stage").val("triage").attr("disabled", true); // Force triage for CC and V
+          // Force triage stage for ChiefComplaint, VitalSign, ChronicalCondition and FirstLookAssessment
+          if (response.responseText === "CC" || response.responseText === "VS" || response.responseText === "CH" || response.responseText === "FL") {
+            $("#question_stage").val("triage").attr("disabled", true);
           } else {
             $("#question_stage").attr("disabled", false);
           }

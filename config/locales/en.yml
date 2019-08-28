@@ -331,12 +331,18 @@ en:
       chief_complaint:
         label: "Chief complaint"
         reference_prefix: "CC"
+      chronical_condition:
+        label: "Chhronical condition"
+        reference_prefix: "CH"
       demographic:
         label: "Demographics"
         reference_prefix: "D"
       exposure:
         label: "Exposure"
         reference_prefix: "E"
+      first_look_assessment:
+        label: "First look assessment"
+        reference_prefix: "FL"
       physical_exam:
         label: "Physical exam"
         reference_prefix: "PE"

@@ -1,5 +1,6 @@
 # How a disease is diagnosed -> Differential diagnostics
 # Contains the actual logic from its relations
+# Reference prefix : DD
 include Rails.application.routes.url_helpers
 class Diagnostic < ApplicationRecord
   before_create :complete_reference
