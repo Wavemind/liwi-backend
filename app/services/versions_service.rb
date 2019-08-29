@@ -291,6 +291,9 @@ class VersionsService
     diagnostics
   end
 
+  # @params [Node, Array]
+  # @return [Array]
+  # Recursive method in order to retrieve every chief complaints the question appears in.
   def self.get_node_chief_complaints(node, chief_complaints)
     node.instances.map(&:instanceable).each do |instanceable|
       unless instanceable == node
