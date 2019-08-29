@@ -124,10 +124,11 @@ en:
   diagnostics:
     table:
       columns:
-        reference: "Reference"
+        actions: "Actions"
+        chief_complaint: "Chief complaint"
         label: "Name"
         last_update: "Last update"
-        actions: "Actions"
+        reference: "Reference"
       title: "Algorithms versions"
     new:
       title: "Add a diagnostic"
@@ -186,11 +187,10 @@ en:
     success_updated: "Data was successfully updated"
     update_fail: "Error will updating value"
     diagnostic:
-      chief_complaint_not_at_start: "Your Chief complaint question should always be at the start of your diagram."
+      chief_complaint_exclude_triage_question: "You are setting a chief complaint that does not take in charge one question in your diagnostic diagram."
       final_diagnostic_no_condition: "The Final Diagnostic %{reference} has no condition."
       hc_question_no_children: "The %{type} %{reference}, which is in <u><a href='%{url}'>%{df_reference}</a></u> is not linked to any children."
-      no_chief_complaint_at_start: "Your diagram should always start with a Chief complaint question."
-      one_chief_complaint: "There should be one and only one Chief Complaint in one diagram"
+      node_is_not_chief_complaint: "The node you are linking to this diagnostic is not a Chief Complaint."
       question_no_children: "The %{type} %{reference} is not linked to any children."
       valid: "This diagnostic is valid!"
     questions_sequence:
