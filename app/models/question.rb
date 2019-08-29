@@ -39,11 +39,13 @@ class Question < Node
   def self.categories
     categories = []
     self.descendants.each do |category|
-      current_category = {}
-      current_category['label'] = category.display_label
-      current_category['name'] = category.name
-      current_category['reference_prefix'] = self.reference_prefix_class(category.name)
-      categories.push(current_category)
+      unless [Questions::FirstLookAssessment, Questions::ChiefComplaint, Questions::ChronicalCondition, Questions::VitalSign].include?(category)
+        current_category = {}
+        current_category['label'] = category.display_label
+        current_category['name'] = category.name
+        current_category['reference_prefix'] = self.reference_prefix_class(category.name)
+        categories.push(current_category)
+      end
     end
     categories
   end
@@ -111,8 +113,8 @@ class Question < Node
     if type.blank?
       errors.add(:type, I18n.t('questions.errors.no_blank'))
     else
-      q = algorithm.questions.where(reference: reference_prefix + reference).first
-      errors.add(:reference, I18n.t('nodes.validation.reference_used')) if q.present? && q.id != id
+      question = algorithm.questions.where(reference: reference_prefix + reference).first
+      errors.add(:reference, I18n.t('nodes.validation.reference_used')) if question.present? && question.id != id
     end
   end
 

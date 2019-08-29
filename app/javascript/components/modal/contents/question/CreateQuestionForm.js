@@ -73,6 +73,7 @@ class CreateQuestionForm extends React.Component {
   handleErrors = (result) => {
     let newErrors = {};
 
+    console.log(result)
     if (result.errors.reference !== undefined) {
       newErrors.reference = result.errors.reference[0];
     }
@@ -131,10 +132,7 @@ class CreateQuestionForm extends React.Component {
     const name = event.target.name;
 
     if (name === "type") {
-      const {
-        questionCategories,
-        questionStages
-      } = this.props;
+      const { questionCategories } = this.props;
       let stateToSet = {};
       stateToSet[name] = value;
       questionCategories.map((category) => {
@@ -142,20 +140,14 @@ class CreateQuestionForm extends React.Component {
           stateToSet['prefix'] = category.reference_prefix
         }
       });
-      if (value === "Questions::Vaccine" || value === "Questions::ChiefComplaint") {
+
+      if (value === "Questions::Vaccine") {
         stateToSet['answerType'] = "1";
         stateToSet['answerTypeDisabled'] = true;
       } else {
         stateToSet['answerTypeDisabled'] = false;
       }
 
-      // Force triage stage for those types
-      if (value === "Questions::FirstLookAssessment" || value === "Questions::ChiefComplaint" || value === "Questions::VitalSign" || value === "Questions::ChronicalCondition") {
-        stateToSet['stage'] = questionStages["triage"];
-        stateToSet['stageDisabled'] = true;
-      } else {
-        stateToSet['stageDisabled'] = false;
-      }
       this.setState(stateToSet);
     } else {
       this.setState({
@@ -315,7 +307,7 @@ class CreateQuestionForm extends React.Component {
         </Modal.Body>
         <Modal.Footer>
           {/*Save directly the question if it is a boolean*/}
-          {(answerType === '1') ? (
+          {(answerType === '1' || type === 'Questions::VitalSign') ? (
             <Button variant="success" onClick={() => this.create()}>
               Save
             </Button>
