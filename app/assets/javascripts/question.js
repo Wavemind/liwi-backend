@@ -5,6 +5,7 @@ jQuery(document).ready(function() {
   }
   $("#question_formula").closest(".form-group").addClass("d-none");
 
+  // Trigger categoryChange function only on edit or create question form
   if ($("#new_question").length || $("#edit_question").length) {
     categoryChange();
   };
