@@ -16,6 +16,7 @@ class DiagnosticDatatable < AjaxDatatablesRails::ActiveRecord
     @view_columns ||= {
       reference: { source: 'Diagnostic.reference' },
       label: { source: 'Diagnostic.label_translations' },
+      node: { source: 'Node.reference' },
     }
   end
 
@@ -28,6 +29,7 @@ class DiagnosticDatatable < AjaxDatatablesRails::ActiveRecord
       {
         reference: record.reference,
         label: record.label,
+        node: record.node.reference,
         last_update: date_format(record.updated_at),
         actions: actions
       }
@@ -35,6 +37,6 @@ class DiagnosticDatatable < AjaxDatatablesRails::ActiveRecord
   end
 
   def get_raw_records
-    Version.find(params[:version_id]).diagnostics
+    Version.find(params[:version_id]).diagnostics.joins(:node)
   end
 end

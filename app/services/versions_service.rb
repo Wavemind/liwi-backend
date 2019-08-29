@@ -238,6 +238,7 @@ class VersionsService
       hash[question.id]['value_format'] = question.answer_type.value
       hash[question.id]['qs'] = get_node_questions_sequences(question, [])
       hash[question.id]['dd'] = get_node_diagnostics(question, [])
+      hash[question.id]['cc'] = get_node_chief_complaints(question, [])
       hash[question.id]['counter'] = 0
       hash[question.id]['value'] = 0
       hash[question.id]['answer'] = nil
@@ -276,7 +277,7 @@ class VersionsService
   def self.get_node_diagnostics(node, diagnostics)
     node.instances.map(&:instanceable).each do |instanceable|
       unless instanceable == node
-        if instanceable.is_a?(Diagnostic)
+        if instanceable.is_a? Diagnostic
           # push the id in the array only if it is not already there and if it is handled by the current algorithm version
           if @diagnostics_ids.include?(instanceable.id) && !diagnostics.include?(instanceable.id)
             hash = {}
@@ -288,6 +289,22 @@ class VersionsService
       end
     end
     diagnostics
+  end
+
+  # @params [Node, Array]
+  # @return [Array]
+  # Recursive method in order to retrieve every chief complaints the question appears in.
+  def self.get_node_chief_complaints(node, chief_complaints)
+    node.instances.map(&:instanceable).each do |instanceable|
+      unless instanceable == node
+        if instanceable.is_a? Diagnostic
+          chief_complaints << instanceable.node_id if @diagnostics_ids.include?(instanceable.id) && !chief_complaints.include?(instanceable.node_id)
+        elsif instanceable.is_a? Node
+          get_node_chief_complaints(instanceable, chief_complaints)
+        end
+      end
+    end
+    chief_complaints
   end
 
   # @params [Node, Array]

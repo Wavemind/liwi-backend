@@ -133,6 +133,7 @@ class DiagnosticsController < ApplicationController
       :id,
       :reference,
       :label_en,
+      :node_id,
       Language.label_params
     )
   end

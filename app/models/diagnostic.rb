@@ -9,10 +9,12 @@ class Diagnostic < ApplicationRecord
   attr_accessor :duplicating
 
   belongs_to :version
+  belongs_to :node
   has_many :final_diagnostics, dependent: :destroy
   has_many :conditions, as: :referenceable, dependent: :destroy
   has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy
 
+  before_validation :validate_chief_complaint
   validates_presence_of :reference
   validates_presence_of :label_en
 
@@ -138,7 +140,16 @@ class Diagnostic < ApplicationRecord
   # @return [Json]
   # Return available nodes in the algorithm in json format
   def available_nodes_json
-    (version.algorithm.nodes.where.not(type: 'Questions::VitalSign').where.not(id: components.not_health_care_conditions.select(:node_id)).where.not('type LIKE ?', 'HealthCares::%').includes(:answers) + final_diagnostics.where.not(id: components.select(:node_id))).as_json(methods: [:category_name, :node_type, :get_answers, :type])
+    # Exclude triage questions if they have a condition on a CC which is not defined in this diagnostic
+    excluded_ids = version.components.select{|i| i.conditions.any? && i.conditions.map(&:first_conditionable).map(&:node).flatten.exclude?(node)}.map(&:node_id)
+    # Exclude the questions that are already used in the diagnostic diagram (it still takes the questions used in the final diagnostic diagram, since it can be used in both diagram)
+    excluded_ids += components.not_health_care_conditions.map(&:node_id)
+
+    (
+      version.algorithm.questions.no_triage_but_other.where.not(id: excluded_ids).includes(:answers) +
+      version.algorithm.questions_sequences.where.not(id: excluded_ids).includes(:answers) +
+      final_diagnostics.where.not(id: components.select(:node_id))
+    ).as_json(methods: [:category_name, :node_type, :get_answers, :type])
   end
 
   # @return [Boolean]
@@ -158,19 +169,12 @@ class Diagnostic < ApplicationRecord
 
   # Add errors to a diagnostic for its components
   def manual_validate
-    errors.add(:basic, I18n.t('flash_message.diagnostic.one_chief_complaint')) if components.joins(:node).where('nodes.type = ?', 'Questions::ChiefComplaint').count != 1
-
     components.includes(:node, :children, :conditions).each do |instance|
       if instance.node.is_a? FinalDiagnostic
         unless instance.conditions.any?
           errors.add(:basic, I18n.t('flash_message.diagnostic.final_diagnostic_no_condition', reference: instance.node.reference))
         end
       elsif instance.node.is_a?(Question) || instance.node.is_a?(QuestionsSequence)
-        if instance.node.is_a?(Questions::ChiefComplaint)
-          errors.add(:basic, I18n.t('flash_message.diagnostic.chief_complaint_not_at_start')) if instance.conditions.count > 0
-        elsif instance.conditions.count == 0
-          errors.add(:basic, I18n.t('flash_message.diagnostic.no_chief_complaint_at_start'))
-        end
         unless instance.children.any?
           if instance.final_diagnostic.nil?
             errors.add(:basic, I18n.t('flash_message.diagnostic.question_no_children', type: instance.node.node_type, reference: instance.node.reference))
@@ -179,6 +183,17 @@ class Diagnostic < ApplicationRecord
           end
         end
       end
+    end
+  end
+
+  # Validate the chief complaint that is being linked to the diagnostic
+  def validate_chief_complaint
+    errors.add(:node, I18n.t('flash_message.diagnostic.node_is_not_chief_complaint')) unless node.is_a? Questions::ChiefComplaint
+
+    triage_questions = components.joins(:node).where('nodes.stage = ?', Question.stages[:triage])
+    triage_questions.each do |instance|
+      version_instance = version.components.find_by(node: instance.node)
+      errors.add(:node, I18n.t('flash_message.diagnostic.chief_complaint_exclude_triage_question')) if version_instance.conditions.any? && version_instance.conditions.map(&:first_conditionable).map(&:node).flatten.exclude?(node)
     end
   end
 

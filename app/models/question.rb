@@ -16,6 +16,11 @@ class Question < Node
   before_validation :validate_formula, if: Proc.new { self.formula.present? }
   validates_presence_of :priority, :stage
 
+  # Return questions which has not triage stage
+  scope :no_triage, ->() { where.not(stage: Questions.stages(:triage)) }
+  # Return questions without basic triage categories but still get the triage stage for other categories
+  scope :no_triage_but_other, ->() { where.not(type: %w(Questions::FirstLookAssessment Questions::ChiefComplaint Questions::VitalSign Questions::ChronicalCondition)) }
+
   accepts_nested_attributes_for :answers, allow_destroy: true
 
   # Preload the children of class Question
