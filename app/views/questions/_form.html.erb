@@ -1,12 +1,13 @@
-<%= f.input :priority, collection: Question.priorities.map { |k, v| [t("question.priorities.#{k}"), k] }, prompt: t('select') %>
-<%= f.input :stage, collection: Question.stages.map { |k, v| [t("question.stages.#{k}"), k] }, prompt: t('select') %>
 <%= f.input :type, collection: Question.descendants, input_html: {id: 'question_type'}, value_method: :name, label_method: :display_label, prompt: t('select'), disabled: f.object.persisted? %>
+<%= f.association :answer_type, collection: AnswerType.all, input_html: {id: 'question_answer_type_displayed'}, label_method: :display_name, prompt: t('select'), disabled: @question.answers.any? %>
+<%= f.association :answer_type, input_html: {id: 'question_answer_type_hidden', class: 'py-0'}, as: :hidden, error: false %>
+<%= f.input :stage, input_html: {id: 'question_stage_displayed'}, collection: Question.stages.map { |k, v| [t("question.stages.#{k}"), k] }, prompt: t('select') %>
+<%= f.input :stage, input_html: {id: 'question_stage_hidden', class: 'py-0'}, as: :hidden, error: false %>
+<%= f.input :priority, collection: Question.priorities.map { |k, v| [t("question.priorities.#{k}"), k] }, prompt: t('select') %>
 
 <%= f.input :reference, prepend: (f.object.persisted? ? false : (@question.type.nil? ? '' : @question.reference_prefix)) %>
 <%= f.input :label_en %>
 <%= f.input :description_en, as: :text %>
-
-<%= f.association :answer_type, collection: AnswerType.all, label_method: :display_name, prompt: t('select'), disabled: @question.answers.any?  %>
 
 <%= f.input :unavailable, input_html: {id: 'question_unavailable', class: (f.object.persisted? && @question.is_a?(Questions::AssessmentTest)) ? 'edit_A' : ''}, as: :boolean %>
 

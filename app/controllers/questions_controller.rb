@@ -20,7 +20,7 @@ class QuestionsController < ApplicationController
     @question = @algorithm.questions.new(question_params)
     if @question.save
       # Don't create answers if it is boolean type, since it is automatically created from the model
-      if @question.answer_type.value == 'Boolean'
+      if @question.answer_type.value == 'Boolean' || @question.is_a?(Questions::VitalSign)
         redirect_to algorithm_url(@algorithm, panel: 'questions'), notice: t('flash_message.success_created')
       else
         # Create a new first answer for the form view
@@ -105,7 +105,7 @@ class QuestionsController < ApplicationController
         instanceable.components.create!(node: question, final_diagnostic_id: params[:final_diagnostic_id])
         render json: {status: 'success', messages: [t('flash_message.success_created')], node: question.as_json(include: :answers, methods: [:node_type, :category_name, :type])}
       else
-        errors = question.answer_type.value == 'Boolean' ? question.errors.messages : question.answers.map(&:errors).map(&:messages)
+        errors = (question.answer_type.value == 'Boolean') ? question.errors.messages : question.answers.map(&:errors).map(&:messages)
         render json: {status: 'danger', errors: errors, overlap_errors: question.errors[:answers], ok: false}
         raise ActiveRecord::Rollback, ''
       end
