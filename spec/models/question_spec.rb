@@ -77,7 +77,7 @@ RSpec.describe Question, type: :model do
     end
   end
 
-  context 'it validates overlaps correctly', focus: true do
+  context 'it validates overlaps correctly' do
     before(:each) do
       integer = AnswerType.create!(value: 'Integer', display: 'Input')
       @question = Questions::Symptom.create!(reference: '9', label: 'skin issue', priority: Question.priorities[:basic], stage: Question.stages[:triage], answer_type: integer, algorithm: @algorithm)
