@@ -20,7 +20,7 @@ class QuestionsController < ApplicationController
     @question = @algorithm.questions.new(question_params)
     if @question.save
       # Don't create answers if it is boolean type, since it is automatically created from the model
-      if @question.answer_type.value == 'Boolean'
+      if @question.answer_type.value == 'Boolean' || @question.is_a?(Questions::VitalSign)
         redirect_to algorithm_url(@algorithm, panel: 'questions'), notice: t('flash_message.success_created')
       else
         # Create a new first answer for the form view
