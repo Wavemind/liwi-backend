@@ -451,6 +451,7 @@ en:
     show:
       subtitle_diagnostics: "Diagnostics"
       subtitle_questions_order: "Triage questions order"
+      subtitle_triage_conditions: "Triage questions conditions"
       title: "Details of %{name} - version %{version}"
       questions_sequences: "Questions Sequences"
   warning_dependency: "Warning ! Editing this node will affect :"
