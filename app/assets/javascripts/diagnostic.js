@@ -13,7 +13,7 @@ jQuery(document).ready(function () {
       {"data": "actions", "className": "text-right"},
     ],
     'columnDefs': [ {
-      'targets': [4],
+      'targets': [3],
       'orderable': false,
     }]
   });
