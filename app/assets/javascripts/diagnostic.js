@@ -9,7 +9,6 @@ jQuery(document).ready(function () {
     "columns": [
       {"data": "reference"},
       {"data": "label"},
-      {"data": "node"},
       {"data": "last_update"},
       {"data": "actions", "className": "text-right"},
     ],
