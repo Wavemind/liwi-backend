@@ -17,7 +17,7 @@ class Question < Node
   validates_presence_of :priority, :stage
 
   # Return questions which has not triage stage
-  scope :no_triage, ->() { where.not(stage: Question.stages(:triage)) }
+  scope :no_triage, ->() { where.not(stage: Question.stages[:triage]) }
   # Return questions without basic triage categories but still get the triage stage for other categories
   scope :no_triage_but_other, ->() { where.not(type: %w(Questions::FirstLookAssessment Questions::ChiefComplaint Questions::VitalSign Questions::ChronicalCondition)) }
 
