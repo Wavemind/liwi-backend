@@ -67,7 +67,7 @@ class VersionsController < ApplicationController
   # @params version [Version] version of algorithm we change order of
   # Change the order of the triage questions for this version
   def change_triage_order
-    if @version.update(triage_questions_order: params[:triage_questions_order])
+    if @version.update("#{params[:key]}": params[:order])
       render json: {result: 'success'}
     else
       render json: {result: 'error'}
@@ -133,6 +133,10 @@ class VersionsController < ApplicationController
     params.require(:version).permit(
       :id,
       :name,
+      :triage_first_look_assessments_order,
+      :triage_chief_complaints_order,
+      :triage_vital_signs_order,
+      :triage_chronical_conditions_order,
       :triage_questions_order,
       :triage_id,
       :cc_id

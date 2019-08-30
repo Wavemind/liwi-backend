@@ -59,14 +59,30 @@ class Question < Node
   def push_in_versions
     algorithm.versions.each do |version|
       version.components.create!(node: self)
-      version.update(triage_questions_order: version.triage_questions_order.push(id))
+      version.update("#{version_field_to_set}": version.send("#{version_field_to_set}").push(id))
     end
   end
 
   # Remove the triage question from the version triage orders
   def remove_from_versions
     algorithm.versions.each do |version|
-      version.update(triage_questions_order: version.triage_questions_order.delete(id)) if version.triage_questions_order.include?(id)
+      version.update("#{version_field_to_set}": version.send("#{version_field_to_set}").delete(id)) if version.send("#{version_field_to_set}").include?(id)
+    end
+  end
+
+  # Get the right field from the node type<
+  def version_field_to_set
+    case type
+    when 'Questions::FirstLookAssessment'
+      return 'triage_first_look_assessments_order'
+    when 'Questions::ChiefComplaint'
+      return 'triage_chief_complaints_order'
+    when 'Questions::VitalSign'
+      return 'triage_vital_signs_order'
+    when 'Questions::ChronicalCondition'
+      return 'triage_chronical_conditions_order'
+    else
+      return 'triage_questions_order'
     end
   end
 

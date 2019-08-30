@@ -23,17 +23,7 @@
   </div>
 
   <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'questions_order'%>" id="questions_order" role="tabpanel" aria-labelledby="questions_order-tab">
-    <ul id="triage_questions_order">
-      <% @version.triage_questions_order.each do |question_id| %>
-        <% question =  Node.find(question_id) %>
-        <li class="ui-state-default" value=<%= question_id %>><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><%= "#{question.reference} - #{question.label_en}" %></li>
-      <% end %>
-      <% @algorithm.questions.triage.each do |question| %>
-        <% unless @version.triage_questions_order.include?(question.id) %>
-          <li class="ui-state-default" value=<%= question.id %>><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><%= "#{question.reference} - #{question.label_en}" %></li>
-        <% end %>
-      <% end %>
-    </ul>
+    <%= render 'triage_order' %>
   </div>
 
   <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'triage_conditions'%>" id="triage_conditions" role="tabpanel" aria-labelledby="triage_conditions-tab">

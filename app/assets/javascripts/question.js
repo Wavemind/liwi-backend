@@ -79,9 +79,9 @@ jQuery(document).ready(function() {
   }
 
   // Hide or show formula field if formula answer type is selected
-  $("#question_answer_type_display").change(function() {
+  $("#question_answer_type_displayed").change(function() {
     let questionFormula = $("#question_formula").closest(".form-group");
-    let answerType = $("#question_answer_type_id option:selected").val();
+    let answerType = $("#question_answer_type_displayed option:selected").val();
     $("#question_answer_type_hidden").val(answerType);
 
     if ($(questionFormula).hasClass("d-none") && answerType === "5") {
@@ -91,8 +91,8 @@ jQuery(document).ready(function() {
     }
   });
 
-  $("#question_stage_display").change(function() {
-    let stage = $("#question_stage_display option:selected").val();
+  $("#question_stage_displayed").change(function() {
+    let stage = $("#question_stage_displayed option:selected").val();
     $("#question_stage_hidden").val(stage);
   });
 });

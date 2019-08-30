@@ -17,16 +17,8 @@ class Version < ApplicationRecord
 
   validates_presence_of :name
   validates_uniqueness_of :name, scope: :algorithm
-  after_validation :check_triage_questions
 
   after_create :instantiate_questions
-
-  # Make sure that the question added to the triage order is a triage question
-  def check_triage_questions
-    triage_questions_order.each do |question_id|
-      self.errors.add(:triage_questions_order, I18n.t('conditions.validation.loop')) unless Question.find(question_id).triage?
-    end
-  end
 
   # @return [String]
   # Return a displayable string for this version
