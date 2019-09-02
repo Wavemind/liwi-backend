@@ -444,6 +444,8 @@ en:
         creator: "Creator"
         actions: "Actions"
       title: "Algorithms versions"
+    triage_order:
+      others: "Other triage questions"
     new:
       title: "Add an algorithm version"
     edit:

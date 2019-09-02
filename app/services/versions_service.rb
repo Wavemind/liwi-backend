@@ -10,6 +10,11 @@ class VersionsService
     hash = extract_version_metadata
     hash['diagnostics'] = {}
 
+    # Add every triage nodes before starting
+    @version.algorithm.questions.triage.each do |triage_question|
+      assign_node(triage_question)
+    end
+
     # Loop in each diagnostics defined in current algorithm version
     @version.diagnostics.includes(:conditions).each do |diagnostic|
       @diagnostics_ids << diagnostic.id
@@ -70,7 +75,12 @@ class VersionsService
     hash['name'] = @version.algorithm.name
     hash['version'] = @version.name
     hash['description'] = @version.algorithm.description
-    hash['triage_questions_order'] = @version.triage_questions_order
+    hash['triage_orders'] = {}
+    hash['triage_orders']['first_look_assessment'] = @version.triage_first_look_assessments_order
+    hash['triage_orders']['chief_complaints'] = @version.triage_chief_complaints_order
+    hash['triage_orders']['vital_signs'] = @version.triage_vital_signs_order
+    hash['triage_orders']['chronical_conditions'] = @version.triage_chronical_conditions_order
+    hash['triage_orders']['others'] = @version.triage_questions_order
     hash['author'] = @version.user.full_name
     hash['created_at'] = @version.created_at
     hash['updated_at'] = @version.updated_at

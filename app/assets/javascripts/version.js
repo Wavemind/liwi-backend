@@ -1,23 +1,28 @@
 jQuery(document).ready(function () {
-  $( "#triage_questions_order" ).sortable({
+  $( ".triage-order" ).sortable({
     stop: function( event, ui ) {
       let order = [];
 
-      $("#triage_questions_order li").each(function(i, question) {
+      $("#" + event.target.id +" li").each(function(i, question) {
         order.push(question.value);
       });
 
+      let url = $("#questions_order").data("url");
+
       $.ajax({
-        url: window.location.href + "/change_triage_order",
+        url: url,
         method: 'PUT',
-        data: {triage_questions_order: order},
+        data: {
+          key: event.target.id,
+          order: order
+        },
         complete: function(response) {
 
         }
       });
     }
   });
-  $( "#triage_questions_order" ).disableSelection();
+  $( ".triage-order" ).disableSelection();
 
 
   $("#versions-datatable").dataTable({
