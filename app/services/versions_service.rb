@@ -82,6 +82,8 @@ class VersionsService
     hash
   end
 
+  # @return hash
+  # Build a hash of metadata about the triage questions
   def self.extract_triage_metadata
     hash = {}
     
@@ -98,8 +100,8 @@ class VersionsService
         hash['conditions'][instance.node_id] = []
         instance.conditions.each do |cond|
           condition = {}
-          condition['chief_complaint'] = cond.first_conditionable.node_id
-          condition['answer'] = cond.first_conditionable_id
+          condition['chief_complaint_id'] = cond.first_conditionable.node_id
+          condition['answer_id'] = cond.first_conditionable_id
           hash['conditions'][instance.node_id].push(condition)
         end
       end
