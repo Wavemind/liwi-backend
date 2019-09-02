@@ -29,7 +29,9 @@ module ModelMacros
   def create_diagnostic
     before(:each) do
       epoc_first = Version.create!(name: 'first_trial', algorithm: @algorithm, user: @user)
-      @dd7 = Diagnostic.create!(version: epoc_first, label_en: 'Severe LRTI', reference: '7')
+      boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
+      @cc = @algorithm.questions.create!(reference: '11', answer_type: boolean, label_en: 'CC11', stage: Question.stages[:triage], priority: Question.priorities[:mandatory], type: 'Questions::ChiefComplaint')
+      @dd7 = Diagnostic.create!(version: epoc_first, label_en: 'Severe LRTI', reference: '7', node: @cc)
     end
   end
 
@@ -50,6 +52,7 @@ module ModelMacros
       p13 = Questions::PhysicalExam.create!(algorithm: @algorithm, label_en: 'Lower chest indrawing', reference: '1331231231', priority: Question.priorities[:basic], stage: Question.stages[:triage], answer_type: @boolean)
       p3 = Questions::PhysicalExam.create!(algorithm: @algorithm, label_en: 'Respiratory rate', reference: '34123123', priority: Question.priorities[:mandatory], stage: Question.stages[:triage], answer_type: @input_integer)
       @p1 = Questions::PhysicalExam.create!(algorithm: @algorithm, label_en: 'SAO2', reference: '1123123', priority: Question.priorities[:mandatory], stage: Question.stages[:triage], answer_type: @input_integer)
+      @cc = @algorithm.questions.create!(reference: '11', answer_type: @boolean, label_en: 'CC11', stage: Question.stages[:triage], priority: Question.priorities[:mandatory], type: 'Questions::ChiefComplaint')
 
       # Answers
       @s2_1 = s2.answers.first
@@ -58,7 +61,7 @@ module ModelMacros
       @p13_1 = p13.answers.first
 
       # Diagnostics
-      @dd7 = Diagnostic.create!(version: epoc_first, label_en: 'Severe LRTI', reference: '7')
+      @dd7 = Diagnostic.create!(version: epoc_first, label_en: 'Severe LRTI', reference: '7', node: @cc)
       @df7 = FinalDiagnostic.create!(label_en: 'Severe lower respiratory tract infection', reference: '7', diagnostic: @dd7)
 
       # Instances

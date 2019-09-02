@@ -7,30 +7,33 @@ RSpec.describe Diagnostic, type: :model do
     user = User.new(first_name: 'Foo', last_name: 'Bar', email: 'foo.bar@gmail.com', role: role)
     @algorithm = Algorithm.create!(name: 'EPOCT', description: 'MedicalCenter1', user: user)
 
+    boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
+    @cc = @algorithm.questions.create!(reference: '11', answer_type: boolean, label_en: 'CC11', stage: Question.stages[:triage], priority: Question.priorities[:mandatory], type: 'Questions::ChiefComplaint')
+
     @version = Version.create!(name: '1.3.2', user: user, algorithm: @algorithm)
   end
 
   it 'is valid with valid attributes' do
-    diagnostic = Diagnostic.new(version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)')
+    diagnostic = Diagnostic.new(version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)', node: @cc)
 
     expect(diagnostic).to be_valid
   end
 
   it 'is invalid with invalid attributes' do
-    diagnostic = Diagnostic.new(version: @version, reference: '1', label: nil)
+    diagnostic = Diagnostic.new(version: @version, reference: '1', label: nil, node: @cc)
 
     expect(diagnostic).to_not be_valid
   end
 
   it 'is invalid same reference' do
-    Diagnostic.create!(version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)')
-    diagnostic = Diagnostic.new(version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)')
+    Diagnostic.create!(version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)', node: @cc)
+    diagnostic = Diagnostic.new(version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)', node: @cc)
 
     expect(diagnostic).to_not be_valid
   end
 
   it 'generates diagram properly' do
-    dd1 = Diagnostic.create!(version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)')
+    dd1 = Diagnostic.create!(version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)', node: @cc)
     dd1.final_diagnostics.create!(reference: '1', label_en: 'Df')
     t1 = HealthCares::Treatment.create!(reference: '1', label_en: 'Treat', algorithm: @algorithm)
     m1 = HealthCares::Management.create!(reference: '1', label_en: 'Manage', algorithm: @algorithm)
@@ -54,7 +57,7 @@ RSpec.describe Diagnostic, type: :model do
   end
 
   it 'returns correct list of available nodes' do
-    dd1 = Diagnostic.create!(version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)')
+    dd1 = Diagnostic.create!(version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)', node: @cc)
 
     ps9 = QuestionsSequences::PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
     ps5 = QuestionsSequences::PredefinedSyndrome.create!(reference: '5', label_en: 'diarrhea', algorithm: @algorithm)
@@ -65,7 +68,7 @@ RSpec.describe Diagnostic, type: :model do
 
   context 'destroys correctly a complet diagnostic' do
     before(:each) do
-      @dd1 = Diagnostic.create!(version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)')
+      @dd1 = Diagnostic.create!(version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)', node: @cc)
       @dd1.final_diagnostics.create!(reference: '1', label_en: 'Df')
       t1 = HealthCares::Treatment.create!(reference: '1', label_en: 'Treat', algorithm: @algorithm)
       m1 = HealthCares::Management.create!(reference: '1', label_en: 'Manage', algorithm: @algorithm)
@@ -104,7 +107,7 @@ RSpec.describe Diagnostic, type: :model do
 
   context 'manual validation' do
     before(:each) do
-      @dd1 = Diagnostic.create!(version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)')
+      @dd1 = Diagnostic.create!(version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)', node: @cc)
       @dd1.final_diagnostics.create!(reference: '1', label_en: 'Df')
       dd1_df1 = Instance.create!(instanceable: @dd1, node: @dd1.final_diagnostics.first)
       ps9 = QuestionsSequences::PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)

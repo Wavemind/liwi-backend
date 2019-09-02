@@ -332,7 +332,7 @@ en:
         label: "Chief complaint"
         reference_prefix: "CC"
       chronical_condition:
-        label: "Chhronical condition"
+        label: "Chronical condition"
         reference_prefix: "CH"
       demographic:
         label: "Demographics"

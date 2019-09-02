@@ -6,6 +6,9 @@ RSpec.describe MedicalCase, type: :model do
   before(:each) do
     @version = Version.create!(name: '1.0', user: @user, algorithm: @algorithm)
     @patient = Patient.create!(first_name: 'John', last_name: 'Do')
+
+    boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
+    @cc = @algorithm.questions.create!(reference: '11', answer_type: boolean, label_en: 'CC11', stage: Question.stages[:triage], priority: Question.priorities[:mandatory], type: 'Questions::ChiefComplaint')
   end
 
   it 'is valid with valid attributes' do
@@ -38,7 +41,7 @@ RSpec.describe MedicalCase, type: :model do
   end
 
   it 'can include a final diagnostic' do
-    diagnostic = Diagnostic.create!(reference: '9', label_en: 'diagnostic', version: @version)
+    diagnostic = Diagnostic.create!(reference: '9', label_en: 'diagnostic', version: @version, node: @cc)
     final_diagnostic = FinalDiagnostic.create!(reference: '9', label_en: 'skin issue', diagnostic: diagnostic)
 
     medical_case = MedicalCase.new(version: @version, patient: @patient)

@@ -50,7 +50,7 @@ RSpec.describe FinalDiagnostic, type: :model do
   end
 
   it 'generates diagram properly' do
-    dd1 = Diagnostic.create!(version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)')
+    dd1 = Diagnostic.create!(version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)', node: @cc)
     dd1.final_diagnostics.create!(reference: '1', label_en: 'Df')
     t1 = HealthCares::Treatment.create!(reference: '1', label_en: 'Treat', algorithm: @algorithm)
     m1 = HealthCares::Management.create!(reference: '1', label_en: 'Manage', algorithm: @algorithm)
