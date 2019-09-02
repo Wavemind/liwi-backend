@@ -103,15 +103,16 @@ class Question < Node
     self.errors.add(:answers, I18n.t('answers.validation.overlap.one_less')) if answers.less.count != 1
 
     if answers.less.any? && answers.more_or_equal.any?
-      self.errors.add(:answers, I18n.t('answers.validation.overlap.less_greater_than_more_or_equal')) if answers.less.first.value.to_f > answers.more_or_equal.first.value.to_f
 
       betweens = []
       answers.between.each do |answer|
         betweens.push(answer.value.split(',').map(&:to_f))
       end
-      betweens = betweens.sort_by {|a| a[0]}
 
       if betweens.any?
+        self.errors.add(:answers, I18n.t('answers.validation.overlap.less_greater_than_more_or_equal')) if answers.less.first.value.to_f > answers.more_or_equal.first.value.to_f
+
+        betweens = betweens.sort_by {|a| a[0]}
         self.errors.add(:answers, I18n.t('answers.validation.overlap.first_between_different_from_less')) if answers.less.first.value.to_f != betweens[0][0]
         self.errors.add(:answers, I18n.t('answers.validation.overlap.last_between_different_from_more_or_equal')) if answers.more_or_equal.first.value.to_f != betweens.last[1]
 
@@ -120,6 +121,8 @@ class Question < Node
             self.errors.add(:answers, I18n.t('answers.validation.overlap.between_not_following')) if between[0] != betweens[i - 1][1]
           end
         end
+      else
+        self.errors.add(:answers, I18n.t('answers.validation.overlap.less_equal_more_or_equal')) if answers.less.first.value.to_f != answers.more_or_equal.first.value.to_f
       end
     end
 
