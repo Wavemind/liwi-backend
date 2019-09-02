@@ -7,7 +7,7 @@ jQuery(document).ready(function () {
         order.push(question.value);
       });
 
-      let url = $(this).parent().parent().parent().data("url");
+      let url = $("#questions_order").data("url");
 
       $.ajax({
         url: url,
