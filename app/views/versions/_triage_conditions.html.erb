@@ -13,7 +13,7 @@
     <%= simple_form_for @version, url: create_triage_condition_algorithm_version_url(@version.algorithm, @version), method: :put do |f| %>
       <div class="row">
         <div class="col">
-          <%= f.input :triage_id, collection: @version.components.joins(:node).triage_no_chief_complaint, value_method: :id, label_method: :reference_label, label: false, prompt: t('prompt') %>
+          <%= f.input :triage_id, collection: @version.components.joins(:node).triage_under_chief_complaint, value_method: :id, label_method: :reference_label, label: false, prompt: t('prompt') %>
         </div>
         <div class="col text-center">
           <%= t('.depends_on') %>

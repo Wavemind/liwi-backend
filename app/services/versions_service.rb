@@ -75,15 +75,37 @@ class VersionsService
     hash['name'] = @version.algorithm.name
     hash['version'] = @version.name
     hash['description'] = @version.algorithm.description
-    hash['triage_orders'] = {}
-    hash['triage_orders']['first_look_assessment'] = @version.triage_first_look_assessments_order
-    hash['triage_orders']['chief_complaint'] = @version.triage_chief_complaints_order
-    hash['triage_orders']['vital_sign'] = @version.triage_vital_signs_order
-    hash['triage_orders']['chronical_condition'] = @version.triage_chronical_conditions_order
-    hash['triage_orders']['other'] = @version.triage_questions_order
+    hash['triage'] = extract_triage_metadata
     hash['author'] = @version.user.full_name
     hash['created_at'] = @version.created_at
     hash['updated_at'] = @version.updated_at
+    hash
+  end
+
+  # @return hash
+  # Build a hash of metadata about the triage questions
+  def self.extract_triage_metadata
+    hash = {}
+    
+    hash['orders'] = {}
+    hash['orders']['first_look_assessment'] = @version.triage_first_look_assessments_order
+    hash['orders']['chief_complaint'] = @version.triage_chief_complaints_order
+    hash['orders']['vital_sign'] = @version.triage_vital_signs_order
+    hash['orders']['chronical_condition'] = @version.triage_chronical_conditions_order
+    hash['orders']['other'] = @version.triage_questions_order
+
+    hash['conditions'] = {}
+    @version.components.each do |instance|
+      if instance.conditions.any?
+        hash['conditions'][instance.node_id] = []
+        instance.conditions.each do |cond|
+          condition = {}
+          condition['chief_complaint_id'] = cond.first_conditionable.node_id
+          condition['answer_id'] = cond.first_conditionable_id
+          hash['conditions'][instance.node_id].push(condition)
+        end
+      end
+    end
     hash
   end
 
