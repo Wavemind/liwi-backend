@@ -22,7 +22,7 @@
     <%= render 'diagnostics/table' %>
   </div>
 
-  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'questions_order'%>" id="questions_order" role="tabpanel" aria-labelledby="questions_order-tab">
+  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'questions_order'%>" id="questions_order" data-url=<%= change_triage_order_algorithm_version_url(@algorithm, @version) %> role="tabpanel" aria-labelledby="questions_order-tab">
     <%= render 'triage_order' %>
   </div>
 

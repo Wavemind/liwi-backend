@@ -7,8 +7,10 @@ jQuery(document).ready(function () {
         order.push(question.value);
       });
 
+      let url = $(this).parent().parent().parent().data("url");
+
       $.ajax({
-        url: window.location.protocol + "//" + window.location.host + window.location.pathname + "/change_triage_order",
+        url: url,
         method: 'PUT',
         data: {
           key: event.target.id,
