@@ -32,7 +32,6 @@
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 /config/secrets.yml
-/config/database.yml
 
 /public
 /public/media/*
@@ -46,3 +45,4 @@ doc/
 /node_modules
 yarn-debug.log*
 .yarn-integrity
+.env
