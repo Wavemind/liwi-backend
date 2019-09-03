@@ -80,15 +80,21 @@ class VersionsController < ApplicationController
   # @params id of the chief complaint that condition the triage question
   # Create a condition between a triage question and a chief complaint
   def create_triage_condition
-    instance = Instance.find(version_params[:triage_id])
-    cc_condition = Instance.find(version_params[:cc_id]).node.answers.first
-
-    condition = Condition.new(referenceable: instance, first_conditionable: cc_condition)
-
-    if condition.save
-      redirect_to algorithm_version_url(@algorithm, @version, panel: 'triage_conditions'), notice: t('flash_message.success_created')
+    if version_params[:cc_id].blank?
+      redirect_to algorithm_version_url(@algorithm, @version, panel: 'triage_conditions'), alert: t('flash_message.version.chief_complaint_missing')
+    elsif version_params[:triage_id].blank?
+      redirect_to algorithm_version_url(@algorithm, @version, panel: 'triage_conditions'), alert: t('flash_message.version.triage_question_missing')
     else
-      redirect_to algorithm_version_url(@algorithm, @version, panel: 'triage_conditions'), notice: t('flash_message.create_fail')
+      instance = Instance.find(version_params[:triage_id])
+      cc_condition = Instance.find(version_params[:cc_id]).node.answers.first
+
+      condition = Condition.new(referenceable: instance, first_conditionable: cc_condition)
+
+      if condition.save
+        redirect_to algorithm_version_url(@algorithm, @version, panel: 'triage_conditions'), notice: t('flash_message.success_created')
+      else
+        redirect_to algorithm_version_url(@algorithm, @version, panel: 'triage_conditions'), alert: t('flash_message.create_fail')
+      end
     end
   end
 
