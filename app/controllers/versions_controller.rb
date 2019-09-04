@@ -86,9 +86,9 @@ class VersionsController < ApplicationController
       redirect_to algorithm_version_url(@algorithm, @version, panel: 'triage_conditions'), alert: t('flash_message.version.triage_question_missing')
     else
       instance = Instance.find(version_params[:triage_id])
-      cc_condition = Instance.find(version_params[:cc_id]).node.answers.first
+      cc_answer = Instance.find(version_params[:cc_id]).node.answers.first
 
-      condition = Condition.new(referenceable: instance, first_conditionable: cc_condition)
+      condition = Condition.new(referenceable: instance, first_conditionable: cc_answer)
 
       if condition.save
         redirect_to algorithm_version_url(@algorithm, @version, panel: 'triage_conditions'), notice: t('flash_message.success_created')
