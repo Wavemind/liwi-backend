@@ -161,20 +161,12 @@ class CreateQuestionForm extends React.Component {
         stateToSet['answerTypeDisabled'] = false;
       }
 
-      if (value === "Questions::AssessmentTest") {
-        stateToSet['unavailableHidden'] = false;
-      } else {
-        stateToSet['unavailableHidden'] = true;
-      }
+      stateToSet['unavailableHidden'] = value !== "Questions::AssessmentTest";
 
       this.setState(stateToSet);
     } else {
       if (name === "answerType") {
-        if (value === "5") {
-          stateToSet['formulaHidden'] = false;
-        } else {
-          stateToSet['formulaHidden'] = true;
-        }
+        stateToSet['formulaHidden'] = value !== "5";
       }
 
       this.setState(stateToSet);
