@@ -26,6 +26,10 @@ class CreateQuestionForm extends React.Component {
     stage: "",
     priority: "",
     answerType: "",
+    unavailable: false,
+    formula: "",
+    formulaHidden: true,
+    unavailableHidden: true,
     answerTypeDisabled: false,
     stageDisabled: false,
     prefix: "",
@@ -73,7 +77,6 @@ class CreateQuestionForm extends React.Component {
   handleErrors = (result) => {
     let newErrors = {};
 
-    console.log(result)
     if (result.errors.reference !== undefined) {
       newErrors.reference = result.errors.reference[0];
     }
@@ -97,6 +100,10 @@ class CreateQuestionForm extends React.Component {
     if (result.errors.type !== undefined) {
       newErrors.category = result.errors.type[0];
     }
+
+    if (result.errors.formula !== undefined) {
+      newErrors.formula = result.errors.formula[0];
+    }
     this.setState({ errors: newErrors });
   };
 
@@ -109,7 +116,9 @@ class CreateQuestionForm extends React.Component {
       type,
       stage,
       priority,
-      answerType
+      answerType,
+      unavailable,
+      formula
     } = this.state;
 
     return {
@@ -121,6 +130,8 @@ class CreateQuestionForm extends React.Component {
         stage: parseInt(stage),
         priority: parseInt(priority),
         answer_type_id: parseInt(answerType),
+        unavailable: unavailable,
+        formula: formula,
         answers_attributes: {}
       }
     };
@@ -128,13 +139,15 @@ class CreateQuestionForm extends React.Component {
 
   // Handle change of inputs in the form
   handleFormChange = (event) => {
-    const value = event.target.value;
     const name = event.target.name;
+    const value = name === "unavailable" ? event.target.checked : event.target.value;
+
+    let stateToSet = {};
+    stateToSet[name] = value;
 
     if (name === "type") {
       const { questionCategories } = this.props;
-      let stateToSet = {};
-      stateToSet[name] = value;
+
       questionCategories.map((category) => {
         if (category.name === event.target.value) {
           stateToSet['prefix'] = category.reference_prefix
@@ -148,11 +161,23 @@ class CreateQuestionForm extends React.Component {
         stateToSet['answerTypeDisabled'] = false;
       }
 
+      if (value === "Questions::AssessmentTest") {
+        stateToSet['unavailableHidden'] = false;
+      } else {
+        stateToSet['unavailableHidden'] = true;
+      }
+
       this.setState(stateToSet);
     } else {
-      this.setState({
-        [name]: value
-      });
+      if (name === "answerType") {
+        if (value === "5") {
+          stateToSet['formulaHidden'] = false;
+        } else {
+          stateToSet['formulaHidden'] = true;
+        }
+      }
+
+      this.setState(stateToSet);
     }
   };
 
@@ -175,8 +200,15 @@ class CreateQuestionForm extends React.Component {
       answerType,
       answerTypeDisabled,
       stageDisabled,
-      prefix
+      prefix,
+      unavailable,
+      unavailableHidden,
+      formulaHidden,
+      formula
     } = this.state;
+
+    let unavailableStyle = unavailableHidden ? {display: 'none'} : {};
+    let formulaStyle = formulaHidden ? {display: 'none'} : {};
 
     return (
       <Form onSubmit={() => this.create()}>
@@ -300,6 +332,36 @@ class CreateQuestionForm extends React.Component {
                   value={description}
                   onChange={this.handleFormChange}
                 />
+              </InputGroup>
+            </Form.Group>
+          </Form.Row>
+
+          <Form.Row style={unavailableStyle}>
+            <Form.Group as={Col}>
+              <Form.Check
+                type="checkbox"
+                label="Unavailable test"
+                name="unavailable"
+                value={unavailable}
+                onChange={this.handleFormChange}
+              />
+            </Form.Group>
+          </Form.Row>
+
+          <Form.Row style={formulaStyle}>
+            <Form.Group as={Col}>
+              <Form.Label>Formula</Form.Label>
+              <InputGroup>
+                <Form.Control
+                  type="text"
+                  name="formula"
+                  value={formula}
+                  onChange={this.handleFormChange}
+                  isInvalid={!!errors.formula}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.formula}
+                </Form.Control.Feedback>
               </InputGroup>
             </Form.Group>
           </Form.Row>

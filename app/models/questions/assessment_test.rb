@@ -2,9 +2,9 @@
 # Reference prefix : A
 class Questions::AssessmentTest < Question
 
-  after_create :create_unavailable_answer, if: Proc.new { unavailable == '1' } # Ensure unavailable is checked
-
   attr_accessor :unavailable
+
+  after_create :create_unavailable_answer, if: Proc.new { unavailable == '1' || unavailable == true} # Ensure unavailable is checked
 
   def self.variable
     'assessment_test'
