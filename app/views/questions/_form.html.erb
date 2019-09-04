@@ -10,8 +10,9 @@
 <%= f.input :description_en, as: :text %>
 
 <% unless f.object.persisted? %>
-  <%= f.input :unavailable, input_html: {id: 'question_unavailable', class: (@question.is_a?(Questions::AssessmentTest)) ? 'edit_A' : ''}, as: :boolean %>
+  <%= f.input :unavailable, input_html: {id: 'question_unavailable'}, as: :boolean %>
 <% end %>
+
 <hr />
 
 <%= f.input :formula %>
