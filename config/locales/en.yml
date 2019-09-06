@@ -200,7 +200,9 @@ en:
       pss_no_combination: "There is no combination for this questions sequence to be true."
       valid: "This questions sequence is valid!"
     version:
+      chief_complaint_missing: "Please select the chief complaint."
       invalids_diagnostics: "Your version contains diagnostics who are invalid : %{diagnostics}"
+      triage_question_missing: "Please select the triage question you want to put a condition on."
   groups:
     add_device:
       success_add_device: "Device was successfully added to group"
