@@ -297,6 +297,7 @@ ActiveRecord::Schema.define(version: 2019_08_30_123307) do
   add_foreign_key "activities", "users"
   add_foreign_key "algorithms", "users"
   add_foreign_key "devices", "groups"
+  add_foreign_key "diagnostics", "nodes"
   add_foreign_key "diagnostics", "versions"
   add_foreign_key "group_accesses", "groups"
   add_foreign_key "group_accesses", "versions"
