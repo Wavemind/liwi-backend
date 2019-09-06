@@ -17,7 +17,7 @@ class Node < ApplicationRecord
 
   validates_presence_of :label_en
   validates_presence_of :reference
-  validates_uniqueness_of :reference, scope: :type
+  validates_uniqueness_of :reference, scope: :type, if: Proc.new { self.id == id }
 
   translates :label, :description
 
