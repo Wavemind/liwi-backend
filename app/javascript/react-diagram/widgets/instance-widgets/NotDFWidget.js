@@ -34,7 +34,10 @@ class NotDFWidget extends React.Component {
   };
 
   render() {
-    const { diagramNode } = this.props;
+    const {
+      diagramNode,
+      getReferencePrefix
+    } = this.props;
 
     let outPorts = [];
     let inPort = diagramNode.getInPorts()[0];
@@ -50,7 +53,7 @@ class NotDFWidget extends React.Component {
             <div className="port srd-port in-port" data-name={inPort.name} data-nodeid={inPort.parent.id}/>
           ) : null}
           <div className="col pl-2 pr-0 text-left">
-            {diagramNode.node.reference}
+            {getReferencePrefix(diagramNode.node.node_type, diagramNode.node.type) + diagramNode.node.reference}
           </div>
           <div className="col pl-0 pr-2 text-center">
             {(diagramNode.node.category_name === 'scored') ? diagramNode.node.min_score : diagramNode.node.priority}

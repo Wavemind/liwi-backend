@@ -80,7 +80,11 @@ class Toolbar extends React.Component {
   };
 
   render() {
-    const { type, instanceable } = this.props;
+    const {
+      type,
+      instanceable,
+      getReferencePrefix
+    } = this.props;
     const { isLoading } = this.state;
 
     return (
@@ -107,7 +111,7 @@ class Toolbar extends React.Component {
 
           {type === "Diagnostic" ? (
             <div className="col text-center justify-content-center align-self-center">
-              <span className="btn-transparent">{instanceable.node.reference + " - " + instanceable.node.label_translations['en']}</span>
+              <span className="btn-transparent">{instanceable.node.reference_label}</span>
             </div>
           ) : null}
 

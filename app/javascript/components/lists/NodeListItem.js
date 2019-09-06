@@ -12,8 +12,7 @@ class NodeListItem extends React.Component {
   };
 
   render = () => {
-    const { node } = this.props;
-
+    const { node, getReferencePrefix } = this.props;
     return (
       <div className="p-2"
            draggable={true}
@@ -24,7 +23,7 @@ class NodeListItem extends React.Component {
         <div className="mx-1 node">
           <div className="port py-2 node-category">
             <div className="col pl-2 pr-0 text-left">
-              {node.reference}
+              {getReferencePrefix(node.node_type, node.type) + node.reference}
             </div>
             <div className="col pl-0 pr-2 text-right">
               {node.priority}
