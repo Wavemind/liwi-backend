@@ -27,7 +27,7 @@ class QuestionsSequenceScoredDatatable < AjaxDatatablesRails::ActiveRecord
     records.map do |record|
       actions = link_to(I18n.t('show'), diagram_questions_sequence_url(record), class: 'btn btn-outline-primary') + " " + link_to(I18n.t('edit'), edit_scored_algorithm_questions_sequence_url(params[:id], record), class: 'btn btn-outline-info') + " " + link_to(I18n.t('delete'), algorithm_questions_sequence_url(record.algorithm, record), class: "btn btn-outline-danger #{record.dependencies? ? 'disabled' : ''}", method: :delete, data: { confirm: 'Are you sure?' })
       {
-        reference: record.reference,
+        reference: record.full_reference,
         label: record.label,
         min_score: record.min_score,
         description: record.description,

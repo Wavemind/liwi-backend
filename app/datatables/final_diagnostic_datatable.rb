@@ -25,7 +25,7 @@ class FinalDiagnosticDatatable < AjaxDatatablesRails::ActiveRecord
       actions += link_to(I18n.t('edit'), edit_algorithm_version_diagnostic_final_diagnostic_url(params[:algorithm_id], params[:version_id], record.diagnostic, record), class: 'btn btn-outline-info') + " "
       actions += link_to(I18n.t('delete'), diagram_algorithm_version_diagnostic_final_diagnostic_url(params[:algorithm_id], params[:version_id], record.diagnostic, record), class: "btn btn-outline-danger #{record.dependencies? ? 'disabled' : ''}", method: :delete, data: { confirm: 'Are you sure?' })
       {
-        reference: record.reference,
+        reference: record.full_reference,
         label: record.label,
         description: record.description,
         actions: actions

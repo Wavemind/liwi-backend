@@ -3,7 +3,6 @@
 # Reference prefix : DD
 include Rails.application.routes.url_helpers
 class Diagnostic < ApplicationRecord
-  before_create :complete_reference
   after_validation :unique_reference
 
   attr_accessor :duplicating
@@ -206,10 +205,5 @@ class Diagnostic < ApplicationRecord
          .where('reference = ? AND algorithms.id = ?', "#{I18n.t('diagnostics.reference')}#{reference}", version.algorithm.id).any?
       errors.add(:reference, I18n.t('nodes.validation.reference_used'))
     end
-  end
-
-  # {Node#complete_reference}
-  def complete_reference
-    self.reference = "#{I18n.t('diagnostics.reference')}#{reference}" unless self.reference.include?(I18n.t('duplicated'))
   end
 end

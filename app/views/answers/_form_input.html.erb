@@ -1,6 +1,6 @@
 <div class="nested-fields">
   <div class="row">
-    <div class="col align-self-center"><%= f.input :reference, prepend: (f.object.persisted? ? false : "#{@question.reference}_") %></div>
+    <div class="col align-self-center"><%= f.input :reference, prepend: "#{@question.full_reference}_" %></div>
     <div class="col align-self-center"><%= f.input :label_en, disabled: (f.object.persisted? && f.object.reference.ends_with?('_0')) %></div>
     <div class="col align-self-center"><%= f.input :operator, collection: Answer.operators.map { |k, v| [t("answers.operators.#{k}"), k] }, prompt: t('select'), disabled: (f.object.persisted? && f.object.reference.ends_with?('_0')) %></div>
     <div class="col align-self-center"><%= f.input :value, disabled: (f.object.persisted? && f.object.reference.ends_with?('_0')) %></div>

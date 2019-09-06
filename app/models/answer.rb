@@ -14,7 +14,6 @@ class Answer < ApplicationRecord
   validates :reference, exclusion: { in: %w(0), message: I18n.t('flash_message.reserved_reference') }
   after_validation :correct_value_type
   after_validation :unique_reference, on: [ :create ]
-  before_create :complete_reference
   before_destroy :remove_conditions
 
   translates :label
@@ -93,10 +92,5 @@ class Answer < ApplicationRecord
     elsif node.answer_type.value == 'Float'
       Float(val) rescue errors.add(:value, I18n.t('answers.validation.wrong_value_type', type: node.answer_type.value))
     end
-  end
-
-  # {Node#complete_reference}
-  def complete_reference
-    self.reference = "#{node.reference}_#{reference}"
   end
 end

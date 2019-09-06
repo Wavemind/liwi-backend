@@ -131,22 +131,6 @@ class Question < Node
 
   private
 
-  # {Node#unique_reference}
-  # Scoped by the current algorithm
-  def unique_reference
-    if type.blank?
-      errors.add(:type, I18n.t('questions.errors.no_blank'))
-    else
-      question = algorithm.questions.where(reference: reference_prefix + reference).first
-      errors.add(:reference, I18n.t('nodes.validation.reference_used')) if question.present? && question.id != id
-    end
-  end
-
-  # {Node#complete_reference}
-  def complete_reference
-    self.reference = reference_prefix + reference
-  end
-
   # Display the label for the current child
   def self.display_label
     I18n.t("questions.categories.#{self.variable}.label")
