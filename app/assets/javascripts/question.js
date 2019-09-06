@@ -1,8 +1,5 @@
 jQuery(document).ready(function() {
 
-  if (!$("#question_unavailable").hasClass("edit_A")) {
-    $("#question_unavailable").closest("fieldset").addClass("d-none");
-  }
   $("#question_formula").closest(".form-group").addClass("d-none");
 
   // Trigger categoryChange function only on edit or create question form
