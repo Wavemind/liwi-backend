@@ -189,6 +189,7 @@ en:
     update_fail: "Error will updating value"
     diagnostic:
       chief_complaint_exclude_triage_question: "You are setting a chief complaint that does not take in charge one question in your diagnostic diagram."
+      error_in_questions_sequence: "The questions sequence <u><a href='%{url}'>%{reference}</a></u> is not valid."
       final_diagnostic_no_condition: "The Final Diagnostic %{reference} has no condition."
       hc_question_no_children: "The %{type} %{reference}, which is in <u><a href='%{url}'>%{df_reference}</a></u> is not linked to any children."
       node_is_not_chief_complaint: "The node you are linking to this diagnostic is not a Chief Complaint."
@@ -200,7 +201,7 @@ en:
       pss_no_combination: "There is no combination for this questions sequence to be true."
       valid: "This questions sequence is valid!"
     version:
-      invalids_diagnostics: "Your version contains diagnostics who are invalid : %{diagnostics}"
+      invalids_diagnostics: "Your version contains diagnostics that are invalid : %{diagnostics}"
   groups:
     add_device:
       success_add_device: "Device was successfully added to group"
