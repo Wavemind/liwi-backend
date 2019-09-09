@@ -65,8 +65,9 @@ class Question < Node
 
   # Remove the triage question from the version triage orders
   def remove_from_versions
+    field_to_set = version_field_to_set
     algorithm.versions.each do |version|
-      version.update("#{version_field_to_set}": version.send("#{version_field_to_set}").delete(id)) if version.send("#{version_field_to_set}").include?(id)
+      version.update("#{field_to_set}": "#{version.send("#{field_to_set}").delete(id)}") if version.send("#{field_to_set}").include?(id)
     end
   end
 
@@ -129,6 +130,13 @@ class Question < Node
     errors.messages.blank?
   end
 
+  def get_type_from_prefix(prefix)
+    Question.descendants.each do |category|
+      Question.reference_prefix_class(category.name)
+      return category.name if Question.reference_prefix_class(category.name) == prefix
+    end
+  end
+
   private
 
   # Display the label for the current child
@@ -140,10 +148,19 @@ class Question < Node
   def validate_formula
     errors.add(:formula, I18n.t('questions.errors.formula_wrong_characters')) if formula.match(/^(\[(.*?)\]|[ \(\)\*\/\+\-|0-9])*$/).nil?
     formula.scan(/\[.*?\]/).each do |reference|
-      reference = reference.tr('[]', '')
-      question = algorithm.questions.find_by(reference: reference)
-      if question.present?
-        errors.add(:formula, I18n.t('questions.errors.formula_reference_not_numeric', reference: reference)) unless question.answer_type.display == 'Input'
+      if reference.include?('_')
+        reference = reference.tr('[]', '').split('_')
+        type = get_type_from_prefix(reference[0])
+        if type.present?
+          question = algorithm.questions.find_by(type: type.to_s, reference: reference[1])
+          if question.present?
+            errors.add(:formula, I18n.t('questions.errors.formula_reference_not_numeric', reference: reference)) unless question.answer_type.display == 'Input'
+          else
+            errors.add(:formula, I18n.t('questions.errors.formula_wrong_reference', reference: reference))
+          end
+        else
+          errors.add(:formula, I18n.t('questions.errors.formula_wrong_type', reference: reference))
+        end
       else
         errors.add(:formula, I18n.t('questions.errors.formula_wrong_reference', reference: reference))
       end

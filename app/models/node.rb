@@ -30,7 +30,7 @@ class Node < ApplicationRecord
   # @return [Boolean]
   # Verify if current node have instances dependencies
   def dependencies?
-    instances.where.not(instanceable: self).any?
+    instances.where.not(instanceable: self).where.not(instanceable_type: 'Version').any?
   end
 
   # @return [ActiveRecord::Association]

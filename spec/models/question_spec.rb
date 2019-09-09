@@ -59,19 +59,19 @@ RSpec.describe Question, type: :model do
       integer = AnswerType.create!(value: 'Integer', display: 'Input')
       Questions::Symptom.create!(reference: '10', label: 'skin issue', priority: Question.priorities[:basic], stage: Question.stages[:triage], answer_type: integer, algorithm: @algorithm)
 
-      @question.formula = "[S10] * 10"
+      @question.formula = "[S_10] * 10"
       expect(@question).to be_valid
     end
 
     it 'Refuses if any reference is wrong' do
-      @question.formula = "[W10] * 10"
+      @question.formula = "[W_10] * 10"
 
       expect(@question).to_not be_valid
     end
 
     it 'Refuses if the reference used is not a numeric format' do
       Questions::Symptom.create!(reference: '10', label: 'skin issue', priority: Question.priorities[:basic], stage: Question.stages[:triage], answer_type: @answer_type, algorithm: @algorithm)
-      @question.formula = "[S10] * 10"
+      @question.formula = "[S_10] * 10"
 
       expect(@question).to_not be_valid
     end
@@ -105,12 +105,12 @@ RSpec.describe Question, type: :model do
 
       @question.validate_overlap
       expect(@question.errors[:answers].count).to eq(1)
-      expect(@question.errors[:answers][0]).to eq(I18n.t('answers.validation.overlap.less_greater_than_more_or_equal'))
+      expect(@question.errors[:answers][0]).to eq(I18n.t('answers.validation.overlap.less_equal_more_or_equal'))
     end
 
     it 'is valid with one less and one more or equal' do
       @question.answers.create!(reference: '1', label_en: 'test', operator: Answer.operators[:less], value: '5')
-      @question.answers.create!(reference: '2', label_en: 'test', operator: Answer.operators[:more_or_equal], value: '100')
+      @question.answers.create!(reference: '2', label_en: 'test', operator: Answer.operators[:more_or_equal], value: '5')
 
       @question.validate_overlap
       expect(@question.errors[:answers].count).to eq(0)
@@ -122,7 +122,7 @@ RSpec.describe Question, type: :model do
       @question.answers.create!(reference: '3', label_en: 'test', operator: Answer.operators[:more_or_equal], value: '100')
 
       @question.validate_overlap
-      expect(@question.errors[:answers].count).to eq(1)
+      expect(@question.errors[:answers].count).to eq(2)
       expect(@question.errors[:answers][0]).to eq(I18n.t('answers.validation.overlap.one_less'))
     end
 

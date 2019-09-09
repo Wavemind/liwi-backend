@@ -3,8 +3,6 @@
 # Reference prefix : DD
 include Rails.application.routes.url_helpers
 class Diagnostic < ApplicationRecord
-  after_validation :unique_reference
-
   attr_accessor :duplicating
 
   belongs_to :version
@@ -14,8 +12,9 @@ class Diagnostic < ApplicationRecord
   has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy
 
   before_validation :validate_chief_complaint
-  validates_presence_of :reference
   validates_presence_of :label_en
+  validates_presence_of :reference
+  validates_uniqueness_of :reference
 
   translates :label
 
@@ -193,17 +192,6 @@ class Diagnostic < ApplicationRecord
     triage_questions.each do |instance|
       version_instance = version.components.find_by(node: instance.node)
       errors.add(:node, I18n.t('flash_message.diagnostic.chief_complaint_exclude_triage_question')) if version_instance.conditions.any? && version_instance.conditions.map(&:first_conditionable).map(&:node).flatten.exclude?(node)
-    end
-  end
-
-  private
-
-  # {Node#unique_reference}
-  # Scoped by the current algorithm
-  def unique_reference
-    if Diagnostic.joins(version: :algorithm)
-         .where('reference = ? AND algorithms.id = ?', "#{I18n.t('diagnostics.reference')}#{reference}", version.algorithm.id).any?
-      errors.add(:reference, I18n.t('nodes.validation.reference_used'))
     end
   end
 end
