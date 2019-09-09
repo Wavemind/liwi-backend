@@ -17,7 +17,7 @@ class Node < ApplicationRecord
 
   validates_presence_of :label_en
   validates_presence_of :reference
-  validates_uniqueness_of :reference, scope: :type, if: Proc.new { self.id == id }
+  before_validation :unique_reference
 
   translates :label, :description
 
@@ -70,5 +70,10 @@ class Node < ApplicationRecord
   # Return reference with its prefix
   def full_reference
     reference_prefix + reference
+  end
+
+  # Ensure the reference is unique
+  def unique_reference
+    self.errors.add(:reference, I18n.t('nodes.validation.reference_used')) if Node.where(type: type, reference: reference).where.not(id: id).any?
   end
 end
