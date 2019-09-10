@@ -1,9 +1,10 @@
 class FinalDiagnosticsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:show, :new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic]
-  before_action :set_version, only: [:show, :new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic]
-  before_action :set_diagnostic, only: [:show, :new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic, :diagram]
-  before_action :set_final_diagnostic, only: [:show, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic, :update_translations, :diagram]
+  before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic]
+  before_action :set_diagnostic, only: [:new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic, :diagram, :create_from_diagram]
+  before_action :set_final_diagnostic, only: [:edit, :update, :destroy, :remove_excluded_diagnostic, :update_translations, :diagram, :update_from_diagram]
+  before_action :set_version, only: [:new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic]
+  before_action :set_breadcrumb, only: [:new, :edit]
   layout 'diagram', only: [:diagram]
 
   def index
@@ -13,30 +14,18 @@ class FinalDiagnosticsController < ApplicationController
     end
   end
 
-  def show
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
-    add_breadcrumb @version.name, algorithm_version_url(@algorithm, @version)
-    add_breadcrumb @diagnostic.reference, algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'final_diagnostics')
-    add_breadcrumb @final_diagnostic.reference
-
-    @final_diagnostic_health_care = FinalDiagnosticHealthCare.new
-    @treatments = @final_diagnostic.final_diagnostic_health_cares.treatments.includes(:node)
-    @managements = @final_diagnostic.final_diagnostic_health_cares.managements
-  end
-
   def new
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
-    add_breadcrumb @version.name, algorithm_version_url(@algorithm, @version)
-    add_breadcrumb @diagnostic.reference, algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'final_diagnostics')
+    add_breadcrumb @diagnostic.label, algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'final_diagnostics')
+    add_breadcrumb t('breadcrumbs.new')
 
     @final_diagnostic = FinalDiagnostic.new
   end
 
   def edit
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
-    add_breadcrumb @version.name, algorithm_version_url(@algorithm, @version)
-    add_breadcrumb @diagnostic.reference, algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'final_diagnostics')
-    add_breadcrumb @final_diagnostic.reference, algorithm_version_diagnostic_final_diagnostic_url(@algorithm, @version, @diagnostic, @final_diagnostic)
+    add_breadcrumb @diagnostic.label, algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'final_diagnostics')
+    add_breadcrumb t('breadcrumbs.final_diagnostics')
+    add_breadcrumb @final_diagnostic.label
+    add_breadcrumb t('breadcrumbs.edit')
   end
 
   def create
@@ -46,6 +35,8 @@ class FinalDiagnosticsController < ApplicationController
       @diagnostic.components.create!(node: @final_diagnostic)
       redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'final_diagnostics'), notice: t('flash_message.success_created')
     else
+      set_breadcrumb
+      add_breadcrumb t('breadcrumbs.new')
       render :new
     end
   end
@@ -54,6 +45,8 @@ class FinalDiagnosticsController < ApplicationController
     if @final_diagnostic.update(final_diagnostic_params)
       redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'final_diagnostics'), notice: t('flash_message.success_updated')
     else
+      set_breadcrumb
+      add_breadcrumb t('breadcrumbs.edit')
       render :edit
     end
   end
@@ -75,15 +68,41 @@ class FinalDiagnosticsController < ApplicationController
   # @return
   # Add excluded diagnostic to final diagnostic
   def add_excluded_diagnostic
+    @final_diagnostic = FinalDiagnostic.find(final_diagnostic_params[:id])
     if @final_diagnostic.update(final_diagnostic_params)
-      render json: {status: 'success', message: t('flash_message.success_updated')}
+      respond_to do |format|
+        format.html { redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'excluding_diagnostics'), notice: t('flash_message.success_updated') }
+        format.js { render json: {status: 'success', messages: [t('flash_message.success_updated')]} }
+      end
     else
-      render json: {status: 'alert', message: t('flash_message.update_fail')}
+      respond_to do |format|
+        format.html { redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'excluding_diagnostics'), alert: @final_diagnostic.errors.full_messages }
+        format.js { render json: { status: 'danger', statusText: @final_diagnostic.errors.full_messages, ok: false }}
+      end
+    end
+  end
+
+  # POST
+  # @return final_diagnostic node
+  # Create a final diagnostic node from diagram
+  def create_from_diagram
+    final_diagnostic = @diagnostic.final_diagnostics.new(final_diagnostic_params)
+
+    if final_diagnostic.save
+      @diagnostic.components.create!(node: final_diagnostic)
+      render json: {status: 'success', messages: [t('flash_message.success_created')], node: final_diagnostic.as_json(methods: :node_type)}
+    else
+      render json: {status: 'danger', errors: final_diagnostic.errors.messages, ok: false}
     end
   end
 
   # Generate react diagram
   def diagram
+    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
+    add_breadcrumb @final_diagnostic.diagnostic.version.algorithm.name, algorithm_url(@final_diagnostic.diagnostic.version.algorithm)
+    add_breadcrumb "#{t('breadcrumbs.versions')} : #{@final_diagnostic.diagnostic.version.name}", algorithm_version_url(@final_diagnostic.diagnostic.version.algorithm, @final_diagnostic.diagnostic.version)
+    add_breadcrumb t('breadcrumbs.diagnostics')
+    add_breadcrumb @diagnostic.reference, algorithm_version_diagnostic_url(@final_diagnostic.diagnostic.version.algorithm, @final_diagnostic.diagnostic.version, @diagnostic, panel: 'final_diagnostics')
   end
 
   # DELETE /algorithms/:algorithm_id/versions/:version_id/diagnostics/:diagnostic_id/final_diagnostics/:id/remove_excluded_diagnostic
@@ -92,14 +111,31 @@ class FinalDiagnosticsController < ApplicationController
   def remove_excluded_diagnostic
     @final_diagnostic.excluded_diagnostic = nil
     if @final_diagnostic.save
-      render json: {status: 'success', message: t('flash_message.success_updated')}
+      respond_to do |format|
+        format.html { redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'excluding_diagnostics'), notice: t('flash_message.success_updated') }
+        format.js { render json: {status: 'success', messages: [t('flash_message.success_updated')]} }
+      end
     else
-      render json: {status: 'alert', message: t('flash_message.update_fail')}
+      respond_to do |format|
+        format.html { redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'excluding_diagnostics'), alert: t('error') }
+        format.js { render json: {status: 'alert', messages: t('flash_message.update_fail')} }
+      end
+    end
+  end
+
+  # PUT
+  # @return final_diagnostic node
+  # Update a final diagnostic node from diagram
+  def update_from_diagram
+    if @final_diagnostic.update(final_diagnostic_params)
+      render json: {status: 'success', messages: [t('flash_message.success_created')], node: @final_diagnostic.as_json(methods: :node_type)}
+    else
+      render json: {status: 'danger', errors: @final_diagnostic.errors.messages, ok: false}
     end
   end
 
   # @params FinalDiagnostic with the translations
-  # Update the object with its translation without
+  # Update the object with its translation without rendering a new page
   def update_translations
     if @final_diagnostic.update(final_diagnostic_params)
       @json = {status: 'success', message: t('flash_message.success_updated')}
@@ -111,6 +147,14 @@ class FinalDiagnosticsController < ApplicationController
   end
 
   private
+
+  def set_breadcrumb
+    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
+    add_breadcrumb t('breadcrumbs.versions')
+    add_breadcrumb @version.name, algorithm_version_url(@algorithm, @version)
+    add_breadcrumb t('breadcrumbs.diagnostics')
+  end
 
   def set_diagnostic
     @diagnostic = Diagnostic.find(params[:diagnostic_id])

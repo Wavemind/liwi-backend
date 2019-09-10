@@ -12,6 +12,10 @@ jQuery(document).ready(function () {
       { "data": "label" },
       { "data": "children" },
       { "data": "actions", "className": "text-right" },
-    ]
+    ],
+    'columnDefs': [ {
+      'targets': [4],
+      'orderable': false,
+    }]
   });
 });

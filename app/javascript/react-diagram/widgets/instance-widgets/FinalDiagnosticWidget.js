@@ -1,5 +1,6 @@
 import * as React from "react";
 import {withDiagram} from "../../../context/Diagram.context";
+import Alert from "../../../components/utils/FlashMessages";
 
 class FinalDiagnosticWidget extends React.Component {
   constructor(props) {
@@ -7,9 +8,21 @@ class FinalDiagnosticWidget extends React.Component {
     this.state = {};
   }
 
+  // Open final diagnostic diagram
   openDiagram = (dfId) => {
     const { http } = this.props;
     http.showFinalDiagnosticDiagram(dfId);
+  };
+
+  // Open modal to edit final diagnostic
+  editFinalDiagnostic = (diagramNode) => {
+    diagramNode.setSelected(false);
+
+    const { set } = this.props;
+    set(
+      ['modalToOpen', 'currentNode', 'currentDiagramNode', 'modalIsOpen'],
+      ['UpdateFinalDiagnostic', diagramNode.node, diagramNode, true]
+    );
   };
 
   render() {
@@ -29,8 +42,16 @@ class FinalDiagnosticWidget extends React.Component {
           <div className="col pl-2 pr-0 text-left">
             {diagramNode.node.reference}
           </div>
-          <div className="col pl-0 pr-2 text-right manage-df" onClick={() => this.openDiagram(inPort.parent.node.id)}>
-            <span>Manage...</span>
+          <div className="col pl-0 pr-2 text-right">
+            <div className="dropdown">
+              <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              </button>
+              <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a className="dropdown-item" href="#" onClick={() => this.openDiagram(inPort.parent.node.id)}>Open diagram</a>
+                <a className="dropdown-item" href="#" onClick={() => this.editFinalDiagnostic(inPort.parent)}>Edit</a>
+              </div>
+            </div>
           </div>
         </div>
         <div>

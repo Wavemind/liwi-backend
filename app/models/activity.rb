@@ -4,8 +4,7 @@ class Activity < ApplicationRecord
   belongs_to :device
   belongs_to :user, optional: true
 
-  validates_presence_of :latitude
-  validates_presence_of :longitude
+  # Latitude and longitude is not required. If value is 0, user doesn't accept to send GPS information
   validates_presence_of :timezone
   validates_presence_of :version
 

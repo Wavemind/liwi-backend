@@ -4,13 +4,52 @@ import AdvancedLinkModel from "../models/AdvancedLinkModel";
 
 class AdvancedPortModel extends DefaultPortModel {
 
-  setData(reference, id) {
-    this.reference = reference;
-    this.dbId = id;
+  in;
+  label;
+  reference;
+  dbId;
+  links;
+  isReadOnly;
+
+  deSerialize(object, engine) {
+    super.deSerialize(object, engine);
+    this.in = object.in;
+    this.label = object.label;
   }
 
-  createLinkModel() {
-    return new AdvancedLinkModel();
+  serialize() {
+    return _.merge(super.serialize(), {
+      in: this.in,
+      label: this.label,
+    });
+  }
+
+  link(port){
+    let link = this.createLinkModel();
+    link.setSourcePort(this);
+    link.setTargetPort(port);
+    return link;
+  }
+
+  canLinkToPort(port) {
+    if (port instanceof DefaultPortModel) {
+      return this.in !== port.in;
+    }
+    return true;
+  }
+
+  setData(reference, id, isReadOnly) {
+    this.reference = reference;
+    this.dbId = id;
+    this.isReadOnly = isReadOnly;
+  }
+
+  createLinkModel() | null {
+    return new AdvancedLinkModel(this.isReadOnly);
+  }
+
+  isLocked() {
+    return this.isReadOnly;
   }
 }
 

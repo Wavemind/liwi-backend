@@ -8,11 +8,14 @@ class Answer < ApplicationRecord
   has_many :medical_case_answers
 
   validates_presence_of :reference
-  validates_presence_of :label
+  validates_presence_of :label_en
+  validates_presence_of :operator, if: Proc.new { self.node.is_a?(Question) && self.node.answer_type.display == 'Input' }
 
+  validates :reference, exclusion: { in: %w(0), message: I18n.t('flash_message.reserved_reference') }
   after_validation :correct_value_type
-  after_validation :unique_reference
+  after_validation :unique_reference, on: [ :create ]
   before_create :complete_reference
+  before_destroy :remove_conditions
 
   translates :label
 
@@ -35,24 +38,39 @@ class Answer < ApplicationRecord
     "#{self.id},#{self.class.name}"
   end
 
-  # @param [Integer] node id to link to questions
-  # Create 1 automatic answer for tests/assessments if attr_accessor :unavailable in question is checked
-  def self.create_unavailable(node_id)
-    Answer.create!(node_id: node_id, reference: '0', label_en: I18n.t('answers.unavailable'))
-  end
-
   # Return the parent node with all the answers in order to include it in a json if the condition is an answer and not a condition
   def get_node
     node.as_json(include: [:answers], methods: [:type])
   end
 
+  # {Node#unique_reference}
+  # Scoped by the current algorithm
+  def unique_reference
+    if node.answers.where(reference: reference).or(node.answers.where(reference: "#{node.reference}_#{reference}")).where.not(id: id).any?
+      errors.add(:reference, I18n.t('nodes.validation.reference_used'))
+      return false
+    end
+    true
+  end
+
   private
+
+  # Remove conditions linked to the answer when it is deleted
+  def remove_conditions
+    Condition.where(first_conditionable: self).or(Condition.where(second_conditionable: self)).destroy_all
+  end
 
   # Ensure that the entered values are in the correct type
   def correct_value_type
     if node.is_a?(Question) && node.answer_type.display == 'Input'
       if between?
-        errors.add(:value, I18n.t('answers.validation.value_missing')) unless value.include?(',')
+        if value.include?(',')
+          values = value.split(',').map(&:to_i)
+          errors.add(:value, I18n.t('answers.validation.between_wrong_order')) if values[0] > values[1]
+        else
+          errors.add(:value, I18n.t('answers.validation.value_missing'))
+        end
+
         value.split(',').each(&method(:validate_value_type))
       else
         validate_value_type(value)
@@ -67,15 +85,6 @@ class Answer < ApplicationRecord
       Integer(val) rescue errors.add(:value, I18n.t('answers.validation.wrong_value_type', type: node.answer_type.value))
     elsif node.answer_type.value == 'Float'
       Float(val) rescue errors.add(:value, I18n.t('answers.validation.wrong_value_type', type: node.answer_type.value))
-    end
-  end
-
-  # {Node#unique_reference}
-  # Scoped by the current algorithm
-  def unique_reference
-    if Answer.joins(node: :algorithm)
-         .where('answers.reference = ? AND algorithms.id = ?', "#{node.reference}_#{reference}", node.algorithm.id).any?
-      errors.add(:reference, I18n.t('nodes.validation.reference_used'))
     end
   end
 

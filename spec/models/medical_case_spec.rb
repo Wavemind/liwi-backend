@@ -2,11 +2,13 @@ require 'rails_helper'
 
 RSpec.describe MedicalCase, type: :model do
   create_algorithm
-  create_predefined_syndrome_category
 
   before(:each) do
     @version = Version.create!(name: '1.0', user: @user, algorithm: @algorithm)
     @patient = Patient.create!(first_name: 'John', last_name: 'Do')
+
+    boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
+    @cc = @algorithm.questions.create!(reference: '11', answer_type: boolean, label_en: 'CC11', stage: Question.stages[:triage], priority: Question.priorities[:mandatory], type: 'Questions::ChiefComplaint')
   end
 
   it 'is valid with valid attributes' do
@@ -20,8 +22,8 @@ RSpec.describe MedicalCase, type: :model do
   end
 
   it 'can include health cares' do
-    treatment = Treatment.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
-    management = Management.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
+    treatment = HealthCares::Treatment.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
+    management = HealthCares::Management.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
 
     medical_case = MedicalCase.new(version: @version, patient: @patient)
     medical_case.nodes << [management, treatment]
@@ -30,7 +32,7 @@ RSpec.describe MedicalCase, type: :model do
   end
 
   it 'cannot include a node which is not a health care (Management/Treatment)' do
-    predefined_syndrome = PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm, category: @ps_category)
+    predefined_syndrome = QuestionsSequences::PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
 
     medical_case = MedicalCase.new(version: @version, patient: @patient)
     medical_case.nodes << predefined_syndrome
@@ -39,7 +41,7 @@ RSpec.describe MedicalCase, type: :model do
   end
 
   it 'can include a final diagnostic' do
-    diagnostic = Diagnostic.create!(reference: '9', label_en: 'diagnostic', version: @version)
+    diagnostic = Diagnostic.create!(reference: '9', label_en: 'diagnostic', version: @version, node: @cc)
     final_diagnostic = FinalDiagnostic.create!(reference: '9', label_en: 'skin issue', diagnostic: diagnostic)
 
     medical_case = MedicalCase.new(version: @version, patient: @patient)

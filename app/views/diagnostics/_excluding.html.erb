@@ -1,0 +1,32 @@
+<ul class="list-group">
+  <% @diagnostic.version.diagnostics.includes(final_diagnostics: :excluded_diagnostic).map(&:final_diagnostics).flatten.each do |final_diagnostic| %>
+    <% if final_diagnostic.excluded_diagnostic.present? %>
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col"><%= final_diagnostic.reference_label %></div>
+          <div class="col text-center"><%= t('.excludes') %></div>
+          <div class="col"><%= final_diagnostic.excluded_diagnostic.reference_label %></div>
+          <div class="col text-right"><%= link_to(I18n.t('destroy'), remove_excluded_diagnostic_algorithm_version_diagnostic_final_diagnostic_url(@diagnostic.version.algorithm, @diagnostic.version, @diagnostic, final_diagnostic), method: :put, class: 'btn btn-outline-danger', data: { confirm: 'Are you sure?' }) %></div>
+        </div>
+      </li>
+    <% end %>
+  <% end %>
+  <li class="list-group-item">
+    <%= simple_form_for @final_diagnostic, url: add_excluded_diagnostic_algorithm_version_diagnostic_final_diagnostics_url(@diagnostic.version.algorithm, @diagnostic.version, @diagnostic), method: :put do |f| %>
+      <div class="row">
+        <div class="col">
+          <%= f.input :id, collection: @diagnostic.version.diagnostics.map(&:final_diagnostics).flatten, value_method: :id, label_method: :reference_label, label: false, prompt: t('prompt') %>
+        </div>
+        <div class="col text-center">
+          <%= t('.excludes') %>
+        </div>
+        <div class="col">
+          <%= f.input :final_diagnostic_id, collection: @diagnostic.version.diagnostics.map(&:final_diagnostics).flatten, value_method: :id, label_method: :reference_label, label: false, prompt: t('prompt') %>
+        </div>
+        <div class="col text-right">
+          <%= f.submit t('add'), class: 'btn btn-primary' %>
+        </div>
+      </div>
+    <% end %>
+  </li>
+</ul>

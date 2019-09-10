@@ -4,6 +4,9 @@ class Media < ApplicationRecord
 
   belongs_to :fileable, polymorphic: true
 
-  validates_presence_of :label
+  validates_presence_of :label_en
   validates_presence_of :url
+
+  translates :label
+
 end

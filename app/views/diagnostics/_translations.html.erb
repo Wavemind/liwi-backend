@@ -54,11 +54,11 @@
       <% end %>
 
       <hr/>
-      <h4><%= t('.predefined_syndromes') %></h4>
+      <h4><%= t('.questions_sequences') %></h4>
 
-      <% @diagnostic.predefined_syndromes.each do |predefined_syndrome| %>
-        <%= simple_form_for predefined_syndrome, url: update_translations_algorithm_predefined_syndrome_url(@diagnostic.version.algorithm, predefined_syndrome), method: :put, remote: true, html: {class: 'form-horizontal'} do |f| %>
-          <%= render 'node_translation', f: f, node: predefined_syndrome, language: language %>
+      <% @diagnostic.questions_sequences.each do |questions_sequence| %>
+        <%= simple_form_for questions_sequence, url: update_translations_algorithm_questions_sequence_url(@diagnostic.version.algorithm, questions_sequence), method: :put, remote: true, html: {class: 'form-horizontal'} do |f| %>
+          <%= render 'node_translation', f: f, node: questions_sequence, language: language %>
         <% end %>
       <% end %>
 

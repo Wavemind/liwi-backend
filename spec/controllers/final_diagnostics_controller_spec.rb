@@ -16,8 +16,8 @@ RSpec.describe FinalDiagnosticsController, type: :controller do
       algorithm_id: @algorithm.id,
       version_id: @dd7.version.id,
       diagnostic_id: @dd7.id,
-      id: @df1.id,
       final_diagnostic: {
+        id: @df1.id,
         final_diagnostic_id: df2.id,
       }
     }

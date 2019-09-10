@@ -26,6 +26,32 @@ class AdvancedLinkWidget extends DefaultLinkWidget {
     return isHorisontal ? difX > 0 : difY > 0;
   }
 
+  // Override the method from DefaultLinkWidget so it can calculate path from AdvancedLink
+  calculateLabelPosition = (label, index: number) => {
+    if (!this.refLabels[label.id]) {
+      // no label? nothing to do here
+      return;
+    }
+
+    const labelDimensions = {
+      width: this.refLabels[label.id].offsetWidth,
+      height: this.refLabels[label.id].offsetHeight
+    };
+
+    // Calcultate position from parent link
+    const centerX = (label.parent.points[0].x + label.parent.points[1].x) / 2;
+    const centerY = (label.parent.points[0].y + label.parent.points[1].y) / 2;
+
+    const labelCoordinates = {
+      x: centerX - labelDimensions.width / 2 + label.offsetX,
+      y: centerY + label.offsetY
+    };
+    this.refLabels[label.id].setAttribute(
+      "style",
+      `transform: translate(${labelCoordinates.x}px, ${labelCoordinates.y}px);`
+    );
+  };
+
   /**
    * Generate link
    * @method generateLink

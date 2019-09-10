@@ -4,18 +4,17 @@ RSpec.describe TreatmentsController, type: :controller do
   login_user
   create_algorithm
   create_answer_type
-  create_category
   create_instances
 
   before(:each) do
-    @treatment = @algorithm.treatments.create!(reference: 1, label_en: 'Label en')
+    @treatment = @algorithm.health_cares.treatments.create!(reference: 1, label_en: 'Label en')
   end
 
   it 'adds translations without rendering the view' do
     put :update_translations, params: {
       algorithm_id: @algorithm.id,
       id: @treatment.id,
-      treatment: {
+      health_cares_treatment: {
         label_fr: 'Label fr',
       }
     }
@@ -31,7 +30,7 @@ RSpec.describe TreatmentsController, type: :controller do
     put :update_translations, params: {
       algorithm_id: @algorithm.id,
       id: @treatment.id,
-      treatment: {
+      health_cares_treatment: {
         label_en: '',
       }
     }

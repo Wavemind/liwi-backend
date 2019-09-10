@@ -16,11 +16,21 @@ import AdvancedNodeLayerWidget from "./AdvancedNodeLayerWidget";
  */
 class AdvancedDiagramWidget extends DiagramWidget {
 
+  constructor(props) {
+    super(props);
+  }
+
+  isLocked(){
+    return true;
+  }
+
   render() {
     let {
       diagramEngine,
       maxNumberPointsPerLink,
-      smartRouting
+      smartRouting,
+      allowCanvasTranslation,
+      allowLooseLinks
     } = this.props;
 
     let diagramModel = diagramEngine.getDiagramModel();
