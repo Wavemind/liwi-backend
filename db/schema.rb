@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_10_113703) do
+ActiveRecord::Schema.define(version: 2019_08_30_123307) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -84,6 +84,7 @@ ActiveRecord::Schema.define(version: 2019_05_10_113703) do
     t.string "second_conditionable_type"
     t.bigint "second_conditionable_id"
     t.boolean "top_level", default: true
+    t.integer "score"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["first_conditionable_type", "first_conditionable_id"], name: "index_first_conditionable_id"
@@ -111,6 +112,8 @@ ActiveRecord::Schema.define(version: 2019_05_10_113703) do
     t.bigint "version_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "node_id"
+    t.index ["node_id"], name: "index_diagnostics_on_node_id"
     t.index ["version_id"], name: "index_diagnostics_on_version_id"
   end
 
@@ -158,7 +161,7 @@ ActiveRecord::Schema.define(version: 2019_05_10_113703) do
   end
 
   create_table "medias", force: :cascade do |t|
-    t.string "label"
+    t.hstore "label_translations"
     t.string "url"
     t.string "fileable_type"
     t.bigint "fileable_id"
@@ -209,18 +212,19 @@ ActiveRecord::Schema.define(version: 2019_05_10_113703) do
     t.hstore "label_translations"
     t.string "reference"
     t.integer "priority"
+    t.integer "stage"
     t.string "type"
-    t.bigint "category_id"
     t.bigint "diagnostic_id"
     t.hstore "description_translations"
+    t.integer "min_score", default: 0
     t.bigint "algorithm_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "final_diagnostic_id"
     t.bigint "answer_type_id"
+    t.string "formula"
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
-    t.index ["category_id"], name: "index_nodes_on_category_id"
     t.index ["diagnostic_id"], name: "index_nodes_on_diagnostic_id"
     t.index ["final_diagnostic_id"], name: "index_nodes_on_final_diagnostic_id"
   end
@@ -229,6 +233,7 @@ ActiveRecord::Schema.define(version: 2019_05_10_113703) do
     t.string "first_name"
     t.string "last_name"
     t.date "birth_date"
+    t.bigint "got_homis_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -287,6 +292,11 @@ ActiveRecord::Schema.define(version: 2019_05_10_113703) do
     t.bigint "algorithm_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "triage_questions_order", default: [], array: true
+    t.integer "triage_first_look_assessments_order", default: [], array: true
+    t.integer "triage_chief_complaints_order", default: [], array: true
+    t.integer "triage_vital_signs_order", default: [], array: true
+    t.integer "triage_chronical_conditions_order", default: [], array: true
     t.index ["algorithm_id"], name: "index_versions_on_algorithm_id"
     t.index ["user_id"], name: "index_versions_on_user_id"
   end
@@ -295,6 +305,7 @@ ActiveRecord::Schema.define(version: 2019_05_10_113703) do
   add_foreign_key "activities", "users"
   add_foreign_key "algorithms", "users"
   add_foreign_key "devices", "groups"
+  add_foreign_key "diagnostics", "nodes"
   add_foreign_key "diagnostics", "versions"
   add_foreign_key "group_accesses", "groups"
   add_foreign_key "group_accesses", "versions"
