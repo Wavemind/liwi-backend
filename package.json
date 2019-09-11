@@ -34,11 +34,24 @@
   },
   "jest": {
     "verbose": true,
-    "modulePathIgnorePatterns": [
-      "config/*"
+    "testURL": "http://localhost:3000",
+    "reporters": [
+      "default"
     ],
-    "transform": {
-      "\\.(js|jsx)$": "babel-jest"
-    }
+    "coverageDirectory": "./",
+    "collectCoverageFrom": [
+      "**/*.{jsx}",
+      "!**/node_modules/**",
+      "!**/vendor/**"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "jsx"
+    ],
+    "moduleDirectories": [
+      "node_modules",
+      "<rootDir>/app/javascript"
+    ]
   }
 }
