@@ -14,7 +14,11 @@ jQuery(document).ready(function () {
       { "data": "last_activity" },
       { "data": "last_user" },
       { "data": "actions", "className": "text-right"  },
-    ]
+    ],
+    'columnDefs': [ {
+      'targets': [6],
+      'orderable': false,
+    }]
   });
 
 

@@ -10,13 +10,17 @@ class Instance < ApplicationRecord
 
   has_many :conditions, as: :referenceable, dependent: :destroy
 
-  scope :managements, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'Management') }
-  scope :questions, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'Question') }
-  scope :predefined_syndromes, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'PredefinedSyndrome') }
-  scope :treatments, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'Treatment') }
+  scope :managements, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'HealthCares::Management') }
+  scope :questions, ->() { joins(:node).includes(:conditions).where('nodes.type IN (?)', Question.descendants.map(&:name)) }
+  scope :questions_sequences, ->() { joins(:node).includes(:conditions).where('nodes.type IN (?)', QuestionsSequence.descendants.map(&:name)) }
+  scope :treatments, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'HealthCares::Treatment') }
   scope :final_diagnostics, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'FinalDiagnostic') }
+
+  scope :triage_chief_complaint, ->() { joins(:node).where('nodes.stage = ? AND nodes.type = ?', Question.stages[:triage], 'Questions::ChiefComplaint') }
+  scope :triage_under_chief_complaint, ->() { joins(:node).where('nodes.type NOT IN (?)', %w(Questions::FirstLookAssessment Questions::ChiefComplaint)) }
+
   # Allow to filter if the node is used as a health care condition or as a final diagnostic condition. A node can be used in both of them.
-  scope :health_care_conditions, ->() { joins(:node).includes(:conditions).where.not(final_diagnostic: nil).or(joins(:node).includes(:conditions).where("nodes.type = 'Treatment'")).or(joins(:node).includes(:conditions).where("nodes.type = 'Management'")) }
+  scope :health_care_conditions, ->() { joins(:node).includes(:conditions).where.not(final_diagnostic: nil).or(joins(:node).includes(:conditions).where("nodes.type LIKE 'HealthCares::%'")) }
   scope :not_health_care_conditions, ->() { includes(:conditions).where(final_diagnostic_id: nil) }
 
   before_destroy :remove_condition_from_children
@@ -26,6 +30,7 @@ class Instance < ApplicationRecord
   amoeba do
     enable
     include_association :conditions
+    include_association :children
   end
 
   # Delete properly conditions from children in the current diagnostic or predefined syndrome.
@@ -50,5 +55,10 @@ class Instance < ApplicationRecord
     elsif cond.second_conditionable.is_a?(Answer) && cond.second_conditionable.node == instance.node
       cond.update!(operator: nil, second_conditionable: nil)
     end
+  end
+
+  # Return the reference label of its node
+  def reference_label
+    node.reference_label
   end
 end

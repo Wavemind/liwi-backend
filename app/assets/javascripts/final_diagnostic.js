@@ -11,6 +11,10 @@ jQuery(document).ready(function () {
       { "data": "label" },
       { "data": "description" },
       { "data": "actions", "className": "text-right" },
-    ]
+    ],
+    'columnDefs': [ {
+      'targets': [3],
+      'orderable': false,
+    }]
   });
 });

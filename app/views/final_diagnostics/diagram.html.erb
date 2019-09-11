@@ -1,12 +1,6 @@
-<div class="row">
-  <div class="col-md-2 my-1">
-    <%= link_to(I18n.t('back'), diagram_algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], params[:diagnostic_id]), class: 'btn btn-primary') %>
-  </div>
-  <div class="col-md-10 my-1">
-    <h2 class="inline"><%= link_to @diagnostic.label, diagram_algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], params[:diagnostic_id]) %></h2>
-    >>
-    <h3 class="inline"><%= @final_diagnostic.label %></h3>
-  </div>
+<div class="row my-1">
+  <div class="col align-self-center"><%= render_breadcrumbs %></div>
+  <div class="col align-self-center text-right text-uppercase font-weight-light breadcrumbs"><%= link_to @diagnostic.label, diagram_algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], params[:diagnostic_id]) %> - <%= @final_diagnostic.label %></div>
 </div>
 <div class="row">
   <div class="col-md-12">
@@ -19,9 +13,19 @@
         finalDiagnostic: @final_diagnostic,
         healthCares: @final_diagnostic.health_cares_json,
         availableNodes: @final_diagnostic.available_nodes_health_cares_json,
-        type: 'FinalDiagnostic'
+        type: 'FinalDiagnostic',
+        questionAnswerTypes: AnswerType.all.as_json,
+        questionStages: Question.stages.as_json,
+        questionPriorities: Question.priorities.as_json(methods: :display_name),
+        questionCategories: Question.categories.as_json,
+        questionsSequenceCategories: QuestionsSequence.categories.as_json,
       }
     }) %>
   </div>
+  <button type="button" class="btn btn-sm btn-info help" data-toggle="popover" data-placement="top" data-html="true" data-content="<%= render 'helps/diagram' %>">
+    <i class="material-icons">
+      help_outline
+    </i>
+  </button>
 </div>
 

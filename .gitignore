@@ -26,16 +26,18 @@
 
 /.idea/*
 
-/public/assets
+
 .byebug_history
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 /config/secrets.yml
-/config/database.yml
 
-/public
 /public/media/*
+/public/assets
+/public/fhir-app
+/public/packs
+/public/uploads
 
 coverage
 
@@ -46,3 +48,4 @@ doc/
 /node_modules
 yarn-debug.log*
 .yarn-integrity
+.env

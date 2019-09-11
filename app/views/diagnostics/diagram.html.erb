@@ -1,10 +1,6 @@
-<div class="row">
-  <div class="col my-1">
-    <h2><%= @diagnostic.label %></h2>
-  </div>
-  <div class="col my-1 text-right">
-    <%= link_to(I18n.t('close'), algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], params[:id]), class: 'btn btn-danger mr-2') %>
-  </div>
+<div class="row my-1">
+  <div class="col align-self-center breadcrumbs"><%= render_breadcrumbs %></div>
+  <div class="col align-self-center text-right text-uppercase font-weight-light"><%= @diagnostic.label %></div>
 </div>
 <div class="row">
   <div class="col-md-12">
@@ -12,13 +8,25 @@
     <%= react_component('Provider', {
     render: 'Diagram',
     context: {
-      instanceable: @diagnostic,
+      instanceable: @diagnostic.as_json(include: :node),
       instanceableType: @diagnostic.class.name,
       questions: @diagnostic.questions_json,
       finalDiagnostics: @diagnostic.final_diagnostics_json,
       availableNodes: @diagnostic.available_nodes_json,
-      type: 'Diagnostic'
+      type: 'Diagnostic',
+      questionAnswerTypes: AnswerType.all.as_json(methods: :display_name),
+      questionStages: Question.stages,
+      questionPriorities: Question.priorities.as_json(methods: :display_name),
+      questionCategories: Question.categories.as_json,
+      questionsSequenceCategories: QuestionsSequence.categories.as_json,
+      answersOperators: Answer.operators.as_json,
+      readOnly: false
     }
   }) %>
+    <button type="button" class="btn btn-sm btn-info help" data-toggle="popover" data-placement="top" data-html="true" data-content="<%= render 'helps/diagram' %>">
+      <i class="material-icons">
+        help_outline
+      </i>
+    </button>
   </div>
 </div>

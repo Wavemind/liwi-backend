@@ -13,6 +13,10 @@ jQuery(document).ready(function () {
       { "data": "last_connection" },
       { "data": "deactivated" },
       { "data": "action", "className": "text-right" },
-    ]
+    ],
+    'columnDefs': [ {
+      'targets': [5],
+      'orderable': false,
+    }]
   });
 });

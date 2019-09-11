@@ -1,4 +1,5 @@
 import * as React from "react";
+import {withDiagram} from "../../../context/Diagram.context";
 
 class NotDFWidget extends React.Component {
   constructor(props) {
@@ -11,13 +12,30 @@ class NotDFWidget extends React.Component {
     return (
       <div key={port.getID()} className="col px-0" style={{ position: "relative" }}>
         <div className="py-1 text-center answer-split">{port.label}</div>
-        <div className="port out-port" data-name={port.name} data-nodeid={port.parent.id}/>
+        <div className="port out-port" data-name={port.id} data-nodeid={port.parent.id} data-id={port.id}/>
       </div>
     );
   }
 
+  // Open final diagnostic diagram
+  openDiagram = (nodeId) => {
+    const { http } = this.props;
+    http.showQuestionsSequenceDiagram(nodeId);
+  };
+
+  editNode = (node) => {
+    node.setSelected(false);
+
+    const { set } = this.props;
+    set(
+      ['modalToOpen', 'currentNode', 'currentDiagramNode', 'modalIsOpen'],
+      ['Update' + node.node.node_type, node.node, node, true]
+    );
+  };
+
   render() {
     const { diagramNode } = this.props;
+
     let outPorts = [];
     let inPort = diagramNode.getInPorts()[0];
 
@@ -28,12 +46,25 @@ class NotDFWidget extends React.Component {
     return (
       <div className="node">
         <div className="port py-2 node-category">
-          <div className="port srd-port in-port" data-name={inPort.name} data-nodeid={inPort.parent.id}/>
+          {(inPort !== undefined) ? (
+            <div className="port srd-port in-port" data-name={inPort.name} data-nodeid={inPort.parent.id} data-id={inPort.id}/>
+          ) : null}
           <div className="col pl-2 pr-0 text-left">
             {diagramNode.node.reference}
           </div>
+          <div className="col pl-0 pr-2 text-center">
+            {(diagramNode.node.category_name === 'scored') ? diagramNode.node.min_score : diagramNode.node.priority}
+          </div>
           <div className="col pl-0 pr-2 text-right">
-            {diagramNode.node.priority}
+            <div className="dropdown">
+              <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              </button>
+              <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                {(diagramNode.node.node_type === "QuestionsSequence") ? (<a className="dropdown-item" href="#" onClick={() => this.openDiagram(diagramNode.node.id)}>Open diagram</a>) : null}
+                <a className="dropdown-item" href="#" onClick={() => this.editNode(diagramNode)}>Edit</a>
+              </div>
+            </div>
           </div>
         </div>
         <div>
@@ -51,4 +82,4 @@ class NotDFWidget extends React.Component {
   }
 }
 
-export default NotDFWidget;
+export default withDiagram(NotDFWidget);

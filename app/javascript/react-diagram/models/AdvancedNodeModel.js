@@ -4,13 +4,22 @@ import * as _ from "lodash";
 import Http from "../../http";
 
 class AdvancedNodeModel extends DefaultNodeModel {
+  node;
+  reference;
+  minScore;
+  color;
+  outPorts;
+  ports = {};
+  addNode;
+  isReadOnly;
 
-  constructor(node, reference, color, outPorts, addNode) {
+  constructor(node, reference, color, outPorts, addNode, isReadOnly) {
     super("advanced");
     this.node = node;
     this.reference = reference;
     this.color = color;
     this.outPorts = outPorts;
+    this.isReadOnly = isReadOnly;
     const http = new Http();
 
     // Don't trigger entity removed for AND node
@@ -27,20 +36,28 @@ class AdvancedNodeModel extends DefaultNodeModel {
 
   addInPort(label, reference = '', id = '') {
     let inPort = new AdvancedPortModel(true, Toolkit.UID(), label);
-    inPort.setData(reference, id);
+    inPort.setData(reference, id, this.isReadOnly);
     return this.addPort(inPort);
   }
 
   addOutPort(label, reference = '', id = '') {
     let outPort = new AdvancedPortModel(false, Toolkit.UID(), label);
-    outPort.setData(reference, id);
+    outPort.setData(reference, id, this.isReadOnly);
     return this.addPort(outPort);
+  }
+
+  addPort(port) {
+    port.setParent(this);
+    port.setName(port.id);
+    this.ports[port.id] = port;
+    return port;
   }
 
   deSerialize(object, engine) {
     super.deSerialize(object, engine);
     this.node = object.node;
     this.reference = object.reference;
+    this.minScore = object.minScore;
     this.color = object.color;
     this.outPorts = object.outPorts;
   }
@@ -49,6 +66,7 @@ class AdvancedNodeModel extends DefaultNodeModel {
     return _.merge(super.serialize(), {
       node: this.node,
       reference: this.reference,
+      minScore: this.minScore,
       color: this.color,
       outPorts: this.outPorts,
     });
@@ -76,6 +94,26 @@ class AdvancedNodeModel extends DefaultNodeModel {
     return _.find(this.ports, portModel => {
       return !portModel.in;
     });
+  }
+
+  getPorts() {
+    return this.ports;
+  }
+
+  isLocked() {
+    return this.isReadOnly;
+  }
+
+  setReference(reference) {
+    return this.reference = reference
+  }
+
+  setMinScore(minScore) {
+    return this.minScore = minScore
+  }
+
+  setNode(node) {
+    return this.node = node
   }
 }
 

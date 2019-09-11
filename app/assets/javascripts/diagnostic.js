@@ -9,9 +9,14 @@ jQuery(document).ready(function () {
     "columns": [
       {"data": "reference"},
       {"data": "label"},
+      {"data": "node"},
       {"data": "last_update"},
       {"data": "actions", "className": "text-right"},
-    ]
+    ],
+    'columnDefs': [ {
+      'targets': [4],
+      'orderable': false,
+    }]
   });
 });
 

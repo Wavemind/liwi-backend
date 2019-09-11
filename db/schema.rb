@@ -57,14 +57,6 @@ ActiveRecord::Schema.define(version: 2019_08_30_123307) do
     t.index ["node_id"], name: "index_answers_on_node_id"
   end
 
-  create_table "categories", force: :cascade do |t|
-    t.hstore "name_translations"
-    t.string "parent"
-    t.string "reference_prefix"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "children", force: :cascade do |t|
     t.float "weight"
     t.bigint "node_id"

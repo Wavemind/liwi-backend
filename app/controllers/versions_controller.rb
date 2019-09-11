@@ -1,7 +1,8 @@
 class VersionsController < ApplicationController
-  before_action :authenticate_user!
-  before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive]
-  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive]
+  before_action :authenticate_user!, except: [:change_triage_order]
+  before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :create_triage_condition, :remove_triage_condition]
+  before_action :set_breadcrumb, only: [:show, :new, :edit]
+  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :change_triage_order, :create_triage_condition, :remove_triage_condition]
 
   def index
     respond_to do |format|
@@ -11,17 +12,18 @@ class VersionsController < ApplicationController
   end
 
   def show
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'versions')
     add_breadcrumb @version.name
   end
 
   def new
+    add_breadcrumb t('breadcrumbs.new')
+
     @version = Version.new
   end
 
   def edit
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'versions')
     add_breadcrumb @version.name, algorithm_version_url(@algorithm, @version)
+    add_breadcrumb t('breadcrumbs.edit')
   end
 
   def create
@@ -31,6 +33,8 @@ class VersionsController < ApplicationController
     if @version.save
       redirect_to algorithm_url(@algorithm, panel: 'versions'), notice: t('flash_message.success_created')
     else
+      set_breadcrumb
+      add_breadcrumb t('breadcrumbs.new')
       render :new
     end
   end
@@ -39,6 +43,8 @@ class VersionsController < ApplicationController
     if @version.update(version_params)
       redirect_to algorithm_url(@algorithm, panel: 'versions'), notice: t('flash_message.success_updated')
     else
+      set_breadcrumb
+      add_breadcrumb t('breadcrumbs.edit')
       render :edit
     end
   end
@@ -54,6 +60,52 @@ class VersionsController < ApplicationController
       redirect_to algorithm_url(@algorithm, panel: 'versions'), notice: t('flash_message.success_created')
     else
       redirect_to algorithm_url(@algorithm, panel: 'versions'), danger: t('flash_message.update_fail')
+    end
+  end
+
+  # PUT algorithms/:algorithm_id/version/:id/change_triage_order
+  # @params version [Version] version of algorithm we change order of
+  # Change the order of the triage questions for this version
+  def change_triage_order
+    if @version.update("#{params[:key]}": params[:order])
+      render json: {result: 'success'}
+    else
+      render json: {result: 'error'}
+    end
+  end
+
+  # PUT algorithms/:algorithm_id/version/:id/create_triage_condition
+  # @params version [Version] version of algorithm where we create a condition
+  # @params id of the triage question to put the condition on
+  # @params id of the chief complaint that condition the triage question
+  # Create a condition between a triage question and a chief complaint
+  def create_triage_condition
+    if version_params[:cc_id].blank?
+      redirect_to algorithm_version_url(@algorithm, @version, panel: 'triage_conditions'), alert: t('flash_message.version.chief_complaint_missing')
+    elsif version_params[:triage_id].blank?
+      redirect_to algorithm_version_url(@algorithm, @version, panel: 'triage_conditions'), alert: t('flash_message.version.triage_question_missing')
+    else
+      instance = Instance.find(version_params[:triage_id])
+      cc_answer = Instance.find(version_params[:cc_id]).node.answers.first
+
+      condition = Condition.new(referenceable: instance, first_conditionable: cc_answer)
+
+      if condition.save
+        redirect_to algorithm_version_url(@algorithm, @version, panel: 'triage_conditions'), notice: t('flash_message.success_created')
+      else
+        redirect_to algorithm_version_url(@algorithm, @version, panel: 'triage_conditions'), alert: t('flash_message.create_fail')
+      end
+    end
+  end
+
+  # Remove a condition between a triage question and a chief complaint
+  def remove_triage_condition
+    condition = Condition.find(params[:condition_id])
+
+    if condition.destroy
+      redirect_to algorithm_version_url(@algorithm, @version, panel: 'triage_conditions'), notice: t('flash_message.success_created')
+    else
+      redirect_to algorithm_version_url(@algorithm, @version, panel: 'triage_conditions'), notice: t('flash_message.create_fail')
     end
   end
 
@@ -73,6 +125,12 @@ class VersionsController < ApplicationController
 
   private
 
+  def set_breadcrumb
+    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'versions')
+    add_breadcrumb t('breadcrumbs.versions')
+  end
+
   def set_version
     @version = Version.find(params[:id])
   end
@@ -81,6 +139,13 @@ class VersionsController < ApplicationController
     params.require(:version).permit(
       :id,
       :name,
+      :triage_first_look_assessments_order,
+      :triage_chief_complaints_order,
+      :triage_vital_signs_order,
+      :triage_chronical_conditions_order,
+      :triage_questions_order,
+      :triage_id,
+      :cc_id
     )
   end
 end

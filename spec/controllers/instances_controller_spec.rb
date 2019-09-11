@@ -3,7 +3,6 @@ require 'rails_helper'
 RSpec.describe InstancesController, type: :controller do
   login_user
   create_algorithm
-  create_category
   create_answer_type
   create_instances
 
@@ -40,7 +39,7 @@ RSpec.describe InstancesController, type: :controller do
   end
 
   it 'creates a node from diagram' do
-    m5 = Management.create!(reference: '5', label_en: 'Test', algorithm: @algorithm)
+    m5 = HealthCares::Management.create!(reference: '5', label_en: 'Test', algorithm: @algorithm)
     post :create_from_diagram, params: {
       diagnostic_id: @dd7.id,
       instance: {

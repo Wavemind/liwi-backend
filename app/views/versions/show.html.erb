@@ -1,8 +1,32 @@
 <h1><%= t('.title', name: @version.algorithm.name, version:@version.name ) %></h1>
 
-<h2><%= t('.subtitle_diagnostics') %></h2>
-<%= link_to new_algorithm_version_diagnostic_url(@algorithm, @version) do %>
-  <button type="button" class="btn btn-outline-secondary"><%= t('add') %></button>
-<% end %>
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link <%= 'active' if params[:panel].blank? || params[:panel] == 'diagnostics'%>" id="diagnostics-tab" data-toggle="tab" href="#diagnostics" role="tab" aria-controls="diagnostics" aria-selected="false"><%= t('.subtitle_diagnostics') %></a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'questions_order'%>" id="questions_order-tab" data-toggle="tab" href="#questions_order" role="tab" aria-controls="questions_order" aria-selected="false"><%= t('.subtitle_questions_order')  %> </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'triage_conditions'%>" id="triage_conditions-tab" data-toggle="tab" href="#triage_conditions" role="tab" aria-controls="triage_conditions" aria-selected="false"><%= t('.subtitle_triage_conditions')  %> </a>
+  </li>
+</ul>
 
-<%= render 'diagnostics/table' %>
+<div class="tab-content mt-4 ml-4" id="version-table">
+  <div class="tab-pane fade <%= 'show active' if params[:panel].blank? || params[:panel] == 'diagnostics'%>" id="diagnostics" role="tabpanel" aria-labelledby="diagnostics-tab">
+    <h2><%= t('.subtitle_diagnostics') %></h2>
+    <%= link_to new_algorithm_version_diagnostic_url(@algorithm, @version) do %>
+      <button type="button" class="btn btn-outline-secondary"><%= t('add') %></button>
+    <% end %>
+
+    <%= render 'diagnostics/table' %>
+  </div>
+
+  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'questions_order'%>" id="questions_order" data-url=<%= change_triage_order_algorithm_version_url(@algorithm, @version) %> role="tabpanel" aria-labelledby="questions_order-tab">
+    <%= render 'triage_order' %>
+  </div>
+
+  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'triage_conditions'%>" id="triage_conditions" role="tabpanel" aria-labelledby="triage_conditions-tab">
+    <%= render 'triage_conditions' %>
+  </div>
+</div>

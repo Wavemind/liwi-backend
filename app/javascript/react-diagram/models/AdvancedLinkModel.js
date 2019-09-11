@@ -1,4 +1,9 @@
-import { DefaultLinkModel, DiagramEngine } from "storm-react-diagrams";
+import {
+  DefaultLinkModel,
+  DiagramEngine,
+  LabelModel,
+  DefaultLabelModel
+} from "storm-react-diagrams";
 import * as _ from "lodash";
 import Http from "../../http";
 
@@ -9,15 +14,17 @@ class AdvancedLinkModel extends DefaultLinkModel {
   markers;
   arrow;
   separator;
+  isReadOnly;
 
-  constructor(type = "default") {
+  constructor(isReadOnly, type = "default") {
     super(type);
     this.color = "rgba(255,255,255,0.5)";
     this.width = 2;
-    this.curvyness = 60;
+    this.curvyness = 0;
     this.markers = { startMarker: true, endMarker: false };
     this.arrow = true;
     this.separator = false;
+    this.isReadOnly = isReadOnly;
 
     const http = new Http();
 
@@ -93,6 +100,10 @@ class AdvancedLinkModel extends DefaultLinkModel {
 
   displaySeparator(separator) {
     this.separator = separator;
+  }
+
+  isLocked() {
+    return this.isReadOnly;
   }
 }
 

@@ -39,6 +39,7 @@ class AdvancedNodeLayerWidget extends NodeLayerWidget {
       finalDiagnostics,
       healthCares,
       type,
+      readOnly
     } = this.props;
 
     const hMargin = 80; // Horizontal Margin between boxes
@@ -48,13 +49,19 @@ class AdvancedNodeLayerWidget extends NodeLayerWidget {
     // List of all the medical nodes dependency type of diagram displayed
     if (type === "Diagnostic") {
       nodes = questions.concat([finalDiagnostics]);
-    } else if (type === "PredefinedSyndrome") {
+    } else if (type === "QuestionsSequence") {
       nodes = questions;
     } else if (type === "FinalDiagnostic") {
       nodes = questions.concat([healthCares]);
     }
 
-    let width = ($(window).width() - $('.liwi-sidebar').width() - 50);
+    let width = ($(window).width());
+    if (readOnly) {
+      width -= $('#sidebar').width();
+    } else {
+      width -= $('.liwi-sidebar').width();
+    }
+
     let x = 0;
     let y = 50;
 

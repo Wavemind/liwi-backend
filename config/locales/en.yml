@@ -3,6 +3,7 @@ en:
     attributes:
       node:
         unavailable: "Can be unavailable ?"
+  activated: "Activate"
   add: "Add"
   algorithms:
     index:
@@ -19,11 +20,20 @@ en:
       title: "Edit this algorithm"
     show:
       subtitle_managements: "Managements"
-      subtitle_predefined_syndromes: "Predefined syndromes"
+      subtitle_questions_sequences: "Questions sequences"
+      subtitle_questions_sequences_scored: "Questions sequences scored"
       subtitle_questions: "Questions"
       subtitle_treatments: "Treatments"
       subtitle_versions: "Versions list"
       title: "Details of %{name}"
+  answer_type:
+    labels:
+      - ~
+      - "True/False"
+      - "Dropdown list"
+      - "Input integer"
+      - "Input decimal"
+      - "Formula"
   answers:
     edit:
       title: "Edit related answers of %{name} question"
@@ -37,6 +47,15 @@ en:
     validation:
       value_missing: "Use coma separated values when using between operator"
       wrong_value_type: "The value is not in the correct type : %{type}"
+      between_wrong_order: "The first value has to be smaller than the second one"
+      overlap:
+        one_more_or_equal: "You have to have one (and only one) answer with more or equal operator in order to close your range."
+        one_less: "You have to have one (and only one) answer with less operator in order to open your range."
+        first_between_different_from_less: "The smallest value on your answers with between operator has to be equal to the answer with less operator."
+        last_between_different_from_more_or_equal: "The highest value on your answers with between operator has to be equal to the answer with more or equal operator."
+        between_not_following: "Two of your answers with between operators are not followed correctly."
+        less_greater_than_more_or_equal: "Your answer with less operator can't be greater than your answer with more or equal operator."
+        less_equal_more_or_equal: "If you only have less and more or equal answers, they must be equal"
     "yes": "Yes"
     unavailable: "Test/Assessment is unavailable"
   api:
@@ -49,8 +68,25 @@ en:
       activities:
         create:
           errors_device_not_present: "Device doesn't exist"
-          errors_on_save: "An error occured when saving activities"
+          errors_on_save: "An error occurred when saving activities"
   archive: "Archive"
+  breadcrumbs:
+    algorithms: 'Algorithms'
+    devices: 'Devices'
+    groups: 'Groups'
+    home: 'Home'
+    roles: 'Roles'
+    settings: 'Settings'
+    users: 'Users'
+    new: "New"
+    edit: "Edit"
+    versions: "Versions"
+    diagnostics: "Diagnostics"
+    final_diagnostics: "Final diagnostics"
+    questions_sequences: "Questions sequences"
+    treatments: "Treatments"
+    questions: "Questions"
+    managements: "Managements"
   children:
     errors:
       unknown_instanceable: "Unknown instanceable"
@@ -89,21 +125,25 @@ en:
   diagnostics:
     table:
       columns:
-        reference: "Reference"
+        actions: "Actions"
+        chief_complaint: "Chief complaint"
         label: "Name"
         last_update: "Last update"
-        actions: "Actions"
+        reference: "Reference"
       title: "Algorithms versions"
     new:
       title: "Add a diagnostic"
     edit:
       title: "Edit this diagnostic"
+    excluding:
+      excludes: "excludes"
     reference: "DD"
     show:
       diagram: "Diagram"
       differential_diagnostic_conditions: "Differential diagnostic conditions"
+      excluding_diagnostics: "Excluding diagnostics"
       instances: "Instance of nodes"
-      predefined_syndromes: "Predefined Syndromes"
+      questions_sequences: "Questions sequences"
       subtitle_final_diagnostics: "Finals diagnostics"
       title: "Details of %{name}"
       translations: "Translations"
@@ -112,7 +152,7 @@ en:
       diagnostic: "Diagnostic"
       final_diagnostics: "Final diagnostics"
       managements: "Managements"
-      predefined_syndromes: "Predefined syndromes"
+      questions_sequences: "Questions sequences"
       questions: "Questions"
       treatments: "Treatments"
   duplicate: "Duplicate"
@@ -137,12 +177,33 @@ en:
       managements: "Managements"
       excluded_diagnostic: "Excluded diagnostic"
       no_excluded_diagnostic: "There is no diagnosis excluded"
+    validation:
+      loop: "You are trying to do a loop into diagnostic excluding which is not possible."
   flash_message:
+    create_fail: "Error will creating the entry"
     delete_fail: "Error will deleting the entry"
+    reserved_reference: "This reference is reserved."
     success_created: "Data was successfully created"
     success_deleted: "Data was successfully deleted"
     success_updated: "Data was successfully updated"
     update_fail: "Error will updating value"
+    diagnostic:
+      chief_complaint_exclude_triage_question: "You are setting a chief complaint that does not take in charge one question in your diagnostic diagram."
+      error_in_questions_sequence: "The questions sequence <u><a href='%{url}'>%{reference}</a></u> is not valid."
+      final_diagnostic_no_condition: "The Final Diagnostic %{reference} has no condition."
+      hc_question_no_children: "The %{type} %{reference}, which is in <u><a href='%{url}'>%{df_reference}</a></u> is not linked to any children."
+      node_is_not_chief_complaint: "The node you are linking to this diagnostic is not a Chief Complaint."
+      question_no_children: "The %{type} %{reference} is not linked to any children."
+      valid: "This diagnostic is valid!"
+    questions_sequence:
+      ps_no_condition: "The questions sequence you are describing has no condition."
+      question_no_children: "The %{type} %{reference} is not linked to any children."
+      pss_no_combination: "There is no combination for this questions sequence to be true."
+      valid: "This questions sequence is valid!"
+    version:
+      chief_complaint_missing: "Please select the chief complaint."
+      invalids_diagnostics: "Your version contains diagnostics that are invalid : %{diagnostics}"
+      triage_question_missing: "Please select the triage question you want to put a condition on."
   groups:
     add_device:
       success_add_device: "Device was successfully added to group"
@@ -172,6 +233,28 @@ en:
   group_accesses:
     new:
       title: "New release"
+  health_cares:
+    categories:
+      management:
+        label: "Management"
+        reference_prefix: "M"
+      treatment:
+        label: "Treatment"
+        reference_prefix: "T"
+  helps:
+    diagram:
+      arrow-title: "Arrow"
+      dashed-arrow-title: "Dashed arrow"
+      in-port-title: "In port"
+      out-port-title: "Out port"
+      excluded-diagnostic-title: "Excluded diagnostic"
+      score-title: "Questions Sequence Scored"
+      arrow-content: "Define links between questions"
+      dashed-arrow-content: "Define which final diagnostic has priority. The final diagnostic who is targeted by the arrow is excluded."
+      in-port-content: "Blue box in the top of the nodes. Inport where the link ends"
+      out-port-content: "Green box below the nodes : Outport where the link begins"
+      excluded-diagnostic-content: "The green box on the left of the nodes is the outport for excluding final diagnostics. The blue box is the inport for excluding final diagnostics."
+      score-content: "In order to add scores to your answers, you have to make a link between an answer and the questions sequence scored. This will display a pop up asking you the score to attribute to this relation."
   instances:
     table:
       columns:
@@ -204,22 +287,83 @@ en:
   nodes:
     validation:
       reference_used: "This reference is already used"
-  predefined_syndromes:
+  questions_sequences:
+    categories:
+      predefined_syndrome:
+        label: "Predefined syndrome"
+        reference_prefix: "PS"
+      scored:
+        label: "Questions sequence scored"
+        reference_prefix: "QSS"
+      comorbidity:
+        label: "Comorbidity"
+        reference_prefix: "DC"
+      triage:
+        label: "Triage"
+        reference_prefix: "TI"
+    edit:
+      title: "Update the questions sequence"
+    edit_scored:
+      title: "Update a questions sequence scored"
+    new:
+      title: "Create questions sequence"
+    new_scored:
+      title: "Create a questions sequence scored"
     show:
       title: "Details of %{name}"
       children: "Children"
-    new:
-      title: "Create predefined syndrome"
-    edit:
-      title: "Update the predefined syndrome"
+    scored_table:
+      columns:
+        actions: "Actions"
+        description: "Description"
+        label: "Label"
+        min_score: "Minimal score"
+        reference: "Reference"
+    table:
+      columns:
+        actions: "Actions"
+        category: "Category"
+        description: "Description"
+        label: "Label"
+        reference: "Reference"
   prompt: "Select"
   questions:
     categories:
-      comorbidity: "Comorbidity"
-      exposure: "Exposure"
-      symptom: "Symptom"
-      physical_exam: "Physical exam"
-      test: "Test"
+      assessment_test:
+        label: "Assessment/test"
+        reference_prefix: "A"
+      chief_complaint:
+        label: "Chief complaint"
+        reference_prefix: "CC"
+      chronical_condition:
+        label: "Chronical condition"
+        reference_prefix: "CH"
+      demographic:
+        label: "Demographics"
+        reference_prefix: "D"
+      exposure:
+        label: "Exposure"
+        reference_prefix: "E"
+      first_look_assessment:
+        label: "First look assessment"
+        reference_prefix: "FL"
+      physical_exam:
+        label: "Physical exam"
+        reference_prefix: "PE"
+      symptom:
+        label: "Symptom"
+        reference_prefix: "S"
+      vaccine:
+        label: "Vaccine"
+        reference_prefix: "V"
+      vital_sign:
+        label: "Vital sign"
+        reference_prefix: "VS"
+    errors:
+      no_blank: "can't be blank"
+      formula_wrong_characters: "Incorrect formula format. You can only use numbers, operators and questions references (between brackets)"
+      formula_wrong_reference: "The reference '%{reference}' does not match to any question in this algorithm"
+      formula_reference_not_numeric: "The question '%{reference}' is not in numeric format."
     new:
       title: "New question"
     priorities:
@@ -232,12 +376,17 @@ en:
       symptom: "S"
       physical_exam: "P"
       test: "T"
+    stages:
+      registration: "Registration"
+      triage: "Triage"
+      test: "Test"
+      consultation: "Consultation"
     table:
       columns:
         label: "Label"
         description: "Description"
         reference: "Reference"
-        mandatory: "Mandatory"
+        priority: "Priority"
         category: "Category"
         answers: "Answers"
         answer_type: "Type of answers"
@@ -289,6 +438,7 @@ en:
       last_account_connection: "Last account connection "
       role: "Role "
       title: "Details of %{name}"
+  validate: "Validate"
   versions:
     table:
       columns:
@@ -298,15 +448,20 @@ en:
         creator: "Creator"
         actions: "Actions"
       title: "Algorithms versions"
+    triage_order:
+      others: "Other triage questions"
     new:
       title: "Add an algorithm version"
     edit:
       title: "Edit this algorithm"
     show:
       subtitle_diagnostics: "Diagnostics"
+      subtitle_questions_order: "Triage questions order"
+      subtitle_triage_conditions: "Triage questions conditions"
       title: "Details of %{name} - version %{version}"
-      predefined_syndromes: "Predefined Syndromes"
+      questions_sequences: "Questions Sequences"
   warning_dependency: "Warning ! Editing this node will affect :"
   close: "Close"
   back: "Back"
   open_diagram: "Open diagram editor"
+  help: "Help"

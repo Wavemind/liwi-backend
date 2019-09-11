@@ -71,8 +71,8 @@ class ConditionsController < ApplicationController
   def set_instanceable
     if params[:diagnostic_id].present?
       @instanceable = Diagnostic.find(params[:diagnostic_id])
-    elsif params[:predefined_syndrome_id].present?
-      @instanceable = PredefinedSyndrome.find(params[:predefined_syndrome_id])
+    elsif params[:questions_sequence_id].present?
+      @instanceable = QuestionsSequence.find(params[:questions_sequence_id])
     else
       raise
     end

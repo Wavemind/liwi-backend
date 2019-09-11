@@ -2,7 +2,7 @@
   background-color: #343434;
   overflow-x: hidden;
   overflow-y: auto;
-  height:95vh;
+  height:92.5vh;
 
   .card {
     background-color: #343434;
@@ -23,6 +23,10 @@
   background-color: #e6e6e6;
 }
 
+.diagram-wrapper-white {
+  background-color: #fff;
+}
+
 .docs-preview-wrapper {
   border-radius: 10px;
   overflow: hidden;
@@ -32,9 +36,11 @@
 }
 
 .srd-canvas {
-  height: 95vh;
-  overflow-x: hidden;
-  overflow-y: auto;
+  height: 92.5vh;
+}
+
+.srd-canvas-read-only {
+  position: static;
 }
 
 .srd-default-node {
@@ -114,7 +120,7 @@
   color: #fff;
   border: 1px solid gray;
   .srd-node & {
-    min-width: 120px;
+    min-width: 140px;
   }
 }
 
@@ -149,7 +155,6 @@
   position: absolute;
   z-index: 10;
   top: -8px;
-  align-item: center;
 }
 
 .out-port {
@@ -171,9 +176,12 @@
 .in-port {
   height: 10px;
   width: 18px;
-  background-color: #FFCACA;
+  background-color: deepskyblue;
   top: -10px;
   border: 2px solid #808080;
+  &:hover {
+    background-color: dodgerblue;
+  }
 }
 
 .inExcluded {
@@ -184,6 +192,9 @@
   top: 50%;
   bottom: 50%;
   right: -10px;
+  &:hover {
+    background-color: steelblue;
+  }
 }
 
 .outExcluded {
@@ -195,12 +206,8 @@
   bottom: 50%;
   left: -10px;
   border-radius: 10px;
-}
-
-.manage-df {
   &:hover {
-    font-weight: bold;
-    font-size: 14px;
+    background-color: green;
   }
 }
 
@@ -220,13 +227,70 @@
 .alerts-leave.alerts-leave-active {
   overflow: hidden;
   opacity: 0.01;
-  padding-top: 0px;
-  padding-bottom: 0px;
-  margin-bottom: 0px;
-  height: 0px;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-bottom: 0;
+  height: 0;
   transition: opacity 300ms ease-in,
   padding-top 500ms ease-in,
   padding-bottom 500ms ease-in,
   margin-bottom 500ms ease-in,
   height 500ms ease-in;
+}
+
+.node-category {
+  .dropdown-toggle::after {
+    right: 9px!important;
+  }
+}
+
+
+.help {
+  position:absolute;
+  bottom:10px;
+  right:10px;
+  padding-top: 8px;
+}
+
+.popover-body {
+  overflow-x: hidden;
+  overflow-y: auto;
+  height:85vh;
+}
+
+.scrollable {
+  height: 100%;
+  min-height: 95vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: unset !important;
+}
+
+.srd-default-label {
+  pointer-events: all !important;
+}
+
+.srd-default-label:hover  {
+  cursor: pointer;
+}
+
+.liwi-toolbar {
+  background-color: #808080;
+
+  .btn-group {
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    &:hover {
+      background-color: #404040;
+    }
+  }
+}
+
+.btn-transparent {
+  background-color: transparent;
+  color: #fff;
+}
+
+.displayedErrors {
+  font-size: 13px;
+  color: red;
 }

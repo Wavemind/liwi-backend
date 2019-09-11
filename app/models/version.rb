@@ -1,6 +1,9 @@
 # Version of an algorithm with its logic
 class Version < ApplicationRecord
 
+  attr_accessor :triage_id
+  attr_accessor :cc_id
+
   belongs_to :algorithm
   belongs_to :user
 
@@ -10,9 +13,12 @@ class Version < ApplicationRecord
   has_many :group_accesses
   has_many :groups, through: :group_accesses
 
-  validates_presence_of :name
+  has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy
 
+  validates_presence_of :name
   validates_uniqueness_of :name, scope: :algorithm
+
+  after_create :instantiate_questions
 
   # @return [String]
   # Return a displayable string for this version
@@ -20,4 +26,10 @@ class Version < ApplicationRecord
     "#{algorithm.name} - #{name}"
   end
 
+  # Create an instance per question who has triage stage or vital sign category
+  def instantiate_questions
+    algorithm.questions.triage.each do |question|
+      components.create!(node: question)
+    end
+  end
 end

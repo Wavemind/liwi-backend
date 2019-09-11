@@ -18,6 +18,8 @@ class QuestionDatatable < AjaxDatatablesRails::ActiveRecord
       reference: { source: 'Question.reference' },
       label: { source: 'Question.label_translations' },
       description: { source: 'Question.description_translations' },
+      priority: { source: 'Question.priority' },
+      category: { source: 'Question.type' },
     }
   end
 
@@ -30,7 +32,7 @@ class QuestionDatatable < AjaxDatatablesRails::ActiveRecord
         label: record.label,
         description: record.description,
         priority: I18n.t("questions.priorities.#{record.priority}"),
-        category: record.category.name,
+        category: Object.const_get(record.type).display_label,
         answers: record.answers.map(&:label).join(' / '),
         answer_type: record.answer_type.display_name,
         actions: actions
@@ -40,7 +42,7 @@ class QuestionDatatable < AjaxDatatablesRails::ActiveRecord
 
   # Activerecord request
   def get_raw_records
-    Algorithm.find(params[:id]).questions.includes([:answers, :answer_type, :category, :algorithm, :instances])
+    Algorithm.find(params[:id]).questions.includes([:answers, :answer_type, :algorithm])
   end
 
 end

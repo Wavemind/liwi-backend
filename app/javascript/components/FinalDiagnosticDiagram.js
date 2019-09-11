@@ -10,11 +10,12 @@ import AdvancedNodeFactory from "../react-diagram/factories/AdvancedNodeFactory"
 import AdvancedNodeModel from "../react-diagram/models/AdvancedNodeModel";
 import AdvancedDiagramWidget from "../react-diagram/widgets/AdvancedDiagramWidget";
 
-import NodeList from "../react-diagram/lists/NodeList";
-import Http from "../http";
+import NodeList from "./lists/NodeList";
 
-import FlashMessages from "./FlashMessages";
+import FlashMessages from "./utils/FlashMessages";
 import {withDiagram} from "../context/Diagram.context";
+import Toolbar from "./utils/Toolbar";
+import FormModal from "./modal/FormModal";
 
 class FinalDiagnosticDiagram extends React.Component {
 
@@ -27,6 +28,30 @@ class FinalDiagnosticDiagram extends React.Component {
 
   componentWillMount() {
     this.initDiagram();
+  }
+
+  async shouldComponentUpdate(nextProps, nextState) {
+    if (this.props.currentDbNode !== nextProps.currentDbNode) {
+      const { engine } = this.state;
+      const { currentDbNode, currentDiagramNode } = nextProps;
+      const model = engine.getDiagramModel();
+
+      // Create or update node in diagram
+      if (nextProps.modalToOpen === 'CreateQuestionsSequence') {
+        let node = this.createNode(currentDbNode, currentDbNode.answers);
+        currentDbNode.answers.map((answer) => (node.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
+        model.addAll(node);
+      } else if (nextProps.modalToOpen === 'UpdateQuestionsSequence' || nextProps.modalToOpen === 'UpdateHealthCare') {
+        currentDiagramNode.setReference(currentDbNode.reference);
+        currentDiagramNode.setNode(currentDbNode);
+      } else if (nextProps.modalToOpen === 'CreateHealthCare') {
+        let node = this.createNode(currentDbNode);
+        model.addAll(node);
+      }
+      this.updateEngine(engine);
+    }
+
+    return true;
   }
 
   initDiagram = () => {
@@ -139,8 +164,8 @@ class FinalDiagnosticDiagram extends React.Component {
 
             // Don't create an another link in DB if it already exist
             if (!exists) {
-              if (eventLink.entity.sourcePort.parent.node.type === "FinalDiagnostic") {
-                if (eventLink.entity.targetPort.parent.node.type === "FinalDiagnostic") {
+              if (eventLink.entity.sourcePort.parent.node.node_type === "FinalDiagnostic") {
+                if (eventLink.entity.targetPort.parent.node.node_type === "FinalDiagnostic") {
                   http.excludeDiagnostic(eventLink.entity.sourcePort.parent.node.id, eventLink.entity.targetPort.parent.node.id);
                 } else {
                   model.removeLink(eventModel.link.id);
@@ -201,7 +226,7 @@ class FinalDiagnosticDiagram extends React.Component {
     const {addMessage} = this.props;
     let message = {
       status,
-      message: [`An error occured: ${response.status} - ${response.statusText}`]
+      messages: [`An error occured: ${response.status} - ${response.statusText}`]
     };
     await addMessage(message);
   };
@@ -218,11 +243,11 @@ class FinalDiagnosticDiagram extends React.Component {
 
     return (
       <div className="content">
+        <FormModal/>
         <FlashMessages/>
         <div className="row">
-          <div className="col-md-2 px-0 liwi-sidebar">
-            <NodeList />
-          </div>
+          <Toolbar/>
+          <NodeList/>
           <div
             className="col-md-10 diagram-wrapper"
             onDrop={async event => {

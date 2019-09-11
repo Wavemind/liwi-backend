@@ -10,6 +10,10 @@ jQuery(document).ready(function () {
       { "data": "name" },
       { "data": "nb_people" },
       { "data": "actions", "className": "text-right" },
-    ]
+    ],
+    'columnDefs': [ {
+      'targets': [2],
+      'orderable': false,
+    }]
   });
 });

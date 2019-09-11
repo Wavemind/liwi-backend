@@ -2,7 +2,7 @@
   <% if name != 'timedout' %>
     <div class="flash-position">
       <div class="alert alert-<%= flash_class(name) %> alert-dismissible fade show" role="alert">
-        <span class="alert-inner--text"><%= msg %></span>
+        <span class="alert-inner--text"><%= raw msg %></span>
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
