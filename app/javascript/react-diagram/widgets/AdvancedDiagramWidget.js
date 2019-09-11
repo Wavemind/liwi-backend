@@ -7,6 +7,7 @@ import {
   LinkLayerWidget,
   PointModel,
   DiagramWidget,
+  Toolkit
 } from "storm-react-diagrams";
 import AdvancedNodeLayerWidget from "./AdvancedNodeLayerWidget";
 
@@ -22,6 +23,57 @@ class AdvancedDiagramWidget extends DiagramWidget {
 
   isLocked(){
     return true;
+  }
+
+  /**
+   * Gets a model and element under the mouse cursor
+   */
+  getMouseElement(event) {
+    var target = event.target;
+    var diagramModel = this.props.diagramEngine.diagramModel;
+
+    //is it a port
+    var element = Toolkit.closest(target, ".port[data-id]");
+    if (element) {
+      var nodeElement = Toolkit.closest(target, ".node[data-nodeid]");
+      return {
+        model: diagramModel
+          .getNode(nodeElement.getAttribute("data-nodeid"))
+          .getPort(element.getAttribute("data-id")),
+        element: element
+      };
+    }
+
+    //look for a point
+    element = Toolkit.closest(target, ".point[data-id]");
+    if (element) {
+      return {
+        model: diagramModel
+          .getLink(element.getAttribute("data-linkid"))
+          .getPointModel(element.getAttribute("data-id")),
+        element: element
+      };
+    }
+
+    //look for a link
+    element = Toolkit.closest(target, "[data-linkid]");
+    if (element) {
+      return {
+        model: diagramModel.getLink(element.getAttribute("data-linkid")),
+        element: element
+      };
+    }
+
+    //look for a node
+    element = Toolkit.closest(target, ".node[data-nodeid]");
+    if (element) {
+      return {
+        model: diagramModel.getNode(element.getAttribute("data-nodeid")),
+        element: element
+      };
+    }
+
+    return null;
   }
 
   render() {

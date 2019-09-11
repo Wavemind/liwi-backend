@@ -12,7 +12,7 @@ class NotDFWidget extends React.Component {
     return (
       <div key={port.getID()} className="col px-0" style={{ position: "relative" }}>
         <div className="py-1 text-center answer-split">{port.label}</div>
-        <div className="port out-port" data-name={port.name} data-nodeid={port.parent.id}/>
+        <div className="port out-port" data-name={port.id} data-nodeid={port.parent.id} data-id={port.id}/>
       </div>
     );
   }
@@ -47,7 +47,7 @@ class NotDFWidget extends React.Component {
       <div className="node">
         <div className="port py-2 node-category">
           {(inPort !== undefined) ? (
-            <div className="port srd-port in-port" data-name={inPort.name} data-nodeid={inPort.parent.id}/>
+            <div className="port srd-port in-port" data-name={inPort.name} data-nodeid={inPort.parent.id} data-id={inPort.id}/>
           ) : null}
           <div className="col pl-2 pr-0 text-left">
             {diagramNode.node.reference}

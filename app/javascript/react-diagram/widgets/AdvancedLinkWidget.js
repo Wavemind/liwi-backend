@@ -27,7 +27,7 @@ class AdvancedLinkWidget extends DefaultLinkWidget {
   }
 
   // Override the method from DefaultLinkWidget so it can calculate path from AdvancedLink
-  calculateLabelPosition = (label, index: number) => {
+  calculateLabelPosition = (label, number) => {
     if (!this.refLabels[label.id]) {
       // no label? nothing to do here
       return;

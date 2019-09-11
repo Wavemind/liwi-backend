@@ -7,7 +7,7 @@ import AdvancedLabelWidget from "../widgets/AdvancedLabelWidget";
  * @author Alain Fresco
  */
 class AdvancedLabelFactory extends DefaultLabelFactory {
-  generateReactWidget(diagramEngine: DiagramEngine, label: DefaultLabelModel): JSX.Element {
+  generateReactWidget(DiagramEngine, DefaultLabelModel) {
     return <AdvancedLabelWidget model={label} />;
   }
 }

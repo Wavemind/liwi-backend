@@ -38,7 +38,7 @@ class FinalDiagnosticWidget extends React.Component {
     return (
       <div className="node">
         <div className="port py-2 node-category">
-          <div className="port srd-port in-port" data-name={inPort.name} data-nodeid={inPort.parent.id}/>
+          <div className="port srd-port in-port" data-name={inPort.name} data-nodeid={inPort.parent.id} data-id={inPort.id}/>
           <div className="col pl-2 pr-0 text-left">
             {diagramNode.node.reference}
           </div>
@@ -60,8 +60,8 @@ class FinalDiagnosticWidget extends React.Component {
               {diagramNode.node.label_translations["en"]}
             </div>
           </div>
-          <div className="port inExcluded" data-name={excludingInPort.name} data-nodeid={excludingInPort.parent.id}/>
-          <div className="port outExcluded" data-name={inExcluded.name} data-nodeid={inExcluded.parent.id}/>
+          <div className="port inExcluded" data-name={excludingInPort.name} data-nodeid={excludingInPort.parent.id} data-id={excludingInPort.id}/>
+          <div className="port outExcluded" data-name={inExcluded.name} data-nodeid={inExcluded.parent.id} data-id={inExcluded.id}/>
         </div>
       </div>
     );

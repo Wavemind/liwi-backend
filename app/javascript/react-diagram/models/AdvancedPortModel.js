@@ -1,6 +1,7 @@
 import * as _ from "lodash";
 import { DefaultPortModel, } from "storm-react-diagrams";
 import AdvancedLinkModel from "../models/AdvancedLinkModel";
+import Http from "../../http";
 
 class AdvancedPortModel extends DefaultPortModel {
 
@@ -8,8 +9,15 @@ class AdvancedPortModel extends DefaultPortModel {
   label;
   reference;
   dbId;
-  links;
+  links = {};
   isReadOnly;
+
+  constructor(isInput, name, label = null, id) {
+    super(name, "default", id);
+    this.in = isInput;
+    this.label = label || name;
+    this.name = id;
+  }
 
   deSerialize(object, engine) {
     super.deSerialize(object, engine);
@@ -44,7 +52,11 @@ class AdvancedPortModel extends DefaultPortModel {
     this.isReadOnly = isReadOnly;
   }
 
-  createLinkModel() | null {
+  setName(name) {
+    this.name = name;
+  }
+
+  createLinkModel() {
     return new AdvancedLinkModel(this.isReadOnly);
   }
 

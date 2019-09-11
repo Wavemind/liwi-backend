@@ -29,8 +29,8 @@ test:
   encoding: utf8
   database: liwi-test
   pool: 5
-  username: <%= ENV['TEST_DB_USERNAME'] %>
-  password: <%= ENV['TEST_DB_PASSWORD'] %>
+  username: postgres
+  password: root
 
 production:
   adapter: postgresql

@@ -9,7 +9,7 @@ class AdvancedNodeModel extends DefaultNodeModel {
   minScore;
   color;
   outPorts;
-  ports: { [s] };
+  ports = {};
   addNode;
   isReadOnly;
 
@@ -44,6 +44,13 @@ class AdvancedNodeModel extends DefaultNodeModel {
     let outPort = new AdvancedPortModel(false, Toolkit.UID(), label);
     outPort.setData(reference, id, this.isReadOnly);
     return this.addPort(outPort);
+  }
+
+  addPort(port) {
+    port.setParent(this);
+    port.setName(port.id);
+    this.ports[port.id] = port;
+    return port;
   }
 
   deSerialize(object, engine) {
@@ -87,6 +94,10 @@ class AdvancedNodeModel extends DefaultNodeModel {
     return _.find(this.ports, portModel => {
       return !portModel.in;
     });
+  }
+
+  getPorts() {
+    return this.ports;
   }
 
   isLocked() {
