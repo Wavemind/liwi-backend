@@ -13,8 +13,7 @@ class Diagnostic < ApplicationRecord
 
   before_validation :validate_chief_complaint
   validates_presence_of :label_en
-  validates_presence_of :reference
-  validates_uniqueness_of :reference
+  validates :reference, presence: true, uniqueness: true
 
   translates :label
 

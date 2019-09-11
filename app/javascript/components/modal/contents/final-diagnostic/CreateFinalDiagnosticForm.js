@@ -76,8 +76,6 @@ class CreateFinalDiagnosticForm extends React.Component {
       errors
     } = this.state;
 
-    console.log('mamer');
-
     return (
       <Form onSubmit={this.create}>
         <Modal.Header>
