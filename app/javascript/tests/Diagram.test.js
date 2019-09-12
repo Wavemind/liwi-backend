@@ -38,7 +38,7 @@ describe('Examining the syntax of Jest tests', () => {
     const html = await page.$eval('#content h1', e => e.innerHTML);
     expect(html).toBe('Device location');
     done();
-  }, 30000);
+  }, 40000);
 
   test('next test', async (done) => {
     await page.goto('http://localhost:3000/algorithms/3/versions/5/diagnostics/1/diagram');
@@ -47,5 +47,5 @@ describe('Examining the syntax of Jest tests', () => {
     expect(html).toBe('CC10 - Prevention');
 
     done();
-  }, 30000);
+  }, 40000);
 });
