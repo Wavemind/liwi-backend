@@ -12,8 +12,8 @@ beforeAll(async () => {
 
   page.emulate({
     viewport: {
-      width: 500,
-      height: 500
+      width: 1024,
+      height: 1024
     },
     userAgent: "Mozilla/5.0 (X11; Linux x86_64)" +
       "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.39 Safari/537.36"
@@ -41,37 +41,23 @@ describe("Examining the syntax of Jest tests", () => {
     done();
   }, 40000);
 
-  test("Create a node", async (done) => {
+  test("Open question modal", async (done) => {
     await page.goto("http://liwi.wavelab.top/algorithms/3/versions/8/diagnostics/51/diagram");
-    await page.waitForSelector("#accordionNodes");
-    await page.waitForSelector(".card");
+    await page.waitForSelector("#node-101");
 
     await page.evaluate(() => {
-      document.querySelector(".card").click();
+      document.querySelector("body > main > div:nth-child(2) > div > div > div > div > div.col-md-12.liwi-toolbar > div > div:nth-child(1) > div > button").click();
+      document.querySelector("body > main > div:nth-child(2) > div > div > div > div > div.col-md-12.liwi-toolbar > div > div:nth-child(1) > div > div > a:nth-child(1)").click();
     });
 
-    await page.waitForSelector("#collapse-assessmentTest");
 
-    const cue_card_links = await page.evaluate(`(async() => {
-      const nodes_list = document.querySelectorAll('#collapse-assessmentTest > div > div');
-      const nodes = [...nodes_list];
-      return nodes.map(node => node);
-    })()`);
+    const modalTitle = await page.$eval("body > div.fade.modal.show > div > div > form > div.modal-header > div", e => e.innerHTML);
+    const category = await page.$eval("body > div.fade.modal.show > div > div > form > div.modal-body > div:nth-child(1) > div > label", e => e.innerHTML);
+    const answerType = await page.$eval("body > div.fade.modal.show > div > div > form > div.modal-body > div:nth-child(2) > div > label", e => e.innerHTML);
+    expect(modalTitle).toBe("Create a question");
+    expect(category).toBe("Category");
+    expect(answerType).toBe("Answer type");
 
-
-    console.log(cue_card_links);
-
-    // let box = await e.boundingBox();
-    // console.log(box);
-    // await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-    // await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-    // await page.mouse.down();
-    // await page.mouse.move(500, 500);
-    // await page.mouse.up();
-
-
-    const html = await page.$eval(".btn-transparent", e => e.innerHTML);
-    expect(html).toBe("New");
-
-  }, 4000000);
+    done();
+  }, 40000);
 });
