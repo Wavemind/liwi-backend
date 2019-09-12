@@ -17,6 +17,7 @@ class NodeListItem extends React.Component {
     return (
       <div className="p-2"
            draggable={true}
+           id={`node-${node.id}`}
            onDragStart={event => {
              event.dataTransfer.setData("node", JSON.stringify(node));
            }}
