@@ -209,7 +209,7 @@ class CreateQuestionForm extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <Form.Row>
-            <Form.Group as={Col} controlId="formGridState">
+            <Form.Group as={Col} controlId="category">
               <Form.Label>Category</Form.Label>
               <Form.Control as="select" name="type" onChange={this.handleFormChange} value={type} isInvalid={!!errors.category}>
                 <option value="">Select the category</option>
@@ -225,7 +225,7 @@ class CreateQuestionForm extends React.Component {
           </Form.Row>
 
           <Form.Row>
-            <Form.Group as={Col} controlId="formGridState">
+            <Form.Group as={Col} controlId="answerType">
               <Form.Label>Answer type</Form.Label>
               <Form.Control as="select" name="answerType" onChange={this.handleFormChange} value={answerType} isInvalid={!!errors.answerType } disabled = { answerTypeDisabled }>
                 <option value="">Select the type of answers expected</option>
@@ -241,7 +241,7 @@ class CreateQuestionForm extends React.Component {
           </Form.Row>
 
           <Form.Row>
-            <Form.Group as={Col} controlId="formGridState">
+            <Form.Group as={Col} controlId="stage">
               <Form.Label>Stage</Form.Label>
               <Form.Control as="select" name="stage" onChange={this.handleFormChange} value={stage} isInvalid={!!errors.stage } disabled = { stageDisabled }>
                 <option value="">Select the stage</option>
@@ -256,7 +256,7 @@ class CreateQuestionForm extends React.Component {
           </Form.Row>
 
           <Form.Row>
-            <Form.Group as={Col} controlId="formGridState">
+            <Form.Group as={Col} controlId="priority">
               <Form.Label>Priority</Form.Label>
               <Form.Control as="select" name="priority" onChange={this.handleFormChange} value={priority} isInvalid={!!errors.priority }>
                 <option value="">Select the priority</option>

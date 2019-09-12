@@ -108,7 +108,7 @@ class UpdateQuestionsSequenceForm extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <Form.Row>
-            <Form.Group as={Col} controlId="formGridState">
+            <Form.Group as={Col} controlId="state">
               <Form.Label>State</Form.Label>
               <Form.Control as="select" defaultValue={type} disabled>
                 <option value="">Select a category</option>

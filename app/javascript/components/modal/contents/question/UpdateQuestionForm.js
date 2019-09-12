@@ -190,7 +190,7 @@ class UpdateQuestionForm extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <Form.Row>
-            <Form.Group as={Col} controlId="formGridState">
+            <Form.Group as={Col} controlId="category">
               <Form.Label>Category</Form.Label>
               <Form.Control as="select" defaultValue={type} disabled>
                 <option value="">Select a category</option>
@@ -202,7 +202,7 @@ class UpdateQuestionForm extends React.Component {
           </Form.Row>
 
           <Form.Row>
-            <Form.Group as={Col} controlId="formGridState">
+            <Form.Group as={Col} controlId="answerType">
               <Form.Label>Answer type</Form.Label>
               <Form.Control as="select" defaultValue={answerType} disabled>
                 <option value="">Select a category</option>
@@ -214,7 +214,7 @@ class UpdateQuestionForm extends React.Component {
           </Form.Row>
 
           <Form.Row>
-            <Form.Group as={Col} controlId="formGridState">
+            <Form.Group as={Col} controlId="stage">
               <Form.Label>Stage</Form.Label>
               <Form.Control as="select" name="stage" onChange={this.handleFormChange} defaultValue={stage} disabled>
                 <option value="">Select a category</option>
@@ -226,7 +226,7 @@ class UpdateQuestionForm extends React.Component {
           </Form.Row>
 
           <Form.Row>
-            <Form.Group as={Col} controlId="formGridState">
+            <Form.Group as={Col} controlId="priority">
               <Form.Label>Priority</Form.Label>
               <Form.Control as="select" name="priority" onChange={this.handleFormChange} defaultValue={priority} isInvalid={!!errors.priority }>
                 <option value="">Select a category</option>
