@@ -5,7 +5,7 @@ jQuery(document).ready(function() {
   // Trigger categoryChange function only on edit or create question form
   if ($("#new_question").length || $("#edit_question").length) {
     categoryChange();
-  };
+  }
 
   $("#question_type").change(categoryChange);
 
@@ -61,10 +61,13 @@ jQuery(document).ready(function() {
             $("#question_answer_type_displayed").attr("disabled", false);
           }
 
-          // Force triage stage for ChiefComplaint, VitalSign, ChronicalCondition and FirstLookAssessment
-          if (response.responseText === "CC" || response.responseText === "VS" || response.responseText === "CH" || response.responseText === "FL") {
+          // Force triage stage for ChiefComplaint, VitalSign and FirstLookAssessment
+          if (response.responseText === "CC" || response.responseText === "VS" ||  response.responseText === "FL") {
             $("#question_stage_displayed").val("triage").attr("disabled", true);
             $("#question_stage_hidden").val("triage")
+          } else if (response.responseText === "CH" || response.responseText === "V") { // Force registration stage for Chronical Condition
+            $("#question_stage_displayed").val("registration").attr("disabled", true);
+            $("#question_stage_hidden").val("registration")
           } else {
             $("#question_stage_displayed").attr("disabled", false);
           }
