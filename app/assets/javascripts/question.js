@@ -65,7 +65,7 @@ jQuery(document).ready(function() {
           if (response.responseText === "CC" || response.responseText === "VS" ||  response.responseText === "FL") {
             $("#question_stage_displayed").val("triage").attr("disabled", true);
             $("#question_stage_hidden").val("triage")
-          } else if (response.responseText === "CH" || response.responseText === "V") { // Force registration stage for Chronical Condition
+          } else if (response.responseText === "CH" || response.responseText === "V") { // Force registration stage for Chronical Condition and Vaccin
             $("#question_stage_displayed").val("registration").attr("disabled", true);
             $("#question_stage_hidden").val("registration")
           } else {
