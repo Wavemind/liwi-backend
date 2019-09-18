@@ -40,7 +40,6 @@ gem 'foreman'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'dotenv-rails', '~> 2.1', '>= 2.1.1'
 end
 
 group :development do
@@ -53,6 +52,7 @@ group :development do
   gem 'binding_of_caller'
   gem 'bullet'
   gem 'seed_dump'
+  gem 'dotenv-rails', '~> 2.1', '>= 2.1.1'
 end
 
 group :test do
