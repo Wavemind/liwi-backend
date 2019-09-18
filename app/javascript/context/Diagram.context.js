@@ -39,6 +39,7 @@ export default class DiagramProvider extends React.Component {
       predefinedSyndrome: [],
       comorbidity: [],
       triage: [],
+      firstLookAssessment: [],
     };
 
     if (type === "Diagnostic") {
