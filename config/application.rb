@@ -1,7 +1,4 @@
 require_relative 'boot'
-if Rails.env.development? || Rails.env.test?
-  require 'dotenv/load'
-end
 require 'rails/all'
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
