@@ -127,10 +127,6 @@ GEM
       rails (>= 4.2.0, < 6)
     diff-lcs (1.3)
     docile (1.3.1)
-    dotenv (2.7.5)
-    dotenv-rails (2.7.5)
-      dotenv (= 2.7.5)
-      railties (>= 3.2, < 6.1)
     erubi (1.7.1)
     execjs (2.7.0)
     ffi (1.9.25)
@@ -369,7 +365,6 @@ DEPENDENCIES
   devise
   devise_invitable (~> 1.7.0)
   devise_token_auth
-  dotenv-rails (~> 2.1, >= 2.1.1)
   foreman
   hstore_translate
   jbuilder (~> 2.5)
