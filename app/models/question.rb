@@ -66,7 +66,8 @@ class Question < Node
   # Remove the triage question from the version triage orders
   def remove_from_versions
     algorithm.versions.each do |version|
-      version.update("#{version_field_to_set}": version.send("#{version_field_to_set}").delete(id)) if version.send("#{version_field_to_set}").include?(id)
+      version["#{version_field_to_set}"].delete(id) if version.send("#{version_field_to_set}").include?(id)
+      version.save
     end
   end
 
@@ -127,6 +128,10 @@ class Question < Node
     end
 
     errors.messages.blank?
+  end
+
+  def instance_dependencies?
+    dependencies.map(&:instanceable).present?
   end
 
   private
