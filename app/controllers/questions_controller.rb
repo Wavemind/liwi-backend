@@ -183,6 +183,7 @@ class QuestionsController < ApplicationController
       :answer_type_id,
       :unavailable,
       :formula,
+      :snomed_id,
       answers_attributes: [
         :id,
         :reference,

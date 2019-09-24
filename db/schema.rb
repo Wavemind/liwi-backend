@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_30_123307) do
+ActiveRecord::Schema.define(version: 2019_09_24_123913) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -215,6 +215,7 @@ ActiveRecord::Schema.define(version: 2019_08_30_123307) do
     t.bigint "final_diagnostic_id"
     t.bigint "answer_type_id"
     t.string "formula"
+    t.bigint "snomed_id"
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
     t.index ["diagnostic_id"], name: "index_nodes_on_diagnostic_id"

@@ -70,6 +70,11 @@
   resolved "https://registry.yarnpkg.com/@restart/hooks/-/hooks-0.3.13.tgz#656a62d6be3f3d72b9437101c557c864c0b34e36"
   integrity sha512-qQ+QYoU9rfxltGSjJH0Ah65N41vhSe4bnaAGV+8J/mEOXnZh0ejN5P2sGoMYIGiOPCVj0Y1k2kL1Rp/wL0YHGA==
 
+"@tarekraafat/autocomplete.js@^7.0.1":
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/@tarekraafat/autocomplete.js/-/autocomplete.js-7.0.1.tgz#3c4ef27ae7b93a78ffab47901f7bfce9950beeb7"
+  integrity sha512-dGrxxeoMEgVFLayO++kc9IsmR9IHyFpPDXGA5ev+EFCdc9fM29T0vKFSNTfuaF3A1iHV/SM5RTPUM8POkERmEw==
+
 "@types/node@^11.11.6":
   version "11.13.20"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-11.13.20.tgz#da42fe93d6599f80b35ffeb5006f4c31f40d89ea"
