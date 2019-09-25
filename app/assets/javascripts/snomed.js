@@ -23,7 +23,7 @@ jQuery(document).ready(function() {
   }).data("ui-autocomplete")._renderItem = function(ul, item) {
     return $("<li></li>")
       .data("item.autocomplete", item)
-      .append(item.fsn.term)
+      .append("<a>" + item.fsn.term + "</a>")
       .appendTo(ul);
   };
 });
