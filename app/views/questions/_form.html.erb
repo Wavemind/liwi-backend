@@ -7,8 +7,8 @@
 
 <%= f.input :reference, prepend: (f.object.persisted? ? false : (@question.type.nil? ? '' : @question.reference_prefix)) %>
 <%= f.input :label_en %>
-<%= f.input :snomed %>
-<%= f.input :snomed_id, as: :hidden %>
+<%= f.input :snomed, prompt: t('type_here') %>
+<%= f.input :snomed_id, readonly: true %>
 <%= f.input :description_en, as: :text %>
 
 <% unless f.object.persisted? %>
