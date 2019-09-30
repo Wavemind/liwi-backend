@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_30_092654) do
+ActiveRecord::Schema.define(version: 2019_08_30_123307) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -104,6 +104,8 @@ ActiveRecord::Schema.define(version: 2019_07_30_092654) do
     t.bigint "version_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "node_id"
+    t.index ["node_id"], name: "index_diagnostics_on_node_id"
     t.index ["version_id"], name: "index_diagnostics_on_version_id"
   end
 
@@ -212,6 +214,7 @@ ActiveRecord::Schema.define(version: 2019_07_30_092654) do
     t.datetime "updated_at", null: false
     t.bigint "final_diagnostic_id"
     t.bigint "answer_type_id"
+    t.string "formula"
     t.string "reference_table_male"
     t.string "reference_table_female"
     t.boolean "is_default", default: false
@@ -288,6 +291,11 @@ ActiveRecord::Schema.define(version: 2019_07_30_092654) do
     t.bigint "algorithm_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "triage_questions_order", default: [], array: true
+    t.integer "triage_first_look_assessments_order", default: [], array: true
+    t.integer "triage_chief_complaints_order", default: [], array: true
+    t.integer "triage_vital_signs_order", default: [], array: true
+    t.integer "triage_chronical_conditions_order", default: [], array: true
     t.index ["algorithm_id"], name: "index_versions_on_algorithm_id"
     t.index ["user_id"], name: "index_versions_on_user_id"
   end
@@ -296,6 +304,7 @@ ActiveRecord::Schema.define(version: 2019_07_30_092654) do
   add_foreign_key "activities", "users"
   add_foreign_key "algorithms", "users"
   add_foreign_key "devices", "groups"
+  add_foreign_key "diagnostics", "nodes"
   add_foreign_key "diagnostics", "versions"
   add_foreign_key "group_accesses", "groups"
   add_foreign_key "group_accesses", "versions"

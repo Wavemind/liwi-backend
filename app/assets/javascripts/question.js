@@ -1,6 +1,13 @@
 jQuery(document).ready(function() {
 
-  $("#question_unavailable").closest("fieldset").addClass("d-none");
+  $("#question_formula").closest(".form-group").addClass("d-none");
+
+  // Trigger categoryChange function only on edit or create question form
+  if ($("#new_question").length || $("#edit_question").length) {
+    categoryChange();
+  }
+
+  $("#question_type").change(categoryChange);
 
   $("#questions-datatable").dataTable({
     "processing": true,
@@ -26,8 +33,8 @@ jQuery(document).ready(function() {
   });
 
   // Update the prepend every time the user pick another category
-  $("#question_type").change(function() {
-    let prepend = $(this).closest("form").find(".input-group-text");
+  function categoryChange(){
+    let prepend = $("#question_type").closest("form").find(".input-group-text");
     let questionUnavailable = $("#question_unavailable").closest("fieldset");
     let type = $("#question_type option:selected").val();
 
@@ -42,15 +49,50 @@ jQuery(document).ready(function() {
           } else if(response.responseText !== "A") {
             $(questionUnavailable).addClass("d-none");
           }
+
+          // Force answer type to boolean if it's ChiefComplaint or Vaccine
           if (response.responseText === "CC" || response.responseText === "V") {
-            $("#question_answer_type_id").val("1").attr("disabled", true);
+            $("#question_answer_type_displayed").val("1").attr("disabled", true);
+            $("#question_answer_type_hidden").val("1");
+          } else if (response.responseText === "VS") {
+            $("#question_answer_type_displayed").val("4").attr("disabled", true);
+            $("#question_answer_type_hidden").val("4");
           } else {
-            $("#question_answer_type_id").attr("disabled", false);
+            $("#question_answer_type_displayed").attr("disabled", false);
+          }
+
+          // Force triage stage for ChiefComplaint, VitalSign and FirstLookAssessment
+          if (response.responseText === "CC" || response.responseText === "VS" ||  response.responseText === "FL") {
+            $("#question_stage_displayed").val("triage").attr("disabled", true);
+            $("#question_stage_hidden").val("triage")
+          } else if (response.responseText === "CH" || response.responseText === "V" || response.responseText === "D") { // Force registration stage for Chronical Condition and Vaccin
+            $("#question_stage_displayed").val("registration").attr("disabled", true);
+            $("#question_stage_hidden").val("registration")
+          } else {
+            $("#question_stage_displayed").attr("disabled", false);
           }
         }
       });
     } else {
       prepend.text("_");
     }
+  }
+
+  // Hide or show formula field if formula answer type is selected
+  $("#question_answer_type_displayed").change(function() {
+    let questionFormula = $("#question_formula").closest(".form-group");
+    let answerType = $("#question_answer_type_displayed option:selected").val();
+    $("#question_answer_type_hidden").val(answerType);
+
+    if ($(questionFormula).hasClass("d-none") && answerType === "5") {
+      $(questionFormula).removeClass("d-none");
+    } else if(answerType !== "5") {
+      $(questionFormula).addClass("d-none");
+    }
+  });
+
+  $("#question_stage_displayed").change(function() {
+    let stage = $("#question_stage_displayed option:selected").val();
+    $("#question_stage_hidden").val(stage);
   });
 });

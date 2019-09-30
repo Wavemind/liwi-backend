@@ -19,6 +19,7 @@
     DEMO STYLEa
 */
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+@import "https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css";
 
 body {
   font-family: 'Poppins', sans-serif;
@@ -249,4 +250,34 @@ td {
   ul {
     margin: 0 !important;
   }
+}
+
+.img-fluid {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.triage-order {
+  list-style-type: none;
+  margin: 15px 0 0 0;
+  width: 60%;
+}
+
+.triage-order li:hover {
+  cursor: pointer;
+}
+
+.triage-order li {
+  border: 0;
+  margin: 0 3px 3px 3px;
+  padding: -0.3em 0 0 2.5em;
+  font-size: 1.1em;
+  height: 28px;
+}
+
+.triage-order li span {
+  margin-top: 0.2em;
+  position: absolute;
+  margin-left: -1.3em;
 }

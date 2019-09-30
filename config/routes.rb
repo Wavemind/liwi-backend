@@ -32,6 +32,9 @@ Rails.application.routes.draw do
       member do
         put 'archive', to: 'versions#archive', as: 'archive'
         put 'unarchive', to: 'versions#unarchive', as: 'unarchive'
+        put 'change_triage_order'
+        put 'create_triage_condition'
+        put 'remove_triage_condition'
       end
 
       resources :diagnostics, only: [:index, :new, :create, :edit, :update, :show, :destroy, :duplicate, :update_translations] do

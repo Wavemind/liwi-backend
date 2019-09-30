@@ -13,7 +13,9 @@ module ServiceMacros
       input_integer = AnswerType.create!(value: 'Integer', display: 'Input')
       input_float = AnswerType.create!(value: 'Float', display: 'Input')
 
-      dd7 = Diagnostic.create!(version: epoc_first, label: 'Severe LRTI', reference: '7')
+      @cc = epoct.questions.create!(reference: '11', answer_type: boolean, label_en: 'CC11', stage: Question.stages[:triage], priority: Question.priorities[:mandatory], type: 'Questions::ChiefComplaint')
+
+      dd7 = Diagnostic.create!(version: epoc_first, label: 'Severe LRTI', reference: '7', node: @cc)
       df7 = FinalDiagnostic.create!(label: 'Severe lower respiratory tract infection', reference: '7', diagnostic: dd7)
 
       s2 = Questions::Symptom.create!(algorithm: epoct, label: 'Cough', reference: '2', priority: Question.priorities[:mandatory], stage: Question.stages[:triage], answer_type: boolean)

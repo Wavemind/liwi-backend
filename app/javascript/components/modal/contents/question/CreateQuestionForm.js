@@ -26,7 +26,12 @@ class CreateQuestionForm extends React.Component {
     stage: "",
     priority: "",
     answerType: "",
+    unavailable: false,
+    formula: "",
+    formulaHidden: true,
+    unavailableHidden: true,
     answerTypeDisabled: false,
+    stageDisabled: false,
     prefix: "",
     errors: {}
   };
@@ -95,6 +100,10 @@ class CreateQuestionForm extends React.Component {
     if (result.errors.type !== undefined) {
       newErrors.category = result.errors.type[0];
     }
+
+    if (result.errors.formula !== undefined) {
+      newErrors.formula = result.errors.formula[0];
+    }
     this.setState({ errors: newErrors });
   };
 
@@ -107,7 +116,9 @@ class CreateQuestionForm extends React.Component {
       type,
       stage,
       priority,
-      answerType
+      answerType,
+      unavailable,
+      formula
     } = this.state;
 
     return {
@@ -119,6 +130,8 @@ class CreateQuestionForm extends React.Component {
         stage: parseInt(stage),
         priority: parseInt(priority),
         answer_type_id: parseInt(answerType),
+        unavailable: unavailable,
+        formula: formula,
         answers_attributes: {}
       }
     };
@@ -126,29 +139,37 @@ class CreateQuestionForm extends React.Component {
 
   // Handle change of inputs in the form
   handleFormChange = (event) => {
-    const value = event.target.value;
     const name = event.target.name;
+    const value = name === "unavailable" ? event.target.checked : event.target.value;
+
+    let stateToSet = {};
+    stateToSet[name] = value;
 
     if (name === "type") {
-      const {questionCategories} = this.props;
-      let stateToSet = {};
-      stateToSet[name] = value;
+      const { questionCategories } = this.props;
+
       questionCategories.map((category) => {
         if (category.name === event.target.value) {
           stateToSet['prefix'] = category.reference_prefix
         }
       });
-      if (value === "Questions::Vaccine" || value === "Questions::ChiefComplaint") {
+
+      if (value === "Questions::Vaccine") {
         stateToSet['answerType'] = "1";
         stateToSet['answerTypeDisabled'] = true;
       } else {
         stateToSet['answerTypeDisabled'] = false;
       }
+
+      stateToSet['unavailableHidden'] = value !== "Questions::AssessmentTest";
+
       this.setState(stateToSet);
     } else {
-      this.setState({
-        [name]: value
-      });
+      if (name === "answerType") {
+        stateToSet['formulaHidden'] = value !== "5";
+      }
+
+      this.setState(stateToSet);
     }
   };
 
@@ -170,8 +191,16 @@ class CreateQuestionForm extends React.Component {
       priority,
       answerType,
       answerTypeDisabled,
-      prefix
+      stageDisabled,
+      prefix,
+      unavailable,
+      unavailableHidden,
+      formulaHidden,
+      formula
     } = this.state;
+
+    let unavailableStyle = unavailableHidden ? {display: 'none'} : {};
+    let formulaStyle = formulaHidden ? {display: 'none'} : {};
 
     return (
       <Form onSubmit={() => this.create()}>
@@ -180,7 +209,7 @@ class CreateQuestionForm extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <Form.Row>
-            <Form.Group as={Col} controlId="formGridState">
+            <Form.Group as={Col} controlId="category">
               <Form.Label>Category</Form.Label>
               <Form.Control as="select" name="type" onChange={this.handleFormChange} value={type} isInvalid={!!errors.category}>
                 <option value="">Select the category</option>
@@ -196,7 +225,7 @@ class CreateQuestionForm extends React.Component {
           </Form.Row>
 
           <Form.Row>
-            <Form.Group as={Col} controlId="formGridState">
+            <Form.Group as={Col} controlId="answerType">
               <Form.Label>Answer type</Form.Label>
               <Form.Control as="select" name="answerType" onChange={this.handleFormChange} value={answerType} isInvalid={!!errors.answerType } disabled = { answerTypeDisabled }>
                 <option value="">Select the type of answers expected</option>
@@ -212,9 +241,9 @@ class CreateQuestionForm extends React.Component {
           </Form.Row>
 
           <Form.Row>
-            <Form.Group as={Col} controlId="formGridState">
+            <Form.Group as={Col} controlId="stage">
               <Form.Label>Stage</Form.Label>
-              <Form.Control as="select" name="stage" onChange={this.handleFormChange} value={stage} isInvalid={!!errors.stage }>
+              <Form.Control as="select" name="stage" onChange={this.handleFormChange} value={stage} isInvalid={!!errors.stage } disabled = { stageDisabled }>
                 <option value="">Select the stage</option>
                 {Object.keys(questionStages).map(function(key) {
                   return <option value={questionStages[key]}>{key.charAt(0).toUpperCase() + key.slice(1)}</option>;
@@ -227,7 +256,7 @@ class CreateQuestionForm extends React.Component {
           </Form.Row>
 
           <Form.Row>
-            <Form.Group as={Col} controlId="formGridState">
+            <Form.Group as={Col} controlId="priority">
               <Form.Label>Priority</Form.Label>
               <Form.Control as="select" name="priority" onChange={this.handleFormChange} value={priority} isInvalid={!!errors.priority }>
                 <option value="">Select the priority</option>
@@ -299,10 +328,40 @@ class CreateQuestionForm extends React.Component {
             </Form.Group>
           </Form.Row>
 
+          <Form.Row style={unavailableStyle}>
+            <Form.Group as={Col}>
+              <Form.Check
+                type="checkbox"
+                label="Unavailable test"
+                name="unavailable"
+                value={unavailable}
+                onChange={this.handleFormChange}
+              />
+            </Form.Group>
+          </Form.Row>
+
+          <Form.Row style={formulaStyle}>
+            <Form.Group as={Col}>
+              <Form.Label>Formula</Form.Label>
+              <InputGroup>
+                <Form.Control
+                  type="text"
+                  name="formula"
+                  value={formula}
+                  onChange={this.handleFormChange}
+                  isInvalid={!!errors.formula}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.formula}
+                </Form.Control.Feedback>
+              </InputGroup>
+            </Form.Group>
+          </Form.Row>
+
         </Modal.Body>
         <Modal.Footer>
           {/*Save directly the question if it is a boolean*/}
-          {(answerType === '1') ? (
+          {(answerType === '1' || type === 'Questions::VitalSign') ? (
             <Button variant="success" onClick={() => this.create()}>
               Save
             </Button>

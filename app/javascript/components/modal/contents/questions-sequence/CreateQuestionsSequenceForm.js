@@ -126,7 +126,7 @@ class CreateQuestionsSequenceForm extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <Form.Row>
-            <Form.Group as={Col} controlId="formGridState">
+            <Form.Group as={Col} controlId="category">
               <Form.Label>Category</Form.Label>
               <Form.Control
                 as="select"

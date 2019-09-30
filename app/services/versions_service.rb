@@ -8,12 +8,17 @@ class VersionsService
     @version = Version.find(id)
 
     hash = extract_version_metadata
-    hash['diseases'] = {}
+    hash['diagnostics'] = {}
+
+    # Add every triage nodes before starting
+    @version.algorithm.questions.triage.each do |triage_question|
+      assign_node(triage_question)
+    end
 
     # Loop in each diagnostics defined in current algorithm version
     @version.diagnostics.includes(:conditions).each do |diagnostic|
       @diagnostics_ids << diagnostic.id
-      hash['diseases'][diagnostic.id] = extract_diagnostic(diagnostic)
+      hash['diagnostics'][diagnostic.id] = extract_diagnostic(diagnostic)
     end
 
     # Set all questions/treatments/managements used in this version of algorithm
@@ -70,9 +75,37 @@ class VersionsService
     hash['name'] = @version.algorithm.name
     hash['version'] = @version.name
     hash['description'] = @version.algorithm.description
+    hash['triage'] = extract_triage_metadata
     hash['author'] = @version.user.full_name
     hash['created_at'] = @version.created_at
     hash['updated_at'] = @version.updated_at
+    hash
+  end
+
+  # @return hash
+  # Build a hash of metadata about the triage questions
+  def self.extract_triage_metadata
+    hash = {}
+    
+    hash['orders'] = {}
+    hash['orders']['first_look_assessment'] = @version.triage_first_look_assessments_order
+    hash['orders']['chief_complaint'] = @version.triage_chief_complaints_order
+    hash['orders']['vital_sign'] = @version.triage_vital_signs_order
+    hash['orders']['chronical_condition'] = @version.triage_chronical_conditions_order
+    hash['orders']['other'] = @version.triage_questions_order
+
+    hash['conditions'] = {}
+    @version.components.each do |instance|
+      if instance.conditions.any?
+        hash['conditions'][instance.node_id] = []
+        instance.conditions.each do |cond|
+          condition = {}
+          condition['chief_complaint_id'] = cond.first_conditionable.node_id
+          condition['answer_id'] = cond.first_conditionable_id
+          hash['conditions'][instance.node_id].push(condition)
+        end
+      end
+    end
     hash
   end
 
@@ -85,15 +118,15 @@ class VersionsService
     hash['reference'] = diagnostic.reference
     hash['label'] = diagnostic.label
     hash['differential'] = extract_conditions(diagnostic.conditions)
-    hash['nodes'] = {}
-    hash['diagnosis'] = {}
+    hash['instances'] = {}
+    hash['final_diagnostics'] = {}
 
     # Loop in each question used in current diagnostic
     diagnostic.components.questions.includes([:children, :nodes, node:[:answers, :answer_type]]).each do |question_instance|
       # Append the questions in order to list them all at the end of the json.
       assign_node(question_instance.node)
 
-      hash['nodes'][question_instance.node.id] = extract_instances(question_instance)
+      hash['instances'][question_instance.node.id] = extract_instances(question_instance)
     end
 
     # Loop in each predefined syndromes used in current diagnostic
@@ -101,14 +134,14 @@ class VersionsService
       # Append the predefined syndromes in order to list them all at the end of the json.
       assign_node(questions_sequence_instance.node)
 
-      hash['nodes'][questions_sequence_instance.node.id] = extract_instances(questions_sequence_instance)
+      hash['instances'][questions_sequence_instance.node.id] = extract_instances(questions_sequence_instance)
     end
 
     # Loop in each final diagnostics for set conditional acceptance and health cares related to it
     diagnostic.components.final_diagnostics.each do |final_diagnostic_instance|
       final_diagnostic_hash = extract_final_diagnostic(final_diagnostic_instance)
       @final_diagnostics[final_diagnostic_instance.node.id] = final_diagnostic_hash
-      hash['diagnosis'][final_diagnostic_instance.node.id] = final_diagnostic_hash
+      hash['final_diagnostics'][final_diagnostic_instance.node.id] = final_diagnostic_hash
     end
 
     hash
@@ -120,13 +153,13 @@ class VersionsService
   def self.extract_final_diagnostic(instance)
     final_diagnostic = instance.node
     hash = extract_conditions(instance.conditions)
-    hash['disease_id'] = final_diagnostic.diagnostic.id
-    hash['name'] = final_diagnostic.label
+    hash['diagnostic_id'] = final_diagnostic.diagnostic.id
     hash['id'] = final_diagnostic.id
+    hash['label'] = final_diagnostic.label
     hash['type'] = final_diagnostic.node_type
     hash['treatments'] = extract_health_cares(final_diagnostic.health_cares.treatments, instance.instanceable.id)
     hash['managements'] = extract_health_cares(final_diagnostic.health_cares.managements, instance.instanceable.id)
-    hash['excluding_diagnosis'] = final_diagnostic.final_diagnostic_id
+    hash['excluding_final_diagnostics'] = final_diagnostic.final_diagnostic_id
     hash
   end
 
@@ -237,6 +270,7 @@ class VersionsService
       hash[question.id]['value_format'] = question.answer_type.value
       hash[question.id]['qs'] = get_node_questions_sequences(question, [])
       hash[question.id]['dd'] = get_node_diagnostics(question, [])
+      hash[question.id]['cc'] = get_node_chief_complaints(question, [])
       hash[question.id]['counter'] = 0
       hash[question.id]['value'] = 0
       hash[question.id]['answer'] = nil
@@ -275,7 +309,7 @@ class VersionsService
   def self.get_node_diagnostics(node, diagnostics)
     node.instances.map(&:instanceable).each do |instanceable|
       unless instanceable == node
-        if instanceable.is_a?(Diagnostic)
+        if instanceable.is_a? Diagnostic
           # push the id in the array only if it is not already there and if it is handled by the current algorithm version
           if @diagnostics_ids.include?(instanceable.id) && !diagnostics.include?(instanceable.id)
             hash = {}
@@ -287,6 +321,22 @@ class VersionsService
       end
     end
     diagnostics
+  end
+
+  # @params [Node, Array]
+  # @return [Array]
+  # Recursive method in order to retrieve every chief complaints the question appears in.
+  def self.get_node_chief_complaints(node, chief_complaints)
+    node.instances.map(&:instanceable).each do |instanceable|
+      unless instanceable == node
+        if instanceable.is_a? Diagnostic
+          chief_complaints << instanceable.node_id if @diagnostics_ids.include?(instanceable.id) && !chief_complaints.include?(instanceable.node_id)
+        elsif instanceable.is_a? Node
+          get_node_chief_complaints(instanceable, chief_complaints)
+        end
+      end
+    end
+    chief_complaints
   end
 
   # @params [Node, Array]
@@ -336,7 +386,7 @@ class VersionsService
       hash[questions_sequence.id]['min_score'] = questions_sequence.min_score
       hash[questions_sequence.id]['type'] = questions_sequence.node_type
       hash[questions_sequence.id]['category'] = questions_sequence.category_name
-      hash[questions_sequence.id]['nodes'] = {}
+      hash[questions_sequence.id]['instances'] = {}
       hash[questions_sequence.id]['answers'] = push_questions_sequence_answers(questions_sequence)
       hash[questions_sequence.id]['qs'] = get_node_questions_sequences(questions_sequence, [])
       hash[questions_sequence.id]['dd'] = get_node_diagnostics(questions_sequence, [])
@@ -345,11 +395,11 @@ class VersionsService
       # Loop in each instance for defined condition
       questions_sequence.components.questions.includes(:conditions, :children, :nodes, node:[:answer_type, :answers]).each do |instance|
         # assign_node(instance.node)
-        hash[questions_sequence.id]['nodes'][instance.node.id] = extract_instances(instance)
+        hash[questions_sequence.id]['instances'][instance.node.id] = extract_instances(instance)
       end
 
       questions_sequence.components.questions_sequences.includes(:conditions, :children, :nodes).each do |instance|
-        hash[questions_sequence.id]['nodes'][instance.node.id] = extract_instances(instance) unless questions_sequence == instance.node
+        hash[questions_sequence.id]['instances'][instance.node.id] = extract_instances(instance) unless questions_sequence == instance.node
       end
     end
     hash

@@ -5,7 +5,7 @@ class Api::V1::ApplicationController < ActionController::Base
   # before_action :authenticate_user!, except: [:is_available]
 
   def is_available
-    render json: 'false'
+    render json: 'true'
   end
 
   protected

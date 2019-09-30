@@ -27,6 +27,7 @@ class UpdateQuestionForm extends React.Component {
     stage: "",
     priority: "",
     answerType: "",
+    formula: "",
     errors: {}
   };
 
@@ -46,18 +47,25 @@ class UpdateQuestionForm extends React.Component {
       description: newCurrentNode.description_translations === null ? "" : newCurrentNode.description_translations["en"],
       priority: questionPriorities[newCurrentNode.priority],
       stage: questionStages[newCurrentNode.stage],
-      answerType: newCurrentNode.answer_type_id
+      answerType: newCurrentNode.answer_type_id,
+      formula: newCurrentNode.formula
     });
   }
 
   updateAnswers = async () => {
-    const { set } = this.props;
+    const { set, http } = this.props;
     const question = this.generateQuestionBody();
 
-    set(
-      ['currentQuestion', 'modalToOpen', 'modalIsOpen'],
-      [question, 'UpdateAnswers', true]
-    );
+
+    let result = await http.validateQuestion(question);
+    if (result.ok === undefined || result.ok) {
+      set(
+        ['currentQuestion', 'modalToOpen', 'modalIsOpen'],
+        [question, 'UpdateAnswers', true]
+      );
+    } else {
+      this.handleErrors(result);
+    }
   };
 
   // Update the score in DB then set score props in order to trigger listener in Diagram.js that will update diagram dynamically
@@ -91,6 +99,28 @@ class UpdateQuestionForm extends React.Component {
     }
   };
 
+  // Display errors from response of the question validation from rails if there is any
+  handleErrors = (result) => {
+    let newErrors = {};
+
+    if (result.errors.reference !== undefined) {
+      newErrors.reference = result.errors.reference[0];
+    }
+
+    if (result.errors.label_en !== undefined) {
+      newErrors.label_en = result.errors.label_en[0];
+    }
+
+    if (result.errors.priority !== undefined) {
+      newErrors.priority = result.errors.priority[0];
+    }
+
+    if (result.errors.formula !== undefined) {
+      newErrors.formula = result.errors.formula[0];
+    }
+    this.setState({ errors: newErrors });
+  };
+
   // Generate the body of the question
   generateQuestionBody = () => {
     const {
@@ -101,7 +131,8 @@ class UpdateQuestionForm extends React.Component {
       type,
       stage,
       priority,
-      answerType
+      answerType,
+      formula
     } = this.state;
 
     return {
@@ -114,6 +145,7 @@ class UpdateQuestionForm extends React.Component {
         stage: parseInt(stage),
         priority: parseInt(priority),
         answer_type_id: parseInt(answerType),
+        formula,
         answers_attributes: {}
       }
     };
@@ -128,7 +160,6 @@ class UpdateQuestionForm extends React.Component {
       [name]: value
     });
   };
-
 
   render() {
     const {
@@ -147,7 +178,10 @@ class UpdateQuestionForm extends React.Component {
       stage,
       priority,
       answerType,
+      formula
     } = this.state;
+
+    let formulaStyle = answerType !== 5 ? {display: 'none'} : {};
 
     return (
       <Form onSubmit={() => this.create()}>
@@ -156,7 +190,7 @@ class UpdateQuestionForm extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <Form.Row>
-            <Form.Group as={Col} controlId="formGridState">
+            <Form.Group as={Col} controlId="category">
               <Form.Label>Category</Form.Label>
               <Form.Control as="select" defaultValue={type} disabled>
                 <option value="">Select a category</option>
@@ -168,7 +202,7 @@ class UpdateQuestionForm extends React.Component {
           </Form.Row>
 
           <Form.Row>
-            <Form.Group as={Col} controlId="formGridState">
+            <Form.Group as={Col} controlId="answerType">
               <Form.Label>Answer type</Form.Label>
               <Form.Control as="select" defaultValue={answerType} disabled>
                 <option value="">Select a category</option>
@@ -180,9 +214,9 @@ class UpdateQuestionForm extends React.Component {
           </Form.Row>
 
           <Form.Row>
-            <Form.Group as={Col} controlId="formGridState">
+            <Form.Group as={Col} controlId="stage">
               <Form.Label>Stage</Form.Label>
-              <Form.Control as="select" name="stage" onChange={this.handleFormChange} defaultValue={stage}>
+              <Form.Control as="select" name="stage" onChange={this.handleFormChange} defaultValue={stage} disabled>
                 <option value="">Select a category</option>
                 {Object.keys(questionStages).map(function(key) {
                   return <option value={questionStages[key]}>{key.charAt(0).toUpperCase() + key.slice(1)}</option>;
@@ -192,14 +226,17 @@ class UpdateQuestionForm extends React.Component {
           </Form.Row>
 
           <Form.Row>
-            <Form.Group as={Col} controlId="formGridState">
+            <Form.Group as={Col} controlId="priority">
               <Form.Label>Priority</Form.Label>
-              <Form.Control as="select" name="priority" onChange={this.handleFormChange} defaultValue={priority}>
+              <Form.Control as="select" name="priority" onChange={this.handleFormChange} defaultValue={priority} isInvalid={!!errors.priority }>
                 <option value="">Select a category</option>
                 {Object.keys(questionPriorities).map(function(key) {
                   return <option value={questionPriorities[key]}>{key.charAt(0).toUpperCase() + key.slice(1)}</option>;
                 })}
               </Form.Control>
+              <Form.Control.Feedback type="invalid">
+                {errors.priority}
+              </Form.Control.Feedback>
             </Form.Group>
           </Form.Row>
 
@@ -232,10 +269,10 @@ class UpdateQuestionForm extends React.Component {
                   name="label"
                   value={label}
                   onChange={this.handleFormChange}
-                  isInvalid={!!errors.label}
+                  isInvalid={!!errors.label_en}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {errors.label}
+                  {errors.label_en}
                 </Form.Control.Feedback>
               </InputGroup>
             </Form.Group>
@@ -254,6 +291,24 @@ class UpdateQuestionForm extends React.Component {
                   value={description}
                   onChange={this.handleFormChange}
                 />
+              </InputGroup>
+            </Form.Group>
+          </Form.Row>
+
+          <Form.Row style={formulaStyle}>
+            <Form.Group as={Col}>
+              <Form.Label>Formula</Form.Label>
+              <InputGroup>
+                <Form.Control
+                  type="text"
+                  name="formula"
+                  value={formula}
+                  onChange={this.handleFormChange}
+                  isInvalid={!!errors.formula}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.formula}
+                </Form.Control.Feedback>
               </InputGroup>
             </Form.Group>
           </Form.Row>

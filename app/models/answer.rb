@@ -38,13 +38,6 @@ class Answer < ApplicationRecord
     "#{self.id},#{self.class.name}"
   end
 
-  # @param [Integer] node id to link to questions
-  # Create 1 automatic answer for tests/assessments if attr_accessor :unavailable in question is checked
-  def self.create_unavailable(node_id)
-    answer = Answer.new(node_id: node_id, reference: '0', label_en: I18n.t('answers.unavailable'))
-    answer.save(validate: false)
-  end
-
   # Return the parent node with all the answers in order to include it in a json if the condition is an answer and not a condition
   def get_node
     node.as_json(include: [:answers], methods: [:type])
@@ -53,7 +46,7 @@ class Answer < ApplicationRecord
   # {Node#unique_reference}
   # Scoped by the current algorithm
   def unique_reference
-    if node.answers.where(reference: reference).where.not(id: id).any?
+    if node.answers.where(reference: reference).or(node.answers.where(reference: "#{node.reference}_#{reference}")).where.not(id: id).any?
       errors.add(:reference, I18n.t('nodes.validation.reference_used'))
       return false
     end
@@ -71,7 +64,13 @@ class Answer < ApplicationRecord
   def correct_value_type
     if node.is_a?(Question) && node.answer_type.display == 'Input'
       if between?
-        errors.add(:value, I18n.t('answers.validation.value_missing')) unless value.include?(',')
+        if value.include?(',')
+          values = value.split(',').map(&:to_i)
+          errors.add(:value, I18n.t('answers.validation.between_wrong_order')) if values[0] > values[1]
+        else
+          errors.add(:value, I18n.t('answers.validation.value_missing'))
+        end
+
         value.split(',').each(&method(:validate_value_type))
       else
         validate_value_type(value)

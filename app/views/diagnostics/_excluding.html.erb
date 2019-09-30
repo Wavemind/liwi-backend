@@ -1,5 +1,5 @@
 <ul class="list-group">
-  <% @diagnostic.version.diagnostics.map(&:final_diagnostics).flatten.each do |final_diagnostic| %>
+  <% @diagnostic.version.diagnostics.includes(final_diagnostics: :excluded_diagnostic).map(&:final_diagnostics).flatten.each do |final_diagnostic| %>
     <% if final_diagnostic.excluded_diagnostic.present? %>
       <li class="list-group-item">
         <div class="row">

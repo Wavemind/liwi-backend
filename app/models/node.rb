@@ -38,7 +38,7 @@ class Node < ApplicationRecord
   # @return [ActiveRecord::Association]
   # List of instances
   def dependencies
-    instances
+    instances.select{|i| i unless i.instanceable.is_a? Version}
   end
 
   # Automatically create the answers, since they can't be changed
