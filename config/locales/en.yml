@@ -34,6 +34,8 @@ en:
       - "Input integer"
       - "Input decimal"
       - "Formula"
+      - "Date"
+      - "String"
   answers:
     edit:
       title: "Edit related answers of %{name} question"

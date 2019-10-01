@@ -62,7 +62,7 @@ jQuery(document).ready(function() {
           }
 
           // Force triage stage for ChiefComplaint, VitalSign and FirstLookAssessment
-          if (response.responseText === "CC" || response.responseText === "VS" ||  response.responseText === "FL") {
+          if (response.responseText === "CC" || response.responseText === "FL") {
             $("#question_stage_displayed").val("triage").attr("disabled", true);
             $("#question_stage_hidden").val("triage")
           } else if (response.responseText === "CH" || response.responseText === "V" || response.responseText === "D") { // Force registration stage for Chronical Condition and Vaccin
