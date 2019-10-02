@@ -13,8 +13,8 @@ class Question < Node
   has_many :answers, foreign_key: 'node_id', dependent: :destroy
   belongs_to :answer_type
 
-  belongs_to :reference_table_x, :class_name => 'Question', optional: true
-  belongs_to :reference_table_y, :class_name => 'Question', optional: true
+  belongs_to :reference_table_x, class_name: 'Question', optional: true
+  belongs_to :reference_table_y, class_name: 'Question', optional: true
 
   before_validation :validate_formula, if: Proc.new { self.formula.present? }
   validates_presence_of :priority, :stage

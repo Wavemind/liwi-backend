@@ -61,7 +61,7 @@ jQuery(document).ready(function() {
             $("#question_answer_type_displayed").attr("disabled", false);
           }
 
-          // Force triage stage for ChiefComplaint, VitalSign and FirstLookAssessment
+          // Force triage stage for ChiefComplaint and FirstLookAssessment
           if (response.responseText === "CC" || response.responseText === "FL") {
             $("#question_stage_displayed").val("triage").attr("disabled", true);
             $("#question_stage_hidden").val("triage")
