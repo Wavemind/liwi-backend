@@ -10,7 +10,7 @@ RSpec.describe VersionsService, type: :service do
       answers_count += node['answers'].count if node['answers'].present?
     end
     expect(nodes.count).to eq(14)
-    expect(answers_count).to eq(16)
+    expect(answers_count).to eq(18)
   end
 
   it 'generates a json with correct amount of conditions' do
@@ -20,6 +20,6 @@ RSpec.describe VersionsService, type: :service do
 
     expect(top_conditions.count + conditions.count).to eq(3)
     expect(top_conditions[1]['first_id']).to eq(10)
-    expect(top_conditions[1]['second_id']).to eq(9)
+    expect(top_conditions[1]['second_id']).to eq(11)
   end
 end

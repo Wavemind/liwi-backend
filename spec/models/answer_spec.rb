@@ -4,8 +4,8 @@ RSpec.describe Answer, type: :model do
   create_algorithm
 
   before(:each) do
-    answer_type = AnswerType.new(value: 'Array', display: 'Radiobutton')
-    @question = Questions::AssessmentTest.create!(reference: '9', label: 'skin issue', priority: Question.priorities[:basic], stage: Question.stages[:triage], answer_type: answer_type, algorithm: @algorithm)
+    @answer_type = AnswerType.new(value: 'Array', display: 'Radiobutton')
+    @question = Questions::AssessmentTest.create!(reference: '9', label: 'skin issue', priority: Question.priorities[:basic], stage: Question.stages[:triage], answer_type: @answer_type, algorithm: @algorithm)
   end
 
   it 'is valid with valid attributes' do
@@ -25,10 +25,10 @@ RSpec.describe Answer, type: :model do
     expect(answer).to_not be_valid
   end
 
-  it 'creates an answer for unavailable assessment test' do
-    Answer.create_unavailable(@question.id)
+  it 'creates an answer for unavailable assessment test', focus: true do
+    assessment = Questions::AssessmentTest.create!(reference: '50', label: 'skin issue', priority: Question.priorities[:basic], stage: Question.stages[:triage], answer_type: @answer_type, algorithm: @algorithm, unavailable: true)
 
-    expect(@question.answers.first.label).to eq(I18n.t('answers.unavailable'))
+    expect(assessment.answers.first.label).to eq(I18n.t('answers.unavailable'))
   end
 
   it 'accept correct input values' do

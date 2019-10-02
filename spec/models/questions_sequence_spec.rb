@@ -38,8 +38,8 @@ RSpec.describe QuestionsSequence, type: :model do
   end
 
   it 'returns correct list of available nodes' do
-    ps9 = QuestionsSequences::PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
     ps5 = QuestionsSequences::PredefinedSyndrome.create!(reference: '5', label_en: 'diarrhea', algorithm: @algorithm)
+    ps9 = QuestionsSequences::PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
 
     expect(ps9.available_nodes_json[0]['id']).to eq(ps9.id)
     expect(ps9.available_nodes_json[1]['id']).to eq(ps5.id)

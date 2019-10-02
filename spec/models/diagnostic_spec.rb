@@ -62,8 +62,8 @@ RSpec.describe Diagnostic, type: :model do
     ps9 = QuestionsSequences::PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
     ps5 = QuestionsSequences::PredefinedSyndrome.create!(reference: '5', label_en: 'diarrhea', algorithm: @algorithm)
 
-    expect(dd1.available_nodes_json[0]['id']).to eq(ps9.id)
-    expect(dd1.available_nodes_json[1]['id']).to eq(ps5.id)
+    expect(dd1.available_nodes_json[0]['id']).to eq(ps5.id)
+    expect(dd1.available_nodes_json[1]['id']).to eq(ps9.id)
   end
 
   context 'destroys correctly a complet diagnostic' do

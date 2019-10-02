@@ -17,7 +17,7 @@ development:
   encoding: utf8
   database: liwi-dev
   pool: 5
-  username: root
+  username: postgres
   password: root
 
 # Warning: The database defined as "test" will be erased and
@@ -29,7 +29,7 @@ test:
   encoding: utf8
   database: liwi-test
   pool: 5
-  username: root
+  username: postgres
   password: root
 
 production:

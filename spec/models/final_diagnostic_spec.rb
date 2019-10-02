@@ -38,9 +38,9 @@ RSpec.describe FinalDiagnostic, type: :model do
   it 'returns correct list of available nodes' do
     df = FinalDiagnostic.new(label_en: 'Severe lower respiratory tract infection', description_en: 'A shot description',reference: '7', diagnostic: @dd7)
 
-    ps9 = QuestionsSequences::PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
-    ps5 = QuestionsSequences::PredefinedSyndrome.create!(reference: '5', label_en: 'diarrhea', algorithm: @algorithm)
     ps6 = QuestionsSequences::PredefinedSyndrome.create!(reference: '7', label_en: 'coucou', algorithm: @algorithm)
+    ps5 = QuestionsSequences::PredefinedSyndrome.create!(reference: '5', label_en: 'diarrhea', algorithm: @algorithm)
+    ps9 = QuestionsSequences::PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
 
     Instance.create!(node: ps6, instanceable: @dd7, final_diagnostic: df)
 
