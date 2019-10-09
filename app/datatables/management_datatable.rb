@@ -22,7 +22,7 @@ class ManagementDatatable < AjaxDatatablesRails::ActiveRecord
     records.map do |record|
       actions = link_to(I18n.t('edit'), edit_algorithm_management_url(params[:id], record), class: 'btn btn-outline-info') + " " + link_to(I18n.t('delete'), algorithm_management_url(record.algorithm, record), class: "btn btn-outline-danger #{record.dependencies? ? 'disabled' : ''}", method: :delete, data: { confirm: 'Are you sure?' })
       {
-        reference: record.reference,
+        reference: record.full_reference,
         label: record.label,
         description: record.description,
         actions: actions

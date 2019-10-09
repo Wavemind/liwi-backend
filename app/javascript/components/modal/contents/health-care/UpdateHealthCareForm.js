@@ -100,6 +100,9 @@ class UpdateHealthCareForm extends React.Component {
             <Form.Group as={Col}>
               <Form.Label>Reference</Form.Label>
               <InputGroup>
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="inputGroupPrepend">{(currentHealthCareType === 'treatments') ? 'T' : 'M'}</InputGroup.Text>
+                </InputGroup.Prepend>
                 <Form.Control
                   type="text"
                   aria-describedby="inputGroupPrepend"

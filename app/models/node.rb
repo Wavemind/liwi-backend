@@ -17,22 +17,20 @@ class Node < ApplicationRecord
 
   validates_presence_of :label_en
   validates_presence_of :reference
-
-  after_validation :unique_reference
-  before_create :complete_reference
+  before_validation :unique_reference
 
   translates :label, :description
 
   # @return [String]
   # Return the label with the reference for the view
   def reference_label
-    "#{reference} - #{label}"
+    "#{full_reference} - #{label}"
   end
 
   # @return [Boolean]
   # Verify if current node have instances dependencies
   def dependencies?
-    instances.where.not(instanceable: self).any?
+    instances.where.not(instanceable: self).where.not(instanceable_type: 'Version').any?
   end
 
   # @return [ActiveRecord::Association]
@@ -69,19 +67,13 @@ class Node < ApplicationRecord
     end
   end
 
-  private
-
-  # @params nil
-  # @return nil
-  # Validate the uniqueness after validation if it is present in order to simulate #complete_reference
-  def unique_reference
-
+  # Return reference with its prefix
+  def full_reference
+    reference_prefix + reference
   end
 
-  # @params nil
-  # @return nil
-  # Complete the reference with the associated prefix before the entry is created
-  def complete_reference
-
+  # Ensure the reference is unique
+  def unique_reference
+    self.errors.add(:reference, I18n.t('nodes.validation.reference_used')) if Node.where(type: type, reference: reference).where.not(id: id).any?
   end
 end

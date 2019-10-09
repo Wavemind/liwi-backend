@@ -70,22 +70,6 @@ class CreateAnswerForm extends React.Component {
           <Form.Row>
             <Form.Group as={Col}>
               <Form.Label>Reference</Form.Label>
-              {(update === true) ? (
-                <InputGroup>
-                  <Form.Control
-                    type="text"
-                    aria-describedby="inputGroupPrepend"
-                    name="reference"
-                    value={reference}
-                    onChange={this.handleFormChange}
-                    isInvalid={!!errors.reference}
-                    disabled
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.reference}
-                  </Form.Control.Feedback>
-                </InputGroup>
-              ) : (
                 <InputGroup>
                   <InputGroup.Prepend>
                     <InputGroup.Text id="inputGroupPrepend">{prefix}</InputGroup.Text>
@@ -102,7 +86,6 @@ class CreateAnswerForm extends React.Component {
                     {errors.reference}
                   </Form.Control.Feedback>
                 </InputGroup>
-              )}
 
             </Form.Group>
 

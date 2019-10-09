@@ -179,6 +179,7 @@ RSpec.describe QuestionsController, type: :controller do
     expect(response).to redirect_to algorithm_url(@algorithm, panel: 'questions')
     expect(response).to have_attributes(status: 302)
     expect(flash[:notice]).to eq I18n.t('flash_message.success_updated')
+
   end
 
   it 'create an unavailable answer if category is an assessment' do

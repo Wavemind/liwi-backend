@@ -59,19 +59,19 @@ RSpec.describe Question, type: :model do
       integer = AnswerType.create!(value: 'Integer', display: 'Input')
       Questions::Symptom.create!(reference: '10', label: 'skin issue', priority: Question.priorities[:basic], stage: Question.stages[:triage], answer_type: integer, algorithm: @algorithm)
 
-      @question.formula = "[S10] * 10"
+      @question.formula = "[S_10] * 10"
       expect(@question).to be_valid
     end
 
     it 'Refuses if any reference is wrong' do
-      @question.formula = "[W10] * 10"
+      @question.formula = "[W_10] * 10"
 
       expect(@question).to_not be_valid
     end
 
     it 'Refuses if the reference used is not a numeric format' do
       Questions::Symptom.create!(reference: '10', label: 'skin issue', priority: Question.priorities[:basic], stage: Question.stages[:triage], answer_type: @answer_type, algorithm: @algorithm)
-      @question.formula = "[S10] * 10"
+      @question.formula = "[S_10] * 10"
 
       expect(@question).to_not be_valid
     end

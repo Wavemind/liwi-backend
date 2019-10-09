@@ -65,7 +65,10 @@ class CreateFinalDiagnosticForm extends React.Component {
   };
 
   render() {
-    const { toggleModal } = this.props;
+    const {
+      toggleModal,
+      getReferencePrefix
+    } = this.props;
     const {
       reference,
       label,
@@ -84,7 +87,7 @@ class CreateFinalDiagnosticForm extends React.Component {
               <Form.Label>Reference</Form.Label>
               <InputGroup>
                 <InputGroup.Prepend>
-                  <InputGroup.Text id="inputGroupPrepend">DF</InputGroup.Text>
+                  <InputGroup.Text id="inputGroupPrepend">{getReferencePrefix('FinalDiagnostic')}</InputGroup.Text>
                 </InputGroup.Prepend>
                 <Form.Control
                   type="text"

@@ -129,19 +129,6 @@ class QuestionsSequence < Node
 
   private
 
-  # {Node#unique_reference}
-  # Scoped by the current algorithm
-  def unique_reference
-    if algorithm.questions_sequences.where(reference: reference_prefix + reference).any?
-      errors.add(:reference, I18n.t('nodes.validation.reference_used'))
-    end
-  end
-
-  # {Node#complete_reference}
-  def complete_reference
-    self.reference = reference_prefix + reference
-  end
-
   # Display the label for the current child
   def self.display_label
     I18n.t("questions_sequences.categories.#{self.variable}.label")
