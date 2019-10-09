@@ -51,7 +51,7 @@ jQuery(document).ready(function() {
           }
 
           // Force answer type to boolean if it's ChiefComplaint or Vaccine
-          if (response.responseText === "CC" || response.responseText === "V") {
+          if (["CC", "V"].include(response.responseText)) {
             $("#question_answer_type_displayed").val("1").attr("disabled", true);
             $("#question_answer_type_hidden").val("1");
           } else if (response.responseText === "VS") {
@@ -62,10 +62,10 @@ jQuery(document).ready(function() {
           }
 
           // Force triage stage for ChiefComplaint and FirstLookAssessment
-          if (response.responseText === "CC" || response.responseText === "FL") {
+          if (["CC", "FL"].include(response.responseText)) {
             $("#question_stage_displayed").val("triage").attr("disabled", true);
             $("#question_stage_hidden").val("triage")
-          } else if (response.responseText === "CH" || response.responseText === "V" || response.responseText === "D") { // Force registration stage for Chronical Condition and Vaccin
+          } else if (["CH", "V", "D"].include(response.responseText)) { // Force registration stage for Chronical Condition and Vaccin
             $("#question_stage_displayed").val("registration").attr("disabled", true);
             $("#question_stage_hidden").val("registration")
           } else {
