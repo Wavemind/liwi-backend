@@ -41,13 +41,13 @@ class Algorithm < ApplicationRecord
        {reference: 3, label_en: 'more than -2 z-score', value: '-2', operator: Answer.operators[:more_or_equal]},
      ])
 
-    hr_th = questions.create!(reference: '8', label_en: 'Heart rate in percentile', type: 'Questions::PhysicalExam', stage: Question.stages[:consultation], priority: Question.priorities[:mandatory], answer_type_id: 3, reference_table_x_id: birth_date.id, reference_table_y_id: hr.id, is_default: true)
+    hr_th = questions.create!(reference: '8', label_en: 'Heart rate in percentile', type: 'Questions::PhysicalExam', stage: Question.stages[:consultation], priority: Question.priorities[:mandatory], answer_type_id: 3, reference_table_x_id: birth_date.id, reference_table_y_id: hr.id, reference_table_male: File.read(File.join(Rails.root, "app/assets/reference_tables/heart_rate_table.json")), reference_table_female: File.read(File.join(Rails.root, "app/assets/reference_tables/heart_rate_table.json")), is_default: true)
     hr_th.answers.create([
        {reference: 1, label_en: 'less than 90th', value: '90', operator: Answer.operators[:less]},
        {reference: 3, label_en: 'more than 90th', value: '90', operator: Answer.operators[:more_or_equal]},
      ])
 
-    rr_th = questions.create!(reference: '9', label_en: 'Respiratory rate in percentile', type: 'Questions::PhysicalExam', stage: Question.stages[:consultation], priority: Question.priorities[:mandatory], answer_type_id: 3, reference_table_x_id: birth_date.id, reference_table_y_id: rr.id, is_default: true)
+    rr_th = questions.create!(reference: '9', label_en: 'Respiratory rate in percentile', type: 'Questions::PhysicalExam', stage: Question.stages[:consultation], priority: Question.priorities[:mandatory], answer_type_id: 3, reference_table_x_id: birth_date.id, reference_table_y_id: rr.id, reference_table_male: File.read(File.join(Rails.root, "app/assets/reference_tables/respiratory_rate_table.json")), reference_table_female: File.read(File.join(Rails.root, "app/assets/reference_tables/respiratory_rate_table.json")), is_default: true)
     rr_th.answers.create([
        {reference: 1, label_en: 'less than 75th', value: '75', operator: Answer.operators[:less]},
        {reference: 2, label_en: 'between 75th and 97th', value: '75, 97', operator: Answer.operators[:between]},
