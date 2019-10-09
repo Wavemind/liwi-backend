@@ -10,6 +10,11 @@ class VersionsService
     hash = extract_version_metadata
     hash['diagnostics'] = {}
 
+    # Add every registration nodes before starting
+    @version.algorithm.questions.registration.each do |registration_question|
+      assign_node(registration_question)
+    end
+
     # Add every triage nodes before starting
     @version.algorithm.questions.triage.each do |triage_question|
       assign_node(triage_question)
@@ -18,7 +23,7 @@ class VersionsService
     # Loop in each diagnostics defined in current algorithm version
     @version.diagnostics.includes(:conditions).each do |diagnostic|
       @diagnostics_ids << diagnostic.id
-      hash['diagnostics'][diagnostic.id] = extract_diagnostic(diagnostic)
+      hash['diagnostics'][diagnostic.id] = extract_diavegnostic(diagnostic)
     end
 
     # Set all questions/treatments/managements used in this version of algorithm
