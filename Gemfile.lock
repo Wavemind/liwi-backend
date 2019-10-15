@@ -130,8 +130,6 @@ GEM
     erubi (1.7.1)
     execjs (2.7.0)
     ffi (1.9.25)
-    foreman (0.64.0)
-      thor (>= 0.13.6)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
     hstore_translate (2.0.0)
@@ -365,7 +363,6 @@ DEPENDENCIES
   devise
   devise_invitable (~> 1.7.0)
   devise_token_auth
-  foreman
   hstore_translate
   jbuilder (~> 2.5)
   jquery-datatables
@@ -400,4 +397,4 @@ RUBY VERSION
    ruby 2.5.1p57
 
 BUNDLED WITH
-   1.17.1
+   1.17.3
