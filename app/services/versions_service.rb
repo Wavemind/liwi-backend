@@ -20,10 +20,15 @@ class VersionsService
       assign_node(triage_question)
     end
 
+    # Add every vital sign nodes before starting
+    @version.algorithm.questions.where(type: 'Questions::VitalSign').each do |vital_sign|
+      assign_node(vital_sign)
+    end
+
     # Loop in each diagnostics defined in current algorithm version
     @version.diagnostics.includes(:conditions).each do |diagnostic|
       @diagnostics_ids << diagnostic.id
-      hash['diagnostics'][diagnostic.id] = extract_diavegnostic(diagnostic)
+      hash['diagnostics'][diagnostic.id] = extract_diagnostic(diagnostic)
     end
 
     # Set all questions/treatments/managements used in this version of algorithm
