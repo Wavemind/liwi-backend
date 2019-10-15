@@ -14,8 +14,6 @@ class Algorithm < ApplicationRecord
 
   after_create :create_reference_table_questions
 
-  private
-
   # Create all hardcoded questions related to reference tables and age.
   # Answer types ids : 3 is Integer, 4 is Decimal, 6 is Date
   def create_reference_table_questions
