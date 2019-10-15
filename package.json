@@ -22,13 +22,13 @@
     "style-loader": "^0.23.1"
   },
   "scripts": {
-    "test": "jest"
+    "test": "./node_modules/.bin/jest"
   },
   "devDependencies": {
     "@babel/polyfill": "^7.4.3",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^23.4.2",
-    "jest": "^24.8.0",
+    "jest": "^24.9.0",
     "puppeteer": "^1.19.0",
     "webpack-dev-server": "2.11.2"
   },

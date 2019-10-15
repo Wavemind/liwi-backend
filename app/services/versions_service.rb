@@ -272,7 +272,7 @@ class VersionsService
       hash[question.id]['dd'] = get_node_diagnostics(question, [])
       hash[question.id]['cc'] = get_node_chief_complaints(question, [])
       hash[question.id]['counter'] = 0
-      hash[question.id]['value'] = 0
+      hash[question.id]['value'] = nil
       hash[question.id]['answer'] = nil
       hash[question.id]['answers'] = {}
 
