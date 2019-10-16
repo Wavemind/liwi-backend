@@ -282,9 +282,9 @@ class VersionsService
       hash[question.id]['dd'] = get_node_diagnostics(question, [])
       hash[question.id]['cc'] = get_node_chief_complaints(question, [])
       hash[question.id]['counter'] = 0
-      hash[question.id]['value'] = 0
+      hash[question.id]['value'] = nil
       hash[question.id]['reference_table_x_id'] = question.reference_table_x_id
-      hash[question.id]['reference_table_y_id'] = question.reference_table_x_id
+      hash[question.id]['reference_table_y_id'] = question.reference_table_y_id
       hash[question.id]['reference_table_male'] = question.reference_table_male
       hash[question.id]['reference_table_female'] = question.reference_table_female
       hash[question.id]['answer'] = nil
