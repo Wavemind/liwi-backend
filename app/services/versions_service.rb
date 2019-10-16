@@ -300,8 +300,11 @@ class VersionsService
       hash[question.id]['formula'] = format_formula(question.formula)
       hash[question.id]['category'] = question.category_name
       # Send Reference instead of actual display format to help f-e interpret the question correctly
-      hash[question.id]['display_format'] = question.reference_table_x_id.nil? ? question.answer_type.display : 'Reference'
       hash[question.id]['value_format'] = question.answer_type.value
+      format = question.answer_type.display
+      format = 'Reference' unless question.reference_table_x_id.nil?
+      format = question.answer_type.value if question.answer_type.value == 'Date'
+      hash[question.id]['display_format'] = format
       hash[question.id]['qs'] = get_node_questions_sequences(question, [])
       hash[question.id]['dd'] = get_node_diagnostics(question, [])
       hash[question.id]['cc'] = get_node_chief_complaints(question, [])
