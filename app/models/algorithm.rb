@@ -22,7 +22,7 @@ class Algorithm < ApplicationRecord
     hr = questions.create!(reference: '4', label_en: 'Heart rate', type: 'Questions::VitalSign', stage: Question.stages[:consultation], priority: Question.priorities[:basic], answer_type_id: 4, is_default: true)
     rr = questions.create!(reference: '5', label_en: 'Respiratory rate', type: 'Questions::VitalSign', stage: Question.stages[:consultation], priority: Question.priorities[:basic], answer_type_id: 4, is_default: true)
 
-    age = questions.create!(reference: '2', label_en: 'Age in months', type: 'Questions::Demographic', stage: Question.stages[:registration], priority: Question.priorities[:mandatory], answer_type_id: 3, formula: '[D_1]', is_default: true)
+    age = questions.create!(reference: '2', label_en: 'Age in months', type: 'Questions::Demographic', stage: Question.stages[:registration], priority: Question.priorities[:mandatory], answer_type_id: 5, formula: '[D_1]', is_default: true)
     age.answers.create([
       {reference: 1, label_en: 'less than 2 months', value: '2', operator: Answer.operators[:less]},
       {reference: 2, label_en: 'between 2 and 6 months', value: '2, 6', operator: Answer.operators[:between]},
