@@ -134,7 +134,7 @@ class Question < Node
     errors.messages.blank?
   end
 
-  def get_type_from_prefix(prefix)
+  def self.get_type_from_prefix(prefix)
     Question.descendants.each do |category|
       Question.reference_prefix_class(category.name)
       return category.name if Question.reference_prefix_class(category.name) == prefix
@@ -158,7 +158,7 @@ class Question < Node
     formula.scan(/\[.*?\]/).each do |reference|
       if reference.include?('_')
         reference = reference.tr('[]', '').split('_')
-        type = get_type_from_prefix(reference[0])
+        type = Question.get_type_from_prefix(reference[0])
         if type.present?
           question = algorithm.questions.find_by(type: type.to_s, reference: reference[1])
           if question.present?

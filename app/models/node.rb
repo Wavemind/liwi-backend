@@ -21,6 +21,9 @@ class Node < ApplicationRecord
 
   translates :label, :description
 
+  # Puts nil instead of empty string when formula is not set in the view.
+  nilify_blanks only: [:formula]
+
   # @return [String]
   # Return the label with the reference for the view
   def reference_label
