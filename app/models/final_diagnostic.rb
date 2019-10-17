@@ -66,7 +66,7 @@ class FinalDiagnostic < Node
   def available_nodes_health_cares_json
     ids = components.select(:node_id)
     (
-      diagnostic.version.algorithm.questions.no_triage.where.not(id: ids) +
+      diagnostic.version.algorithm.questions.no_triage_but_other.where.not(id: ids) +
       diagnostic.version.algorithm.questions_sequences.where.not(id: ids) +
       diagnostic.version.algorithm.health_cares.where.not(id: ids)
     ).as_json(methods: [:category_name, :node_type, :get_answers, :type])

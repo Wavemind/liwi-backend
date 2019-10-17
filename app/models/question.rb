@@ -22,7 +22,7 @@ class Question < Node
   # Return questions which has not triage stage
   scope :no_triage, ->() { where.not(stage: Question.stages[:triage]) }
   # Return questions without basic triage categories but still get the triage stage for other categories
-  scope :no_triage_but_other, ->() { where.not(type: %w(Questions::ChiefComplaint Questions::VitalSign)) }
+  scope :no_triage_but_other, ->() { where.not(type: %w(Questions::ChiefComplaint Questions::FirstLookAssessment Questions::VitalSign)) }
 
   accepts_nested_attributes_for :answers, allow_destroy: true
 
