@@ -198,4 +198,8 @@ class Diagnostic < ApplicationRecord
       errors.add(:node, I18n.t('flash_message.diagnostic.chief_complaint_exclude_triage_question')) if version_instance.conditions.any? && version_instance.conditions.map(&:first_conditionable).map(&:node).flatten.exclude?(node)
     end
   end
+
+  def full_reference
+    I18n.t('diagnostics.reference') + reference
+  end
 end

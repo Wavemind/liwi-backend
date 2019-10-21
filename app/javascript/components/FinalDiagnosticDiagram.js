@@ -33,7 +33,7 @@ class FinalDiagnosticDiagram extends React.Component {
   async shouldComponentUpdate(nextProps, nextState) {
     if (this.props.currentDbNode !== nextProps.currentDbNode) {
       const { engine } = this.state;
-      const { currentDbNode, currentDiagramNode } = nextProps;
+      const { currentDbNode, currentDiagramNode, getReferencePrefix } = nextProps;
       const model = engine.getDiagramModel();
 
       // Create or update node in diagram
@@ -42,7 +42,7 @@ class FinalDiagnosticDiagram extends React.Component {
         currentDbNode.answers.map((answer) => (node.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
         model.addAll(node);
       } else if (nextProps.modalToOpen === 'UpdateQuestionsSequence' || nextProps.modalToOpen === 'UpdateHealthCare') {
-        currentDiagramNode.setReference(currentDbNode.reference);
+        currentDiagramNode.setReference(getReferencePrefix(currentDbNode.node_type, currentDbNode.type) + currentDbNode.reference);
         currentDiagramNode.setNode(currentDbNode);
       } else if (nextProps.modalToOpen === 'CreateHealthCare') {
         let node = this.createNode(currentDbNode);
@@ -59,7 +59,8 @@ class FinalDiagnosticDiagram extends React.Component {
       questions,
       healthCares,
       addMessage,
-      http
+      http,
+      getReferencePrefix
     } = this.props;
 
     const {engine} = this.state;
@@ -110,11 +111,11 @@ class FinalDiagnosticDiagram extends React.Component {
     nodes.map((node, index) => {
       instances[index].conditions.map((condition) => {
         let firstAnswer = condition.first_conditionable;
-        let firstNodeAnswer = _.find(nodes, ["reference", firstAnswer.get_node.reference]);
+        let firstNodeAnswer = _.find(nodes, ["reference", getReferencePrefix(firstAnswer.get_node.type.substring(0, firstAnswer.get_node.type.indexOf('s::')), firstAnswer.get_node.type) + firstAnswer.get_node.reference]);
 
         if (condition.second_conditionable_id !== null && condition.operator === "and_operator") {
           let secondAnswer = condition.second_conditionable;
-          let secondNodeAnswer = _.find(nodes, ["reference", secondAnswer.get_node.reference]);
+          let secondNodeAnswer = _.find(nodes, ["reference", getReferencePrefix(secondAnswer.get_node.node_type, secondAnswer.get_node.type) + secondAnswer.get_node.reference]);
 
           let andNode = new AdvancedNodeModel("AND", "", "", "");
           andNode.addInPort(" ");

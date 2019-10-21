@@ -36,7 +36,7 @@ class Diagram extends React.Component {
   async shouldComponentUpdate(nextProps, nextState) {
     // Listen to the change of the props score in order to update the model in the proper way
     if (this.props.currentScore !== nextProps.currentScore) {
-      const {http, currentNode, currentAnswerId, currentLinkId, currentScore} = nextProps;
+      const {http, currentNode, currentAnswerId, currentLinkId, currentScore, getReferencePrefix} = nextProps;
       const {engine} = this.state;
       const model = engine.getDiagramModel();
 
@@ -75,22 +75,21 @@ class Diagram extends React.Component {
       if (nextProps.modalToOpen === 'CreateFinalDiagnostic') {
         let node = this.createNode(currentDbNode);
         node.addInPort(" ");
-        node.addOutPort(" ", currentDbNode.reference, currentDbNode.id);
+        node.addOutPort(" ", getReferencePrefix(currentDbNode.node_type, currentDbNode.type) + currentDbNode.reference, currentDbNode.id);
         model.addAll(node);
       } else if (nextProps.modalToOpen === 'UpdateFinalDiagnostic') {
-        currentDiagramNode.setReference(currentDbNode.reference);
+        currentDiagramNode.setReference(getReferencePrefix(currentDbNode.node_type, currentDbNode.type) + currentDbNode.reference);
         currentDiagramNode.setNode(currentDbNode);
       } else if (nextProps.modalToOpen === 'CreateQuestionsSequence' || nextProps.modalToOpen === 'CreateQuestion' || nextProps.modalToOpen === 'CreateAnswers') {
         let node = this.createNode(currentDbNode, currentDbNode.answers);
         currentDbNode.answers.map((answer) => (node.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
         model.addAll(node);
       } else if (nextProps.modalToOpen === 'UpdateQuestionsSequence') {
-        currentDiagramNode.setReference(currentDbNode.reference);
+        currentDiagramNode.setReference(getReferencePrefix(currentDbNode.node_type, currentDbNode.type) + currentDbNode.reference);
         currentDiagramNode.setMinScore(currentDbNode.min_score);
-
         currentDiagramNode.setNode(currentDbNode);
       } else if (nextProps.modalToOpen === 'UpdateQuestion') {
-        currentDiagramNode.setReference(currentDbNode.reference);
+        currentDiagramNode.setReference(getReferencePrefix(currentDbNode.node_type, currentDbNode.type) + currentDbNode.reference);
         currentDiagramNode.setNode(currentDbNode);
       } else if (nextProps.modalToOpen === 'UpdateAnswers') {
         // Refresh the page because it would be very handy to handle every updating case of the answers (adding, destroying or updating one or several) which would need a different handling
@@ -111,7 +110,8 @@ class Diagram extends React.Component {
       http,
       type,
       instanceable,
-      set
+      set,
+      getReferencePrefix
     } = this.props;
 
     const {engine} = this.state;
@@ -165,7 +165,7 @@ class Diagram extends React.Component {
         let node = this.createNode(finalDiagnostic);
         node.addInPort(" ");
 
-        node.addOutPort(" ", finalDiagnostic.reference, finalDiagnostic.id);
+        node.addOutPort(" ", getReferencePrefix(finalDiagnostic.node_type, finalDiagnostic.type) + finalDiagnostic.reference, finalDiagnostic.id);
 
         // Manage excluding final diagnostics
         if (finalDiagnostic.final_diagnostic_id !== null) {
@@ -201,11 +201,10 @@ class Diagram extends React.Component {
     nodes.map((node, index) => {
       instances[index].conditions.map((condition) => {
         let firstAnswer = condition.first_conditionable;
-        let firstNodeAnswer = _.find(nodes, ["reference", firstAnswer.get_node.reference]);
-
+        let firstNodeAnswer = _.find(nodes, ["reference", getReferencePrefix(firstAnswer.get_node.type.substring(0, firstAnswer.get_node.type.indexOf('s::')), firstAnswer.get_node.type) + firstAnswer.get_node.reference]);
         if (condition.second_conditionable_id !== null && condition.operator === "and_operator") {
           let secondAnswer = condition.second_conditionable;
-          let secondNodeAnswer = _.find(nodes, ["reference", secondAnswer.get_node.reference]);
+          let secondNodeAnswer = _.find(nodes, ["reference", getReferencePrefix(secondAnswer.get_node.node_type, secondAnswer.get_node.type) + secondAnswer.get_node.reference]);
 
           let andNode = new AdvancedNodeModel("AND", "", "", "");
           andNode.addInPort(" ");
@@ -337,9 +336,9 @@ class Diagram extends React.Component {
 
   // Create a node from label with its inport
   createNode = (node, outPorts = [], color = "rgb(255,255,255)", inPort = true) => {
-    const {addNode, readOnly} = this.props;
+    const {addNode, readOnly, getReferencePrefix} = this.props;
 
-    let advancedNode = new AdvancedNodeModel(node, node.reference, outPorts, color, addNode, readOnly);
+    let advancedNode = new AdvancedNodeModel(node, getReferencePrefix(node.node_type, node.type) + node.reference, outPorts, color, addNode, readOnly);
     if (inPort) {
       advancedNode.addInPort(" ");
     }

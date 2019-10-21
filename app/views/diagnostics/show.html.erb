@@ -36,6 +36,8 @@
             questions: @diagnostic.questions_json,
             finalDiagnostics: @diagnostic.final_diagnostics_json,
             availableNodes: @diagnostic.available_nodes_json,
+            questionCategories: Question.categories.as_json,
+            questionsSequenceCategories: QuestionsSequence.categories.as_json,
             type: 'Diagnostic',
             readOnly: true
           }

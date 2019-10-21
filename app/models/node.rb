@@ -77,6 +77,6 @@ class Node < ApplicationRecord
 
   # Ensure the reference is unique
   def unique_reference
-    self.errors.add(:reference, I18n.t('nodes.validation.reference_used')) if Node.where(type: type, reference: reference).where.not(id: id).any?
+    self.errors.add(:reference, I18n.t('nodes.validation.reference_used')) if algorithm.nodes.where(type: type, reference: reference).where.not(id: id).any?
   end
 end
