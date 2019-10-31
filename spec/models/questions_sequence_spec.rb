@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsSequence, type: :model do
+  create_answer_type
   create_algorithm
 
   it 'is valid with valid attributes' do
@@ -41,8 +42,8 @@ RSpec.describe QuestionsSequence, type: :model do
     ps5 = QuestionsSequences::PredefinedSyndrome.create!(reference: '5', label_en: 'diarrhea', algorithm: @algorithm)
     ps9 = QuestionsSequences::PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
 
-    expect(ps9.available_nodes_json[0]['id']).to eq(ps9.id)
-    expect(ps9.available_nodes_json[1]['id']).to eq(ps5.id)
+    expect(ps9.available_nodes_json[5]['id']).to eq(ps9.id)
+    expect(ps9.available_nodes_json[6]['id']).to eq(ps5.id)
   end
 
   context 'manual validation' do

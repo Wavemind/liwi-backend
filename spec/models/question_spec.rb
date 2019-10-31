@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Question, type: :model do
+  create_answer_type
   create_algorithm
 
   before(:each) do

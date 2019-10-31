@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Answer, type: :model do
+  create_answer_type
   create_algorithm
 
   before(:each) do
@@ -25,7 +26,7 @@ RSpec.describe Answer, type: :model do
     expect(answer).to_not be_valid
   end
 
-  it 'creates an answer for unavailable assessment test', focus: true do
+  it 'creates an answer for unavailable assessment test' do
     assessment = Questions::AssessmentTest.create!(reference: '50', label: 'skin issue', priority: Question.priorities[:basic], stage: Question.stages[:triage], answer_type: @answer_type, algorithm: @algorithm, unavailable: true)
 
     expect(assessment.answers.first.label).to eq(I18n.t('answers.unavailable'))

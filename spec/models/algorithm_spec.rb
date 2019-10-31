@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Algorithm, type: :model do
+  create_answer_type
+
   before(:each) do
     role = Role.new(name: 'administrator')
     @user = User.new(first_name: 'Foo', last_name: 'Bar', email: 'foo.bar@gmail.com', role: role)

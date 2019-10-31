@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe AlgorithmsController, type: :controller do
   login_user
+  create_answer_type
 
   before(:each) do
     role = Role.new(name: 'administrator')

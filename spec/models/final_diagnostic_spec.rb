@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe FinalDiagnostic, type: :model do
+  create_answer_type
   create_algorithm
   create_diagnostic
 
@@ -44,9 +45,9 @@ RSpec.describe FinalDiagnostic, type: :model do
 
     Instance.create!(node: ps6, instanceable: @dd7, final_diagnostic: df)
 
-    expect(df.available_nodes_health_cares_json[0]['id']).to eq(ps9.id)
-    expect(df.available_nodes_health_cares_json[1]['id']).to eq(ps5.id)
-    expect(df.available_nodes_health_cares_json.count).to eq(2)
+    expect(df.available_nodes_health_cares_json[5]['id']).to eq(ps9.id)
+    expect(df.available_nodes_health_cares_json[6]['id']).to eq(ps5.id)
+    expect(df.available_nodes_health_cares_json.count).to eq(7) # 3 new nodes, one used and 5 auto created by algorithm (reference tables)
   end
 
   it 'generates diagram properly' do

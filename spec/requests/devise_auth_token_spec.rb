@@ -6,6 +6,15 @@ include ActionController::RespondWith
 
 describe 'Whether access is ocurring properly', type: :request do
   before(:each) do
+    # needed for algorithm creation for auto created questions
+    boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
+    dropdown_list = AnswerType.create!(value: 'Array', display: 'DropDownList')
+    input_integer = AnswerType.create!(value: 'Integer', display: 'Input')
+    input_float = AnswerType.create!(value: 'Float', display: 'Input')
+    formula = AnswerType.create!(value: 'Float', display: 'Formula')
+    date = AnswerType.create!(value: 'Date', display: 'Input')
+    string = AnswerType.create!(value: 'String', display: 'Input')
+
     role = Role.create(name: 'administrator')
     @current_user = User.create(first_name: 'Foo', last_name: 'Bar', email: 'foo.bar@ilovetestunit.com', password: '123456', password_confirmation: '123456', role: role)
     group_wavemind = Group.create!(name: 'Wavemind')

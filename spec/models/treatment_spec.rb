@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe HealthCares::Treatment, type: :model do
+  create_answer_type
   create_algorithm
 
   it 'is valid with valid attributes' do

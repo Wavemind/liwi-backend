@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe TreatmentsController, type: :controller do
   login_user
-  create_algorithm
   create_answer_type
+  create_algorithm
   create_instances
 
   before(:each) do

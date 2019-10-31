@@ -91,4 +91,9 @@ class FinalDiagnostic < Node
     I18n.t("final_diagnostics.reference")
   end
 
+  # Override Node method since the final_diagnostic is linked to a diagnostic and not the algorithm directly
+  # Ensure the reference is unique
+  def unique_reference
+    self.errors.add(:reference, I18n.t('nodes.validation.reference_used')) if diagnostic.final_diagnostics.where(reference: reference).where.not(id: id).any?
+  end
 end
