@@ -366,6 +366,7 @@ en:
       formula_wrong_characters: "Incorrect formula format. You can only use numbers, operators and questions references (between brackets)"
       formula_wrong_reference: "The reference '%{reference}' does not match to any question in this algorithm"
       formula_wrong_type: "The reference prefix you used does not match any question category"
+      formula_reference_not_date: "The question '%{reference}' is not in date format."
       formula_reference_not_numeric: "The question '%{reference}' is not in numeric format."
       formula_reference_no_underscore: "The reference must contain an underscore (ex: A_1)"
     new:

@@ -56,7 +56,14 @@ class VersionsService
     nodes.map do |k, node|
       if node['formula'].present?
         node['formula'].scan(/\[.*?\]/).each do |id|
-          id = id.tr('[]', '').to_i
+          id = id.tr('[]', '')
+
+          # Remove temporary the function
+          id = id.sub!('ToDay', '').tr('()', '') if id.include?('ToDay')
+          id = id.sub!('ToMonth', '').tr('()', '') if id.include?('ToMonth')
+
+          id = id.to_i
+
           nodes[id]['referenced_in'] = nodes[id]['referenced_in'].push(node['id']) unless nodes[id]['referenced_in'].include?(node['id'])
         end
       end
@@ -339,6 +346,11 @@ class VersionsService
     return nil if formula.nil?
     formula.scan(/\[.*?\]/).each do |reference|
       reference = reference.tr('[]', '')
+
+      # Remove temporary the function
+      reference = reference.sub!('ToDay', '').tr('()', '') if reference.include?('ToDay')
+      reference = reference.sub!('ToMonth', '').tr('()', '') if reference.include?('ToMonth')
+
       db_reference = reference.split('_')
       type = Question.get_type_from_prefix(db_reference[0])
       if type.present?

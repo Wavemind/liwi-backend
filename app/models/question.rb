@@ -157,11 +157,24 @@ class Question < Node
     errors.add(:formula, I18n.t('questions.errors.formula_wrong_characters')) if formula.match(/^(\[(.*?)\]|[ \(\)\*\/\+\-|0-9])*$/).nil?
     formula.scan(/\[.*?\]/).each do |reference|
       if reference.include?('_')
+        is_date = false
+        if reference.include?('ToDay')
+          is_date = true
+          reference = reference.sub!('ToDay', '').tr('()', '')
+        elsif reference.include?('ToMonth')
+          is_date = true
+          reference = reference.sub!('ToMonth', '').tr('()', '')
+        end
         reference = reference.tr('[]', '').split('_')
         type = Question.get_type_from_prefix(reference[0])
         if type.present?
           question = algorithm.questions.find_by(type: type.to_s, reference: reference[1])
           if question.present?
+            if is_date
+              errors.add(:formula, I18n.t('questions.errors.formula_reference_not_date', reference: reference)) unless question.answer_type.display == 'Input'
+            else
+              errors.add(:formula, I18n.t('questions.errors.formula_reference_not_numeric', reference: reference)) unless ['Integer', 'Float'].include?(question.answer_type.display)
+            end
             errors.add(:formula, I18n.t('questions.errors.formula_reference_not_numeric', reference: reference)) unless question.answer_type.display == 'Input'
           else
             errors.add(:formula, I18n.t('questions.errors.formula_wrong_reference', reference: reference))
