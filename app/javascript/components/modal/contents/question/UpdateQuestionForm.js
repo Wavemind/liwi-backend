@@ -168,6 +168,7 @@ class UpdateQuestionForm extends React.Component {
       questionAnswerTypes,
       questionStages,
       questionPriorities,
+      getReferencePrefix
     } = this.props;
     const {
       reference,
@@ -244,6 +245,9 @@ class UpdateQuestionForm extends React.Component {
             <Form.Group as={Col}>
               <Form.Label>Reference</Form.Label>
               <InputGroup>
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="inputGroupPrepend">{getReferencePrefix('Question', type)}</InputGroup.Text>
+                </InputGroup.Prepend>
                 <Form.Control
                   type="text"
                   aria-describedby="inputGroupPrepend"

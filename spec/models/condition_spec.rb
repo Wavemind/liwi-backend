@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Condition, type: :model do
-  create_algorithm
   create_answer_type
+  create_algorithm
   create_instances
 
   it 'is valid with valid attributes' do

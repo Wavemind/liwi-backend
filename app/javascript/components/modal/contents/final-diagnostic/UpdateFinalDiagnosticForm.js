@@ -83,7 +83,10 @@ class UpdateFinalDiagnosticForm extends React.Component {
   };
 
   render() {
-    const { toggleModal } = this.props;
+    const {
+      toggleModal,
+      getReferencePrefix
+    } = this.props;
     const {
       reference,
       label,
@@ -101,6 +104,9 @@ class UpdateFinalDiagnosticForm extends React.Component {
             <Form.Group as={Col}>
               <Form.Label>Reference</Form.Label>
               <InputGroup>
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="inputGroupPrepend">{getReferencePrefix('FinalDiagnostic')}</InputGroup.Text>
+                </InputGroup.Prepend>
                 <Form.Control
                   type="text"
                   aria-describedby="inputGroupPrepend"

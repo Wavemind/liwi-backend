@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe GroupAccess, type: :model do
+  create_answer_type
   create_version
 
   before(:each) do

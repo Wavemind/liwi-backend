@@ -13,13 +13,16 @@ class Question < Node
   has_many :answers, foreign_key: 'node_id', dependent: :destroy
   belongs_to :answer_type
 
+  belongs_to :reference_table_x, class_name: 'Question', optional: true
+  belongs_to :reference_table_y, class_name: 'Question', optional: true
+
   before_validation :validate_formula, if: Proc.new { self.formula.present? }
   validates_presence_of :priority, :stage
 
   # Return questions which has not triage stage
   scope :no_triage, ->() { where.not(stage: Question.stages[:triage]) }
   # Return questions without basic triage categories but still get the triage stage for other categories
-  scope :no_triage_but_other, ->() { where.not(type: %w(Questions::ChiefComplaint Questions::VitalSign)) }
+  scope :no_triage_but_other, ->() { where.not(type: %w(Questions::ChiefComplaint Questions::FirstLookAssessment Questions::VitalSign)) }
 
   accepts_nested_attributes_for :answers, allow_destroy: true
 
@@ -65,8 +68,9 @@ class Question < Node
 
   # Remove the triage question from the version triage orders
   def remove_from_versions
+    field_to_set = version_field_to_set
     algorithm.versions.each do |version|
-      version["#{version_field_to_set}"].delete(id) if version.send("#{version_field_to_set}").include?(id)
+      version["#{field_to_set}"].delete(id) if version.send("#{field_to_set}").include?(id)
       version.save
     end
   end
@@ -130,27 +134,18 @@ class Question < Node
     errors.messages.blank?
   end
 
+  def self.get_type_from_prefix(prefix)
+    Question.descendants.each do |category|
+      Question.reference_prefix_class(category.name)
+      return category.name if Question.reference_prefix_class(category.name) == prefix
+    end
+  end
+
   def instance_dependencies?
     dependencies.map(&:instanceable).present?
   end
 
   private
-
-  # {Node#unique_reference}
-  # Scoped by the current algorithm
-  def unique_reference
-    if type.blank?
-      errors.add(:type, I18n.t('questions.errors.no_blank'))
-    else
-      question = algorithm.questions.where(reference: reference_prefix + reference).first
-      errors.add(:reference, I18n.t('nodes.validation.reference_used')) if question.present? && question.id != id
-    end
-  end
-
-  # {Node#complete_reference}
-  def complete_reference
-    self.reference = reference_prefix + reference
-  end
 
   # Display the label for the current child
   def self.display_label
@@ -161,10 +156,19 @@ class Question < Node
   def validate_formula
     errors.add(:formula, I18n.t('questions.errors.formula_wrong_characters')) if formula.match(/^(\[(.*?)\]|[ \(\)\*\/\+\-|0-9])*$/).nil?
     formula.scan(/\[.*?\]/).each do |reference|
-      reference = reference.tr('[]', '')
-      question = algorithm.questions.find_by(reference: reference)
-      if question.present?
-        errors.add(:formula, I18n.t('questions.errors.formula_reference_not_numeric', reference: reference)) unless question.answer_type.display == 'Input'
+      if reference.include?('_')
+        reference = reference.tr('[]', '').split('_')
+        type = Question.get_type_from_prefix(reference[0])
+        if type.present?
+          question = algorithm.questions.find_by(type: type.to_s, reference: reference[1])
+          if question.present?
+            errors.add(:formula, I18n.t('questions.errors.formula_reference_not_numeric', reference: reference)) unless question.answer_type.display == 'Input'
+          else
+            errors.add(:formula, I18n.t('questions.errors.formula_wrong_reference', reference: reference))
+          end
+        else
+          errors.add(:formula, I18n.t('questions.errors.formula_wrong_type', reference: reference))
+        end
       else
         errors.add(:formula, I18n.t('questions.errors.formula_wrong_reference', reference: reference))
       end

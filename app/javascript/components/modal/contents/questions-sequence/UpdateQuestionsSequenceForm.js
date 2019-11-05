@@ -89,7 +89,8 @@ class UpdateQuestionsSequenceForm extends React.Component {
   render() {
     const {
       toggleModal,
-      questionsSequenceCategories
+      questionsSequenceCategories,
+      getReferencePrefix
     } = this.props;
     const {
       reference,
@@ -123,6 +124,9 @@ class UpdateQuestionsSequenceForm extends React.Component {
             <Form.Group as={Col}>
               <Form.Label>Reference</Form.Label>
               <InputGroup>
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="inputGroupPrepend">{getReferencePrefix('QuestionsSequence', type)}</InputGroup.Text>
+                </InputGroup.Prepend>
                 <Form.Control
                   type="text"
                   aria-describedby="inputGroupPrepend"

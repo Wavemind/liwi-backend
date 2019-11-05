@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe InstancesController, type: :controller do
   login_user
-  create_algorithm
   create_answer_type
+  create_algorithm
   create_instances
 
   it 'creates a link in both instances' do

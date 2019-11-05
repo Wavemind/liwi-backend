@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Version, type: :model do
+  create_answer_type
   create_algorithm
 
   it 'is valid with valid attributes' do

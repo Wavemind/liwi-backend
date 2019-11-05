@@ -3,9 +3,6 @@
 # Reference prefix : DD
 include Rails.application.routes.url_helpers
 class Diagnostic < ApplicationRecord
-  before_create :complete_reference
-  after_validation :unique_reference
-
   attr_accessor :duplicating
 
   belongs_to :version
@@ -15,8 +12,8 @@ class Diagnostic < ApplicationRecord
   has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy
 
   before_validation :validate_chief_complaint
-  validates_presence_of :reference
   validates_presence_of :label_en
+  validates :reference, presence: true, uniqueness: true
 
   translates :label
 
@@ -172,14 +169,14 @@ class Diagnostic < ApplicationRecord
     components.includes(:node, :children, :conditions).each do |instance|
       if instance.node.is_a? FinalDiagnostic
         unless instance.conditions.any?
-          errors.add(:basic, I18n.t('flash_message.diagnostic.final_diagnostic_no_condition', reference: instance.node.reference))
+          errors.add(:basic, I18n.t('flash_message.diagnostic.final_diagnostic_no_condition', reference: instance.node.full_reference))
         end
       elsif instance.node.is_a?(Question) || instance.node.is_a?(QuestionsSequence)
         unless instance.children.any?
           if instance.final_diagnostic.nil?
-            errors.add(:basic, I18n.t('flash_message.diagnostic.question_no_children', type: instance.node.node_type, reference: instance.node.reference))
+            errors.add(:basic, I18n.t('flash_message.diagnostic.question_no_children', type: instance.node.node_type, reference: instance.node.full_reference))
           else
-            errors.add(:basic, I18n.t('flash_message.diagnostic.hc_question_no_children', type: instance.node.node_type, reference: instance.node.reference, url: diagram_algorithm_version_diagnostic_final_diagnostic_url(version.algorithm.id, version.id, id, instance.final_diagnostic_id).to_s, df_reference: instance.final_diagnostic.reference))
+            errors.add(:basic, I18n.t('flash_message.diagnostic.hc_question_no_children', type: instance.node.node_type, reference: instance.node.full_reference, url: diagram_algorithm_version_diagnostic_final_diagnostic_url(version.algorithm.id, version.id, id, instance.final_diagnostic_id).to_s, df_reference: instance.final_diagnostic.full_reference))
           end
         end
 
@@ -202,19 +199,7 @@ class Diagnostic < ApplicationRecord
     end
   end
 
-  private
-
-  # {Node#unique_reference}
-  # Scoped by the current algorithm
-  def unique_reference
-    if Diagnostic.joins(version: :algorithm)
-         .where('reference = ? AND algorithms.id = ?', "#{I18n.t('diagnostics.reference')}#{reference}", version.algorithm.id).any?
-      errors.add(:reference, I18n.t('nodes.validation.reference_used'))
-    end
-  end
-
-  # {Node#complete_reference}
-  def complete_reference
-    self.reference = "#{I18n.t('diagnostics.reference')}#{reference}" unless self.reference.include?(I18n.t('duplicated'))
+  def full_reference
+    I18n.t('diagnostics.reference') + reference
   end
 end

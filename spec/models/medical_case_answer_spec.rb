@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe MedicalCaseAnswer, type: :model do
+  create_answer_type
   create_algorithm
   create_version
   create_question

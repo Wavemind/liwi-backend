@@ -66,7 +66,7 @@ class FinalDiagnostic < Node
   def available_nodes_health_cares_json
     ids = components.select(:node_id)
     (
-      diagnostic.version.algorithm.questions.no_triage.where.not(id: ids) +
+      diagnostic.version.algorithm.questions.no_triage_but_other.where.not(id: ids) +
       diagnostic.version.algorithm.questions_sequences.where.not(id: ids) +
       diagnostic.version.algorithm.health_cares.where.not(id: ids)
     ).as_json(methods: [:category_name, :node_type, :get_answers, :type])
@@ -86,19 +86,14 @@ class FinalDiagnostic < Node
     end
   end
 
-  private
-
-  # {Node#unique_reference}
-  def unique_reference
-    if FinalDiagnostic.joins(diagnostic: [version: :algorithm])
-         .where('nodes.reference = ? AND algorithms.id = ?', "#{I18n.t('final_diagnostics.reference')}#{reference}", diagnostic.version.algorithm.id).any?
-      errors.add(:reference, I18n.t('nodes.validation.reference_used'))
-    end
+  # Get the reference prefix according to the type
+  def reference_prefix
+    I18n.t("final_diagnostics.reference")
   end
 
-  # {Node#complete_reference}
-  # Scoped by the current algorithm
-  def complete_reference
-    self.reference = "#{I18n.t('final_diagnostics.reference')}#{reference}" unless self.reference.include?(I18n.t('duplicated'))
+  # Override Node method since the final_diagnostic is linked to a diagnostic and not the algorithm directly
+  # Ensure the reference is unique
+  def unique_reference
+    self.errors.add(:reference, I18n.t('nodes.validation.reference_used')) if diagnostic.final_diagnostics.where(reference: reference).where.not(id: id).any?
   end
 end

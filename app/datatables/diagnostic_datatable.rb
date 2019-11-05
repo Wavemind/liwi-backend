@@ -27,9 +27,9 @@ class DiagnosticDatatable < AjaxDatatablesRails::ActiveRecord
         link_to(I18n.t('duplicate'), duplicate_algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], record), class: 'btn btn-outline-info', method: :post) + " " +
         link_to(I18n.t('delete'), algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], record), class: 'btn btn-outline-danger', method: :delete, data: { confirm: 'Are you sure?' })
       {
-        reference: record.reference,
+        reference: record.full_reference,
         label: record.label,
-        node: record.node.reference,
+        node: record.node.full_reference,
         last_update: date_format(record.updated_at),
         actions: actions
       }

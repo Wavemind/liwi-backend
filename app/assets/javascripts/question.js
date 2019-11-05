@@ -5,9 +5,11 @@ jQuery(document).ready(function() {
   // Trigger categoryChange function only on edit or create question form
   if ($("#new_question").length || $("#edit_question").length) {
     categoryChange();
+    answer_type_change();
   }
 
   $("#question_type").change(categoryChange);
+  $("#question_answer_type_displayed").change(answer_type_change);
 
   $("#questions-datatable").dataTable({
     "processing": true,
@@ -51,7 +53,7 @@ jQuery(document).ready(function() {
           }
 
           // Force answer type to boolean if it's ChiefComplaint or Vaccine
-          if (response.responseText === "CC" || response.responseText === "V") {
+          if (["CC", "V"].include(response.responseText)) {
             $("#question_answer_type_displayed").val("1").attr("disabled", true);
             $("#question_answer_type_hidden").val("1");
           } else if (response.responseText === "VS") {
@@ -61,11 +63,11 @@ jQuery(document).ready(function() {
             $("#question_answer_type_displayed").attr("disabled", false);
           }
 
-          // Force triage stage for ChiefComplaint, VitalSign and FirstLookAssessment
-          if (response.responseText === "CC" || response.responseText === "VS" ||  response.responseText === "FL") {
+          // Force triage stage for ChiefComplaint and FirstLookAssessment
+          if (["CC", "FL"].include(response.responseText)) {
             $("#question_stage_displayed").val("triage").attr("disabled", true);
             $("#question_stage_hidden").val("triage")
-          } else if (response.responseText === "CH" || response.responseText === "V" || response.responseText === "D") { // Force registration stage for Chronical Condition and Vaccin
+          } else if (["CH", "V", "D"].include(response.responseText)) { // Force registration stage for Chronical Condition, Vaccin and Demographic
             $("#question_stage_displayed").val("registration").attr("disabled", true);
             $("#question_stage_hidden").val("registration")
           } else {
@@ -77,9 +79,8 @@ jQuery(document).ready(function() {
       prepend.text("_");
     }
   }
-
   // Hide or show formula field if formula answer type is selected
-  $("#question_answer_type_displayed").change(function() {
+  function answer_type_change() {
     let questionFormula = $("#question_formula").closest(".form-group");
     let answerType = $("#question_answer_type_displayed option:selected").val();
     $("#question_answer_type_hidden").val(answerType);
@@ -89,7 +90,8 @@ jQuery(document).ready(function() {
     } else if(answerType !== "5") {
       $(questionFormula).addClass("d-none");
     }
-  });
+  }
+
 
   $("#question_stage_displayed").change(function() {
     let stage = $("#question_stage_displayed option:selected").val();

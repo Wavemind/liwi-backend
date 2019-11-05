@@ -10,9 +10,19 @@ class VersionsService
     hash = extract_version_metadata
     hash['diagnostics'] = {}
 
+    # Add every registration nodes before starting
+    @version.algorithm.questions.registration.each do |registration_question|
+      assign_node(registration_question)
+    end
+
     # Add every triage nodes before starting
     @version.algorithm.questions.triage.each do |triage_question|
       assign_node(triage_question)
+    end
+
+    # Add every vital sign nodes before starting
+    @version.algorithm.questions.where(type: 'Questions::VitalSign').each do |vital_sign|
+      assign_node(vital_sign)
     end
 
     # Loop in each diagnostics defined in current algorithm version
@@ -23,6 +33,8 @@ class VersionsService
 
     # Set all questions/treatments/managements used in this version of algorithm
     hash['nodes'] = generate_nodes
+
+    hash['nodes'] = add_reference_links(hash['nodes'])
 
     hash
   end
@@ -38,6 +50,27 @@ class VersionsService
   end
 
   private
+
+  # Fetch every nodes and add to vital signs where they are used in formula or reference tables
+  def self.add_reference_links(nodes)
+    nodes.map do |k, node|
+      if node['formula'].present?
+        node['formula'].scan(/\[.*?\]/).each do |id|
+          id = id.tr('[]', '').to_i
+          nodes[id]['referenced_in'] = nodes[id]['referenced_in'].push(node['id']) unless nodes[id]['referenced_in'].include?(node['id'])
+        end
+      end
+
+      if node['reference_table_x_id'].present?
+        nodes[node['reference_table_x_id']]['referenced_in'] = nodes[node['reference_table_x_id']]['referenced_in'].push(node['id']) unless nodes[node['reference_table_x_id']]['referenced_in'].include?(node['id'])
+      end
+
+      if node['reference_table_y_id'].present?
+        nodes[node['reference_table_y_id']]['referenced_in'] = nodes[node['reference_table_y_id']]['referenced_in'].push(node['id']) unless nodes[node['reference_table_y_id']]['referenced_in'].include?(node['id'])
+      end
+    end
+    nodes
+  end
 
   def self.init
     @questions = {}
@@ -266,13 +299,22 @@ class VersionsService
       hash[question.id]['stage'] = question.stage
       hash[question.id]['formula'] = format_formula(question.formula)
       hash[question.id]['category'] = question.category_name
-      hash[question.id]['display_format'] = question.answer_type.display
+      # Send Reference instead of actual display format to help f-e interpret the question correctly
       hash[question.id]['value_format'] = question.answer_type.value
+      format = question.answer_type.display
+      format = 'Reference' unless question.reference_table_x_id.nil?
+      format = question.answer_type.value if question.answer_type.value == 'Date'
+      hash[question.id]['display_format'] = format
       hash[question.id]['qs'] = get_node_questions_sequences(question, [])
       hash[question.id]['dd'] = get_node_diagnostics(question, [])
       hash[question.id]['cc'] = get_node_chief_complaints(question, [])
+      hash[question.id]['referenced_in'] = []
       hash[question.id]['counter'] = 0
-      hash[question.id]['value'] = 0
+      hash[question.id]['value'] = nil
+      hash[question.id]['reference_table_x_id'] = question.reference_table_x_id
+      hash[question.id]['reference_table_y_id'] = question.reference_table_y_id
+      hash[question.id]['reference_table_male'] = question.reference_table_male
+      hash[question.id]['reference_table_female'] = question.reference_table_female
       hash[question.id]['answer'] = nil
       hash[question.id]['answers'] = {}
 
@@ -297,8 +339,12 @@ class VersionsService
     return nil if formula.nil?
     formula.scan(/\[.*?\]/).each do |reference|
       reference = reference.tr('[]', '')
-      question = @version.algorithm.questions.find_by(reference: reference)
-      formula.sub!(reference, question.id.to_s)
+      db_reference = reference.split('_')
+      type = Question.get_type_from_prefix(db_reference[0])
+      if type.present?
+        question = @version.algorithm.questions.find_by(type: type, reference: db_reference[1])
+        formula.sub!(reference, question.id.to_s)
+      end
     end
     formula
   end
