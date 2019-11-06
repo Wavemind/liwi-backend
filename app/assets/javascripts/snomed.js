@@ -1,5 +1,5 @@
 jQuery(document).ready(function() {
-  $("#question_snomed").autocomplete({
+  $("#question_snomed_label").autocomplete({
     source: function(request, response) {
       $.ajax({
         url: "https://browser.ihtsdotools.org/snowstorm/snomed-ct/v2/MAIN/concepts?term=" + request.term + "&limit=50",
@@ -12,7 +12,7 @@ jQuery(document).ready(function() {
     },
     minLength: 1,
     select: function(event, ui) {
-      $("#question_snomed").val(ui.item.fsn.term);
+      $("#question_snomed_label").val(ui.item.fsn.term);
       $("#question_snomed_id").val(ui.item.id);
       return false;
     },

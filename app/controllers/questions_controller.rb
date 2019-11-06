@@ -188,6 +188,7 @@ class QuestionsController < ApplicationController
       :unavailable,
       :formula,
       :snomed_id,
+      :snomed_label,
       answers_attributes: [
         :id,
         :reference,

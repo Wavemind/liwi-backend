@@ -5,7 +5,7 @@ class Question < Node
   after_create :push_in_versions, if: Proc.new { stage == 'triage' }
   before_destroy :remove_from_versions, if: Proc.new { stage == 'triage' }
 
-  attr_accessor :unavailable, :snomed
+  attr_accessor :unavailable
 
   enum priority: [:basic, :mandatory]
   enum stage: [:registration, :triage, :test, :consultation]
