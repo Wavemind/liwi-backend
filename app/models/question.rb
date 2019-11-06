@@ -174,11 +174,10 @@ class Question < Node
           question = algorithm.questions.find_by(type: type.to_s, reference: reference[1])
           if question.present?
             if is_date
-              errors.add(:formula, I18n.t('questions.errors.formula_reference_not_date', reference: reference)) unless question.answer_type.display == 'Input'
+              errors.add(:formula, I18n.t('questions.errors.formula_reference_not_date', reference: reference)) unless question.answer_type.value == 'Date'
             else
-              errors.add(:formula, I18n.t('questions.errors.formula_reference_not_numeric', reference: reference)) unless ['Integer', 'Float'].include?(question.answer_type.display)
+              errors.add(:formula, I18n.t('questions.errors.formula_reference_not_numeric', reference: reference)) unless %w(Integer Float).include?(question.answer_type.value)
             end
-            errors.add(:formula, I18n.t('questions.errors.formula_reference_not_numeric', reference: reference)) unless question.answer_type.display == 'Input'
           else
             errors.add(:formula, I18n.t('questions.errors.formula_wrong_reference', reference: reference))
           end
