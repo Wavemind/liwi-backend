@@ -155,8 +155,10 @@ class Question < Node
   # Ensure that the formula is in a correct format
   def validate_formula
     errors.add(:formula, I18n.t('questions.errors.formula_wrong_characters')) if formula.match(/^(\[(.*?)\]|[ \(\)\*\/\+\-|0-9])*$/).nil?
+    # Extract references and functions from the formula
     formula.scan(/\[.*?\]/).each do |reference|
       if reference.include?('_')
+        # Check for date functions ToDay() or ToMonth() and remove element if it's correct
         is_date = false
         if reference.include?('ToDay')
           is_date = true
@@ -165,6 +167,7 @@ class Question < Node
           is_date = true
           reference = reference.sub!('ToMonth', '').tr('()', '')
         end
+        # Extract type and reference from full reference
         reference = reference.tr('[]', '').split('_')
         type = Question.get_type_from_prefix(reference[0])
         if type.present?
