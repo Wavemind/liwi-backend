@@ -6,6 +6,8 @@ import {
   InputGroup,
   Col
 } from "react-bootstrap";
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import TextField from '@material-ui/core/TextField';
 import { withDiagram } from "../../../../context/Diagram.context";
 import * as _ from "lodash";
 
@@ -28,16 +30,20 @@ class UpdateQuestionForm extends React.Component {
     priority: "",
     answerType: "",
     formula: "",
+    snomedId: "",
+    snomedLabel: "",
+    snomedResults: [],
     errors: {}
   };
 
-  componentWillMount() {
+  async componentWillMount() {
     const {
       currentNode,
       questionStages,
       questionPriorities
     } = this.props;
     const newCurrentNode = _.cloneDeep(currentNode);
+
 
     this.setState({
       id: newCurrentNode.id,
@@ -48,7 +54,9 @@ class UpdateQuestionForm extends React.Component {
       priority: questionPriorities[newCurrentNode.priority],
       stage: questionStages[newCurrentNode.stage],
       answerType: newCurrentNode.answer_type_id,
-      formula: newCurrentNode.formula
+      formula: newCurrentNode.formula,
+      snomedId: newCurrentNode.snomed_id,
+      snomedLabel: newCurrentNode.snomed_label,
     });
   }
 
@@ -132,7 +140,9 @@ class UpdateQuestionForm extends React.Component {
       stage,
       priority,
       answerType,
-      formula
+      formula,
+      snomedId,
+      snomedLabel
     } = this.state;
 
     return {
@@ -145,7 +155,9 @@ class UpdateQuestionForm extends React.Component {
         stage: parseInt(stage),
         priority: parseInt(priority),
         answer_type_id: parseInt(answerType),
-        formula,
+        formula: formula,
+        snomedId: parseInt(snomedId),
+        snomedLabel: snomedLabel,
         answers_attributes: {}
       }
     };
@@ -158,6 +170,20 @@ class UpdateQuestionForm extends React.Component {
 
     this.setState({
       [name]: value
+    });
+  };
+
+  searchSnomed = async (event) => {
+    const { http } = this.props;
+
+    let response = await http.searchSnomed(event.target.value);
+    this.setState({ snomedResults: response.items });
+  };
+
+  snomedChange = async (event, value) => {
+    this.setState({
+      snomedId: value.id,
+      snomedLabel: value.fsn.term
     });
   };
 
@@ -179,8 +205,12 @@ class UpdateQuestionForm extends React.Component {
       stage,
       priority,
       answerType,
-      formula
+      formula,
+      snomedLabel,
+      snomedResults
     } = this.state;
+
+    console.log(snomedLabel);
 
     let formulaStyle = answerType !== 5 ? {display: 'none'} : {};
 
@@ -279,6 +309,25 @@ class UpdateQuestionForm extends React.Component {
                   {errors.label_en}
                 </Form.Control.Feedback>
               </InputGroup>
+            </Form.Group>
+          </Form.Row>
+
+          <Form.Row>
+            <Form.Group as={Col}>
+              <Form.Label>Snomed</Form.Label>
+                <Autocomplete
+                  options={snomedResults}
+                  getOptionLabel={option => option.fsn.term}
+                  autoComplete
+                  includeInputInList
+                  freeSolo
+                  disableOpenOnFocus
+                  defaultValue={{fsn: {term: snomedLabel}}}
+                  onChange={this.snomedChange}
+                  renderInput={params => (
+                    <TextField {...params} label="Search a snomed label" variant="outlined" onChange={this.searchSnomed} fullWidth />
+                  )}
+                />
             </Form.Group>
           </Form.Row>
 
