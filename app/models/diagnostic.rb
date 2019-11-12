@@ -6,7 +6,7 @@ class Diagnostic < ApplicationRecord
   attr_accessor :duplicating
 
   belongs_to :version
-  belongs_to :node
+  belongs_to :node # Compaint Category
   has_many :final_diagnostics, dependent: :destroy
   has_many :conditions, as: :referenceable, dependent: :destroy
   has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy

@@ -82,7 +82,7 @@ class VersionsService
     @diagnostics_ids = []
     @questions_sequences_ids = []
   end
-  
+
   def self.generate_nodes
     hash = {}
     hash = hash.merge(generate_questions_sequences)
@@ -119,7 +119,7 @@ class VersionsService
   # Build a hash of metadata about the triage questions
   def self.extract_triage_metadata
     hash = {}
-    
+
     hash['orders'] = {}
     hash['orders']['first_look_assessment'] = @version.triage_first_look_assessments_order
     hash['orders']['chief_complaint'] = @version.triage_chief_complaints_order
@@ -193,6 +193,7 @@ class VersionsService
     hash['treatments'] = extract_health_cares(final_diagnostic.health_cares.treatments, instance.instanceable.id)
     hash['managements'] = extract_health_cares(final_diagnostic.health_cares.managements, instance.instanceable.id)
     hash['excluding_final_diagnostics'] = final_diagnostic.final_diagnostic_id
+    hash['cc'] = final_diagnostic.diagnostic.node_id
     hash
   end
 
