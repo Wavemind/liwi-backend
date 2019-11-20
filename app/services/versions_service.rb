@@ -107,6 +107,7 @@ class VersionsService
     hash['algorithm_id'] = @version.algorithm.id
     hash['name'] = @version.algorithm.name
     hash['version'] = @version.name
+    hash['version_id'] = @version.id
     hash['description'] = @version.algorithm.description
     hash['triage'] = extract_triage_metadata
     hash['author'] = @version.user.full_name
