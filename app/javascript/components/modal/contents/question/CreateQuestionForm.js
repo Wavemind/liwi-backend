@@ -6,6 +6,8 @@ import {
   InputGroup,
   Col
 } from "react-bootstrap";
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import TextField from '@material-ui/core/TextField';
 import { withDiagram } from "../../../../context/Diagram.context";
 import NodeListItem from "../../../lists/NodeList";
 
@@ -33,8 +35,12 @@ class CreateQuestionForm extends React.Component {
     answerTypeDisabled: false,
     stageDisabled: false,
     prefix: "",
+    snomedId: "",
+    snomedLabel: "",
+    snomedResults: [],
     errors: {}
   };
+
 
   // Update the score in DB then set score props in order to trigger listener in Diagram.js that will update diagram dynamically
   create = async () => {
@@ -118,7 +124,9 @@ class CreateQuestionForm extends React.Component {
       priority,
       answerType,
       unavailable,
-      formula
+      formula,
+      snomedId,
+      snomedLabel
     } = this.state;
 
     return {
@@ -132,6 +140,8 @@ class CreateQuestionForm extends React.Component {
         answer_type_id: parseInt(answerType),
         unavailable: unavailable,
         formula: formula,
+        snomed_id: parseInt(snomedId),
+        snomed_label: snomedLabel,
         answers_attributes: {}
       }
     };
@@ -173,6 +183,32 @@ class CreateQuestionForm extends React.Component {
     }
   };
 
+
+  /**
+   * Search in snomed api to get results
+   *
+   * @param {Object} event
+   */
+  searchSnomed = async (event) => {
+    const { http } = this.props;
+
+    let response = await http.searchSnomed(event.target.value);
+    this.setState({ snomedResults: response.items });
+  };
+
+  /**
+   * Save id and value of snomed selected
+   *
+   * @param {Object} event
+   */
+  snomedChange = async (event, value) => {
+    this.setState({
+      snomedId: value.id,
+      snomedLabel: value.fsn.term
+    });
+  };
+
+
   render() {
     const {
       toggleModal,
@@ -196,7 +232,8 @@ class CreateQuestionForm extends React.Component {
       unavailable,
       unavailableHidden,
       formulaHidden,
-      formula
+      formula,
+      snomedResults
     } = this.state;
 
     let unavailableStyle = unavailableHidden ? {display: 'none'} : {};
@@ -307,6 +344,26 @@ class CreateQuestionForm extends React.Component {
                 <Form.Control.Feedback type="invalid">
                   {errors.label_en}
                 </Form.Control.Feedback>
+              </InputGroup>
+            </Form.Group>
+          </Form.Row>
+
+          <Form.Row>
+            <Form.Group as={Col}>
+              <Form.Label>Snomed</Form.Label>
+              <InputGroup>
+                <Autocomplete
+                  options={snomedResults}
+                  getOptionLabel={option => option.fsn.term}
+                  autoComplete
+                  includeInputInList
+                  freeSolo
+                  disableOpenOnFocus
+                  onChange={this.snomedChange}
+                  renderInput={params => (
+                    <TextField {...params} label="Search a snomed label" variant="outlined" onChange={this.searchSnomed} fullWidth />
+                  )}
+                />
               </InputGroup>
             </Form.Group>
           </Form.Row>

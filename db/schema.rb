@@ -224,6 +224,8 @@ ActiveRecord::Schema.define(version: 2019_11_20_145634) do
     t.boolean "is_default", default: false
     t.bigint "reference_table_x_id"
     t.bigint "reference_table_y_id"
+    t.bigint "snomed_id"
+    t.string "snomed_label"
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
     t.index ["diagnostic_id"], name: "index_nodes_on_diagnostic_id"

@@ -355,6 +355,23 @@ export default class Http {
     window.location = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics`;
   };
 
+  // @params [String] term
+  // @return [Object] json with results
+  // Search for snomet results from search string
+  searchSnomed = async (term) => {
+    let response;
+    const url = `https://browser.ihtsdotools.org/snowstorm/snomed-ct/v2/MAIN/concepts?term=${term}&limit=50`;
+    const request = await fetch(url).catch(error => console.log(error));
+
+    // Display error or parse json
+    if (request.ok) {
+      response = await request.json();
+    } else {
+      response = request;
+    }
+    return await response;
+  };
+
   // @params [String] method, [Object] body
   // @return [Object] header
   // Set header credentials to communicate with server
