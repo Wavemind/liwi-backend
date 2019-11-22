@@ -68,7 +68,7 @@ class Diagram extends React.Component {
       }
     } else if (this.props.currentDbNode !== nextProps.currentDbNode) {
       const {engine} = this.state;
-      const {currentDbNode, currentDiagramNode} = nextProps;
+      const {currentDbNode, currentDiagramNode, getReferencePrefix} = nextProps;
       const model = engine.getDiagramModel();
 
       // Create or update node in diagram
