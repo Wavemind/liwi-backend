@@ -183,7 +183,12 @@ class CreateQuestionForm extends React.Component {
     }
   };
 
-  // Search in snomed api to get results
+
+  /**
+   * Search in snomed api to get results
+   *
+   * @param {Object} event
+   */
   searchSnomed = async (event) => {
     const { http } = this.props;
 
@@ -191,7 +196,11 @@ class CreateQuestionForm extends React.Component {
     this.setState({ snomedResults: response.items });
   };
 
-  // Save id and value of snomed selected
+  /**
+   * Save id and value of snomed selected
+   *
+   * @param {Object} event
+   */
   snomedChange = async (event, value) => {
     this.setState({
       snomedId: value.id,
