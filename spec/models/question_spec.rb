@@ -39,7 +39,7 @@ RSpec.describe Question, type: :model do
     expect(question.answers.count).to eq(2)
   end
 
-  context 'it validates formula correctly' do
+  context 'it validates formula correctly', focus: true do
     before(:each) do
       @question = Questions::Symptom.new(reference: '9', label: 'skin issue', priority: Question.priorities[:basic], stage: Question.stages[:triage], answer_type: @answer_type, algorithm: @algorithm)
     end
@@ -74,6 +74,28 @@ RSpec.describe Question, type: :model do
       Questions::Symptom.create!(reference: '10', label: 'skin issue', priority: Question.priorities[:basic], stage: Question.stages[:triage], answer_type: @answer_type, algorithm: @algorithm)
       @question.formula = "[S_10] * 10"
 
+      expect(@question).to_not be_valid
+    end
+
+    it 'Pass through with a correct formula within a date reference and a function' do
+      @question.formula = "[ToDay(D_1)] * 10"
+      expect(@question).to be_valid
+    end
+
+    it 'Fails because ToDay() use a numeric function (and not date)' do
+      Questions::Symptom.create!(reference: '10', label: 'skin issue', priority: Question.priorities[:basic], stage: Question.stages[:triage], answer_type: @answer_type, algorithm: @algorithm)
+
+      @question.formula = "[ToDay(S_10)] * 10"
+      expect(@question).to_not be_valid
+    end
+
+    it 'Fails using a date without converting it with a function' do
+      @question.formula = "[D_1] * 10"
+      expect(@question).to_not be_valid
+    end
+
+    it 'Fails with invalid function format' do
+      @question.formula = "[ToDay de D_1] * 10"
       expect(@question).to_not be_valid
     end
   end
