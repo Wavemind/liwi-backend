@@ -3,6 +3,8 @@ en:
     attributes:
       node:
         unavailable: "Can be unavailable ?"
+      diagnostic:
+        node: "Chief complaint"
   activated: "Activate"
   add: "Add"
   algorithms:
@@ -218,6 +220,9 @@ en:
       title: "Groups"
     edit:
       title: "Edit group"
+    errors:
+      code_pin_unvalid: "The PIN code should be only 4 digits"
+      ip_invalid: "The IP is not in the good format."
     new:
       title: "Add group"
     remove_device:
