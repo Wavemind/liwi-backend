@@ -7,6 +7,9 @@
     <li class="<%= 'active' if controller_name == 'dashboard' %>">
       <%= link_to 'Dashboard', root_url %>
     </li>
+    <li class="<%= 'active' if controller_name == 'devices' %>">
+      <%= link_to 'Devices', devices_url %>
+    </li>
     <li class="<%= 'active' if controller_name == 'users' %>">
       <%= link_to 'Users', users_url %>
     </li>
