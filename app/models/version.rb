@@ -30,6 +30,7 @@ class Version < ApplicationRecord
   def instantiate_questions
     algorithm.questions.triage.each do |question|
       components.create!(node: question)
+      self.update("#{question.version_field_to_set}": self.send("#{question.version_field_to_set}").push(question.id))
     end
   end
 end
