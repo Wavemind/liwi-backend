@@ -40,7 +40,6 @@ class UsersController < ApplicationController
 
   def update
     if @user.update(user_params)
-
       redirect_to users_url, notice: t('flash_message.success_updated')
     else
       set_breadcrumb
