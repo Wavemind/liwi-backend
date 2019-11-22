@@ -97,6 +97,10 @@ class GroupsController < ApplicationController
   def group_params
     params.require(:group).permit(
       :name,
+      :architecture,
+      :local_data_ip,
+      :main_data_ip,
+      :pin_code,
       device_ids: []
     )
   end

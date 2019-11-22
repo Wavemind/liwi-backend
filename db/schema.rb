@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_30_123307) do
+ActiveRecord::Schema.define(version: 2019_11_20_145634) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -133,6 +133,10 @@ ActiveRecord::Schema.define(version: 2019_08_30_123307) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "local_data_ip"
+    t.string "main_data_ip"
+    t.integer "architecture"
+    t.string "pin_code"
   end
 
   create_table "instances", force: :cascade do |t|
@@ -241,6 +245,14 @@ ActiveRecord::Schema.define(version: 2019_08_30_123307) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "stage"
+  end
+
+  create_table "user_roles", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "role_id"
+    t.index ["role_id"], name: "index_user_roles_on_role_id"
+    t.index ["user_id"], name: "index_user_roles_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -270,7 +282,6 @@ ActiveRecord::Schema.define(version: 2019_08_30_123307) do
     t.string "invited_by_type"
     t.bigint "invited_by_id"
     t.integer "invitations_count", default: 0
-    t.bigint "role_id"
     t.string "provider", default: "email", null: false
     t.string "uid", default: "", null: false
     t.text "tokens"
@@ -280,7 +291,6 @@ ActiveRecord::Schema.define(version: 2019_08_30_123307) do
     t.index ["invited_by_id"], name: "index_users_on_invited_by_id"
     t.index ["invited_by_type", "invited_by_id"], name: "index_users_on_invited_by_type_and_invited_by_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-    t.index ["role_id"], name: "index_users_on_role_id"
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
@@ -310,7 +320,6 @@ ActiveRecord::Schema.define(version: 2019_08_30_123307) do
   add_foreign_key "group_accesses", "versions"
   add_foreign_key "nodes", "algorithms"
   add_foreign_key "nodes", "answer_types"
-  add_foreign_key "users", "roles"
   add_foreign_key "versions", "algorithms"
   add_foreign_key "versions", "users"
 end

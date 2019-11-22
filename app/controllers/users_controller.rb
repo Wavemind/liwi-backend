@@ -40,6 +40,7 @@ class UsersController < ApplicationController
 
   def update
     if @user.update(user_params)
+
       redirect_to users_url, notice: t('flash_message.success_updated')
     else
       set_breadcrumb
@@ -91,7 +92,7 @@ class UsersController < ApplicationController
       :last_name,
       :email,
       :deactivated,
-      :role_id
+      role_ids: []
     )
   end
 
