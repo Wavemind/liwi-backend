@@ -9,7 +9,7 @@ RSpec.describe VersionsService, type: :service do
     nodes.each do |key, node|
       answers_count += node['answers'].count if node['answers'].present?
     end
-    expect(nodes.count).to eq(19)
+    expect(nodes.count).to eq(20)
     expect(answers_count).to eq(25)
   end
 
