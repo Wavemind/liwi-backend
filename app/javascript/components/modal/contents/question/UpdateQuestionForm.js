@@ -173,6 +173,7 @@ class UpdateQuestionForm extends React.Component {
     });
   };
 
+  // Search in snomed api to get results
   searchSnomed = async (event) => {
     const { http } = this.props;
 
@@ -180,6 +181,7 @@ class UpdateQuestionForm extends React.Component {
     this.setState({ snomedResults: response.items });
   };
 
+  // Save id and value of snomed selected
   snomedChange = async (event, value) => {
     this.setState({
       snomedId: value.id,
