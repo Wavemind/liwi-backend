@@ -1,5 +1,5 @@
 # Answers give for a medical case
-class UserRole < ApplicationRecord
+class Access < ApplicationRecord
 
   belongs_to :user
   belongs_to :role

@@ -14,19 +14,18 @@ class Group < ApplicationRecord
   before_validation :validate_code_pin
   after_validation :validate_ips
 
-
   private
 
   # Ensure the code pin is a 4 digits
   def validate_code_pin
-    self.errors.add(:code_pin, I18n.t('groups.errors.code_pin_unvalid')) if pin_code.match('^[0-9]{4}$').nil?
+    self.errors.add(:pin_code, I18n.t('groups.errors.code_pin_unvalid')) if pin_code.match('^[0-9]{4}$').nil?
   end
 
   # Ensure the IPs are in a good format
   def validate_ips
-    if self.client_server?
+    if client_server?
       self.errors.add(:local_data_ip, I18n.t('groups.errors.ip_invalid')) if local_data_ip.present? && local_data_ip.match('^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$').nil?
-    elsif self.standalone?
+    elsif standalone?
       self.errors.add(:main_data_ip, I18n.t('groups.errors.ip_invalid')) if main_data_ip.present? && main_data_ip.match('^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$').nil?
     end
   end

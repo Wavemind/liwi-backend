@@ -5,6 +5,6 @@ class Role < ApplicationRecord
 
   enum stage: [:registration, :triage, :test, :consultation]
 
-  has_many :user_roles
+  has_many :accesses
 
 end
