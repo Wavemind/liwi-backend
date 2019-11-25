@@ -11,7 +11,7 @@ class Group < ApplicationRecord
   validates_presence_of :architecture
   validates_presence_of :pin_code
 
-  before_validation :validate_code_pin
+  after_validation :validate_code_pin
   after_validation :validate_ips
 
   private

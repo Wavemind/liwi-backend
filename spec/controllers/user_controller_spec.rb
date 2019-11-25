@@ -4,8 +4,7 @@ RSpec.describe UsersController, type: :controller do
   login_user
 
   before(:each) do
-    role = Role.new(name: 'administrator')
-    @user = User.create!(first_name: 'Foo', last_name: 'Bar', email: 'foo.bar@gmail.com', role: role)
+    @user = User.create!(first_name: 'Foo', last_name: 'Bar', email: 'foo.bar@gmail.com')
   end
 
   it 'active correctly' do

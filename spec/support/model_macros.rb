@@ -3,16 +3,14 @@ module ModelMacros
   def create_algorithm
     before(:each) do
       Language.create!(name: 'French', code: 'fr')
-      role_administrator = Role.create!(name: 'Administrator')
-      @user = User.create!(first_name: 'Alain', last_name: 'Fresco', email: 'alain.fresco@wavemind.ch', password: '123456', password_confirmation: '123456', role: role_administrator)
+      @user = User.create!(first_name: 'Alain', last_name: 'Fresco', email: 'alain.fresco@wavemind.ch', password: '123456', password_confirmation: '123456')
       @algorithm = Algorithm.create!(name: 'ePoct', user: @user)
     end
   end
 
   def create_version
     before(:each) do
-      role_administrator = Role.create!(name: 'Administrator')
-      user = User.create!(first_name: 'Alain', last_name: 'Fresco', email: 'manu.barchichat@wavemind.ch', password: '123456', password_confirmation: '123456', role: role_administrator)
+      user = User.create!(first_name: 'Alain', last_name: 'Fresco', email: 'manu.barchichat@wavemind.ch', password: '123456', password_confirmation: '123456')
       algorithm = Algorithm.create!(name: 'Liwi', user: user)
       @version = Version.create!(name: 'first_trial', algorithm: algorithm, user: user)
     end

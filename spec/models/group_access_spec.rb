@@ -5,7 +5,7 @@ RSpec.describe GroupAccess, type: :model do
   create_version
 
   before(:each) do
-    @group = Group.new(name: 'ILoveTestUnits')
+    @group = Group.new(name: 'ILoveTestUnits', architecture: Group.architectures[:standalone], pin_code: '1234')
   end
 
   it 'is valid with valid attributes' do

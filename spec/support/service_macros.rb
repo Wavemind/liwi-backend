@@ -11,8 +11,7 @@ module ServiceMacros
       date = AnswerType.create!(value: 'Date', display: 'Input')
       string = AnswerType.create!(value: 'String', display: 'Input')
 
-      role_administrator = Role.create!(name: 'Administrator')
-      emmanuel = User.create!(first_name: 'Emmanuel', last_name: 'Barchichat', email: 'emmanuel.barchichat@wavemind.ch', password: '123456', password_confirmation: '123456', role: role_administrator)
+      emmanuel = User.create!(first_name: 'Emmanuel', last_name: 'Barchichat', email: 'emmanuel.barchichat@wavemind.ch', password: '123456', password_confirmation: '123456')
       epoct = Algorithm.create!(name: 'ePoct', description: 'loremp ipsum', user: emmanuel)
       epoc_first = Version.create!(name: 'first_trial', algorithm: epoct, user: emmanuel)
 

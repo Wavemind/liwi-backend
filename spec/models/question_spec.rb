@@ -39,7 +39,7 @@ RSpec.describe Question, type: :model do
     expect(question.answers.count).to eq(2)
   end
 
-  context 'it validates formula correctly', focus: true do
+  context 'it validates formula correctly' do
     before(:each) do
       @question = Questions::Symptom.new(reference: '9', label: 'skin issue', priority: Question.priorities[:basic], stage: Question.stages[:triage], answer_type: @answer_type, algorithm: @algorithm)
     end
