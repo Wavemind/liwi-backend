@@ -214,9 +214,9 @@ class FinalDiagnosticDiagram extends React.Component {
 
   // Create a node from label with its inport
   createNode = (node, outPorts = [], color = "rgb(255,255,255)") => {
-    const {addNode} = this.props;
+    const {addNode, getReferencePrefix} = this.props;
 
-    let advancedNode = new AdvancedNodeModel(node, node.reference, outPorts, color, addNode);
+    let advancedNode = new AdvancedNodeModel(node, getReferencePrefix(node.node_type, node.type) + node.reference, outPorts, color, addNode);
     advancedNode.addInPort(" ");
     return advancedNode;
   };
