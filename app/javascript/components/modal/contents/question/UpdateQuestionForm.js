@@ -220,8 +220,6 @@ class UpdateQuestionForm extends React.Component {
       snomedResults
     } = this.state;
 
-    console.log(snomedLabel);
-
     let formulaStyle = answerType !== 5 ? {display: 'none'} : {};
 
     return (
