@@ -20,7 +20,7 @@ class VersionsService
       assign_node(triage_question)
     end
 
-    # Add every vital sign nodes before starting
+    # Add every vital_sign nodes before starting
     @version.algorithm.questions.where(type: 'Questions::VitalSign').each do |vital_sign|
       assign_node(vital_sign)
     end
@@ -51,7 +51,7 @@ class VersionsService
 
   private
 
-  # Fetch every nodes and add to vital signs where they are used in formula or reference tables
+  # Fetch every nodes and add to vital sign where they are used in formula or reference tables
   def self.add_reference_links(nodes)
     nodes.map do |k, node|
       if node['formula'].present?
@@ -163,7 +163,7 @@ class VersionsService
     hash['final_diagnostics'] = {}
 
     # Loop in each question used in current diagnostic
-    diagnostic.components.questions.includes([:children, :nodes, node:[:answers, :answer_type]]).each do |question_instance|
+    diagnostic.components.not_health_care_conditions.questions.includes([:children, :nodes, node:[:answers, :answer_type]]).each do |question_instance|
       # Append the questions in order to list them all at the end of the json.
       assign_node(question_instance.node)
 
@@ -171,7 +171,7 @@ class VersionsService
     end
 
     # Loop in each predefined syndromes used in current diagnostic
-    diagnostic.components.questions_sequences.includes([:children, :nodes, node:[:answers]]).each do |questions_sequence_instance|
+    diagnostic.components.not_health_care_conditions.questions_sequences.includes([:children, :nodes, node:[:answers]]).each do |questions_sequence_instance|
       # Append the predefined syndromes in order to list them all at the end of the json.
       assign_node(questions_sequence_instance.node)
 
@@ -200,6 +200,12 @@ class VersionsService
     hash['type'] = final_diagnostic.node_type
     hash['treatments'] = extract_health_cares(final_diagnostic.health_cares.treatments, instance.instanceable.id)
     hash['managements'] = extract_health_cares(final_diagnostic.health_cares.managements, instance.instanceable.id)
+    hash['instances'] = {}
+    final_diagnostic.components.map do |instance|
+      assign_node(instance.node)
+
+      hash['instances'][instance.node.id] = extract_instances(instance)
+    end
     hash['excluding_final_diagnostics'] = final_diagnostic.final_diagnostic_id
     hash['cc'] = final_diagnostic.diagnostic.node_id
     hash
