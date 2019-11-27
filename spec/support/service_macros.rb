@@ -15,7 +15,7 @@ module ServiceMacros
       epoct = Algorithm.create!(name: 'ePoct', description: 'loremp ipsum', user: emmanuel)
       epoc_first = Version.create!(name: 'first_trial', algorithm: epoct, user: emmanuel)
 
-      @cc = epoct.questions.create!(reference: '11', answer_type: boolean, label_en: 'CC11', stage: Question.stages[:triage], priority: Question.priorities[:mandatory], type: 'Questions::ChiefComplaint')
+      @cc = epoct.questions.create!(reference: '11', answer_type: boolean, label_en: 'CC11', stage: Question.stages[:triage], priority: Question.priorities[:mandatory], type: 'Questions::ComplaintCategory')
 
       dd7 = Diagnostic.create!(version: epoc_first, label: 'Severe LRTI', reference: '7', node: @cc)
       df7 = FinalDiagnostic.create!(label: 'Severe lower respiratory tract infection', reference: '7', diagnostic: dd7)

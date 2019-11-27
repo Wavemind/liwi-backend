@@ -18,10 +18,10 @@ class Algorithm < ApplicationRecord
   # Answer types ids : 3 is Integer, 4 is Decimal, 6 is Date
   def create_reference_table_questions
     birth_date = questions.create!(reference: '1', label_en: 'Birth date', type: 'Questions::Demographic', stage: Question.stages[:registration], priority: Question.priorities[:mandatory], answer_type_id: 6, is_default: true)
-    age_in_days = questions.create!(reference: '15', label_en: 'Age in days', type: 'Questions::VitalSign', stage: Question.stages[:triage], priority: Question.priorities[:mandatory], answer_type_id: 5, formula: '[ToDay(D_1)]', is_default: true)
-    weight = questions.create!(reference: '1', label_en: 'Weight', type: 'Questions::VitalSign', stage: Question.stages[:triage], priority: Question.priorities[:mandatory], answer_type_id: 4, is_default: true)
-    hr = questions.create!(reference: '4', label_en: 'Heart rate', type: 'Questions::VitalSign', stage: Question.stages[:consultation], priority: Question.priorities[:basic], answer_type_id: 4, is_default: true)
-    rr = questions.create!(reference: '5', label_en: 'Respiratory rate', type: 'Questions::VitalSign', stage: Question.stages[:consultation], priority: Question.priorities[:basic], answer_type_id: 4, is_default: true)
+    age_in_days = questions.create!(reference: '15', label_en: 'Age in days', type: 'Questions::BasicMeasurement', stage: Question.stages[:triage], priority: Question.priorities[:mandatory], answer_type_id: 5, formula: '[ToDay(D_1)]', is_default: true)
+    weight = questions.create!(reference: '1', label_en: 'Weight', type: 'Questions::BasicMeasurement', stage: Question.stages[:triage], priority: Question.priorities[:mandatory], answer_type_id: 4, is_default: true)
+    hr = questions.create!(reference: '4', label_en: 'Heart rate', type: 'Questions::BasicMeasurement', stage: Question.stages[:consultation], priority: Question.priorities[:basic], answer_type_id: 4, is_default: true)
+    rr = questions.create!(reference: '5', label_en: 'Respiratory rate', type: 'Questions::BasicMeasurement', stage: Question.stages[:consultation], priority: Question.priorities[:basic], answer_type_id: 4, is_default: true)
 
     age = questions.create!(reference: '2', label_en: 'Age in months', type: 'Questions::Demographic', stage: Question.stages[:registration], priority: Question.priorities[:mandatory], answer_type_id: 5, formula: '[ToMonth(D_1)]', is_default: true)
     age.answers.create([
