@@ -63,13 +63,27 @@ jQuery(document).ready(function() {
             $("#question_answer_type_displayed").attr("disabled", false);
           }
 
-          // Force triage stage for ChiefComplaint and FirstLookAssessment
-          if (["CC", "FL"].includes(response.responseText)) {
+          // Force priority depending on the category
+          if (["CC"].includes(response.responseText)){
+            $("#question_priority_displayed").val("mandatory").attr("disabled", true);
+            $("#question_priority_hidden").val("mandatory");
+          } else {
+            $("#question_priority_displayed").attr("disabled", false);
+          }
+
+          // Force stage depending on the category (except basic measurement)
+          if (["CC", "FL"].includes(response.responseText)) { // Force triage stage for Complaint category and FirstLookAssessment
             $("#question_stage_displayed").val("triage").attr("disabled", true);
-            $("#question_stage_hidden").val("triage")
-          } else if (["CH", "V", "D"].includes(response.responseText)) { // Force registration stage for Chronical Condition, Vaccin and Demographic
+            $("#question_stage_hidden").val("triage");
+          } else if (["CH", "V", "D"].includes(response.responseText)) { // Force registration stage for Chronical Condition, Vaccin and Demographic categories
             $("#question_stage_displayed").val("registration").attr("disabled", true);
             $("#question_stage_hidden").val("registration")
+          } else if (["E", "PE", "S"].includes(response.responseText)) { // Force consultation stage for Exposure, Physical exam and Symptom categories
+            $("#question_stage_displayed").val("consultation").attr("disabled", true);
+            $("#question_stage_hidden").val("consultation")
+          }  else if (response.responseText === "A") { // Force test stage for Assessment test category
+            $("#question_stage_displayed").val("test").attr("disabled", true);
+            $("#question_stage_hidden").val("test")
           } else {
             $("#question_stage_displayed").attr("disabled", false);
           }
