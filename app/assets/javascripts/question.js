@@ -93,6 +93,7 @@ jQuery(document).ready(function() {
       prepend.text("_");
     }
   }
+
   // Hide or show formula field if formula answer type is selected
   function answer_type_change() {
     let questionFormula = $("#question_formula").closest(".form-group");
@@ -106,7 +107,13 @@ jQuery(document).ready(function() {
     }
   }
 
+  // Update the right priority field
+  $("#question_priority_displayed").change(function() {
+    let priority = $("#question_priority_displayed option:selected").val();
+    $("#question_priority_hidden").val(priority);
+  });
 
+  // Update the right stage field
   $("#question_stage_displayed").change(function() {
     let stage = $("#question_stage_displayed option:selected").val();
     $("#question_stage_hidden").val(stage);
