@@ -1,0 +1,7 @@
+<h2><%= t('.languages') %></h2>
+
+<%= simple_form_for TechnicalFile.new, url: technical_files_url, html: { class: 'form-horizontal' } do |f| %>
+  <div class="col align-self-center"><%= f.input :file, as: :file %></div>
+
+  <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
+<% end %>

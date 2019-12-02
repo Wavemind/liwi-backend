@@ -10,11 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_20_145634) do
+ActiveRecord::Schema.define(version: 2019_11_29_134125) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
+
+  create_table "accesses", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "role_id"
+    t.index ["role_id"], name: "index_accesses_on_role_id"
+    t.index ["user_id"], name: "index_accesses_on_user_id"
+  end
 
   create_table "activities", force: :cascade do |t|
     t.decimal "longitude", precision: 13, scale: 9
@@ -250,11 +257,13 @@ ActiveRecord::Schema.define(version: 2019_11_20_145634) do
     t.integer "stage"
   end
 
-  create_table "user_roles", force: :cascade do |t|
+  create_table "technical_files", force: :cascade do |t|
     t.bigint "user_id"
-    t.bigint "role_id"
-    t.index ["role_id"], name: "index_user_roles_on_role_id"
-    t.index ["user_id"], name: "index_user_roles_on_user_id"
+    t.string "file"
+    t.boolean "active", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_technical_files_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -322,6 +331,7 @@ ActiveRecord::Schema.define(version: 2019_11_20_145634) do
   add_foreign_key "group_accesses", "versions"
   add_foreign_key "nodes", "algorithms"
   add_foreign_key "nodes", "answer_types"
+  add_foreign_key "technical_files", "users"
   add_foreign_key "versions", "algorithms"
   add_foreign_key "versions", "users"
 end
