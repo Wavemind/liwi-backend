@@ -37,6 +37,8 @@ gem 'nilify_blanks'
 gem 'rails-controller-testing'
 gem 'react-rails'
 gem 'webpacker', '~> 3'
+gem 'rqrcode'
+gem 'barby'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

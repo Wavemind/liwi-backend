@@ -1,7 +1,8 @@
 class TechnicalFilesController < ApplicationController
   before_action :authenticate_user!
 
-  def new
+  def index
+    @apk = TechnicalFile.active
   end
 
   def create
@@ -10,9 +11,6 @@ class TechnicalFilesController < ApplicationController
     if @technical_file.save
       redirect_to technical_files_url, notice: t('flash_message.success_created')
     else
-      puts '***'
-      puts @technical_file.errors.messages
-      puts '***'
       redirect_to technical_files_url, alert: t('error')
     end
   end
