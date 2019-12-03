@@ -1,0 +1,9 @@
+<h2><%= t('.title') %></h2>
+
+<%= simple_form_for TechnicalFile.new, url: technical_files_url, html: { class: 'form-horizontal' } do |f| %>
+  <div class="col align-self-center"><%= f.input :file, as: :file %></div>
+
+  <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
+<% end %>
+
+<%= image_tag(generate_qr(@apk.file.file.authenticated_url)) %>

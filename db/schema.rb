@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_20_145634) do
+ActiveRecord::Schema.define(version: 2019_11_29_134125) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -250,6 +250,15 @@ ActiveRecord::Schema.define(version: 2019_11_20_145634) do
     t.integer "stage"
   end
 
+  create_table "technical_files", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "file"
+    t.boolean "active", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_technical_files_on_user_id"
+  end
+
   create_table "user_roles", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "role_id"
@@ -305,8 +314,8 @@ ActiveRecord::Schema.define(version: 2019_11_20_145634) do
     t.datetime "updated_at", null: false
     t.integer "triage_questions_order", default: [], array: true
     t.integer "triage_first_look_assessments_order", default: [], array: true
-    t.integer "triage_chief_complaints_order", default: [], array: true
-    t.integer "triage_vital_signs_order", default: [], array: true
+    t.integer "triage_complaint_categories_order", default: [], array: true
+    t.integer "triage_basic_measurements_order", default: [], array: true
     t.integer "triage_chronical_conditions_order", default: [], array: true
     t.index ["algorithm_id"], name: "index_versions_on_algorithm_id"
     t.index ["user_id"], name: "index_versions_on_user_id"
@@ -322,6 +331,7 @@ ActiveRecord::Schema.define(version: 2019_11_20_145634) do
   add_foreign_key "group_accesses", "versions"
   add_foreign_key "nodes", "algorithms"
   add_foreign_key "nodes", "answer_types"
+  add_foreign_key "technical_files", "users"
   add_foreign_key "versions", "algorithms"
   add_foreign_key "versions", "users"
 end
