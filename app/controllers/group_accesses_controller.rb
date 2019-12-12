@@ -16,7 +16,7 @@ class GroupAccessesController < ApplicationController
     version = Version.find(group_access_params[:version_id])
     version.diagnostics.each do |diagnostic|
       diagnostic.manual_validate
-      invalid_diagnostics.push(diagnostic.reference) if diagnostic.errors.messages.any?
+      invalid_diagnostics.push(diagnostic.full_reference) if diagnostic.errors.messages.any?
     end
 
     if invalid_diagnostics.any?
