@@ -7,6 +7,7 @@ jQuery(document).ready(function () {
     "ajax": $("#questions_sequences-datatable").data("source"),
     "pagingType": "full_numbers",
     "columns": [
+      { "data": "id" },
       { "data": "reference" },
       { "data": "category" },
       { "data": "label" },
@@ -14,7 +15,7 @@ jQuery(document).ready(function () {
       { "data": "actions", "className": "text-right" },
     ],
     'columnDefs': [ {
-      'targets': [4],
+      'targets': [5],
       'orderable': false,
     }]
   });
@@ -27,6 +28,7 @@ jQuery(document).ready(function () {
     "ajax": $("#questions_sequences_scored-datatable").data("source"),
     "pagingType": "full_numbers",
     "columns": [
+      { "data": "id" },
       { "data": "reference" },
       { "data": "label" },
       { "data": "min_score" },
@@ -34,7 +36,7 @@ jQuery(document).ready(function () {
       { "data": "actions", "className": "text-right" },
     ],
     'columnDefs': [ {
-      'targets': [4],
+      'targets': [5],
       'orderable': false,
     }]
   });

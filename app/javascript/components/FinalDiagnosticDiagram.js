@@ -82,6 +82,8 @@ class FinalDiagnosticDiagram extends React.Component {
     let hcLevel = [];
     let hcConditions = [];
 
+    console.log(questions);
+
     // Create nodes for PS and questions
     questions.map((levels) => {
       let currentLevel = [];
@@ -112,7 +114,6 @@ class FinalDiagnosticDiagram extends React.Component {
       instances[index].conditions.map((condition) => {
         let firstAnswer = condition.first_conditionable;
         let firstNodeAnswer = _.find(nodes, ["reference", getReferencePrefix(firstAnswer.get_node.type.substring(0, firstAnswer.get_node.type.indexOf('s::')), firstAnswer.get_node.type) + firstAnswer.get_node.reference]);
-
         if (condition.second_conditionable_id !== null && condition.operator === "and_operator") {
           let secondAnswer = condition.second_conditionable;
           let secondNodeAnswer = _.find(nodes, ["reference", getReferencePrefix(secondAnswer.get_node.node_type, secondAnswer.get_node.type) + secondAnswer.get_node.reference]);

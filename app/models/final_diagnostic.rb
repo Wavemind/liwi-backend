@@ -45,15 +45,26 @@ class FinalDiagnostic < Node
     instances.includes(:conditions, children: [:node]).map(&:children).flatten.each do |child|
       current_nodes << child.node if child.node.is_a?(Question) || child.node.is_a?(QuestionsSequence)
     end
-
     if current_nodes.any?
-      current_instances = Instance.health_care_conditions.where('instanceable_id = ? AND instanceable_type = ? AND node_id IN (?)', id, self.class.name, current_nodes.map(&:id).flatten)
+      current_instances = Instance.health_care_conditions.where('instanceable_id = ? AND instanceable_type = ? AND node_id IN (?)', diagnostic.id, diagnostic.class.name, current_nodes.map(&:id).flatten)
+
       current_instances.each { |instance| nodes = remove_old_node(nodes, instance) }
       nodes << current_instances
       get_children(current_instances, nodes)
     else
       nodes
     end
+  end
+
+  # @params [Array][Array][Instances] instances before delete, [Instance] instance to delete
+  # @return [Array][Array][Instances] instances after delete
+  # Remove the duplicated node if it was already set before. We keep the last one in order to be coherent in the diagram.
+  def remove_old_node(instances, instance)
+    instances.each_with_index do |level, index|
+      instances[index] = instances[index].to_a unless instances[index].is_a? Array # Convert ActiveRelation to Array to prevent database updating
+      instances[index].delete(instance)
+    end
+    instances
   end
 
   # Return all questions for Final Diagnostic diagram as json
