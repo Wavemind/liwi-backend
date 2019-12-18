@@ -143,7 +143,7 @@ class Diagnostic < ApplicationRecord
     excluded_ids += components.not_health_care_conditions.map(&:node_id)
 
     (
-      version.algorithm.questions.no_triage_but_other.where.not(id: excluded_ids).includes(:answers) +
+      version.algorithm.questions.no_triage_but_other.no_treatment_condition.where.not(id: excluded_ids).includes(:answers) +
       version.algorithm.questions_sequences.where.not(id: excluded_ids).includes(:answers) +
       final_diagnostics.where.not(id: components.select(:node_id))
     ).as_json(methods: [:category_name, :node_type, :get_answers, :type])
