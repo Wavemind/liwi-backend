@@ -28,7 +28,6 @@ jQuery(document).ready(function () {
   function treatmentTypeChange() {
     let pillSize = $("#health_cares_treatment_pill_size").closest(".form-group");
     let treatmentType = $("#health_cares_treatment_treatment_type option:selected").val();
-    // $("#question_answer_type_hidden").val(treatmentType);
 
     if ($(pillSize).hasClass("d-none") && treatmentType === "pill") {
       $(pillSize).removeClass("d-none");
