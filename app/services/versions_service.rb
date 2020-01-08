@@ -212,6 +212,7 @@ class VersionsService
     hash = extract_conditions(instance.conditions)
     hash['id'] = instance.node.id
     hash['children'] = instance.nodes.collect(&:id)
+    hash['final_diagnostic_id'] = instance.final_diagnostic_id
     hash
   end
 

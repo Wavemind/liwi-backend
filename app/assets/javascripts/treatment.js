@@ -7,13 +7,14 @@ jQuery(document).ready(function () {
     "ajax": $("#treatments-datatable").data("source"),
     "pagingType": "full_numbers",
     "columns": [
+      { "data": "id" },
       { "data": "reference" },
       { "data": "label" },
       { "data": "description" },
       { "data": "actions", "className": "text-right" },
     ],
     'columnDefs': [ {
-      'targets': [3],
+      'targets': [4],
       'orderable': false,
     }]
   });

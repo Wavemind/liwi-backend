@@ -19,6 +19,7 @@ jQuery(document).ready(function() {
     "ajax": $("#questions-datatable").data("source"),
     "pagingType": "full_numbers",
     "columns": [
+      { "data": "id" },
       { "data": "reference" },
       { "data": "label" },
       { "data": "description" },
@@ -29,7 +30,7 @@ jQuery(document).ready(function() {
       { "data": "actions", "className": "text-right" }
     ],
     'columnDefs': [ {
-      'targets': [5,6,7],
+      'targets': [6,7,8],
       'orderable': false,
     }]
   });

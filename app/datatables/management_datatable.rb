@@ -12,6 +12,7 @@ class ManagementDatatable < AjaxDatatablesRails::ActiveRecord
 
   def view_columns
     @view_columns ||= {
+      id: { source: 'HealthCares::Management.id' },
       reference: { source: 'HealthCares::Management.reference' },
       label: { source: 'HealthCares::Management.label_translations' },
       description: { source: 'HealthCares::Management.description_translations' },
@@ -22,6 +23,7 @@ class ManagementDatatable < AjaxDatatablesRails::ActiveRecord
     records.map do |record|
       actions = link_to(I18n.t('edit'), edit_algorithm_management_url(params[:id], record), class: 'btn btn-outline-info') + " " + link_to(I18n.t('delete'), algorithm_management_url(record.algorithm, record), class: "btn btn-outline-danger #{record.dependencies? ? 'disabled' : ''}", method: :delete, data: { confirm: 'Are you sure?' })
       {
+        id: record.id,
         reference: record.full_reference,
         label: record.label,
         description: record.description,
