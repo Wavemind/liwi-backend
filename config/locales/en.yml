@@ -3,6 +3,12 @@ en:
     attributes:
       node:
         unavailable: "Can be unavailable ?"
+        minimal_dose_per_kg: "Minimal dose/kg"
+        maximal_dose_per_kg: "Maximal dose/kg"
+        maximal_dose: "Maximal dose"
+        doses_per_day: "Number of doses per day"
+        treatment_type: "Medication form"
+        pill_size: "Pill minimal size (mg)"
       diagnostic:
         node: "Complaint category"
   activated: "Activate"
@@ -426,6 +432,9 @@ en:
         label: "Label"
         description: "Description"
         actions: "Actions"
+    treatment_types:
+      liquid: "Liquid"
+      pill: "Pill"
   unarchive: "Unarchive"
   users:
     new:

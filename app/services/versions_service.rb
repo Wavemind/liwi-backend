@@ -432,6 +432,14 @@ class VersionsService
       hash[health_care.id]['reference'] = health_care.reference
       hash[health_care.id]['label'] = health_care.label
       hash[health_care.id]['description'] = health_care.description
+      # Fields specific to treatments
+      hash[health_care.id]['weight_question_id'] = @version.algorithm.questions.find_by(type: 'Questions::VitalSign', reference: '1').id
+      hash[health_care.id]['minimal_dose_per_kg'] = health_care.minimal_dose_per_kg
+      hash[health_care.id]['maximal_dose_per_kg'] = health_care.maximal_dose_per_kg
+      hash[health_care.id]['maximal_dose'] = health_care.maximal_dose
+      hash[health_care.id]['doses_per_day'] = health_care.doses_per_day
+      hash[health_care.id]['treatment_type'] = health_care.treatment_type
+      hash[health_care.id]['pill_size'] = health_care.pill_size
     end
     hash
   end

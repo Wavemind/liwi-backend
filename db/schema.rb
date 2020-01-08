@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_29_134125) do
+ActiveRecord::Schema.define(version: 2019_12_20_142836) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -233,10 +233,18 @@ ActiveRecord::Schema.define(version: 2019_11_29_134125) do
     t.bigint "reference_table_y_id"
     t.bigint "snomed_id"
     t.string "snomed_label"
+    t.bigint "node_id"
+    t.decimal "minimal_dose_per_kg"
+    t.decimal "maximal_dose_per_kg"
+    t.decimal "maximal_dose"
+    t.integer "treatment_type"
+    t.integer "pill_size"
+    t.integer "doses_per_day"
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
     t.index ["diagnostic_id"], name: "index_nodes_on_diagnostic_id"
     t.index ["final_diagnostic_id"], name: "index_nodes_on_final_diagnostic_id"
+    t.index ["node_id"], name: "index_nodes_on_node_id"
     t.index ["reference_table_x_id"], name: "index_nodes_on_reference_table_x_id"
     t.index ["reference_table_y_id"], name: "index_nodes_on_reference_table_y_id"
   end
@@ -331,6 +339,7 @@ ActiveRecord::Schema.define(version: 2019_11_29_134125) do
   add_foreign_key "group_accesses", "versions"
   add_foreign_key "nodes", "algorithms"
   add_foreign_key "nodes", "answer_types"
+  add_foreign_key "nodes", "nodes"
   add_foreign_key "technical_files", "users"
   add_foreign_key "versions", "algorithms"
   add_foreign_key "versions", "users"
