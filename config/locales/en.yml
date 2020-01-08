@@ -363,6 +363,9 @@ en:
       symptom:
         label: "Symptom"
         reference_prefix: "S"
+      treatment_condition:
+        label: "Treatment condition"
+        reference_prefix: "TC"
       vaccine:
         label: "Vaccine"
         reference_prefix: "V"
@@ -378,19 +381,13 @@ en:
       title: "New question"
     priorities:
       basic: "Basic"
-      triage: "Triage"
       mandatory: "Mandatory"
-    references:
-      comorbidity: "DC"
-      exposure: "E"
-      symptom: "S"
-      physical_exam: "P"
-      test: "T"
     stages:
       registration: "Registration"
       triage: "Triage"
       test: "Test"
       consultation: "Consultation"
+      health_cares: "Health cares"
     table:
       columns:
         label: "Label"

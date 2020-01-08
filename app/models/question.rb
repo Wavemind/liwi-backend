@@ -8,7 +8,7 @@ class Question < Node
   attr_accessor :unavailable
 
   enum priority: [:basic, :mandatory]
-  enum stage: [:registration, :triage, :test, :consultation]
+  enum stage: [:registration, :triage, :test, :consultation, :health_cares]
 
   has_many :answers, foreign_key: 'node_id', dependent: :destroy
   belongs_to :answer_type
@@ -23,12 +23,25 @@ class Question < Node
   scope :no_triage, ->() { where.not(stage: Question.stages[:triage]) }
   # Return questions without basic triage categories but still get the triage stage for other categories
   scope :no_triage_but_other, ->() { where.not(type: %w(Questions::ComplaintCategory Questions::FirstLookAssessment Questions::BasicMeasurement)) }
+  scope :no_treatment_condition, ->() { where.not(type: 'Questions::TreatmentCondition') }
 
   accepts_nested_attributes_for :answers, allow_destroy: true
 
   # Preload the children of class Question
   def self.descendants
-    [Questions::AssessmentTest, Questions::BasicMeasurement, Questions::ComplaintCategory, Questions::ChronicalCondition, Questions::Demographic, Questions::Exposure, Questions::FirstLookAssessment, Questions::PhysicalExam, Questions::Symptom, Questions::Vaccine]
+    [
+        Questions::AssessmentTest,
+        Questions::ComplaintCategory,
+        Questions::ChronicalCondition,
+        Questions::Demographic,
+        Questions::Exposure,
+        Questions::FirstLookAssessment,
+        Questions::PhysicalExam,
+        Questions::Symptom,
+        Questions::Vaccine,
+        Questions::BasicMeasurement,
+        Questions::TreatmentCondition,
+    ]
   end
 
   # Get the reference prefix according to the type
@@ -44,10 +57,12 @@ class Question < Node
   end
 
   # Return a hash with all question categories with their name, label and prefix
-  def self.categories
+  def self.categories(diagram_class_name)
     categories = []
+    excluded_categories = [Questions::ComplaintCategory, Questions::BasicMeasurement]
+    excluded_categories.push(Questions::TreatmentCondition) unless diagram_class_name == 'FinalDiagnostic'
     self.descendants.each do |category|
-      unless [Questions::ComplaintCategory, Questions::BasicMeasurement].include?(category)
+      unless excluded_categories.include?(category)
         current_category = {}
         current_category['label'] = category.display_label
         current_category['name'] = category.name
@@ -117,7 +132,7 @@ class Question < Node
       if betweens.any?
         self.errors.add(:answers, I18n.t('answers.validation.overlap.less_greater_than_more_or_equal')) if answers.less.first.value.to_f > answers.more_or_equal.first.value.to_f
 
-        betweens = betweens.sort_by {|a| a[0]}
+        betweens = betweens.sort_by { |a| a[0] }
         self.errors.add(:answers, I18n.t('answers.validation.overlap.first_between_different_from_less')) if answers.less.first.value.to_f != betweens[0][0]
         self.errors.add(:answers, I18n.t('answers.validation.overlap.last_between_different_from_more_or_equal')) if answers.more_or_equal.first.value.to_f != betweens.last[1]
 

@@ -46,6 +46,7 @@ export default class DiagramProvider extends React.Component {
       orderedNodes.scored = [];
       orderedNodes.finalDiagnostic = [];
     } else if (type === "FinalDiagnostic") {
+      orderedNodes.treatmentCondition = [];
       orderedNodes.scored = [];
       orderedNodes.treatment = [];
       orderedNodes.management = [];
