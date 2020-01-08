@@ -6,12 +6,12 @@ class Diagnostic < ApplicationRecord
   attr_accessor :duplicating
 
   belongs_to :version
-  belongs_to :node # Compaint Category
+  belongs_to :node # Complaint Category
   has_many :final_diagnostics, dependent: :destroy
   has_many :conditions, as: :referenceable, dependent: :destroy
   has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy
 
-  before_validation :validate_chief_complaint
+  before_validation :validate_complaint_category
   validates_presence_of :label_en
   validates :reference, presence: true, uniqueness: { scope: :version }
 
@@ -188,14 +188,14 @@ class Diagnostic < ApplicationRecord
     end
   end
 
-  # Validate the chief complaint that is being linked to the diagnostic
-  def validate_chief_complaint
-    errors.add(:node, I18n.t('flash_message.diagnostic.node_is_not_chief_complaint')) unless node.is_a? Questions::ChiefComplaint
+  # Validate the complaint category that is being linked to the diagnostic
+  def validate_complaint_category
+    errors.add(:node, I18n.t('flash_message.diagnostic.node_is_not_complaint_category')) unless node.is_a? Questions::ComplaintCategory
 
     triage_questions = components.joins(:node).where('nodes.stage = ?', Question.stages[:triage])
     triage_questions.each do |instance|
       version_instance = version.components.find_by(node: instance.node)
-      errors.add(:node, I18n.t('flash_message.diagnostic.chief_complaint_exclude_triage_question')) if version_instance.conditions.any? && version_instance.conditions.map(&:first_conditionable).map(&:node).flatten.exclude?(node)
+      errors.add(:node, I18n.t('flash_message.diagnostic.complaint_category_exclude_triage_question')) if version_instance.conditions.any? && version_instance.conditions.map(&:first_conditionable).map(&:node).flatten.exclude?(node)
     end
   end
 

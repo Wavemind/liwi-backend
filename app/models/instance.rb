@@ -16,8 +16,8 @@ class Instance < ApplicationRecord
   scope :treatments, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'HealthCares::Treatment') }
   scope :final_diagnostics, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'FinalDiagnostic') }
 
-  scope :triage_chief_complaint, ->() { joins(:node).where('nodes.stage = ? AND nodes.type = ?', Question.stages[:triage], 'Questions::ChiefComplaint') }
-  scope :triage_under_chief_complaint, ->() { joins(:node).where('nodes.type NOT IN (?)', %w(Questions::FirstLookAssessment Questions::ChiefComplaint)) }
+  scope :triage_complaint_category, ->() { joins(:node).where('nodes.stage = ? AND nodes.type = ?', Question.stages[:triage], 'Questions::ComplaintCategory') }
+  scope :triage_under_complaint_category, ->() { joins(:node).where('nodes.type NOT IN (?)', %w(Questions::FirstLookAssessment Questions::ComplaintCategory)) }
 
   # Allow to filter if the node is used as a health care condition or as a final diagnostic condition. A node can be used in both of them.
   scope :health_care_conditions, ->() { joins(:node).includes(:conditions).where.not(final_diagnostic: nil).or(joins(:node).includes(:conditions).where("nodes.type LIKE 'HealthCares::%'")) }

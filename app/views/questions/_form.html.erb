@@ -3,7 +3,8 @@
 <%= f.association :answer_type, input_html: {id: 'question_answer_type_hidden', class: 'py-0'}, as: :hidden, error: false %>
 <%= f.input :stage, input_html: {id: 'question_stage_displayed'}, collection: Question.stages.map { |k, v| [t("question.stages.#{k}"), k] }, prompt: t('select'), disabled: f.object.persisted?  %>
 <%= f.input :stage, input_html: {id: 'question_stage_hidden', class: 'py-0'}, as: :hidden, error: false %>
-<%= f.input :priority, collection: Question.priorities.map { |k, v| [t("question.priorities.#{k}"), k] }, prompt: t('select') %>
+<%= f.input :priority, input_html: {id: 'question_priority_displayed'}, collection: Question.priorities.map { |k, v| [t("question.priorities.#{k}"), k] }, prompt: t('select') %>
+<%= f.input :priority, input_html: {id: 'question_priority_hidden', class: 'py-0'}, as: :hidden, error: false %>
 
 <%= f.input :reference, prepend: (@question.type.nil? ? '' : @question.reference_prefix) %>
 <%= f.input :label_en %>

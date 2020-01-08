@@ -9,7 +9,7 @@ RSpec.describe MedicalCase, type: :model do
     @patient = Patient.create!(first_name: 'John', last_name: 'Do')
 
     boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
-    @cc = @algorithm.questions.create!(reference: '11', answer_type: boolean, label_en: 'CC11', stage: Question.stages[:triage], priority: Question.priorities[:mandatory], type: 'Questions::ChiefComplaint')
+    @cc = @algorithm.questions.create!(reference: '11', answer_type: boolean, label_en: 'CC11', stage: Question.stages[:triage], priority: Question.priorities[:mandatory], type: 'Questions::ComplaintCategory')
   end
 
   it 'is valid with valid attributes' do
