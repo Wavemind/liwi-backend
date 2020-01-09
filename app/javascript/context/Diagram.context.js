@@ -198,6 +198,7 @@ export default class DiagramProvider extends React.Component {
     questionPriorities: null,
     questionCategories: null,
     questionsSequenceCategories: null,
+    treatmentTypes: null,
     answersOperators: null,
     currentQuestion: null,
   };

@@ -51,7 +51,7 @@ export default class Http {
   // @params [Integer] nodeId
   // @return [Object] body of request
   // Create an instance
-  createHealthCare = async (type, reference, label, description) => {
+  createHealthCare = async (type, reference, label, description, minimalDosePerKg, maximalDosePerKg, maximalDose, dosesPerDay, treatmentType, pillSize) => {
     let response;
     const url = `${this.url}/algorithms/${this.algorithm}/${type}/create_from_diagram`;
     const body = {
@@ -61,7 +61,13 @@ export default class Http {
     body['health_cares_' + type.substring(0, type.length-1)] = {
       reference: reference,
       label_en: label,
-      description_en: description
+      description_en: description,
+      minimal_dose_per_kg: minimalDosePerKg,
+      maximal_dose_per_kg: maximalDosePerKg,
+      maximal_dose: maximalDose,
+      doses_per_day: dosesPerDay,
+      treatment_type: treatmentType,
+      pill_size: pillSize
     };
     const header = await this.setHeaders("POST", body);
     const request = await fetch( url, header).catch(error => console.log(error));

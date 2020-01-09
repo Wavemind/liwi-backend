@@ -40,3 +40,7 @@ class DiagnosticDatatable < AjaxDatatablesRails::ActiveRecord
     Version.find(params[:version_id]).diagnostics.joins(:node)
   end
 end
+
+
+
+
