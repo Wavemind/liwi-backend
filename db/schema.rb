@@ -16,13 +16,6 @@ ActiveRecord::Schema.define(version: 2019_12_20_142836) do
   enable_extension "hstore"
   enable_extension "plpgsql"
 
-  create_table "accesses", force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "role_id"
-    t.index ["role_id"], name: "index_accesses_on_role_id"
-    t.index ["user_id"], name: "index_accesses_on_user_id"
-  end
-
   create_table "activities", force: :cascade do |t|
     t.decimal "longitude", precision: 13, scale: 9
     t.decimal "latitude", precision: 13, scale: 9
@@ -274,6 +267,13 @@ ActiveRecord::Schema.define(version: 2019_12_20_142836) do
     t.index ["user_id"], name: "index_technical_files_on_user_id"
   end
 
+  create_table "user_roles", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "role_id"
+    t.index ["role_id"], name: "index_user_roles_on_role_id"
+    t.index ["user_id"], name: "index_user_roles_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
@@ -322,8 +322,8 @@ ActiveRecord::Schema.define(version: 2019_12_20_142836) do
     t.datetime "updated_at", null: false
     t.integer "triage_questions_order", default: [], array: true
     t.integer "triage_first_look_assessments_order", default: [], array: true
-    t.integer "triage_chief_complaints_order", default: [], array: true
-    t.integer "triage_vital_signs_order", default: [], array: true
+    t.integer "triage_complaint_categories_order", default: [], array: true
+    t.integer "triage_basic_measurements_order", default: [], array: true
     t.integer "triage_chronical_conditions_order", default: [], array: true
     t.index ["algorithm_id"], name: "index_versions_on_algorithm_id"
     t.index ["user_id"], name: "index_versions_on_user_id"
