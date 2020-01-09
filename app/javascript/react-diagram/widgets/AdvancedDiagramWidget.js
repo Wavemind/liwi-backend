@@ -28,19 +28,22 @@ class AdvancedDiagramWidget extends DiagramWidget {
   // Override keyup function in order to prevent qs instance removing in its own diagram
   // TODO : refactor this method to do better
   onKeyUp(event) {
+
+    const {deleteKeys, diagramEngine} = this.props;
+
     //delete all selected
-    if (this.props.deleteKeys.indexOf(event.keyCode) !== -1) {
+    if (deleteKeys.indexOf(event.keyCode) !== -1) {
       let qsInstanceDeleting = false;
-      _.forEach(this.props.diagramEngine.getDiagramModel().getSelectedItems(), element => {
+      _.forEach(diagramEngine.getDiagramModel().getSelectedItems(), element => {
         if (element instanceof AdvancedNodeModel && window.location.pathname.endsWith('questions_sequences/' + element.node.id + '/diagram')) {
           qsInstanceDeleting = true;
         }
       });
 
       if(!qsInstanceDeleting) {
-        _.forEach(this.props.diagramEngine.getDiagramModel().getSelectedItems(), element => {
+        _.forEach(diagramEngine.getDiagramModel().getSelectedItems(), element => {
           //only delete items which are not locked
-          if (!this.props.diagramEngine.isModelLocked(element)) {
+          if (!diagramEngine.isModelLocked(element)) {
             element.remove();
           }
         });
@@ -97,9 +100,11 @@ class AdvancedDiagramWidget extends DiagramWidget {
             const boundingRect = event.currentTarget.getBoundingClientRect();
             const clientWidth = boundingRect.width;
             const clientHeight = boundingRect.height;
+
             // compute difference between rect before and after scroll
             const widthDiff = clientWidth * zoomFactor - clientWidth * oldZoomFactor;
             const heightDiff = clientHeight * zoomFactor - clientHeight * oldZoomFactor;
+
             // compute mouse coords relative to canvas
             const clientX = event.clientX - boundingRect.left;
             const clientY = event.clientY - boundingRect.top;
