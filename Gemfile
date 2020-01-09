@@ -36,7 +36,7 @@ gem 'hstore_translate'
 gem 'nilify_blanks'
 gem 'rails-controller-testing'
 gem 'react-rails'
-gem 'webpacker'
+gem 'webpacker', '~> 3'
 gem 'rqrcode'
 gem 'barby'
 
