@@ -8,7 +8,7 @@ RSpec.describe Diagnostic, type: :model do
     @algorithm = Algorithm.create!(name: 'EPOCT', description: 'MedicalCenter1', user: user)
 
     boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
-    @cc = @algorithm.questions.create!(reference: '11', answer_type: boolean, label_en: 'CC11', stage: Question.stages[:triage], priority: Question.priorities[:mandatory], type: 'Questions::ChiefComplaint')
+    @cc = @algorithm.questions.create!(reference: '11', answer_type: boolean, label_en: 'CC11', stage: Question.stages[:triage], priority: Question.priorities[:mandatory], type: 'Questions::ComplaintCategory')
 
     @version = Version.create!(name: '1.3.2', user: user, algorithm: @algorithm)
   end

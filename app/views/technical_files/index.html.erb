@@ -6,4 +6,4 @@
   <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
 <% end %>
 
-<%= image_tag(generate_qr(@apk.file.file.authenticated_url)) %>
+<%= image_tag(generate_qr(@apk.file.file.authenticated_url)) if @apk.present? %>

@@ -17,7 +17,7 @@
       questionAnswerTypes: AnswerType.all.as_json(methods: :display_name),
       questionStages: Question.stages,
       questionPriorities: Question.priorities.as_json(methods: :display_name),
-      questionCategories: Question.categories.as_json,
+      questionCategories: Question.categories('Diagnostic').as_json,
       questionsSequenceCategories: QuestionsSequence.categories.as_json,
       answersOperators: Answer.operators.as_json,
       readOnly: false

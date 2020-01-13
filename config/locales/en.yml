@@ -10,7 +10,7 @@ en:
         treatment_type: "Medication form"
         pill_size: "Pill minimal size (mg)"
       diagnostic:
-        node: "Chief complaint"
+        node: "Complaint category"
   activated: "Activate"
   add: "Add"
   algorithms:
@@ -136,7 +136,7 @@ en:
     table:
       columns:
         actions: "Actions"
-        chief_complaint: "Chief complaint"
+        complaint_category: "Complaint category"
         label: "Name"
         last_update: "Last update"
         reference: "Reference"
@@ -198,11 +198,11 @@ en:
     success_updated: "Data was successfully updated"
     update_fail: "Error will updating value"
     diagnostic:
-      chief_complaint_exclude_triage_question: "You are setting a chief complaint that does not take in charge one question in your diagnostic diagram."
+      complaint_category_exclude_triage_question: "You are setting a complaint category that does not take in charge one question in your diagnostic diagram."
       error_in_questions_sequence: "The questions sequence <u><a href='%{url}'>%{reference}</a></u> is not valid."
       final_diagnostic_no_condition: "The Final Diagnostic %{reference} has no condition."
       hc_question_no_children: "The %{type} %{reference}, which is in <u><a href='%{url}'>%{df_reference}</a></u> is not linked to any children."
-      node_is_not_chief_complaint: "The node you are linking to this diagnostic is not a Chief Complaint."
+      node_is_not_complaint_category: "The node you are linking to this diagnostic is not a Complaint Category."
       question_no_children: "The %{type} %{reference} is not linked to any children."
       valid: "This diagnostic is valid!"
     questions_sequence:
@@ -211,13 +211,13 @@ en:
       pss_no_combination: "There is no combination for this questions sequence to be true."
       valid: "This questions sequence is valid!"
     version:
-      chief_complaint_missing: "Please select the chief complaint."
+      complaint_category_missing: "Please select the complaint category."
       invalids_diagnostics: "Your version contains diagnostics that are invalid : %{diagnostics}"
       triage_question_missing: "Please select the triage question you want to put a condition on."
   groups:
     add_device:
       success_add_device: "Device was successfully added to group"
-      error_add_device: "An error occured when adding device to group"
+      error_add_device: "An error occurred when adding device to group"
     index:
       columns:
         name: "Name"
@@ -233,7 +233,7 @@ en:
       title: "Add group"
     remove_device:
       success_remove_device: "Device was successfully removed from group"
-      error_remove_device: "An error occured when removing device from group"
+      error_remove_device: "An error occurred when removing device from group"
     show:
       title: "Details of %{name}"
       second_title: "Accesses"
@@ -345,8 +345,11 @@ en:
       assessment_test:
         label: "Assessment/test"
         reference_prefix: "A"
-      chief_complaint:
-        label: "Chief complaint"
+      basic_measurement:
+        label: "Basic measurement"
+        reference_prefix: "BM"
+      complaint_category:
+        label: "Complaint category"
         reference_prefix: "CC"
       chronical_condition:
         label: "Chronical condition"
@@ -366,12 +369,12 @@ en:
       symptom:
         label: "Symptom"
         reference_prefix: "S"
+      treatment_condition:
+        label: "Treatment condition"
+        reference_prefix: "TC"
       vaccine:
         label: "Vaccine"
         reference_prefix: "V"
-      vital_sign:
-        label: "Vital sign"
-        reference_prefix: "VS"
     errors:
       no_blank: "can't be blank"
       formula_wrong_characters: "Incorrect formula format. You can only use numbers, operators and questions references (between brackets)"
@@ -384,19 +387,13 @@ en:
       title: "New question"
     priorities:
       basic: "Basic"
-      triage: "Triage"
       mandatory: "Mandatory"
-    references:
-      comorbidity: "DC"
-      exposure: "E"
-      symptom: "S"
-      physical_exam: "P"
-      test: "T"
     stages:
       registration: "Registration"
       triage: "Triage"
       test: "Test"
       consultation: "Consultation"
+      health_cares: "Health cares"
     table:
       columns:
         label: "Label"

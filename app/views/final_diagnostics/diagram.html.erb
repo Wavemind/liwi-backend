@@ -17,7 +17,7 @@
         questionAnswerTypes: AnswerType.all.as_json,
         questionStages: Question.stages.as_json,
         questionPriorities: Question.priorities.as_json(methods: :display_name),
-        questionCategories: Question.categories.as_json,
+        questionCategories: Question.categories('FinalDiagnostic').as_json,
         questionsSequenceCategories: QuestionsSequence.categories.as_json,
         treatmentTypes: HealthCares::Treatment.treatment_types.as_json
       }
