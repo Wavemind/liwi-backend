@@ -27,9 +27,17 @@ class NotDFWidget extends React.Component {
     node.setSelected(false);
 
     const { set } = this.props;
+
+    let healthCareType = null
+    if (node.node.type === 'HealthCares::Management') {
+      healthCareType = 'managements';
+    } else if (node.node.type === 'HealthCares::Treatment'){
+      healthCareType = 'treatments';
+    }
+
     set(
-      ['modalToOpen', 'currentNode', 'currentDiagramNode', 'modalIsOpen'],
-      ['Update' + node.node.node_type, node.node, node, true]
+      ['modalToOpen', 'currentNode', 'currentDiagramNode', 'currentHealthCareType', 'modalIsOpen'],
+      ['Update' + node.node.node_type, node.node, node, healthCareType, true]
     );
   };
 

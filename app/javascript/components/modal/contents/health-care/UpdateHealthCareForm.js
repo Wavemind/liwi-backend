@@ -34,20 +34,21 @@ class UpdateHealthCareForm extends React.Component {
   };
 
   componentWillMount() {
-    const { currentNode } = this.props;
+    const { currentNode, treatmentTypes } = this.props;
     const newCurrentNode = _.cloneDeep(currentNode);
+
 
     this.setState({
       id: newCurrentNode.id,
       reference: newCurrentNode.reference,
       label: newCurrentNode.label_translations["en"],
       description: newCurrentNode.description_translations === null ? "" : newCurrentNode.description_translations["en"],
-      minimalDosePerKg: newCurrentNode.minimalDosePerKg,
-      maximalDosePerKg: newCurrentNode.maximalDosePerKg,
-      maximalDose: newCurrentNode.maximalDose,
-      dosesPerDay: newCurrentNode.dosesPerDay,
-      treatmentType: newCurrentNode.treatmentType,
-      pillSize: newCurrentNode.pillSize,
+      minimalDosePerKg: newCurrentNode.minimal_dose_per_kg,
+      maximalDosePerKg: newCurrentNode.maximal_dose_per_kg,
+      maximalDose: newCurrentNode.maximal_dose,
+      dosesPerDay: newCurrentNode.doses_per_day,
+      treatmentType: treatmentTypes[newCurrentNode.treatment_type],
+      pillSize: newCurrentNode.pill_size,
       type: newCurrentNode.type === "HealthCares::Management" ? "managements" : "treatments"
     });
   }
@@ -100,7 +101,12 @@ class UpdateHealthCareForm extends React.Component {
   };
 
   render() {
-    const { toggleModal } = this.props;
+    const {
+      toggleModal,
+      currentHealthCareType,
+      treatmentTypes
+    } = this.props;
+
     const {
       reference,
       label,
