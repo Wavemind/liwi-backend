@@ -465,7 +465,7 @@ export default class Http {
   // @params [Integer] id, [String] reference, [String] label, [String] description, [Integer] final_diagnostic_id
   // @return [Object] body of request
   // Update final diagnostic node
-  updateHealthCare = async (id, reference, label, description, type) => {
+  updateHealthCare = async (id, reference, label, description, type, minimalDosePerKg, maximalDosePerKg, maximalDose, dosesPerDay, treatmentType, pillSize) => {
     let response;
     const url = `${this.url}/algorithms/${this.algorithm}/${type}/${id}/update_from_diagram`;
     const body = {
@@ -476,7 +476,13 @@ export default class Http {
       id: id,
       reference: reference,
       label_en: label,
-      description_en: description
+      description_en: description,
+      minimal_dose_per_kg: minimalDosePerKg,
+      maximal_dose_per_kg: maximalDosePerKg,
+      maximal_dose: maximalDose,
+      doses_per_day: dosesPerDay,
+      treatment_type: treatmentType,
+      pill_size: pillSize
     };
     const header = await this.setHeaders("PUT", body);
     const request = await fetch( url, header).catch(error => console.log(error));
