@@ -6,6 +6,7 @@ class Node < ApplicationRecord
   has_many :children
   has_many :instances
   has_many :medias, as: :fileable
+  has_many :diagnostics
 
   has_many :final_diagnostic_health_cares
   has_many :final_diagnostics, through: :final_diagnostic_health_cares
