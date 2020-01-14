@@ -3,6 +3,7 @@ class TechnicalFilesController < ApplicationController
 
   def index
     @apk = TechnicalFile.active
+    @apks = TechnicalFile.last(10).reverse
   end
 
   def create
