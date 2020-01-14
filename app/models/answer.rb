@@ -61,7 +61,7 @@ class Answer < ApplicationRecord
 
   # Ensure that the entered values are in the correct type
   def correct_value_type
-    if node.is_a?(Question) && node.answer_type.display == 'Input'
+    if node.is_a?(Question) && %w(Input Formula).include?(node.answer_type.display)
       if between?
         if value.include?(',')
           values = value.split(',').map(&:to_i)
