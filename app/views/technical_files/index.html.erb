@@ -12,7 +12,7 @@
   <% @apks.each do |apk| %>
   <tr>
     <td><%= apk.created_at.strftime('%d.%m.%Y at %H:%M') %></td>
-    <td><%= apk.user_id %></td>
+    <td><%= apk.user.full_name if apk.user.present? %></td>
     <td class="text-right"><%= image_tag(generate_qr(apk.file.file.authenticated_url)) if @apk.present? %></td>
   </tr>
   <% end %>

@@ -8,6 +8,7 @@ class TechnicalFilesController < ApplicationController
 
   def create
     @technical_file = TechnicalFile.new(technical_file_params)
+    @technical_file.user = current_user
 
     if @technical_file.save
       redirect_to technical_files_url, notice: t('flash_message.success_created')
