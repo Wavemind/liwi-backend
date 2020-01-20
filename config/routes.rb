@@ -12,9 +12,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :roles, only: [:index, :show, :new, :create, :edit, :update]
-
-  resources :technical_files, only: [:index, :new, :create]
+  resources :technical_files, only: [:index, :create]
   resources :settings, only: [:index]
   resources :languages, only: [:new, :create, :update, :destroy]
 
