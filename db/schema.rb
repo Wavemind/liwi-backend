@@ -10,18 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_20_142836) do
+ActiveRecord::Schema.define(version: 2020_01_17_153305) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
-
-  create_table "accesses", force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "role_id"
-    t.index ["role_id"], name: "index_accesses_on_role_id"
-    t.index ["user_id"], name: "index_accesses_on_user_id"
-  end
 
   create_table "activities", force: :cascade do |t|
     t.decimal "longitude", precision: 13, scale: 9
@@ -34,6 +27,11 @@ ActiveRecord::Schema.define(version: 2019_12_20_142836) do
     t.datetime "updated_at", null: false
     t.index ["device_id"], name: "index_activities_on_device_id"
     t.index ["user_id"], name: "index_activities_on_user_id"
+  end
+
+  create_table "administration_routes", force: :cascade do |t|
+    t.integer "type"
+    t.string "name"
   end
 
   create_table "algorithms", force: :cascade do |t|
@@ -233,16 +231,19 @@ ActiveRecord::Schema.define(version: 2019_12_20_142836) do
     t.bigint "reference_table_y_id"
     t.bigint "snomed_id"
     t.string "snomed_label"
+    t.bigint "node_id"
     t.decimal "minimal_dose_per_kg"
     t.decimal "maximal_dose_per_kg"
     t.decimal "maximal_dose"
     t.integer "treatment_type"
     t.integer "pill_size"
     t.integer "doses_per_day"
+    t.integer "system"
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
     t.index ["diagnostic_id"], name: "index_nodes_on_diagnostic_id"
     t.index ["final_diagnostic_id"], name: "index_nodes_on_final_diagnostic_id"
+    t.index ["node_id"], name: "index_nodes_on_node_id"
     t.index ["reference_table_x_id"], name: "index_nodes_on_reference_table_x_id"
     t.index ["reference_table_y_id"], name: "index_nodes_on_reference_table_y_id"
   end
@@ -270,6 +271,13 @@ ActiveRecord::Schema.define(version: 2019_12_20_142836) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_technical_files_on_user_id"
+  end
+
+  create_table "user_roles", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "role_id"
+    t.index ["role_id"], name: "index_user_roles_on_role_id"
+    t.index ["user_id"], name: "index_user_roles_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -337,6 +345,7 @@ ActiveRecord::Schema.define(version: 2019_12_20_142836) do
   add_foreign_key "group_accesses", "versions"
   add_foreign_key "nodes", "algorithms"
   add_foreign_key "nodes", "answer_types"
+  add_foreign_key "nodes", "nodes"
   add_foreign_key "technical_files", "users"
   add_foreign_key "versions", "algorithms"
   add_foreign_key "versions", "users"

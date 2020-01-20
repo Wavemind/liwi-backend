@@ -394,6 +394,15 @@ en:
       test: "Test"
       consultation: "Consultation"
       health_cares: "Health cares"
+    systems:
+      respiratory_circulation: "Respiratory and circulatory system"
+      ear_nose_mouth_throat: "Ear, nose, mouth and throat system"
+      visual: "Visual system"
+      integumentary: "Integumentary system"
+      digestive: "Digestive system"
+      urinary_reproductive: "Urinary and reproductive system"
+      nervous: "Nervous system"
+      muscular_skeletal: "Muscular and skeletal system"
     table:
       columns:
         label: "Label"
