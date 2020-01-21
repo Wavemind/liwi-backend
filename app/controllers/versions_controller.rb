@@ -100,6 +100,7 @@ class VersionsController < ApplicationController
 
   # Remove a condition between a triage question and a complaint category
   def remove_triage_condition
+
     condition = Condition.find(params[:condition_id])
 
     if condition.destroy

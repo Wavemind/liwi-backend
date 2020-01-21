@@ -22,62 +22,62 @@ RSpec.describe AlgorithmsController, type: :controller do
     expect(@archived_algorithm.archived).to equal(false)
   end
 
-  it 'should not work for [GET:index]' do
+  it 'should work for [GET:index]' do
     get :index
     expect(response.status).to eq(200)
   end
 
-  it 'should not work for [GET:show]' do
+  it 'should work for [GET:show]' do
     get :show, params: { id: @algorithm.id }
     expect(response.status).to eq(200)
   end
 
-  it 'should not work for [GET:new]' do
+  it 'should work for [GET:new]' do
     get :new, xhr: true
     expect(response.status).to eq(200)
   end
 
-  it 'should not work for [POST:create]' do
+  it 'should work for [POST:create]' do
     post :create, params: { algorithm: { name: 'EPOCT', description: 'MedicalCenter1', user: @user } }
     expect(response.status).to eq(200)
   end
 
-  it 'should not work for [GET:edit]' do
+  it 'should work for [GET:edit]' do
     get :edit, params: { id: @algorithm.id }
     expect(response.status).to eq(200)
   end
 
-  it 'should not work for [PATCH:update]' do
+  it 'should work for [PATCH:update]' do
     patch :update, params: { id: @algorithm.id, algorithm: { name: 'EPOCT', description: 'MedicalCenter1', user: @user } }
     expect(response.status).to eq(302)
   end
 
-  it 'should not work for [GET:questions]' do
+  it 'should work for [GET:questions]' do
     get :questions, params: { id: @algorithm.id }, xhr: true
     expect(response.status).to eq(204)
   end
 
-  it 'should not work for [GET:treatments]' do
+  it 'should work for [GET:treatments]' do
     get :treatments, params: { id: @algorithm.id }, xhr: true
     expect(response.status).to eq(204)
   end
 
-  it 'should not work for [GET:managements]' do
+  it 'should work for [GET:managements]' do
     get :managements, params: { id: @algorithm.id }, xhr: true
     expect(response.status).to eq(204)
   end
 
-  it 'should not work for [GET:questions_sequences]' do
+  it 'should work for [GET:questions_sequences]' do
     get :questions_sequences, params: { id: @algorithm.id }, xhr: true
     expect(response.status).to eq(204)
   end
 
-  it 'should not work for [GET:questions_sequences_scored]' do
+  it 'should work for [GET:questions_sequences_scored]' do
     get :questions_sequences_scored, params: { id: @algorithm.id }, xhr: true
     expect(response.status).to eq(204)
   end
 
-  it 'should not work for [DELETE:destroy]', focus: :true do
+  it 'should not work for [DELETE:destroy]' do
     expect(delete: :destroy).not_to be_routable
   end
 end
