@@ -180,6 +180,7 @@ class QuestionsController < ApplicationController
       Language.label_params,
       :reference,
       :priority,
+      :system,
       :stage,
       :type,
       :description_en,

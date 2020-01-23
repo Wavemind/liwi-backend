@@ -1,6 +1,7 @@
 jQuery(document).ready(function() {
 
-  // $("#question_formula").closest(".form-group").addClass("d-none");
+  $("#question_formula").closest(".form-group").addClass("d-none");
+  $("#question_system").closest(".form-group").addClass("d-none");
 
   // Trigger categoryChange function only on edit or create question form
   if ($("#new_question").length || $("[id^='edit_question']").length) {
@@ -55,15 +56,17 @@ jQuery(document).ready(function() {
             $(questionUnavailable).addClass("d-none");
           }
 
-          // Force answer type to boolean if it's ChiefComplaint or Vaccine
-          if (["CC", "V"].includes(response.responseText)) {
-            $("#question_answer_type_displayed").val("1").attr("disabled", true);
-            $("#question_answer_type_hidden").val("1");
-          } else if (response.responseText === "VS") {
-            $("#question_answer_type_displayed").val("4").attr("disabled", true);
-            $("#question_answer_type_hidden").val("4");
-          } else {
-            $("#question_answer_type_displayed").attr("disabled", false);
+          if (!$("[id^='edit_question']").length) {
+            // Force answer type to boolean if it's ChiefComplaint or Vaccine
+            if (["CC", "V"].includes(response.responseText)) {
+              $("#question_answer_type_displayed").val("1").attr("disabled", true);
+              $("#question_answer_type_hidden").val("1");
+            } else if (response.responseText === "VS") {
+              $("#question_answer_type_displayed").val("4").attr("disabled", true);
+              $("#question_answer_type_hidden").val("4");
+            } else {
+              $("#question_answer_type_displayed").attr("disabled", false);
+            }
           }
 
           // Force priority depending on the category
@@ -89,6 +92,13 @@ jQuery(document).ready(function() {
             $("#question_stage_hidden").val("test")
           } else {
             $("#question_stage_displayed").attr("disabled", false);
+          }
+
+          // Hide or not the system field if it is a consultation category
+          if ($("#question_system").closest(".form-group") && ["PE", "S"].includes(response.responseText)) {
+            $("#question_system").closest(".form-group").removeClass("d-none");
+          } else {
+            $("#question_system").closest(".form-group").addClass("d-none");
           }
         }
       });

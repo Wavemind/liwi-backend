@@ -9,6 +9,7 @@ class Question < Node
 
   enum priority: [:basic, :mandatory]
   enum stage: [:registration, :triage, :test, :consultation, :health_cares]
+  enum system: [:general, :respiratory_circulation, :ear_nose_mouth_throat, :visual, :integumentary, :digestive, :urinary_reproductive, :nervous, :muscular_skeletal]
 
   has_many :answers, foreign_key: 'node_id', dependent: :destroy
   belongs_to :answer_type
