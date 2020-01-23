@@ -9,8 +9,6 @@ jQuery(document).ready(function() {
     answer_type_change();
   }
 
-
-
   $("#question_type").change(categoryChange);
   $("#question_answer_type_displayed").change(answer_type_change);
 
@@ -61,7 +59,7 @@ jQuery(document).ready(function() {
             if (["CC", "V"].includes(response.responseText)) {
               $("#question_answer_type_displayed").val("1").attr("disabled", true);
               $("#question_answer_type_hidden").val("1");
-            } else if (response.responseText === "VS") {
+            } else if (["VC", "VT"].includes(response.responseText)) { // Force answer type to numerif if it is a vital sign (triage or consultation)
               $("#question_answer_type_displayed").val("4").attr("disabled", true);
               $("#question_answer_type_hidden").val("4");
             } else {
@@ -77,19 +75,22 @@ jQuery(document).ready(function() {
             $("#question_priority_displayed").attr("disabled", false);
           }
 
-          // Force stage depending on the category (except basic measurement)
-          if (["CC", "FL"].includes(response.responseText)) { // Force triage stage for Complaint category and FirstLookAssessment
+          // Force stage depending on the category
+          if (["CC", "ES", "VT"].includes(response.responseText)) { // Force triage stage for Complaint category emergency sign and vital sign triage
             $("#question_stage_displayed").val("triage").attr("disabled", true);
             $("#question_stage_hidden").val("triage");
-          } else if (["CH", "V", "D"].includes(response.responseText)) { // Force registration stage for Chronical Condition, Vaccin and Demographic categories
+          } else if (["CH", "V", "D"].includes(response.responseText)) { // Force registration stage for Chronic Condition, Vaccine and Demographic categories
             $("#question_stage_displayed").val("registration").attr("disabled", true);
             $("#question_stage_hidden").val("registration")
-          } else if (["E", "PE", "S"].includes(response.responseText)) { // Force consultation stage for Exposure, Physical exam and Symptom categories
+          } else if (["E", "BC", "PE", "OS", "S", "VC"].includes(response.responseText)) { // Force consultation stage for Exposure, Background calculation, Physical exam, Observed physical signs, Symptom and vital sign consultation categories
             $("#question_stage_displayed").val("consultation").attr("disabled", true);
             $("#question_stage_hidden").val("consultation")
           }  else if (response.responseText === "A") { // Force test stage for Assessment test category
             $("#question_stage_displayed").val("test").attr("disabled", true);
             $("#question_stage_hidden").val("test")
+          }  else if (response.responseText === "TQ") { // Force diagnosis and management stage for treatment questions
+            $("#question_stage_displayed").val("diagnosis_management").attr("disabled", true);
+            $("#question_stage_hidden").val("diagnosis_management")
           } else {
             $("#question_stage_displayed").attr("disabled", false);
           }

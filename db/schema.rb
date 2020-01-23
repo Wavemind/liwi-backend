@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_17_153305) do
+ActiveRecord::Schema.define(version: 2020_01_23_141840) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -231,19 +231,16 @@ ActiveRecord::Schema.define(version: 2020_01_17_153305) do
     t.bigint "reference_table_y_id"
     t.bigint "snomed_id"
     t.string "snomed_label"
-    t.bigint "node_id"
     t.decimal "minimal_dose_per_kg"
     t.decimal "maximal_dose_per_kg"
     t.decimal "maximal_dose"
     t.integer "treatment_type"
     t.integer "pill_size"
     t.integer "doses_per_day"
-    t.integer "system"
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
     t.index ["diagnostic_id"], name: "index_nodes_on_diagnostic_id"
     t.index ["final_diagnostic_id"], name: "index_nodes_on_final_diagnostic_id"
-    t.index ["node_id"], name: "index_nodes_on_node_id"
     t.index ["reference_table_x_id"], name: "index_nodes_on_reference_table_x_id"
     t.index ["reference_table_y_id"], name: "index_nodes_on_reference_table_y_id"
   end
@@ -327,10 +324,10 @@ ActiveRecord::Schema.define(version: 2020_01_17_153305) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "triage_questions_order", default: [], array: true
-    t.integer "triage_first_look_assessments_order", default: [], array: true
-    t.integer "triage_complaint_categories_order", default: [], array: true
-    t.integer "triage_basic_measurements_order", default: [], array: true
-    t.integer "triage_chronical_conditions_order", default: [], array: true
+    t.integer "triage_emergency_sign_order", default: [], array: true
+    t.integer "triage_complaint_category_order", default: [], array: true
+    t.integer "triage_vital_sign_triage_order", default: [], array: true
+    t.integer "triage_chronic_condition_order", default: [], array: true
     t.index ["algorithm_id"], name: "index_versions_on_algorithm_id"
     t.index ["user_id"], name: "index_versions_on_user_id"
   end
