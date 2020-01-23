@@ -1,12 +1,14 @@
 jQuery(document).ready(function() {
 
-  $("#question_formula").closest(".form-group").addClass("d-none");
+  // $("#question_formula").closest(".form-group").addClass("d-none");
 
   // Trigger categoryChange function only on edit or create question form
-  if ($("#new_question").length || $("#edit_question").length) {
+  if ($("#new_question").length || $("[id^='edit_question']").length) {
     categoryChange();
     answer_type_change();
   }
+
+
 
   $("#question_type").change(categoryChange);
   $("#question_answer_type_displayed").change(answer_type_change);

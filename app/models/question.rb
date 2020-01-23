@@ -117,7 +117,7 @@ class Question < Node
 
   # Ensure that the answers are coherent with each other, that every value the mobile user may enter match one and only one answers entered by the medal-C user
   def validate_overlap
-    return true if answer_type.display != 'Input'
+    return true unless %w(Input Formula).include?(answer_type.display)
 
     self.errors.add(:answers, I18n.t('answers.validation.overlap.one_more_or_equal')) if answers.more_or_equal.count != 1
     self.errors.add(:answers, I18n.t('answers.validation.overlap.one_less')) if answers.less.count != 1
