@@ -196,6 +196,7 @@ export default class DiagramProvider extends React.Component {
     currentHealthCareType: null,
     questionAnswerTypes: null,
     questionStages: null,
+    questionSystems: null,
     questionPriorities: null,
     questionCategories: null,
     questionsSequenceCategories: null,

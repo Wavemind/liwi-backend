@@ -395,6 +395,7 @@ en:
       consultation: "Consultation"
       health_cares: "Health cares"
     systems:
+      general: "General"
       respiratory_circulation: "Respiratory and circulatory system"
       ear_nose_mouth_throat: "Ear, nose, mouth and throat system"
       visual: "Visual system"

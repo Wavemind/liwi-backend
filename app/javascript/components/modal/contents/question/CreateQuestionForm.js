@@ -32,6 +32,7 @@ class CreateQuestionForm extends React.Component {
     formula: "",
     formulaHidden: true,
     unavailableHidden: true,
+    systemHidden: true,
     answerTypeDisabled: false,
     stageDisabled: false,
     prefix: "",
@@ -121,6 +122,7 @@ class CreateQuestionForm extends React.Component {
       description,
       type,
       stage,
+      system,
       priority,
       answerType,
       unavailable,
@@ -136,6 +138,7 @@ class CreateQuestionForm extends React.Component {
         description_en: description,
         type: type,
         stage: parseInt(stage),
+        system: system,
         priority: parseInt(priority),
         answer_type_id: parseInt(answerType),
         unavailable: unavailable,
@@ -172,6 +175,7 @@ class CreateQuestionForm extends React.Component {
       }
 
       stateToSet['unavailableHidden'] = value !== "Questions::AssessmentTest";
+      stateToSet['systemHidden'] = !["Questions::Symptom", "Questions::PhysicalExam"].includes(value);
 
       this.setState(stateToSet);
     } else {
@@ -214,6 +218,7 @@ class CreateQuestionForm extends React.Component {
       toggleModal,
       questionCategories,
       questionAnswerTypes,
+      questionSystems,
       questionStages,
       questionPriorities,
     } = this.props;
@@ -224,6 +229,8 @@ class CreateQuestionForm extends React.Component {
       errors,
       type,
       stage,
+      system,
+      systemHidden,
       priority,
       answerType,
       answerTypeDisabled,
@@ -238,6 +245,9 @@ class CreateQuestionForm extends React.Component {
 
     let unavailableStyle = unavailableHidden ? {display: 'none'} : {};
     let formulaStyle = formulaHidden ? {display: 'none'} : {};
+    let systemStyle = systemHidden ? {display: 'none'} : {};
+
+    console.log(questionSystems);
 
     return (
       <Form onSubmit={() => this.create()}>
@@ -257,6 +267,21 @@ class CreateQuestionForm extends React.Component {
 
               <Form.Control.Feedback type="invalid">
                 {errors.category}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Form.Row>
+
+          <Form.Row style={systemStyle}>
+            <Form.Group as={Col} controlId="system">
+              <Form.Label>System</Form.Label>
+              <Form.Control as="select" name="system" onChange={this.handleFormChange} value={system} isInvalid={!!errors.system } >
+                <option value="">Select the system</option>
+                {questionSystems.map((system) => (
+                  <option value={system[1]}>{system[0]}</option>
+                ))}
+              </Form.Control>
+              <Form.Control.Feedback type="invalid">
+                {errors.system}
               </Form.Control.Feedback>
             </Form.Group>
           </Form.Row>

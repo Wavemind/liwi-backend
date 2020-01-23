@@ -27,6 +27,7 @@ class UpdateQuestionForm extends React.Component {
     description: "",
     type: "",
     stage: "",
+    system: "",
     priority: "",
     answerType: "",
     formula: "",
@@ -40,10 +41,12 @@ class UpdateQuestionForm extends React.Component {
     const {
       currentNode,
       questionStages,
+      questionSystems,
       questionPriorities
     } = this.props;
     const newCurrentNode = _.cloneDeep(currentNode);
 
+    let system = questionSystems.find((element) => {return element[1] === newCurrentNode.system});
 
     this.setState({
       id: newCurrentNode.id,
@@ -53,6 +56,7 @@ class UpdateQuestionForm extends React.Component {
       description: newCurrentNode.description_translations === null ? "" : newCurrentNode.description_translations["en"],
       priority: questionPriorities[newCurrentNode.priority],
       stage: questionStages[newCurrentNode.stage],
+      system: system === null ? null : system[1],
       answerType: newCurrentNode.answer_type_id,
       formula: newCurrentNode.formula,
       snomedId: newCurrentNode.snomed_id,
@@ -138,6 +142,7 @@ class UpdateQuestionForm extends React.Component {
       description,
       type,
       stage,
+      system,
       priority,
       answerType,
       formula,
@@ -153,6 +158,7 @@ class UpdateQuestionForm extends React.Component {
         description_en: description,
         type: type,
         stage: parseInt(stage),
+        system: system,
         priority: parseInt(priority),
         answer_type_id: parseInt(answerType),
         formula: formula,
@@ -203,6 +209,7 @@ class UpdateQuestionForm extends React.Component {
       questionCategories,
       questionAnswerTypes,
       questionStages,
+      questionSystems,
       questionPriorities,
       getReferencePrefix
     } = this.props;
@@ -213,6 +220,7 @@ class UpdateQuestionForm extends React.Component {
       errors,
       type,
       stage,
+      system,
       priority,
       answerType,
       formula,
@@ -221,6 +229,7 @@ class UpdateQuestionForm extends React.Component {
     } = this.state;
 
     let formulaStyle = answerType !== 5 ? {display: 'none'} : {};
+    let systemStyle = !['Questions::Symptom', 'Questions::PhysicalExam'].includes(type) ? {display: 'none'} : {};
 
     return (
       <Form onSubmit={() => this.create()}>
@@ -235,6 +244,18 @@ class UpdateQuestionForm extends React.Component {
                 <option value="">Select a category</option>
                 {questionCategories.map((category) => (
                   <option value={category.name}>{category.label}</option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+          </Form.Row>
+
+          <Form.Row style={systemStyle}>
+            <Form.Group as={Col} controlId="system">
+              <Form.Label>System</Form.Label>
+              <Form.Control as="select" name="system" onChange={this.handleFormChange} value={system} isInvalid={!!errors.system } >
+                <option value="">Select the system</option>
+                {questionSystems.map((system) => (
+                  <option value={system[1]}>{system[0]}</option>
                 ))}
               </Form.Control>
             </Form.Group>
