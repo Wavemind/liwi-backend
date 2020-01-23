@@ -418,7 +418,7 @@ class CreateQuestionForm extends React.Component {
         </Modal.Body>
         <Modal.Footer>
           {/*Save directly the question if it is a boolean*/}
-          {(answerType === '1' || type === 'Questions::BasicMeasurement') ? (
+          {(answerType === '1' || type === 'Questions::VitalSignTriage' || type === 'Questions::VitalSignConsultation') ? (
             <Button variant="success" onClick={() => this.create()}>
               Save
             </Button>

@@ -20,9 +20,9 @@ class VersionsService
       assign_node(triage_question)
     end
 
-    # Add every basic_measurement nodes before starting
-    @version.algorithm.questions.where(type: 'Questions::BasicMeasurement').each do |basic_measurement|
-      assign_node(basic_measurement)
+    # Add every vital sign consultation
+    @version.algorithm.questions.where(type: 'Questions::VitalSignConsultation').each do |vital_sign|
+      assign_node(vital_sign)
     end
 
     # Loop in each diagnostics defined in current algorithm version
@@ -51,7 +51,7 @@ class VersionsService
 
   private
 
-  # Fetch every nodes and add to basic measurement where they are used in formula or reference tables
+  # Fetch every nodes and add to vital sign where they are used in formula or reference tables
   def self.add_reference_links(nodes)
     nodes.map do |k, node|
       if node['formula'].present?
@@ -129,10 +129,10 @@ class VersionsService
     hash = {}
 
     hash['orders'] = {}
-    hash['orders']['first_look_assessment'] = @version.triage_first_look_assessments_order
-    hash['orders']['complaint_category'] = @version.triage_complaint_categories_order
-    hash['orders']['basic_measurement'] = @version.triage_basic_measurements_order
-    hash['orders']['chronical_condition'] = @version.triage_chronical_conditions_order
+    hash['orders']['emergency_sign'] = @version.triage_emergency_sign_order
+    hash['orders']['complaint_category'] = @version.triage_complaint_category_order
+    hash['orders']['vital_sign'] = @version.triage_vital_sign_triage_order
+    hash['orders']['chronic_condition'] = @version.triage_chronic_conditions_order
     hash['orders']['other'] = @version.triage_questions_order
 
     hash['conditions'] = {}
@@ -433,7 +433,7 @@ class VersionsService
       hash[health_care.id]['label'] = health_care.label
       hash[health_care.id]['description'] = health_care.description
       # Fields specific to treatments
-      hash[health_care.id]['weight_question_id'] = @version.algorithm.questions.find_by(type: 'Questions::BasicMeasurement', reference: '1').id
+      hash[health_care.id]['weight_question_id'] = @version.algorithm.questions.find_by(type: 'Questions::VitalSignTriage', reference: '1').id
       hash[health_care.id]['minimal_dose_per_kg'] = health_care.minimal_dose_per_kg
       hash[health_care.id]['maximal_dose_per_kg'] = health_care.maximal_dose_per_kg
       hash[health_care.id]['maximal_dose'] = health_care.maximal_dose

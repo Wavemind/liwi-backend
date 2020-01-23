@@ -8,7 +8,7 @@ class Question < Node
   attr_accessor :unavailable
 
   enum priority: [:basic, :mandatory]
-  enum stage: [:registration, :triage, :test, :consultation, :health_cares]
+  enum stage: [:registration, :triage, :test, :consultation, :diagnosis_management]
 
   has_many :answers, foreign_key: 'node_id', dependent: :destroy
   belongs_to :answer_type
@@ -21,9 +21,8 @@ class Question < Node
 
   # Return questions which has not triage stage
   scope :no_triage, ->() { where.not(stage: Question.stages[:triage]) }
-  # Return questions without basic triage categories but still get the triage stage for other categories
-  scope :no_triage_but_other, ->() { where.not(type: %w(Questions::ComplaintCategory Questions::FirstLookAssessment Questions::BasicMeasurement)) }
-  scope :no_treatment_condition, ->() { where.not(type: 'Questions::TreatmentCondition') }
+  scope :no_treatment_condition, ->() { where.not(type: 'Questions::TreatmentQuestion') }
+  scope :no_vital_sign, ->() { where.not(type: %w(Questions::VitalSignConsultation Questions::VitalSignTriage)) }
 
   accepts_nested_attributes_for :answers, allow_destroy: true
 
@@ -31,16 +30,19 @@ class Question < Node
   def self.descendants
     [
         Questions::AssessmentTest,
+        Questions::BackgroundCalculation,
+        Questions::ChronicCondition,
         Questions::ComplaintCategory,
-        Questions::ChronicalCondition,
         Questions::Demographic,
+        Questions::EmergencySign,
         Questions::Exposure,
-        Questions::FirstLookAssessment,
+        Questions::ObservedPhysicalSign,
         Questions::PhysicalExam,
         Questions::Symptom,
+        Questions::TreatmentQuestion,
         Questions::Vaccine,
-        Questions::BasicMeasurement,
-        Questions::TreatmentCondition,
+        Questions::VitalSignConsultation,
+        Questions::VitalSignTriage,
     ]
   end
 
@@ -59,8 +61,8 @@ class Question < Node
   # Return a hash with all question categories with their name, label and prefix
   def self.categories(diagram_class_name)
     categories = []
-    excluded_categories = [Questions::ComplaintCategory, Questions::BasicMeasurement]
-    excluded_categories.push(Questions::TreatmentCondition) unless diagram_class_name == 'FinalDiagnostic'
+    excluded_categories = [Questions::ComplaintCategory, Questions::VitalSignTriage, Questions::VitalSignConsultation, Questions::EmergencySign]
+    excluded_categories.push(Questions::TreatmentQuestion) unless diagram_class_name == 'FinalDiagnostic'
     self.descendants.each do |category|
       unless excluded_categories.include?(category)
         current_category = {}
@@ -93,14 +95,14 @@ class Question < Node
   # Get the right field from the node type<
   def version_field_to_set
     case type
-    when 'Questions::FirstLookAssessment'
-      return 'triage_first_look_assessments_order'
+    when 'Questions::EmergencySign'
+      return 'triage_emergency_sign_order'
     when 'Questions::ComplaintCategory'
-      return 'triage_complaint_categories_order'
-    when 'Questions::BasicMeasurement'
-      return 'triage_basic_measurements_order'
-    when 'Questions::ChronicalCondition'
-      return 'triage_chronical_conditions_order'
+      return 'triage_complaint_category_order'
+    when 'Questions::VitalSignTriage'
+      return 'triage_vital_sign_triage_order'
+    when 'Questions::ChronicCondition'
+      return 'triage_chronic_condition_order'
     else
       return 'triage_questions_order'
     end

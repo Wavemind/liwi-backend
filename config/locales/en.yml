@@ -345,14 +345,14 @@ en:
       assessment_test:
         label: "Assessment/test"
         reference_prefix: "A"
-      basic_measurement:
-        label: "Basic measurement"
-        reference_prefix: "BM"
+      background_calculation:
+        label: "Background calculation"
+        reference_prefix: "BC"
       complaint_category:
         label: "Complaint category"
         reference_prefix: "CC"
-      chronical_condition:
-        label: "Chronical condition"
+      chronic_condition:
+        label: "Chronic condition"
         reference_prefix: "CH"
       demographic:
         label: "Demographics"
@@ -360,21 +360,30 @@ en:
       exposure:
         label: "Exposure"
         reference_prefix: "E"
-      first_look_assessment:
-        label: "First look assessment"
-        reference_prefix: "FL"
+      emergency_sign:
+        label: "Emergency sign"
+        reference_prefix: "ES"
+      observed_physical_sign:
+        label: "Observed physical sign"
+        reference_prefix: "OS"
       physical_exam:
         label: "Physical exam"
         reference_prefix: "PE"
       symptom:
         label: "Symptom"
         reference_prefix: "S"
-      treatment_condition:
-        label: "Treatment condition"
-        reference_prefix: "TC"
+      treatment_question:
+        label: "Additional Treatment question"
+        reference_prefix: "TQ"
       vaccine:
         label: "Vaccine"
         reference_prefix: "V"
+      vital_sign_consultation:
+        label: "Vital sign and anthropometric taken during consultation"
+        reference_prefix: "VC"
+      vital_sign_triage:
+        label: "Vital sign and anthropometric taken at triage"
+        reference_prefix: "VT"
     errors:
       no_blank: "can't be blank"
       formula_wrong_characters: "Incorrect formula format. You can only use numbers, operators and questions references (between brackets)"
@@ -393,7 +402,7 @@ en:
       triage: "Triage"
       test: "Test"
       consultation: "Consultation"
-      health_cares: "Health cares"
+      diagnosis_management: "Diagnosis and management"
     table:
       columns:
         label: "Label"

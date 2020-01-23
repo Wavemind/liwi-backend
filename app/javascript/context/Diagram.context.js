@@ -31,22 +31,24 @@ export default class DiagramProvider extends React.Component {
 
     let orderedNodes = {
       assessmentTest: [],
-      exposure: [],
+      backgroundCalculation: [],
       demographic: [],
+      exposure: [],
+      observedPhysicalSign: [],
       physicalExam: [],
       symptom: [],
       vaccine: [],
       predefinedSyndrome: [],
       comorbidity: [],
       triage: [],
-      chronicalCondition: [],
+      chronicCondition: [],
     };
 
     if (type === "Diagnostic") {
       orderedNodes.scored = [];
       orderedNodes.finalDiagnostic = [];
     } else if (type === "FinalDiagnostic") {
-      orderedNodes.treatmentCondition = [];
+      orderedNodes.treatmentQuestion = [];
       orderedNodes.scored = [];
       orderedNodes.treatment = [];
       orderedNodes.management = [];
@@ -60,6 +62,8 @@ export default class DiagramProvider extends React.Component {
     // Assign node to correct array
     availableNodes.map((node) => {
       let category = this.getCategoryNode(node);
+      console.log(category)
+      console.log(node)
       orderedNodes[category].push(node);
     });
 
