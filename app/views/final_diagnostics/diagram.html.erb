@@ -15,7 +15,7 @@
         availableNodes: @final_diagnostic.available_nodes_health_cares_json,
         type: 'FinalDiagnostic',
         questionAnswerTypes: AnswerType.all.as_json,
-        questionSystems: Question.systems,
+        questionSystems: Question.systems.map { |k, v| [t("questions.systems.#{k}"), k] },
         questionStages: Question.stages.as_json,
         questionPriorities: Question.priorities.as_json(methods: :display_name),
         questionCategories: Question.categories('FinalDiagnostic').as_json,

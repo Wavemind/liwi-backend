@@ -247,8 +247,6 @@ class CreateQuestionForm extends React.Component {
     let formulaStyle = formulaHidden ? {display: 'none'} : {};
     let systemStyle = systemHidden ? {display: 'none'} : {};
 
-    console.log(questionSystems);
-
     return (
       <Form onSubmit={() => this.create()}>
         <Modal.Header>
