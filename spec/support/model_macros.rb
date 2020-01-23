@@ -78,6 +78,12 @@ module ModelMacros
 
       # PS
       ps6 = QuestionsSequences::PredefinedSyndrome.create!(algorithm: @algorithm, reference: '6', label_en: 'Able to drink')
+
+      # Management
+      @management = HealthCares::Management.create!(algorithm: @algorithm, reference: '11', label_en: 'Hospital')
+
+      # Final diagnostic health care
+      @dfh7 = FinalDiagnosticHealthCare.create!(node_id: @management.id, final_diagnostic: @df7)
     end
   end
 
