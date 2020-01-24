@@ -11,7 +11,6 @@ RSpec.describe ManagementsController, type: :controller do
   end
 
   it 'adds translations without rendering the view' do
-
     put :update_translations, params: {
       algorithm_id: @algorithm.id,
       id: @management.id,
@@ -38,7 +37,6 @@ RSpec.describe ManagementsController, type: :controller do
 
     expect(response).to render_template('diagnostics/update_translations')
     expect(response).to have_attributes(status: 422)
-
   end
 
   it 'returns error message when trying to remove a management who has an instance' do
@@ -64,5 +62,7 @@ RSpec.describe ManagementsController, type: :controller do
     expect(response).to have_attributes(status: 302)
     expect(flash[:notice]).to eq I18n.t('flash_message.success_updated')
   end
+
+  
 
 end
