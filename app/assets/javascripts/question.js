@@ -24,7 +24,7 @@ jQuery(document).ready(function() {
       { "data": "reference" },
       { "data": "label" },
       { "data": "description" },
-      { "data": "priority" },
+      { "data": "is_mandatory" },
       { "data": "category" },
       { "data": "answers" },
       { "data": "answer_type" },
@@ -65,14 +65,6 @@ jQuery(document).ready(function() {
             } else {
               $("#question_answer_type_displayed").attr("disabled", false);
             }
-          }
-
-          // Force priority depending on the category
-          if (["CC"].includes(response.responseText)){
-            $("#question_priority_displayed").val("mandatory").attr("disabled", true);
-            $("#question_priority_hidden").val("mandatory");
-          } else {
-            $("#question_priority_displayed").attr("disabled", false);
           }
 
           // Force stage depending on the category
@@ -120,12 +112,6 @@ jQuery(document).ready(function() {
       $(questionFormula).addClass("d-none");
     }
   }
-
-  // Update the right priority field
-  $("#question_priority_displayed").change(function() {
-    let priority = $("#question_priority_displayed option:selected").val();
-    $("#question_priority_hidden").val(priority);
-  });
 
   // Update the right stage field
   $("#question_stage_displayed").change(function() {

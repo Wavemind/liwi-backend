@@ -1,0 +1,9 @@
+{
+  "name": "liwi",
+  "description": "Projet LIWI medal-c",
+  "scripts": {
+    "dokku": {
+      "postdeploy": "bundle exec rails db:migrate"
+    }
+  }
+}

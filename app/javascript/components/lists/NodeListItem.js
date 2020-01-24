@@ -27,7 +27,7 @@ class NodeListItem extends React.Component {
               {getReferencePrefix(node.node_type, node.type) + node.reference}
             </div>
             <div className="col pl-0 pr-2 text-right">
-              {node.priority}
+              {node.is_mandatory ? 'Mandatory' : 'Optional'}
             </div>
           </div>
           <div className="py-2 node-label">

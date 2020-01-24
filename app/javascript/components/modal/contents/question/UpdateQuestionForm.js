@@ -28,7 +28,7 @@ class UpdateQuestionForm extends React.Component {
     type: "",
     stage: "",
     system: "",
-    priority: "",
+    is_mandatory: false,
     answerType: "",
     formula: "",
     snomedId: "",
@@ -42,7 +42,6 @@ class UpdateQuestionForm extends React.Component {
       currentNode,
       questionStages,
       questionSystems,
-      questionPriorities
     } = this.props;
     const newCurrentNode = _.cloneDeep(currentNode);
 
@@ -54,7 +53,7 @@ class UpdateQuestionForm extends React.Component {
       label: newCurrentNode.label_translations["en"],
       type: newCurrentNode.type,
       description: newCurrentNode.description_translations === null ? "" : newCurrentNode.description_translations["en"],
-      priority: questionPriorities[newCurrentNode.priority],
+      is_mandatory: newCurrentNode.is_mandatory,
       stage: questionStages[newCurrentNode.stage],
       system: system === null ? null : system[1],
       answerType: newCurrentNode.answer_type_id,
@@ -123,10 +122,6 @@ class UpdateQuestionForm extends React.Component {
       newErrors.label_en = result.errors.label_en[0];
     }
 
-    if (result.errors.priority !== undefined) {
-      newErrors.priority = result.errors.priority[0];
-    }
-
     if (result.errors.formula !== undefined) {
       newErrors.formula = result.errors.formula[0];
     }
@@ -143,7 +138,7 @@ class UpdateQuestionForm extends React.Component {
       type,
       stage,
       system,
-      priority,
+      is_mandatory,
       answerType,
       formula,
       snomedId,
@@ -159,7 +154,7 @@ class UpdateQuestionForm extends React.Component {
         type: type,
         stage: parseInt(stage),
         system: system,
-        priority: parseInt(priority),
+        is_mandatory: is_mandatory,
         answer_type_id: parseInt(answerType),
         formula: formula,
         snomedId: parseInt(snomedId),
@@ -171,7 +166,7 @@ class UpdateQuestionForm extends React.Component {
 
   // Handle change of inputs in the form
   handleFormChange = (event) => {
-    const value = event.target.value;
+    const value = name === "isMandatory" ? event.target.checked : event.target.value;
     const name = event.target.name;
 
     this.setState({
@@ -210,7 +205,6 @@ class UpdateQuestionForm extends React.Component {
       questionAnswerTypes,
       questionStages,
       questionSystems,
-      questionPriorities,
       getReferencePrefix
     } = this.props;
     const {
@@ -221,7 +215,7 @@ class UpdateQuestionForm extends React.Component {
       type,
       stage,
       system,
-      priority,
+      is_mandatory,
       answerType,
       formula,
       snomedLabel,
@@ -286,17 +280,14 @@ class UpdateQuestionForm extends React.Component {
           </Form.Row>
 
           <Form.Row>
-            <Form.Group as={Col} controlId="priority">
-              <Form.Label>Priority</Form.Label>
-              <Form.Control as="select" name="priority" onChange={this.handleFormChange} defaultValue={priority} isInvalid={!!errors.priority }>
-                <option value="">Select a category</option>
-                {Object.keys(questionPriorities).map(function(key) {
-                  return <option value={questionPriorities[key]}>{key.charAt(0).toUpperCase() + key.slice(1)}</option>;
-                })}
-              </Form.Control>
-              <Form.Control.Feedback type="invalid">
-                {errors.priority}
-              </Form.Control.Feedback>
+            <Form.Group as={Col}>
+              <Form.Check
+                type="checkbox"
+                label="Is Mandatory"
+                name="isMandatory"
+                value={isMandatory}
+                onChange={this.handleFormChange}
+              />
             </Form.Group>
           </Form.Row>
 

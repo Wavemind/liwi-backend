@@ -305,7 +305,7 @@ class VersionsService
       hash[question.id]['reference'] = question.reference
       hash[question.id]['label'] = question.label
       hash[question.id]['description'] = question.description
-      hash[question.id]['priority'] = question.priority
+      hash[question.id]['is_mandatory'] = question.is_mandatory
       hash[question.id]['stage'] = question.stage
       hash[question.id]['formula'] = format_formula(question.formula)
       hash[question.id]['category'] = question.category_name

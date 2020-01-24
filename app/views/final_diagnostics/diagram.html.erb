@@ -17,7 +17,6 @@
         questionAnswerTypes: AnswerType.all.as_json,
         questionSystems: Question.systems.map { |k, v| [t("questions.systems.#{k}"), k] },
         questionStages: Question.stages.as_json,
-        questionPriorities: Question.priorities.as_json(methods: :display_name),
         questionCategories: Question.categories('FinalDiagnostic').as_json,
         questionsSequenceCategories: QuestionsSequence.categories.as_json,
       }

@@ -37,19 +37,26 @@ en:
   answer_type:
     labels:
       - ~
-      - "True/False"
+      - "Yes / No"
       - "Dropdown list"
       - "Input integer"
       - "Input decimal"
       - "Formula"
       - "Date"
-      - "String"
+      - "Present / Absent"
+      - "Positive / Negative"
   answers:
+    predefined:
+      absent: "Absent"
+      negative: "Negative"
+      "no": "No"
+      positive: "Positive"
+      present: "Present"
+      "yes": "Yes"
     edit:
       title: "Edit related answers of %{name} question"
     new:
       title: "Create related answers of %{name} question"
-    "no": "No"
     operators:
       between: ">=, <"
       less: "<"
@@ -66,7 +73,6 @@ en:
         between_not_following: "Two of your answers with between operators are not followed correctly."
         less_greater_than_more_or_equal: "Your answer with less operator can't be greater than your answer with more or equal operator."
         less_equal_more_or_equal: "If you only have less and more or equal answers, they must be equal"
-    "yes": "Yes"
     unavailable: "Test/Assessment is unavailable"
   api:
     v1:
@@ -421,7 +427,7 @@ en:
         priority: "Priority"
         category: "Category"
         answers: "Answers"
-        answer_type: "Type of answers"
+        answer_type: "Answer type"
         actions: "Actions"
     edit:
       title: "Edit question"

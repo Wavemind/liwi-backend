@@ -62,6 +62,9 @@ export default class DiagramProvider extends React.Component {
     // Assign node to correct array
     availableNodes.map((node) => {
       let category = this.getCategoryNode(node);
+
+      console.log(category)
+      console.log(node)
       orderedNodes[category].push(node);
     });
 
@@ -199,7 +202,6 @@ export default class DiagramProvider extends React.Component {
     questionAnswerTypes: null,
     questionStages: null,
     questionSystems: null,
-    questionPriorities: null,
     questionCategories: null,
     questionsSequenceCategories: null,
     answersOperators: null,

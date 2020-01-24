@@ -2,12 +2,13 @@
 class Question < Node
 
   after_create :create_boolean, if: Proc.new { answer_type.value == 'Boolean' }
+  after_create :create_positive, if: Proc.new { answer_type.value == 'Positive' }
+  after_create :create_present, if: Proc.new { answer_type.value == 'Present' }
   after_create :push_in_versions, if: Proc.new { stage == 'triage' }
   before_destroy :remove_from_versions, if: Proc.new { stage == 'triage' }
 
   attr_accessor :unavailable
 
-  enum priority: [:basic, :mandatory]
   enum stage: [:registration, :triage, :test, :consultation, :diagnosis_management]
   enum system: [:general, :respiratory_circulation, :ear_nose_mouth_throat, :visual, :integumentary, :digestive, :urinary_reproductive, :nervous, :muscular_skeletal]
 
@@ -18,7 +19,7 @@ class Question < Node
   belongs_to :reference_table_y, class_name: 'Question', optional: true
 
   before_validation :validate_formula, if: Proc.new { self.formula.present? }
-  validates_presence_of :priority, :stage
+  validates_presence_of :stage
 
   # Return questions which has not triage stage
   scope :no_triage, ->() { where.not(stage: Question.stages[:triage]) }
@@ -74,6 +75,22 @@ class Question < Node
       end
     end
     categories
+  end
+
+  # Automatically create the answers, since they can't be changed
+  # Create 2 automatic answers (positive & negative) for positive questions
+  def create_positive
+    self.answers << Answer.new(reference: '1', label_en: I18n.t('answers.predefined.positive'))
+    self.answers << Answer.new(reference: '2', label_en: I18n.t('answers.predefined.negative'))
+    self.save
+  end
+
+  # Automatically create the answers, since they can't be changed
+  # Create 2 automatic answers (present & absent) for present questions
+  def create_present
+    self.answers << Answer.new(reference: '1', label_en: I18n.t('answers.predefined.present'))
+    self.answers << Answer.new(reference: '2', label_en: I18n.t('answers.predefined.absent'))
+    self.save
   end
 
   # When a question from triage stage is created, push it at the end of the versions order

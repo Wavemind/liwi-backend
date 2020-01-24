@@ -56,7 +56,7 @@ class AnswersController < ApplicationController
       :label_en,
       Language.label_params,
       :reference,
-      :priority,
+      :is_mandatory,
       :category,
       :answer_type_id,
     )

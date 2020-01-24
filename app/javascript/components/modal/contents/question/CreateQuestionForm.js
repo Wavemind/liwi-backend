@@ -26,7 +26,7 @@ class CreateQuestionForm extends React.Component {
     description: "",
     type: "",
     stage: "",
-    priority: "",
+    isMandatory: false,
     answerType: "",
     unavailable: false,
     formula: "",
@@ -96,10 +96,6 @@ class CreateQuestionForm extends React.Component {
       newErrors.stage = result.errors.stage[0];
     }
 
-    if (result.errors.priority !== undefined) {
-      newErrors.priority = result.errors.priority[0];
-    }
-
     if (result.errors.answer_type !== undefined) {
       newErrors.answerType = result.errors.answer_type[0];
     }
@@ -123,7 +119,7 @@ class CreateQuestionForm extends React.Component {
       type,
       stage,
       system,
-      priority,
+      isMandatory,
       answerType,
       unavailable,
       formula,
@@ -139,7 +135,7 @@ class CreateQuestionForm extends React.Component {
         type: type,
         stage: parseInt(stage),
         system: system,
-        priority: parseInt(priority),
+        is_mandatory: isMandatory,
         answer_type_id: parseInt(answerType),
         unavailable: unavailable,
         formula: formula,
@@ -153,7 +149,7 @@ class CreateQuestionForm extends React.Component {
   // Handle change of inputs in the form
   handleFormChange = (event) => {
     const name = event.target.name;
-    const value = name === "unavailable" ? event.target.checked : event.target.value;
+    const value = ["unavailable", "isMandatory"].includes(name) ? event.target.checked : event.target.value;
 
     let stateToSet = {};
     stateToSet[name] = value;
@@ -185,6 +181,8 @@ class CreateQuestionForm extends React.Component {
 
       this.setState(stateToSet);
     }
+    console.log('fesse')
+    console.log(this.state.isMandatory)
   };
 
 
@@ -231,7 +229,7 @@ class CreateQuestionForm extends React.Component {
       stage,
       system,
       systemHidden,
-      priority,
+      isMandatory,
       answerType,
       answerTypeDisabled,
       stageDisabled,
@@ -316,17 +314,14 @@ class CreateQuestionForm extends React.Component {
           </Form.Row>
 
           <Form.Row>
-            <Form.Group as={Col} controlId="priority">
-              <Form.Label>Priority</Form.Label>
-              <Form.Control as="select" name="priority" onChange={this.handleFormChange} value={priority} isInvalid={!!errors.priority }>
-                <option value="">Select the priority</option>
-                {Object.keys(questionPriorities).map(function(key) {
-                  return <option value={questionPriorities[key]}>{key.charAt(0).toUpperCase() + key.slice(1)}</option>;
-                })}
-              </Form.Control>
-              <Form.Control.Feedback type="invalid">
-                {errors.priority}
-              </Form.Control.Feedback>
+            <Form.Group as={Col}>
+              <Form.Check
+                type="checkbox"
+                label="Is Mandatory"
+                name="isMandatory"
+                value={isMandatory}
+                onChange={this.handleFormChange}
+              />
             </Form.Group>
           </Form.Row>
 
@@ -441,7 +436,7 @@ class CreateQuestionForm extends React.Component {
         </Modal.Body>
         <Modal.Footer>
           {/*Save directly the question if it is a boolean*/}
-          {(answerType === '1' || type === 'Questions::VitalSignTriage' || type === 'Questions::VitalSignConsultation') ? (
+          {(['1', '7', '8'].includes(answerType) || ['Questions::VitalSignTriage', 'Questions::VitalSignConsultation'].includes(type)) ? (
             <Button variant="success" onClick={() => this.create()}>
               Save
             </Button>
