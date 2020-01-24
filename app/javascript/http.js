@@ -360,7 +360,7 @@ export default class Http {
   // Search for snomet results from search string
   searchSnomed = async (term) => {
     let response;
-    const url = `https://browser.ihtsdotools.org/snowstorm/snomed-ct/v2/MAIN/concepts?term=${term}&limit=50`;
+    const url = `https://browser.ihtsdotools.org/snowstorm/snomed-ct/MAIN/concepts?term=${term}&limit=50`;
     const request = await fetch(url).catch(error => console.log(error));
 
     // Display error or parse json

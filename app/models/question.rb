@@ -2,13 +2,15 @@
 class Question < Node
 
   after_create :create_boolean, if: Proc.new { answer_type.value == 'Boolean' }
+  after_create :create_positive, if: Proc.new { answer_type.value == 'Positive' }
+  after_create :create_present, if: Proc.new { answer_type.value == 'Present' }
   after_create :push_in_versions, if: Proc.new { stage == 'triage' }
   before_destroy :remove_from_versions, if: Proc.new { stage == 'triage' }
 
   attr_accessor :unavailable
 
-  enum priority: [:basic, :mandatory]
-  enum stage: [:registration, :triage, :test, :consultation, :health_cares]
+  enum stage: [:registration, :triage, :test, :consultation, :diagnosis_management]
+  enum system: [:general, :respiratory_circulation, :ear_nose_mouth_throat, :visual, :integumentary, :digestive, :urinary_reproductive, :nervous, :muscular_skeletal]
 
   has_many :answers, foreign_key: 'node_id', dependent: :destroy
   belongs_to :answer_type
@@ -17,13 +19,12 @@ class Question < Node
   belongs_to :reference_table_y, class_name: 'Question', optional: true
 
   before_validation :validate_formula, if: Proc.new { self.formula.present? }
-  validates_presence_of :priority, :stage
+  validates_presence_of :stage
 
   # Return questions which has not triage stage
   scope :no_triage, ->() { where.not(stage: Question.stages[:triage]) }
-  # Return questions without basic triage categories but still get the triage stage for other categories
-  scope :no_triage_but_other, ->() { where.not(type: %w(Questions::ComplaintCategory Questions::FirstLookAssessment Questions::BasicMeasurement)) }
-  scope :no_treatment_condition, ->() { where.not(type: 'Questions::TreatmentCondition') }
+  scope :no_treatment_condition, ->() { where.not(type: 'Questions::TreatmentQuestion') }
+  scope :no_vital_sign, ->() { where.not(type: %w(Questions::VitalSignConsultation Questions::VitalSignTriage)) }
 
   accepts_nested_attributes_for :answers, allow_destroy: true
 
@@ -31,16 +32,19 @@ class Question < Node
   def self.descendants
     [
         Questions::AssessmentTest,
+        Questions::BackgroundCalculation,
+        Questions::ChronicCondition,
         Questions::ComplaintCategory,
-        Questions::ChronicalCondition,
         Questions::Demographic,
+        Questions::EmergencySign,
         Questions::Exposure,
-        Questions::FirstLookAssessment,
+        Questions::ObservedPhysicalSign,
         Questions::PhysicalExam,
         Questions::Symptom,
+        Questions::TreatmentQuestion,
         Questions::Vaccine,
-        Questions::BasicMeasurement,
-        Questions::TreatmentCondition,
+        Questions::VitalSignConsultation,
+        Questions::VitalSignTriage,
     ]
   end
 
@@ -59,8 +63,8 @@ class Question < Node
   # Return a hash with all question categories with their name, label and prefix
   def self.categories(diagram_class_name)
     categories = []
-    excluded_categories = [Questions::ComplaintCategory, Questions::BasicMeasurement]
-    excluded_categories.push(Questions::TreatmentCondition) unless diagram_class_name == 'FinalDiagnostic'
+    excluded_categories = [Questions::ComplaintCategory, Questions::VitalSignTriage, Questions::VitalSignConsultation, Questions::EmergencySign]
+    excluded_categories.push(Questions::TreatmentQuestion) unless diagram_class_name == 'FinalDiagnostic'
     self.descendants.each do |category|
       unless excluded_categories.include?(category)
         current_category = {}
@@ -71,6 +75,22 @@ class Question < Node
       end
     end
     categories
+  end
+
+  # Automatically create the answers, since they can't be changed
+  # Create 2 automatic answers (positive & negative) for positive questions
+  def create_positive
+    self.answers << Answer.new(reference: '1', label_en: I18n.t('answers.predefined.positive'))
+    self.answers << Answer.new(reference: '2', label_en: I18n.t('answers.predefined.negative'))
+    self.save
+  end
+
+  # Automatically create the answers, since they can't be changed
+  # Create 2 automatic answers (present & absent) for present questions
+  def create_present
+    self.answers << Answer.new(reference: '1', label_en: I18n.t('answers.predefined.present'))
+    self.answers << Answer.new(reference: '2', label_en: I18n.t('answers.predefined.absent'))
+    self.save
   end
 
   # When a question from triage stage is created, push it at the end of the versions order
@@ -93,14 +113,14 @@ class Question < Node
   # Get the right field from the node type<
   def version_field_to_set
     case type
-    when 'Questions::FirstLookAssessment'
-      return 'triage_first_look_assessments_order'
+    when 'Questions::EmergencySign'
+      return 'triage_emergency_sign_order'
     when 'Questions::ComplaintCategory'
-      return 'triage_complaint_categories_order'
-    when 'Questions::BasicMeasurement'
-      return 'triage_basic_measurements_order'
-    when 'Questions::ChronicalCondition'
-      return 'triage_chronical_conditions_order'
+      return 'triage_complaint_category_order'
+    when 'Questions::VitalSignTriage'
+      return 'triage_vital_sign_triage_order'
+    when 'Questions::ChronicCondition'
+      return 'triage_chronic_condition_order'
     else
       return 'triage_questions_order'
     end
@@ -117,7 +137,7 @@ class Question < Node
 
   # Ensure that the answers are coherent with each other, that every value the mobile user may enter match one and only one answers entered by the medal-C user
   def validate_overlap
-    return true if answer_type.display != 'Input'
+    return true unless %w(Input Formula).include?(answer_type.display)
 
     self.errors.add(:answers, I18n.t('answers.validation.overlap.one_more_or_equal')) if answers.more_or_equal.count != 1
     self.errors.add(:answers, I18n.t('answers.validation.overlap.one_less')) if answers.less.count != 1

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_20_142836) do
+ActiveRecord::Schema.define(version: 2020_01_24_090812) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -214,7 +214,6 @@ ActiveRecord::Schema.define(version: 2019_12_20_142836) do
   create_table "nodes", force: :cascade do |t|
     t.hstore "label_translations"
     t.string "reference"
-    t.integer "priority"
     t.integer "stage"
     t.string "type"
     t.bigint "diagnostic_id"
@@ -239,6 +238,8 @@ ActiveRecord::Schema.define(version: 2019_12_20_142836) do
     t.integer "treatment_type"
     t.integer "pill_size"
     t.integer "doses_per_day"
+    t.integer "system"
+    t.boolean "is_mandatory", default: false
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
     t.index ["diagnostic_id"], name: "index_nodes_on_diagnostic_id"
@@ -319,10 +320,10 @@ ActiveRecord::Schema.define(version: 2019_12_20_142836) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "triage_questions_order", default: [], array: true
-    t.integer "triage_first_look_assessments_order", default: [], array: true
-    t.integer "triage_complaint_categories_order", default: [], array: true
-    t.integer "triage_basic_measurements_order", default: [], array: true
-    t.integer "triage_chronical_conditions_order", default: [], array: true
+    t.integer "triage_emergency_sign_order", default: [], array: true
+    t.integer "triage_complaint_category_order", default: [], array: true
+    t.integer "triage_vital_sign_triage_order", default: [], array: true
+    t.integer "triage_chronic_condition_order", default: [], array: true
     t.index ["algorithm_id"], name: "index_versions_on_algorithm_id"
     t.index ["user_id"], name: "index_versions_on_user_id"
   end

@@ -1,9 +1,9 @@
 # Category of question who defines other condition that might influence the present patient condition
 # Reference prefix : CH
-class Questions::ChronicalCondition < Question
+class Questions::ChronicCondition < Question
 
   def self.variable
-    'chronical_condition'
+    'chronic_condition'
   end
 
 end
