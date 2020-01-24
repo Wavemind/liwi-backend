@@ -1,23 +1,12 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_answer, only: [:edit, :update, :update_translations]
-  before_action :set_question, only: [:new, :create, :edit, :update]
-  before_action :set_algorithm, only: [:new, :create, :edit, :update]
+  before_action :set_question, only: [:new, :update]
+  before_action :set_algorithm, only: [:new, :update]
 
 
   def new
     @answer = Answer.new
-  end
-
-  def create
-    @answer = Answer.new(answer_params)
-    @answer.algorithms << @algorithm
-
-    if @answer.save
-      redirect_to new_algorithm_answer_answer_url(@algorithm, @answer)
-    else
-      render :new
-    end
   end
 
   def update

@@ -71,7 +71,7 @@ Rails.application.routes.draw do
         put 'update_translations'
       end
 
-      resources :answers, only: [:new, :create, :edit, :update] do
+      resources :answers, only: [:new, :update] do
         member do
           put 'update_translations'
         end

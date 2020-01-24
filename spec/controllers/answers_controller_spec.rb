@@ -7,7 +7,6 @@ RSpec.describe AnswersController, type: :controller do
   create_question
 
   it 'adds translations without rendering the view' do
-
     put :update_translations, params: {
       algorithm_id: @algorithm.id,
       question_id: @question.id,
@@ -36,7 +35,17 @@ RSpec.describe AnswersController, type: :controller do
 
     expect(response).to render_template('diagnostics/update_translations')
     expect(response).to have_attributes(status: 422)
+  end
 
+  it 'should work for [GET:new]' do
+    get :new, params: { algorithm_id: @algorithm.id, question_id: @question.id }
+    expect(response.status).to eq(200)
+  end
+
+  # TODO: Check if this method is used
+  it 'should work for [PATCH:update]' do
+    patch :update, params: { algorithm_id: @algorithm.id, question_id: @question.id, id: @question.answers.first.id, answer: {reference: '4', label: 'True', operator: nil, value: 'true', node: @question}}
+    expect(response.status).to eq(302)
   end
 
 end

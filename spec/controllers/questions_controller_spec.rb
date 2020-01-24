@@ -187,6 +187,11 @@ RSpec.describe QuestionsController, type: :controller do
     expect(@question.answers.count).to equal(3)
   end
 
+  it 'should work for [GET:new]' do
+    get :new, params: { algorithm_id: @algorithm.id }
+    expect(response.status).to eq(200)
+  end
+
   it 'should work for [GET:edit]' do
     @question = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', is_mandatory: true, stage: Question.stages[:triage], answer_type: @boolean)
 
