@@ -96,7 +96,7 @@ jQuery(document).ready(function() {
           }
 
           // Hide or not the system field if it is a consultation category
-          if ($("#question_system").closest(".form-group") && ["PE", "S"].includes(response.responseText)) {
+          if ($("#question_system").closest(".form-group") && ["OS", "PE", "S"].includes(response.responseText)) {
             $("#question_system").closest(".form-group").removeClass("d-none");
           } else {
             $("#question_system").closest(".form-group").addClass("d-none");

@@ -229,7 +229,7 @@ class UpdateQuestionForm extends React.Component {
     } = this.state;
 
     let formulaStyle = answerType !== 5 ? {display: 'none'} : {};
-    let systemStyle = !['Questions::Symptom', 'Questions::PhysicalExam'].includes(type) ? {display: 'none'} : {};
+    let systemStyle = !["Questions::Symptom", "Questions::PhysicalExam", "Questions::ObservedPhysicalSign"].includes(type) ? {display: 'none'} : {};
 
     return (
       <Form onSubmit={() => this.create()}>

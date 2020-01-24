@@ -175,7 +175,7 @@ class CreateQuestionForm extends React.Component {
       }
 
       stateToSet['unavailableHidden'] = value !== "Questions::AssessmentTest";
-      stateToSet['systemHidden'] = !["Questions::Symptom", "Questions::PhysicalExam"].includes(value);
+      stateToSet['systemHidden'] = !["Questions::Symptom", "Questions::PhysicalExam", "Questions::ObservedPhysicalSign"].includes(value);
 
       this.setState(stateToSet);
     } else {
