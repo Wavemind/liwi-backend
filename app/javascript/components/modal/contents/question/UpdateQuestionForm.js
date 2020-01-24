@@ -28,7 +28,7 @@ class UpdateQuestionForm extends React.Component {
     type: "",
     stage: "",
     system: "",
-    is_mandatory: false,
+    isMandatory: false,
     answerType: "",
     formula: "",
     snomedId: "",
@@ -53,15 +53,15 @@ class UpdateQuestionForm extends React.Component {
       label: newCurrentNode.label_translations["en"],
       type: newCurrentNode.type,
       description: newCurrentNode.description_translations === null ? "" : newCurrentNode.description_translations["en"],
-      is_mandatory: newCurrentNode.is_mandatory,
+      isMandatory: newCurrentNode.is_mandatory,
       stage: questionStages[newCurrentNode.stage],
-      system: system === null ? null : system[1],
+      system: system === undefined ? undefined : system[1],
       answerType: newCurrentNode.answer_type_id,
       formula: newCurrentNode.formula,
       snomedId: newCurrentNode.snomed_id,
       snomedLabel: newCurrentNode.snomed_label,
     });
-  }
+  };
 
   updateAnswers = async () => {
     const { set, http } = this.props;
@@ -138,7 +138,7 @@ class UpdateQuestionForm extends React.Component {
       type,
       stage,
       system,
-      is_mandatory,
+      isMandatory,
       answerType,
       formula,
       snomedId,
@@ -154,7 +154,7 @@ class UpdateQuestionForm extends React.Component {
         type: type,
         stage: parseInt(stage),
         system: system,
-        is_mandatory: is_mandatory,
+        is_mandatory: isMandatory,
         answer_type_id: parseInt(answerType),
         formula: formula,
         snomedId: parseInt(snomedId),
@@ -215,7 +215,7 @@ class UpdateQuestionForm extends React.Component {
       type,
       stage,
       system,
-      is_mandatory,
+      isMandatory,
       answerType,
       formula,
       snomedLabel,
@@ -285,6 +285,7 @@ class UpdateQuestionForm extends React.Component {
                 type="checkbox"
                 label="Is Mandatory"
                 name="isMandatory"
+                checked={isMandatory}
                 value={isMandatory}
                 onChange={this.handleFormChange}
               />
@@ -389,7 +390,7 @@ class UpdateQuestionForm extends React.Component {
         </Modal.Body>
         <Modal.Footer>
           {/*Save directly the question if it is a boolean*/}
-          {(answerType === 1) ? (
+          {(['1', '7', '8'].includes(answerType)) ? (
             <Button variant="success" onClick={() => this.update()}>
               Save
             </Button>

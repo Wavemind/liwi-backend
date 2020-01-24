@@ -181,8 +181,6 @@ class CreateQuestionForm extends React.Component {
 
       this.setState(stateToSet);
     }
-    console.log('fesse')
-    console.log(this.state.isMandatory)
   };
 
 
