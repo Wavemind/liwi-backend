@@ -32,7 +32,7 @@ module ModelMacros
     before(:each) do
       epoc_first = Version.create!(name: 'first_trial', algorithm: @algorithm, user: @user)
       boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
-      @cc = @algorithm.questions.create!(reference: '11', answer_type: boolean, label_en: 'CC11', stage: Question.stages[:triage], priority: Question.priorities[:mandatory], type: 'Questions::ComplaintCategory')
+      @cc = @algorithm.questions.create!(reference: '11', answer_type: boolean, label_en: 'CC11', stage: Question.stages[:triage], is_mandatory: true, type: 'Questions::ComplaintCategory')
       @dd7 = Diagnostic.create!(version: epoc_first, label_en: 'Severe LRTI', reference: '7', node: @cc)
     end
   end
@@ -40,7 +40,7 @@ module ModelMacros
   def create_question
     before(:each) do
       @boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
-      @question = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2456', priority: Question.priorities[:mandatory], stage: Question.stages[:triage], answer_type: @boolean)
+      @question = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2456', is_mandatory: true, stage: Question.stages[:triage], answer_type: @boolean)
     end
   end
 
@@ -50,11 +50,11 @@ module ModelMacros
       epoc_first = Version.create!(name: 'first_trial', algorithm: @algorithm, user: @user)
 
       # Questions
-      s2 = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2123123', priority: Question.priorities[:mandatory], stage: Question.stages[:triage], answer_type: @boolean)
-      p13 = Questions::PhysicalExam.create!(algorithm: @algorithm, label_en: 'Lower chest indrawing', reference: '1331231231', priority: Question.priorities[:basic], stage: Question.stages[:triage], answer_type: @boolean)
-      p3 = Questions::PhysicalExam.create!(algorithm: @algorithm, label_en: 'Respiratory rate', reference: '34123123', priority: Question.priorities[:mandatory], stage: Question.stages[:triage], answer_type: @input_integer)
-      @p1 = Questions::PhysicalExam.create!(algorithm: @algorithm, label_en: 'SAO2', reference: '1123123', priority: Question.priorities[:mandatory], stage: Question.stages[:triage], answer_type: @input_integer)
-      @cc = @algorithm.questions.create!(reference: '11', answer_type: @boolean, label_en: 'CC11', stage: Question.stages[:triage], priority: Question.priorities[:mandatory], type: 'Questions::ComplaintCategory')
+      s2 = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2123123', is_mandatory: true, stage: Question.stages[:triage], answer_type: @boolean)
+      p13 = Questions::PhysicalExam.create!(algorithm: @algorithm, label_en: 'Lower chest indrawing', reference: '1331231231', is_mandatory: true, stage: Question.stages[:triage], answer_type: @boolean)
+      p3 = Questions::PhysicalExam.create!(algorithm: @algorithm, label_en: 'Respiratory rate', reference: '34123123', is_mandatory: true, stage: Question.stages[:triage], answer_type: @input_integer)
+      @p1 = Questions::PhysicalExam.create!(algorithm: @algorithm, label_en: 'SAO2', reference: '1123123', is_mandatory: true, stage: Question.stages[:triage], answer_type: @input_integer)
+      @cc = @algorithm.questions.create!(reference: '11', answer_type: @boolean, label_en: 'CC11', stage: Question.stages[:triage], is_mandatory: true, type: 'Questions::ComplaintCategory')
 
       # Answers
       @s2_1 = s2.answers.first

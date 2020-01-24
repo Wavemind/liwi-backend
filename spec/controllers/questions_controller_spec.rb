@@ -52,7 +52,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   it 'create an answer for current question if attributes is valid' do
-    @question = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', priority: Question.priorities[:mandatory], stage: Question.stages[:triage], answer_type: @boolean)
+    @question = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', is_mandatory: true, stage: Question.stages[:triage], answer_type: @boolean)
 
     expect {
       put :answers, params: {
@@ -74,7 +74,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   it 'create multiple answers for current question if attributes is valid' do
-    @question = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', priority: Question.priorities[:mandatory], stage: Question.stages[:triage], answer_type: @boolean)
+    @question = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', is_mandatory: true, stage: Question.stages[:triage], answer_type: @boolean)
 
     expect {
       put :answers, params: {
@@ -102,7 +102,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   it 'doesn\'t create an answer for current question if attributes is invalid' do
-    @question = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', priority: Question.priorities[:mandatory], stage: Question.stages[:triage], answer_type: @boolean)
+    @question = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', is_mandatory: true, stage: Question.stages[:triage], answer_type: @boolean)
 
     expect {
       put :answers, params: {
@@ -124,7 +124,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   it 'adds translations without rendering the view' do
-    @question = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', priority: Question.priorities[:mandatory], stage: Question.stages[:triage], answer_type: @boolean)
+    @question = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', is_mandatory: true, stage: Question.stages[:triage], answer_type: @boolean)
 
     put :update_translations, params: {
       algorithm_id: @algorithm.id,
@@ -142,7 +142,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   it 'returns error when sending attributes with clearing a mandatory field' do
-    @question = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', priority: Question.priorities[:mandatory], stage: Question.stages[:triage], answer_type: @boolean)
+    @question = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', is_mandatory: true, stage: Question.stages[:triage], answer_type: @boolean)
 
     put :update_translations, params: {
       algorithm_id: @algorithm.id,
@@ -179,12 +179,45 @@ RSpec.describe QuestionsController, type: :controller do
     expect(response).to redirect_to algorithm_url(@algorithm, panel: 'questions')
     expect(response).to have_attributes(status: 302)
     expect(flash[:notice]).to eq I18n.t('flash_message.success_updated')
-
   end
 
   it 'create an unavailable answer if category is an assessment' do
-    @question = Questions::AssessmentTest.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', priority: Question.priorities[:mandatory], stage: Question.stages[:triage], answer_type: @boolean, unavailable: '1')
+    @question = Questions::AssessmentTest.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', is_mandatory: true, stage: Question.stages[:triage], answer_type: @boolean, unavailable: '1')
 
     expect(@question.answers.count).to equal(3)
   end
+
+  it 'should work for [GET:edit]' do
+    @question = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', is_mandatory: true, stage: Question.stages[:triage], answer_type: @boolean)
+
+    get :edit, params: { algorithm_id: @algorithm.id, id: @question.id }
+    expect(response.status).to eq(200)
+  end
+
+  it 'should work for [POST:create]' do
+    post :create, params: { algorithm_id: @algorithm.id, question: {algorithm: @algorithm, label_en: 'Cough', reference: '2', is_mandatory: true, stage: 'triage', answer_type: @boolean} }
+    expect(response.status).to eq(200)
+  end
+
+  it 'should work for [POST:update]' do
+    @question = Questions::AssessmentTest.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', is_mandatory: true, stage: Question.stages[:triage], answer_type: @boolean, unavailable: '1')
+    put :update, params: { algorithm_id: @algorithm.id, id: @question.id, question: {id: @question.id, algorithm: @algorithm, label_en: 'Cough', reference: '2', is_mandatory: true, stage: 'triage', answer_type: @boolean} }
+    expect(response.status).to eq(302)
+  end
+
+  # TODO @Manu
+  it 'should work for [POST:create_from_diagram]' do
+
+  end
+
+  # TODO @Manu
+  it 'should work for [PUT:update_from_diagram]' do
+
+  end
+
+  it 'should work for [POST:validate]' do
+    put :validate, params: { algorithm_id: @algorithm.id, question: {algorithm: @algorithm, label_en: 'Cough', reference: '2', is_mandatory: true, stage: 'triage', answer_type: @boolean} }, xhr: true
+    expect(response.status).to eq(200)
+  end
+
 end
