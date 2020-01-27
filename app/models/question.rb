@@ -126,15 +126,6 @@ class Question < Node
     end
   end
 
-  # After all answers have been created, ensure that they does not share the same reference
-  def validate_answers_references
-    valid = true
-    answers.map do |answer|
-      valid = false unless answer.unique_reference
-    end
-    valid
-  end
-
   # Ensure that the answers are coherent with each other, that every value the mobile user may enter match one and only one answers entered by the medal-C user
   def validate_overlap
     return true unless %w(Input Formula).include?(answer_type.display)

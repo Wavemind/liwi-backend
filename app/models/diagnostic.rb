@@ -12,8 +12,8 @@ class Diagnostic < ApplicationRecord
   has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy
 
   before_validation :validate_complaint_category
+  after_create :generate_reference
   validates_presence_of :label_en
-  validates :reference, presence: true, uniqueness: { scope: :version }
 
   translates :label
 
@@ -200,6 +200,15 @@ class Diagnostic < ApplicationRecord
   end
 
   def full_reference
-    I18n.t('diagnostics.reference') + reference
+    I18n.t('diagnostics.reference') + reference.to_s
+  end
+
+  def generate_reference
+    if version.diagnostics.count > 1
+      self.reference = version.diagnostics.maximum(:reference) + 1
+    else
+      self.reference = 1
+    end
+    self.save
   end
 end

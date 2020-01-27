@@ -14,6 +14,7 @@ class FinalDiagnostic < Node
   has_many :components, class_name: 'Instance', dependent: :destroy
 
   before_validation :prevent_loop
+  before_create :link_algorithm
 
   # Enable recursive duplicating
   # https://github.com/amoeba-rb/amoeba#usage
@@ -102,9 +103,8 @@ class FinalDiagnostic < Node
     I18n.t("final_diagnostics.reference")
   end
 
-  # Override Node method since the final_diagnostic is linked to a diagnostic and not the algorithm directly
-  # Ensure the reference is unique
-  def unique_reference
-    self.errors.add(:reference, I18n.t('nodes.validation.reference_used')) if diagnostic.final_diagnostics.where(reference: reference).where.not(id: id).any?
+  # Link the DF to its algorithm (from diagnostic)
+  def link_algorithm
+    self.algorithm = diagnostic.version.algorithm
   end
 end

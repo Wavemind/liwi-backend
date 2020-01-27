@@ -132,7 +132,6 @@ class UpdateQuestionForm extends React.Component {
   generateQuestionBody = () => {
     const {
       id,
-      reference,
       label,
       description,
       type,
@@ -148,7 +147,6 @@ class UpdateQuestionForm extends React.Component {
     return {
       question: {
         id: id,
-        reference: reference,
         label_en: label,
         description_en: description,
         type: type,
@@ -289,28 +287,6 @@ class UpdateQuestionForm extends React.Component {
                 value={isMandatory}
                 onChange={this.handleFormChange}
               />
-            </Form.Group>
-          </Form.Row>
-
-          <Form.Row>
-            <Form.Group as={Col}>
-              <Form.Label>Reference</Form.Label>
-              <InputGroup>
-                <InputGroup.Prepend>
-                  <InputGroup.Text id="inputGroupPrepend">{getReferencePrefix('Question', type)}</InputGroup.Text>
-                </InputGroup.Prepend>
-                <Form.Control
-                  type="text"
-                  aria-describedby="inputGroupPrepend"
-                  name="reference"
-                  value={reference}
-                  onChange={this.handleFormChange}
-                  isInvalid={!!errors.reference}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.reference}
-                </Form.Control.Feedback>
-              </InputGroup>
             </Form.Group>
           </Form.Row>
 

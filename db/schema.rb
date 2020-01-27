@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_24_090812) do
+ActiveRecord::Schema.define(version: 2020_01_27_085907) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -106,7 +106,7 @@ ActiveRecord::Schema.define(version: 2020_01_24_090812) do
   end
 
   create_table "diagnostics", force: :cascade do |t|
-    t.string "reference"
+    t.integer "reference"
     t.hstore "label_translations"
     t.bigint "version_id"
     t.datetime "created_at", null: false
@@ -213,7 +213,7 @@ ActiveRecord::Schema.define(version: 2020_01_24_090812) do
 
   create_table "nodes", force: :cascade do |t|
     t.hstore "label_translations"
-    t.string "reference"
+    t.integer "reference"
     t.integer "stage"
     t.string "type"
     t.bigint "diagnostic_id"
