@@ -307,6 +307,7 @@ class VersionsService
       hash[question.id]['description'] = question.description
       hash[question.id]['is_mandatory'] = question.is_mandatory
       hash[question.id]['stage'] = question.stage
+      hash[question.id]['system'] = question.system
       hash[question.id]['formula'] = format_formula(question.formula)
       hash[question.id]['category'] = question.category_name
       # Send Reference instead of actual display format to help f-e interpret the question correctly
