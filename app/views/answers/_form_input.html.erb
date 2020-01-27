@@ -1,10 +1,10 @@
 <div class="nested-fields">
   <div class="row">
-    <div class="col align-self-center"><%= f.input :label_en, disabled: (f.object.persisted? && f.object.reference.ends_with?('_0')), disabled: (f.object.persisted? && f.object.reference.ends_with?('_0')) %></div>
-    <div class="col align-self-center"><%= f.input :operator, collection: Answer.operators.map { |k, v| [t("answers.operators.#{k}"), k] }, prompt: t('select'), disabled: (f.object.persisted? && f.object.reference.ends_with?('_0')) %></div>
-    <div class="col align-self-center"><%= f.input :value, disabled: (f.object.persisted? && f.object.reference.ends_with?('_0')) %></div>
+    <div class="col align-self-center"><%= f.input :label_en, disabled: (f.object.persisted? && f.object.reference == 0) %></div>
+    <div class="col align-self-center"><%= f.input :operator, collection: Answer.operators.map { |k, v| [t("answers.operators.#{k}"), k] }, prompt: t('select'), disabled: (f.object.persisted? && f.object.reference == 0) %></div>
+    <div class="col align-self-center"><%= f.input :value, disabled: (f.object.persisted? && f.object.reference == 0) %></div>
     <div class="col align-self-center">
-      <% unless f.object.persisted? && f.object.reference.ends_with?('_0') %>
+      <% unless f.object.persisted? && f.object.reference == 0 %>
         <%= link_to_remove_association "<button class='btn btn-outline-danger'>#{t('remove')}</button>".html_safe, f %>
       <% end %>
     </div>

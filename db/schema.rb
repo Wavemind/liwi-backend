@@ -54,7 +54,7 @@ ActiveRecord::Schema.define(version: 2020_01_27_085907) do
   end
 
   create_table "answers", force: :cascade do |t|
-    t.string "reference"
+    t.integer "reference"
     t.hstore "label_translations"
     t.integer "operator"
     t.string "value"
