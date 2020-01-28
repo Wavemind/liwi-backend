@@ -19,7 +19,7 @@ class Question < Node
   belongs_to :reference_table_y, class_name: 'Question', optional: true
 
   before_validation :validate_formula, if: Proc.new { self.formula.present? }
-  validates_presence_of :stage
+  validates_presence_of :stage, unless: Proc.new { self.is_a? Questions::BackgroundCalculation }
 
   # Return questions which has not triage stage
   scope :no_triage, ->() { where.not(stage: Question.stages[:triage]) }

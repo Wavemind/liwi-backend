@@ -35,13 +35,13 @@ class CreateQuestionForm extends React.Component {
     systemHidden: true,
     answerTypeDisabled: false,
     stageDisabled: false,
+    stageHidden: false,
     prefix: "",
     snomedId: "",
     snomedLabel: "",
     snomedResults: [],
     errors: {}
   };
-
 
   // Update the score in DB then set score props in order to trigger listener in Diagram.js that will update diagram dynamically
   create = async () => {
@@ -155,16 +155,46 @@ class CreateQuestionForm extends React.Component {
     stateToSet[name] = value;
 
     if (name === "type") {
-      const { questionCategories } = this.props;
+      stateToSet['stageDisabled'] = true;
+      stateToSet['stageHidden'] = false;
 
-      questionCategories.map((category) => {
-        if (category.name === event.target.value) {
-          stateToSet['prefix'] = category.reference_prefix
-        }
-      });
+      switch (value) {
+        case "Questions::EmergencySign":
+        case "Questions::ComplaintCategory":
+        case "Questions::VitalSignTriage":
+          stateToSet['stage'] = "1";
+          break;
+        case "Questions::ChronicCondition":
+        case "Questions::Demographic":
+        case "Questions::Vaccine":
+          stateToSet['stage'] = "0";
+          break;
+        case "Questions::Exposure":
+        case "Questions::ObservedPhysicalSign":
+        case "Questions::PhysicalExam":
+        case "Questions::Symptom":
+        case "Questions::VitalSignConsultation":
+          stateToSet['stage'] = "3";
+          break;
+        case "Questions::AssessmentTest":
+          stateToSet['stage'] = "2";
+          break;
+        case "Questions::TreatmentQuestion":
+          stateToSet['stage'] = "4";
+          break;
+        case "Questions::BackgroundCalculation":
+          stateToSet['stage'] = "";
+          stateToSet['stageHidden'] = true;
+          break;
+      }
 
       if (value === "Questions::Vaccine") {
         stateToSet['answerType'] = "1";
+        stateToSet['answerTypeDisabled'] = true;
+        stateToSet['formulaHidden'] = true;
+      } else if (value === "Questions::BackgroundCalculation") {
+        stateToSet['formulaHidden'] = false;
+        stateToSet['answerType'] = "5";
         stateToSet['answerTypeDisabled'] = true;
       } else {
         stateToSet['answerTypeDisabled'] = false;
@@ -182,7 +212,6 @@ class CreateQuestionForm extends React.Component {
       this.setState(stateToSet);
     }
   };
-
 
   /**
    * Search in snomed api to get results
@@ -208,7 +237,6 @@ class CreateQuestionForm extends React.Component {
     });
   };
 
-
   render() {
     const {
       toggleModal,
@@ -216,10 +244,8 @@ class CreateQuestionForm extends React.Component {
       questionAnswerTypes,
       questionSystems,
       questionStages,
-      questionPriorities,
     } = this.props;
     const {
-      reference,
       label,
       description,
       errors,
@@ -231,10 +257,10 @@ class CreateQuestionForm extends React.Component {
       answerType,
       answerTypeDisabled,
       stageDisabled,
-      prefix,
       unavailable,
       unavailableHidden,
       formulaHidden,
+      stageHidden,
       formula,
       snomedResults
     } = this.state;
@@ -242,6 +268,7 @@ class CreateQuestionForm extends React.Component {
     let unavailableStyle = unavailableHidden ? {display: 'none'} : {};
     let formulaStyle = formulaHidden ? {display: 'none'} : {};
     let systemStyle = systemHidden ? {display: 'none'} : {};
+    let stageStyle = stageHidden ? {display: 'none'} : {};
 
     return (
       <Form onSubmit={() => this.create()}>
@@ -296,7 +323,7 @@ class CreateQuestionForm extends React.Component {
             </Form.Group>
           </Form.Row>
 
-          <Form.Row>
+          <Form.Row style={stageStyle}>
             <Form.Group as={Col} controlId="stage">
               <Form.Label>Stage</Form.Label>
               <Form.Control as="select" name="stage" onChange={this.handleFormChange} value={stage} isInvalid={!!errors.stage } disabled = { stageDisabled }>
@@ -315,7 +342,7 @@ class CreateQuestionForm extends React.Component {
             <Form.Group as={Col}>
               <Form.Check
                 type="checkbox"
-                label="Is Mandatory"
+                label="Is mandatory"
                 name="isMandatory"
                 value={isMandatory}
                 onChange={this.handleFormChange}
