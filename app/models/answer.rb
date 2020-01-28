@@ -80,15 +80,7 @@ class Answer < ApplicationRecord
   end
 
   def generate_reference
-    puts '***'
-    puts node.answers.count
-    puts '***'
     if node.answers.count > 1
-
-      puts '***'
-      puts node.answers.count
-      puts '***'
-
       self.reference = node.answers.maximum(:reference) + 1
     else
       self.reference = 1
