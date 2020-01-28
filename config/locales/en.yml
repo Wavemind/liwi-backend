@@ -274,6 +274,13 @@ en:
       out-port-content: "Green box below the nodes : Outport where the link begins"
       excluded-diagnostic-content: "The green box on the left of the nodes is the outport for excluding final diagnostics. The blue box is the inport for excluding final diagnostics."
       score-content: "In order to add scores to your answers, you have to make a link between an answer and the questions sequence scored. This will display a pop up asking you the score to attribute to this relation."
+    formula:
+      formula-title: "What is a formula ?"
+      formula-content: "A formula helps you use the value of a previous question, either by using its value directly, or by doing some operation on it."
+      reference-title: "How to call a question's answer"
+      reference-content: "In order to use the value of a question's answer, you need to put its reference between brackets.<br />Ex: [PE15].<br />Please remember that the question has to be in a numeric format in order to work"
+      date-title: "How to make some calculation from a date ?"
+      date-content: "In some case, you will need to calculate the patient's age in months. In order to do so, you have to use a function. The available functions are 'ToMonth' and 'ToDay'. Those will return the number of months or days between the given date (ex: birth date) and the time the question will be asked.<br />Ex: ToMonth(D1).<br />Please remember that the question has to be in a date format in order to work."
   instances:
     table:
       columns:

@@ -18,7 +18,19 @@
 
 <hr />
 
-<%= f.input :formula %>
+<div class="row formula">
+  <div class="col-10">
+    <%= f.input :formula %>
+  </div>
+
+  <div class="col">
+    <button type="button" class="btn btn-sm btn-info help-formula" data-toggle="popover" data-placement="top" data-html="true" data-content="<%= render 'helps/formula' %>">
+      <i class="material-icons">
+        help_outline
+      </i>
+    </button>
+  </div>
+</div>
 
 <hr />
 
