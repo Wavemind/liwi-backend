@@ -131,7 +131,7 @@ class VersionsService
     hash['orders'] = {}
     hash['orders']['emergency_sign'] = @version.triage_emergency_sign_order
     hash['orders']['complaint_category'] = @version.triage_complaint_category_order
-    hash['orders']['vital_sign'] = @version.triage_vital_sign_triage_order
+    hash['orders']['vital_sign_triage'] = @version.triage_vital_sign_triage_order
     hash['orders']['chronic_condition'] = @version.triage_chronic_condition_order
     hash['orders']['other'] = @version.triage_questions_order
 
