@@ -103,7 +103,7 @@ class QuestionsController < ApplicationController
       question.unavailable = question_params[:unavailable] if question.is_a? Questions::AssessmentTest # Manually done it because the form could not handle it
 
       # in order to add answers after creation (which can't be done if the question has no id), we also remove reference from params so it will not fail validation
-      if question.save && question.update(question_params.except(:reference)) && question.validate_answers_references && question.validate_overlap
+      if question.save && question.update(question_params.except(:reference)) && question.validate_overlap
         instanceable = Object.const_get(params[:instanceable_type].camelize.singularize).find(params[:instanceable_id])
         instanceable.components.create!(node: question, final_diagnostic_id: params[:final_diagnostic_id])
         render json: {status: 'success', messages: [t('flash_message.success_created')], node: question.as_json(include: :answers, methods: [:node_type, :category_name, :type])}
