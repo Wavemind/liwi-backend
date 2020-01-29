@@ -1,6 +1,7 @@
 jQuery(document).ready(function() {
 
-  $("#question_formula").closest(".form-group").addClass("d-none");
+  // $("#question_formula").closest(".form-group").addClass("d-none");
+  $(".formula").addClass("d-none");
   $("#question_system").closest(".form-group").addClass("d-none");
 
   // Trigger categoryChange function only on edit or create question form
@@ -102,7 +103,8 @@ jQuery(document).ready(function() {
 
   // Hide or show formula field if formula answer type is selected
   function answer_type_change() {
-    let questionFormula = $("#question_formula").closest(".form-group");
+    // let questionFormula = $("#question_formula").closest(".form-group");
+    let questionFormula = $(".formula");
     let answerType = $("#question_answer_type_displayed option:selected").val();
     $("#question_answer_type_hidden").val(answerType);
 
