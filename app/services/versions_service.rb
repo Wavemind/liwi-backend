@@ -131,8 +131,8 @@ class VersionsService
     hash['orders'] = {}
     hash['orders']['emergency_sign'] = @version.triage_emergency_sign_order
     hash['orders']['complaint_category'] = @version.triage_complaint_category_order
-    hash['orders']['vital_sign'] = @version.triage_vital_sign_triage_order
-    hash['orders']['chronic_condition'] = @version.triage_chronic_conditions_order
+    hash['orders']['vital_sign_triage'] = @version.triage_vital_sign_triage_order
+    hash['orders']['chronic_condition'] = @version.triage_chronic_condition_order
     hash['orders']['other'] = @version.triage_questions_order
 
     hash['conditions'] = {}
@@ -307,6 +307,7 @@ class VersionsService
       hash[question.id]['description'] = question.description
       hash[question.id]['is_mandatory'] = question.is_mandatory
       hash[question.id]['stage'] = question.stage
+      hash[question.id]['system'] = question.system
       hash[question.id]['formula'] = format_formula(question.formula)
       hash[question.id]['category'] = question.category_name
       # Send Reference instead of actual display format to help f-e interpret the question correctly
