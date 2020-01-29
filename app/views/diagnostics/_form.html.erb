@@ -1,6 +1,5 @@
 <%= simple_form_for [@algorithm, @version, @diagnostic], html: { class: 'form-horizontal' }, wrapper: :input_group do |f| %>
 
-  <%= f.input :reference, prepend: t('diagnostics.reference') %>
   <%= f.input :label_en %>
   <%= f.association :node, collection: @algorithm.questions.where(type: 'Questions::ComplaintCategory'), label_method: :reference_label, prompt: t('select')  %>
 

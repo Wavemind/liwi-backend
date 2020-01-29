@@ -40,17 +40,13 @@ class CreateHealthCareForm extends React.Component {
       description
     } = this.state;
 
-    let result = await http.createHealthCare(currentHealthCareType, reference, label, description);
+    let result = await http.createHealthCare(currentHealthCareType, label, description);
     if (result.ok === undefined || result.ok) {
       toggleModal();
       await addMessage({ status: result.status, messages: result.messages });
       set("currentDbNode", result.node);
     } else {
       let newErrors = {};
-      if (result.errors.reference !== undefined) {
-        newErrors.reference = result.errors.reference[0];
-      }
-
       if (result.errors.label_en !== undefined) {
         newErrors.label_en = result.errors.label_en[0];
       }
@@ -83,28 +79,6 @@ class CreateHealthCareForm extends React.Component {
           <Modal.Title>Create an health cares</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form.Row>
-            <Form.Group as={Col}>
-              <Form.Label>Reference</Form.Label>
-              <InputGroup>
-                <InputGroup.Prepend>
-                  <InputGroup.Text id="inputGroupPrepend">{(currentHealthCareType === 'treatments') ? 'T' : 'M'}</InputGroup.Text>
-                </InputGroup.Prepend>
-                <Form.Control
-                  type="text"
-                  aria-describedby="inputGroupPrepend"
-                  name="reference"
-                  value={reference}
-                  onChange={this.updateState}
-                  isInvalid={!!errors.reference}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.reference}
-                </Form.Control.Feedback>
-              </InputGroup>
-            </Form.Group>
-          </Form.Row>
-
           <Form.Row>
             <Form.Group as={Col}>
               <Form.Label>Label</Form.Label>

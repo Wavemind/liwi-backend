@@ -1,5 +1,4 @@
 <%= f.input :type, as: :hidden %>
-<%= f.input :reference, prepend: (f.object.persisted? ? false : t('treatments.reference')) %>
 <%= f.input :label_en %>
 
 <%= f.input :minimal_dose_per_kg, as: :decimal %>

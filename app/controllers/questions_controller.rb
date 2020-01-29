@@ -74,7 +74,7 @@ class QuestionsController < ApplicationController
     ActiveRecord::Base.transaction(requires_new: true) do
       @question.answers.reload
 
-      if @question.update(question_params) && @question.validate_answers_references && @question.validate_overlap
+      if @question.update(question_params) && @question.validate_overlap
         redirect_to algorithm_url(@algorithm, panel: 'questions'), notice: t('flash_message.success_updated')
       else
         flash[:alert] = @question.errors[:answers] if @question.errors[:answers].any?

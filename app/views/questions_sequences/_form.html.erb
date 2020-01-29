@@ -1,6 +1,5 @@
 <%= f.input :type, collection: QuestionsSequence.descendants.reject{ |k| k==QuestionsSequences::Scored}, value_method: :name, label_method: :display_label, prompt: t('select'), disabled: f.object.persisted? %>
 
-<%= f.input :reference, prepend: (f.object.persisted? ? false : (@questions_sequence.type.nil? ? '' : @questions_sequence.reference_prefix)) %>
 <%= f.input :label_en %>
 <%= f.input :description_en, as: :text %>
 
