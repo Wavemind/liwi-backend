@@ -112,7 +112,14 @@ class TreatmentsController < ApplicationController
       Language.label_params,
       :description_en,
       Language.description_params,
-      :algorithm_id
+      :algorithm_id,
+      :unavailable,
+      :minimal_dose_per_kg,
+      :maximal_dose_per_kg,
+      :maximal_dose,
+      :doses_per_day,
+      :treatment_type,
+      :pill_size
     )
   end
 end

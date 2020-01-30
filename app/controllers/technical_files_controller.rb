@@ -3,10 +3,12 @@ class TechnicalFilesController < ApplicationController
 
   def index
     @apk = TechnicalFile.active
+    @apks = TechnicalFile.last(10).reverse
   end
 
   def create
     @technical_file = TechnicalFile.new(technical_file_params)
+    @technical_file.user = current_user
 
     if @technical_file.save
       redirect_to technical_files_url, notice: t('flash_message.success_created')

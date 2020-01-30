@@ -77,11 +77,11 @@ class VersionsController < ApplicationController
   # PUT algorithms/:algorithm_id/version/:id/create_triage_condition
   # @params version [Version] version of algorithm where we create a condition
   # @params id of the triage question to put the condition on
-  # @params id of the chief complaint that condition the triage question
-  # Create a condition between a triage question and a chief complaint
+  # @params id of the complaint category that condition the triage question
+  # Create a condition between a triage question and a complaint category
   def create_triage_condition
     if version_params[:cc_id].blank?
-      redirect_to algorithm_version_url(@algorithm, @version, panel: 'triage_conditions'), alert: t('flash_message.version.chief_complaint_missing')
+      redirect_to algorithm_version_url(@algorithm, @version, panel: 'triage_conditions'), alert: t('flash_message.version.complaint_category_missing')
     elsif version_params[:triage_id].blank?
       redirect_to algorithm_version_url(@algorithm, @version, panel: 'triage_conditions'), alert: t('flash_message.version.triage_question_missing')
     else
@@ -98,7 +98,7 @@ class VersionsController < ApplicationController
     end
   end
 
-  # Remove a condition between a triage question and a chief complaint
+  # Remove a condition between a triage question and a complaint category
   def remove_triage_condition
     condition = Condition.find(params[:condition_id])
 
@@ -139,10 +139,10 @@ class VersionsController < ApplicationController
     params.require(:version).permit(
       :id,
       :name,
-      :triage_first_look_assessments_order,
-      :triage_chief_complaints_order,
-      :triage_vital_signs_order,
-      :triage_chronical_conditions_order,
+      :triage_emergency_sign_order,
+      :triage_complaint_category_order,
+      :triage_vital_sign_triage_order,
+      :triage_chronic_condition_order,
       :triage_questions_order,
       :triage_id,
       :cc_id

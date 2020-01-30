@@ -31,22 +31,24 @@ export default class DiagramProvider extends React.Component {
 
     let orderedNodes = {
       assessmentTest: [],
-      exposure: [],
+      backgroundCalculation: [],
       demographic: [],
+      exposure: [],
+      observedPhysicalSign: [],
       physicalExam: [],
       symptom: [],
       vaccine: [],
       predefinedSyndrome: [],
       comorbidity: [],
       triage: [],
-      chronicalCondition: [],
+      chronicCondition: [],
     };
 
     if (type === "Diagnostic") {
       orderedNodes.scored = [];
       orderedNodes.finalDiagnostic = [];
     } else if (type === "FinalDiagnostic") {
-      orderedNodes.treatmentCondition = [];
+      orderedNodes.treatmentQuestion = [];
       orderedNodes.scored = [];
       orderedNodes.treatment = [];
       orderedNodes.management = [];
@@ -196,7 +198,7 @@ export default class DiagramProvider extends React.Component {
     currentHealthCareType: null,
     questionAnswerTypes: null,
     questionStages: null,
-    questionPriorities: null,
+    questionSystems: null,
     questionCategories: null,
     questionsSequenceCategories: null,
     answersOperators: null,

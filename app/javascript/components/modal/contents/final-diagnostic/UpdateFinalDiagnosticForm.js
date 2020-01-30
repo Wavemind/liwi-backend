@@ -51,23 +51,18 @@ class UpdateFinalDiagnosticForm extends React.Component {
 
     const {
       id,
-      reference,
       label,
       description,
       final_diagnostic_id
     } = this.state;
 
-    let result = await http.updateFinalDiagnostic(id, reference, label, description, final_diagnostic_id);
+    let result = await http.updateFinalDiagnostic(id, label, description, final_diagnostic_id);
     if (result.ok === undefined || result.ok) {
       toggleModal();
       await addMessage({ status: result.status, messages: result.messages });
       set("currentDbNode", result.node);
     } else {
       let newErrors = {};
-      if (result.errors.reference !== undefined) {
-        newErrors.reference = result.errors.reference[0];
-      }
-
       if (result.errors.label_en !== undefined) {
         newErrors.label_en = result.errors.label_en[0];
       }
@@ -100,28 +95,6 @@ class UpdateFinalDiagnosticForm extends React.Component {
           <Modal.Title>Update a final diagnostic</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form.Row>
-            <Form.Group as={Col}>
-              <Form.Label>Reference</Form.Label>
-              <InputGroup>
-                <InputGroup.Prepend>
-                  <InputGroup.Text id="inputGroupPrepend">{getReferencePrefix('FinalDiagnostic')}</InputGroup.Text>
-                </InputGroup.Prepend>
-                <Form.Control
-                  type="text"
-                  aria-describedby="inputGroupPrepend"
-                  name="reference"
-                  value={reference}
-                  onChange={this.updateState}
-                  isInvalid={!!errors.reference}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.reference}
-                </Form.Control.Feedback>
-              </InputGroup>
-            </Form.Group>
-          </Form.Row>
-
           <Form.Row>
             <Form.Group as={Col}>
               <Form.Label>Label</Form.Label>

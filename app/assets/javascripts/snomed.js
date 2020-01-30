@@ -2,7 +2,7 @@ jQuery(document).ready(function() {
   $("#question_snomed_label").autocomplete({
     source: function(request, response) {
       $.ajax({
-        url: "https://browser.ihtsdotools.org/snowstorm/snomed-ct/v2/MAIN/concepts?term=" + request.term + "&limit=50",
+        url: "https://browser.ihtsdotools.org/snowstorm/snomed-ct/MAIN/concepts?term=" + request.term + "&limit=50",
         dataType: "json",
         crossDomain: true,
         success: function(data) {

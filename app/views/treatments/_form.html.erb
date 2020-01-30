@@ -1,6 +1,14 @@
 <%= f.input :type, as: :hidden %>
-<%= f.input :reference, prepend: (f.object.persisted? ? false : t('treatments.reference')) %>
 <%= f.input :label_en %>
+
+<%= f.input :minimal_dose_per_kg, as: :decimal %>
+<%= f.input :maximal_dose_per_kg, as: :decimal %>
+<%= f.input :maximal_dose, as: :decimal %>
+<%= f.input :doses_per_day, as: :integer %>
+
+<%= f.input :treatment_type, collection: HealthCares::Treatment.treatment_types.map { |k, v| [t("treatments.treatment_types.#{k}"), k] }, prompt: t('select') %>
+<%= f.input :pill_size, as: :integer %>
+
 <%= f.input :description_en, as: :text %>
 
 <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>

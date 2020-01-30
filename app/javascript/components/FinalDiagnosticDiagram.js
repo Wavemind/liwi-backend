@@ -82,8 +82,6 @@ class FinalDiagnosticDiagram extends React.Component {
     let hcLevel = [];
     let hcConditions = [];
 
-    console.log(questions);
-
     // Create nodes for PS and questions
     questions.map((levels) => {
       let currentLevel = [];
