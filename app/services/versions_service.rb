@@ -313,7 +313,7 @@ class VersionsService
       # Send Reference instead of actual display format to help f-e interpret the question correctly
       hash[question.id]['value_format'] = question.answer_type.value
       format = question.answer_type.display
-      format = 'Reference' unless question.reference_table_x_id.nil?
+      format = 'Reference' if question.reference_table_x_id.present?
       format = question.answer_type.value if question.answer_type.value == 'Date'
       hash[question.id]['display_format'] = format
       hash[question.id]['qs'] = get_node_questions_sequences(question, [])
@@ -355,10 +355,10 @@ class VersionsService
       reference = reference.sub!('ToDay', '').tr('()', '') if reference.include?('ToDay')
       reference = reference.sub!('ToMonth', '').tr('()', '') if reference.include?('ToMonth')
 
-      db_reference = reference.split('_')
-      type = Question.get_type_from_prefix(db_reference[0])
+      prefix_type, db_reference = full_reference.match(/([A-Z]*)([0-9]*)/i).captures
+      type = Question.get_type_from_prefix(prefix_type)
       if type.present?
-        question = @version.algorithm.questions.find_by(type: type, reference: db_reference[1])
+        question = @version.algorithm.questions.find_by(type: type, reference: db_reference)
         formula.sub!(reference, question.id.to_s)
       end
     end
