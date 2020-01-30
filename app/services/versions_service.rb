@@ -355,7 +355,7 @@ class VersionsService
       reference = reference.sub!('ToDay', '').tr('()', '') if reference.include?('ToDay')
       reference = reference.sub!('ToMonth', '').tr('()', '') if reference.include?('ToMonth')
 
-      prefix_type, db_reference = full_reference.match(/([A-Z]*)([0-9]*)/i).captures
+      prefix_type, db_reference = reference.match(/([A-Z]*)([0-9]*)/i).captures
       type = Question.get_type_from_prefix(prefix_type)
       if type.present?
         question = @version.algorithm.questions.find_by(type: type, reference: db_reference)
