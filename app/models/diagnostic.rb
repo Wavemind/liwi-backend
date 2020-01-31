@@ -24,7 +24,6 @@ class Diagnostic < ApplicationRecord
     include_association :components
     include_association :final_diagnostics
     include_association :conditions
-    append reference: I18n.t('duplicated')
   end
 
   # @return [String]
@@ -59,11 +58,11 @@ class Diagnostic < ApplicationRecord
 
   # @param [Diagnostic]
   # After a duplicate, link DF instances to the duplicated ones instead of the source ones
-  def relink_instance
+  def relink_instance(old_diagnostic)
     components_ids = components.map(&:id)
-    components.final_diagnostics.each do |df_instance|
+    components.final_diagnostics.each_with_index do |df_instance, index|
 
-      new_df = Node.find_by(reference: "#{df_instance.node.reference}#{I18n.t('duplicated')}")
+      new_df = old_diagnostic.final_diagnostics[index]
       Child.where(instance_id: components_ids, node: df_instance.node).each do |child|
         child.update!(node: new_df)
       end

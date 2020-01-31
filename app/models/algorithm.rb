@@ -3,6 +3,7 @@ class Algorithm < ApplicationRecord
 
   has_many :versions
   has_many :nodes, dependent: :destroy
+  has_many :final_diagnostics, -> { where type: 'FinalDiagnostic' }, source: :node
   has_many :questions, -> { where type: Question.descendants.map(&:name) }, source: :node
   has_many :health_cares, -> { where type: HealthCare.descendants.map(&:name) }, source: :node
   has_many :questions_sequences, -> { where type: QuestionsSequence.descendants.map(&:name) }, source: :node
@@ -18,7 +19,7 @@ class Algorithm < ApplicationRecord
   # Answer types ids : 3 is Integer, 4 is Decimal, 6 is Date
   def create_reference_table_questions
     birth_date = questions.create!(label_en: 'Birth date', type: 'Questions::Demographic', stage: Question.stages[:registration], is_mandatory: true, answer_type_id: 6, is_default: true)
-    age_in_days = questions.create!(label_en: 'Age in days', type: 'Questions::VitalSignTriage', stage: Question.stages[:triage], is_mandatory: true, answer_type_id: 5, formula: '[ToDay(1)]', is_default: true)
+    age_in_days = questions.create!(label_en: 'Age in days', type: 'Questions::VitalSignTriage', stage: Question.stages[:triage], is_mandatory: true, answer_type_id: 5, formula: '[ToDay(D1)]', is_default: true)
     weight = questions.create!(label_en: 'Weight (kg)', type: 'Questions::VitalSignTriage', stage: Question.stages[:triage], is_mandatory: true, answer_type_id: 4, is_default: true)
     hr = questions.create!(label_en: 'Heart rate', type: 'Questions::VitalSignConsultation', stage: Question.stages[:consultation], answer_type_id: 4, is_default: true)
     rr = questions.create!(label_en: 'Respiratory rate', type: 'Questions::VitalSignConsultation', stage: Question.stages[:consultation], answer_type_id: 4, is_default: true)

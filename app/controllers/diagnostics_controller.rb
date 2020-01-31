@@ -83,7 +83,7 @@ class DiagnosticsController < ApplicationController
     duplicated_diagnostic = diagnostic.amoeba_dup
 
     if duplicated_diagnostic.save
-      duplicated_diagnostic.relink_instance
+      duplicated_diagnostic.relink_instance(diagnostic)
       diagnostic.update(duplicating: false)
       redirect_to algorithm_version_url(@algorithm, @version), notice: t('flash_message.success_deleted')
     else
