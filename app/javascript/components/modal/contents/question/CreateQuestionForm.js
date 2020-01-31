@@ -84,6 +84,8 @@ class CreateQuestionForm extends React.Component {
   handleErrors = (result) => {
     let newErrors = {};
 
+    console.log(result);
+
     if (result.errors.reference !== undefined) {
       newErrors.reference = result.errors.reference[0];
     }
