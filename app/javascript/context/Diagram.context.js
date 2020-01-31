@@ -31,22 +31,24 @@ export default class DiagramProvider extends React.Component {
 
     let orderedNodes = {
       assessmentTest: [],
-      exposure: [],
-      chiefComplaint: [],
+      backgroundCalculation: [],
       demographic: [],
+      exposure: [],
+      observedPhysicalSign: [],
       physicalExam: [],
       symptom: [],
       vaccine: [],
-      vitalSign: [],
       predefinedSyndrome: [],
       comorbidity: [],
       triage: [],
+      chronicCondition: [],
     };
 
     if (type === "Diagnostic") {
       orderedNodes.scored = [];
       orderedNodes.finalDiagnostic = [];
     } else if (type === "FinalDiagnostic") {
+      orderedNodes.treatmentQuestion = [];
       orderedNodes.scored = [];
       orderedNodes.treatment = [];
       orderedNodes.management = [];
@@ -94,6 +96,38 @@ export default class DiagramProvider extends React.Component {
     await this.setState(stateHash);
   };
 
+  // @params type, category
+  // Retrieve reference prefix for given type and category
+  getReferencePrefix = (nodeType, nodeCategory) => {
+    let prefix = '';
+
+    switch(nodeType) {
+      case 'Question':
+        const { questionCategories } = this.state;
+        questionCategories.map((category) => {
+          if (category.name === nodeCategory || category.label === nodeCategory) {
+            prefix = category.reference_prefix;
+          }
+        });
+        break;
+      case 'QuestionsSequence':
+        const { questionsSequenceCategories } = this.state;
+        questionsSequenceCategories.map((category) => {
+          if (category.name === nodeCategory || category.label === nodeCategory) {
+            prefix = category.reference_prefix;
+          }
+        });
+        break;
+      case 'HealthCare':
+        prefix = nodeCategory === 'HealthCares::Management' ? 'M' : 'T';
+        break;
+      case 'FinalDiagnostic':
+        prefix = 'DF';
+        break;
+    }
+
+    return prefix;
+  };
 
   // @params node
   // Remove node from available node
@@ -141,6 +175,7 @@ export default class DiagramProvider extends React.Component {
     addNode: this.addNode,
     addMessage: this.addMessage,
     removeMessage: this.removeMessage,
+    getReferencePrefix: this.getReferencePrefix,
     instanceable: null,
     instanceableType: null,
     questions: null,
@@ -163,7 +198,7 @@ export default class DiagramProvider extends React.Component {
     currentHealthCareType: null,
     questionAnswerTypes: null,
     questionStages: null,
-    questionPriorities: null,
+    questionSystems: null,
     questionCategories: null,
     questionsSequenceCategories: null,
     answersOperators: null,

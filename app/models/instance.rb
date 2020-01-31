@@ -16,6 +16,9 @@ class Instance < ApplicationRecord
   scope :treatments, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'HealthCares::Treatment') }
   scope :final_diagnostics, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'FinalDiagnostic') }
 
+  scope :triage_complaint_category, ->() { joins(:node).where('nodes.stage = ? AND nodes.type = ?', Question.stages[:triage], 'Questions::ComplaintCategory') }
+  scope :triage_under_complaint_category, ->() { joins(:node).where('nodes.type NOT IN (?)', %w(Questions::EmergencySign Questions::ComplaintCategory)) }
+
   # Allow to filter if the node is used as a health care condition or as a final diagnostic condition. A node can be used in both of them.
   scope :health_care_conditions, ->() { joins(:node).includes(:conditions).where.not(final_diagnostic: nil).or(joins(:node).includes(:conditions).where("nodes.type LIKE 'HealthCares::%'")) }
   scope :not_health_care_conditions, ->() { includes(:conditions).where(final_diagnostic_id: nil) }
@@ -52,5 +55,10 @@ class Instance < ApplicationRecord
     elsif cond.second_conditionable.is_a?(Answer) && cond.second_conditionable.node == instance.node
       cond.update!(operator: nil, second_conditionable: nil)
     end
+  end
+
+  # Return the reference label of its node
+  def reference_label
+    node.reference_label
   end
 end

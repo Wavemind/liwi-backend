@@ -60,16 +60,13 @@ class UpdateQuestionsSequenceForm extends React.Component {
       minScore
     } = this.state;
 
-    let result = await http.updateQuestionsSequence(currentNode.id, reference, label, description, minScore);
+    let result = await http.updateQuestionsSequence(currentNode.id, label, description, minScore);
     if (result.ok === undefined || result.ok) {
       toggleModal();
       await addMessage({ status: result.status, messages: result.messages });
       set("currentDbNode", result.node);
     } else {
       let newErrors = {};
-      if (result.errors.reference !== undefined) {
-        newErrors.reference = result.errors.reference[0];
-      }
 
       if (result.errors.label !== undefined) {
         newErrors.label = result.errors.label[0];
@@ -89,10 +86,9 @@ class UpdateQuestionsSequenceForm extends React.Component {
   render() {
     const {
       toggleModal,
-      questionsSequenceCategories
+      questionsSequenceCategories,
     } = this.props;
     const {
-      reference,
       label,
       description,
       errors,
@@ -108,7 +104,7 @@ class UpdateQuestionsSequenceForm extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <Form.Row>
-            <Form.Group as={Col} controlId="formGridState">
+            <Form.Group as={Col} controlId="state">
               <Form.Label>State</Form.Label>
               <Form.Control as="select" defaultValue={type} disabled>
                 <option value="">Select a category</option>
@@ -116,25 +112,6 @@ class UpdateQuestionsSequenceForm extends React.Component {
                   <option value={category.name}>{category.label}</option>
                 ))}
               </Form.Control>
-            </Form.Group>
-          </Form.Row>
-
-          <Form.Row>
-            <Form.Group as={Col}>
-              <Form.Label>Reference</Form.Label>
-              <InputGroup>
-                <Form.Control
-                  type="text"
-                  aria-describedby="inputGroupPrepend"
-                  name="reference"
-                  value={reference}
-                  onChange={this.updateState}
-                  isInvalid={!!errors.reference}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.reference}
-                </Form.Control.Feedback>
-              </InputGroup>
             </Form.Group>
           </Form.Row>
 

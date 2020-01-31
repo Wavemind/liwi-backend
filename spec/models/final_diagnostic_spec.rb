@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe FinalDiagnostic, type: :model do
+  create_answer_type
   create_algorithm
   create_diagnostic
 
@@ -38,19 +39,19 @@ RSpec.describe FinalDiagnostic, type: :model do
   it 'returns correct list of available nodes' do
     df = FinalDiagnostic.new(label_en: 'Severe lower respiratory tract infection', description_en: 'A shot description',reference: '7', diagnostic: @dd7)
 
-    ps9 = QuestionsSequences::PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
-    ps5 = QuestionsSequences::PredefinedSyndrome.create!(reference: '5', label_en: 'diarrhea', algorithm: @algorithm)
     ps6 = QuestionsSequences::PredefinedSyndrome.create!(reference: '7', label_en: 'coucou', algorithm: @algorithm)
+    ps5 = QuestionsSequences::PredefinedSyndrome.create!(reference: '5', label_en: 'diarrhea', algorithm: @algorithm)
+    ps9 = QuestionsSequences::PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
 
     Instance.create!(node: ps6, instanceable: @dd7, final_diagnostic: df)
 
-    expect(df.available_nodes_health_cares_json[0]['id']).to eq(ps9.id)
-    expect(df.available_nodes_health_cares_json[1]['id']).to eq(ps5.id)
-    expect(df.available_nodes_health_cares_json.count).to eq(2)
+    expect(df.available_nodes_health_cares_json[5]['id']).to eq(ps9.id)
+    expect(df.available_nodes_health_cares_json[6]['id']).to eq(ps5.id)
+    expect(df.available_nodes_health_cares_json.count).to eq(7) # 3 new nodes, one used and 5 auto created by algorithm (reference tables)
   end
 
   it 'generates diagram properly' do
-    dd1 = Diagnostic.create!(version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)')
+    dd1 = Diagnostic.create!(version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)', node: @cc)
     dd1.final_diagnostics.create!(reference: '1', label_en: 'Df')
     t1 = HealthCares::Treatment.create!(reference: '1', label_en: 'Treat', algorithm: @algorithm)
     m1 = HealthCares::Management.create!(reference: '1', label_en: 'Manage', algorithm: @algorithm)

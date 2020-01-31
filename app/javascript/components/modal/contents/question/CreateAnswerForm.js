@@ -33,6 +33,7 @@ class CreateAnswerForm extends React.Component {
     answer[name] = name === "operator" ? parseInt(value) : value;
 
     setAnswer(index, answer);
+    this.forceUpdate(); // Since there is no more state component does not rerender itself. I force it to make the form work. TODO better way to do so
   };
 
   render() {
@@ -68,44 +69,6 @@ class CreateAnswerForm extends React.Component {
 
           <Form.Row>
             <Form.Group as={Col}>
-              <Form.Label>Reference</Form.Label>
-              {(update === true) ? (
-                <InputGroup>
-                  <Form.Control
-                    type="text"
-                    aria-describedby="inputGroupPrepend"
-                    name="reference"
-                    value={reference}
-                    onChange={this.handleFormChange}
-                    isInvalid={!!errors.reference}
-                    disabled
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.reference}
-                  </Form.Control.Feedback>
-                </InputGroup>
-              ) : (
-                <InputGroup>
-                  <InputGroup.Prepend>
-                    <InputGroup.Text id="inputGroupPrepend">{prefix}</InputGroup.Text>
-                  </InputGroup.Prepend>
-                  <Form.Control
-                    type="text"
-                    aria-describedby="inputGroupPrepend"
-                    name="reference"
-                    value={reference}
-                    onChange={this.handleFormChange}
-                    isInvalid={!!errors.reference}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.reference}
-                  </Form.Control.Feedback>
-                </InputGroup>
-              )}
-
-            </Form.Group>
-
-            <Form.Group as={Col}>
               <Form.Label>Label</Form.Label>
               <InputGroup>
                 <Form.Control
@@ -126,7 +89,7 @@ class CreateAnswerForm extends React.Component {
           <Form.Row>
             {/*Do not ask for value and operator if it is an array*/}
             {(currentQuestion.question.answer_type_id !== 2) ? [
-              <Form.Group as={Col} controlId="formGridState">
+              <Form.Group as={Col} controlId="operator">
                 <Form.Label>Operator</Form.Label>
                 <Form.Control as="select" name="operator" onChange={this.handleFormChange} defaultValue={operator} isInvalid={!!errors.operator}>
                   <option value="">Select a category</option>

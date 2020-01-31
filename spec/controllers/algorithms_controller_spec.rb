@@ -2,10 +2,10 @@ require 'rails_helper'
 
 RSpec.describe AlgorithmsController, type: :controller do
   login_user
+  create_answer_type
 
   before(:each) do
-    role = Role.new(name: 'administrator')
-    user = User.new(first_name: 'Foo', last_name: 'Bar', email: 'foo.bar@gmail.com', role: role)
+    user = User.new(first_name: 'Foo', last_name: 'Bar', email: 'foo.bar@gmail.com')
     @algorithm = Algorithm.create!(name: 'EPOCT', description: 'MedicalCenter1', user: user)
     @archived_algorithm = Algorithm.create!(name: 'EPOCT_old', description: 'MedicalCenter1', user: user, archived: true)
   end

@@ -1,7 +1,6 @@
 <h1><%= t('.title', name: @user.full_name) %></h1>
 
 <p><%= @user.email %></p>
-<p><%= t('.role') %><b><%= @user.role.name %></b></p>
 <p><%= t('.last_account_connection') %><b><%= datetime_format(@user.last_sign_in_at) %></b></p>
 
 <h2>Activity</h2>

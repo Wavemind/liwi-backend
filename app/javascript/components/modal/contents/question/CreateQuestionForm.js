@@ -6,6 +6,8 @@ import {
   InputGroup,
   Col
 } from "react-bootstrap";
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import TextField from '@material-ui/core/TextField';
 import { withDiagram } from "../../../../context/Diagram.context";
 import NodeListItem from "../../../lists/NodeList";
 
@@ -24,10 +26,20 @@ class CreateQuestionForm extends React.Component {
     description: "",
     type: "",
     stage: "",
-    priority: "",
+    isMandatory: false,
     answerType: "",
+    unavailable: false,
+    formula: "",
+    formulaHidden: true,
+    unavailableHidden: true,
+    systemHidden: true,
     answerTypeDisabled: false,
+    stageDisabled: false,
+    stageHidden: false,
     prefix: "",
+    snomedId: "",
+    snomedLabel: "",
+    snomedResults: [],
     errors: {}
   };
 
@@ -84,16 +96,16 @@ class CreateQuestionForm extends React.Component {
       newErrors.stage = result.errors.stage[0];
     }
 
-    if (result.errors.priority !== undefined) {
-      newErrors.priority = result.errors.priority[0];
-    }
-
     if (result.errors.answer_type !== undefined) {
       newErrors.answerType = result.errors.answer_type[0];
     }
 
     if (result.errors.type !== undefined) {
       newErrors.category = result.errors.type[0];
+    }
+
+    if (result.errors.formula !== undefined) {
+      newErrors.formula = result.errors.formula[0];
     }
     this.setState({ errors: newErrors });
   };
@@ -106,8 +118,13 @@ class CreateQuestionForm extends React.Component {
       description,
       type,
       stage,
-      priority,
-      answerType
+      system,
+      isMandatory,
+      answerType,
+      unavailable,
+      formula,
+      snomedId,
+      snomedLabel
     } = this.state;
 
     return {
@@ -117,8 +134,13 @@ class CreateQuestionForm extends React.Component {
         description_en: description,
         type: type,
         stage: parseInt(stage),
-        priority: parseInt(priority),
+        system: system,
+        is_mandatory: isMandatory,
         answer_type_id: parseInt(answerType),
+        unavailable: unavailable,
+        formula: formula,
+        snomed_id: parseInt(snomedId),
+        snomed_label: snomedLabel,
         answers_attributes: {}
       }
     };
@@ -126,30 +148,93 @@ class CreateQuestionForm extends React.Component {
 
   // Handle change of inputs in the form
   handleFormChange = (event) => {
-    const value = event.target.value;
     const name = event.target.name;
+    const value = ["unavailable", "isMandatory"].includes(name) ? event.target.checked : event.target.value;
+
+    let stateToSet = {};
+    stateToSet[name] = value;
 
     if (name === "type") {
-      const {questionCategories} = this.props;
-      let stateToSet = {};
-      stateToSet[name] = value;
-      questionCategories.map((category) => {
-        if (category.name === event.target.value) {
-          stateToSet['prefix'] = category.reference_prefix
-        }
-      });
-      if (value === "Questions::Vaccine" || value === "Questions::ChiefComplaint") {
+      stateToSet['stageDisabled'] = true;
+      stateToSet['stageHidden'] = false;
+
+      switch (value) {
+        case "Questions::EmergencySign":
+        case "Questions::ComplaintCategory":
+        case "Questions::VitalSignTriage":
+          stateToSet['stage'] = "1";
+          break;
+        case "Questions::ChronicCondition":
+        case "Questions::Demographic":
+        case "Questions::Vaccine":
+          stateToSet['stage'] = "0";
+          break;
+        case "Questions::Exposure":
+        case "Questions::ObservedPhysicalSign":
+        case "Questions::PhysicalExam":
+        case "Questions::Symptom":
+        case "Questions::VitalSignConsultation":
+          stateToSet['stage'] = "3";
+          break;
+        case "Questions::AssessmentTest":
+          stateToSet['stage'] = "2";
+          break;
+        case "Questions::TreatmentQuestion":
+          stateToSet['stage'] = "4";
+          break;
+        case "Questions::BackgroundCalculation":
+          stateToSet['stage'] = "";
+          stateToSet['stageHidden'] = true;
+          break;
+      }
+
+      if (value === "Questions::Vaccine") {
         stateToSet['answerType'] = "1";
+        stateToSet['answerTypeDisabled'] = true;
+        stateToSet['formulaHidden'] = true;
+      } else if (value === "Questions::BackgroundCalculation") {
+        stateToSet['formulaHidden'] = false;
+        stateToSet['answerType'] = "5";
         stateToSet['answerTypeDisabled'] = true;
       } else {
         stateToSet['answerTypeDisabled'] = false;
       }
+
+      stateToSet['unavailableHidden'] = value !== "Questions::AssessmentTest";
+      stateToSet['systemHidden'] = !["Questions::Symptom", "Questions::PhysicalExam", "Questions::ObservedPhysicalSign"].includes(value);
+
       this.setState(stateToSet);
     } else {
-      this.setState({
-        [name]: value
-      });
+      if (name === "answerType") {
+        stateToSet['formulaHidden'] = value !== "5";
+      }
+
+      this.setState(stateToSet);
     }
+  };
+
+  /**
+   * Search in snomed api to get results
+   *
+   * @param {Object} event
+   */
+  searchSnomed = async (event) => {
+    const { http } = this.props;
+
+    let response = await http.searchSnomed(event.target.value);
+    this.setState({ snomedResults: response.items });
+  };
+
+  /**
+   * Save id and value of snomed selected
+   *
+   * @param {Object} event
+   */
+  snomedChange = async (event, value) => {
+    this.setState({
+      snomedId: value.id,
+      snomedLabel: value.fsn.term
+    });
   };
 
   render() {
@@ -157,21 +242,33 @@ class CreateQuestionForm extends React.Component {
       toggleModal,
       questionCategories,
       questionAnswerTypes,
+      questionSystems,
       questionStages,
-      questionPriorities,
     } = this.props;
     const {
-      reference,
       label,
       description,
       errors,
       type,
       stage,
-      priority,
+      system,
+      systemHidden,
+      isMandatory,
       answerType,
       answerTypeDisabled,
-      prefix
+      stageDisabled,
+      unavailable,
+      unavailableHidden,
+      formulaHidden,
+      stageHidden,
+      formula,
+      snomedResults
     } = this.state;
+
+    let unavailableStyle = unavailableHidden ? {display: 'none'} : {};
+    let formulaStyle = formulaHidden ? {display: 'none'} : {};
+    let systemStyle = systemHidden ? {display: 'none'} : {};
+    let stageStyle = stageHidden ? {display: 'none'} : {};
 
     return (
       <Form onSubmit={() => this.create()}>
@@ -180,7 +277,7 @@ class CreateQuestionForm extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <Form.Row>
-            <Form.Group as={Col} controlId="formGridState">
+            <Form.Group as={Col} controlId="category">
               <Form.Label>Category</Form.Label>
               <Form.Control as="select" name="type" onChange={this.handleFormChange} value={type} isInvalid={!!errors.category}>
                 <option value="">Select the category</option>
@@ -195,8 +292,23 @@ class CreateQuestionForm extends React.Component {
             </Form.Group>
           </Form.Row>
 
+          <Form.Row style={systemStyle}>
+            <Form.Group as={Col} controlId="system">
+              <Form.Label>System</Form.Label>
+              <Form.Control as="select" name="system" onChange={this.handleFormChange} value={system} isInvalid={!!errors.system } >
+                <option value="">Select the system</option>
+                {questionSystems.map((system) => (
+                  <option value={system[1]}>{system[0]}</option>
+                ))}
+              </Form.Control>
+              <Form.Control.Feedback type="invalid">
+                {errors.system}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Form.Row>
+
           <Form.Row>
-            <Form.Group as={Col} controlId="formGridState">
+            <Form.Group as={Col} controlId="answerType">
               <Form.Label>Answer type</Form.Label>
               <Form.Control as="select" name="answerType" onChange={this.handleFormChange} value={answerType} isInvalid={!!errors.answerType } disabled = { answerTypeDisabled }>
                 <option value="">Select the type of answers expected</option>
@@ -211,10 +323,10 @@ class CreateQuestionForm extends React.Component {
             </Form.Group>
           </Form.Row>
 
-          <Form.Row>
-            <Form.Group as={Col} controlId="formGridState">
+          <Form.Row style={stageStyle}>
+            <Form.Group as={Col} controlId="stage">
               <Form.Label>Stage</Form.Label>
-              <Form.Control as="select" name="stage" onChange={this.handleFormChange} value={stage} isInvalid={!!errors.stage }>
+              <Form.Control as="select" name="stage" onChange={this.handleFormChange} value={stage} isInvalid={!!errors.stage } disabled = { stageDisabled }>
                 <option value="">Select the stage</option>
                 {Object.keys(questionStages).map(function(key) {
                   return <option value={questionStages[key]}>{key.charAt(0).toUpperCase() + key.slice(1)}</option>;
@@ -227,39 +339,14 @@ class CreateQuestionForm extends React.Component {
           </Form.Row>
 
           <Form.Row>
-            <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>Priority</Form.Label>
-              <Form.Control as="select" name="priority" onChange={this.handleFormChange} value={priority} isInvalid={!!errors.priority }>
-                <option value="">Select the priority</option>
-                {Object.keys(questionPriorities).map(function(key) {
-                  return <option value={questionPriorities[key]}>{key.charAt(0).toUpperCase() + key.slice(1)}</option>;
-                })}
-              </Form.Control>
-              <Form.Control.Feedback type="invalid">
-                {errors.priority}
-              </Form.Control.Feedback>
-            </Form.Group>
-          </Form.Row>
-
-          <Form.Row>
             <Form.Group as={Col}>
-              <Form.Label>Reference</Form.Label>
-              <InputGroup>
-                <InputGroup.Prepend>
-                  <InputGroup.Text id="inputGroupPrepend">{prefix}</InputGroup.Text>
-                </InputGroup.Prepend>
-                <Form.Control
-                  type="text"
-                  aria-describedby="inputGroupPrepend"
-                  name="reference"
-                  value={reference}
-                  onChange={this.handleFormChange}
-                  isInvalid={!!errors.reference}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.reference}
-                </Form.Control.Feedback>
-              </InputGroup>
+              <Form.Check
+                type="checkbox"
+                label="Is mandatory"
+                name="isMandatory"
+                value={isMandatory}
+                onChange={this.handleFormChange}
+              />
             </Form.Group>
           </Form.Row>
 
@@ -284,6 +371,26 @@ class CreateQuestionForm extends React.Component {
 
           <Form.Row>
             <Form.Group as={Col}>
+              <Form.Label>Snomed</Form.Label>
+              <InputGroup>
+                <Autocomplete
+                  options={snomedResults}
+                  getOptionLabel={option => option.fsn.term}
+                  autoComplete
+                  includeInputInList
+                  freeSolo
+                  disableOpenOnFocus
+                  onChange={this.snomedChange}
+                  renderInput={params => (
+                    <TextField {...params} label="Search a snomed label" variant="outlined" onChange={this.searchSnomed} fullWidth />
+                  )}
+                />
+              </InputGroup>
+            </Form.Group>
+          </Form.Row>
+
+          <Form.Row>
+            <Form.Group as={Col}>
               <Form.Label>Description</Form.Label>
               <InputGroup>
                 <Form.Control
@@ -299,10 +406,40 @@ class CreateQuestionForm extends React.Component {
             </Form.Group>
           </Form.Row>
 
+          <Form.Row style={unavailableStyle}>
+            <Form.Group as={Col}>
+              <Form.Check
+                type="checkbox"
+                label="Unavailable test"
+                name="unavailable"
+                value={unavailable}
+                onChange={this.handleFormChange}
+              />
+            </Form.Group>
+          </Form.Row>
+
+          <Form.Row style={formulaStyle}>
+            <Form.Group as={Col}>
+              <Form.Label>Formula</Form.Label>
+              <InputGroup>
+                <Form.Control
+                  type="text"
+                  name="formula"
+                  value={formula}
+                  onChange={this.handleFormChange}
+                  isInvalid={!!errors.formula}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.formula}
+                </Form.Control.Feedback>
+              </InputGroup>
+            </Form.Group>
+          </Form.Row>
+
         </Modal.Body>
         <Modal.Footer>
           {/*Save directly the question if it is a boolean*/}
-          {(answerType === '1') ? (
+          {(['1', '7', '8'].includes(answerType) || ['Questions::VitalSignTriage', 'Questions::VitalSignConsultation'].includes(type)) ? (
             <Button variant="success" onClick={() => this.create()}>
               Save
             </Button>

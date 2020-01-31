@@ -14,10 +14,10 @@
         healthCares: @final_diagnostic.health_cares_json,
         availableNodes: @final_diagnostic.available_nodes_health_cares_json,
         type: 'FinalDiagnostic',
-        questionAnswerTypes: AnswerType.all.as_json,
+        questionAnswerTypes: AnswerType.all.as_json(methods: :display_name),
+        questionSystems: Question.systems.map { |k, v| [t("questions.systems.#{k}"), k] },
         questionStages: Question.stages.as_json,
-        questionPriorities: Question.priorities.as_json(methods: :display_name),
-        questionCategories: Question.categories.as_json,
+        questionCategories: Question.categories('FinalDiagnostic').as_json,
         questionsSequenceCategories: QuestionsSequence.categories.as_json,
       }
     }) %>

@@ -25,12 +25,11 @@ export default class Http {
   // @params [Integer] nodeId
   // @return [Object] body of request
   // Create an instance
-  createFinalDiagnostic = async (reference, label, description) => {
+  createFinalDiagnostic = async (label, description) => {
     let response;
     const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/create_from_diagram`;
     const body = {
       final_diagnostic: {
-        reference: reference,
         label_en: label,
         description_en: description,
         diagnostic_id: this.instanceableId
@@ -51,7 +50,7 @@ export default class Http {
   // @params [Integer] nodeId
   // @return [Object] body of request
   // Create an instance
-  createHealthCare = async (type, reference, label, description) => {
+  createHealthCare = async (type, label, description) => {
     let response;
     const url = `${this.url}/algorithms/${this.algorithm}/${type}/create_from_diagram`;
     const body = {
@@ -59,7 +58,6 @@ export default class Http {
       final_diagnostic_id: this.finalDiagnostic
     };
     body['health_cares_' + type.substring(0, type.length-1)] = {
-      reference: reference,
       label_en: label,
       description_en: description
     };
@@ -178,12 +176,11 @@ export default class Http {
   // @params [Integer] nodeId
   // @return [Object] body of request
   // Create an instance
-  createQuestionsSequence = async (reference, label, description, type, minScore) => {
+  createQuestionsSequence = async (label, description, type, minScore) => {
     let response;
     const url = `${this.url}/algorithms/${this.algorithm}/questions_sequences/create_from_diagram`;
     const body = {
       questions_sequence: {
-        reference: reference,
         label_en: label,
         description_en: description,
         type: type,
@@ -355,6 +352,23 @@ export default class Http {
     window.location = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics`;
   };
 
+  // @params [String] term
+  // @return [Object] json with results
+  // Search for snomet results from search string
+  searchSnomed = async (term) => {
+    let response;
+    const url = `https://browser.ihtsdotools.org/snowstorm/snomed-ct/MAIN/concepts?term=${term}&limit=50`;
+    const request = await fetch(url).catch(error => console.log(error));
+
+    // Display error or parse json
+    if (request.ok) {
+      response = await request.json();
+    } else {
+      response = request;
+    }
+    return await response;
+  };
+
   // @params [String] method, [Object] body
   // @return [Object] header
   // Set header credentials to communicate with server
@@ -412,16 +426,15 @@ export default class Http {
     return await response;
   };
 
-  // @params [Integer] id, [String] reference, [String] label, [String] description, [Integer] final_diagnostic_id
+  // @params [Integer] id, [String] label, [String] description, [Integer] final_diagnostic_id
   // @return [Object] body of request
   // Update final diagnostic node
-  updateFinalDiagnostic = async (id, reference, label, description, final_diagnostic_id) => {
+  updateFinalDiagnostic = async (id, label, description, final_diagnostic_id) => {
     let response;
     const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/${id}/update_from_diagram`;
     const body = {
       final_diagnostic: {
         id: id,
-        reference: reference,
         label_en: label,
         description_en: description,
         final_diagnostic_id: final_diagnostic_id
@@ -439,10 +452,10 @@ export default class Http {
     return await response;
   };
 
-  // @params [Integer] id, [String] reference, [String] label, [String] description, [Integer] final_diagnostic_id
+  // @params [Integer] id, [String] label, [String] description, [Integer] final_diagnostic_id
   // @return [Object] body of request
   // Update final diagnostic node
-  updateHealthCare = async (id, reference, label, description, type) => {
+  updateHealthCare = async (id, label, description, type) => {
     let response;
     const url = `${this.url}/algorithms/${this.algorithm}/${type}/${id}/update_from_diagram`;
     const body = {
@@ -451,7 +464,6 @@ export default class Http {
     };
     body['health_cares_' + type.substring(0, type.length-1)] = {
       id: id,
-      reference: reference,
       label_en: label,
       description_en: description
     };
@@ -489,16 +501,15 @@ export default class Http {
   };
 
 
-  // @params [Integer] id, [String] reference, [String] label, [String] description
+  // @params [Integer] id, [String] label, [String] description
   // @return [Object] body of request
   // Update predefined syndrome node
-  updateQuestionsSequence = async (id, reference, label, description, minScore) => {
+  updateQuestionsSequence = async (id, label, description, minScore) => {
     let response;
     const url = `${this.url}/algorithms/${this.algorithm}/questions_sequences/${id}/update_from_diagram`;
     const body = {
       questions_sequence: {
         id: id,
-        reference: reference,
         label_en: label,
         description_en: description,
         min_score: minScore

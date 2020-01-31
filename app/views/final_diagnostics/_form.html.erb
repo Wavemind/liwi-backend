@@ -1,6 +1,5 @@
 <%= simple_form_for [@algorithm, @version, @diagnostic, @final_diagnostic], html: { class: 'form-horizontal' }, wrapper: :input_group do |f| %>
 
-  <%= f.input :reference, prepend: (f.object.persisted? ? false : t('final_diagnostics.reference')) %>
   <%= f.input :label_en %>
 
   <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>

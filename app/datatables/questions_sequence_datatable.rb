@@ -15,9 +15,11 @@ class QuestionsSequenceDatatable < AjaxDatatablesRails::ActiveRecord
   # Column configuration
   def view_columns
     @view_columns ||= {
+      id: { source: 'QuestionsSequence.id' },
       reference: { source: 'QuestionsSequence.reference' },
       label: { source: 'QuestionsSequence.label_translations' },
       description: { source: 'QuestionsSequence.description_translations' },
+      category: { source: 'QuestionsSequence.type' },
     }
   end
 
@@ -26,7 +28,8 @@ class QuestionsSequenceDatatable < AjaxDatatablesRails::ActiveRecord
     records.map do |record|
       actions = link_to(I18n.t('show'), diagram_questions_sequence_url(record), class: 'btn btn-outline-primary') + " " + link_to(I18n.t('edit'), edit_algorithm_questions_sequence_url(record.algorithm, record), class: 'btn btn-outline-info') + " " + link_to(I18n.t('delete'), algorithm_questions_sequence_url(record.algorithm, record), class: "btn btn-outline-danger #{record.dependencies? ? 'disabled' : ''}", method: :delete, data: { confirm: 'Are you sure?' })
       {
-        reference: record.reference,
+        id: record.id,
+        reference: record.full_reference,
         category: Object.const_get(record.type).display_label,
         label: record.label,
         description: record.description,
@@ -37,6 +40,6 @@ class QuestionsSequenceDatatable < AjaxDatatablesRails::ActiveRecord
 
   # Activerecord request
   def get_raw_records
-    Algorithm.find(params[:id]).questions_sequences.not_scored.includes(:instances, :algorithm)
+    Algorithm.find(params[:id]).questions_sequences.not_scored.includes(:algorithm)
   end
 end

@@ -1,7 +1,10 @@
 <%= simple_form_for @group, html: { class: 'form-horizontal' } do |f| %>
 
   <%= f.input :name %>
-  <%= f.association :devices, collection: Device.where(group_id: nil), label_method: :full_name  %>
+  <%= f.input :architecture, collection: Group.architectures.map { |k, v| [t("group.architectures.#{k}"), k] }, prompt: t('select') %>
+  <%= f.input :local_data_ip %>
+  <%= f.input :main_data_ip %>
+  <%= f.input :pin_code %>
 
   <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
 <% end %>

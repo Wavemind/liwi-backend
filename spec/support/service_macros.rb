@@ -2,18 +2,22 @@ module ServiceMacros
 
   def create_full_algorithm_version
     before(:each) do
-      role_administrator = Role.create!(name: 'Administrator')
-      emmanuel = User.create!(first_name: 'Emmanuel', last_name: 'Barchichat', email: 'emmanuel.barchichat@wavemind.ch', password: '123456', password_confirmation: '123456', role: role_administrator)
+      # Answer types
+      boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
+      dropdown_list = AnswerType.create!(value: 'Array', display: 'DropDownList')
+      input_integer = AnswerType.create!(value: 'Integer', display: 'Input')
+      input_float = AnswerType.create!(value: 'Float', display: 'Input')
+      formula = AnswerType.create!(value: 'Float', display: 'Formula')
+      date = AnswerType.create!(value: 'Date', display: 'Input')
+      string = AnswerType.create!(value: 'String', display: 'Input')
+
+      emmanuel = User.create!(first_name: 'Emmanuel', last_name: 'Barchichat', email: 'emmanuel.barchichat@wavemind.ch', password: '123456', password_confirmation: '123456')
       epoct = Algorithm.create!(name: 'ePoct', description: 'loremp ipsum', user: emmanuel)
       epoc_first = Version.create!(name: 'first_trial', algorithm: epoct, user: emmanuel)
 
-      # Answer types
-      boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
-      checkbox = AnswerType.create!(value: 'Array', display: 'Checkbox')
-      input_integer = AnswerType.create!(value: 'Integer', display: 'Input')
-      input_float = AnswerType.create!(value: 'Float', display: 'Input')
+      @cc = epoct.questions.create!(reference: '11', answer_type: boolean, label_en: 'CC11', stage: Question.stages[:triage], priority: Question.priorities[:mandatory], type: 'Questions::ComplaintCategory')
 
-      dd7 = Diagnostic.create!(version: epoc_first, label: 'Severe LRTI', reference: '7')
+      dd7 = Diagnostic.create!(version: epoc_first, label: 'Severe LRTI', reference: '7', node: @cc)
       df7 = FinalDiagnostic.create!(label: 'Severe lower respiratory tract infection', reference: '7', diagnostic: dd7)
 
       s2 = Questions::Symptom.create!(algorithm: epoct, label: 'Cough', reference: '2', priority: Question.priorities[:mandatory], stage: Question.stages[:triage], answer_type: boolean)
@@ -24,7 +28,7 @@ module ServiceMacros
       s4_1 = s4.answers.first
       s4_2 = s4.answers.second
 
-      p1 = Questions::PhysicalExam.create!(algorithm: epoct, label: 'SAO2', reference: '1', priority: Question.priorities[:mandatory], stage: Question.stages[:triage], answer_type: input_integer)
+      p1 = Questions::PhysicalExam.create!(algorithm: epoct, label: 'SAO2', reference: '10', priority: Question.priorities[:mandatory], stage: Question.stages[:triage], answer_type: input_integer)
       p1_1 = Answer.create!(node: p1, reference: '1', label: '>/= 90%', value: '90', operator: Answer.operators[:more_or_equal])
       p1_1 = Answer.create!(node: p1, reference: '2', label: '< 90%', value: '90', operator: Answer.operators[:less])
 

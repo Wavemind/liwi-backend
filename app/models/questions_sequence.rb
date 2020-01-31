@@ -61,7 +61,11 @@ class QuestionsSequence < Node
   # @return [Json]
   # Return available nodes in the algorithm in json format
   def available_nodes_json
-    (algorithm.nodes.where.not(id: components.not_health_care_conditions.select(:node_id)).where.not('type LIKE ?', 'HealthCares::%')).as_json(methods: [:category_name, :node_type, :get_answers, :type])
+    ids = components.not_health_care_conditions.select(:node_id)
+    (
+      algorithm.questions.no_triage.no_treatment_condition.no_vital_sign.where.not(id: ids) +
+      algorithm.questions_sequences.where.not(id: ids)
+    ).as_json(methods: [:category_name, :node_type, :get_answers, :type])
   end
 
   # Add errors to a predefined syndrome for its components
@@ -124,19 +128,6 @@ class QuestionsSequence < Node
   end
 
   private
-
-  # {Node#unique_reference}
-  # Scoped by the current algorithm
-  def unique_reference
-    if algorithm.questions_sequences.where(reference: reference_prefix + reference).any?
-      errors.add(:reference, I18n.t('nodes.validation.reference_used'))
-    end
-  end
-
-  # {Node#complete_reference}
-  def complete_reference
-    self.reference = reference_prefix + reference
-  end
 
   # Display the label for the current child
   def self.display_label

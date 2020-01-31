@@ -9,6 +9,7 @@ import {
   DiagramWidget,
 } from "storm-react-diagrams";
 import AdvancedNodeLayerWidget from "./AdvancedNodeLayerWidget";
+import AdvancedNodeModel from "../models/AdvancedNodeModel";
 
 /**
  * @author Alain Fresco
@@ -22,6 +23,34 @@ class AdvancedDiagramWidget extends DiagramWidget {
 
   isLocked(){
     return true;
+  }
+
+  // Override keyup function in order to prevent qs instance removing in its own diagram
+  // TODO : refactor this method to do better
+  onKeyUp(event) {
+
+    const {deleteKeys, diagramEngine} = this.props;
+
+    //delete all selected
+    if (deleteKeys.indexOf(event.keyCode) !== -1) {
+      let qsInstanceDeleting = false;
+      _.forEach(diagramEngine.getDiagramModel().getSelectedItems(), element => {
+        if (element instanceof AdvancedNodeModel && window.location.pathname.endsWith('questions_sequences/' + element.node.id + '/diagram')) {
+          qsInstanceDeleting = true;
+        }
+      });
+
+      if(!qsInstanceDeleting) {
+        _.forEach(diagramEngine.getDiagramModel().getSelectedItems(), element => {
+          //only delete items which are not locked
+          if (!diagramEngine.isModelLocked(element)) {
+            element.remove();
+          }
+        });
+      }
+
+      this.forceUpdate();
+    }
   }
 
   render() {
@@ -71,9 +100,11 @@ class AdvancedDiagramWidget extends DiagramWidget {
             const boundingRect = event.currentTarget.getBoundingClientRect();
             const clientWidth = boundingRect.width;
             const clientHeight = boundingRect.height;
+
             // compute difference between rect before and after scroll
             const widthDiff = clientWidth * zoomFactor - clientWidth * oldZoomFactor;
             const heightDiff = clientHeight * zoomFactor - clientHeight * oldZoomFactor;
+
             // compute mouse coords relative to canvas
             const clientX = event.clientX - boundingRect.left;
             const clientY = event.clientY - boundingRect.top;
@@ -148,7 +179,8 @@ class AdvancedDiagramWidget extends DiagramWidget {
           this.state.document.addEventListener("mousemove", this.onMouseMove);
           this.state.document.addEventListener("mouseup", this.onMouseUp);
         }}
-      >
+
+        >
         {this.state.renderedNodes && (
           <LinkLayerWidget
             diagramEngine={diagramEngine}

@@ -4,7 +4,7 @@ RSpec.describe GroupsController, type: :controller do
   login_user
 
   before(:each) do
-    @group = Group.create!(name: 'administrator')
+    @group = Group.create!(name: 'administrator', architecture: Group.architectures[:standalone], pin_code: '1234')
     @device = Device.create!(mac_address: 'BB:3B:AA:69:8F:74', model: 'P50s', brand: 'Lenovo', status: :active, name: 'MedicalCenter1', os: 'Android', os_version: '8.0')
   end
 

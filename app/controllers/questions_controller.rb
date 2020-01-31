@@ -18,9 +18,10 @@ class QuestionsController < ApplicationController
 
   def create
     @question = @algorithm.questions.new(question_params)
+
     if @question.save
       # Don't create answers if it is boolean type, since it is automatically created from the model
-      if @question.answer_type.value == 'Boolean'
+      if %w(Boolean Present Positive).include?(@question.answer_type.value) || @question.is_a?(Questions::VitalSignTriage) || @question.is_a?(Questions::VitalSignConsultation)
         redirect_to algorithm_url(@algorithm, panel: 'questions'), notice: t('flash_message.success_created')
       else
         # Create a new first answer for the form view
@@ -54,7 +55,7 @@ class QuestionsController < ApplicationController
 
   def destroy
     # If user remove 'disabled' css in button, we verify in controller
-    if @question.dependencies?
+    if @question.instance_dependencies?
       redirect_to algorithm_url(@algorithm, panel: 'questions'), alert: t('dependencies')
     else
       if @question.destroy
@@ -70,10 +71,24 @@ class QuestionsController < ApplicationController
   # @return redirect to algorithms#index with flash message
   # Create answers related to the current question
   def answers
-    if @question.update(question_params)
-      redirect_to algorithm_url(@algorithm, panel: 'questions'), notice: t('flash_message.success_updated')
-    else
-      render 'answers/new'
+    ActiveRecord::Base.transaction(requires_new: true) do
+      @question.answers.reload
+
+      if @question.update(question_params) && @question.validate_overlap
+        redirect_to algorithm_url(@algorithm, panel: 'questions'), notice: t('flash_message.success_updated')
+      else
+        flash[:alert] = @question.errors[:answers] if @question.errors[:answers].any?
+
+        # Code to reassign corrects id to failing answers that failed after a validation fail. On wait for improvements
+        i = 0
+        question_params[:answers_attributes].each_pair do |key, value|
+          @question.answers[i].id = value[:id]
+          i+=1
+        end
+
+        render 'answers/new'
+        raise ActiveRecord::Rollback, ''
+      end
     end
   end
 
@@ -85,14 +100,16 @@ class QuestionsController < ApplicationController
       question = @algorithm.questions.new(question_params).becomes(Object.const_get(question_params[:type]))
       question.becomes(Object.const_get(question_params[:type])) if question_params[:type].present?
 
+      question.unavailable = question_params[:unavailable] if question.is_a? Questions::AssessmentTest # Manually done it because the form could not handle it
+
       # in order to add answers after creation (which can't be done if the question has no id), we also remove reference from params so it will not fail validation
-      if question.save && question.update(question_params.except(:reference)) && question.validate_answers_references
+      if question.save && question.update(question_params.except(:reference)) && question.validate_overlap
         instanceable = Object.const_get(params[:instanceable_type].camelize.singularize).find(params[:instanceable_id])
         instanceable.components.create!(node: question, final_diagnostic_id: params[:final_diagnostic_id])
         render json: {status: 'success', messages: [t('flash_message.success_created')], node: question.as_json(include: :answers, methods: [:node_type, :category_name, :type])}
       else
-        errors = question.answer_type.value == 'Boolean' ? question.errors.messages : question.answers.map(&:errors).map(&:messages)
-        render json: {status: 'danger', errors: errors, ok: false}
+        errors = (question.answer_type.value == 'Boolean') ? question.errors.messages : question.answers.map(&:errors).map(&:messages)
+        render json: {status: 'danger', errors: errors, overlap_errors: question.errors[:answers], ok: false}
         raise ActiveRecord::Rollback, ''
       end
     end
@@ -109,10 +126,14 @@ class QuestionsController < ApplicationController
   # @return questions_sequence node
   # Update a questions sequence node from diagram
   def update_from_diagram
-    if @question.update(question_params)
-      render json: {status: 'success', messages: [t('flash_message.success_updated')], node: @question.as_json(include: :answers, methods: [:category_name, :node_type, :type])}
-    else
-      render json: {status: 'danger', errors: @question.errors.messages, ok: false}
+    ActiveRecord::Base.transaction(requires_new: true) do
+      if @question.update(question_params) && @question.validate_answers_references && @question.validate_overlap
+        render json: {status: 'success', messages: [t('flash_message.success_updated')], node: @question.as_json(include: :answers, methods: [:category_name, :node_type, :type])}
+      else
+        errors = (@question.answer_type.value == 'Boolean') ? @question.errors.messages : @question.answers.map(&:errors).map(&:messages)
+        render json: {status: 'danger', errors: errors, overlap_errors: @question.errors[:answers], ok: false}
+        raise ActiveRecord::Rollback, ''
+      end
     end
   end
 
@@ -158,7 +179,8 @@ class QuestionsController < ApplicationController
       :label_en,
       Language.label_params,
       :reference,
-      :priority,
+      :is_mandatory,
+      :system,
       :stage,
       :type,
       :description_en,
@@ -166,6 +188,8 @@ class QuestionsController < ApplicationController
       :answer_type_id,
       :unavailable,
       :formula,
+      :snomed_id,
+      :snomed_label,
       answers_attributes: [
         :id,
         :reference,

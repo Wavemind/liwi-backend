@@ -12,6 +12,7 @@ class TreatmentDatatable < AjaxDatatablesRails::ActiveRecord
 
   def view_columns
     @view_columns ||= {
+      id: { source: 'HealthCares::Treatment.id' },
       reference: { source: 'HealthCares::Treatment.reference' },
       label: { source: 'HealthCares::Treatment.label_translations' },
       description: { source: 'HealthCares::Treatment.description_translations' },
@@ -22,7 +23,8 @@ class TreatmentDatatable < AjaxDatatablesRails::ActiveRecord
     records.map do |record|
       actions = link_to(I18n.t('edit'), edit_algorithm_treatment_url(params[:id], record), class: 'btn btn-outline-info') + " " + link_to(I18n.t('delete'), algorithm_treatment_url(record.algorithm, record), class: "btn btn-outline-danger #{record.dependencies? ? 'disabled' : ''}", method: :delete, data: { confirm: 'Are you sure?' })
       {
-        reference: record.reference,
+        id: record.id,
+        reference: record.full_reference,
         label: record.label,
         description: record.description,
         actions: actions
@@ -31,6 +33,6 @@ class TreatmentDatatable < AjaxDatatablesRails::ActiveRecord
   end
 
   def get_raw_records
-    Algorithm.find(params[:id]).health_cares.treatments.includes([:algorithm, :instances])
+    Algorithm.find(params[:id]).health_cares.treatments.includes([:algorithm])
   end
 end

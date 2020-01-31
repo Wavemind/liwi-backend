@@ -7,14 +7,11 @@ class Answer < ApplicationRecord
   has_many :children
   has_many :medical_case_answers
 
-  validates_presence_of :reference
   validates_presence_of :label_en
   validates_presence_of :operator, if: Proc.new { self.node.is_a?(Question) && self.node.answer_type.display == 'Input' }
 
-  validates :reference, exclusion: { in: %w(0), message: I18n.t('flash_message.reserved_reference') }
   after_validation :correct_value_type
-  after_validation :unique_reference, on: [ :create ]
-  before_create :complete_reference
+  after_create :generate_reference
   before_destroy :remove_conditions
 
   translates :label
@@ -22,14 +19,14 @@ class Answer < ApplicationRecord
   # @return [String]
   # Return the label with the reference for the view
   def reference_label
-    "#{reference} - #{label}"
+    "#{full_reference} - #{label}"
   end
 
   # @return [String]
   # Return the reference of the answer. This function is needed to do a recursive functional call
   # with conditions or answers, answer being the last level
   def display_condition
-    "#{reference}"
+    "#{full_reference}"
   end
 
   # @return [String]
@@ -38,26 +35,9 @@ class Answer < ApplicationRecord
     "#{self.id},#{self.class.name}"
   end
 
-  # @param [Integer] node id to link to questions
-  # Create 1 automatic answer for tests/assessments if attr_accessor :unavailable in question is checked
-  def self.create_unavailable(node_id)
-    answer = Answer.new(node_id: node_id, reference: '0', label_en: I18n.t('answers.unavailable'))
-    answer.save(validate: false)
-  end
-
   # Return the parent node with all the answers in order to include it in a json if the condition is an answer and not a condition
   def get_node
     node.as_json(include: [:answers], methods: [:type])
-  end
-
-  # {Node#unique_reference}
-  # Scoped by the current algorithm
-  def unique_reference
-    if node.answers.where(reference: reference).or(node.answers.where(reference: "#{node.reference}_#{reference}")).where.not(id: id).any?
-      errors.add(:reference, I18n.t('nodes.validation.reference_used'))
-      return false
-    end
-    true
   end
 
   private
@@ -69,9 +49,15 @@ class Answer < ApplicationRecord
 
   # Ensure that the entered values are in the correct type
   def correct_value_type
-    if node.is_a?(Question) && node.answer_type.display == 'Input'
+    if node.is_a?(Question) && %w(Input Formula).include?(node.answer_type.display)
       if between?
-        errors.add(:value, I18n.t('answers.validation.value_missing')) unless value.include?(',')
+        if value.include?(',')
+          values = value.split(',').map(&:to_i)
+          errors.add(:value, I18n.t('answers.validation.between_wrong_order')) if values[0] > values[1]
+        else
+          errors.add(:value, I18n.t('answers.validation.value_missing'))
+        end
+
         value.split(',').each(&method(:validate_value_type))
       else
         validate_value_type(value)
@@ -89,8 +75,16 @@ class Answer < ApplicationRecord
     end
   end
 
-  # {Node#complete_reference}
-  def complete_reference
-    self.reference = "#{node.reference}_#{reference}"
+  def full_reference
+    "#{node.full_reference}_#{reference}"
+  end
+
+  def generate_reference
+    if node.answers.count > 1
+      self.reference = node.answers.maximum(:reference) + 1
+    else
+      self.reference = 1
+    end
+    self.save
   end
 end

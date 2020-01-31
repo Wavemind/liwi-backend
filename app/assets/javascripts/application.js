@@ -18,6 +18,7 @@
 //= require bootstrap-sprockets
 //= require moment
 //= require cocoon
+//= require jquery-ui
 //= require_tree .
 
 $(function () {

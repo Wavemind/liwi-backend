@@ -15,23 +15,25 @@ class QuestionDatatable < AjaxDatatablesRails::ActiveRecord
   # Column configuration
   def view_columns
     @view_columns ||= {
+      id: { source: 'Question.id' },
+      category: { source: 'Question.type' },
       reference: { source: 'Question.reference' },
       label: { source: 'Question.label_translations' },
       description: { source: 'Question.description_translations' },
-      priority: { source: 'Question.priority' },
-      category: { source: 'Question.type' },
+      is_mandatory: { source: 'Question.is_mandatory' },
     }
   end
 
   # Value display
   def data
     records.map do |record|
-      actions = link_to(I18n.t('edit'), edit_algorithm_question_url(params[:id], record), class: 'btn btn-outline-info') + " " + link_to(I18n.t('delete'), algorithm_question_url(record.algorithm, record), class: "btn btn-outline-danger #{record.dependencies? ? 'disabled' : ''}", method: :delete, data: { confirm: 'Are you sure?' })
+      actions = record.is_default ? '' : link_to(I18n.t('edit'), edit_algorithm_question_url(params[:id], record), class: 'btn btn-outline-info') + " " + link_to(I18n.t('delete'), algorithm_question_url(record.algorithm, record), class: "btn btn-outline-danger #{record.instance_dependencies? ? 'disabled' : ''}", method: :delete, data: { confirm: 'Are you sure?' })
       {
-        reference: record.reference,
+        id: record.id,
+        reference: record.full_reference,
         label: record.label,
         description: record.description,
-        priority: I18n.t("questions.priorities.#{record.priority}"),
+        is_mandatory: record.is_mandatory,
         category: Object.const_get(record.type).display_label,
         answers: record.answers.map(&:label).join(' / '),
         answer_type: record.answer_type.display_name,
@@ -42,7 +44,7 @@ class QuestionDatatable < AjaxDatatablesRails::ActiveRecord
 
   # Activerecord request
   def get_raw_records
-    Algorithm.find(params[:id]).questions.includes([:answers, :answer_type, :algorithm, :instances])
+    Algorithm.find(params[:id]).questions.includes([:instances, :answers, :answer_type, :algorithm])
   end
 
 end

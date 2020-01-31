@@ -14,6 +14,7 @@ Rails.application.routes.draw do
 
   resources :roles, only: [:index, :show, :new, :create, :edit, :update]
 
+  resources :technical_files, only: [:index, :new, :create]
   resources :settings, only: [:index]
   resources :languages, only: [:new, :create, :update, :destroy]
 
@@ -33,6 +34,9 @@ Rails.application.routes.draw do
         put 'archive', to: 'versions#archive', as: 'archive'
         put 'unarchive', to: 'versions#unarchive', as: 'unarchive'
         post 'duplicate'
+        put 'change_triage_order'
+        put 'create_triage_condition'
+        put 'remove_triage_condition'
       end
 
       resources :diagnostics, only: [:index, :new, :create, :edit, :update, :show, :destroy, :duplicate, :update_translations] do

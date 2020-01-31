@@ -2,7 +2,17 @@ en:
   activerecord:
     attributes:
       node:
+        type: "Category"
         unavailable: "Can be unavailable ?"
+        minimal_dose_per_kg: "Minimal dose/kg"
+        maximal_dose_per_kg: "Maximal dose/kg"
+        maximal_dose: "Maximal dose"
+        doses_per_day: "Number of doses per day"
+        treatment_type: "Medication form"
+        pill_size: "Pill minimal size (mg)"
+      diagnostic:
+        node: "Complaint category"
+  activated: "Activate"
   add: "Add"
   algorithms:
     index:
@@ -28,16 +38,26 @@ en:
   answer_type:
     labels:
       - ~
-      - "True/False"
+      - "Yes / No"
       - "Dropdown list"
       - "Input integer"
       - "Input decimal"
+      - "Formula"
+      - "Date"
+      - "Present / Absent"
+      - "Positive / Negative"
   answers:
+    predefined:
+      absent: "Absent"
+      negative: "Negative"
+      "no": "No"
+      positive: "Positive"
+      present: "Present"
+      "yes": "Yes"
     edit:
       title: "Edit related answers of %{name} question"
     new:
       title: "Create related answers of %{name} question"
-    "no": "No"
     operators:
       between: ">=, <"
       less: "<"
@@ -45,7 +65,15 @@ en:
     validation:
       value_missing: "Use coma separated values when using between operator"
       wrong_value_type: "The value is not in the correct type : %{type}"
-    "yes": "Yes"
+      between_wrong_order: "The first value has to be smaller than the second one"
+      overlap:
+        one_more_or_equal: "You have to have one (and only one) answer with more or equal operator in order to close your range."
+        one_less: "You have to have one (and only one) answer with less operator in order to open your range."
+        first_between_different_from_less: "The smallest value on your answers with between operator has to be equal to the answer with less operator."
+        last_between_different_from_more_or_equal: "The highest value on your answers with between operator has to be equal to the answer with more or equal operator."
+        between_not_following: "Two of your answers with between operators are not followed correctly."
+        less_greater_than_more_or_equal: "Your answer with less operator can't be greater than your answer with more or equal operator."
+        less_equal_more_or_equal: "If you only have less and more or equal answers, they must be equal"
     unavailable: "Test/Assessment is unavailable"
   api:
     v1:
@@ -57,7 +85,7 @@ en:
       activities:
         create:
           errors_device_not_present: "Device doesn't exist"
-          errors_on_save: "An error occured when saving activities"
+          errors_on_save: "An error occurred when saving activities"
   archive: "Archive"
   breadcrumbs:
     algorithms: 'Algorithms'
@@ -114,10 +142,11 @@ en:
   diagnostics:
     table:
       columns:
-        reference: "Reference"
+        actions: "Actions"
+        complaint_category: "Complaint category"
         label: "Name"
         last_update: "Last update"
-        actions: "Actions"
+        reference: "Reference"
       title: "Algorithms versions"
     new:
       title: "Add a diagnostic"
@@ -176,19 +205,26 @@ en:
     success_updated: "Data was successfully updated"
     update_fail: "Error will updating value"
     diagnostic:
+      complaint_category_exclude_triage_question: "You are setting a complaint category that does not take in charge one question in your diagnostic diagram."
+      error_in_questions_sequence: "The questions sequence <u><a href='%{url}'>%{reference}</a></u> is not valid."
       final_diagnostic_no_condition: "The Final Diagnostic %{reference} has no condition."
-      question_no_children: "The %{type} %{reference} is not linked to any children."
       hc_question_no_children: "The %{type} %{reference}, which is in <u><a href='%{url}'>%{df_reference}</a></u> is not linked to any children."
+      node_is_not_complaint_category: "The node you are linking to this diagnostic is not a Complaint Category."
+      question_no_children: "The %{type} %{reference} is not linked to any children."
       valid: "This diagnostic is valid!"
     questions_sequence:
       ps_no_condition: "The questions sequence you are describing has no condition."
       question_no_children: "The %{type} %{reference} is not linked to any children."
       pss_no_combination: "There is no combination for this questions sequence to be true."
       valid: "This questions sequence is valid!"
+    version:
+      complaint_category_missing: "Please select the complaint category."
+      invalids_diagnostics: "Your version contains diagnostics that are invalid : %{diagnostics}"
+      triage_question_missing: "Please select the triage question you want to put a condition on."
   groups:
     add_device:
       success_add_device: "Device was successfully added to group"
-      error_add_device: "An error occured when adding device to group"
+      error_add_device: "An error occurred when adding device to group"
     index:
       columns:
         name: "Name"
@@ -197,11 +233,14 @@ en:
       title: "Groups"
     edit:
       title: "Edit group"
+    errors:
+      code_pin_unvalid: "The PIN code should be only 4 digits"
+      ip_invalid: "The IP is not in the good format."
     new:
       title: "Add group"
     remove_device:
       success_remove_device: "Device was successfully removed from group"
-      error_remove_device: "An error occured when removing device from group"
+      error_remove_device: "An error occurred when removing device from group"
     show:
       title: "Details of %{name}"
       second_title: "Accesses"
@@ -229,11 +268,20 @@ en:
       in-port-title: "In port"
       out-port-title: "Out port"
       excluded-diagnostic-title: "Excluded diagnostic"
+      score-title: "Questions Sequence Scored"
       arrow-content: "Define links between questions"
       dashed-arrow-content: "Define which final diagnostic has priority. The final diagnostic who is targeted by the arrow is excluded."
-      in-port-content: "Blue box in the top of the nodes. Inport where the link begins"
-      out-port-content: "Green box below the nodes : Outport where the link ends"
+      in-port-content: "Blue box in the top of the nodes. Inport where the link ends"
+      out-port-content: "Green box below the nodes : Outport where the link begins"
       excluded-diagnostic-content: "The green box on the left of the nodes is the outport for excluding final diagnostics. The blue box is the inport for excluding final diagnostics."
+      score-content: "In order to add scores to your answers, you have to make a link between an answer and the questions sequence scored. This will display a pop up asking you the score to attribute to this relation."
+    formula:
+      formula-title: "What is a formula ?"
+      formula-content: "A formula helps you use the value of a previous question, either by using its value directly, or by doing some operation on it."
+      reference-title: "How to call a question's answer"
+      reference-content: "In order to use the value of a question's answer, you need to put its reference between brackets.<br />Ex: [PE15].<br />Please remember that the question has to be in a numeric format in order to work"
+      date-title: "How to make some calculation from a date ?"
+      date-content: "In some case, you will need to calculate the patient's age in months. In order to do so, you have to use a function. The available functions are 'ToMonth' and 'ToDay'. Those will return the number of months or days between the given date (ex: birth date) and the time the question will be asked.<br />Ex: ToMonth(D1).<br />Please remember that the question has to be in a date format in order to work."
   instances:
     table:
       columns:
@@ -311,49 +359,74 @@ en:
       assessment_test:
         label: "Assessment/test"
         reference_prefix: "A"
-      chief_complaint:
-        label: "Chief complaint"
+      background_calculation:
+        label: "Background calculation"
+        reference_prefix: "BC"
+      complaint_category:
+        label: "Complaint category"
         reference_prefix: "CC"
+      chronic_condition:
+        label: "Chronic condition"
+        reference_prefix: "CH"
       demographic:
         label: "Demographics"
         reference_prefix: "D"
       exposure:
         label: "Exposure"
         reference_prefix: "E"
+      emergency_sign:
+        label: "Emergency sign"
+        reference_prefix: "ES"
+      observed_physical_sign:
+        label: "Observed physical sign"
+        reference_prefix: "OS"
       physical_exam:
         label: "Physical exam"
         reference_prefix: "PE"
       symptom:
         label: "Symptom"
         reference_prefix: "S"
+      treatment_question:
+        label: "Additional Treatment question"
+        reference_prefix: "TQ"
       vaccine:
         label: "Vaccine"
         reference_prefix: "V"
-      vital_sign:
-        label: "Vital sign"
-        reference_prefix: "VS"
+      vital_sign_consultation:
+        label: "Vital sign and anthropometric taken during consultation"
+        reference_prefix: "VC"
+      vital_sign_triage:
+        label: "Vital sign and anthropometric taken at triage"
+        reference_prefix: "VT"
     errors:
       no_blank: "can't be blank"
       formula_wrong_characters: "Incorrect formula format. You can only use numbers, operators and questions references (between brackets)"
       formula_wrong_reference: "The reference '%{reference}' does not match to any question in this algorithm"
+      formula_wrong_type: "The reference prefix you used does not match any question category"
+      formula_reference_not_date: "The question '%{reference}' is not in date format."
       formula_reference_not_numeric: "The question '%{reference}' is not in numeric format."
+      formula_reference_no_underscore: "The reference must contain an underscore (ex: A_1)"
     new:
       title: "New question"
     priorities:
       basic: "Basic"
-      triage: "Triage"
       mandatory: "Mandatory"
-    references:
-      comorbidity: "DC"
-      exposure: "E"
-      symptom: "S"
-      physical_exam: "P"
-      test: "T"
     stages:
       registration: "Registration"
       triage: "Triage"
       test: "Test"
       consultation: "Consultation"
+      diagnosis_management: "Diagnosis and management"
+    systems:
+      general: "General"
+      respiratory_circulation: "Respiratory and circulatory system"
+      ear_nose_mouth_throat: "Ear, nose, mouth and throat system"
+      visual: "Visual system"
+      integumentary: "Integumentary system"
+      digestive: "Digestive system"
+      urinary_reproductive: "Urinary and reproductive system"
+      nervous: "Nervous system"
+      muscular_skeletal: "Muscular and skeletal system"
     table:
       columns:
         label: "Label"
@@ -362,7 +435,7 @@ en:
         priority: "Priority"
         category: "Category"
         answers: "Answers"
-        answer_type: "Type of answers"
+        answer_type: "Answer type"
         actions: "Actions"
     edit:
       title: "Edit question"
@@ -392,6 +465,9 @@ en:
         label: "Label"
         description: "Description"
         actions: "Actions"
+    treatment_types:
+      liquid: "Liquid"
+      pill: "Pill"
   unarchive: "Unarchive"
   users:
     new:
@@ -421,12 +497,16 @@ en:
         creator: "Creator"
         actions: "Actions"
       title: "Algorithms versions"
+    triage_order:
+      others: "Other triage questions"
     new:
       title: "Add an algorithm version"
     edit:
       title: "Edit this algorithm"
     show:
       subtitle_diagnostics: "Diagnostics"
+      subtitle_questions_order: "Triage questions order"
+      subtitle_triage_conditions: "Triage questions conditions"
       title: "Details of %{name} - version %{version}"
       questions_sequences: "Questions Sequences"
   warning_dependency: "Warning ! Editing this node will affect :"
@@ -434,3 +514,7 @@ en:
   back: "Back"
   open_diagram: "Open diagram editor"
   help: "Help"
+  type_here: "Type here"
+  technical_files:
+    index:
+      title: "Upload/Download APK"

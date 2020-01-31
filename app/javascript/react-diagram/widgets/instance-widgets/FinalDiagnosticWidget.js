@@ -28,6 +28,7 @@ class FinalDiagnosticWidget extends React.Component {
   render() {
     const {
       diagramNode,
+      getReferencePrefix
     } = this.props;
 
     let inPort = diagramNode.getInPorts()[0];
@@ -40,7 +41,7 @@ class FinalDiagnosticWidget extends React.Component {
         <div className="port py-2 node-category">
           <div className="port srd-port in-port" data-name={inPort.name} data-nodeid={inPort.parent.id}/>
           <div className="col pl-2 pr-0 text-left">
-            {diagramNode.node.reference}
+            {getReferencePrefix(diagramNode.node.node_type, diagramNode.node.type) + diagramNode.node.reference}
           </div>
           <div className="col pl-0 pr-2 text-right">
             <div className="dropdown">

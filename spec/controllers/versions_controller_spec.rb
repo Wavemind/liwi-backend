@@ -4,8 +4,7 @@ RSpec.describe VersionsController, type: :controller do
   login_user
 
   before(:each) do
-    role = Role.new(name: 'administrator')
-    user = User.new(first_name: 'Foo', last_name: 'Bar', email: 'foo.bar@gmail.com', role: role)
+    user = User.new(first_name: 'Foo', last_name: 'Bar', email: 'foo.bar@gmail.com')
     @algorithm = Algorithm.new(name: 'EPOCT', description: 'MedicalCenter1', user: user)
 
     @version = Version.create!(name: 'final', algorithm: @algorithm, user: user)

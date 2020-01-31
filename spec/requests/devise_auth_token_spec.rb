@@ -6,9 +6,17 @@ include ActionController::RespondWith
 
 describe 'Whether access is ocurring properly', type: :request do
   before(:each) do
-    role = Role.create(name: 'administrator')
-    @current_user = User.create(first_name: 'Foo', last_name: 'Bar', email: 'foo.bar@ilovetestunit.com', password: '123456', password_confirmation: '123456', role: role)
-    group_wavemind = Group.create!(name: 'Wavemind')
+    # needed for algorithm creation for auto created questions
+    boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
+    dropdown_list = AnswerType.create!(value: 'Array', display: 'DropDownList')
+    input_integer = AnswerType.create!(value: 'Integer', display: 'Input')
+    input_float = AnswerType.create!(value: 'Float', display: 'Input')
+    formula = AnswerType.create!(value: 'Float', display: 'Formula')
+    date = AnswerType.create!(value: 'Date', display: 'Input')
+    string = AnswerType.create!(value: 'String', display: 'Input')
+
+    @current_user = User.create(first_name: 'Foo', last_name: 'Bar', email: 'foo.bar@ilovetestunit.com', password: '123456', password_confirmation: '123456')
+    group_wavemind = Group.create!(name: 'Wavemind', architecture: Group.architectures[:standalone], pin_code: '1234')
     Device.create!(mac_address: '64:DB:43:D5:31:5C', group: group_wavemind)
 
     epoct = Algorithm.create!(name: 'ePoct', description: 'loremp ipsum', user: @current_user)
