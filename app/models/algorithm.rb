@@ -18,12 +18,12 @@ class Algorithm < ApplicationRecord
   # Answer types ids : 3 is Integer, 4 is Decimal, 6 is Date
   def create_reference_table_questions
     birth_date = questions.create!(label_en: 'Birth date', type: 'Questions::Demographic', stage: Question.stages[:registration], is_mandatory: true, answer_type_id: 6, is_default: true)
-    age_in_days = questions.create!(label_en: 'Age in days', type: 'Questions::VitalSignTriage', stage: Question.stages[:triage], is_mandatory: true, answer_type_id: 5, formula: '[ToDay(D_1)]', is_default: true)
+    age_in_days = questions.create!(label_en: 'Age in days', type: 'Questions::VitalSignTriage', stage: Question.stages[:triage], is_mandatory: true, answer_type_id: 5, formula: '[ToDay(1)]', is_default: true)
     weight = questions.create!(label_en: 'Weight (kg)', type: 'Questions::VitalSignTriage', stage: Question.stages[:triage], is_mandatory: true, answer_type_id: 4, is_default: true)
     hr = questions.create!(label_en: 'Heart rate', type: 'Questions::VitalSignConsultation', stage: Question.stages[:consultation], answer_type_id: 4, is_default: true)
     rr = questions.create!(label_en: 'Respiratory rate', type: 'Questions::VitalSignConsultation', stage: Question.stages[:consultation], answer_type_id: 4, is_default: true)
 
-    age = questions.create!(label_en: 'Age in months', type: 'Questions::Demographic', stage: Question.stages[:registration], is_mandatory: true, answer_type_id: 5, formula: '[ToMonth(D_1)]', is_default: true)
+    age = questions.create!(label_en: 'Age in months', type: 'Questions::Demographic', stage: Question.stages[:registration], is_mandatory: true, answer_type_id: 5, formula: '[ToMonth(D1)]', is_default: true)
     age.answers.create([
       {label_en: 'less than 2 months', value: '2', operator: Answer.operators[:less]},
       {label_en: 'between 2 and 6 months', value: '2, 6', operator: Answer.operators[:between]},
