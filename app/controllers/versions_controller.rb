@@ -59,7 +59,7 @@ class VersionsController < ApplicationController
     if @version.save
       redirect_to algorithm_url(@algorithm, panel: 'versions'), notice: t('flash_message.success_created')
     else
-      redirect_to algorithm_url(@algorithm, panel: 'versions'), danger: t('flash_message.update_fail')
+      redirect_to algorithm_url(@algorithm, panel: 'versions'), alert: t('flash_message.update_fail')
     end
   end
 
@@ -70,11 +70,14 @@ class VersionsController < ApplicationController
     duplicated_version = @version.amoeba_dup
 
     if duplicated_version.save
-      duplicated_version.diagnostics.each { |diagnostic| diagnostic.relink_instance }
+      duplicated_version.diagnostics.each_with_index { |diagnostic, index| diagnostic.relink_instance }
       @version.diagnostics.each { |diagnostic| diagnostic.update(duplicating: false) }
       redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_deleted')
     else
-      render :new
+      puts '***'
+      puts duplicated_version.errors.messages
+      puts '***'
+      redirect_to algorithm_url(@algorithm, panel: 'versions'), alert: t('flash_message.duplicate_fail')
     end
   end
 

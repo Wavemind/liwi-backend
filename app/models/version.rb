@@ -16,13 +16,13 @@ class Version < ApplicationRecord
   has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy
 
   validates_presence_of :name
-  validates_uniqueness_of :name, scope: :algorithm
 
   after_create :instantiate_questions
 
   amoeba do
     enable
     include_association :diagnostics
+    include_association :components
     append name: I18n.t('duplicated')
   end
 
@@ -34,6 +34,7 @@ class Version < ApplicationRecord
 
   # Create an instance per question who has triage stage or vital sign category
   def instantiate_questions
+    return if name.ends_with?(I18n.t('duplicated'))
     algorithm.questions.triage.each do |question|
       components.create!(node: question)
       self.update("#{question.version_field_to_set}": self.send("#{question.version_field_to_set}").push(question.id))

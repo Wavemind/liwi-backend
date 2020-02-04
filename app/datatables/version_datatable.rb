@@ -6,6 +6,7 @@ class VersionDatatable < AjaxDatatablesRails::ActiveRecord
   def_delegator :@view, :algorithm_version_url
   def_delegator :@view, :archive_algorithm_version_url
   def_delegator :@view, :unarchive_algorithm_version_url
+  def_delegator :@view, :duplicate_algorithm_version_url
   def_delegator :@view, :date_format
 
   def initialize(params, opts = {})
