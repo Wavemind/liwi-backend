@@ -15,49 +15,49 @@ module ServiceMacros
       epoct = Algorithm.create!(name: 'ePoct', description: 'loremp ipsum', user: emmanuel)
       epoc_first = Version.create!(name: 'first_trial', algorithm: epoct, user: emmanuel)
 
-      @cc = epoct.questions.create!(reference: '11', answer_type: boolean, label_en: 'CC11', stage: Question.stages[:triage], priority: Question.priorities[:mandatory], type: 'Questions::ComplaintCategory')
+      @cc = epoct.questions.create!(answer_type: boolean, label_en: 'CC11', stage: Question.stages[:triage], type: 'Questions::ComplaintCategory')
 
-      dd7 = Diagnostic.create!(version: epoc_first, label: 'Severe LRTI', reference: '7', node: @cc)
-      df7 = FinalDiagnostic.create!(label: 'Severe lower respiratory tract infection', reference: '7', diagnostic: dd7)
+      dd7 = Diagnostic.create!(version: epoc_first, label: 'Severe LRTI', node: @cc)
+      df7 = FinalDiagnostic.create!(label: 'Severe lower respiratory tract infection', diagnostic: dd7)
 
-      s2 = Questions::Symptom.create!(algorithm: epoct, label: 'Cough', reference: '2', priority: Question.priorities[:mandatory], stage: Question.stages[:triage], answer_type: boolean)
+      s2 = Questions::Symptom.create!(algorithm: epoct, label: 'Cough', stage: Question.stages[:triage], answer_type: boolean)
       s2_1 = s2.answers.first
       s2_2 = s2.answers.second
 
-      s4 = Questions::Symptom.create!(algorithm: epoct, label: 'Drink as usual', reference: '4', priority: Question.priorities[:mandatory], stage: Question.stages[:triage], answer_type: boolean)
+      s4 = Questions::Symptom.create!(algorithm: epoct, label: 'Drink as usual', stage: Question.stages[:triage], answer_type: boolean)
       s4_1 = s4.answers.first
       s4_2 = s4.answers.second
 
-      p1 = Questions::PhysicalExam.create!(algorithm: epoct, label: 'SAO2', reference: '10', priority: Question.priorities[:mandatory], stage: Question.stages[:triage], answer_type: input_integer)
-      p1_1 = Answer.create!(node: p1, reference: '1', label: '>/= 90%', value: '90', operator: Answer.operators[:more_or_equal])
-      p1_1 = Answer.create!(node: p1, reference: '2', label: '< 90%', value: '90', operator: Answer.operators[:less])
+      p1 = Questions::PhysicalExam.create!(algorithm: epoct, label: 'SAO2', stage: Question.stages[:triage], answer_type: input_integer)
+      p1_1 = Answer.create!(node: p1, label: '>/= 90%', value: '90', operator: Answer.operators[:more_or_equal])
+      p1_1 = Answer.create!(node: p1, label: '< 90%', value: '90', operator: Answer.operators[:less])
 
-      p3 = Questions::PhysicalExam.create!(algorithm: epoct, label: 'Respiratory rate', reference: '3', priority: Question.priorities[:mandatory], stage: Question.stages[:triage], answer_type: input_integer)
-      p3_1 = Answer.create!(node: p3, reference: '1', label: '< 97th%ile', value: '97', operator: Answer.operators[:less])
-      p3_2 = Answer.create!(node: p3, reference: '2', label: '>/= 97th%ile', value: '97', operator: Answer.operators[:more_or_equal])
+      p3 = Questions::PhysicalExam.create!(algorithm: epoct, label: 'Respiratory rate', stage: Question.stages[:triage], answer_type: input_integer)
+      p3_1 = Answer.create!(node: p3, label: '< 97th%ile', value: '97', operator: Answer.operators[:less])
+      p3_2 = Answer.create!(node: p3, label: '>/= 97th%ile', value: '97', operator: Answer.operators[:more_or_equal])
 
-      p13 = Questions::PhysicalExam.create!(algorithm: epoct, label: 'Lower chest indrawing', reference: '13', priority: Question.priorities[:basic], stage: Question.stages[:triage], answer_type: boolean)
+      p13 = Questions::PhysicalExam.create!(algorithm: epoct, label: 'Lower chest indrawing', stage: Question.stages[:triage], answer_type: boolean)
       p13_1 = p13.answers.first
       p13_2 = p13.answers.second
 
 
-      p14 = Questions::PhysicalExam.create!(algorithm: epoct, label: 'Sever respiratory distress', reference: '14', priority: Question.priorities[:basic], stage: Question.stages[:triage], answer_type: boolean)
+      p14 = Questions::PhysicalExam.create!(algorithm: epoct, label: 'Sever respiratory distress', stage: Question.stages[:triage], answer_type: boolean)
       p14_1 = p14.answers.first
       p14_1 = p14.answers.second
 
-      p25 = Questions::PhysicalExam.create!(algorithm: epoct, label: 'Tolerates PO liquid', reference: '25', priority: Question.priorities[:basic], stage: Question.stages[:triage], answer_type: boolean)
+      p25 = Questions::PhysicalExam.create!(algorithm: epoct, label: 'Tolerates PO liquid', stage: Question.stages[:triage], answer_type: boolean)
       p25_1 = p25.answers.first
       p25_2 = p25.answers.second
 
-      t1 = HealthCares::Treatment.create!(algorithm: epoct, label: 'Amoxicillin', reference: '1')
-      t2 = HealthCares::Treatment.create!(algorithm: epoct, label: 'IM ceftriaxone', reference: '2')
-      t9 = HealthCares::Treatment.create!(algorithm: epoct, label: 'Oral rehydration', reference: '9')
+      t1 = HealthCares::Treatment.create!(algorithm: epoct, label: 'Amoxicillin', )
+      t2 = HealthCares::Treatment.create!(algorithm: epoct, label: 'IM ceftriaxone', )
+      t9 = HealthCares::Treatment.create!(algorithm: epoct, label: 'Oral rehydration', )
 
-      m2 = HealthCares::Management.create!(algorithm: epoct, label: 'Refer', reference: '2')
+      m2 = HealthCares::Management.create!(algorithm: epoct, label: 'Refer', )
 
       df7.health_cares << [t1,t2,t9, m2]
 
-      ps6 = QuestionsSequences::PredefinedSyndrome.create!(algorithm: epoct, reference: '6', label: 'Able to drink')
+      ps6 = QuestionsSequences::PredefinedSyndrome.create!(algorithm: epoct, label: 'Able to drink')
       ps6_1 = ps6.answers.first
       ps6_2 = ps6.answers.second
 

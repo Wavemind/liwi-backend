@@ -7,7 +7,7 @@ RSpec.describe TreatmentsController, type: :controller do
   create_instances
 
   before(:each) do
-    @treatment = @algorithm.health_cares.treatments.create!(reference: 1, label_en: 'Label en')
+    @treatment = @algorithm.health_cares.treatments.create!(label_en: 'Label en')
   end
 
   it 'adds translations without rendering the view' do

@@ -39,7 +39,7 @@ RSpec.describe InstancesController, type: :controller do
   end
 
   it 'creates a node from diagram' do
-    m5 = HealthCares::Management.create!(reference: '5', label_en: 'Test', algorithm: @algorithm)
+    m5 = HealthCares::Management.create!(label_en: 'Test', algorithm: @algorithm)
     post :create_from_diagram, params: {
       diagnostic_id: @dd7.id,
       instance: {

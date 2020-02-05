@@ -19,7 +19,7 @@ RSpec.describe Instance, type: :model do
   end
 
   it 'removes condition from children' do
-    @q2 = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2457', priority: Question.priorities[:mandatory], stage: Question.stages[:triage], answer_type: @boolean)
+    @q2 = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', stage: Question.stages[:triage], answer_type: @boolean)
     instance = Instance.create!(instanceable: @dd7, node: @question)
     instance2 = Instance.create!(instanceable: @dd7, node: @q2)
     instance2.conditions.create!(first_conditionable: @question.answers.first)

@@ -7,11 +7,11 @@ RSpec.describe FinalDiagnosticsController, type: :controller do
   create_diagnostic
 
   before(:each) do
-    @df1 = @dd7.final_diagnostics.create!(reference: 1, label_en: 'df')
+    @df1 = @dd7.final_diagnostics.create!(label_en: 'df')
   end
 
   it 'creates excluding final diagnostic from controller than remove it with the destroy method' do
-    df2 = @dd7.final_diagnostics.create!(reference: 2, label_en: 'df')
+    df2 = @dd7.final_diagnostics.create!(label_en: 'df')
 
     post :add_excluded_diagnostic, params: {
       algorithm_id: @algorithm.id,
