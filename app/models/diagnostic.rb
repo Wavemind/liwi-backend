@@ -12,8 +12,8 @@ class Diagnostic < ApplicationRecord
   has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy
 
   before_validation :validate_complaint_category
+  after_create :generate_reference
   validates_presence_of :label_en
-  validates :reference, presence: true, uniqueness: { scope: :version }
 
   translates :label
 
@@ -143,7 +143,7 @@ class Diagnostic < ApplicationRecord
     excluded_ids += components.not_health_care_conditions.map(&:node_id)
 
     (
-      version.algorithm.questions.no_triage_but_other.no_treatment_condition.where.not(id: excluded_ids).includes(:answers) +
+      version.algorithm.questions.no_triage.no_treatment_condition.no_vital_sign.where.not(id: excluded_ids).includes(:answers) +
       version.algorithm.questions_sequences.where.not(id: excluded_ids).includes(:answers) +
       final_diagnostics.where.not(id: components.select(:node_id))
     ).as_json(methods: [:category_name, :node_type, :get_answers, :type])
@@ -200,6 +200,15 @@ class Diagnostic < ApplicationRecord
   end
 
   def full_reference
-    I18n.t('diagnostics.reference') + reference
+    I18n.t('diagnostics.reference') + reference.to_s
+  end
+
+  def generate_reference
+    if version.diagnostics.count > 1
+      self.reference = version.diagnostics.maximum(:reference) + 1
+    else
+      self.reference = 1
+    end
+    self.save
   end
 end

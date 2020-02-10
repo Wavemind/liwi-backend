@@ -139,10 +139,10 @@ class VersionsController < ApplicationController
     params.require(:version).permit(
       :id,
       :name,
-      :triage_first_look_assessments_order,
-      :triage_complaint_categories_order,
-      :triage_basic_measurements_order,
-      :triage_chronical_conditions_order,
+      :triage_emergency_sign_order,
+      :triage_complaint_category_order,
+      :triage_vital_sign_triage_order,
+      :triage_chronic_condition_order,
       :triage_questions_order,
       :triage_id,
       :cc_id

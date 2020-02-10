@@ -21,7 +21,7 @@ class QuestionsController < ApplicationController
 
     if @question.save
       # Don't create answers if it is boolean type, since it is automatically created from the model
-      if @question.answer_type.value == 'Boolean' || @question.is_a?(Questions::BasicMeasurement)
+      if %w(Boolean Present Positive).include?(@question.answer_type.value) || @question.is_a?(Questions::VitalSignTriage) || @question.is_a?(Questions::VitalSignConsultation)
         redirect_to algorithm_url(@algorithm, panel: 'questions'), notice: t('flash_message.success_created')
       else
         # Create a new first answer for the form view
@@ -74,7 +74,7 @@ class QuestionsController < ApplicationController
     ActiveRecord::Base.transaction(requires_new: true) do
       @question.answers.reload
 
-      if @question.update(question_params) && @question.validate_answers_references && @question.validate_overlap
+      if @question.update(question_params) && @question.validate_overlap
         redirect_to algorithm_url(@algorithm, panel: 'questions'), notice: t('flash_message.success_updated')
       else
         flash[:alert] = @question.errors[:answers] if @question.errors[:answers].any?
@@ -103,7 +103,7 @@ class QuestionsController < ApplicationController
       question.unavailable = question_params[:unavailable] if question.is_a? Questions::AssessmentTest # Manually done it because the form could not handle it
 
       # in order to add answers after creation (which can't be done if the question has no id), we also remove reference from params so it will not fail validation
-      if question.save && question.update(question_params.except(:reference)) && question.validate_answers_references && question.validate_overlap
+      if question.save && question.update(question_params.except(:reference)) && question.validate_overlap
         instanceable = Object.const_get(params[:instanceable_type].camelize.singularize).find(params[:instanceable_id])
         instanceable.components.create!(node: question, final_diagnostic_id: params[:final_diagnostic_id])
         render json: {status: 'success', messages: [t('flash_message.success_created')], node: question.as_json(include: :answers, methods: [:node_type, :category_name, :type])}
@@ -179,7 +179,8 @@ class QuestionsController < ApplicationController
       :label_en,
       Language.label_params,
       :reference,
-      :priority,
+      :is_mandatory,
+      :system,
       :stage,
       :type,
       :description_en,

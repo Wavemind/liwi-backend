@@ -63,7 +63,6 @@ class UpdateHealthCareForm extends React.Component {
 
     const {
       id,
-      reference,
       label,
       description,
       minimalDosePerKg,
@@ -75,17 +74,13 @@ class UpdateHealthCareForm extends React.Component {
       type
     } = this.state;
 
-    let result = await http.updateHealthCare(id, reference, label, description, type, minimalDosePerKg, maximalDosePerKg, maximalDose, dosesPerDay, treatmentType, pillSize);
+    let result = await http.updateHealthCare(id, label, description, type, minimalDosePerKg, maximalDosePerKg, maximalDose, dosesPerDay, treatmentType, pillSize);
     if (result.ok === undefined || result.ok) {
       toggleModal();
       await addMessage({ status: result.status, messages: result.messages });
       set("currentDbNode", result.node);
     } else {
       let newErrors = {};
-      if (result.errors.reference !== undefined) {
-        newErrors.reference = result.errors.reference[0];
-      }
-
       if (result.errors.label !== undefined) {
         newErrors.label = result.errors.label[0];
       }
@@ -126,28 +121,6 @@ class UpdateHealthCareForm extends React.Component {
           <Modal.Title>Update health cares</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form.Row>
-            <Form.Group as={Col}>
-              <Form.Label>Reference</Form.Label>
-              <InputGroup>
-                <InputGroup.Prepend>
-                  <InputGroup.Text id="inputGroupPrepend">{(currentHealthCareType === 'treatments') ? 'T' : 'M'}</InputGroup.Text>
-                </InputGroup.Prepend>
-                <Form.Control
-                  type="text"
-                  aria-describedby="inputGroupPrepend"
-                  name="reference"
-                  value={reference}
-                  onChange={this.updateState}
-                  isInvalid={!!errors.reference}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.reference}
-                </Form.Control.Feedback>
-              </InputGroup>
-            </Form.Group>
-          </Form.Row>
-
           <Form.Row>
             <Form.Group as={Col}>
               <Form.Label>Label</Form.Label>

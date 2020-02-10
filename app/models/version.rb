@@ -26,7 +26,7 @@ class Version < ApplicationRecord
     "#{algorithm.name} - #{name}"
   end
 
-  # Create an instance per question who has triage stage or basic measurement category
+  # Create an instance per question who has triage stage or vital sign category
   def instantiate_questions
     algorithm.questions.triage.each do |question|
       components.create!(node: question)

@@ -2,6 +2,7 @@ en:
   activerecord:
     attributes:
       node:
+        type: "Category"
         unavailable: "Can be unavailable ?"
         minimal_dose_per_kg: "Minimal dose/kg"
         maximal_dose_per_kg: "Maximal dose/kg"
@@ -37,19 +38,26 @@ en:
   answer_type:
     labels:
       - ~
-      - "True/False"
+      - "Yes / No"
       - "Dropdown list"
       - "Input integer"
       - "Input decimal"
       - "Formula"
       - "Date"
-      - "String"
+      - "Present / Absent"
+      - "Positive / Negative"
   answers:
+    predefined:
+      absent: "Absent"
+      negative: "Negative"
+      "no": "No"
+      positive: "Positive"
+      present: "Present"
+      "yes": "Yes"
     edit:
       title: "Edit related answers of %{name} question"
     new:
       title: "Create related answers of %{name} question"
-    "no": "No"
     operators:
       between: ">=, <"
       less: "<"
@@ -66,7 +74,6 @@ en:
         between_not_following: "Two of your answers with between operators are not followed correctly."
         less_greater_than_more_or_equal: "Your answer with less operator can't be greater than your answer with more or equal operator."
         less_equal_more_or_equal: "If you only have less and more or equal answers, they must be equal"
-    "yes": "Yes"
     unavailable: "Test/Assessment is unavailable"
   api:
     v1:
@@ -268,6 +275,13 @@ en:
       out-port-content: "Green box below the nodes : Outport where the link begins"
       excluded-diagnostic-content: "The green box on the left of the nodes is the outport for excluding final diagnostics. The blue box is the inport for excluding final diagnostics."
       score-content: "In order to add scores to your answers, you have to make a link between an answer and the questions sequence scored. This will display a pop up asking you the score to attribute to this relation."
+    formula:
+      formula-title: "What is a formula ?"
+      formula-content: "A formula helps you use the value of a previous question, either by using its value directly, or by doing some operation on it."
+      reference-title: "How to call a question's answer"
+      reference-content: "In order to use the value of a question's answer, you need to put its reference between brackets.<br />Ex: [PE15].<br />Please remember that the question has to be in a numeric format in order to work"
+      date-title: "How to make some calculation from a date ?"
+      date-content: "In some case, you will need to calculate the patient's age in months. In order to do so, you have to use a function. The available functions are 'ToMonth' and 'ToDay'. Those will return the number of months or days between the given date (ex: birth date) and the time the question will be asked.<br />Ex: ToMonth(D1).<br />Please remember that the question has to be in a date format in order to work."
   instances:
     table:
       columns:
@@ -345,14 +359,14 @@ en:
       assessment_test:
         label: "Assessment/test"
         reference_prefix: "A"
-      basic_measurement:
-        label: "Basic measurement"
-        reference_prefix: "BM"
+      background_calculation:
+        label: "Background calculation"
+        reference_prefix: "BC"
       complaint_category:
         label: "Complaint category"
         reference_prefix: "CC"
-      chronical_condition:
-        label: "Chronical condition"
+      chronic_condition:
+        label: "Chronic condition"
         reference_prefix: "CH"
       demographic:
         label: "Demographics"
@@ -360,21 +374,30 @@ en:
       exposure:
         label: "Exposure"
         reference_prefix: "E"
-      first_look_assessment:
-        label: "First look assessment"
-        reference_prefix: "FL"
+      emergency_sign:
+        label: "Emergency sign"
+        reference_prefix: "ES"
+      observed_physical_sign:
+        label: "Observed physical sign"
+        reference_prefix: "OS"
       physical_exam:
         label: "Physical exam"
         reference_prefix: "PE"
       symptom:
         label: "Symptom"
         reference_prefix: "S"
-      treatment_condition:
-        label: "Treatment condition"
-        reference_prefix: "TC"
+      treatment_question:
+        label: "Additional Treatment question"
+        reference_prefix: "TQ"
       vaccine:
         label: "Vaccine"
         reference_prefix: "V"
+      vital_sign_consultation:
+        label: "Vital sign and anthropometric taken during consultation"
+        reference_prefix: "VC"
+      vital_sign_triage:
+        label: "Vital sign and anthropometric taken at triage"
+        reference_prefix: "VT"
     errors:
       no_blank: "can't be blank"
       formula_wrong_characters: "Incorrect formula format. You can only use numbers, operators and questions references (between brackets)"
@@ -393,7 +416,17 @@ en:
       triage: "Triage"
       test: "Test"
       consultation: "Consultation"
-      health_cares: "Health cares"
+      diagnosis_management: "Diagnosis and management"
+    systems:
+      general: "General"
+      respiratory_circulation: "Respiratory and circulatory system"
+      ear_nose_mouth_throat: "Ear, nose, mouth and throat system"
+      visual: "Visual system"
+      integumentary: "Integumentary system"
+      digestive: "Digestive system"
+      urinary_reproductive: "Urinary and reproductive system"
+      nervous: "Nervous system"
+      muscular_skeletal: "Muscular and skeletal system"
     table:
       columns:
         label: "Label"
@@ -402,7 +435,7 @@ en:
         priority: "Priority"
         category: "Category"
         answers: "Answers"
-        answer_type: "Type of answers"
+        answer_type: "Answer type"
         actions: "Actions"
     edit:
       title: "Edit question"

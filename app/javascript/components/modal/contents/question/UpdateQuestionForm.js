@@ -27,7 +27,8 @@ class UpdateQuestionForm extends React.Component {
     description: "",
     type: "",
     stage: "",
-    priority: "",
+    system: "",
+    isMandatory: false,
     answerType: "",
     formula: "",
     snomedId: "",
@@ -40,10 +41,11 @@ class UpdateQuestionForm extends React.Component {
     const {
       currentNode,
       questionStages,
-      questionPriorities
+      questionSystems,
     } = this.props;
     const newCurrentNode = _.cloneDeep(currentNode);
 
+    let system = questionSystems.find((element) => {return element[1] === newCurrentNode.system});
 
     this.setState({
       id: newCurrentNode.id,
@@ -51,14 +53,15 @@ class UpdateQuestionForm extends React.Component {
       label: newCurrentNode.label_translations["en"],
       type: newCurrentNode.type,
       description: newCurrentNode.description_translations === null ? "" : newCurrentNode.description_translations["en"],
-      priority: questionPriorities[newCurrentNode.priority],
+      isMandatory: newCurrentNode.is_mandatory,
       stage: questionStages[newCurrentNode.stage],
+      system: system === undefined ? undefined : system[1],
       answerType: newCurrentNode.answer_type_id,
       formula: newCurrentNode.formula,
       snomedId: newCurrentNode.snomed_id,
       snomedLabel: newCurrentNode.snomed_label,
     });
-  }
+  };
 
   updateAnswers = async () => {
     const { set, http } = this.props;
@@ -119,10 +122,6 @@ class UpdateQuestionForm extends React.Component {
       newErrors.label_en = result.errors.label_en[0];
     }
 
-    if (result.errors.priority !== undefined) {
-      newErrors.priority = result.errors.priority[0];
-    }
-
     if (result.errors.formula !== undefined) {
       newErrors.formula = result.errors.formula[0];
     }
@@ -133,12 +132,12 @@ class UpdateQuestionForm extends React.Component {
   generateQuestionBody = () => {
     const {
       id,
-      reference,
       label,
       description,
       type,
       stage,
-      priority,
+      system,
+      isMandatory,
       answerType,
       formula,
       snomedId,
@@ -148,12 +147,12 @@ class UpdateQuestionForm extends React.Component {
     return {
       question: {
         id: id,
-        reference: reference,
         label_en: label,
         description_en: description,
         type: type,
         stage: parseInt(stage),
-        priority: parseInt(priority),
+        system: system,
+        is_mandatory: isMandatory,
         answer_type_id: parseInt(answerType),
         formula: formula,
         snomedId: parseInt(snomedId),
@@ -165,7 +164,7 @@ class UpdateQuestionForm extends React.Component {
 
   // Handle change of inputs in the form
   handleFormChange = (event) => {
-    const value = event.target.value;
+    const value = name === "isMandatory" ? event.target.checked : event.target.value;
     const name = event.target.name;
 
     this.setState({
@@ -203,7 +202,7 @@ class UpdateQuestionForm extends React.Component {
       questionCategories,
       questionAnswerTypes,
       questionStages,
-      questionPriorities,
+      questionSystems,
       getReferencePrefix
     } = this.props;
     const {
@@ -213,7 +212,8 @@ class UpdateQuestionForm extends React.Component {
       errors,
       type,
       stage,
-      priority,
+      system,
+      isMandatory,
       answerType,
       formula,
       snomedLabel,
@@ -221,6 +221,7 @@ class UpdateQuestionForm extends React.Component {
     } = this.state;
 
     let formulaStyle = answerType !== 5 ? {display: 'none'} : {};
+    let systemStyle = !["Questions::Symptom", "Questions::PhysicalExam", "Questions::ObservedPhysicalSign"].includes(type) ? {display: 'none'} : {};
 
     return (
       <Form onSubmit={() => this.create()}>
@@ -235,6 +236,18 @@ class UpdateQuestionForm extends React.Component {
                 <option value="">Select a category</option>
                 {questionCategories.map((category) => (
                   <option value={category.name}>{category.label}</option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+          </Form.Row>
+
+          <Form.Row style={systemStyle}>
+            <Form.Group as={Col} controlId="system">
+              <Form.Label>System</Form.Label>
+              <Form.Control as="select" name="system" onChange={this.handleFormChange} value={system} isInvalid={!!errors.system } >
+                <option value="">Select the system</option>
+                {questionSystems.map((system) => (
+                  <option value={system[1]}>{system[0]}</option>
                 ))}
               </Form.Control>
             </Form.Group>
@@ -265,39 +278,15 @@ class UpdateQuestionForm extends React.Component {
           </Form.Row>
 
           <Form.Row>
-            <Form.Group as={Col} controlId="priority">
-              <Form.Label>Priority</Form.Label>
-              <Form.Control as="select" name="priority" onChange={this.handleFormChange} defaultValue={priority} isInvalid={!!errors.priority }>
-                <option value="">Select a category</option>
-                {Object.keys(questionPriorities).map(function(key) {
-                  return <option value={questionPriorities[key]}>{key.charAt(0).toUpperCase() + key.slice(1)}</option>;
-                })}
-              </Form.Control>
-              <Form.Control.Feedback type="invalid">
-                {errors.priority}
-              </Form.Control.Feedback>
-            </Form.Group>
-          </Form.Row>
-
-          <Form.Row>
             <Form.Group as={Col}>
-              <Form.Label>Reference</Form.Label>
-              <InputGroup>
-                <InputGroup.Prepend>
-                  <InputGroup.Text id="inputGroupPrepend">{getReferencePrefix('Question', type)}</InputGroup.Text>
-                </InputGroup.Prepend>
-                <Form.Control
-                  type="text"
-                  aria-describedby="inputGroupPrepend"
-                  name="reference"
-                  value={reference}
-                  onChange={this.handleFormChange}
-                  isInvalid={!!errors.reference}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.reference}
-                </Form.Control.Feedback>
-              </InputGroup>
+              <Form.Check
+                type="checkbox"
+                label="Is Mandatory"
+                name="isMandatory"
+                checked={isMandatory}
+                value={isMandatory}
+                onChange={this.handleFormChange}
+              />
             </Form.Group>
           </Form.Row>
 
@@ -377,7 +366,7 @@ class UpdateQuestionForm extends React.Component {
         </Modal.Body>
         <Modal.Footer>
           {/*Save directly the question if it is a boolean*/}
-          {(answerType === 1) ? (
+          {(['1', '7', '8'].includes(answerType)) ? (
             <Button variant="success" onClick={() => this.update()}>
               Save
             </Button>

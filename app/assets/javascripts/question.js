@@ -1,9 +1,12 @@
 jQuery(document).ready(function() {
 
-  $("#question_formula").closest(".form-group").addClass("d-none");
+  // $("#question_formula").closest(".form-group").addClass("d-none");
+  $(".formula").addClass("d-none");
+  $("#question_system").closest(".form-group").addClass("d-none");
+  $("#question_unavailable").closest(".form-group").addClass("d-none");
 
   // Trigger categoryChange function only on edit or create question form
-  if ($("#new_question").length || $("#edit_question").length) {
+  if ($("#new_question").length || $("[id^='edit_question']").length) {
     categoryChange();
     answer_type_change();
   }
@@ -23,7 +26,7 @@ jQuery(document).ready(function() {
       { "data": "reference" },
       { "data": "label" },
       { "data": "description" },
-      { "data": "priority" },
+      { "data": "is_mandatory" },
       { "data": "category" },
       { "data": "answers" },
       { "data": "answer_type" },
@@ -53,40 +56,55 @@ jQuery(document).ready(function() {
             $(questionUnavailable).addClass("d-none");
           }
 
-          // Force answer type to boolean if it's ChiefComplaint or Vaccine
-          if (["CC", "V"].includes(response.responseText)) {
-            $("#question_answer_type_displayed").val("1").attr("disabled", true);
-            $("#question_answer_type_hidden").val("1");
-          } else if (response.responseText === "VS") {
-            $("#question_answer_type_displayed").val("4").attr("disabled", true);
-            $("#question_answer_type_hidden").val("4");
-          } else {
-            $("#question_answer_type_displayed").attr("disabled", false);
+          if (!$("[id^='edit_question']").length) {
+            // Force answer type to boolean if it's ChiefComplaint or Vaccine
+            if (["CC", "V"].includes(response.responseText)) {
+              $("#question_answer_type_displayed").val("1").attr("disabled", true);
+              $("#question_answer_type_hidden").val("1");
+            } else if (["VC", "VT"].includes(response.responseText)) { // Force answer type to numerif if it is a vital sign (triage or consultation)
+              $("#question_answer_type_displayed").val("4").attr("disabled", true);
+              $("#question_answer_type_hidden").val("4");
+            } else if (response.responseText === "BC") { // Force formula answer type when the category is a Background Calculation
+              $("#question_answer_type_displayed").val("5").attr("disabled", true);
+              $("#question_answer_type_hidden").val("5");
+              answer_type_change();
+            } else {
+              $("#question_answer_type_displayed").attr("disabled", false);
+            }
           }
 
-          // Force priority depending on the category
-          if (["CC"].includes(response.responseText)){
-            $("#question_priority_displayed").val("mandatory").attr("disabled", true);
-            $("#question_priority_hidden").val("mandatory");
-          } else {
-            $("#question_priority_displayed").attr("disabled", false);
-          }
-
-          // Force stage depending on the category (except basic measurement)
-          if (["CC", "FL"].includes(response.responseText)) { // Force triage stage for Complaint category and FirstLookAssessment
+          // Force stage depending on the category
+          if (["CC", "ES", "VT"].includes(response.responseText)) { // Force triage stage for Complaint category emergency sign and vital sign triage
             $("#question_stage_displayed").val("triage").attr("disabled", true);
             $("#question_stage_hidden").val("triage");
-          } else if (["CH", "V", "D"].includes(response.responseText)) { // Force registration stage for Chronical Condition, Vaccin and Demographic categories
+          } else if (["CH", "V", "D"].includes(response.responseText)) { // Force registration stage for Chronic Condition, Vaccine and Demographic categories
             $("#question_stage_displayed").val("registration").attr("disabled", true);
             $("#question_stage_hidden").val("registration")
-          } else if (["E", "PE", "S"].includes(response.responseText)) { // Force consultation stage for Exposure, Physical exam and Symptom categories
+          } else if (["E", "PE", "OS", "S", "VC"].includes(response.responseText)) { // Force consultation stage for Exposure, Background calculation, Physical exam, Observed physical signs, Symptom and vital sign consultation categories
             $("#question_stage_displayed").val("consultation").attr("disabled", true);
             $("#question_stage_hidden").val("consultation")
           }  else if (response.responseText === "A") { // Force test stage for Assessment test category
             $("#question_stage_displayed").val("test").attr("disabled", true);
             $("#question_stage_hidden").val("test")
+          }  else if (response.responseText === "TQ") { // Force diagnosis and management stage for treatment questions
+            $("#question_stage_displayed").val("diagnosis_management").attr("disabled", true);
+            $("#question_stage_hidden").val("diagnosis_management")
           } else {
             $("#question_stage_displayed").attr("disabled", false);
+          }
+
+          // Hide stage for Background calculation
+          if (response.responseText === "BC") {
+            $("#question_stage_displayed").val("").closest(".form-group").attr("hidden", true);
+          } else {
+            $("#question_stage_displayed").closest(".form-group").attr("hidden", false);
+          }
+
+          // Hide or not the system field if it is a consultation category
+          if ($("#question_system").closest(".form-group") && ["OS", "PE", "S"].includes(response.responseText)) {
+            $("#question_system").closest(".form-group").removeClass("d-none");
+          } else {
+            $("#question_system").closest(".form-group").addClass("d-none");
           }
         }
       });
@@ -97,7 +115,8 @@ jQuery(document).ready(function() {
 
   // Hide or show formula field if formula answer type is selected
   function answer_type_change() {
-    let questionFormula = $("#question_formula").closest(".form-group");
+    // let questionFormula = $("#question_formula").closest(".form-group");
+    let questionFormula = $(".formula");
     let answerType = $("#question_answer_type_displayed option:selected").val();
     $("#question_answer_type_hidden").val(answerType);
 
@@ -107,12 +126,6 @@ jQuery(document).ready(function() {
       $(questionFormula).addClass("d-none");
     }
   }
-
-  // Update the right priority field
-  $("#question_priority_displayed").change(function() {
-    let priority = $("#question_priority_displayed option:selected").val();
-    $("#question_priority_hidden").val(priority);
-  });
 
   // Update the right stage field
   $("#question_stage_displayed").change(function() {

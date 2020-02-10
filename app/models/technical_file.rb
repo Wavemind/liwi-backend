@@ -1,6 +1,7 @@
 # Can be gif or images and stock in server with carrierwave
 class TechnicalFile < ApplicationRecord
   mount_uploader :file, TechnicalFileUploader
+  belongs_to :user
 
   validates_presence_of :file
 

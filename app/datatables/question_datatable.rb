@@ -20,7 +20,7 @@ class QuestionDatatable < AjaxDatatablesRails::ActiveRecord
       reference: { source: 'Question.reference' },
       label: { source: 'Question.label_translations' },
       description: { source: 'Question.description_translations' },
-      priority: { source: 'Question.priority' },
+      is_mandatory: { source: 'Question.is_mandatory' },
     }
   end
 
@@ -33,7 +33,7 @@ class QuestionDatatable < AjaxDatatablesRails::ActiveRecord
         reference: record.full_reference,
         label: record.label,
         description: record.description,
-        priority: I18n.t("questions.priorities.#{record.priority}"),
+        is_mandatory: record.is_mandatory,
         category: Object.const_get(record.type).display_label,
         answers: record.answers.map(&:label).join(' / '),
         answer_type: record.answer_type.display_name,

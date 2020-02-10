@@ -4,7 +4,7 @@ class Node < ApplicationRecord
   # DF are not linked to algorithm this way, but through diagnostic > version
   belongs_to :algorithm, optional: true
   has_many :children
-  has_many :instances
+  has_many :instances, dependent: :destroy
   has_many :medias, as: :fileable
   has_many :diagnostics
 
@@ -17,8 +17,7 @@ class Node < ApplicationRecord
   accepts_nested_attributes_for :medias, reject_if: :all_blank, allow_destroy: true
 
   validates_presence_of :label_en
-  validates_presence_of :reference
-  before_validation :unique_reference
+  after_create :generate_reference
 
   translates :label, :description
 
@@ -46,8 +45,8 @@ class Node < ApplicationRecord
   # Automatically create the answers, since they can't be changed
   # Create 2 automatic answers (yes & no) for PS and boolean questions
   def create_boolean
-    self.answers << Answer.new(reference: '1', label_en: I18n.t('answers.yes'))
-    self.answers << Answer.new(reference: '2', label_en: I18n.t('answers.no'))
+    self.answers << Answer.new(reference: '1', label_en: I18n.t('answers.predefined.yes'))
+    self.answers << Answer.new(reference: '2', label_en: I18n.t('answers.predefined.no'))
     self.save
   end
 
@@ -73,11 +72,16 @@ class Node < ApplicationRecord
 
   # Return reference with its prefix
   def full_reference
-    reference_prefix + reference
+    reference_prefix + reference.to_s
   end
 
-  # Ensure the reference is unique
-  def unique_reference
-    self.errors.add(:reference, I18n.t('nodes.validation.reference_used')) if algorithm.nodes.where(type: type, reference: reference).where.not(id: id).any?
+  # Generate the reference automatically using the type
+  def generate_reference
+    if algorithm.nodes.where(type: type).count > 1
+      self.reference = algorithm.nodes.where(type: type).maximum(:reference) + 1
+    else
+      self.reference = 1
+    end
+    self.save
   end
 end
