@@ -19,6 +19,7 @@
 //= require moment
 //= require cocoon
 //= require jquery-ui
+//= require select2_simple_form
 //= require_tree .
 
 $(function () {
