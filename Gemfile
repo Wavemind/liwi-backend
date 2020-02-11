@@ -39,7 +39,6 @@ gem 'react-rails'
 gem 'webpacker', '~> 3'
 gem 'rqrcode'
 gem 'barby'
-gem 'select2_simple_form', github: 'lndl/select2_simple_form', tag: '0.7.3'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

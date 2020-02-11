@@ -27,14 +27,14 @@ class UpdateHealthCareForm extends React.Component {
     maximalDosePerKg: "",
     maximalDose: "",
     dosesPerDay: "",
-    treatmentType: "",
+    medicationForm: "",
     pillSize: "",
     type: "",
     errors: {}
   };
 
   componentWillMount() {
-    const { currentNode, treatmentTypes } = this.props;
+    const { currentNode, medicationForms } = this.props;
     const newCurrentNode = _.cloneDeep(currentNode);
 
 
@@ -47,9 +47,9 @@ class UpdateHealthCareForm extends React.Component {
       maximalDosePerKg: newCurrentNode.maximal_dose_per_kg,
       maximalDose: newCurrentNode.maximal_dose,
       dosesPerDay: newCurrentNode.doses_per_day,
-      treatmentType: treatmentTypes[newCurrentNode.treatment_type],
+      medicationForm: medicationForms[newCurrentNode.medication_form],
       pillSize: newCurrentNode.pill_size,
-      type: newCurrentNode.type === "HealthCares::Management" ? "managements" : "treatments"
+      type: newCurrentNode.type === "HealthCares::Management" ? "managements" : "drugs"
     });
   }
 
@@ -69,12 +69,12 @@ class UpdateHealthCareForm extends React.Component {
       maximalDosePerKg,
       maximalDose,
       dosesPerDay,
-      treatmentType,
+      medicationForm,
       pillSize,
       type
     } = this.state;
 
-    let result = await http.updateHealthCare(id, label, description, type, minimalDosePerKg, maximalDosePerKg, maximalDose, dosesPerDay, treatmentType, pillSize);
+    let result = await http.updateHealthCare(id, label, description, type, minimalDosePerKg, maximalDosePerKg, maximalDose, dosesPerDay, medicationForm, pillSize);
     if (result.ok === undefined || result.ok) {
       toggleModal();
       await addMessage({ status: result.status, messages: result.messages });
@@ -99,7 +99,7 @@ class UpdateHealthCareForm extends React.Component {
     const {
       toggleModal,
       currentHealthCareType,
-      treatmentTypes
+      medicationForms
     } = this.props;
 
     const {
@@ -110,7 +110,7 @@ class UpdateHealthCareForm extends React.Component {
       maximalDosePerKg,
       maximalDose,
       dosesPerDay,
-      treatmentType,
+      medicationForm,
       pillSize,
       errors
     } = this.state;
@@ -141,7 +141,7 @@ class UpdateHealthCareForm extends React.Component {
           </Form.Row>
 
 
-          {(currentHealthCareType === 'treatments') ? (
+          {(currentHealthCareType === 'drugs') ? (
             <div>
               <Form.Row>
                 <Form.Group as={Col}>
@@ -201,15 +201,15 @@ class UpdateHealthCareForm extends React.Component {
 
               <Form.Row>
                 <Form.Group as={Col} controlId="stage">
-                  <Form.Label>Treatment form</Form.Label>
-                  <Form.Control as="select" name="treatmentType" onChange={this.updateState} value={treatmentType}>
+                  <Form.Label>Drug form</Form.Label>
+                  <Form.Control as="select" name="medicationForm" onChange={this.updateState} value={medicationForm}>
                     <option value="">Select the stage</option>
-                    {Object.keys(treatmentTypes).map(function(key) {
-                      return <option value={treatmentTypes[key]}>{key.charAt(0).toUpperCase() + key.slice(1)}</option>;
+                    {Object.keys(medicationForms).map(function(key) {
+                      return <option value={medicationForms[key]}>{key.charAt(0).toUpperCase() + key.slice(1)}</option>;
                     })}
                   </Form.Control>
                   <Form.Control.Feedback type="invalid">
-                    {errors.treatment_type}
+                    {errors.medication_form}
                   </Form.Control.Feedback>
                 </Form.Group>
               </Form.Row>

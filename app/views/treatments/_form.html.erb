@@ -1,12 +1,22 @@
 <%= f.input :type, as: :hidden %>
 <%= f.input :label_en %>
 
+<select class="administration-routes-select2" name="health_cares_drug[administration_route_id]">
+  <% AdministrationRoute.categories.map do |category| %>
+    <optgroup label="<%= category[0] %>">
+      <% AdministrationRoute.send(category[0]).map do |ar| %>
+        <option value="<%= ar.id %>"><%= ar.name %></option>
+    <% end %>
+    </optgroup>
+  <% end %>
+</select>
+
 <%= f.input :minimal_dose_per_kg, as: :decimal %>
 <%= f.input :maximal_dose_per_kg, as: :decimal %>
 <%= f.input :maximal_dose, as: :decimal %>
 <%= f.input :doses_per_day, as: :integer %>
 
-<%= f.input :treatment_type, collection: HealthCares::Treatment.treatment_types.map { |k, v| [t("treatments.treatment_types.#{k}"), k] }, prompt: t('select') %>
+<%= f.input :drug_type, collection: HealthCares::Drug.medication_forms.map { |k, v| [t("drugs.medication_forms.#{k}"), k] }, prompt: t('select') %>
 <%= f.input :pill_size, as: :integer %>
 
 <%= f.input :description_en, as: :text %>

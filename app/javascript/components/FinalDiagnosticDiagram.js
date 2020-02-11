@@ -96,7 +96,7 @@ class FinalDiagnosticDiagram extends React.Component {
       nodeLevels.push(currentLevel);
     });
 
-    // Create nodes for treatments and managements
+    // Create nodes for drugs and managements
     healthCares.map((healthCare) => {
       let node = this.createNode(healthCare.node);
       nodes.push(node);

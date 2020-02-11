@@ -1,9 +1,9 @@
-class TreatmentDatatable < AjaxDatatablesRails::ActiveRecord
+class DrugDatatable < AjaxDatatablesRails::ActiveRecord
   extend Forwardable
 
   def_delegator :@view, :link_to
-  def_delegator :@view, :edit_algorithm_treatment_url
-  def_delegator :@view, :algorithm_treatment_url
+  def_delegator :@view, :edit_algorithm_drug_url
+  def_delegator :@view, :algorithm_drug_url
 
   def initialize(params, opts = {})
     @view = opts[:view_context]
@@ -12,16 +12,16 @@ class TreatmentDatatable < AjaxDatatablesRails::ActiveRecord
 
   def view_columns
     @view_columns ||= {
-      id: { source: 'HealthCares::Treatment.id' },
-      reference: { source: 'HealthCares::Treatment.reference' },
-      label: { source: 'HealthCares::Treatment.label_translations' },
-      description: { source: 'HealthCares::Treatment.description_translations' },
+      id: { source: 'HealthCares::Drug.id' },
+      reference: { source: 'HealthCares::Drug.reference' },
+      label: { source: 'HealthCares::Drug.label_translations' },
+      description: { source: 'HealthCares::Drug.description_translations' },
     }
   end
 
   def data
     records.map do |record|
-      actions = link_to(I18n.t('edit'), edit_algorithm_treatment_url(params[:id], record), class: 'btn btn-outline-info') + " " + link_to(I18n.t('delete'), algorithm_treatment_url(record.algorithm, record), class: "btn btn-outline-danger #{record.dependencies? ? 'disabled' : ''}", method: :delete, data: { confirm: 'Are you sure?' })
+      actions = link_to(I18n.t('edit'), edit_algorithm_drug_url(params[:id], record), class: 'btn btn-outline-info') + " " + link_to(I18n.t('delete'), algorithm_drug_url(record.algorithm, record), class: "btn btn-outline-danger #{record.dependencies? ? 'disabled' : ''}", method: :delete, data: { confirm: 'Are you sure?' })
       {
         id: record.id,
         reference: record.full_reference,
@@ -33,6 +33,6 @@ class TreatmentDatatable < AjaxDatatablesRails::ActiveRecord
   end
 
   def get_raw_records
-    Algorithm.find(params[:id]).health_cares.treatments.includes([:algorithm])
+    Algorithm.find(params[:id]).health_cares.drugs.includes([:algorithm])
   end
 end

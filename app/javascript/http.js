@@ -50,7 +50,7 @@ export default class Http {
   // @params [Integer] nodeId
   // @return [Object] body of request
   // Create an instance
-  createHealthCare = async (type, label, description, minimalDosePerKg, maximalDosePerKg, maximalDose, dosesPerDay, treatmentType, pillSize) => {
+  createHealthCare = async (type, label, description, minimalDosePerKg, maximalDosePerKg, maximalDose, dosesPerDay, medicationForm, pillSize) => {
     let response;
     const url = `${this.url}/algorithms/${this.algorithm}/${type}/create_from_diagram`;
     const body = {
@@ -64,7 +64,7 @@ export default class Http {
       maximal_dose_per_kg: maximalDosePerKg,
       maximal_dose: maximalDose,
       doses_per_day: dosesPerDay,
-      treatment_type: treatmentType,
+      medication_form: medicationForm,
       pill_size: pillSize
     };
     const header = await this.setHeaders("POST", body);
@@ -461,7 +461,7 @@ export default class Http {
   // @params [Integer] id, [String] label, [String] description, [Integer] final_diagnostic_id
   // @return [Object] body of request
   // Update final diagnostic node
-  updateHealthCare = async (id, label, description, type, minimalDosePerKg, maximalDosePerKg, maximalDose, dosesPerDay, treatmentType, pillSize) => {
+  updateHealthCare = async (id, label, description, type, minimalDosePerKg, maximalDosePerKg, maximalDose, dosesPerDay, medicationForm, pillSize) => {
     let response;
     const url = `${this.url}/algorithms/${this.algorithm}/${type}/${id}/update_from_diagram`;
     const body = {
@@ -476,7 +476,7 @@ export default class Http {
       maximal_dose_per_kg: maximalDosePerKg,
       maximal_dose: maximalDose,
       doses_per_day: dosesPerDay,
-      treatment_type: treatmentType,
+      medication_form: medicationForm,
       pill_size: pillSize
     };
     const header = await this.setHeaders("PUT", body);

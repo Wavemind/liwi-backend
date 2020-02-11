@@ -14,6 +14,12 @@ en:
         node: "Complaint category"
   activated: "Activate"
   add: "Add"
+  administration_routes:
+    labels:
+      - ~
+      - "Enteral"
+      - "Parental or injectable"
+      - "Mucocutaneous"
   algorithms:
     index:
       columns:
@@ -32,7 +38,7 @@ en:
       subtitle_questions_sequences: "Questions sequences"
       subtitle_questions_sequences_scored: "Questions sequences scored"
       subtitle_questions: "Questions"
-      subtitle_treatments: "Treatments"
+      subtitle_drugs: "Drugs"
       subtitle_versions: "Versions list"
       title: "Details of %{name}"
   answer_type:
@@ -101,7 +107,7 @@ en:
     diagnostics: "Diagnostics"
     final_diagnostics: "Final diagnostics"
     questions_sequences: "Questions sequences"
-    treatments: "Treatments"
+    drugs: "Drugs"
     questions: "Questions"
     managements: "Managements"
   children:
@@ -171,7 +177,7 @@ en:
       managements: "Managements"
       questions_sequences: "Questions sequences"
       questions: "Questions"
-      treatments: "Treatments"
+      drugs: "Drugs"
   duplicate: "Duplicate"
   duplicated: "_duplicated"
   edit: "Edit"
@@ -190,7 +196,7 @@ en:
     edit:
       title: "Edit final diagnostic"
     show:
-      treatments: "Treatments"
+      drugs: "Drugs"
       managements: "Managements"
       excluded_diagnostic: "Excluded diagnostic"
       no_excluded_diagnostic: "There is no diagnosis excluded"
@@ -258,9 +264,9 @@ en:
       management:
         label: "Management"
         reference_prefix: "M"
-      treatment:
-        label: "Treatment"
-        reference_prefix: "T"
+      drug:
+        label: "Drug"
+        reference_prefix: "DR"
   helps:
     diagram:
       arrow-title: "Arrow"
@@ -310,7 +316,7 @@ en:
         actions: "Actions"
   medical_case:
     validation:
-      wrong_node_type: "This node is not a management or a treatment."
+      wrong_node_type: "This node is not a management or a drug."
   nodes:
     validation:
       reference_used: "This reference is already used"
@@ -453,19 +459,19 @@ en:
     index:
       languages: "Languages"
   show: "Show"
-  treatments:
+  drugs:
     edit:
-      title: "Edit the treatment"
+      title: "Edit the drug"
     new:
-      title: "Create a treatment"
-    reference: "T"
+      title: "Create a drug"
+    reference: "DR"
     table:
       columns:
         reference: "Reference"
         label: "Label"
         description: "Description"
         actions: "Actions"
-    treatment_types:
+    medication_forms:
       liquid: "Liquid"
       pill: "Pill"
   unarchive: "Unarchive"

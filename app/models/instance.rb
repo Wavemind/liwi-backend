@@ -13,7 +13,7 @@ class Instance < ApplicationRecord
   scope :managements, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'HealthCares::Management') }
   scope :questions, ->() { joins(:node).includes(:conditions).where('nodes.type IN (?)', Question.descendants.map(&:name)) }
   scope :questions_sequences, ->() { joins(:node).includes(:conditions).where('nodes.type IN (?)', QuestionsSequence.descendants.map(&:name)) }
-  scope :treatments, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'HealthCares::Treatment') }
+  scope :drugs, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'HealthCares::Drug') }
   scope :final_diagnostics, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'FinalDiagnostic') }
 
   scope :triage_complaint_category, ->() { joins(:node).where('nodes.stage = ? AND nodes.type = ?', Question.stages[:triage], 'Questions::ComplaintCategory') }

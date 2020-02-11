@@ -1,8 +1,8 @@
 # Define the possible administration routes for a treatment
 class AdministrationRoute < ApplicationRecord
 
-  enum type: [:enteral, :parenteral_injectable, :mucocutaneous]
+  enum category: [:enteral, :parenteral_injectable, :mucocutaneous]
 
-  has_many :treatments
+  has_many :drug_formulations
 
 end

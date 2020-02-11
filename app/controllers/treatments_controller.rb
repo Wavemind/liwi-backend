@@ -1,25 +1,25 @@
-class TreatmentsController < ApplicationController
+class DrugsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy, :create_from_diagram, :update_from_diagram]
-  before_action :set_treatment, only: [:edit, :update, :update_translations, :destroy, :update_from_diagram]
+  before_action :set_drug, only: [:edit, :update, :update_translations, :destroy, :update_from_diagram]
   before_action :set_breadcrumb, only: [:new, :edit]
 
   def new
     add_breadcrumb t('breadcrumbs.new')
 
-    @treatment = HealthCares::Treatment.new
+    @drug = HealthCares::Drug.new
   end
 
   def edit
-    add_breadcrumb @treatment.label
+    add_breadcrumb @drug.label
     add_breadcrumb t('breadcrumbs.edit')
   end
 
   def create
-    @treatment = @algorithm.health_cares.treatments.new(treatment_params)
+    @drug = @algorithm.health_cares.drugs.new(drug_params)
 
-    if @treatment.save
-      redirect_to algorithm_url(@algorithm, panel: 'treatments'), notice: t('flash_message.success_created')
+    if @drug.save
+      redirect_to algorithm_url(@algorithm, panel: 'drugs'), notice: t('flash_message.success_created')
     else
       set_breadcrumb
       add_breadcrumb t('breadcrumbs.new')
@@ -28,8 +28,8 @@ class TreatmentsController < ApplicationController
   end
 
   def update
-    if @treatment.update(treatment_params)
-      redirect_to algorithm_url(@algorithm, panel: 'treatments'), notice: t('flash_message.success_updated')
+    if @drug.update(drug_params)
+      redirect_to algorithm_url(@algorithm, panel: 'drugs'), notice: t('flash_message.success_updated')
     else
       set_breadcrumb
       add_breadcrumb t('breadcrumbs.edit')
@@ -39,50 +39,50 @@ class TreatmentsController < ApplicationController
 
   def destroy
     # If user remove 'disabled' css in button, we verify in controller
-    if @treatment.dependencies?
-      redirect_to algorithm_url(@algorithm, panel: 'treatments'), alert: t('dependencies')
+    if @drug.dependencies?
+      redirect_to algorithm_url(@algorithm, panel: 'drugs'), alert: t('dependencies')
     else
-      if @treatment.destroy
-        redirect_to algorithm_url(@algorithm, panel: 'treatments'), notice: t('flash_message.success_updated')
+      if @drug.destroy
+        redirect_to algorithm_url(@algorithm, panel: 'drugs'), notice: t('flash_message.success_updated')
       else
-        redirect_to algorithm_url(@algorithm, panel: 'treatments'), alert: t('error')
+        redirect_to algorithm_url(@algorithm, panel: 'drugs'), alert: t('error')
       end
     end
   end
 
   # POST
   # @return final_diagnostic node
-  # Create a treatment node from diagram
+  # Create a drug node from diagram
   def create_from_diagram
-    treatment = @algorithm.health_cares.treatments.new(treatment_params).becomes(HealthCares::Treatment)
-    treatment.type = HealthCares::Treatment
+    drug = @algorithm.health_cares.drugs.new(drug_params).becomes(HealthCares::Drug)
+    drug.type = HealthCares::Drug
 
-    if treatment.save
+    if drug.save
       diagnostic = Diagnostic.find(params[:diagnostic_id])
       final_diagnostic = FinalDiagnostic.find(params[:final_diagnostic_id])
-      final_diagnostic.health_cares << treatment
-      diagnostic.components.create!(node: treatment, final_diagnostic: final_diagnostic)
-      render json: {status: 'success', messages: [t('flash_message.success_created')], node: treatment.as_json(methods: [:node_type, :type])}
+      final_diagnostic.health_cares << drug
+      diagnostic.components.create!(node: drug, final_diagnostic: final_diagnostic)
+      render json: {status: 'success', messages: [t('flash_message.success_created')], node: drug.as_json(methods: [:node_type, :type])}
     else
-      render json: {status: 'danger', errors: treatment.errors.messages, ok: false}
+      render json: {status: 'danger', errors: drug.errors.messages, ok: false}
     end
   end
 
   # PUT
   # @return final_diagnostic node
-  # Update a treatment node from diagram
+  # Update a drug node from diagram
   def update_from_diagram
-    if @treatment.update(treatment_params)
-      render json: {status: 'success', messages: [t('flash_message.success_created')], node: @treatment.as_json(methods: [:node_type, :type])}
+    if @drug.update(drug_params)
+      render json: {status: 'success', messages: [t('flash_message.success_created')], node: @drug.as_json(methods: [:node_type, :type])}
     else
-      render json: {status: 'danger', errors: @treatment.errors.messages, ok: false}
+      render json: {status: 'danger', errors: @drug.errors.messages, ok: false}
     end
   end
 
-  # @params Treatment with the translations
+  # @params Drug with the translations
   # Update the object with its translation without rendering a new page
   def update_translations
-    if @treatment.update(treatment_params)
+    if @drug.update(drug_params)
       @json = { status: 'success', message: t('flash_message.success_updated')}
       render 'diagnostics/update_translations', formats: :js, status: :ok
     else
@@ -95,16 +95,16 @@ class TreatmentsController < ApplicationController
 
   def set_breadcrumb
     add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'treatments')
-    add_breadcrumb t('breadcrumbs.treatments')
+    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'drugs')
+    add_breadcrumb t('breadcrumbs.drugs')
   end
 
-  def set_treatment
-    @treatment = Node.find(params[:id])
+  def set_drug
+    @drug = Node.find(params[:id])
   end
 
-  def treatment_params
-    params.require(:health_cares_treatment).permit(
+  def drug_params
+    params.require(:health_cares_drug).permit(
       :id,
       :reference,
       :type,
@@ -113,13 +113,6 @@ class TreatmentsController < ApplicationController
       :description_en,
       Language.description_params,
       :algorithm_id,
-      :unavailable,
-      :minimal_dose_per_kg,
-      :maximal_dose_per_kg,
-      :maximal_dose,
-      :doses_per_day,
-      :treatment_type,
-      :pill_size
     )
   end
 end

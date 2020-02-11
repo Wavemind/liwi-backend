@@ -4,7 +4,7 @@
 
 <%= render 'conditions/table' %>
 
-<% unless @instance.node.is_a?(Management) || @instance.node.is_a?(Treatment) %>
+<% unless @instance.node.is_a?(Management) || @instance.node.is_a?(Drug) %>
   <h2><%= t('.children') %></h2>
 
   <%= render 'children/table' %>

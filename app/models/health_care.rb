@@ -1,12 +1,12 @@
-# Define every treatments for a diagnostic
+# Define every drugs for a diagnostic
 class HealthCare < Node
 
   scope :managements, ->() { where('type = ?', 'HealthCares::Management') }
-  scope :treatments, ->() { where('type = ?', 'HealthCares::Treatment') }
+  scope :drugs, ->() { where('type = ?', 'HealthCares::Drug') }
 
   # Preload the children of class Question
   def self.descendants
-    [HealthCares::Management, HealthCares::Treatment]
+    [HealthCares::Management, HealthCares::Drug]
   end
 
   private

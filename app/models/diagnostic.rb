@@ -51,10 +51,10 @@ class Diagnostic < ApplicationRecord
     Node.joins(:instances).where('type = ? AND instances.instanceable_id = ? AND instances.instanceable_type = ?', 'HealthCares::Management', id, self.class.name)
   end
 
-  # @return [ActiveRecord::Relation] of treatments
-  # Get every treatments used in a diagnostic
-  def treatments
-    Node.joins(:instances).where('type = ? AND instances.instanceable_id = ? AND instances.instanceable_type = ?', 'HealthCares::Treatment', id, self.class.name)
+  # @return [ActiveRecord::Relation] of drugs
+  # Get every drugs used in a diagnostic
+  def drugs
+    Node.joins(:instances).where('type = ? AND instances.instanceable_id = ? AND instances.instanceable_type = ?', 'HealthCares::Drug', id, self.class.name)
   end
 
   # @param [Diagnostic]
@@ -129,9 +129,9 @@ class Diagnostic < ApplicationRecord
   end
 
   # @return [Json]
-  # Return treatments and managements in json format
+  # Return drugs and managements in json format
   def health_cares_json
-    components.treatments.as_json(include: [node: {methods: [:node_type, :type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}]) + components.managements.as_json(include: [node: {methods: [:node_type, :type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}])
+    components.drugs.as_json(include: [node: {methods: [:node_type, :type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}]) + components.managements.as_json(include: [node: {methods: [:node_type, :type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}])
   end
 
   # @return [Json]

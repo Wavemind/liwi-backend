@@ -25,7 +25,7 @@ class CreateHealthCareForm extends React.Component {
     maximalDosePerKg: null,
     maximalDose: null,
     dosesPerDay: null,
-    treatmentType: null,
+    medicationForm: null,
     pillSize: null,
     errors: {}
   };
@@ -48,11 +48,11 @@ class CreateHealthCareForm extends React.Component {
       maximalDosePerKg,
       maximalDose,
       dosesPerDay,
-      treatmentType,
+      medicationForm,
       pillSize
     } = this.state;
 
-    let result = await http.createHealthCare(currentHealthCareType, label, description, minimalDosePerKg, maximalDosePerKg, maximalDose, dosesPerDay, treatmentType, pillSize);
+    let result = await http.createHealthCare(currentHealthCareType, label, description, minimalDosePerKg, maximalDosePerKg, maximalDose, dosesPerDay, medicationForm, pillSize);
     if (result.ok === undefined || result.ok) {
       toggleModal();
       await addMessage({ status: result.status, messages: result.messages });
@@ -71,15 +71,13 @@ class CreateHealthCareForm extends React.Component {
     const key = event.target.name;
     const value = event.target.value;
     this.setState({ [key]: value });
-
-    console.log(this.state.treatmentType);
   };
 
   render() {
     const {
       toggleModal,
       currentHealthCareType,
-      treatmentTypes
+      medicationForms
     } = this.props;
     const {
       reference,
@@ -89,7 +87,7 @@ class CreateHealthCareForm extends React.Component {
       maximalDosePerKg,
       maximalDose,
       dosesPerDay,
-      treatmentType,
+      medicationForm,
       pillSize,
       errors,
     } = this.state;
@@ -119,7 +117,7 @@ class CreateHealthCareForm extends React.Component {
             </Form.Group>
           </Form.Row>
 
-          {(currentHealthCareType === 'treatments') ? (
+          {(currentHealthCareType === 'drug') ? (
             <div>
               <Form.Row>
                 <Form.Group as={Col}>
@@ -179,15 +177,15 @@ class CreateHealthCareForm extends React.Component {
 
               <Form.Row>
                 <Form.Group as={Col} controlId="stage">
-                  <Form.Label>Treatment form</Form.Label>
-                  <Form.Control as="select" name="treatmentType" onChange={this.updateState} value={treatmentType}>
+                  <Form.Label>Drug form</Form.Label>
+                  <Form.Control as="select" name="medicationForm" onChange={this.updateState} value={medicationForm}>
                     <option value="">Select the stage</option>
-                    {Object.keys(treatmentTypes).map(function(key) {
-                      return <option value={treatmentTypes[key]}>{key.charAt(0).toUpperCase() + key.slice(1)}</option>;
+                    {Object.keys(medicationForms).map(function(key) {
+                      return <option value={medicationForms[key]}>{key.charAt(0).toUpperCase() + key.slice(1)}</option>;
                     })}
                   </Form.Control>
                   <Form.Control.Feedback type="invalid">
-                    {errors.treatment_type}
+                    {errors.medication_form}
                   </Form.Control.Feedback>
                 </Form.Group>
               </Form.Row>

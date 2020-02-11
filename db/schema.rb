@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_27_085907) do
+ActiveRecord::Schema.define(version: 2020_02_11_124022) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 2020_01_27_085907) do
   end
 
   create_table "administration_routes", force: :cascade do |t|
-    t.integer "type"
+    t.integer "category"
     t.string "name"
   end
 
@@ -119,6 +119,21 @@ ActiveRecord::Schema.define(version: 2020_01_27_085907) do
     t.bigint "node_id"
     t.index ["node_id"], name: "index_diagnostics_on_node_id"
     t.index ["version_id"], name: "index_diagnostics_on_version_id"
+  end
+
+  create_table "drug_formulations", force: :cascade do |t|
+    t.float "minimal_dose_per_kg"
+    t.float "maximal_dose_per_kg"
+    t.float "maximal_dose"
+    t.integer "treatment_type"
+    t.integer "pill_size"
+    t.integer "liquid_concentration"
+    t.integer "doses_per_day"
+    t.integer "unique_dose"
+    t.bigint "node_id"
+    t.bigint "administration_route_id"
+    t.index ["administration_route_id"], name: "index_drug_formulations_on_administration_route_id"
+    t.index ["node_id"], name: "index_drug_formulations_on_node_id"
   end
 
   create_table "final_diagnostic_health_cares", force: :cascade do |t|
@@ -237,14 +252,10 @@ ActiveRecord::Schema.define(version: 2020_01_27_085907) do
     t.bigint "reference_table_y_id"
     t.bigint "snomed_id"
     t.string "snomed_label"
-    t.decimal "minimal_dose_per_kg"
-    t.decimal "maximal_dose_per_kg"
-    t.decimal "maximal_dose"
-    t.integer "treatment_type"
-    t.integer "pill_size"
-    t.integer "doses_per_day"
     t.integer "system"
     t.boolean "is_mandatory", default: false
+    t.bigint "administration_route_id"
+    t.index ["administration_route_id"], name: "index_nodes_on_administration_route_id"
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
     t.index ["diagnostic_id"], name: "index_nodes_on_diagnostic_id"
@@ -341,6 +352,7 @@ ActiveRecord::Schema.define(version: 2020_01_27_085907) do
   add_foreign_key "diagnostics", "versions"
   add_foreign_key "group_accesses", "groups"
   add_foreign_key "group_accesses", "versions"
+  add_foreign_key "nodes", "administration_routes"
   add_foreign_key "nodes", "algorithms"
   add_foreign_key "nodes", "answer_types"
   add_foreign_key "technical_files", "users"

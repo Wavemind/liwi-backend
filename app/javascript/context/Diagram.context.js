@@ -50,7 +50,7 @@ export default class DiagramProvider extends React.Component {
     } else if (type === "FinalDiagnostic") {
       orderedNodes.treatmentQuestion = [];
       orderedNodes.scored = [];
-      orderedNodes.treatment = [];
+      orderedNodes.drug = [];
       orderedNodes.management = [];
     } else if (type === "QuestionsSequence") {
       // If different predefined syndromes scored category
@@ -201,7 +201,7 @@ export default class DiagramProvider extends React.Component {
     questionSystems: null,
     questionCategories: null,
     questionsSequenceCategories: null,
-    treatmentTypes: null,
+    medicationForms: null,
     answersOperators: null,
     currentQuestion: null,
   };

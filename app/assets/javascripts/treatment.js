@@ -1,15 +1,15 @@
 jQuery(document).ready(function () {
 
-  treatmentTypeChange();
+  drugTypeChange();
 
-  $("#health_cares_treatment_treatment_type").change(treatmentTypeChange);
+  $("#health_cares_drug_formulation_medication_form").change(medicationFormChange);
 
-  $("#treatments-datatable").dataTable({
+  $("#drugs-datatable").dataTable({
     "processing": true,
     "info": false,
     "bLengthChange": false,
     "serverSide": true,
-    "ajax": $("#treatments-datatable").data("source"),
+    "ajax": $("#drugs-datatable").data("source"),
     "pagingType": "full_numbers",
     "columns": [
       { "data": "id" },
@@ -24,14 +24,14 @@ jQuery(document).ready(function () {
     }]
   });
 
-  // Show pill size field only if treatment type is pill
-  function treatmentTypeChange() {
-    let pillSize = $("#health_cares_treatment_pill_size").closest(".form-group");
-    let treatmentType = $("#health_cares_treatment_treatment_type option:selected").val();
+  // Show pill size field only if medication form is capsule
+  function medicationFormChange() {
+    let pillSize = $("#health_cares_drug_formula_pill_size").closest(".form-group");
+    let medicationForm = $("#health_cares_drug_formulation_medication_form option:selected").val();
 
-    if ($(pillSize).hasClass("d-none") && treatmentType === "pill") {
+    if ($(pillSize).hasClass("d-none") && medicationForm === "pill") {
       $(pillSize).removeClass("d-none");
-    } else if(treatmentType !== "pill") {
+    } else if(medicationForm !== "pill") {
       $(pillSize).addClass("d-none");
     }
   }

@@ -31,8 +31,8 @@ class NotDFWidget extends React.Component {
     let healthCareType = null
     if (node.node.type === 'HealthCares::Management') {
       healthCareType = 'managements';
-    } else if (node.node.type === 'HealthCares::Treatment'){
-      healthCareType = 'treatments';
+    } else if (node.node.type === 'HealthCares::Drug'){
+      healthCareType = 'drugs';
     }
 
     set(
