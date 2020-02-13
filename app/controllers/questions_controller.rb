@@ -40,7 +40,7 @@ class QuestionsController < ApplicationController
 
   def update
     if @question.update(question_params)
-      if @question.answer_type.value == 'Boolean'
+      if %w(Boolean Present Positive).include?(@question.answer_type.value) || @question.is_a?(Questions::VitalSignTriage) || @question.is_a?(Questions::VitalSignConsultation)
         redirect_to algorithm_url(@algorithm, panel: 'questions'), notice: t('flash_message.success_updated')
       else
         render 'answers/edit'
