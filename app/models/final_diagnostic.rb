@@ -21,7 +21,6 @@ class FinalDiagnostic < Node
   amoeba do
     enable
     include_association :final_diagnostic_health_cares
-    append reference: I18n.t('duplicated')
   end
 
   # @return [Json]

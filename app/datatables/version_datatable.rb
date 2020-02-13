@@ -6,6 +6,7 @@ class VersionDatatable < AjaxDatatablesRails::ActiveRecord
   def_delegator :@view, :algorithm_version_url
   def_delegator :@view, :archive_algorithm_version_url
   def_delegator :@view, :unarchive_algorithm_version_url
+  def_delegator :@view, :duplicate_algorithm_version_url
   def_delegator :@view, :date_format
 
   def initialize(params, opts = {})
@@ -24,8 +25,11 @@ class VersionDatatable < AjaxDatatablesRails::ActiveRecord
 
   def data
     records.map do |record|
-      actions = link_to(I18n.t('show'), algorithm_version_url(record.algorithm, record), class: 'btn btn-outline-primary') + " " + link_to(I18n.t('edit'), edit_algorithm_version_url(record.algorithm, record), class: 'btn btn-outline-info') + " "
-      actions += record.archived ? link_to(I18n.t('unarchive'), unarchive_algorithm_version_url(record.algorithm, record), class: 'btn btn-outline-danger', method: :put, data: { confirm: 'Are you sure?' }) : link_to(I18n.t('archive'), archive_algorithm_version_url(record.algorithm, record), class: 'btn btn-outline-danger', method: :put, data: { confirm: 'Are you sure?' })
+      actions =
+        link_to(I18n.t('show'), algorithm_version_url(record.algorithm, record), class: 'btn btn-outline-primary') + " " +
+        link_to(I18n.t('edit'), edit_algorithm_version_url(record.algorithm, record), class: 'btn btn-outline-info') + " " +
+        link_to(I18n.t('duplicate'), duplicate_algorithm_version_url(params[:algorithm_id], record), class: 'btn btn-outline-info', method: :post) + " "
+        actions += record.archived ? link_to(I18n.t('unarchive'), unarchive_algorithm_version_url(record.algorithm, record), class: 'btn btn-outline-danger', method: :put, data: { confirm: 'Are you sure?' }) : link_to(I18n.t('archive'), archive_algorithm_version_url(record.algorithm, record), class: 'btn btn-outline-danger', method: :put, data: { confirm: 'Are you sure?' })
       {
         name: record.name,
         last_update: date_format(record.updated_at),

@@ -20,6 +20,8 @@ class Question < Node
 
   before_validation :validate_formula, if: Proc.new { self.formula.present? }
   validates_presence_of :stage, unless: Proc.new { self.is_a? Questions::BackgroundCalculation }
+  validates_presence_of :formula, if: Proc.new { self.answer_type.display == 'Formula'}
+  validates_presence_of :type
 
   # Return questions which has not triage stage
   scope :no_triage, ->() { where.not(stage: Question.stages[:triage]).or(where(stage: nil)) }
