@@ -204,6 +204,7 @@ en:
     success_deleted: "Data was successfully deleted"
     success_updated: "Data was successfully updated"
     update_fail: "Error will updating value"
+    duplicate_fail: "Error will duplicating your data"
     diagnostic:
       complaint_category_exclude_triage_question: "You are setting a complaint category that does not take in charge one question in your diagnostic diagram."
       error_in_questions_sequence: "The questions sequence <u><a href='%{url}'>%{reference}</a></u> is not valid."
