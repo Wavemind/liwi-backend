@@ -87,7 +87,7 @@ class DiagnosticsController < ApplicationController
       diagnostic.update(duplicating: false)
       redirect_to algorithm_version_url(@algorithm, @version), notice: t('flash_message.success_deleted')
     else
-      render :new
+      redirect_to algorithm_version_url(@algorithm, @version), alert: t('flash_message.duplicate_fail')
     end
   end
 
