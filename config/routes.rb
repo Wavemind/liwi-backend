@@ -93,6 +93,7 @@ Rails.application.routes.draw do
     resources :treatments, only: [:new, :create, :edit, :update, :destroy] do
       collection do
         post 'create_from_diagram'
+        post 'validate'
       end
       member do
         put 'update_from_diagram'

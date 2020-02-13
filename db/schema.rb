@@ -121,21 +121,6 @@ ActiveRecord::Schema.define(version: 2020_02_11_124022) do
     t.index ["version_id"], name: "index_diagnostics_on_version_id"
   end
 
-  create_table "drug_formulations", force: :cascade do |t|
-    t.float "minimal_dose_per_kg"
-    t.float "maximal_dose_per_kg"
-    t.float "maximal_dose"
-    t.integer "treatment_type"
-    t.integer "pill_size"
-    t.integer "liquid_concentration"
-    t.integer "doses_per_day"
-    t.integer "unique_dose"
-    t.bigint "node_id"
-    t.bigint "administration_route_id"
-    t.index ["administration_route_id"], name: "index_drug_formulations_on_administration_route_id"
-    t.index ["node_id"], name: "index_drug_formulations_on_node_id"
-  end
-
   create_table "final_diagnostic_health_cares", force: :cascade do |t|
     t.bigint "node_id"
     t.bigint "final_diagnostic_id"
@@ -143,6 +128,21 @@ ActiveRecord::Schema.define(version: 2020_02_11_124022) do
     t.datetime "updated_at", null: false
     t.index ["final_diagnostic_id"], name: "index_final_diagnostic_health_cares_on_final_diagnostic_id"
     t.index ["node_id"], name: "index_final_diagnostic_health_cares_on_node_id"
+  end
+
+  create_table "formulations", force: :cascade do |t|
+    t.float "minimal_dose_per_kg"
+    t.float "maximal_dose_per_kg"
+    t.float "maximal_dose"
+    t.integer "medication_form"
+    t.integer "pill_size"
+    t.integer "liquid_concentration"
+    t.integer "doses_per_day"
+    t.integer "unique_dose"
+    t.bigint "node_id"
+    t.bigint "administration_route_id"
+    t.index ["administration_route_id"], name: "index_formulations_on_administration_route_id"
+    t.index ["node_id"], name: "index_formulations_on_node_id"
   end
 
   create_table "group_accesses", force: :cascade do |t|

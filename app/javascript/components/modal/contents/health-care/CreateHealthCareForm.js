@@ -18,15 +18,8 @@ class CreateHealthCareForm extends React.Component {
   }
 
   state = {
-    reference: "",
     label: "",
     description: "",
-    minimalDosePerKg: null,
-    maximalDosePerKg: null,
-    maximalDose: null,
-    dosesPerDay: null,
-    medicationForm: null,
-    pillSize: null,
     errors: {}
   };
 
@@ -41,18 +34,17 @@ class CreateHealthCareForm extends React.Component {
     } = this.props;
 
     const {
-      reference,
       label,
       description,
-      minimalDosePerKg,
-      maximalDosePerKg,
-      maximalDose,
-      dosesPerDay,
-      medicationForm,
-      pillSize
     } = this.state;
 
-    let result = await http.createHealthCare(currentHealthCareType, label, description, minimalDosePerKg, maximalDosePerKg, maximalDose, dosesPerDay, medicationForm, pillSize);
+    let health_care = {
+      label_en: label,
+      description_en: description,
+      formulations_attributes: {}
+    };
+
+    let result = await http.createHealthCare(health_care, currentHealthCareType);
     if (result.ok === undefined || result.ok) {
       toggleModal();
       await addMessage({ status: result.status, messages: result.messages });
@@ -63,6 +55,36 @@ class CreateHealthCareForm extends React.Component {
         newErrors.label_en = result.errors.label_en[0];
       }
       this.setState({ errors: newErrors });
+    }
+  };
+
+  // Validate first the drug data. If it is valid, open the formulations form, if not display the errors
+  createFormulations = async () => {
+    const {
+      set,
+      http,
+      currentHealthCareType
+    } = this.props;
+
+    const {
+      label,
+      description
+    } = this.state;
+
+    let drug = {
+      label_en: label,
+      description_en: description,
+      formulations_attributes: {}
+    };
+
+    let result = await http.validateDrug(drug, currentHealthCareType);
+    if (result.ok === undefined || result.ok) {
+      set(
+        ['currentDrug', 'modalToOpen', 'modalIsOpen'],
+        [drug, 'CreateFormulations', true]
+      );
+    } else {
+      this.handleErrors(result);
     }
   };
 
@@ -77,19 +99,11 @@ class CreateHealthCareForm extends React.Component {
     const {
       toggleModal,
       currentHealthCareType,
-      medicationForms
     } = this.props;
     const {
-      reference,
       label,
       description,
-      minimalDosePerKg,
-      maximalDosePerKg,
-      maximalDose,
-      dosesPerDay,
-      medicationForm,
-      pillSize,
-      errors,
+      errors
     } = this.state;
 
     return (
@@ -117,95 +131,6 @@ class CreateHealthCareForm extends React.Component {
             </Form.Group>
           </Form.Row>
 
-          {(currentHealthCareType === 'drug') ? (
-            <div>
-              <Form.Row>
-                <Form.Group as={Col}>
-                  <Form.Label>Minimal dose per kg</Form.Label>
-                  <InputGroup>
-                    <Form.Control
-                      type="number"
-                      name="minimalDosePerKg"
-                      value={minimalDosePerKg}
-                      onChange={this.updateState}
-                    />
-                  </InputGroup>
-                </Form.Group>
-              </Form.Row>
-
-              <Form.Row>
-                <Form.Group as={Col}>
-                  <Form.Label>Maximal dose per kg</Form.Label>
-                  <InputGroup>
-                    <Form.Control
-                      type="number"
-                      name="maximalDosePerKg"
-                      value={maximalDosePerKg}
-                      onChange={this.updateState}
-                    />
-                  </InputGroup>
-                </Form.Group>
-              </Form.Row>
-
-              <Form.Row>
-                <Form.Group as={Col}>
-                  <Form.Label>Maximal dose</Form.Label>
-                  <InputGroup>
-                    <Form.Control
-                      type="number"
-                      name="maximalDose"
-                      value={maximalDose}
-                      onChange={this.updateState}
-                    />
-                  </InputGroup>
-                </Form.Group>
-              </Form.Row>
-
-              <Form.Row>
-                <Form.Group as={Col}>
-                  <Form.Label>Doses per day</Form.Label>
-                  <InputGroup>
-                    <Form.Control
-                      type="number"
-                      name="dosesPerDay"
-                      value={dosesPerDay}
-                      onChange={this.updateState}
-                    />
-                  </InputGroup>
-                </Form.Group>
-              </Form.Row>
-
-              <Form.Row>
-                <Form.Group as={Col} controlId="stage">
-                  <Form.Label>Drug form</Form.Label>
-                  <Form.Control as="select" name="medicationForm" onChange={this.updateState} value={medicationForm}>
-                    <option value="">Select the stage</option>
-                    {Object.keys(medicationForms).map(function(key) {
-                      return <option value={medicationForms[key]}>{key.charAt(0).toUpperCase() + key.slice(1)}</option>;
-                    })}
-                  </Form.Control>
-                  <Form.Control.Feedback type="invalid">
-                    {errors.medication_form}
-                  </Form.Control.Feedback>
-                </Form.Group>
-              </Form.Row>
-
-              <Form.Row>
-                <Form.Group as={Col}>
-                  <Form.Label>Pill size</Form.Label>
-                  <InputGroup>
-                    <Form.Control
-                      type="number"
-                      name="pillSize"
-                      value={pillSize}
-                      onChange={this.updateState}
-                    />
-                  </InputGroup>
-                </Form.Group>
-              </Form.Row>
-            </div>
-          ) : null}
-
           <Form.Row>
             <Form.Group as={Col}>
               <Form.Label>Description</Form.Label>
@@ -225,10 +150,17 @@ class CreateHealthCareForm extends React.Component {
 
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={this.create}>
-            Create
-          </Button>
-          <Button variant="secondary" onClick={toggleModal}>
+          {/*Save directly the management but go to formulations for the drugs*/}
+          {(currentHealthCareType === 'drug') ? (
+            <Button variant="primary" onClick={() => this.createFormulations()}>
+              Save and create formulations
+            </Button>
+          ) : (
+            <Button variant="success" onClick={() => this.create()}>
+            Save
+            </Button>
+          )}
+          <Button variant="secondary" onClick={() => toggleModal()}>
             Close
           </Button>
         </Modal.Footer>

@@ -1,6 +1,6 @@
-class CreateDrugFormulation < ActiveRecord::Migration[5.2]
+class CreateFormulation < ActiveRecord::Migration[5.2]
   def change
-    create_table :drug_formulations do |t|
+    create_table :formulations do |t|
       t.float :minimal_dose_per_kg
       t.float :maximal_dose_per_kg
       t.float :maximal_dose

@@ -2,7 +2,7 @@ jQuery(document).ready(function () {
 
   drugTypeChange();
 
-  $("#health_cares_drug_formulation_medication_form").change(medicationFormChange);
+  $("#health_cares_formulation_medication_form").change(medicationFormChange);
 
   $("#drugs-datatable").dataTable({
     "processing": true,
@@ -26,7 +26,7 @@ jQuery(document).ready(function () {
 
   // Show pill size field only if medication form is capsule
   function medicationFormChange() {
-    let pillSize = $("#health_cares_drug_formula_pill_size").closest(".form-group");
+    let pillSize = $("#health_cares_drug_formulation_pill_size").closest(".form-group");
     let medicationForm = $("#health_cares_drug_formulation_medication_form option:selected").val();
 
     if ($(pillSize).hasClass("d-none") && medicationForm === "pill") {

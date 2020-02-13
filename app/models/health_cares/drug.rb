@@ -2,7 +2,7 @@
 # Reference prefix : DR
 class HealthCares::Drug < HealthCare
 
-  has_many :drug_formulations
+  has_many :formulations
 
   def self.variable
     'drug'

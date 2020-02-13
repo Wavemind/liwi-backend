@@ -125,7 +125,6 @@ class AnswersContainer extends React.Component {
       nodeAnswers.map((answer, index) => {
         answers[index] = {
           id: answer.id,
-          reference: answer.reference,
           label_en: answer.label_translations['en'],
           operator: answersOperators[answer.operator],
           value: answer.value,

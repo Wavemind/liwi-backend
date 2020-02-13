@@ -3,6 +3,6 @@ class AdministrationRoute < ApplicationRecord
 
   enum category: [:enteral, :parenteral_injectable, :mucocutaneous]
 
-  has_many :drug_formulations
+  has_many :formulations
 
 end

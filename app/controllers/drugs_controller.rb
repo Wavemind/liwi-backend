@@ -1,6 +1,6 @@
 class DrugsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy, :create_from_diagram, :update_from_diagram]
+  before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy, :create_from_diagram, :update_from_diagram, :validate]
   before_action :set_drug, only: [:edit, :update, :update_translations, :destroy, :update_from_diagram]
   before_action :set_breadcrumb, only: [:new, :edit]
 
@@ -91,6 +91,20 @@ class DrugsController < ApplicationController
     end
   end
 
+  # POST algorithm/:algorithm_id/drugs/validate
+  # @params Drug
+  # @return errors messages if drug is not valid
+  def validate
+    drug = @algorithm.health_cares.drugs.new(drug_params).becomes(HealthCares::Drug)
+    drug.type = HealthCares::Drug
+
+    if drug.valid?
+      render json: {status: 'success', messages: ['valid']}
+    else
+      render json: {status: 'danger', errors: drug.errors.messages, ok: false}
+    end
+  end
+
   private
 
   def set_breadcrumb
@@ -113,6 +127,17 @@ class DrugsController < ApplicationController
       :description_en,
       Language.description_params,
       :algorithm_id,
+      formulations_attributes: [
+        :administration_route_id,
+        :minimal_dose_per_kg,
+        :maximal_dose_per_kg,
+        :maximal_dose,
+        :medication_form,
+        :pill_size,
+        :liquid_concentration,
+        :doses_per_day,
+        :unique_dose,
+      ]
     )
   end
 end

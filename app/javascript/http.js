@@ -461,24 +461,14 @@ export default class Http {
   // @params [Integer] id, [String] label, [String] description, [Integer] final_diagnostic_id
   // @return [Object] body of request
   // Update final diagnostic node
-  updateHealthCare = async (id, label, description, type, minimalDosePerKg, maximalDosePerKg, maximalDose, dosesPerDay, medicationForm, pillSize) => {
+  updateHealthCare = async (healthCareBody, type) => {
     let response;
     const url = `${this.url}/algorithms/${this.algorithm}/${type}/${id}/update_from_diagram`;
     const body = {
       diagnostic_id: this.instanceableId,
       final_diagnostic_id: this.finalDiagnostic
     };
-    body['health_cares_' + type.substring(0, type.length-1)] = {
-      id: id,
-      label_en: label,
-      description_en: description,
-      minimal_dose_per_kg: minimalDosePerKg,
-      maximal_dose_per_kg: maximalDosePerKg,
-      maximal_dose: maximalDose,
-      doses_per_day: dosesPerDay,
-      medication_form: medicationForm,
-      pill_size: pillSize
-    };
+    body['health_cares_' + type.substring(0, type.length-1)] = healthCareBody;
     const header = await this.setHeaders("PUT", body);
     const request = await fetch( url, header).catch(error => console.log(error));
 
@@ -567,6 +557,27 @@ export default class Http {
     questionBody['instanceable_type'] = this.instanceableType;
 
     const header = await this.setHeaders("POST", questionBody);
+    const request = await fetch( url, header).catch(error => console.log(error));
+
+    // Display error or parse json
+    if (request.ok) {
+      response = await request.json();
+    } else {
+      response = request;
+    }
+    return await response;
+  };
+
+  // @params [Hash] body of the question
+  // @return [Object] body of request
+  // Validate the drug itself
+  validateDrug = async (drugBody) => {
+    let response;
+    const url = `${this.url}/algorithms/${this.algorithm}/drugs/validate`;
+    drugBody['instanceable_id'] = this.instanceableId;
+    drugBody['instanceable_type'] = this.instanceableType;
+
+    const header = await this.setHeaders("POST", drugBody);
     const request = await fetch( url, header).catch(error => console.log(error));
 
     // Display error or parse json

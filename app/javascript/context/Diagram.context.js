@@ -204,6 +204,7 @@ export default class DiagramProvider extends React.Component {
     medicationForms: null,
     answersOperators: null,
     currentQuestion: null,
+    currentDrug: null,
   };
 
 
