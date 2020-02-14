@@ -1,6 +1,6 @@
 jQuery(document).ready(function () {
 
-  drugTypeChange();
+  medicationFormChange();
 
   $("#health_cares_formulation_medication_form").change(medicationFormChange);
 

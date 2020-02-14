@@ -95,6 +95,17 @@ class CreateHealthCareForm extends React.Component {
     this.setState({ [key]: value });
   };
 
+  // Display errors from response of the drug validation from rails if there is any
+  handleErrors = (result) => {
+    let newErrors = {};
+
+    if (result.errors.label_en !== undefined) {
+      newErrors.label_en = result.errors.label_en[0];
+    }
+
+    this.setState({ errors: newErrors });
+  };
+
   render() {
     const {
       toggleModal,
@@ -151,7 +162,7 @@ class CreateHealthCareForm extends React.Component {
         </Modal.Body>
         <Modal.Footer>
           {/*Save directly the management but go to formulations for the drugs*/}
-          {(currentHealthCareType === 'drug') ? (
+          {(currentHealthCareType === 'drugs') ? (
             <Button variant="primary" onClick={() => this.createFormulations()}>
               Save and create formulations
             </Button>

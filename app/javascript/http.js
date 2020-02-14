@@ -556,6 +556,8 @@ export default class Http {
     questionBody['instanceable_id'] = this.instanceableId;
     questionBody['instanceable_type'] = this.instanceableType;
 
+    console.log(questionBody);
+
     const header = await this.setHeaders("POST", questionBody);
     const request = await fetch( url, header).catch(error => console.log(error));
 
@@ -574,10 +576,15 @@ export default class Http {
   validateDrug = async (drugBody) => {
     let response;
     const url = `${this.url}/algorithms/${this.algorithm}/drugs/validate`;
-    drugBody['instanceable_id'] = this.instanceableId;
-    drugBody['instanceable_type'] = this.instanceableType;
+    const body = {
+      diagnostic_id: this.instanceableId,
+      final_diagnostic_id: this.finalDiagnostic
+    };
+    body['health_cares_drug'] = drugBody;
 
-    const header = await this.setHeaders("POST", drugBody);
+    console.log(body);
+
+    const header = await this.setHeaders("POST", body);
     const request = await fetch( url, header).catch(error => console.log(error));
 
     // Display error or parse json

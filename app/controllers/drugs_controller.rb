@@ -95,8 +95,8 @@ class DrugsController < ApplicationController
   # @params Drug
   # @return errors messages if drug is not valid
   def validate
-    drug = @algorithm.health_cares.drugs.new(drug_params).becomes(HealthCares::Drug)
-    drug.type = HealthCares::Drug
+    drug = HealthCares::Drug.new(drug_params).becomes(HealthCares::Drug)
+    drug.algorithm = @algorithm
 
     if drug.valid?
       render json: {status: 'success', messages: ['valid']}

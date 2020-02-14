@@ -122,6 +122,8 @@ class FormulationsContainer extends React.Component {
         formulations: {0: {}},
         formulationComponents: {0: <CreateFormulationForm setFormulation={this.setFormulation} formulations={{0: {}}} removeFormulation={this.removeFormulation} index={0} errors={{}} />}
       });
+      console.log(this.state.formulationComponents)
+
       // If this is a question updating, set drug formulations form and drug formulations hash
     } else {
       const { currentNode } = this.props;
