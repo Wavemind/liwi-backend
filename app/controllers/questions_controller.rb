@@ -127,7 +127,7 @@ class QuestionsController < ApplicationController
   # Update a questions sequence node from diagram
   def update_from_diagram
     ActiveRecord::Base.transaction(requires_new: true) do
-      if @question.update(question_params) && @question.validate_answers_references && @question.validate_overlap
+      if @question.update(question_params) && @question.validate_overlap
         render json: {status: 'success', messages: [t('flash_message.success_updated')], node: @question.as_json(include: :answers, methods: [:category_name, :node_type, :type])}
       else
         errors = (@question.answer_type.value == 'Boolean') ? @question.errors.messages : @question.answers.map(&:errors).map(&:messages)
