@@ -1,0 +1,32 @@
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <%= image_tag('logo.png', class: 'mx-auto text-center', height: '75', alt: 'Logo') %>
+  </div>
+
+  <ul class="list-unstyled components">
+    <li class="<%= 'active' if controller_name == 'dashboard' %>">
+      <%= link_to 'Dashboard', root_url %>
+    </li>
+    <li class="<%= 'active' if controller_name == 'devices' %>">
+      <%= link_to 'Devices', devices_url %>
+    </li>
+    <li class="<%= 'active' if controller_name == 'users' %>">
+      <%= link_to 'Users', users_url %>
+    </li>
+    <li class="<%= 'active' if controller_name == 'groups' %>">
+      <%= link_to 'Groups', groups_url %>
+    </li>
+    <li class="<%= 'active' if controller_name == 'algorithms' %>">
+      <%= link_to 'Algorithms', algorithms_url %>
+    </li>
+    <li class="<%= 'active' if controller_name == 'settings' %>">
+      <%= link_to 'Settings', settings_url %>
+    </li>
+    <li class="<%= 'active' if controller_name == 'technical_files' %>">
+      <%= link_to 'APK', technical_files_url %>
+    </li>
+    <li>
+      <%= link_to 'Logout', destroy_user_session_url, method: :delete %>
+    </li>
+  </ul>
+</nav>

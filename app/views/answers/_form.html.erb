@@ -1,0 +1,20 @@
+<% form_type = @question.answer_type.display == 'DropDownList' ? 'multiple' : 'input' %>
+
+<div class="row justify-content-center">
+  <%= simple_form_for [@algorithm, @question.becomes(Question)], html: { class: 'form-horizontal' }, url: answers_algorithm_question_url(@algorithm, @question.becomes(Question)), method: :put, wrapper: :input_group do |f| %>
+    <% f.object = @question %>
+
+    <!-- If there's no answers, question_params is empty and it crash, this is a workaround. (https://thecodinglove.com/easy-workaround-vs-correct-implementation) -->
+    <%= f.input :id, html_input: { value: @question.id }, as: :hidden %>
+
+    <%= f.simple_fields_for :answers do |ff| %>
+      <%= render "answers/form_#{form_type}", f: ff %>
+    <% end %>
+
+    <div class="links">
+      <%= link_to_add_association "<button class='btn btn-outline-success'>#{t('add')}</button>".html_safe, f, :answers, partial: "answers/form_#{form_type}" %>
+    </div>
+
+    <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
+  <% end %>
+</div>

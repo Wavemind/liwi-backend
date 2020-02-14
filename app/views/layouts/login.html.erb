@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<%= render 'layouts/header' %>
+
+<body>
+
+<div class="wrapper">
+
+  <!-- Page Content  -->
+  <div id="content">
+
+    <%= render 'layouts/flash' %>
+
+    <%= yield %>
+
+  </div>
+</div>
+
+</body>
+
+<%= render 'layouts/footer' %>
+</html>

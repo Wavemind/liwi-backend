@@ -1,0 +1,18 @@
+<h1><%= t('.title') %></h1>
+<%= link_to new_user_url do %>
+  <button type="button" class="btn btn-outline-secondary"><%= t('add') %></button>
+<% end %>
+
+<table class="table table-condensed table-hover" id="users-datatable" data-source="<%= users_url(format: :json) %>">
+  <thead>
+    <tr>
+      <th><%= t('.columns.first_name') %></th>
+      <th><%= t('.columns.last_name') %></th>
+      <th><%= t('.columns.mail') %></th>
+      <th><%= t('.columns.last_connection') %></th>
+      <th><%= t('.columns.status') %></th>
+      <th class="text-right"><%= t('.columns.actions') %></th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>

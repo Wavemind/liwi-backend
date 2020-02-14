@@ -1,33 +1,521 @@
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t 'hello'
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t('hello') %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# The following keys must be escaped otherwise they will not be retrieved by
-# the default I18n backend:
-#
-# true, false, on, off, yes, no
-#
-# Instead, surround them with single quotes.
-#
-# en:
-#   'true': 'foo'
-#
-# To learn more, please read the Rails Internationalization guide
-# available at http://guides.rubyonrails.org/i18n.html.
-
 en:
-  hello: "Hello world"
+  activerecord:
+    attributes:
+      node:
+        type: "Category"
+        unavailable: "Can be unavailable ?"
+        minimal_dose_per_kg: "Minimal dose/kg"
+        maximal_dose_per_kg: "Maximal dose/kg"
+        maximal_dose: "Maximal dose"
+        doses_per_day: "Number of doses per day"
+        treatment_type: "Medication form"
+        pill_size: "Pill minimal size (mg)"
+      diagnostic:
+        node: "Complaint category"
+  activated: "Activate"
+  add: "Add"
+  algorithms:
+    index:
+      columns:
+        name: "Name"
+        description: "Description"
+        version_count: "Amount of versions"
+        creator: "Creator"
+        actions: "Actions"
+      title: "Algorithms"
+    new:
+      title: "Add an algorithm"
+    edit:
+      title: "Edit this algorithm"
+    show:
+      subtitle_managements: "Managements"
+      subtitle_questions_sequences: "Questions sequences"
+      subtitle_questions_sequences_scored: "Questions sequences scored"
+      subtitle_questions: "Questions"
+      subtitle_treatments: "Treatments"
+      subtitle_versions: "Versions list"
+      title: "Details of %{name}"
+  answer_type:
+    labels:
+      - ~
+      - "Yes / No"
+      - "Dropdown list"
+      - "Input integer"
+      - "Input decimal"
+      - "Formula"
+      - "Date"
+      - "Present / Absent"
+      - "Positive / Negative"
+  answers:
+    predefined:
+      absent: "Absent"
+      negative: "Negative"
+      "no": "No"
+      positive: "Positive"
+      present: "Present"
+      "yes": "Yes"
+    edit:
+      title: "Edit related answers of %{name} question"
+    new:
+      title: "Create related answers of %{name} question"
+    operators:
+      between: ">=, <"
+      less: "<"
+      more_or_equal: ">="
+    validation:
+      value_missing: "Use coma separated values when using between operator"
+      wrong_value_type: "The value is not in the correct type : %{type}"
+      between_wrong_order: "The first value has to be smaller than the second one"
+      overlap:
+        one_more_or_equal: "You have to have one (and only one) answer with more or equal operator in order to close your range."
+        one_less: "You have to have one (and only one) answer with less operator in order to open your range."
+        first_between_different_from_less: "The smallest value on your answers with between operator has to be equal to the answer with less operator."
+        last_between_different_from_more_or_equal: "The highest value on your answers with between operator has to be equal to the answer with more or equal operator."
+        between_not_following: "Two of your answers with between operators are not followed correctly."
+        less_greater_than_more_or_equal: "Your answer with less operator can't be greater than your answer with more or equal operator."
+        less_equal_more_or_equal: "If you only have less and more or equal answers, they must be equal"
+    unavailable: "Test/Assessment is unavailable"
+  api:
+    v1:
+      versions:
+        index:
+          no_group: "Your tablet isn't associated with groups"
+          no_version: "Your group has no version"
+          device_not_exist: "Device doesn't exist"
+      activities:
+        create:
+          errors_device_not_present: "Device doesn't exist"
+          errors_on_save: "An error occurred when saving activities"
+  archive: "Archive"
+  breadcrumbs:
+    algorithms: 'Algorithms'
+    devices: 'Devices'
+    groups: 'Groups'
+    home: 'Home'
+    roles: 'Roles'
+    settings: 'Settings'
+    users: 'Users'
+    new: "New"
+    edit: "Edit"
+    versions: "Versions"
+    diagnostics: "Diagnostics"
+    final_diagnostics: "Final diagnostics"
+    questions_sequences: "Questions sequences"
+    treatments: "Treatments"
+    questions: "Questions"
+    managements: "Managements"
+  children:
+    errors:
+      unknown_instanceable: "Unknown instanceable"
+  conditions:
+    operators:
+      and_operator: "AND"
+      or_operator: "OR"
+    validation:
+      loop: "You are trying to do a loop in your diagnostic which is impossible."
+  deactivated: "Deactivate"
+  delete: "Delete"
+  destroy: "Remove"
+  devices:
+    index:
+      columns:
+        mac_address: "MAC address"
+        name: "Name"
+        brand: "Brand"
+        model: "Model"
+        last_activity: "Last activity"
+        last_user: "Last user"
+        actions: "Actions"
+      title: "Devices"
+    show:
+      brand: "Brand: "
+      model: "Model: "
+      os: "OS: "
+      os_version: "OS version: "
+      mac_address: "MAC address: "
+      status: "Status: "
+      tablet_connection: "Tablet connection"
+      title: "Details of %{name}"
+      user_actions: "User actions"
+    new:
+      title: "Add device"
+  diagnostics:
+    table:
+      columns:
+        actions: "Actions"
+        complaint_category: "Complaint category"
+        label: "Name"
+        last_update: "Last update"
+        reference: "Reference"
+      title: "Algorithms versions"
+    new:
+      title: "Add a diagnostic"
+    edit:
+      title: "Edit this diagnostic"
+    excluding:
+      excludes: "excludes"
+    reference: "DD"
+    show:
+      diagram: "Diagram"
+      differential_diagnostic_conditions: "Differential diagnostic conditions"
+      excluding_diagnostics: "Excluding diagnostics"
+      instances: "Instance of nodes"
+      questions_sequences: "Questions sequences"
+      subtitle_final_diagnostics: "Finals diagnostics"
+      title: "Details of %{name}"
+      translations: "Translations"
+      subtitle_health_cares: "Health cares diagram"
+    translations:
+      diagnostic: "Diagnostic"
+      final_diagnostics: "Final diagnostics"
+      managements: "Managements"
+      questions_sequences: "Questions sequences"
+      questions: "Questions"
+      treatments: "Treatments"
+  duplicate: "Duplicate"
+  duplicated: "_duplicated"
+  edit: "Edit"
+  error: "An error occured"
+  dependencies: "Node have dependencies"
+  final_diagnostics:
+    new:
+      title: "Create a new final diagnostic"
+    reference: "DF"
+    table:
+      columns:
+        reference: "Reference"
+        label: "Label"
+        description: "Description"
+        actions: "Actions"
+    edit:
+      title: "Edit final diagnostic"
+    show:
+      treatments: "Treatments"
+      managements: "Managements"
+      excluded_diagnostic: "Excluded diagnostic"
+      no_excluded_diagnostic: "There is no diagnosis excluded"
+    validation:
+      loop: "You are trying to do a loop into diagnostic excluding which is not possible."
+  flash_message:
+    create_fail: "Error will creating the entry"
+    delete_fail: "Error will deleting the entry"
+    reserved_reference: "This reference is reserved."
+    success_created: "Data was successfully created"
+    success_deleted: "Data was successfully deleted"
+    success_updated: "Data was successfully updated"
+    update_fail: "Error will updating value"
+    duplicate_fail: "Error will duplicating your data"
+    diagnostic:
+      complaint_category_exclude_triage_question: "You are setting a complaint category that does not take in charge one question in your diagnostic diagram."
+      error_in_questions_sequence: "The questions sequence <u><a href='%{url}'>%{reference}</a></u> is not valid."
+      final_diagnostic_no_condition: "The Final Diagnostic %{reference} has no condition."
+      hc_question_no_children: "The %{type} %{reference}, which is in <u><a href='%{url}'>%{df_reference}</a></u> is not linked to any children."
+      node_is_not_complaint_category: "The node you are linking to this diagnostic is not a Complaint Category."
+      question_no_children: "The %{type} %{reference} is not linked to any children."
+      valid: "This diagnostic is valid!"
+    questions_sequence:
+      ps_no_condition: "The questions sequence you are describing has no condition."
+      question_no_children: "The %{type} %{reference} is not linked to any children."
+      pss_no_combination: "There is no combination for this questions sequence to be true."
+      valid: "This questions sequence is valid!"
+    version:
+      complaint_category_missing: "Please select the complaint category."
+      invalids_diagnostics: "Your version contains diagnostics that are invalid : %{diagnostics}"
+      triage_question_missing: "Please select the triage question you want to put a condition on."
+  groups:
+    add_device:
+      success_add_device: "Device was successfully added to group"
+      error_add_device: "An error occurred when adding device to group"
+    index:
+      columns:
+        name: "Name"
+        nb_people: "Number of devices"
+        actions: "Actions"
+      title: "Groups"
+    edit:
+      title: "Edit group"
+    errors:
+      code_pin_unvalid: "The PIN code should be only 4 digits"
+      ip_invalid: "The IP is not in the good format."
+    new:
+      title: "Add group"
+    remove_device:
+      success_remove_device: "Device was successfully removed from group"
+      error_remove_device: "An error occurred when removing device from group"
+    show:
+      title: "Details of %{name}"
+      second_title: "Accesses"
+      columns:
+        algorithm: "Algorithm"
+        version: "Version"
+        created_at: "Created on"
+        end_date: "Archived date"
+      archived: "Archive"
+  group_accesses:
+    new:
+      title: "New release"
+  health_cares:
+    categories:
+      management:
+        label: "Management"
+        reference_prefix: "M"
+      treatment:
+        label: "Treatment"
+        reference_prefix: "T"
+  helps:
+    diagram:
+      arrow-title: "Arrow"
+      dashed-arrow-title: "Dashed arrow"
+      in-port-title: "In port"
+      out-port-title: "Out port"
+      excluded-diagnostic-title: "Excluded diagnostic"
+      score-title: "Questions Sequence Scored"
+      arrow-content: "Define links between questions"
+      dashed-arrow-content: "Define which final diagnostic has priority. The final diagnostic who is targeted by the arrow is excluded."
+      in-port-content: "Blue box in the top of the nodes. Inport where the link ends"
+      out-port-content: "Green box below the nodes : Outport where the link begins"
+      excluded-diagnostic-content: "The green box on the left of the nodes is the outport for excluding final diagnostics. The blue box is the inport for excluding final diagnostics."
+      score-content: "In order to add scores to your answers, you have to make a link between an answer and the questions sequence scored. This will display a pop up asking you the score to attribute to this relation."
+    formula:
+      formula-title: "What is a formula ?"
+      formula-content: "A formula helps you use the value of a previous question, either by using its value directly, or by doing some operation on it."
+      reference-title: "How to call a question's answer"
+      reference-content: "In order to use the value of a question's answer, you need to put its reference between brackets.<br />Ex: [PE15].<br />Please remember that the question has to be in a numeric format in order to work"
+      date-title: "How to make some calculation from a date ?"
+      date-content: "In some case, you will need to calculate the patient's age in months. In order to do so, you have to use a function. The available functions are 'ToMonth' and 'ToDay'. Those will return the number of months or days between the given date (ex: birth date) and the time the question will be asked.<br />Ex: ToMonth(D1).<br />Please remember that the question has to be in a date format in order to work."
+  instances:
+    table:
+      columns:
+        type: "Type"
+    show:
+      children: "Children"
+      title: "Details of %{name} in %{node}"
+  languages:
+    description: "description_"
+    edit:
+      title: "Edit the language"
+    label: "label_"
+    new:
+      title: "New language"
+  managements:
+    edit:
+      title: "Edit the management"
+    new:
+      title: "Create a management"
+    reference: "M"
+    table:
+      columns:
+        reference: "Reference"
+        label: "Label"
+        description: "Description"
+        actions: "Actions"
+  medical_case:
+    validation:
+      wrong_node_type: "This node is not a management or a treatment."
+  nodes:
+    validation:
+      reference_used: "This reference is already used"
+  questions_sequences:
+    categories:
+      predefined_syndrome:
+        label: "Predefined syndrome"
+        reference_prefix: "PS"
+      scored:
+        label: "Questions sequence scored"
+        reference_prefix: "QSS"
+      comorbidity:
+        label: "Comorbidity"
+        reference_prefix: "DC"
+      triage:
+        label: "Triage"
+        reference_prefix: "TI"
+    edit:
+      title: "Update the questions sequence"
+    edit_scored:
+      title: "Update a questions sequence scored"
+    new:
+      title: "Create questions sequence"
+    new_scored:
+      title: "Create a questions sequence scored"
+    show:
+      title: "Details of %{name}"
+      children: "Children"
+    scored_table:
+      columns:
+        actions: "Actions"
+        description: "Description"
+        label: "Label"
+        min_score: "Minimal score"
+        reference: "Reference"
+    table:
+      columns:
+        actions: "Actions"
+        category: "Category"
+        description: "Description"
+        label: "Label"
+        reference: "Reference"
+  prompt: "Select"
+  questions:
+    categories:
+      assessment_test:
+        label: "Assessment/test"
+        reference_prefix: "A"
+      background_calculation:
+        label: "Background calculation"
+        reference_prefix: "BC"
+      complaint_category:
+        label: "Complaint category"
+        reference_prefix: "CC"
+      chronic_condition:
+        label: "Chronic condition"
+        reference_prefix: "CH"
+      demographic:
+        label: "Demographics"
+        reference_prefix: "D"
+      exposure:
+        label: "Exposure"
+        reference_prefix: "E"
+      emergency_sign:
+        label: "Emergency sign"
+        reference_prefix: "ES"
+      observed_physical_sign:
+        label: "Observed physical sign"
+        reference_prefix: "OS"
+      physical_exam:
+        label: "Physical exam"
+        reference_prefix: "PE"
+      symptom:
+        label: "Symptom"
+        reference_prefix: "S"
+      treatment_question:
+        label: "Additional Treatment question"
+        reference_prefix: "TQ"
+      vaccine:
+        label: "Vaccine"
+        reference_prefix: "V"
+      vital_sign_consultation:
+        label: "Vital sign and anthropometric taken during consultation"
+        reference_prefix: "VC"
+      vital_sign_triage:
+        label: "Vital sign and anthropometric taken at triage"
+        reference_prefix: "VT"
+    errors:
+      no_blank: "can't be blank"
+      formula_wrong_characters: "Incorrect formula format. You can only use numbers, operators and questions references (between brackets)"
+      formula_wrong_reference: "The reference '%{reference}' does not match to any question in this algorithm"
+      formula_wrong_type: "The reference prefix you used does not match any question category"
+      formula_reference_not_date: "The question '%{reference}' is not in date format."
+      formula_reference_not_numeric: "The question '%{reference}' is not in numeric format."
+      formula_reference_no_underscore: "The reference must contain an underscore (ex: A_1)"
+    new:
+      title: "New question"
+    priorities:
+      basic: "Basic"
+      mandatory: "Mandatory"
+    stages:
+      registration: "Registration"
+      triage: "Triage"
+      test: "Test"
+      consultation: "Consultation"
+      diagnosis_management: "Diagnosis and management"
+    systems:
+      general: "General"
+      respiratory_circulation: "Respiratory and circulatory system"
+      ear_nose_mouth_throat: "Ear, nose, mouth and throat system"
+      visual: "Visual system"
+      integumentary: "Integumentary system"
+      digestive: "Digestive system"
+      urinary_reproductive: "Urinary and reproductive system"
+      nervous: "Nervous system"
+      muscular_skeletal: "Muscular and skeletal system"
+    table:
+      columns:
+        label: "Label"
+        description: "Description"
+        reference: "Reference"
+        priority: "Priority"
+        category: "Category"
+        answers: "Answers"
+        answer_type: "Answer type"
+        actions: "Actions"
+    edit:
+      title: "Edit question"
+  remove: "Remove"
+  roles:
+    index:
+      title: "Roles"
+    new:
+      title: "Add role"
+    edit:
+      title: "Edit role"
+  save: "Save"
+  select: "Please select"
+  settings:
+    index:
+      languages: "Languages"
+  show: "Show"
+  treatments:
+    edit:
+      title: "Edit the treatment"
+    new:
+      title: "Create a treatment"
+    reference: "T"
+    table:
+      columns:
+        reference: "Reference"
+        label: "Label"
+        description: "Description"
+        actions: "Actions"
+    treatment_types:
+      liquid: "Liquid"
+      pill: "Pill"
+  unarchive: "Unarchive"
+  users:
+    new:
+      title: "Add user"
+    edit:
+      title: "Update user"
+    index:
+      columns:
+        first_name: "First name"
+        last_name: "Last name"
+        mail: "Email"
+        last_connection: "Last connection"
+        status: "Status"
+        actions: "Actions"
+      title: "Users"
+    show:
+      last_account_connection: "Last account connection "
+      role: "Role "
+      title: "Details of %{name}"
+  validate: "Validate"
+  versions:
+    table:
+      columns:
+        name: "Name"
+        container: "Container"
+        last_update: "Last update"
+        creator: "Creator"
+        actions: "Actions"
+      title: "Algorithms versions"
+    triage_order:
+      others: "Other triage questions"
+    new:
+      title: "Add an algorithm version"
+    edit:
+      title: "Edit this algorithm"
+    show:
+      subtitle_diagnostics: "Diagnostics"
+      subtitle_questions_order: "Triage questions order"
+      subtitle_triage_conditions: "Triage questions conditions"
+      title: "Details of %{name} - version %{version}"
+      questions_sequences: "Questions Sequences"
+  warning_dependency: "Warning ! Editing this node will affect :"
+  close: "Close"
+  back: "Back"
+  open_diagram: "Open diagram editor"
+  help: "Help"
+  type_here: "Type here"
+  technical_files:
+    index:
+      title: "Upload/Download APK"

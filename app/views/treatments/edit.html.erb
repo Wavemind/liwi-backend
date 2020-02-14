@@ -1,0 +1,9 @@
+<h1><%= t('.title') %></h1>
+
+<%= render 'utils/dependency_warning', node: @treatment %>
+
+<div class="row justify-content-center">
+  <%= simple_form_for @treatment, url: algorithm_treatment_url(@algorithm, @treatment), html: { class: 'form-horizontal' }, wrapper: :input_group do |f| %>
+    <%= render 'form', f: f %>
+  <% end %>
+</div>

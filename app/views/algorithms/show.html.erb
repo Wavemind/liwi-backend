@@ -1,0 +1,81 @@
+<h1><%= t('.title', name: @algorithm.name) %></h1>
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link <%= 'active' if params[:panel].blank? || params[:panel] == 'versions'%>" id="home-tab" data-toggle="tab" href="#versions" role="tab" aria-controls="home" aria-selected="true"><%= t('.subtitle_versions') %></a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'questions'%>" id="profile-tab" data-toggle="tab" href="#questions" role="tab" aria-controls="profile" aria-selected="false"><%= t('.subtitle_questions')  %> </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'treatments'%>" id="contact-tab" data-toggle="tab" href="#treatments" role="tab" aria-controls="contact" aria-selected="false"><%= t('.subtitle_treatments') %></a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'managements'%>" id="contact-tab" data-toggle="tab" href="#managements" role="tab" aria-controls="contact" aria-selected="false"><%= t('.subtitle_managements') %></a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'questions_sequences'%>" id="contact-tab" data-toggle="tab" href="#questions_sequences" role="tab" aria-controls="contact" aria-selected="false"><%= t('.subtitle_questions_sequences') %></a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'questions_sequences_scored'%>" id="contact-tab" data-toggle="tab" href="#questions_sequences_scored" role="tab" aria-controls="contact" aria-selected="false"><%= t('.subtitle_questions_sequences_scored') %></a>
+  </li>
+</ul>
+
+<div class="tab-content mt-4 ml-4" id="algorithm-table">
+  <div class="tab-pane fade <%= 'show active' if params[:panel].blank? || params[:panel] == 'versions'%>" id="versions" role="tabpanel" aria-labelledby="home-tab">
+    <h3><%= t('.subtitle_versions') %></h3>
+
+    <%= link_to new_algorithm_version_url(@algorithm) do %>
+      <button type="button" class="btn btn-outline-primary"><%= t('add') %></button>
+    <% end %>
+
+    <%= render 'versions/table' %>
+  </div>
+  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'questions'%>" id="questions" role="tabpanel" aria-labelledby="questions-tab">
+    <h3><%= t('.subtitle_questions') %></h3>
+
+    <%= link_to new_algorithm_question_url(@algorithm) do %>
+      <button type="button" class="btn btn-outline-primary"><%= t('add') %></button>
+    <% end %>
+
+    <%= render 'questions/table' %>
+  </div>
+  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'treatments'%>" id="treatments" role="tabpanel" aria-labelledby="treatments-tab">
+    <h3><%= t('.subtitle_treatments') %></h3>
+
+    <%= link_to new_algorithm_treatment_url(@algorithm) do %>
+      <button type="button" class="btn btn-outline-primary"><%= t('add') %></button>
+    <% end %>
+
+    <%= render 'treatments/table' %>
+  </div>
+  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'managements'%>" id="managements" role="tabpanel" aria-labelledby="managements-tab">
+    <h3><%= t('.subtitle_managements') %></h3>
+
+    <%= link_to new_algorithm_management_url(@algorithm) do %>
+      <button type="button" class="btn btn-outline-primary"><%= t('add') %></button>
+    <% end %>
+
+    <%= render 'managements/table' %>
+  </div>
+  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'questions_sequences'%>" id="questions_sequences" role="tabpanel" aria-labelledby="questions_sequences-tab">
+    <h3><%= t('.subtitle_questions_sequences') %></h3>
+
+    <%= link_to new_algorithm_questions_sequence_url(@algorithm) do %>
+      <button type="button" class="btn btn-outline-primary"><%= t('add') %></button>
+    <% end %>
+
+    <%= render 'questions_sequences/table' %>
+
+  </div>
+  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'questions_sequences_scored'%>" id="questions_sequences_scored" role="tabpanel" aria-labelledby="questions_sequences_scored-tab">
+    <h3><%= t('.subtitle_questions_sequences_scored') %></h3>
+
+    <%= link_to new_scored_algorithm_questions_sequences_url(@algorithm) do %>
+      <button type="button" class="btn btn-outline-primary"><%= t('add') %></button>
+    <% end %>
+
+    <%= render 'questions_sequences/scored_table' %>
+
+  </div>
+</div>

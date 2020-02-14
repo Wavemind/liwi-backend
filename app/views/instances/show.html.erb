@@ -1,0 +1,11 @@
+<h1><%= t('.title', node: @instanceable.reference_label, name: @instance.node.reference_label ) %></h1>
+
+<h2><%= t('.conditions') %></h2>
+
+<%= render 'conditions/table' %>
+
+<% unless @instance.node.is_a?(Management) || @instance.node.is_a?(Treatment) %>
+  <h2><%= t('.children') %></h2>
+
+  <%= render 'children/table' %>
+<% end %>

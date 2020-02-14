@@ -1,0 +1,22 @@
+<ul class="list-group">
+  <% @children.each do |child| %>
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col"><%= child.node.label %></div>
+        <div class="col text-right"><%= link_to(I18n.t('destroy'), polymorphic_url([@instanceable, @instance, child]), method: :delete, class: 'btn btn-outline-danger', data: { confirm: 'Are you sure?' }) %></div>
+      </div>
+    </li>
+  <% end %>
+  <li class="list-group-item">
+    <%= simple_form_for @child, url: polymorphic_url([@instanceable, @instance, @child]), method: :post do |f| %>
+      <div class="row">
+        <div class="col">
+          <%= f.association :node, collection: (@algorithm.nodes.where.not(id: @instance.children.select(:node_id)) + FinalDiagnostic.where(diagnostic_id: params[:diagnostic_id])).flatten.sort_by(&:reference), label_method: :reference_label, label: false, prompt: t('prompt') %>
+        </div>
+        <div class="col">
+          <%= f.submit t('add'), class: 'btn btn-primary' %>
+        </div>
+      </div>
+    <% end %>
+  </li>
+</ul>

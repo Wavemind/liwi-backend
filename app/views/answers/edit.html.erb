@@ -1,0 +1,5 @@
+<h1><%= t('.title', name: @question.label) %></h1>
+
+<%= render 'utils/dependency_warning', node: @question %>
+
+<%= render 'answers/form' %>

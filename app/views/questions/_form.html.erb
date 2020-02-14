@@ -1,0 +1,45 @@
+<%= f.input :type, collection: Question.descendants, input_html: {id: 'question_type'}, value_method: :name, label_method: :display_label, prompt: t('select'), disabled: f.object.persisted? %>
+<%= f.input :system, collection: Question.systems.map { |k, v| [t("questions.systems.#{k}"), k] }, prompt: t('select') %>
+<%= f.association :answer_type, collection: AnswerType.all, input_html: {id: 'question_answer_type_displayed'}, label_method: :display_name, prompt: t('select'), disabled: @question.answers.any? %>
+<%= f.association :answer_type, input_html: {id: 'question_answer_type_hidden', class: 'py-0'}, as: :hidden, error: false %>
+<%= f.input :stage, input_html: {id: 'question_stage_displayed'}, collection: Question.stages.map { |k, v| [t("questions.stages.#{k}"), k] }, prompt: t('select'), disabled: f.object.persisted?  %>
+<%= f.input :stage, input_html: {id: 'question_stage_hidden', class: 'py-0'}, as: :hidden, error: false %>
+
+<%= f.input :is_mandatory, as: :boolean %>
+
+<%= f.input :label_en %>
+<%= f.input :snomed_label, prompt: t('type_here') %>
+<%= f.input :snomed_id, as: :hidden %>
+<%= f.input :description_en, as: :text %>
+
+<% unless f.object.persisted? %>
+  <%= f.input :unavailable, input_html: {id: 'question_unavailable'}, as: :boolean %>
+<% end %>
+
+<hr />
+
+<div class="row formula">
+  <div class="col-10">
+    <%= f.input :formula %>
+  </div>
+
+  <div class="col">
+    <button type="button" class="btn btn-sm btn-info help-formula" data-toggle="popover" data-placement="right" data-html="true" data-content="<%= render 'helps/formula' %>">
+      <i class="material-icons">
+        help_outline
+      </i>
+    </button>
+  </div>
+</div>
+
+<hr />
+
+<%= f.simple_fields_for :medias do |ff| %>
+  <%= render 'medias/fields', f: ff %>
+<% end %>
+
+<div class="links">
+  <%= link_to_add_association "<button class='btn btn-outline-success'>#{t('add')}</button>".html_safe, f, :medias, partial: 'medias/fields' %>
+</div>
+
+<%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>

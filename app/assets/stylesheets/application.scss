@@ -1,0 +1,303 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ */
+@import "bootstrap";
+@import "datatables";
+@import "storm-react-diagrams/src/sass/main";
+@import "diagram";
+/*
+    DEMO STYLEa
+*/
+@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+@import "https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css";
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #fafafa;
+}
+
+p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.1em;
+  font-weight: 300;
+  line-height: 1.7em;
+  color: #999;
+}
+
+a,
+a:hover,
+a:focus {
+  color: inherit;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.navbar {
+  padding: 15px 10px;
+  background: #fff;
+  border: none;
+  border-radius: 0;
+  margin-bottom: 40px;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-btn {
+  box-shadow: none;
+  outline: none !important;
+  border: none;
+}
+
+.line {
+  width: 100%;
+  height: 1px;
+  border-bottom: 1px dashed #ddd;
+  margin: 40px 0;
+}
+
+/* ---------------------------------------------------
+    SIDEBAR STYLE
+----------------------------------------------------- */
+
+.wrapper {
+  display: flex;
+  width: 100%;
+  align-items: stretch;
+}
+
+
+#sidebar {
+  min-width: 250px;
+  max-width: 250px;
+  background: #7386D5;
+  color: #fff;
+  transition: all 0.3s;
+}
+
+#sidebar.active {
+  margin-left: -250px;
+}
+
+#sidebar .sidebar-header {
+  padding: 20px;
+  background: #6d7fcc;
+}
+
+#sidebar ul.components {
+  padding: 20px 0;
+  border-bottom: 1px solid #47748b;
+}
+
+#sidebar ul p {
+  color: #fff;
+  padding: 10px;
+}
+
+#sidebar ul li a {
+  padding: 10px;
+  font-size: 1.1em;
+  display: block;
+}
+
+#sidebar ul li a:hover {
+  color: #7386D5;
+  background: #fff;
+}
+
+#sidebar ul li.active > a,
+a[aria-expanded="true"] {
+  color: #fff;
+  background: #6d7fcc;
+}
+
+a[data-toggle="collapse"] {
+  position: relative;
+}
+
+.dropdown-toggle::after {
+  display: block;
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+}
+
+ul ul a {
+  font-size: 0.9em !important;
+  padding-left: 30px !important;
+  background: #6d7fcc;
+}
+
+ul.CTAs {
+  padding: 20px;
+}
+
+ul.CTAs a {
+  text-align: center;
+  font-size: 0.9em !important;
+  display: block;
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
+a.download {
+  background: #fff;
+  color: #7386D5;
+}
+
+a.article,
+a.article:hover {
+  background: #6d7fcc !important;
+  color: #fff !important;
+}
+
+/* ---------------------------------------------------
+    CONTENT STYLE
+----------------------------------------------------- */
+
+#content {
+  width: 100%;
+  min-height: 100vh;
+  transition: all 0.3s;
+}
+
+.breadcrumb {
+  border-radius: 0;
+}
+
+/* ---------------------------------------------------
+    MEDIAQUERIES
+----------------------------------------------------- */
+
+@media (max-width: 768px) {
+  #sidebar {
+    margin-left: -250px;
+  }
+  #sidebar.active {
+    margin-left: 0;
+  }
+  #sidebarCollapse span {
+    display: none;
+  }
+}
+
+// Maps
+#map {
+  height: 800px;
+}
+
+td {
+  a {
+    text-decoration: underline;
+  }
+
+  a.btn {
+    text-decoration: none;
+  }
+}
+
+/* ---------------------------------------------------
+    Algorithms views
+----------------------------------------------------- */
+
+#diagnostic_diagram div.col-sm {
+  padding: 3px 0 3px 0;
+  height: 100%
+}
+
+.node-block {
+  margin-right: 10px;
+  align-self: start;
+}
+
+.border-3 {
+  border-width: 3px !important;
+}
+
+#diagnostic_diagram ul {
+  list-style: none;
+  margin: 0;
+}
+
+.inline {
+  display: inline;
+}
+
+.breadcrumbs {
+  a {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.alert-dismissible {
+  z-index: 10;
+  position: absolute;
+  right: 30px;
+  top: 60px;
+  padding: 25px;
+  min-width: 500px;
+
+  ul {
+    margin: 0 !important;
+  }
+}
+
+.img-fluid {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.triage-order {
+  list-style-type: none;
+  margin: 15px 0 0 0;
+  width: 60%;
+}
+
+.triage-order li:hover {
+  cursor: pointer;
+}
+
+.triage-order li {
+  border: 0;
+  margin: 0 3px 3px 3px;
+  padding: -0.3em 0 0 2.5em;
+  font-size: 1.1em;
+  height: 28px;
+}
+
+.triage-order li span {
+  margin-top: 0.2em;
+  position: absolute;
+  margin-left: -1.3em;
+}
+
+// AUTOCOMPLETE
+.ui-menu {
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.ui-menu .ui-menu-item a:hover {
+  background-color: #7386D5;
+  color: #fff;
+}
+
+.ui-menu .ui-menu-item a:active {
+  box-shadow: 0 0 30px #96f226
+}
+
+.help-formula {
+  margin-top: 30px
+}

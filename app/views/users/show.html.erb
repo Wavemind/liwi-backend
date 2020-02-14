@@ -1,0 +1,9 @@
+<h1><%= t('.title', name: @user.full_name) %></h1>
+
+<p><%= @user.email %></p>
+<p><%= t('.last_account_connection') %><b><%= datetime_format(@user.last_sign_in_at) %></b></p>
+
+<h2>Activity</h2>
+<% @user.activities.includes(:device).each do |activity| %>
+  <p><%= "#{datetime_format(activity.created_at)} - #{activity.device.brand}/#{activity.device.model}"%></p>
+<% end %>

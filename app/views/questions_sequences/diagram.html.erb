@@ -1,0 +1,30 @@
+<div class="row my-1">
+  <div class="col align-self-center breadcrumbs"><%= render_breadcrumbs %></div>
+  <div class="col align-self-center text-right text-uppercase font-weight-light"><%= @questions_sequence.label %></div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <p class="mx-0 my-0 metadata" data-type="<%= @questions_sequence.class.name %>" data-id="<%= @questions_sequence.id %>"  data-algorithm="<%= @questions_sequence.algorithm.id %>"></p>
+    <%= react_component('Provider', {
+      render: 'Diagram',
+      context: {
+        instanceable: @questions_sequence.as_json(methods: :category_name),
+        instanceable_type: @questions_sequence.class.name,
+        questions: @questions_sequence.questions_json,
+        availableNodes: @questions_sequence.available_nodes_json,
+        type: 'QuestionsSequence',
+        questionAnswerTypes: AnswerType.all.as_json(methods: :display_name),
+        questionSystems: Question.systems.map { |k, v| [t("questions.systems.#{k}"), k] },
+        questionStages: Question.stages.as_json,
+        questionCategories: Question.categories('QuestionsSequence').as_json,
+        questionsSequenceCategories: QuestionsSequence.categories.as_json,
+        answersOperators: Answer.operators.as_json,
+      }
+    }) %>
+  </div>
+  <button type="button" class="btn btn-sm btn-info help" data-toggle="popover" data-placement="top" data-html="true" data-content="<%= render 'helps/diagram' %>">
+    <i class="material-icons">
+      help_outline
+    </i>
+  </button>
+</div>
