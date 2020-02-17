@@ -19,7 +19,7 @@
         questionStages: Question.stages.as_json,
         questionCategories: Question.categories('FinalDiagnostic').as_json,
         questionsSequenceCategories: QuestionsSequence.categories.as_json,
-        medicationForms: Formulation.medication_forms.as_json
+        medicationForms: Formulation.medication_forms.to_a.map(&:first).map(&:capitalize)
       }
     }) %>
   </div>

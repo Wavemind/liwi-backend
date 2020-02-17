@@ -4,8 +4,11 @@ import {
   Modal,
   Form,
   InputGroup,
-  Col
+  Col,
+  Accordion,
+  Card
 } from "react-bootstrap";
+
 import { withDiagram } from "../../../../context/Diagram.context";
 import NodeListItem from "../../../lists/NodeList";
 import CreateFormulationForm from "./CreateFormulationForm";
@@ -25,6 +28,10 @@ class FormulationsContainer extends React.Component {
     errors: {},
     formulations: {},
     formulationComponents: {},
+    availableMedicationForms: [],
+    selectedForms: [],
+    medicationForm: null,
+    medicationFormError: null
   };
 
   componentWillMount() {
@@ -33,11 +40,32 @@ class FormulationsContainer extends React.Component {
 
   // Add a new drug formulation to the form
   newFormulation = async () => {
-    let { formulationComponents, formulations } = this.state;
-    let lastIndex = parseInt(Object.keys(formulations)[Object.keys(formulations).length-1]) + 1;
-    formulations[lastIndex] = {};
-    formulationComponents[lastIndex] = <CreateFormulationForm setFormulation={this.setFormulation} removeFormulation={this.removeFormulation} formulations={formulations} index={lastIndex} errors={{}} />;
-    this.setState({ formulationComponents, formulations });
+    let {
+      formulationComponents,
+      formulations,
+      medicationForm,
+      availableMedicationForms,
+      selectedForms
+    } = this.state;
+
+    if (medicationForm === null) {
+      this.setState({ medicationFormError: "Medication form has to be filled" });
+    } else {
+      let lastIndex = parseInt(Object.keys(formulations)[Object.keys(formulations).length-1]) + 1;
+      formulations[lastIndex] = {};
+      formulationComponents[lastIndex] = <CreateFormulationForm medicationForm={medicationForm} setFormulation={this.setFormulation} removeFormulation={this.removeFormulation} formulations={formulations} index={lastIndex} errors={{}} />;
+
+      availableMedicationForms.splice( availableMedicationForms.indexOf(medicationForm), 1 );
+      selectedForms.push(medicationForm);
+
+      this.setState({
+        availableMedicationForms: availableMedicationForms,
+        selectedForms: selectedForms,
+        formulationComponents,
+        formulations,
+        medicationForm: null,
+      });
+    }
   };
 
   // Set general state of drug formulations so the container can access to all of then
@@ -120,12 +148,10 @@ class FormulationsContainer extends React.Component {
     if (currentDrug.id === undefined) {
       this.setState({
         formulations: {0: {}},
-        formulationComponents: {0: <CreateFormulationForm setFormulation={this.setFormulation} formulations={{0: {}}} removeFormulation={this.removeFormulation} index={0} errors={{}} />}
+        formulationComponents: {},
+        availableMedicationForms: medicationForms
       });
-      console.log(this.state.formulationComponents)
-
-      // If this is a question updating, set drug formulations form and drug formulations hash
-    } else {
+    } else { // If this is a question updating, set drug formulations form and drug formulations hash
       const { currentNode } = this.props;
       let formulations = {};
       let formulationComponents = {};
@@ -158,13 +184,20 @@ class FormulationsContainer extends React.Component {
     }
   };
 
+  handleMedicationFormChange = () => {
+    this.setState({ medicationForm: event.target.value });
+  };
+
   render() {
     const {
-      toggleModal,
+      toggleModal
     } = this.props;
 
     const {
       formulationComponents,
+      medicationFormError,
+      availableMedicationForms,
+      selectedForms
     } = this.state;
 
     return (
@@ -173,20 +206,45 @@ class FormulationsContainer extends React.Component {
           <Modal.Title>Create drug formulations</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {Object.keys(formulationComponents).map((key) => {
-            return <React.Fragment> { formulationComponents[key] }</React.Fragment>
-          })}
+          <Accordion>
+            {Object.keys(formulationComponents).map((key) =>
+              <Card>
+                <Card.Header>
+                  <Accordion.Toggle as={Button} variant="link" eventKey={key}>
+                    {selectedForms[key-1]}
+                  </Accordion.Toggle>
+                </Card.Header>
+                <Accordion.Collapse eventKey={key}>
+                  <Card.Body>
+                    { formulationComponents[key] }
+                  </Card.Body>
+                </Accordion.Collapse>
+              </Card>
+            )}
+          </Accordion>
         </Modal.Body>
         <Modal.Footer>
+          <Form.Control as="select" name="medicationForm" onChange={this.handleMedicationFormChange} isInvalid={!!medicationFormError } >
+            <option value="">Select a medication form</option>
+            {availableMedicationForms.map((medicationForm) => (
+              <option value={medicationForm}>{medicationForm.charAt(0).toUpperCase() + medicationForm.slice(1)}</option>
+            ))}
+          </Form.Control>
+          <Form.Control.Feedback type="invalid">
+            {medicationFormError}
+          </Form.Control.Feedback>
+
           <Button variant="primary" onClick={() => this.newFormulation()}>
             New formulation
           </Button>
+
           <Button variant="success" onClick={() => this.save()}>
             Validate
           </Button>
           <Button variant="secondary" onClick={() => toggleModal()}>
             Close
           </Button>
+
         </Modal.Footer>
       </Form>
     );
