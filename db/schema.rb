@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 2020_02_11_124022) do
   end
 
   create_table "administration_routes", force: :cascade do |t|
-    t.integer "category"
+    t.string "category"
     t.string "name"
   end
 

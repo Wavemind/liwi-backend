@@ -228,6 +228,11 @@ en:
       complaint_category_missing: "Please select the complaint category."
       invalids_diagnostics: "Your version contains diagnostics that are invalid : %{diagnostics}"
       triage_question_missing: "Please select the triage question you want to put a condition on."
+  formulations:
+    breakables:
+      one: "No"
+      two: "In 2"
+      four: "In 4"
   groups:
     add_device:
       success_add_device: "Device was successfully added to group"

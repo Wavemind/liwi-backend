@@ -1,8 +1,11 @@
 # Define the possible administration routes for a treatment
 class AdministrationRoute < ApplicationRecord
 
-  enum category: [:enteral, :parenteral_injectable, :mucocutaneous]
-
   has_many :formulations
 
+  # @return [String]
+  # Return a displayable string for the view
+  def display_name
+    I18n.t('administration_routes.labels')[id]
+  end
 end

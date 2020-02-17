@@ -310,7 +310,7 @@ class CreateQuestionForm extends React.Component {
           <Form.Row>
             <Form.Group as={Col} controlId="answerType">
               <Form.Label>Answer type</Form.Label>
-              <Form.Control as="select" name="answerType" onChange={this.handleFormChange} value={answerType} isInvalid={!!errors.answerType } disabled = { answerTypeDisabled }>
+              <Form.Control as="select" name="answerType" onChange={this.handleFormChange} value={answerType} isInvalid={!!errors.answer_type } disabled = { answerTypeDisabled }>
                 <option value="">Select the type of answers expected</option>
                 {questionAnswerTypes.map((answerType) => (
                   <option value={answerType.id}>{answerType.display_name}</option>
@@ -318,7 +318,7 @@ class CreateQuestionForm extends React.Component {
               </Form.Control>
 
               <Form.Control.Feedback type="invalid">
-                {errors.answerType}
+                {errors.answer_type}
               </Form.Control.Feedback>
             </Form.Group>
           </Form.Row>

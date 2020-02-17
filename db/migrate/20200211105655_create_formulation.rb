@@ -5,7 +5,7 @@ class CreateFormulation < ActiveRecord::Migration[5.2]
       t.float :maximal_dose_per_kg
       t.float :maximal_dose
       t.integer :medication_form
-      t.integer :pill_size
+      t.integer :dose_form
       t.integer :liquid_concentration
       t.integer :doses_per_day
       t.integer :unique_dose
