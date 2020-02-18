@@ -135,10 +135,11 @@ ActiveRecord::Schema.define(version: 2020_02_11_124022) do
     t.float "maximal_dose_per_kg"
     t.float "maximal_dose"
     t.integer "medication_form"
-    t.integer "pill_size"
+    t.integer "dose_form"
     t.integer "liquid_concentration"
     t.integer "doses_per_day"
     t.integer "unique_dose"
+    t.boolean "by_age", default: false
     t.bigint "node_id"
     t.bigint "administration_route_id"
     t.index ["administration_route_id"], name: "index_formulations_on_administration_route_id"

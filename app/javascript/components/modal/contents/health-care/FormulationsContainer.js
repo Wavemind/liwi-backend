@@ -6,7 +6,6 @@ import {
   InputGroup,
   Col,
   Accordion,
-  Card
 } from "react-bootstrap";
 
 import { withDiagram } from "../../../../context/Diagram.context";
@@ -177,6 +176,7 @@ class FormulationsContainer extends React.Component {
           liquid_concentration: parseInt(formulation.liquid_concentration),
           doses_per_day: parseInt(formulation.doses_per_day),
           unique_dose: parseInt(formulation.unique_dose),
+          byAge: formulation.by_age,
           _destroy: false
         }
       });

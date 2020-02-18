@@ -1,4 +1,5 @@
 import React from "react";
+import Select from 'react-select';
 import {
   Button,
   Modal,
@@ -21,9 +22,10 @@ class CreateFormulationForm extends React.Component {
   }
 
   // Push the answer object to the container
-  handleFormChange = () => {
-    const value = event.target.value;
-    const name = event.target.name;
+  handleFormChange = (e) => {
+    // Get the name and value by additional param for Select (can't get it in the usual way...)
+    const name = event.target.name !== undefined ? event.target.name : e.target.name;
+    const value = event.target.value !== undefined ? event.target.value : e.target.value;
 
     const {
       index,
@@ -69,12 +71,7 @@ class CreateFormulationForm extends React.Component {
     let pillOrLiquidFields = {display: 'none'};
     let simpleFields = {};
 
-    console.log(byAge)
-    console.log(medicationForm);
-    console.log(medicationForm);
-
-
-    if (!byAge && ["Tablet", "Capsule", "Syrup", "Suspension"].includes(medicationForm)) {
+    if ((byAge !== "true") && (["Tablet", "Capsule", "Syrup", "Suspension"].includes(medicationForm))) {
       simpleFields = {display: 'none'};
       pillOrLiquidFields = {};
       if (["Tablet"].includes(medicationForm)) {
@@ -104,13 +101,12 @@ class CreateFormulationForm extends React.Component {
                 <Form.Row>
                   <Form.Group as={Col} controlId="administrationRoute">
                     <Form.Label>Administration route</Form.Label>
-                    <Form.Control as="select" name="answerType" onChange={this.handleFormChange}
-                                  value={administrationRoute} isInvalid={!!errors.administration_route}>
-                      <option value="">Select the administration route</option>
-                      {administrationRoutes.map((administrationRoute) => (
-                        <option value={administrationRoute.id}>{administrationRoute.display_name}</option>
-                      ))}
-                    </Form.Control>
+
+                    <Select
+                      defaultValue={administrationRoute}
+                      options={administrationRoutes}
+                      onChange={(val)=> {this.handleFormChange({target: { name:'administrationRoute', value: val.value }})}}
+                    />
 
                     <Form.Control.Feedback type="invalid">
                       {errors.administration_route}

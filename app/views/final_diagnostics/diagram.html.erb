@@ -20,7 +20,7 @@
         questionCategories: Question.categories('FinalDiagnostic').as_json,
         questionsSequenceCategories: QuestionsSequence.categories.as_json,
         medicationForms: Formulation.medication_forms.to_a.map(&:first).map(&:capitalize),
-        administrationRoutes: AdministrationRoute.all.as_json(methods: :display_name),
+        administrationRoutes: AdministrationRoute.generate_select_options,
         breakableOptions: Formulation.breakables.map { |k, v| [t("formulations.breakables.#{k}"), k] }
       }
     }) %>
