@@ -582,8 +582,6 @@ export default class Http {
     };
     body['health_cares_drug'] = drugBody;
 
-    console.log(body);
-
     const header = await this.setHeaders("POST", body);
     const request = await fetch( url, header).catch(error => console.log(error));
 

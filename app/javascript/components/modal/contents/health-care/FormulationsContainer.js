@@ -77,16 +77,24 @@ class FormulationsContainer extends React.Component {
 
   // Remove the selected formulation
   removeFormulation = async (key) => {
-    let { formulationComponents, formulations } = this.state;
+    let {
+      formulationComponents,
+      formulations,
+      availableMedicationForms,
+      selectedForms
+    } = this.state;
 
     if (formulations[key].id !== undefined){
       formulations[key]._destroy = true;
     } else {
       formulations[key] = null;
     }
-    formulationComponents[key] = null;
 
-    await this.setState({ formulations, formulationComponents });
+    formulationComponents[key] = null;
+    availableMedicationForms.push(selectedForms[key-1]);
+    selectedForms.splice(key-1, 1)
+
+    await this.setState({ formulations, formulationComponents, availableMedicationForms, selectedForms });
   };
 
   // Get question hash and add drug formulations to it to finally create the whole question
@@ -207,20 +215,9 @@ class FormulationsContainer extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <Accordion>
-            {Object.keys(formulationComponents).map((key) =>
-              <Card>
-                <Card.Header>
-                  <Accordion.Toggle as={Button} variant="link" eventKey={key}>
-                    {selectedForms[key-1]}
-                  </Accordion.Toggle>
-                </Card.Header>
-                <Accordion.Collapse eventKey={key}>
-                  <Card.Body>
-                    { formulationComponents[key] }
-                  </Card.Body>
-                </Accordion.Collapse>
-              </Card>
-            )}
+            {Object.keys(formulationComponents).map((key) => {
+              return <React.Fragment> {formulationComponents[key]}</React.Fragment>
+            })}
           </Accordion>
         </Modal.Body>
         <Modal.Footer>
