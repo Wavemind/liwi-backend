@@ -27,10 +27,11 @@ class FormulationsContainer extends React.Component {
     errors: {},
     formulations: {},
     formulationComponents: {},
-    availableMedicationForms: [],
+    availableMedicationForms: JSON.parse(JSON.stringify(this.props.medicationForms)),
     selectedForms: [],
     medicationForm: null,
-    medicationFormError: null
+    medicationFormError: null,
+    accordionIndex: 1,
   };
 
   componentWillMount() {
@@ -52,14 +53,14 @@ class FormulationsContainer extends React.Component {
     } else {
       let lastIndex = parseInt(Object.keys(formulations)[Object.keys(formulations).length-1]) + 1;
       formulations[lastIndex] = {};
-      formulationComponents[lastIndex] = <CreateFormulationForm medicationForm={medicationForm} setFormulation={this.setFormulation} removeFormulation={this.removeFormulation} formulations={formulations} index={lastIndex} errors={{}} />;
+      formulationComponents[lastIndex] = <CreateFormulationForm medicationForm={medicationForm} setActiveAccordion={this.setActiveAccordion} setFormulation={this.setFormulation} removeFormulation={this.removeFormulation} formulations={formulations} index={lastIndex} errors={{}} />;
 
       availableMedicationForms.splice( availableMedicationForms.indexOf(medicationForm), 1 );
       selectedForms.push(medicationForm);
-
       this.setState({
         availableMedicationForms: availableMedicationForms,
         selectedForms: selectedForms,
+        accordionIndex: lastIndex,
         formulationComponents,
         formulations,
         medicationForm: null,
@@ -120,6 +121,7 @@ class FormulationsContainer extends React.Component {
     let result = currentDrug.id === undefined ? await http.createDrug(currentDrug, currentHealthCareType) : await http.updateHealthCare(currentDrug, currentHealthCareType);
     if (result.ok === undefined || result.ok) {
       toggleModal();
+      this.resetFormulationLists();
       await addMessage({ status: result.status, messages: result.messages });
       set("currentDbNode", result.node);
     } else {
@@ -153,7 +155,6 @@ class FormulationsContainer extends React.Component {
       this.setState({
         formulations: {0: {}},
         formulationComponents: {},
-        availableMedicationForms: medicationForms
       });
     } else { // If this is a question updating, set drug formulations form and drug formulations hash
       const { currentNode } = this.props;
@@ -194,16 +195,31 @@ class FormulationsContainer extends React.Component {
     this.setState({ medicationForm: event.target.value });
   };
 
-  render() {
-    const {
-      toggleModal
-    } = this.props;
+  setActiveAccordion = (index) => {
+    this.setState({accordionIndex: index});
+  };
 
+  closeModal = () => {
+    const { toggleModal } = this.props;
+    this.resetFormulationLists();
+    toggleModal();
+  };
+
+  resetFormulationLists = () => {
+    const {medicationForms} = this.props;
+
+    this.setState({
+      availableMedicationForms: medicationForms,
+      selectedForms: []
+    })
+  };
+
+  render() {
     const {
       formulationComponents,
       medicationFormError,
       availableMedicationForms,
-      selectedForms
+      accordionIndex
     } = this.state;
 
     return (
@@ -212,9 +228,9 @@ class FormulationsContainer extends React.Component {
           <Modal.Title>Create drug formulations</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Accordion>
+          <Accordion activeKey={accordionIndex}>
             {Object.keys(formulationComponents).map((key) => {
-              return <React.Fragment> {formulationComponents[key]}</React.Fragment>
+              return formulationComponents[key];
             })}
           </Accordion>
         </Modal.Body>
@@ -236,7 +252,7 @@ class FormulationsContainer extends React.Component {
           <Button variant="success" onClick={() => this.save()}>
             Validate
           </Button>
-          <Button variant="secondary" onClick={() => toggleModal()}>
+          <Button variant="secondary" onClick={() => this.closeModal()}>
             Close
           </Button>
 

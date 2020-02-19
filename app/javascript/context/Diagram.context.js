@@ -150,7 +150,6 @@ export default class DiagramProvider extends React.Component {
     });
   };
 
-
   // @params message
   // Add message to flash message methods
   addMessage = async (message) => {
@@ -158,7 +157,6 @@ export default class DiagramProvider extends React.Component {
     messages.push(message);
     this.setState({ messages });
   };
-
 
   // @params message
   // Remove message to flash message methods

@@ -25,7 +25,14 @@ class CreateFormulationForm extends React.Component {
   handleFormChange = (e) => {
     // Get the name and value by additional param for Select (can't get it in the usual way...)
     const name = event.target.name !== undefined ? event.target.name : e.target.name;
-    const value = event.target.value !== undefined ? event.target.value : e.target.value;
+    let value = null;
+    if (name === 'by_age') {
+      value = event.target.checked
+    } else if (name === 'administration_route') {
+      value = e.target.value
+    } else {
+      value = event.target.value
+    }
 
     const {
       index,
@@ -48,7 +55,8 @@ class CreateFormulationForm extends React.Component {
       removeFormulation,
       administrationRoutes,
       breakableOptions,
-      medicationForm
+      medicationForm,
+      setActiveAccordion,
     } = this.props;
 
     const {
@@ -88,11 +96,9 @@ class CreateFormulationForm extends React.Component {
 
     return (
       <Card>
-        <Card.Header>
-          <Accordion.Toggle as={Button} variant="link" eventKey={index}>
-            {medicationForm}
-          </Accordion.Toggle>
-        </Card.Header>
+        <Accordion.Toggle onClick={() => setActiveAccordion(index)} as={Card.Header} variant="link" eventKey={index}>
+          {medicationForm}
+        </Accordion.Toggle>
         <Accordion.Collapse eventKey={index}>
           <Card.Body>
             <Form onSubmit={() => this.create()}>
@@ -105,7 +111,9 @@ class CreateFormulationForm extends React.Component {
                     <Select
                       defaultValue={administration_route_id}
                       options={administrationRoutes}
-                      onChange={(val)=> {this.handleFormChange({target: { name:'administration_route_id', value: val.value }})}}
+                      onChange={(val) => {
+                        this.handleFormChange({target: {name: 'administration_route_id', value: val.value}})
+                      }}
                     />
 
                     <Form.Control.Feedback type="invalid">
@@ -133,15 +141,13 @@ class CreateFormulationForm extends React.Component {
 
                 <Form.Row>
                   <Form.Group as={Col}>
-                    <Form.Label>Treatment conditioned by </Form.Label>
-                    <ButtonGroup onChange={this.handleFormChange} toggle>
-                      <ToggleButton type="radio" name="by_age" defaultChecked value={false}>
-                        Weight
-                      </ToggleButton>
-                      <ToggleButton type="radio" name="by_age" value={true}>
-                        Age
-                      </ToggleButton>
-                    </ButtonGroup>
+                    <Form.Check
+                      type="checkbox"
+                      label="Treatment conditioned by age"
+                      name="by_age"
+                      value={by_age}
+                      onChange={this.handleFormChange}
+                    />
                   </Form.Group>
 
                   <Form.Group as={Col} style={capsFields}>
@@ -200,42 +206,6 @@ class CreateFormulationForm extends React.Component {
 
                 <Form.Row style={pillOrLiquidFields}>
                   <Form.Group as={Col}>
-                    <Form.Label>Minimal dose per kg (mg)</Form.Label>
-                    <InputGroup>
-                      <Form.Control
-                        type="number"
-                        aria-describedby="inputGroupPrepend"
-                        name="minimal_dose_per_kg"
-                        value={minimal_dose_per_kg}
-                        onChange={this.handleFormChange}
-                        isInvalid={!!errors.minimal_dose_per_kg}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {errors.minimal_dose_per_kg}
-                      </Form.Control.Feedback>
-                    </InputGroup>
-                  </Form.Group>
-
-                  <Form.Group as={Col}>
-                    <Form.Label>Maximal dose per kg (mg)</Form.Label>
-                    <InputGroup>
-                      <Form.Control
-                        type="number"
-                        aria-describedby="inputGroupPrepend"
-                        name="maximal_dose_per_kg"
-                        value={maximal_dose_per_kg}
-                        onChange={this.handleFormChange}
-                        isInvalid={!!errors.maximal_dose_per_kg}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {errors.maximal_dose_per_kg}
-                      </Form.Control.Feedback>
-                    </InputGroup>
-                  </Form.Group>
-                </Form.Row>
-
-                <Form.Row style={pillOrLiquidFields}>
-                  <Form.Group as={Col}>
                     <Form.Label>Dose form ({unity})</Form.Label>
                     <InputGroup>
                       <Form.Control
@@ -265,6 +235,42 @@ class CreateFormulationForm extends React.Component {
                       />
                       <Form.Control.Feedback type="invalid">
                         {errors.maximal_dose}
+                      </Form.Control.Feedback>
+                    </InputGroup>
+                  </Form.Group>
+                </Form.Row>
+
+                <Form.Row style={pillOrLiquidFields}>
+                  <Form.Group as={Col}>
+                    <Form.Label>Minimal dose per kg (mg)</Form.Label>
+                    <InputGroup>
+                      <Form.Control
+                        type="number"
+                        aria-describedby="inputGroupPrepend"
+                        name="minimal_dose_per_kg"
+                        value={minimal_dose_per_kg}
+                        onChange={this.handleFormChange}
+                        isInvalid={!!errors.minimal_dose_per_kg}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.minimal_dose_per_kg}
+                      </Form.Control.Feedback>
+                    </InputGroup>
+                  </Form.Group>
+
+                  <Form.Group as={Col}>
+                    <Form.Label>Maximal dose per kg (mg)</Form.Label>
+                    <InputGroup>
+                      <Form.Control
+                        type="number"
+                        aria-describedby="inputGroupPrepend"
+                        name="maximal_dose_per_kg"
+                        value={maximal_dose_per_kg}
+                        onChange={this.handleFormChange}
+                        isInvalid={!!errors.maximal_dose_per_kg}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.maximal_dose_per_kg}
                       </Form.Control.Feedback>
                     </InputGroup>
                   </Form.Group>
