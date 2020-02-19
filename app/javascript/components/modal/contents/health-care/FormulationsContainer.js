@@ -112,12 +112,12 @@ class FormulationsContainer extends React.Component {
     } = this.state;
 
     Object.keys(formulations).map(function(key) {
-      if (formulations[key] !== null){
+      if (formulations[key] !== null && Object.keys(formulations[key]).length > 0){
         currentDrug.formulations_attributes[key] = formulations[key];
       }
     });
 
-    let result = currentDrug.id === undefined ? await http.createHealthCare(currentDrug, currentHealthCareType) : await http.updateHealthCare(currentDrug, currentHealthCareType);
+    let result = currentDrug.id === undefined ? await http.createDrug(currentDrug, currentHealthCareType) : await http.updateHealthCare(currentDrug, currentHealthCareType);
     if (result.ok === undefined || result.ok) {
       toggleModal();
       await addMessage({ status: result.status, messages: result.messages });
@@ -133,9 +133,6 @@ class FormulationsContainer extends React.Component {
       });
 
       let newErrors = {};
-      if (result.errors.reference !== undefined) {
-        newErrors.reference = result.errors.reference[0];
-      }
 
       if (result.errors.label !== undefined) {
         newErrors.label = result.errors.label[0];
@@ -160,6 +157,7 @@ class FormulationsContainer extends React.Component {
       });
     } else { // If this is a question updating, set drug formulations form and drug formulations hash
       const { currentNode } = this.props;
+      const { selectedForms } = this.state;
       let formulations = {};
       let formulationComponents = {};
       let drugFormulations = currentNode.formulations;
@@ -171,12 +169,12 @@ class FormulationsContainer extends React.Component {
           minimal_dose_per_kg: parseInt(formulation.minimal_dose_per_kg),
           maximal_dose_per_kg: parseInt(formulation.maximal_dose_per_kg),
           maximal_dose: parseInt(formulation.maximal_dose),
-          medication_form: medicationForms[formulation.medication_form],
-          pill_size: parseInt(formulation.pill_size),
+          medication_form: selectedForms[index],
+          dose_form: parseInt(formulation.dose_form),
           liquid_concentration: parseInt(formulation.liquid_concentration),
           doses_per_day: parseInt(formulation.doses_per_day),
           unique_dose: parseInt(formulation.unique_dose),
-          byAge: formulation.by_age,
+          by_age: formulation.by_age,
           _destroy: false
         }
       });

@@ -52,16 +52,16 @@ class CreateFormulationForm extends React.Component {
     } = this.props;
 
     const {
-      administrationRoute,
-      minimalDosePerKg,
-      maximalDosePerKg,
-      maximalDosePerDay,
-      dosesPerDay,
-      doseForm,
+      administration_route_id,
+      minimal_dose_per_kg,
+      maximal_dose_per_kg,
+      maximal_dose,
+      doses_per_day,
+      dose_form,
       breakable,
-      uniqueDose,
-      concentration,
-      byAge
+      unique_dose,
+      liquid_concentration,
+      by_age
     } = formulations[index];
 
     let unity = '';
@@ -71,7 +71,7 @@ class CreateFormulationForm extends React.Component {
     let pillOrLiquidFields = {display: 'none'};
     let simpleFields = {};
 
-    if ((byAge !== "true") && (["Tablet", "Capsule", "Syrup", "Suspension"].includes(medicationForm))) {
+    if ((by_age !== "true") && (["Tablet", "Capsule", "Syrup", "Suspension"].includes(medicationForm))) {
       simpleFields = {display: 'none'};
       pillOrLiquidFields = {};
       if (["Tablet"].includes(medicationForm)) {
@@ -99,17 +99,17 @@ class CreateFormulationForm extends React.Component {
               <Modal.Body>
 
                 <Form.Row>
-                  <Form.Group as={Col} controlId="administrationRoute">
+                  <Form.Group as={Col} controlId="administration_route_id">
                     <Form.Label>Administration route</Form.Label>
 
                     <Select
-                      defaultValue={administrationRoute}
+                      defaultValue={administration_route_id}
                       options={administrationRoutes}
-                      onChange={(val)=> {this.handleFormChange({target: { name:'administrationRoute', value: val.value }})}}
+                      onChange={(val)=> {this.handleFormChange({target: { name:'administration_route_id', value: val.value }})}}
                     />
 
                     <Form.Control.Feedback type="invalid">
-                      {errors.administration_route}
+                      {errors.administration_route_id}
                     </Form.Control.Feedback>
                   </Form.Group>
 
@@ -119,8 +119,8 @@ class CreateFormulationForm extends React.Component {
                       <Form.Control
                         type="number"
                         aria-describedby="inputGroupPrepend"
-                        name="dosesPerDay"
-                        value={dosesPerDay}
+                        name="doses_per_day"
+                        value={doses_per_day}
                         onChange={this.handleFormChange}
                         isInvalid={!!errors.doses_per_day}
                       />
@@ -135,10 +135,10 @@ class CreateFormulationForm extends React.Component {
                   <Form.Group as={Col}>
                     <Form.Label>Treatment conditioned by </Form.Label>
                     <ButtonGroup onChange={this.handleFormChange} toggle>
-                      <ToggleButton type="radio" name="byAge" defaultChecked value={false}>
+                      <ToggleButton type="radio" name="by_age" defaultChecked value={false}>
                         Weight
                       </ToggleButton>
-                      <ToggleButton type="radio" name="byAge" value={true}>
+                      <ToggleButton type="radio" name="by_age" value={true}>
                         Age
                       </ToggleButton>
                     </ButtonGroup>
@@ -169,8 +169,8 @@ class CreateFormulationForm extends React.Component {
                       <Form.Control
                         type="number"
                         aria-describedby="inputGroupPrepend"
-                        name="uniqueDose"
-                        value={uniqueDose}
+                        name="unique_dose"
+                        value={unique_dose}
                         onChange={this.handleFormChange}
                         isInvalid={!!errors.unique_dose}
                       />
@@ -186,8 +186,8 @@ class CreateFormulationForm extends React.Component {
                       <Form.Control
                         type="number"
                         aria-describedby="inputGroupPrepend"
-                        name="concentration"
-                        value={concentration}
+                        name="liquid_concentration"
+                        value={liquid_concentration}
                         onChange={this.handleFormChange}
                         isInvalid={!!errors.liquid_concentration}
                       />
@@ -205,8 +205,8 @@ class CreateFormulationForm extends React.Component {
                       <Form.Control
                         type="number"
                         aria-describedby="inputGroupPrepend"
-                        name="minimalDosePerKg"
-                        value={minimalDosePerKg}
+                        name="minimal_dose_per_kg"
+                        value={minimal_dose_per_kg}
                         onChange={this.handleFormChange}
                         isInvalid={!!errors.minimal_dose_per_kg}
                       />
@@ -222,8 +222,8 @@ class CreateFormulationForm extends React.Component {
                       <Form.Control
                         type="number"
                         aria-describedby="inputGroupPrepend"
-                        name="maximalDosePerKg"
-                        value={maximalDosePerKg}
+                        name="maximal_dose_per_kg"
+                        value={maximal_dose_per_kg}
                         onChange={this.handleFormChange}
                         isInvalid={!!errors.maximal_dose_per_kg}
                       />
@@ -241,8 +241,8 @@ class CreateFormulationForm extends React.Component {
                       <Form.Control
                         type="number"
                         aria-describedby="inputGroupPrepend"
-                        name="doseForm"
-                        value={doseForm}
+                        name="dose_form"
+                        value={dose_form}
                         onChange={this.handleFormChange}
                         isInvalid={!!errors.dose_form}
                       />
@@ -258,8 +258,8 @@ class CreateFormulationForm extends React.Component {
                       <Form.Control
                         type="number"
                         aria-describedby="inputGroupPrepend"
-                        name="maximalDosePerDay"
-                        value={maximalDosePerDay}
+                        name="maximal_dose"
+                        value={maximal_dose}
                         onChange={this.handleFormChange}
                         isInvalid={!!errors.maximal_dose}
                       />

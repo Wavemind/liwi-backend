@@ -54,10 +54,10 @@ class DrugsController < ApplicationController
   # @return final_diagnostic node
   # Create a drug node from diagram
   def create_from_diagram
-    drug = @algorithm.health_cares.drugs.new(drug_params).becomes(HealthCares::Drug)
-    drug.type = HealthCares::Drug
+    drug = HealthCares::Drug.new(drug_params).becomes(HealthCares::Drug)
+    drug.algorithm = @algorithm
 
-    if drug.save
+    if drug.save && drug.update(drug_params)
       diagnostic = Diagnostic.find(params[:diagnostic_id])
       final_diagnostic = FinalDiagnostic.find(params[:final_diagnostic_id])
       final_diagnostic.health_cares << drug
@@ -133,10 +133,11 @@ class DrugsController < ApplicationController
         :maximal_dose_per_kg,
         :maximal_dose,
         :medication_form,
-        :pill_size,
+        :dose_form,
         :liquid_concentration,
         :doses_per_day,
         :unique_dose,
+        :by_age
       ]
     )
   end

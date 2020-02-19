@@ -9,6 +9,7 @@ class CreateFormulation < ActiveRecord::Migration[5.2]
       t.integer :liquid_concentration
       t.integer :doses_per_day
       t.integer :unique_dose
+      t.integer :breakable
       t.boolean :by_age, default: false
 
       t.references :node

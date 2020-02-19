@@ -30,7 +30,6 @@ class CreateHealthCareForm extends React.Component {
       http,
       addMessage,
       set,
-      currentHealthCareType
     } = this.props;
 
     const {
@@ -38,13 +37,7 @@ class CreateHealthCareForm extends React.Component {
       description,
     } = this.state;
 
-    let health_care = {
-      label_en: label,
-      description_en: description,
-      formulations_attributes: {}
-    };
-
-    let result = await http.createHealthCare(health_care, currentHealthCareType);
+    let result = await http.createManagement(label, description);
     if (result.ok === undefined || result.ok) {
       toggleModal();
       await addMessage({ status: result.status, messages: result.messages });

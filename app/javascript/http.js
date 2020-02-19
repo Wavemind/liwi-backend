@@ -22,6 +22,30 @@ export default class Http {
     this.token = document.querySelector("meta[name='csrf-token']").content;
   }
 
+  // @params [Hash] body of the drug with its formulations
+  // @return [Object] body of request
+  // Create an instance
+  createDrug = async (drugBody) => {
+    let response;
+    const url = `${this.url}/algorithms/${this.algorithm}/drugs/create_from_diagram`;
+    const body = {
+      diagnostic_id: this.instanceableId,
+      final_diagnostic_id: this.finalDiagnostic
+    };
+    body['health_cares_drug'] = drugBody;
+
+    const header = await this.setHeaders("POST", body);
+    const request = await fetch( url, header).catch(error => console.log(error));
+
+    // Display error or parse json
+    if (request.ok) {
+      response = await request.json();
+    } else {
+      response = request;
+    }
+    return await response;
+  };
+
   // @params [Integer] nodeId
   // @return [Object] body of request
   // Create an instance
@@ -50,22 +74,16 @@ export default class Http {
   // @params [Integer] nodeId
   // @return [Object] body of request
   // Create an instance
-  createHealthCare = async (type, label, description, minimalDosePerKg, maximalDosePerKg, maximalDose, dosesPerDay, medicationForm, pillSize) => {
+  createManagement = async (label, description) => {
     let response;
-    const url = `${this.url}/algorithms/${this.algorithm}/${type}/create_from_diagram`;
+    const url = `${this.url}/algorithms/${this.algorithm}/managements/create_from_diagram`;
     const body = {
       diagnostic_id: this.instanceableId,
       final_diagnostic_id: this.finalDiagnostic
     };
-    body['health_cares_' + type.substring(0, type.length-1)] = {
+    body['health_cares_management'] = {
       label_en: label,
       description_en: description,
-      minimal_dose_per_kg: minimalDosePerKg,
-      maximal_dose_per_kg: maximalDosePerKg,
-      maximal_dose: maximalDose,
-      doses_per_day: dosesPerDay,
-      medication_form: medicationForm,
-      pill_size: pillSize
     };
     const header = await this.setHeaders("POST", body);
     const request = await fetch( url, header).catch(error => console.log(error));

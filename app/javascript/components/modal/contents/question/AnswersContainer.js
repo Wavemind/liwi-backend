@@ -95,9 +95,6 @@ class AnswersContainer extends React.Component {
       });
 
       let newErrors = {};
-      if (result.errors.reference !== undefined) {
-        newErrors.reference = result.errors.reference[0];
-      }
 
       if (result.errors.label !== undefined) {
         newErrors.label = result.errors.label[0];
