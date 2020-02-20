@@ -43,7 +43,7 @@ RSpec.describe VersionsController, type: :controller do
 
   it 'should work for [POST:create]' do
     post :create, params: { algorithm_id: @algorithm.id, version: { name: 'final', algorithm: @algorithm, user: @user } }
-    expect(response.status).to eq(200)
+    expect(response.status).to eq(302)
   end
 
   it 'should work for [GET:edit]' do
