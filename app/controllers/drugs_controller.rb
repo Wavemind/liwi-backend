@@ -58,13 +58,22 @@ class DrugsController < ApplicationController
     drug.algorithm = @algorithm
 
     if drug.save && drug.update(drug_params)
+      puts '***'
+      puts drug.inspect
+      puts '***'
+      puts drug.formulations.first.inspect
+      puts '***'
       diagnostic = Diagnostic.find(params[:diagnostic_id])
       final_diagnostic = FinalDiagnostic.find(params[:final_diagnostic_id])
       final_diagnostic.health_cares << drug
       diagnostic.components.create!(node: drug, final_diagnostic: final_diagnostic)
       render json: {status: 'success', messages: [t('flash_message.success_created')], node: drug.as_json(methods: [:node_type, :type])}
     else
-      render json: {status: 'danger', errors: drug.errors.messages, ok: false}
+      p ''
+      p drug.formulations.map(&:medication_form)
+      p ''
+
+      render json: {status: 'danger', errors: drug.formulations.map(&:errors).map(&:messages), ok: false}
     end
   end
 

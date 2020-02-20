@@ -62,6 +62,8 @@ export default class DiagramProvider extends React.Component {
     // Assign node to correct array
     availableNodes.map((node) => {
       let category = this.getCategoryNode(node);
+      console.log(node)
+      console.log(category)
       orderedNodes[category].push(node);
     });
 
@@ -71,6 +73,7 @@ export default class DiagramProvider extends React.Component {
   // @params node
   // Find category
   getCategoryNode = (node) => {
+    console.log(node)
     let category = null;
     if (node.node_type === "Question" || node.node_type === "QuestionsSequence" || node.node_type === "HealthCare") {
       category = _.camelCase(node.category_name);

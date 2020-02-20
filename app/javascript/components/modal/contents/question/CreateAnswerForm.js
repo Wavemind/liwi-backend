@@ -44,11 +44,9 @@ class CreateAnswerForm extends React.Component {
       removeAnswer,
       index,
       answers,
-      update,
-      errors
+      errors,
     } = this.props;
     const {
-      reference,
       label_en,
       operator,
       value,

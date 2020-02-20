@@ -28,7 +28,7 @@ class CreateFormulationForm extends React.Component {
     let value = null;
     if (name === 'by_age') {
       value = event.target.checked
-    } else if (name === 'administration_route') {
+    } else if (name === 'administration_route_id') {
       value = e.target.value
     } else {
       value = event.target.value
@@ -79,13 +79,13 @@ class CreateFormulationForm extends React.Component {
     let pillOrLiquidFields = {display: 'none'};
     let simpleFields = {};
 
-    if ((by_age !== "true") && (["Tablet", "Capsule", "Syrup", "Suspension"].includes(medicationForm))) {
+    if ((!by_age) && (["tablet", "capsule", "syrup", "suspension"].includes(medicationForm))) {
       simpleFields = {display: 'none'};
       pillOrLiquidFields = {};
-      if (["Tablet"].includes(medicationForm)) {
+      if (["tablet"].includes(medicationForm)) {
         tabletFields = {};
         unity = 'mg';
-      } else if (["Syrup", "Suspension"].includes(medicationForm)) {
+      } else if (["syrup", "suspension"].includes(medicationForm)) {
         liquidFields = {};
         unity = 'ml';
       } else {
@@ -97,7 +97,7 @@ class CreateFormulationForm extends React.Component {
     return (
       <Card>
         <Accordion.Toggle onClick={() => setActiveAccordion(index)} as={Card.Header} variant="link" eventKey={index}>
-          {medicationForm}
+          {medicationForm.charAt(0).toUpperCase() + medicationForm.slice(1)}
         </Accordion.Toggle>
         <Accordion.Collapse eventKey={index}>
           <Card.Body>
@@ -111,6 +111,7 @@ class CreateFormulationForm extends React.Component {
                     <Select
                       defaultValue={administration_route_id}
                       options={administrationRoutes}
+                      isInvalid={!!errors.administration_route_id}
                       onChange={(val) => {
                         this.handleFormChange({target: {name: 'administration_route_id', value: val.value}})
                       }}
@@ -158,7 +159,7 @@ class CreateFormulationForm extends React.Component {
                     <Form.Label>Breakable</Form.Label>
                     <Form.Control as="select" name="breakable" onChange={this.handleFormChange} value={breakable}
                                   isInvalid={!!errors.breakable}>
-                      <option value="">Select the administration route</option>
+                      <option value="">Is the tablet breakable ?</option>
                       {breakableOptions.map((breakable) => (
                         <option value={breakable[1]}>{breakable[0]}</option>
                       ))}

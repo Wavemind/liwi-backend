@@ -52,7 +52,7 @@ class FormulationsContainer extends React.Component {
       this.setState({ medicationFormError: "Medication form has to be filled" });
     } else {
       let lastIndex = parseInt(Object.keys(formulations)[Object.keys(formulations).length-1]) + 1;
-      formulations[lastIndex] = {};
+      formulations[lastIndex] = {medication_form: medicationForm};
       formulationComponents[lastIndex] = <CreateFormulationForm medicationForm={medicationForm} setActiveAccordion={this.setActiveAccordion} setFormulation={this.setFormulation} removeFormulation={this.removeFormulation} formulations={formulations} index={lastIndex} errors={{}} />;
 
       availableMedicationForms.splice( availableMedicationForms.indexOf(medicationForm), 1 );
@@ -63,7 +63,7 @@ class FormulationsContainer extends React.Component {
         accordionIndex: lastIndex,
         formulationComponents,
         formulations,
-        medicationForm: null,
+        medicationForm: "",
       });
     }
   };
@@ -125,21 +125,15 @@ class FormulationsContainer extends React.Component {
       await addMessage({ status: result.status, messages: result.messages });
       set("currentDbNode", result.node);
     } else {
-
       let i = 0;
+      console.log(result)
       Object.keys(formulationComponents).map(function(key) {
         formulationComponents[key] = React.cloneElement(formulationComponents[key], {
           errors: result.errors[i]
         });
         i++;
       });
-
-      let newErrors = {};
-
-      if (result.errors.label !== undefined) {
-        newErrors.label = result.errors.label[0];
-      }
-      this.setState({ errors: newErrors, formulationComponents });
+      this.setState({ formulationComponents });
     }
   };
 
@@ -219,7 +213,8 @@ class FormulationsContainer extends React.Component {
       formulationComponents,
       medicationFormError,
       availableMedicationForms,
-      accordionIndex
+      accordionIndex,
+      medicationForm
     } = this.state;
 
     return (
@@ -235,7 +230,7 @@ class FormulationsContainer extends React.Component {
           </Accordion>
         </Modal.Body>
         <Modal.Footer>
-          <Form.Control as="select" name="medicationForm" onChange={this.handleMedicationFormChange} isInvalid={!!medicationFormError } >
+          <Form.Control as="select" name="medicationForm" value={medicationForm} onChange={this.handleMedicationFormChange} isInvalid={!!medicationFormError } >
             <option value="">Select a medication form</option>
             {availableMedicationForms.map((medicationForm) => (
               <option value={medicationForm}>{medicationForm.charAt(0).toUpperCase() + medicationForm.slice(1)}</option>

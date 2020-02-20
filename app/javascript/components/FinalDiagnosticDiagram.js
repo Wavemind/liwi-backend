@@ -37,14 +37,14 @@ class FinalDiagnosticDiagram extends React.Component {
       const model = engine.getDiagramModel();
 
       // Create or update node in diagram
-      if (nextProps.modalToOpen === 'CreateQuestionsSequence') {
+      if (['CreateQuestionsSequence', 'CreateQuestion', 'CreateAnswers'].includes(nextProps.modalToOpen)) {
         let node = this.createNode(currentDbNode, currentDbNode.answers);
         currentDbNode.answers.map((answer) => (node.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
         model.addAll(node);
-      } else if (nextProps.modalToOpen === 'UpdateQuestionsSequence' || nextProps.modalToOpen === 'UpdateHealthCare') {
+      } else if (['UpdateQuestionsSequence', 'UpdateHealthCare'].includes(nextProps.modalToOpen)) {
         currentDiagramNode.setReference(getReferencePrefix(currentDbNode.node_type, currentDbNode.type) + currentDbNode.reference);
         currentDiagramNode.setNode(currentDbNode);
-      } else if (nextProps.modalToOpen === 'CreateHealthCare') {
+      } else if (['CreateHealthCare', 'CreateFormulations'].includes(nextProps.modalToOpen)) {
         let node = this.createNode(currentDbNode);
         model.addAll(node);
       }
