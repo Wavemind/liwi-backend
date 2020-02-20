@@ -180,7 +180,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :questions, only: [:reference_prefix] do
+  resources :questions, only: [] do
     collection do
       get 'reference_prefix'
     end

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe UsersController, type: :controller, focus: :true do
+RSpec.describe UsersController, type: :controller do
   login_user
 
   before(:each) do

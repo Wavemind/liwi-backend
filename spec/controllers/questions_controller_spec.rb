@@ -220,6 +220,11 @@ RSpec.describe QuestionsController, type: :controller do
 
   end
 
+  it 'should work for [GET:reference_prefix]' do
+    get :reference_prefix, params: { type: 'Questions::Demographic' }
+    expect(response.status).to eq(200)
+  end
+
   it 'should work for [POST:validate]' do
     put :validate, params: { algorithm_id: @algorithm.id, question: {algorithm: @algorithm, label_en: 'Cough', reference: '2', is_mandatory: true, stage: 'triage', answer_type: @boolean} }, xhr: true
     expect(response.status).to eq(200)
