@@ -10,7 +10,7 @@
   </div>
 
   <div class="col">
-    <h3><%= t('questions.category.complaint_category.label') %></h3>
+    <h3><%= t('questions.categories.complaint_category.label') %></h3>
     <ul id="triage_complaint_category_order" class="triage-order">
       <% @version.triage_complaint_category_order.each do |question_id| %>
         <% question =  Node.find(question_id) %>
