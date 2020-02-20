@@ -98,7 +98,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :questions_sequences, only: [:index, :new, :create, :edit, :update, :destroy, :new_scored, :edit_scored] do
+    resources :questions_sequences, only: [:index, :new, :create, :edit, :update, :destroy] do
       collection do
         get 'new_scored'
         post 'create_from_diagram'
@@ -123,11 +123,12 @@ Rails.application.routes.draw do
       end
       resources :children, only: [:create, :destroy]
       resources :conditions, only: [:create, :destroy]
-
     end
+
     collection do
       get 'reference_prefix'
     end
+
     member do
       get 'diagram'
       get 'validate'
