@@ -80,10 +80,8 @@ class QuestionsController < ApplicationController
         flash[:alert] = @question.errors[:answers] if @question.errors[:answers].any?
 
         # Code to reassign corrects id to failing answers that failed after a validation fail. On wait for improvements
-        i = 0
-        question_params[:answers_attributes].each_pair do |key, value|
-          @question.answers[i].id = value[:id]
-          i+=1
+        question_params[:answers_attributes].each do |key, value|
+          @question.answers[key.to_i].id = value[:id]
         end
 
         render 'answers/new'

@@ -46,8 +46,8 @@ RSpec.describe QuestionsController, type: :controller do
     expect(response).to render_template(:new)
   end
 
-  it 'create an answer for current question if attributes is valid' do
-    @question = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', stage: Question.stages[:triage], answer_type: @boolean)
+  it 'create an answer for current question if attributes is invalid' do
+    @question = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', stage: Question.stages[:triage], answer_type: @input_integer)
 
     expect {
       put :answers, params: {
@@ -64,11 +64,11 @@ RSpec.describe QuestionsController, type: :controller do
           ]
         }
       }
-    }.to change(Answer, :count).by(1)
+    }.to change(Answer, :count).by(0)
   end
 
   it 'create multiple answers for current question if attributes is valid' do
-    @question = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', stage: Question.stages[:triage], answer_type: @boolean)
+    @question = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', stage: Question.stages[:triage], answer_type: @input_integer)
 
     expect {
       put :answers, params: {
@@ -85,7 +85,7 @@ RSpec.describe QuestionsController, type: :controller do
             {
               label_en: 'more than 12 months',
               value: '12',
-              operator: :more_or_equal
+              operator: :less
             }
           ]
         }
@@ -94,7 +94,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   it 'doesn\'t create an answer for current question if attributes is invalid' do
-    @question = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', stage: Question.stages[:triage], answer_type: @boolean)
+    @question = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', stage: Question.stages[:triage], answer_type: @input_integer)
 
     expect {
       put :answers, params: {
@@ -115,7 +115,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   it 'adds translations without rendering the view' do
-    @question = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', stage: Question.stages[:triage], answer_type: @boolean)
+    @question = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', stage: Question.stages[:triage], answer_type: @input_integer)
 
     put :update_translations, params: {
       algorithm_id: @algorithm.id,
@@ -133,7 +133,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   it 'returns error when sending attributes with clearing a mandatory field' do
-    @question = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', stage: Question.stages[:triage], answer_type: @boolean)
+    @question = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', stage: Question.stages[:triage], answer_type: @input_integer)
 
     put :update_translations, params: {
       algorithm_id: @algorithm.id,
