@@ -10,7 +10,7 @@ RSpec.describe GroupAccessesController, type: :controller do
     expect(response.status).to eq(204)
   end
 
-  it 'should work for [POST:create]', focus: :true do
+  it 'should work for [POST:create]' do
     @standalone = Group.create!(name: 'Standalone test', architecture: Group.architectures[:standalone], pin_code: '1234')
 
     post :create, params: { group_access: { version_id: @version.id, group_id: @standalone.id } }
