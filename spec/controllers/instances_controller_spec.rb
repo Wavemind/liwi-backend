@@ -6,6 +6,10 @@ RSpec.describe InstancesController, type: :controller do
   create_algorithm
   create_instances
 
+  before(:each) do
+    @predefined_syndrome = @algorithm.questions_sequences.create!(reference: 1, label_en: 'Label en', type: QuestionsSequences::PredefinedSyndrome)
+  end
+
   it 'creates a link in both instances' do
     post :create_link, params: {
       diagnostic_id: @dd7.id,
@@ -64,5 +68,32 @@ RSpec.describe InstancesController, type: :controller do
 
     expect(@dd7.components.where(node_id: @p1.id).count).to equal(0)
   end
+
+  it 'should work for [POST:create]' do
+    post :create, params: { diagnostic_id: @dd7.id, instance: { instanceable: @dd7, node: @p1 } }
+    expect(response.status).to eq(302)
+  end
+
+  it 'should work for [GET:by_reference]' do
+    get :by_reference, params: { diagnostic_id: @dd7.id, reference: @p1.reference }
+    expect(response.status).to eq(200)
+  end
+
+  it 'creates a node from diagram', focus: :true do
+    m5 = HealthCares::Management.create!(reference: '5', label_en: 'Test', algorithm: @algorithm)
+    post :create_from_final_diagnostic_diagram, params: {
+      diagnostic_id: @dd7.id,
+      instance: {
+        instanceable_id: @dd7.id,
+        instanceable_type: @dd7.class.name,
+        final_diagnostic_id: @df7.id,
+        node_id: m5.id,
+      }
+    }
+
+    expect(@dd7.components.where(node_id: m5.id).count).to equal(1)
+  end
+
+  # TODO: @manu update_score
 
 end

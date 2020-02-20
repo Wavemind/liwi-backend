@@ -61,11 +61,6 @@ RSpec.describe QuestionsSequencesController, type: :controller do
 
   # TODO: @manu missing create from diagram
 
-  it 'should work for [GET:index]' do
-    get :new, params: { algorithm_id: @algorithm.id }
-    expect(response.status).to eq(200)
-  end
-
   it 'should work for [GET:new]' do
     get :new, params: { algorithm_id: @algorithm.id }
     expect(response.status).to eq(200)

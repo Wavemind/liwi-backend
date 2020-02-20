@@ -112,7 +112,7 @@ Rails.application.routes.draw do
   end
 
   resources :questions_sequences, only: [] do
-    resources :instances, only: [:show, :destroy, :create, :by_reference] do
+    resources :instances, only: [:destroy, :create] do
       collection do
         get 'by_reference'
         post 'create_from_diagram'
@@ -136,10 +136,9 @@ Rails.application.routes.draw do
   end
 
   resources :diagnostics, only: [] do
-    resources :instances, only: [:show, :destroy, :create, :by_reference] do
+    resources :instances, only: [:show, :destroy, :create] do
       collection do
         get 'by_reference'
-        get 'load_conditions'
         post 'create_from_diagram'
         post 'create_from_final_diagnostic_diagram'
         post 'create_link'
