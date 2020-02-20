@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ManagementsController, type: :controller, focus: :true do
+RSpec.describe ManagementsController, type: :controller do
   login_user
   create_answer_type
   create_algorithm
