@@ -19,12 +19,13 @@ module ModelMacros
   def create_answer_type
     before(:each) do
       @boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
-      dropdown_list = AnswerType.create!(value: 'Array', display: 'DropDownList')
+      @dropdown_list = AnswerType.create!(value: 'Array', display: 'DropDownList')
       @input_integer = AnswerType.create!(value: 'Integer', display: 'Input')
       @input_float = AnswerType.create!(value: 'Float', display: 'Input')
-      formula = AnswerType.create!(value: 'Float', display: 'Formula')
-      date = AnswerType.create!(value: 'Date', display: 'Input')
-      string = AnswerType.create!(value: 'String', display: 'Input')
+      @formula = AnswerType.create!(value: 'Float', display: 'Formula')
+      @date = AnswerType.create!(value: 'Date', display: 'Input')
+      @present_absent = AnswerType.create!(value: 'Present', display: 'DropDownList')
+      @positive_negative = AnswerType.create!(value: 'Positive', display: 'DropDownList')
     end
   end
 
@@ -32,15 +33,15 @@ module ModelMacros
     before(:each) do
       epoc_first = Version.create!(name: 'first_trial', algorithm: @algorithm, user: @user)
       boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
-      @cc = @algorithm.questions.create!(reference: '11', answer_type: boolean, label_en: 'CC11', stage: Question.stages[:triage], is_mandatory: true, type: 'Questions::ComplaintCategory')
-      @dd7 = Diagnostic.create!(version: epoc_first, label_en: 'Severe LRTI', reference: '7', node: @cc)
+      @cc = @algorithm.questions.create!(answer_type: boolean, label_en: 'CC11', stage: Question.stages[:triage], type: 'Questions::ComplaintCategory')
+      @dd7 = Diagnostic.create!(version: epoc_first, label_en: 'Severe LRTI', node: @cc)
     end
   end
 
   def create_question
     before(:each) do
       @boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
-      @question = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2456', is_mandatory: true, stage: Question.stages[:triage], answer_type: @boolean)
+      @question = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', stage: Question.stages[:triage], answer_type: @boolean)
     end
   end
 
@@ -50,21 +51,21 @@ module ModelMacros
       epoc_first = Version.create!(name: 'first_trial', algorithm: @algorithm, user: @user)
 
       # Questions
-      s2 = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2123123', is_mandatory: true, stage: Question.stages[:triage], answer_type: @boolean)
-      p13 = Questions::PhysicalExam.create!(algorithm: @algorithm, label_en: 'Lower chest indrawing', reference: '1331231231', is_mandatory: true, stage: Question.stages[:triage], answer_type: @boolean)
-      p3 = Questions::PhysicalExam.create!(algorithm: @algorithm, label_en: 'Respiratory rate', reference: '34123123', is_mandatory: true, stage: Question.stages[:triage], answer_type: @input_integer)
-      @p1 = Questions::PhysicalExam.create!(algorithm: @algorithm, label_en: 'SAO2', reference: '1123123', is_mandatory: true, stage: Question.stages[:triage], answer_type: @input_integer)
-      @cc = @algorithm.questions.create!(reference: '11', answer_type: @boolean, label_en: 'CC11', stage: Question.stages[:triage], is_mandatory: true, type: 'Questions::ComplaintCategory')
+      s2 = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', stage: Question.stages[:triage], answer_type: @boolean)
+      p13 = Questions::PhysicalExam.create!(algorithm: @algorithm, label_en: 'Lower chest indrawing', stage: Question.stages[:triage], answer_type: @boolean)
+      p3 = Questions::PhysicalExam.create!(algorithm: @algorithm, label_en: 'Respiratory rate', stage: Question.stages[:triage], answer_type: @input_integer)
+      @p1 = Questions::PhysicalExam.create!(algorithm: @algorithm, label_en: 'SAO2', stage: Question.stages[:triage], answer_type: @input_integer)
+      @cc = @algorithm.questions.create!(answer_type: @boolean, label_en: 'CC11', stage: Question.stages[:triage], type: 'Questions::ComplaintCategory')
 
       # Answers
       @s2_1 = s2.answers.first
-      @p1_1 = Answer.create!(node: @p1, reference: '1', label_en: '>/= 90%', value: '90', operator: Answer.operators[:more_or_equal])
-      @p3_2 = Answer.create!(node: p3, reference: '2', label_en: '>/= 97th%ile', value: '97', operator: Answer.operators[:more_or_equal])
+      @p1_1 = Answer.create!(node: @p1, label_en: '>/= 90%', value: '90', operator: Answer.operators[:more_or_equal])
+      @p3_2 = Answer.create!(node: p3, label_en: '>/= 97th%ile', value: '97', operator: Answer.operators[:more_or_equal])
       @p13_1 = p13.answers.first
 
       # Diagnostics
-      @dd7 = Diagnostic.create!(version: epoc_first, label_en: 'Severe LRTI', reference: '7', node: @cc)
-      @df7 = FinalDiagnostic.create!(label_en: 'Severe lower respiratory tract infection', reference: '7', diagnostic: @dd7)
+      @dd7 = Diagnostic.create!(version: epoc_first, label_en: 'Severe LRTI', node: @cc)
+      @df7 = FinalDiagnostic.create!(label_en: 'Severe lower respiratory tract infection', diagnostic: @dd7)
 
       # Instances
       @dd7_p1 = Instance.create!(instanceable: @dd7, node: @p1)

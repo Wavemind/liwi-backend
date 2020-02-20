@@ -1,7 +1,9 @@
 jQuery(document).ready(function() {
 
-  $("#question_formula").closest(".form-group").addClass("d-none");
+  // $("#question_formula").closest(".form-group").addClass("d-none");
+  $(".formula").addClass("d-none");
   $("#question_system").closest(".form-group").addClass("d-none");
+  $("#question_unavailable").closest(".form-group").addClass("d-none");
 
   // Trigger categoryChange function only on edit or create question form
   if ($("#new_question").length || $("[id^='edit_question']").length) {
@@ -62,6 +64,10 @@ jQuery(document).ready(function() {
             } else if (["VC", "VT"].includes(response.responseText)) { // Force answer type to numerif if it is a vital sign (triage or consultation)
               $("#question_answer_type_displayed").val("4").attr("disabled", true);
               $("#question_answer_type_hidden").val("4");
+            } else if (response.responseText === "BC") { // Force formula answer type when the category is a Background Calculation
+              $("#question_answer_type_displayed").val("5").attr("disabled", true);
+              $("#question_answer_type_hidden").val("5");
+              answer_type_change();
             } else {
               $("#question_answer_type_displayed").attr("disabled", false);
             }
@@ -74,7 +80,7 @@ jQuery(document).ready(function() {
           } else if (["CH", "V", "D"].includes(response.responseText)) { // Force registration stage for Chronic Condition, Vaccine and Demographic categories
             $("#question_stage_displayed").val("registration").attr("disabled", true);
             $("#question_stage_hidden").val("registration")
-          } else if (["E", "BC", "PE", "OS", "S", "VC"].includes(response.responseText)) { // Force consultation stage for Exposure, Background calculation, Physical exam, Observed physical signs, Symptom and vital sign consultation categories
+          } else if (["E", "PE", "OS", "S", "VC"].includes(response.responseText)) { // Force consultation stage for Exposure, Background calculation, Physical exam, Observed physical signs, Symptom and vital sign consultation categories
             $("#question_stage_displayed").val("consultation").attr("disabled", true);
             $("#question_stage_hidden").val("consultation")
           }  else if (response.responseText === "A") { // Force test stage for Assessment test category
@@ -85,6 +91,13 @@ jQuery(document).ready(function() {
             $("#question_stage_hidden").val("diagnosis_management")
           } else {
             $("#question_stage_displayed").attr("disabled", false);
+          }
+
+          // Hide stage for Background calculation
+          if (response.responseText === "BC") {
+            $("#question_stage_displayed").val("").closest(".form-group").attr("hidden", true);
+          } else {
+            $("#question_stage_displayed").closest(".form-group").attr("hidden", false);
           }
 
           // Hide or not the system field if it is a consultation category
@@ -102,7 +115,8 @@ jQuery(document).ready(function() {
 
   // Hide or show formula field if formula answer type is selected
   function answer_type_change() {
-    let questionFormula = $("#question_formula").closest(".form-group");
+    // let questionFormula = $("#question_formula").closest(".form-group");
+    let questionFormula = $(".formula");
     let answerType = $("#question_answer_type_displayed option:selected").val();
     $("#question_answer_type_hidden").val(answerType);
 

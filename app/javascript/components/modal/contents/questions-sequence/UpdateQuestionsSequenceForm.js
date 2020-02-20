@@ -60,16 +60,13 @@ class UpdateQuestionsSequenceForm extends React.Component {
       minScore
     } = this.state;
 
-    let result = await http.updateQuestionsSequence(currentNode.id, reference, label, description, minScore);
+    let result = await http.updateQuestionsSequence(currentNode.id, label, description, minScore);
     if (result.ok === undefined || result.ok) {
       toggleModal();
       await addMessage({ status: result.status, messages: result.messages });
       set("currentDbNode", result.node);
     } else {
       let newErrors = {};
-      if (result.errors.reference !== undefined) {
-        newErrors.reference = result.errors.reference[0];
-      }
 
       if (result.errors.label !== undefined) {
         newErrors.label = result.errors.label[0];
@@ -90,10 +87,8 @@ class UpdateQuestionsSequenceForm extends React.Component {
     const {
       toggleModal,
       questionsSequenceCategories,
-      getReferencePrefix
     } = this.props;
     const {
-      reference,
       label,
       description,
       errors,
@@ -117,28 +112,6 @@ class UpdateQuestionsSequenceForm extends React.Component {
                   <option value={category.name}>{category.label}</option>
                 ))}
               </Form.Control>
-            </Form.Group>
-          </Form.Row>
-
-          <Form.Row>
-            <Form.Group as={Col}>
-              <Form.Label>Reference</Form.Label>
-              <InputGroup>
-                <InputGroup.Prepend>
-                  <InputGroup.Text id="inputGroupPrepend">{getReferencePrefix('QuestionsSequence', type)}</InputGroup.Text>
-                </InputGroup.Prepend>
-                <Form.Control
-                  type="text"
-                  aria-describedby="inputGroupPrepend"
-                  name="reference"
-                  value={reference}
-                  onChange={this.updateState}
-                  isInvalid={!!errors.reference}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.reference}
-                </Form.Control.Feedback>
-              </InputGroup>
             </Form.Group>
           </Form.Row>
 

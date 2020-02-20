@@ -10,12 +10,13 @@ module ControllerMacros
   def create_answer_type
     before(:each) do
       @boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
-      dropdown_list = AnswerType.create!(value: 'Array', display: 'DropDownList')
+      @dropdown_list = AnswerType.create!(value: 'Array', display: 'DropDownList')
       @input_integer = AnswerType.create!(value: 'Integer', display: 'Input')
       @input_float = AnswerType.create!(value: 'Float', display: 'Input')
-      formula = AnswerType.create!(value: 'Float', display: 'Formula')
-      date = AnswerType.create!(value: 'Date', display: 'Input')
-      string = AnswerType.create!(value: 'String', display: 'Input')
+      @formula = AnswerType.create!(value: 'Float', display: 'Formula')
+      @date = AnswerType.create!(value: 'Date', display: 'Input')
+      @present_absent = AnswerType.create!(value: 'Present', display: 'DropDownList')
+      @positive_negative = AnswerType.create!(value: 'Positive', display: 'DropDownList')
     end
   end
 end

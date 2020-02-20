@@ -7,7 +7,6 @@
 
 <%= f.input :is_mandatory, as: :boolean %>
 
-<%= f.input :reference, prepend: (@question.type.nil? ? '' : @question.reference_prefix) %>
 <%= f.input :label_en %>
 <%= f.input :snomed_label, prompt: t('type_here') %>
 <%= f.input :snomed_id, as: :hidden %>
@@ -19,7 +18,19 @@
 
 <hr />
 
-<%= f.input :formula %>
+<div class="row formula">
+  <div class="col-10">
+    <%= f.input :formula %>
+  </div>
+
+  <div class="col">
+    <button type="button" class="btn btn-sm btn-info help-formula" data-toggle="popover" data-placement="right" data-html="true" data-content="<%= render 'helps/formula' %>">
+      <i class="material-icons">
+        help_outline
+      </i>
+    </button>
+  </div>
+</div>
 
 <hr />
 

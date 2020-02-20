@@ -7,13 +7,11 @@ class Answer < ApplicationRecord
   has_many :children
   has_many :medical_case_answers
 
-  validates_presence_of :reference
   validates_presence_of :label_en
   validates_presence_of :operator, if: Proc.new { self.node.is_a?(Question) && self.node.answer_type.display == 'Input' }
 
-  validates :reference, exclusion: { in: %w(0), message: I18n.t('flash_message.reserved_reference') }
   after_validation :correct_value_type
-  after_validation :unique_reference, on: [ :create ]
+  after_create :generate_reference
   before_destroy :remove_conditions
 
   translates :label
@@ -21,14 +19,14 @@ class Answer < ApplicationRecord
   # @return [String]
   # Return the label with the reference for the view
   def reference_label
-    "#{reference} - #{label}"
+    "#{full_reference} - #{label}"
   end
 
   # @return [String]
   # Return the reference of the answer. This function is needed to do a recursive functional call
   # with conditions or answers, answer being the last level
   def display_condition
-    "#{reference}"
+    "#{full_reference}"
   end
 
   # @return [String]
@@ -40,16 +38,6 @@ class Answer < ApplicationRecord
   # Return the parent node with all the answers in order to include it in a json if the condition is an answer and not a condition
   def get_node
     node.as_json(include: [:answers], methods: [:type])
-  end
-
-  # {Node#unique_reference}
-  # Scoped by the current algorithm
-  def unique_reference
-    if node.answers.where(reference: reference).or(node.answers.where(reference: "#{node.reference}_#{reference}")).where.not(id: id).any?
-      errors.add(:reference, I18n.t('nodes.validation.reference_used'))
-      return false
-    end
-    true
   end
 
   private
@@ -85,5 +73,18 @@ class Answer < ApplicationRecord
     elsif node.answer_type.value == 'Float'
       Float(val) rescue errors.add(:value, I18n.t('answers.validation.wrong_value_type', type: node.answer_type.value))
     end
+  end
+
+  def full_reference
+    "#{node.full_reference}_#{reference}"
+  end
+
+  def generate_reference
+    if node.answers.count > 1
+      self.reference = node.answers.maximum(:reference) + 1
+    else
+      self.reference = 1
+    end
+    self.save
   end
 end

@@ -157,7 +157,7 @@ class Diagram extends React.Component {
 
     // Create nodes for final diagnostics
     let finalDiagnosticLevel = [];
-    let excludingDF = null;
+    let excludingDFs = [];
 
     if (instanceableType === 'Diagnostic') {
       finalDiagnostics.map((instance) => {
@@ -169,7 +169,7 @@ class Diagram extends React.Component {
 
         // Manage excluding final diagnostics
         if (finalDiagnostic.final_diagnostic_id !== null) {
-          excludingDF = finalDiagnostic;
+          excludingDFs.push(finalDiagnostic);
         }
         finalDiagnosticLevel.push(node);
         nodes.push(node);
@@ -177,8 +177,8 @@ class Diagram extends React.Component {
         instances.push(instance);
       });
 
-      // Excluded diagnostic
-      if (excludingDF !== null) {
+      // Excluded diagnostics
+      excludingDFs.map((excludingDF) => {
         let mainDF = _.find(finalDiagnosticLevel, ["node.id", excludingDF.id]);
         let excludedDF = _.find(finalDiagnosticLevel, ["node.id", excludingDF.final_diagnostic_id]);
 
@@ -186,7 +186,7 @@ class Diagram extends React.Component {
         link.displaySeparator(true);
 
         model.addAll(link);
-      }
+      });
 
       nodeLevels.push(finalDiagnosticLevel);
 

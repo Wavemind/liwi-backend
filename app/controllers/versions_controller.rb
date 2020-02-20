@@ -1,8 +1,8 @@
 class VersionsController < ApplicationController
   before_action :authenticate_user!, except: [:change_triage_order]
-  before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :create_triage_condition, :remove_triage_condition]
+  before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :duplicate, :create_triage_condition, :remove_triage_condition]
   before_action :set_breadcrumb, only: [:show, :new, :edit]
-  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :change_triage_order, :create_triage_condition, :remove_triage_condition]
+  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :duplicate, :change_triage_order, :create_triage_condition, :remove_triage_condition]
 
   def index
     respond_to do |format|
@@ -59,7 +59,25 @@ class VersionsController < ApplicationController
     if @version.save
       redirect_to algorithm_url(@algorithm, panel: 'versions'), notice: t('flash_message.success_created')
     else
-      redirect_to algorithm_url(@algorithm, panel: 'versions'), danger: t('flash_message.update_fail')
+      redirect_to algorithm_url(@algorithm, panel: 'versions'), alert: t('flash_message.update_fail')
+    end
+  end
+
+  # @params [Version] version to duplicate
+  # Duplicate a version with every diagnostics and their logics (Instances with their Conditions and Children), the FinalDiagnostics and Conditions attached to it
+  def duplicate
+    @version.diagnostics.each { |diagnostic| diagnostic.update(duplicating: true) }
+    duplicated_version = @version.amoeba_dup
+
+    if duplicated_version.save
+      duplicated_version.diagnostics.each_with_index { |diagnostic, index| diagnostic.relink_instance }
+      @version.diagnostics.each { |diagnostic| diagnostic.update(duplicating: false) }
+      redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_deleted')
+    else
+      puts '***'
+      puts duplicated_version.errors.messages
+      puts '***'
+      redirect_to algorithm_url(@algorithm, panel: 'versions'), alert: t('flash_message.duplicate_fail')
     end
   end
 
