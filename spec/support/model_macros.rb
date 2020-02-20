@@ -77,7 +77,7 @@ module ModelMacros
       @cond1 = Condition.create!(referenceable: @dd7_df7, first_conditionable: @p3_2, top_level: true)
 
       # PS
-      ps6 = QuestionsSequences::PredefinedSyndrome.create!(algorithm: @algorithm, reference: '6', label_en: 'Able to drink')
+      @ps6 = QuestionsSequences::PredefinedSyndrome.create!(algorithm: @algorithm, reference: '6', label_en: 'Able to drink')
 
       # Management
       @management = HealthCares::Management.create!(algorithm: @algorithm, reference: '11', label_en: 'Hospital')

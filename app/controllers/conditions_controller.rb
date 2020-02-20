@@ -1,26 +1,8 @@
 class ConditionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_instanceable, only: [:index, :show, :create, :destroy, :add_diagnostic_condition, :destroy_diagnostic_condition]
-  before_action :set_instance, only: [:show, :create, :destroy]
+  before_action :set_instanceable, only: [:destroy, :add_diagnostic_condition, :destroy_diagnostic_condition]
+  before_action :set_instance, only: [:destroy]
   before_action :set_condition, only: [:destroy, :destroy_diagnostic_condition]
-
-  def create
-    @condition = @instance.conditions.new(condition_params)
-    @condition.first_conditionable = @condition.create_conditionable(condition_params[:first_conditionable_id]) unless condition_params[:first_conditionable_id].empty?
-    @condition.second_conditionable = @condition.create_conditionable(condition_params[:second_conditionable_id]) unless condition_params[:second_conditionable_id].empty?
-
-    if @condition.save
-      respond_to do |format|
-        format.html {}
-        format.json { render json: t('flash_message.success_created') }
-      end
-    else
-      respond_to do |format|
-        format.html {}
-        format.json { render json: t('error') }
-      end
-    end
-  end
 
   def destroy
     if @condition.destroy

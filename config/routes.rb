@@ -121,8 +121,7 @@ Rails.application.routes.draw do
         delete 'remove_link'
         put 'update_score'
       end
-      resources :children, only: [:create, :destroy]
-      resources :conditions, only: [:create, :destroy]
+      resources :conditions, only: [:destroy]
     end
 
     collection do
@@ -145,12 +144,10 @@ Rails.application.routes.draw do
         delete 'remove_from_diagram'
         delete 'remove_link'
       end
-      resources :children, only: [:create, :destroy]
-      resources :conditions, only: [:create, :destroy]
+      resources :conditions, only: [:destroy]
     end
 
     resources :conditions, only: [] do
-
       collection do
         post 'differential', to: 'conditions#add_diagnostic_condition'
       end

@@ -10,6 +10,11 @@ RSpec.describe InstancesController, type: :controller do
     @predefined_syndrome = @algorithm.questions_sequences.create!(reference: 1, label_en: 'Label en', type: QuestionsSequences::PredefinedSyndrome)
   end
 
+  it 'should work for [GET:index]' do
+    get :index, params: {type: 'FinalDiagnostic', id: Instance.first.id }, xhr: true
+    expect(response.status).to eq(204)
+  end
+
   it 'creates a link in both instances' do
     post :create_link, params: {
       diagnostic_id: @dd7.id,
@@ -79,7 +84,7 @@ RSpec.describe InstancesController, type: :controller do
     expect(response.status).to eq(200)
   end
 
-  it 'creates a node from diagram', focus: :true do
+  it 'creates a node from diagram' do
     m5 = HealthCares::Management.create!(reference: '5', label_en: 'Test', algorithm: @algorithm)
     post :create_from_final_diagnostic_diagram, params: {
       diagnostic_id: @dd7.id,
@@ -93,7 +98,5 @@ RSpec.describe InstancesController, type: :controller do
 
     expect(@dd7.components.where(node_id: m5.id).count).to equal(1)
   end
-
-  # TODO: @manu update_score
 
 end
