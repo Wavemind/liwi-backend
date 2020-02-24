@@ -6,7 +6,7 @@ import { withDiagram } from "../context/Diagram.context";
 import AdvancedLinkFactory from "./advancedDiagram/AdvancedLinkFactory";
 import AdvancedPortModel from "./advancedDiagram/AdvancedPortModel";
 
-class Diagram extends React.Component {
+export class Diagram extends React.Component {
 
   constructor() {
     super();
@@ -54,9 +54,7 @@ class Diagram extends React.Component {
         <div className="row">
           <div className="col-md-2 px-0 liwi-sidebar">
           </div>
-          <div
-            className="col diagram-wrapper"
-          >
+          <div className="col diagram-wrapper">
             <CanvasWidget
               className="srd-canvas"
               engine={engine}

@@ -2,8 +2,8 @@ import * as React from "react";
 
 export default class Http {
 
-  url: string;
-  token: string;
+  url;
+  token;
   instanceableId;
   instanceableType;
   version;

@@ -1,5 +1,5 @@
 import React from "react"
-import DiagramContext from "../context/Diagram.context";
+import DiagramProvider from "../context/Diagram.context";
 import Diagram from "../components/Diagram";
 
 class Provider extends React.Component {
@@ -10,9 +10,9 @@ class Provider extends React.Component {
     } = this.props;
 
     return (
-      <DiagramContext value={{...context}}>
+      <DiagramProvider value={{...context}}>
         <Diagram/>
-      </DiagramContext>
+      </DiagramProvider>
     );
   }
 }
