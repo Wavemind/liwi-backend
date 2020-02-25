@@ -36,10 +36,6 @@ class FinalDiagnosticDiagram extends React.Component {
       const { currentDbNode, currentDiagramNode, getReferencePrefix } = nextProps;
       const model = engine.getDiagramModel();
 
-      console.log(nextProps.modalToOpen);
-      console.log(currentDbNode);
-      console.log(currentDiagramNode);
-
       // Create or update node in diagram
       if (['CreateQuestionsSequence', 'CreateQuestion', 'CreateAnswers'].includes(nextProps.modalToOpen)) {
         let node = this.createNode(currentDbNode, currentDbNode.answers);

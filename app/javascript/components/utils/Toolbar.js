@@ -83,7 +83,6 @@ class Toolbar extends React.Component {
     const {
       type,
       instanceable,
-      getReferencePrefix
     } = this.props;
     const { isLoading } = this.state;
 

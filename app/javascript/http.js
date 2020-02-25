@@ -602,8 +602,6 @@ export default class Http {
     questionBody['instanceable_id'] = this.instanceableId;
     questionBody['instanceable_type'] = this.instanceableType;
 
-    console.log(questionBody);
-
     const header = await this.setHeaders("POST", questionBody);
     const request = await fetch( url, header).catch(error => console.log(error));
 

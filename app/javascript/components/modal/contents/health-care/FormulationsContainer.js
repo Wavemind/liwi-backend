@@ -91,8 +91,8 @@ class FormulationsContainer extends React.Component {
     }
 
     formulationComponents[key] = null;
-    availableMedicationForms.push(selectedForms[key-1]);
-    selectedForms.splice(key-1, 1)
+    availableMedicationForms.push(selectedForms[key]);
+    selectedForms.splice(key, 1);
 
     await this.setState({ formulations, formulationComponents, availableMedicationForms, selectedForms });
   };
@@ -222,8 +222,6 @@ class FormulationsContainer extends React.Component {
       accordionIndex,
       medicationForm
     } = this.state;
-
-    console.log(Object.keys(formulationComponents).length)
 
     return (
       <Form onSubmit={() => this.create()}>

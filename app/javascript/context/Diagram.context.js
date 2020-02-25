@@ -143,7 +143,6 @@ export default class DiagramProvider extends React.Component {
   // @params node
   // Add node from available node
   addNode = async (node) => {
-    console.log(node)
     const { availableNodes } = this.state;
     availableNodes.push(node);
     this.setState({ availableNodes }, async () => {

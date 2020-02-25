@@ -94,8 +94,6 @@ class CreateFormulationForm extends React.Component {
       }
     }
 
-    console.log(administrationRoutes.map((ar) => ar.options));
-
     return (
       <Card>
         <Accordion.Toggle onClick={() => setActiveAccordion(index)} as={Card.Header} variant="link" eventKey={index}>
