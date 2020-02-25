@@ -36,12 +36,16 @@ class FinalDiagnosticDiagram extends React.Component {
       const { currentDbNode, currentDiagramNode, getReferencePrefix } = nextProps;
       const model = engine.getDiagramModel();
 
+      console.log(nextProps.modalToOpen);
+      console.log(currentDbNode);
+      console.log(currentDiagramNode);
+
       // Create or update node in diagram
       if (['CreateQuestionsSequence', 'CreateQuestion', 'CreateAnswers'].includes(nextProps.modalToOpen)) {
         let node = this.createNode(currentDbNode, currentDbNode.answers);
         currentDbNode.answers.map((answer) => (node.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
         model.addAll(node);
-      } else if (['UpdateQuestionsSequence', 'UpdateHealthCare'].includes(nextProps.modalToOpen)) {
+      } else if (['UpdateQuestionsSequence', 'UpdateHealthCare', 'UpdateFormulations', 'UpdateAnswers'].includes(nextProps.modalToOpen)) {
         currentDiagramNode.setReference(getReferencePrefix(currentDbNode.node_type, currentDbNode.type) + currentDbNode.reference);
         currentDiagramNode.setNode(currentDbNode);
       } else if (['CreateHealthCare', 'CreateFormulations'].includes(nextProps.modalToOpen)) {
@@ -254,7 +258,6 @@ class FinalDiagnosticDiagram extends React.Component {
               let points = engine.getRelativeMousePoint(event);
               let nodeDiagram = {};
               let result;
-
 
               // Create node
               result = await http.createHealthCareInstance(nodeDb.id);

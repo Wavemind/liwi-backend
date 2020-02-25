@@ -453,6 +453,30 @@ export default class Http {
   // @params [Integer] id, [String] label, [String] description, [Integer] final_diagnostic_id
   // @return [Object] body of request
   // Update final diagnostic node
+  updateDrug = async (drugBody) => {
+    let response;
+    const url = `${this.url}/algorithms/${this.algorithm}/drugs/${drugBody['id']}/update_from_diagram`;
+    const body = {
+      diagnostic_id: this.instanceableId,
+      final_diagnostic_id: this.finalDiagnostic
+    };
+
+    body['health_cares_drug'] = drugBody;
+    const header = await this.setHeaders("PUT", body);
+    const request = await fetch( url, header).catch(error => console.log(error));
+
+    // Display error or parse json
+    if (request.ok) {
+      response = await request.json();
+    } else {
+      response = request;
+    }
+    return await response;
+  };
+
+  // @params [Integer] id, [String] label, [String] description, [Integer] final_diagnostic_id
+  // @return [Object] body of request
+  // Update final diagnostic node
   updateFinalDiagnostic = async (id, label, description, final_diagnostic_id) => {
     let response;
     const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/${id}/update_from_diagram`;
@@ -479,14 +503,18 @@ export default class Http {
   // @params [Integer] id, [String] label, [String] description, [Integer] final_diagnostic_id
   // @return [Object] body of request
   // Update final diagnostic node
-  updateHealthCare = async (healthCareBody, type) => {
+  updateManagement = async (id, label, description) => {
     let response;
-    const url = `${this.url}/algorithms/${this.algorithm}/${type}/${id}/update_from_diagram`;
+    const url = `${this.url}/algorithms/${this.algorithm}/managements/${id}/update_from_diagram`;
     const body = {
       diagnostic_id: this.instanceableId,
       final_diagnostic_id: this.finalDiagnostic
     };
-    body['health_cares_' + type.substring(0, type.length-1)] = healthCareBody;
+    body['health_cares_management'] = {
+      id: id,
+      label_en: label,
+      description_en: description,
+    };
     const header = await this.setHeaders("PUT", body);
     const request = await fetch( url, header).catch(error => console.log(error));
 

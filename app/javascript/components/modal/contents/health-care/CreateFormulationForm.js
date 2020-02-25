@@ -94,6 +94,8 @@ class CreateFormulationForm extends React.Component {
       }
     }
 
+    console.log(administrationRoutes.map((ar) => ar.options));
+
     return (
       <Card>
         <Accordion.Toggle onClick={() => setActiveAccordion(index)} as={Card.Header} variant="link" eventKey={index}>
@@ -109,7 +111,7 @@ class CreateFormulationForm extends React.Component {
                     <Form.Label>Administration route</Form.Label>
 
                     <Select
-                      defaultValue={administration_route_id}
+                      value={administrationRoutes.map((ar) => ar.options).flat()[administration_route_id - 1]}
                       options={administrationRoutes}
                       isInvalid={!!errors.administration_route_id}
                       onChange={(val) => {

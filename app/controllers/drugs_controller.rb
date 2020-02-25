@@ -58,21 +58,12 @@ class DrugsController < ApplicationController
     drug.algorithm = @algorithm
 
     if drug.save && drug.update(drug_params)
-      puts '***'
-      puts drug.inspect
-      puts '***'
-      puts drug.formulations.first.inspect
-      puts '***'
       diagnostic = Diagnostic.find(params[:diagnostic_id])
       final_diagnostic = FinalDiagnostic.find(params[:final_diagnostic_id])
       final_diagnostic.health_cares << drug
       diagnostic.components.create!(node: drug, final_diagnostic: final_diagnostic)
-      render json: {status: 'success', messages: [t('flash_message.success_created')], node: drug.as_json(methods: [:node_type, :type])}
+      render json: {status: 'success', messages: [t('flash_message.success_created')], node: drug.as_json(include: [:formulations], methods: [:node_type, :type, :category_name])}
     else
-      p ''
-      p drug.formulations.map(&:medication_form)
-      p ''
-
       render json: {status: 'danger', errors: drug.formulations.map(&:errors).map(&:messages), ok: false}
     end
   end
@@ -82,7 +73,7 @@ class DrugsController < ApplicationController
   # Update a drug node from diagram
   def update_from_diagram
     if @drug.update(drug_params)
-      render json: {status: 'success', messages: [t('flash_message.success_created')], node: @drug.as_json(methods: [:node_type, :type])}
+      render json: {status: 'success', messages: [t('flash_message.success_updated')], node: @drug.as_json(include: [:formulations], methods: [:node_type, :type, :category_name])}
     else
       render json: {status: 'danger', errors: @drug.errors.messages, ok: false}
     end
@@ -137,6 +128,7 @@ class DrugsController < ApplicationController
       Language.description_params,
       :algorithm_id,
       formulations_attributes: [
+        :id,
         :administration_route_id,
         :minimal_dose_per_kg,
         :maximal_dose_per_kg,
@@ -146,7 +138,8 @@ class DrugsController < ApplicationController
         :liquid_concentration,
         :doses_per_day,
         :unique_dose,
-        :by_age
+        :by_age,
+        :_destroy
       ]
     )
   end

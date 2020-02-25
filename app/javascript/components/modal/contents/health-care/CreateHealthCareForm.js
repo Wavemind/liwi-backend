@@ -56,7 +56,6 @@ class CreateHealthCareForm extends React.Component {
     const {
       set,
       http,
-      currentHealthCareType
     } = this.props;
 
     const {
@@ -70,7 +69,7 @@ class CreateHealthCareForm extends React.Component {
       formulations_attributes: {}
     };
 
-    let result = await http.validateDrug(drug, currentHealthCareType);
+    let result = await http.validateDrug(drug);
     if (result.ok === undefined || result.ok) {
       set(
         ['currentDrug', 'modalToOpen', 'modalIsOpen'],

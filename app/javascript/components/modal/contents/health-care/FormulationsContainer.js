@@ -31,7 +31,7 @@ class FormulationsContainer extends React.Component {
     selectedForms: [],
     medicationForm: null,
     medicationFormError: null,
-    accordionIndex: 1,
+    accordionIndex: 0,
   };
 
   componentWillMount() {
@@ -118,7 +118,7 @@ class FormulationsContainer extends React.Component {
       }
     });
 
-    let result = currentDrug.id === undefined ? await http.createDrug(currentDrug, currentHealthCareType) : await http.updateHealthCare(currentDrug, currentHealthCareType);
+    let result = currentDrug.id === undefined ? await http.createDrug(currentDrug, currentHealthCareType) : await http.updateDrug(currentDrug);
     if (result.ok === undefined || result.ok) {
       toggleModal();
       this.resetFormulationLists();
@@ -126,7 +126,6 @@ class FormulationsContainer extends React.Component {
       set("currentDbNode", result.node);
     } else {
       let i = 0;
-      console.log(result)
       Object.keys(formulationComponents).map(function(key) {
         formulationComponents[key] = React.cloneElement(formulationComponents[key], {
           errors: result.errors[i]
@@ -152,19 +151,26 @@ class FormulationsContainer extends React.Component {
       });
     } else { // If this is a question updating, set drug formulations form and drug formulations hash
       const { currentNode } = this.props;
-      const { selectedForms } = this.state;
+      let {
+        availableMedicationForms,
+        selectedForms
+      } = this.state;
       let formulations = {};
       let formulationComponents = {};
       let drugFormulations = currentNode.formulations;
+
       // build formulations
       drugFormulations.map((formulation, index) => {
+        availableMedicationForms.splice( availableMedicationForms.indexOf(formulation.medication_form), 1 );
+        selectedForms.push(formulation.medication_form);
+
         formulations[index] = {
           id: formulation.id,
           administration_route_id: parseInt(formulation.administration_route_id),
           minimal_dose_per_kg: parseInt(formulation.minimal_dose_per_kg),
           maximal_dose_per_kg: parseInt(formulation.maximal_dose_per_kg),
           maximal_dose: parseInt(formulation.maximal_dose),
-          medication_form: selectedForms[index],
+          medication_form: formulation.medication_form,
           dose_form: parseInt(formulation.dose_form),
           liquid_concentration: parseInt(formulation.liquid_concentration),
           doses_per_day: parseInt(formulation.doses_per_day),
@@ -175,7 +181,7 @@ class FormulationsContainer extends React.Component {
       });
 
       for (let i = 0; i < drugFormulations.length; i++) {
-        formulationComponents[i] = <CreateFormulationForm setFormulation={this.setFormulation} formulations={formulations} removeFormulation={this.removeFormulation} index={i} errors={{}} update={true} />
+        formulationComponents[i] = <CreateFormulationForm medicationForm={formulations[i].medication_form} setActiveAccordion={this.setActiveAccordion} setFormulation={this.setFormulation} removeFormulation={this.removeFormulation} formulations={formulations} index={i} errors={{}} update={true} />
       }
 
       this.setState({
@@ -203,7 +209,7 @@ class FormulationsContainer extends React.Component {
     const {medicationForms} = this.props;
 
     this.setState({
-      availableMedicationForms: medicationForms,
+      availableMedicationForms: JSON.parse(JSON.stringify(medicationForms)),
       selectedForms: []
     })
   };
@@ -217,13 +223,15 @@ class FormulationsContainer extends React.Component {
       medicationForm
     } = this.state;
 
+    console.log(Object.keys(formulationComponents).length)
+
     return (
       <Form onSubmit={() => this.create()}>
         <Modal.Header>
           <Modal.Title>Create drug formulations</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Accordion activeKey={accordionIndex}>
+          <Accordion activeKey={accordionIndex} defaultActiveKey={Object.keys(formulationComponents).length -1}>
             {Object.keys(formulationComponents).map((key) => {
               return formulationComponents[key];
             })}

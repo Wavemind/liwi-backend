@@ -114,10 +114,6 @@ class UpdateQuestionForm extends React.Component {
   handleErrors = (result) => {
     let newErrors = {};
 
-    if (result.errors.reference !== undefined) {
-      newErrors.reference = result.errors.reference[0];
-    }
-
     if (result.errors.label_en !== undefined) {
       newErrors.label_en = result.errors.label_en[0];
     }
