@@ -5,13 +5,13 @@ import {
   FormControl,
   Form
 } from "react-bootstrap";
-import { withDiagram } from "../../../context/Diagram.context";
+import { withDiagram } from "../../../../context/Diagram.context";
 
 /**
  * @author Emmanuel Barchichat
  * Modal content to define the score in QS scored
  */
-class UpdateScoreForm extends React.Component {
+class UpdateDrugInstanceForm extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -87,4 +87,4 @@ class UpdateScoreForm extends React.Component {
   }
 }
 
-export default withDiagram(UpdateScoreForm);
+export default withDiagram(UpdateDrugInstanceForm);

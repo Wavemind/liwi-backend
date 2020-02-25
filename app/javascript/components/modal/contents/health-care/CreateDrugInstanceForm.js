@@ -5,7 +5,7 @@ import {
   FormControl,
   Form, Col, InputGroup
 } from "react-bootstrap";
-import { withDiagram } from "../../../context/Diagram.context";
+import { withDiagram } from "../../../../context/Diagram.context";
 
 /**
  * @author Emmanuel Barchichat
@@ -17,34 +17,47 @@ class CreateDrugInstanceForm extends React.Component {
   }
 
   state = {
-    duration: "",
+    duration: 0,
     description: ""
   };
 
   componentDidMount() {
-    const { currentDrug } = this.props;
-
-    this.setState({description: currentDrug.description});
+    const { currentDbNode } = this.props;
+    
+    this.setState({description: currentDbNode.description_translations['en']});
   }
 
   // Set the score props from input, so it triggers listener in Diagram.js and execute http request
-  createLink = async () => {
-    const { set, toggleModal } = this.props;
-    const { score } = this.state;
-    await set("currentScore", score);
-    toggleModal();
-  };
+  save = async () => {
+    const {
+      http,
+      toggleModal,
+      currentDbNode,
+      set
+    } = this.props;
 
-  // Close diagram and triggers listener in Diagram.js so it can delete the link (since the score has not been set)
-  cancelLink = async () => {
-    const { set, toggleModal } = this.props;
-    await set("currentScore", null);
-    toggleModal();
+    const {
+      duration,
+      description
+    } = this.state;
+
+    let result = await http.createHealthCareInstance(currentDbNode.id, duration, description);
+    if (result.ok === undefined || result.ok) {
+      set('modalToOpen', 'CreateDrugInstanceCompleted');
+      toggleModal();
+    } else {
+
+      let newErrors = {};
+      if (result.errors.duration !== undefined) {
+        newErrors.duration = result.errors.duration[0];
+      }
+      this.setState({ errors: newErrors });
+    }
   };
 
   // Set state for the input changes
   updateState = (event) => {
-    this.setState({ score: event.target.value });
+    this.setState({ [event.target.name]: event.target.value });
   };
 
   render() {
@@ -54,19 +67,20 @@ class CreateDrugInstanceForm extends React.Component {
     } = this.state;
 
     const {
-      currentDrug,
-      getReferencePrefix
+      currentDbNode,
+      getReferencePrefix,
+      toggleModal
     } = this.props;
 
     return (
       <Form onSubmit={this.create}>
         <Modal.Header>
-          <Modal.Title>Create a treatment from drug {getReferencePrefix(currentDrug.node_type, currentDrug.type) + currentDrug.reference}</Modal.Title>
+          <Modal.Title>Create a treatment for drug : {getReferencePrefix(currentDbNode.node_type, currentDbNode.type) + currentDbNode.reference} - {currentDbNode.label_translations['en']}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form.Row>
             <Form.Group as={Col}>
-              <Form.Label>Label</Form.Label>
+              <Form.Label>Treatment duration (in days)</Form.Label>
               <InputGroup>
                 <Form.Control
                   type="number"
@@ -95,6 +109,14 @@ class CreateDrugInstanceForm extends React.Component {
             </Form.Group>
           </Form.Row>
         </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={this.save}>
+            Save
+          </Button>
+          <Button variant="secondary" onClick={toggleModal}>
+            Close
+          </Button>
+        </Modal.Footer>
       </Form>
     );
   }

@@ -123,7 +123,7 @@ class FormulationsContainer extends React.Component {
       toggleModal();
       this.resetFormulationLists();
       await addMessage({ status: result.status, messages: result.messages });
-      set("currentDbNode", result.node);
+      set(["currentDbNode", "modalToOpen", "modalIsOpen"], [result.node, "CreateDrugInstance", true]);
     } else {
       let i = 0;
       Object.keys(formulationComponents).map(function(key) {

@@ -180,7 +180,9 @@ class InstancesController < ApplicationController
       :instanceable_id,
       :instanceable_type,
       :answer_id,
-      :final_diagnostic_id
+      :final_diagnostic_id,
+      :duration,
+      :description
     )
   end
 end

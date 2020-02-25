@@ -100,12 +100,14 @@ export default class Http {
   // @params [Integer] nodeId
   // @return [Object] body of request
   // Create an instance of a health care or a condition of it
-  createHealthCareInstance = async (nodeId) => {
+  createHealthCareInstance = async (nodeId, duration = null, description = "") => {
     let response;
     const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/create_from_final_diagnostic_diagram`;
     const body = {
       instance: {
         node_id: nodeId,
+        duration: duration,
+        description: description,
         instanceable_id: this.instanceableId,
         instanceable_type: this.instanceableType,
         final_diagnostic_id: this.finalDiagnostic
