@@ -217,4 +217,15 @@ class Diagnostic < ApplicationRecord
     end
     self.save
   end
+
+  def diagnostic_json
+    diagnostic = {
+      id: id,
+      type: 'Diagnostic',
+      reference: reference,
+      label: label,
+      version_id: version_id,
+      chief_complaint_label: node.reference_label
+    }
+  end
 end

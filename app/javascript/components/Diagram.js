@@ -1,53 +1,79 @@
+// External import
 import * as React from "react";
-import createEngine, { DiagramModel, DefaultNodeModel, DefaultPortModel } from "@projectstorm/react-diagrams";
+import createEngine, { DiagramModel } from "@projectstorm/react-diagrams";
 import { CanvasWidget } from "@projectstorm/react-canvas-core";
 
+// Internal import
 import { withDiagram } from "../context/Diagram.context";
-import AdvancedLinkFactory from "./advancedDiagram/AdvancedLinkFactory";
-import AdvancedPortModel from "./advancedDiagram/AdvancedPortModel";
+import AdvancedLinkFactory from "./advancedDiagram/link/AdvancedLinkFactory";
+import AdvancedNodeFactory from "./advancedDiagram/node/AdvancedNodeFactory";
+import AdvancedNodeModel from "./advancedDiagram/node/AdvancedNodeModel";
+import AdvancedPortModel from "./advancedDiagram/port/AdvancedPortModel";
+import {createNode} from "../helpers/nodeHelpers";
+
 
 export class Diagram extends React.Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+
+    const engine = createEngine();
+    const model = new DiagramModel();
+
+    // Register our own factory
+    engine.getLinkFactories().registerFactory(new AdvancedLinkFactory());
+    engine.getNodeFactories().registerFactory(new AdvancedNodeFactory());
+
+    this.state = {
+      engine: engine,
+      model: model,
+    };
+
+    this.initDiagram();
   }
 
-  render = () => {
 
-    //1) setup the diagram engine
-    var engine = createEngine();
-    engine.getLinkFactories().registerFactory(new AdvancedLinkFactory());
+  initDiagram = () => {
+    const {engine, model} = this.state;
+    const {questionsPerLevel} = this.props;
 
-    // create some nodes
-    var node1 = new DefaultNodeModel("Source", "rgb(0,192,255)");
-    let port1 = node1.addPort(new AdvancedPortModel(false, "out-1", "Out thick"));
-    let port2 = node1.addPort(new DefaultPortModel(false, "out-2", "Out default"));
+    let questions = [];
+    console.log(this.props);
+
+    // Generate questions
+    questionsPerLevel.map(level => {
+      level.map(question => {
+        questions.push(createNode(question))
+      })
+    });
+
+    const node1 = new AdvancedNodeModel({ color: 'rgb(192,255,0)' });
+    let port1 = node1.addPort(new AdvancedPortModel(false, 'out'));
     node1.setPosition(100, 100);
 
-    var node2 = new DefaultNodeModel("Target", "rgb(192,255,0)");
-    var port3 = node2.addPort(new AdvancedPortModel(true, "in-1", "In thick"));
-    var port4 = node2.addPort(new DefaultPortModel(true, "in-2", "In default"));
-    node2.setPosition(300, 100);
+    const node2 = new AdvancedNodeModel({ color: 'rgb(0,192,255)' });
+    let port2 = node2.addPort(new AdvancedPortModel(true, 'in'));
+    node2.setPosition(500, 350);
 
-    var node3 = new DefaultNodeModel("Source", "rgb(0,192,255)");
-    node3.addPort(new AdvancedPortModel(false, "out-1", "Out thick"));
-    node3.addPort(new DefaultPortModel(false, "out-2", "Out default"));
-    node3.setPosition(100, 200);
+    const node3 = new AdvancedNodeModel('Source', 'rgb(0,192,255)');
+    let port3 = node3.addPort(new AdvancedPortModel(false, 'out'));
+    node3.setPosition(100, 500);
 
-    var node4 = new DefaultNodeModel("Target", "rgb(192,255,0)");
-    node4.addPort(new AdvancedPortModel(true, "in-1", "In thick"));
-    node4.addPort(new DefaultPortModel(true, "in-2", "In default"));
-    node4.setPosition(300, 200);
+    const node4 = new AdvancedNodeModel('Target', 'rgb(192,255,0)');
+    let port4 = node4.addPort(new AdvancedPortModel(true, 'in'));
+    node4.setPosition(500, 450);
 
-    var model = new DiagramModel();
-
-    model.addAll(port1.link(port3), port2.link(port4));
+    model.addAll(port1.link(port2), port3.link(port4));
 
     // add everything else
     model.addAll(node1, node2, node3, node4);
 
     // load model into engine
     engine.setModel(model);
+  };
+
+  render = () => {
+    const {engine} = this.state;
 
     return (
       <div className="content">

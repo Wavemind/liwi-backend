@@ -503,7 +503,7 @@ en:
     new:
       title: "Add an algorithm version"
     edit:
-      title: "Edit this algorithm"
+      title: "Edit an algorithm version"
     show:
       subtitle_diagnostics: "Diagnostics"
       subtitle_questions_order: "Triage questions order"

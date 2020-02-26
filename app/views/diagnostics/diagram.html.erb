@@ -8,9 +8,8 @@
     <%= react_component('Provider', {
     render: 'Diagram',
     context: {
-      instanceable: @diagnostic.as_json(include: {node: {methods: :reference_label}}),
-      instanceableType: @diagnostic.class.name,
-      questions: @diagnostic.questions_json,
+      instanceable: @diagnostic.diagnostic_json,
+      questionsPerLevel: @diagnostic.questions_json,
       finalDiagnostics: @diagnostic.final_diagnostics_json,
       availableNodes: @diagnostic.available_nodes_json,
       type: 'Diagnostic',
