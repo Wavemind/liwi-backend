@@ -129,6 +129,24 @@ export default class DiagramProvider extends React.Component {
     return prefix;
   };
 
+  // @params nodeId
+  // Retrieve drug instance from node id
+  getDrugInstance = (nodeId) => {
+    const { healthCares } = this.state;
+    return _.find(healthCares, { "node_id": nodeId });
+  };
+
+  setDrugInstance = (instance) => {
+    let { healthCares } = this.state;
+    let index = _.findIndex(healthCares, { "id": instance.id });
+    if (index === -1){
+      healthCares.push(instance)
+    } else {
+      healthCares[index] = instance;
+    }
+    this.setState({healthCares});
+  };
+
   // @params node
   // Remove node from available node
   removeNode = async (node) => {
@@ -174,6 +192,8 @@ export default class DiagramProvider extends React.Component {
     addMessage: this.addMessage,
     removeMessage: this.removeMessage,
     getReferencePrefix: this.getReferencePrefix,
+    getDrugInstance: this.getDrugInstance,
+    setDrugInstance: this.setDrugInstance,
     instanceable: null,
     instanceableType: null,
     questions: null,

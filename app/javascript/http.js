@@ -16,7 +16,7 @@ export default class Http {
     this.url = window.location.origin;
     this.instanceableId = data.dataset.id;
     this.finalDiagnostic = data.dataset.final_diagnostic;
-    this.instanceableType = data.dataset.type === "Diagnostic" ? "diagnostics" : "questions_sequences";
+    this.instanceableType = ["Diagnostic", "FinalDiagnostic"].includes(data.dataset.type) ? "diagnostics" : "questions_sequences";
     this.version = data.dataset.version;
     this.algorithm = data.dataset.algorithm;
     this.token = document.querySelector("meta[name='csrf-token']").content;
@@ -488,6 +488,36 @@ export default class Http {
         label_en: label,
         description_en: description,
         final_diagnostic_id: final_diagnostic_id
+      }
+    };
+    const header = await this.setHeaders("PUT", body);
+    const request = await fetch( url, header).catch(error => console.log(error));
+
+    // Display error or parse json
+    if (request.ok) {
+      response = await request.json();
+    } else {
+      response = request;
+    }
+    return await response;
+  };
+
+
+  // @params [Integer] nodeId
+  // @return [Object] body of request
+  // Create an instance of a health care or a condition of it
+  updateHealthCareInstance = async (id, nodeId, duration = null, description = "") => {
+    let response;
+    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/update_from_final_diagnostic_diagram`;
+    const body = {
+      id: id,
+      instanceable_id: this.instanceableId,
+      instanceable_type: this.instanceableType,
+      final_diagnostic_id: this.finalDiagnostic,
+      instance: {
+        node_id: nodeId,
+        duration: duration,
+        description: description,
       }
     };
     const header = await this.setHeaders("PUT", body);

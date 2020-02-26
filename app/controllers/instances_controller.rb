@@ -2,7 +2,7 @@ class InstancesController < ApplicationController
 
   before_action :authenticate_user!
   before_action :set_instanceable, only: [:show, :create, :destroy, :by_reference, :create_from_diagram, :remove_from_diagram, :create_link, :remove_link, :create_from_final_diagnostic_diagram, :update_score]
-  before_action :set_instance, only: [:show, :destroy]
+  before_action :set_instance, only: [:show, :destroy, :update_from_final_diagnostic_diagram]
   before_action :set_child, only: [:create_link, :remove_link, :update_score]
   before_action :set_parent, only: [:create_link, :remove_link, :update_score]
 
@@ -79,7 +79,7 @@ class InstancesController < ApplicationController
     end
   end
 
-  # POST /diagnostics/:diagnostic_id/instances/diagram_create
+  # POST /diagnostics/:diagnostic_id/instances/create_from_final_diagnostic_diagram
   # @return JSON of instance
   # Create an instances of node for final diagnostic diagram and return json format
   def create_from_final_diagnostic_diagram
@@ -93,7 +93,7 @@ class InstancesController < ApplicationController
 
     respond_to do |format|
       format.html {}
-      format.json { render json: instance }
+      format.json { render json: instance.as_json(include: [node: {include: [:formulations], methods: [:node_type, :type, :category_name]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}])}
     end
   end
 
@@ -133,6 +133,23 @@ class InstancesController < ApplicationController
     condition = Condition.find_by(referenceable: @child_instance, first_conditionable: @parent_answer)
     Instance.remove_condition(condition, @parent_instance)
     render json: { status: 'success', message: t('flash_message.success_deleted') }
+  end
+
+  # POST /diagnostics/:diagnostic_id/instances/update_from_final_diagnostic_diagram
+  # @return JSON of instance
+  # Update an instance of node for final diagnostic diagram and return json format
+  def update_from_final_diagnostic_diagram
+    if @instance.update(instance_params)
+      respond_to do |format|
+        format.html {}
+        format.json { render json: @instance.as_json(include: [node: {include: [:formulations], methods: [:node_type, :type, :category_name]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}])}
+      end
+    else
+      respond_to do |format|
+        format.html {}
+        format.json { render json: {ok: false, errors: @instance.errors.messages }}
+      end
+    end
   end
 
   # @params [Diagnostic] Current diagnostic, [Answer] Answer from parent of the link, [Node] child of the link

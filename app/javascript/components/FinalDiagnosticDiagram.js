@@ -236,7 +236,7 @@ class FinalDiagnosticDiagram extends React.Component {
       removeNode,
       finalDiagnostic,
       http,
-      set
+      set,
     } = this.props;
 
     let model = engine.getDiagramModel();
@@ -265,6 +265,7 @@ class FinalDiagnosticDiagram extends React.Component {
               } else {
                 result = await http.createHealthCareInstance(nodeDb.id);
                 if (result.ok === undefined || result.ok) {
+
                   if (nodeDb.get_answers !== null && nodeDb.get_answers !== undefined) {
                     nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers);
                     nodeDb.get_answers.map((answer) => (nodeDiagram.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));

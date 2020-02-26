@@ -23,21 +23,35 @@ class NotDFWidget extends React.Component {
     http.showQuestionsSequenceDiagram(nodeId);
   };
 
+  updateDrugInstance = (node) => {
+    node.setSelected(false);
+
+    const {
+      getDrugInstance,
+      set
+    } = this.props;
+
+    set(
+      ["currentDrugInstance", "modalIsOpen", "modalToOpen"],
+      [getDrugInstance(node.node.id), true, "UpdateDrugInstance"]
+    );
+  };
+
   editNode = (node) => {
     node.setSelected(false);
 
     const { set } = this.props;
 
-    let healthCareType = null
-    if (node.node.type === 'HealthCares::Management') {
-      healthCareType = 'managements';
-    } else if (node.node.type === 'HealthCares::Drug'){
-      healthCareType = 'drugs';
+    let healthCareType = null;
+    if (node.node.type === "HealthCares::Management") {
+      healthCareType = "managements";
+    } else if (node.node.type === "HealthCares::Drug"){
+      healthCareType = "drugs";
     }
 
     set(
-      ['modalToOpen', 'currentNode', 'currentDiagramNode', 'currentHealthCareType', 'modalIsOpen'],
-      ['Update' + node.node.node_type, node.node, node, healthCareType, true]
+      ["modalToOpen", "currentNode", "currentDiagramNode", "currentHealthCareType", "modalIsOpen"],
+      ["Update" + node.node.node_type, node.node, node, healthCareType, true]
     );
   };
 
@@ -74,6 +88,7 @@ class NotDFWidget extends React.Component {
                 <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                   {(diagramNode.node.node_type === "QuestionsSequence") ? (<a className="dropdown-item" href="#" onClick={() => this.openDiagram(diagramNode.node.id)}>Open diagram</a>) : null}
                   <a className="dropdown-item" href="#" onClick={() => this.editNode(diagramNode)}>Edit</a>
+                  {(diagramNode.node.category_name === "drug") ? (<a className="dropdown-item" href="#" onClick={() => this.updateDrugInstance(diagramNode)}>Edit treatment</a>) : null}
                 </div>
               </div>
             ) : null}

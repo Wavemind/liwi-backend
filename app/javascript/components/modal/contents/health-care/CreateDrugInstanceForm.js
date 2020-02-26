@@ -23,7 +23,7 @@ class CreateDrugInstanceForm extends React.Component {
 
   componentDidMount() {
     const { currentDbNode } = this.props;
-    
+
     this.setState({description: currentDbNode.description_translations['en']});
   }
 
@@ -33,7 +33,8 @@ class CreateDrugInstanceForm extends React.Component {
       http,
       toggleModal,
       currentDbNode,
-      set
+      set,
+      setDrugInstance
     } = this.props;
 
     const {
@@ -43,6 +44,7 @@ class CreateDrugInstanceForm extends React.Component {
 
     let result = await http.createHealthCareInstance(currentDbNode.id, duration, description);
     if (result.ok === undefined || result.ok) {
+      setDrugInstance(result);
       set('modalToOpen', 'CreateDrugInstanceCompleted');
       toggleModal();
     } else {
@@ -73,7 +75,7 @@ class CreateDrugInstanceForm extends React.Component {
     } = this.props;
 
     return (
-      <Form onSubmit={this.create}>
+      <Form onSubmit={this.save}>
         <Modal.Header>
           <Modal.Title>Create a treatment for drug : {getReferencePrefix(currentDbNode.node_type, currentDbNode.type) + currentDbNode.reference} - {currentDbNode.label_translations['en']}</Modal.Title>
         </Modal.Header>

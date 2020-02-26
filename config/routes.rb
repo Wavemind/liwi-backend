@@ -145,6 +145,7 @@ Rails.application.routes.draw do
         get 'load_conditions'
         post 'create_from_diagram'
         post 'create_from_final_diagnostic_diagram'
+        put 'update_from_final_diagnostic_diagram'
         post 'create_link'
         delete 'remove_from_diagram'
         delete 'remove_link'
