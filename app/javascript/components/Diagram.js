@@ -47,26 +47,28 @@ export class Diagram extends React.Component {
       })
     });
 
-    const node1 = new AdvancedNodeModel({ color: 'rgb(192,255,0)' });
-    let port1 = node1.addPort(new AdvancedPortModel(false, 'out'));
-    node1.setPosition(100, 100);
+    // const node1 = new AdvancedNodeModel({ color: 'rgb(192,255,0)' });
+    // let port1 = node1.addPort(new AdvancedPortModel(false, 'out'));
+    // node1.setPosition(100, 100);
+    //
+    // const node2 = new AdvancedNodeModel({ color: 'rgb(0,192,255)' });
+    // let port2 = node2.addPort(new AdvancedPortModel(true, 'in'));
+    // node2.setPosition(500, 350);
+    //
+    // const node3 = new AdvancedNodeModel('Source', 'rgb(0,192,255)');
+    // let port3 = node3.addPort(new AdvancedPortModel(false, 'out'));
+    // node3.setPosition(100, 500);
+    //
+    // const node4 = new AdvancedNodeModel('Target', 'rgb(192,255,0)');
+    // let port4 = node4.addPort(new AdvancedPortModel(true, 'in'));
+    // node4.setPosition(500, 450);
+    //
+    // model.addAll(port1.link(port2), port3.link(port4));
 
-    const node2 = new AdvancedNodeModel({ color: 'rgb(0,192,255)' });
-    let port2 = node2.addPort(new AdvancedPortModel(true, 'in'));
-    node2.setPosition(500, 350);
-
-    const node3 = new AdvancedNodeModel('Source', 'rgb(0,192,255)');
-    let port3 = node3.addPort(new AdvancedPortModel(false, 'out'));
-    node3.setPosition(100, 500);
-
-    const node4 = new AdvancedNodeModel('Target', 'rgb(192,255,0)');
-    let port4 = node4.addPort(new AdvancedPortModel(true, 'in'));
-    node4.setPosition(500, 450);
-
-    model.addAll(port1.link(port2), port3.link(port4));
+    console.log(questions);
 
     // add everything else
-    model.addAll(node1, node2, node3, node4);
+    model.addAll(questions);
 
     // load model into engine
     engine.setModel(model);

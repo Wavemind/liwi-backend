@@ -8,7 +8,7 @@ export interface AdvancedNodeModelOptions extends BaseModelOptions {
 
 export default class AdvancedNodeModel extends NodeModel {
   color: string;
-  node: object;
+  dbNode: object;
 
   constructor(options: AdvancedNodeModelOptions = {}) {
     super({
@@ -16,7 +16,7 @@ export default class AdvancedNodeModel extends NodeModel {
       type: 'advanced'
     });
     this.color = options.color || 'red';
-    this.node = options.dbNode || {};
+    this.dbNode = options.dbNode || {};
 
     // setup an in and out port
     this.addPort(
@@ -36,7 +36,8 @@ export default class AdvancedNodeModel extends NodeModel {
   serialize() {
     return {
       ...super.serialize(),
-      color: this.color
+      color: this.color,
+      dbNode: this.dbNode
     };
   }
 

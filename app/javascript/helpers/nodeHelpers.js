@@ -6,6 +6,7 @@ import AdvancedPortModel from "../components/advancedDiagram/port/AdvancedPortMo
 export const createNode = (node) => {
   let advancedNode = new AdvancedNodeModel({ color: 'rgb(192,255,0)', dbNode: node });
   advancedNode.addPort(new AdvancedPortModel(false, 'out'));
+  advancedNode.setPosition(100, 100);
   return advancedNode
 };
 
