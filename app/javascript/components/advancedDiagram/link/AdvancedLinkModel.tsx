@@ -5,7 +5,7 @@ export default class AdvancedLinkModel extends DefaultLinkModel {
   constructor() {
     super({
       type: 'advanced', // <-- here we give it a new type
-      width: 4 // we specifically want this to also be width 10
+      width: 3 // we specifically want this to also be width 10
     });
   }
 }

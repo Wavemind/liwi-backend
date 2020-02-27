@@ -2,19 +2,25 @@ import * as React from 'react';
 import AdvancedNodeModel from "../components/advancedDiagram/node/AdvancedNodeModel";
 import AdvancedPortModel from "../components/advancedDiagram/port/AdvancedPortModel";
 
+
+// @params [object] instance
 // Create diagram node
-export const createNode = (node) => {
-  let advancedNode = new AdvancedNodeModel({ color: 'rgb(192,255,0)', dbNode: node });
-  advancedNode.addPort(new AdvancedPortModel(false, 'out'));
+export const createNode = (instance) => {
+  let advancedNode = new AdvancedNodeModel({ color: 'rgb(192,255,0)', dbInstance: instance });
+
+  // Node position
   advancedNode.setPosition(100, 100);
+
   return advancedNode
 };
 
 
+// @params [object] node
 // Get full label of an object
 export const getLabel = (node) => {
   return node.label_translations["en"];
 };
+
 
 // Generate arrow for link
 export const AdvancedLinkArrowWidget = props => {
@@ -29,13 +35,12 @@ export const AdvancedLinkArrowWidget = props => {
       180) /
     Math.PI;
 
-  //translate(50, -10),
   return (
     <g className="arrow" transform={'translate(' + point.getPosition().x + ', ' + point.getPosition().y + ')'}>
       <g style={{ transform: 'rotate(' + angle + 'deg)' }}>
         <g transform={'translate(0, -3)'}>
           <polygon
-            points="0,10 8,30 -8,30"
+            points="0,9 7,30 -7,30"
             fill={props.color}
             onMouseLeave={() => {
               this.setState({ selected: false });

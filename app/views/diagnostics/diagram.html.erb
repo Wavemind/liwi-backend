@@ -12,7 +12,6 @@
       questionsPerLevel: @diagnostic.questions_json,
       finalDiagnostics: @diagnostic.final_diagnostics_json,
       availableNodes: @diagnostic.available_nodes_json,
-      type: 'Diagnostic',
       questionAnswerTypes: AnswerType.all.as_json(methods: :display_name),
       questionSystems: Question.systems.map { |k, v| [t("questions.systems.#{k}"), k] },
       questionStages: Question.stages,
