@@ -19,7 +19,7 @@ development:
   pool: 5
   username: postgres
   password: root
-  url :  postgres://gzdgczdsprokui:7a9b999e8958720750838984f959da46d7ed91f0b50a62cb84f83e939e3d65dd@ec2-54-228-207-163.eu-west-1.compute.amazonaws.com:5432/d395difi02l27b # allow to test with prod database
+#  url :  postgres://gzdgczdsprokui:7a9b999e8958720750838984f959da46d7ed91f0b50a62cb84f83e939e3d65dd@ec2-54-228-207-163.eu-west-1.compute.amazonaws.com:5432/d395difi02l27b # allow to test with prod database
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".

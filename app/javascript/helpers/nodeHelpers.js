@@ -1,20 +1,21 @@
 import * as React from 'react';
 import AdvancedNodeModel from "../components/advancedDiagram/node/AdvancedNodeModel";
-
+import Http from "../http";
 
 // @params [object] instance
 // Create diagram node
 export const createNode = (instance) => {
+  const http = Http.new();
   let advancedNode = new AdvancedNodeModel({ color: 'rgb(192,255,0)', dbInstance: instance });
 
   // Node position
-  advancedNode.setPosition(100, 100);
+  advancedNode.setPosition(instance.position_x, instance.position_y);
 
   // Set event listener
   advancedNode.registerListener({
     eventDidFire: _.debounce(
-      () =>
-        console.log('je test'),
+      (event) =>
+        http.updateInstance(instance.id, event.entity.position.x, event.entity.position.y),
       100
     )
   });
