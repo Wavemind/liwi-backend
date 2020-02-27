@@ -1,6 +1,5 @@
 import * as React from 'react';
 import AdvancedNodeModel from "../components/advancedDiagram/node/AdvancedNodeModel";
-import AdvancedPortModel from "../components/advancedDiagram/port/AdvancedPortModel";
 
 
 // @params [object] instance
@@ -11,16 +10,23 @@ export const createNode = (instance) => {
   // Node position
   advancedNode.setPosition(100, 100);
 
+  // Set event listener
+  advancedNode.registerListener({
+    eventDidFire: _.debounce(
+      () =>
+        console.log('je test'),
+      100
+    )
+  });
+
   return advancedNode
 };
-
 
 // @params [object] node
 // Get full label of an object
 export const getLabel = (node) => {
   return node.label_translations["en"];
 };
-
 
 // Generate arrow for link
 export const AdvancedLinkArrowWidget = props => {
