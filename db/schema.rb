@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_25_142958) do
+ActiveRecord::Schema.define(version: 2020_02_27_102531) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -259,6 +259,8 @@ ActiveRecord::Schema.define(version: 2020_02_25_142958) do
     t.integer "system"
     t.boolean "is_mandatory", default: false
     t.bigint "administration_route_id"
+    t.boolean "is_anti_malarial", default: false
+    t.boolean "is_antibiotic", default: false
     t.index ["administration_route_id"], name: "index_nodes_on_administration_route_id"
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"

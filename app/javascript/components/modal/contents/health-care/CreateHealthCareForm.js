@@ -20,6 +20,8 @@ class CreateHealthCareForm extends React.Component {
   state = {
     label: "",
     description: "",
+    isAntiBiotic: null,
+    isAntiMalarial: null,
     errors: {}
   };
 
@@ -60,11 +62,15 @@ class CreateHealthCareForm extends React.Component {
 
     const {
       label,
+      isAntiBiotic,
+      isAntiMalarial,
       description
     } = this.state;
 
     let drug = {
       label_en: label,
+      is_antibiotic: isAntiBiotic,
+      is_anti_malarial: isAntiMalarial,
       description_en: description,
       formulations_attributes: {}
     };
@@ -83,7 +89,7 @@ class CreateHealthCareForm extends React.Component {
   // Set value of inputs in state
   updateState = (event) => {
     const key = event.target.name;
-    const value = event.target.value;
+    const value = ["isAntibiotic", "isAntiMalarial"].includes(key) ? event.target.checked : event.target.value;
     this.setState({ [key]: value });
   };
 
@@ -105,6 +111,8 @@ class CreateHealthCareForm extends React.Component {
     } = this.props;
     const {
       label,
+      isAntiBiotic,
+      isAntiMalarial,
       description,
       errors
     } = this.state;
@@ -131,6 +139,28 @@ class CreateHealthCareForm extends React.Component {
                   {errors.label_en}
                 </Form.Control.Feedback>
               </InputGroup>
+            </Form.Group>
+          </Form.Row>
+
+          <Form.Row>
+            <Form.Group as={Col}>
+              <Form.Check
+                type="checkbox"
+                label="Antibiotic"
+                name="isAntiBiotic"
+                value={isAntiBiotic}
+                onChange={this.handleFormChange}
+              />
+            </Form.Group>
+
+            <Form.Group as={Col}>
+              <Form.Check
+                type="checkbox"
+                label="Anti malarial"
+                name="isAntiMalarial"
+                value={isAntiMalarial}
+                onChange={this.handleFormChange}
+              />
             </Form.Group>
           </Form.Row>
 
