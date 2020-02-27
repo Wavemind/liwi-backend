@@ -16,8 +16,8 @@ class Formulation < ApplicationRecord
   after_validation :validate_dosage_logic, if: Proc.new { %w(tablet capsule syrup suspension).include?(self.medication_form) && !( self.by_age == '1' || self.by_age == true)}
 
   def validate_dosage_logic
-    errors.add(:minimal_dose_per_kg, I18n.t('formulations.errors.minimum_higher_than_maximum')) if minimal_dose_per_kg > maximal_dose_per_kg
-    errors.add(:maximal_dose_per_kg, I18n.t('formulations.errors.maximum_per_kg_higher_than_maximum')) if maximal_dose_per_kg > maximal_dose
+    errors.add(:minimal_dose_per_kg, I18n.t('formulations.errors.minimum_higher_than_maximum')) if minimal_dose_per_kg.present? && minimal_dose_per_kg > maximal_dose_per_kg
+    errors.add(:maximal_dose_per_kg, I18n.t('formulations.errors.maximum_per_kg_higher_than_maximum')) if maximal_dose_per_kg.present? && maximal_dose_per_kg > maximal_dose
   end
 
 end

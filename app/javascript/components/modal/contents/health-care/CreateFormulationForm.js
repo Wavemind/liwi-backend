@@ -94,6 +94,8 @@ class CreateFormulationForm extends React.Component {
       }
     }
 
+    let administrationRouteErrorsStyle = !!errors.administration_route ? {color: '#DC3545', fontSize: 13} : {display: 'none'};
+
     return (
       <Card>
         <Accordion.Toggle onClick={() => setActiveAccordion(index)} as={Card.Header} variant="link" eventKey={index}>
@@ -111,15 +113,13 @@ class CreateFormulationForm extends React.Component {
                     <Select
                       value={administrationRoutes.map((ar) => ar.options).flat()[administration_route_id - 1]}
                       options={administrationRoutes}
-                      isInvalid={!!errors.administration_route_id}
                       onChange={(val) => {
                         this.handleFormChange({target: {name: 'administration_route_id', value: val.value}})
                       }}
                     />
-
-                    <Form.Control.Feedback type="invalid">
-                      {errors.administration_route_id}
-                    </Form.Control.Feedback>
+                    <span style={administrationRouteErrorsStyle}>
+                        {errors.administration_route}
+                    </span>
                   </Form.Group>
 
                   <Form.Group as={Col}>

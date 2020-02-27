@@ -139,6 +139,7 @@ ActiveRecord::Schema.define(version: 2020_02_25_142958) do
     t.integer "liquid_concentration"
     t.integer "doses_per_day"
     t.integer "unique_dose"
+    t.integer "breakable"
     t.boolean "by_age", default: false
     t.bigint "node_id"
     t.bigint "administration_route_id"

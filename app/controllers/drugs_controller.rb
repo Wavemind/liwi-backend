@@ -62,6 +62,11 @@ class DrugsController < ApplicationController
       final_diagnostic.health_cares << drug
       render json: {status: 'success', messages: [t('flash_message.success_created')], node: drug.as_json(include: [:formulations], methods: [:node_type, :type, :category_name])}
     else
+      puts '**'
+      puts drug.errors.messages
+      puts '**'
+      puts drug.formulations.map(&:errors).map(&:messages)
+      puts '**'
       render json: {status: 'danger', errors: drug.formulations.map(&:errors).map(&:messages), ok: false}
     end
   end
@@ -137,6 +142,7 @@ class DrugsController < ApplicationController
         :doses_per_day,
         :unique_dose,
         :by_age,
+        :breakable,
         :_destroy
       ]
     )

@@ -64,6 +64,7 @@ class FormulationsContainer extends React.Component {
         formulationComponents,
         formulations,
         medicationForm: "",
+        medicationFormError: ""
       });
     }
   };
@@ -112,27 +113,35 @@ class FormulationsContainer extends React.Component {
       formulationComponents
     } = this.state;
 
+
     Object.keys(formulations).map(function(key) {
       if (formulations[key] !== null && Object.keys(formulations[key]).length > 0){
         currentDrug.formulations_attributes[key] = formulations[key];
       }
     });
 
-    let result = currentDrug.id === undefined ? await http.createDrug(currentDrug, currentHealthCareType) : await http.updateDrug(currentDrug);
-    if (result.ok === undefined || result.ok) {
-      toggleModal();
-      this.resetFormulationLists();
-      await addMessage({ status: result.status, messages: result.messages });
-      set(["currentDbNode", "modalToOpen", "modalIsOpen"], [result.node, "CreateDrugInstance", true]);
+    if (Object.keys(currentDrug.formulations_attributes).length < 1) {
+      this.setState({ medicationFormError: "At least one formulation must be entered" });
     } else {
-      let i = 0;
-      Object.keys(formulationComponents).map(function(key) {
-        formulationComponents[key] = React.cloneElement(formulationComponents[key], {
-          errors: result.errors[i]
+
+      let result = currentDrug.id === undefined ? await http.createDrug(currentDrug, currentHealthCareType) : await http.updateDrug(currentDrug);
+      if (result.ok === undefined || result.ok) {
+        toggleModal();
+        this.resetFormulationLists();
+        await addMessage({ status: result.status, messages: result.messages });
+        if (currentDrug.id !== undefined) {
+          set(["currentDbNode", "modalToOpen", "modalIsOpen"], [result.node, "CreateDrugInstance", true]);
+        }
+      } else {
+        let i = 0;
+        Object.keys(formulationComponents).map(function(key) {
+          formulationComponents[key] = React.cloneElement(formulationComponents[key], {
+            errors: result.errors[i]
+          });
+          i++;
         });
-        i++;
-      });
-      this.setState({ formulationComponents });
+        this.setState({ formulationComponents });
+      }
     }
   };
 
@@ -175,6 +184,7 @@ class FormulationsContainer extends React.Component {
           liquid_concentration: parseInt(formulation.liquid_concentration),
           doses_per_day: parseInt(formulation.doses_per_day),
           unique_dose: parseInt(formulation.unique_dose),
+          breakable: formulation.breakable,
           by_age: formulation.by_age,
           _destroy: false
         }
