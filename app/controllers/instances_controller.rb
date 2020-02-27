@@ -2,7 +2,7 @@ class InstancesController < ApplicationController
 
   before_action :authenticate_user!
   before_action :set_instanceable, only: [:show, :create, :destroy, :by_reference, :create_from_diagram, :remove_from_diagram, :create_link, :remove_link, :create_from_final_diagnostic_diagram, :update_score]
-  before_action :set_instance, only: [:show, :destroy]
+  before_action :set_instance, only: [:show, :destroy, :update_from_diagram]
   before_action :set_child, only: [:create_link, :remove_link, :update_score]
   before_action :set_parent, only: [:create_link, :remove_link, :update_score]
 
@@ -135,6 +135,24 @@ class InstancesController < ApplicationController
     render json: { status: 'success', message: t('flash_message.success_deleted') }
   end
 
+  # POST /diagnostics/:diagnostic_id/instances/diagram_create
+  # @return JSON of instance
+  # Create an instances and return json format
+  def update_from_diagram
+
+    if @instance.update(instance_params)
+      respond_to do |format|
+        format.html {}
+        format.json { render json: instance }
+      end
+    else
+      respond_to do |format|
+        format.html {}
+        format.json { render json: instance }
+      end
+    end
+  end
+
   # @params [Diagnostic] Current diagnostic, [Answer] Answer from parent of the link, [Node] child of the link
   # Update the score of a condition in a PSS
   def update_score
@@ -177,6 +195,8 @@ class InstancesController < ApplicationController
     params.require(:instance).permit(
       :id,
       :node_id,
+      :position_x,
+      :position_y,
       :instanceable_id,
       :instanceable_type,
       :answer_id,
