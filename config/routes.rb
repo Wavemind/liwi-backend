@@ -145,9 +145,12 @@ Rails.application.routes.draw do
         post 'create_from_diagram'
         post 'create_from_final_diagnostic_diagram'
         post 'create_link'
-        put 'update_from_diagram'
         delete 'remove_from_diagram'
         delete 'remove_link'
+      end
+
+      member do
+        put 'update_from_diagram'
       end
       resources :children, only: [:create, :destroy]
       resources :conditions, only: [:create, :destroy]

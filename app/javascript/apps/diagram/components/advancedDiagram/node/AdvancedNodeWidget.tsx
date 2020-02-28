@@ -1,7 +1,7 @@
 import * as React from "react";
 import { DiagramEngine, PortWidget } from "@projectstorm/react-diagrams-core";
 
-import { withDiagram } from "../../../context/Diagram.context";
+import { withDiagram } from "../../../engine/context/Diagram.context";
 import { getLabel } from "../../../helpers/nodeHelpers";
 import AdvancedNodeModel from "./AdvancedNodeModel";
 

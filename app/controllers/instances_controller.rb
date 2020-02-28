@@ -143,12 +143,12 @@ class InstancesController < ApplicationController
     if @instance.update(instance_params)
       respond_to do |format|
         format.html {}
-        format.json { render json: instance }
+        format.json { render json: @instance }
       end
     else
       respond_to do |format|
         format.html {}
-        format.json { render json: instance }
+        format.json { render json: @instance }
       end
     end
   end

@@ -481,10 +481,10 @@ export default class Http {
 
   updateInstance = async (id, positionX, positionY) => {
     let response;
-    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/instances/${id}/update_from_diagram`;
+    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/${id}/update_from_diagram`;
     const body = {
       instance: {
-        position_y: positionX,
+        position_x: positionX,
         position_y: positionY,
       }
     };

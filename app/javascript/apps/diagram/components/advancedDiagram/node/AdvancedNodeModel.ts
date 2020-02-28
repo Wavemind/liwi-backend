@@ -4,15 +4,13 @@ import { BaseModelOptions } from "@projectstorm/react-canvas-core";
 
 import AdvancedPortModel from "../port/AdvancedPortModel";
 import { getLabel } from "../../../helpers/nodeHelpers";
-
+import Http from "../../../engine/http";
 
 export interface AdvancedNodeModelOptions extends BaseModelOptions {
-  color?: string;
   dbInstance?: object;
 }
 
 export default class AdvancedNodeModel extends NodeModel {
-  color: string;
   dbInstance: object;
 
   constructor(options: AdvancedNodeModelOptions = {}) {
@@ -20,9 +18,8 @@ export default class AdvancedNodeModel extends NodeModel {
       ...options,
       type: "advanced"
     });
-    this.color = options.color || "red";
     this.dbInstance = options.dbInstance || {};
-
+    const http = new Http();
     // inPort
     this.addPort(
       new AdvancedPortModel({
@@ -38,6 +35,19 @@ export default class AdvancedNodeModel extends NodeModel {
         name: getLabel(answer)
       }));
     });
+
+    // Position
+    this.setPosition(this.dbInstance.position_x, this.dbInstance.position_y);
+
+
+    this.registerListener({
+      eventDidFire: _.debounce(
+        (event) =>
+          http.updateInstance(this.dbInstance.id, event.entity.position.x, event.entity.position.y),
+        100
+      )
+    });
+
   }
 
   // Get single in port
@@ -57,14 +67,12 @@ export default class AdvancedNodeModel extends NodeModel {
   serialize() {
     return {
       ...super.serialize(),
-      color: this.color,
       dbInstance: this.dbInstance
     };
   }
 
   deserialize(event): void {
     super.deserialize(event);
-    this.color = event.data.color;
     this.dbInstance = event.data.dbInstance;
   }
 }

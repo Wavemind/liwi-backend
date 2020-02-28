@@ -1,8 +1,8 @@
 import React from "react"
-import DiagramProvider from "../context/Diagram.context";
-import Diagram from "../components/Diagram";
+import DiagramProvider from "./engine/context/Diagram.context";
+import Diagram from "./components/Diagram";
 
-class Provider extends React.Component {
+export default class Provider extends React.Component {
   render () {
     const {
       context,
@@ -17,4 +17,3 @@ class Provider extends React.Component {
   }
 }
 
-export default Provider;

@@ -4,10 +4,10 @@ import createEngine, { DiagramModel } from "@projectstorm/react-diagrams";
 import { CanvasWidget } from "@projectstorm/react-canvas-core";
 
 // Internal import
-import { withDiagram } from "../context/Diagram.context";
+import { withDiagram } from "../engine/context/Diagram.context";
 import AdvancedLinkFactory from "./advancedDiagram/link/AdvancedLinkFactory";
 import AdvancedNodeFactory from "./advancedDiagram/node/AdvancedNodeFactory";
-import {createNode} from "../helpers/nodeHelpers";
+import AdvancedNodeModel from "./advancedDiagram/node/AdvancedNodeModel";
 
 
 export class Diagram extends React.Component {
@@ -34,14 +34,14 @@ export class Diagram extends React.Component {
     const {engine, model} = this.state;
     const {questionsPerLevel} = this.props;
 
-    let questions = [];
+    let instances = [];
 
     // Generate questions
     questionsPerLevel.map(level => {
-      level.map(question => {
-        let questionNode = createNode(question);
-        questions.push(questionNode);
-        model.addAll(questionNode);
+      level.map(instance => {
+        let diagramInstance = new AdvancedNodeModel({ dbInstance: instance });
+        instances.push(diagramInstance);
+        model.addAll(diagramInstance);
       })
     });
 
