@@ -6,6 +6,18 @@ export const getLabel = (node) => {
   return node.label_translations["en"];
 };
 
+// @params node
+// Find category
+export const getCategoryNode = (node) => {
+  let category = null;
+  if (node.node_type === "Question" || node.node_type === "QuestionsSequence" || node.node_type === "HealthCare") {
+    category = _.camelCase(node.category_name);
+  } else {
+    category = _.camelCase(node.node_type);
+  }
+  return category;
+};
+
 // Generate arrow for link
 export const AdvancedLinkArrowWidget = props => {
   const { point, previousPoint } = props;

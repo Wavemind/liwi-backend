@@ -4,10 +4,11 @@ import createEngine, { DiagramModel } from "@projectstorm/react-diagrams";
 import { CanvasWidget } from "@projectstorm/react-canvas-core";
 
 // Internal import
-import { withDiagram } from "../engine/context/Diagram.context";
-import AdvancedLinkFactory from "./advancedDiagram/link/AdvancedLinkFactory";
-import AdvancedNodeFactory from "./advancedDiagram/node/AdvancedNodeFactory";
-import AdvancedNodeModel from "./advancedDiagram/node/AdvancedNodeModel";
+import { withDiagram } from "../../engine/context/Diagram.context";
+import AdvancedLinkFactory from "../AdvancedDiagram/link/AdvancedLinkFactory";
+import AdvancedNodeFactory from "../AdvancedDiagram/node/AdvancedNodeFactory";
+import AdvancedNodeModel from "../AdvancedDiagram/node/AdvancedNodeModel";
+import AvailableNodes from "../AvailableNodes";
 
 
 export class Diagram extends React.Component {
@@ -55,8 +56,7 @@ export class Diagram extends React.Component {
     return (
       <div className="content">
         <div className="row">
-          <div className="col-md-2 px-0 liwi-sidebar">
-          </div>
+          <AvailableNodes/>
           <div className="col diagram-wrapper">
             <CanvasWidget
               className="srd-canvas"

@@ -36,10 +36,10 @@ export default class AdvancedNodeModel extends NodeModel {
       }));
     });
 
-    // Position
+    // Set Position
     this.setPosition(this.dbInstance.position_x, this.dbInstance.position_y);
 
-
+    // Set event listener
     this.registerListener({
       eventDidFire: _.debounce(
         (event) =>
