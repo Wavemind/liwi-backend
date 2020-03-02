@@ -17,7 +17,7 @@ class CreateDrugInstanceForm extends React.Component {
   }
 
   state = {
-    duration: 0,
+    duration: null,
     description: ""
   };
 
