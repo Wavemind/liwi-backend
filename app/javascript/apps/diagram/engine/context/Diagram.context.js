@@ -46,8 +46,12 @@ export default class DiagramProvider extends React.Component {
     this.state = { ...this.state, ...props.value, http, orderedNodes };
   }
 
-  // @params type, category
-  // Retrieve reference prefix for given type and category
+  /**
+   * Retrieve reference prefix for given type and category
+   * @param nodeType
+   * @param nodeCategory
+   * @return prefix
+   */
   getReferencePrefix = (nodeType, nodeCategory) => {
     let prefix = "";
 
@@ -79,8 +83,45 @@ export default class DiagramProvider extends React.Component {
     return prefix;
   };
 
+  /**
+   * Set value in context
+   * @param prop
+   * @param value
+   */
+  setValState = (prop, value) => {
+    this.setState({ [prop]: value });
+  };
+
+  /**
+   * Add message to flash message methods
+   * @param newMessages
+   * @param colorClass
+   */
+  addMessage = async (newMessages, colorClass) => {
+    const { messages } = this.state;
+    messages.push({
+      colorClass,
+      messages: newMessages,
+    });
+    this.setState({ messages });
+  };
+
+  /**
+   * Remove message to flash message methods
+   * @param index
+   */
+  removeMessage = async (index) => {
+    const { messages } = this.state;
+    messages.splice(index, 1);
+    this.setState({ messages });
+  };
+
   state = {
-    getReferencePrefix: this.getReferencePrefix
+    addMessage: this.addMessage,
+    getReferencePrefix: this.getReferencePrefix,
+    set: this.setValState,
+    removeMessage: this.removeMessage,
+    messages: [],
   };
 
   render() {

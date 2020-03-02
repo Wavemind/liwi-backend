@@ -25,6 +25,8 @@ class Instance < ApplicationRecord
 
   before_destroy :remove_condition_from_children
 
+  validate :already_exist
+
   # Enable recursive duplicating
   # https://github.com/amoeba-rb/amoeba#usage
   amoeba do
@@ -60,5 +62,14 @@ class Instance < ApplicationRecord
   # Return the reference label of its node
   def reference_label
     node.reference_label
+  end
+
+  private
+
+  # Save if validation is true and node_id doesn't already exist in current diagnostic
+  def already_exist
+    if instanceable.components.find_by(node_id: node_id, final_diagnostic_id: final_diagnostic_id)
+      errors.add(:base, I18n.t('.already_exist'))
+    end
   end
 end

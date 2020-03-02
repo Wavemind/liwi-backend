@@ -36,7 +36,7 @@ export default class Http {
       }
     };
     const header = await this.setHeaders("POST", body);
-    const request = await fetch( url, header).catch(error => console.log(error));
+    const request = await fetch(url, header).catch(error => console.log(error));
 
     // Display error or parse json
     if (request.ok) {
@@ -57,12 +57,12 @@ export default class Http {
       diagnostic_id: this.instanceableId,
       final_diagnostic_id: this.finalDiagnostic
     };
-    body['health_cares_' + type.substring(0, type.length-1)] = {
+    body["health_cares_" + type.substring(0, type.length - 1)] = {
       label_en: label,
       description_en: description
     };
     const header = await this.setHeaders("POST", body);
-    const request = await fetch( url, header).catch(error => console.log(error));
+    const request = await fetch(url, header).catch(error => console.log(error));
 
     // Display error or parse json
     if (request.ok) {
@@ -88,7 +88,7 @@ export default class Http {
       }
     };
     const header = await this.setHeaders("POST", body);
-    const request = await fetch( url, header).catch(error => console.log(error));
+    const request = await fetch(url, header).catch(error => console.log(error));
 
     // Display error or parse json
     if (request.ok) {
@@ -96,35 +96,27 @@ export default class Http {
     } else {
       response = request;
     }
+
     return await response;
   };
 
-
-  // @params [Integer] nodeId
-  // @return [Object] body of request
-  // Create an instance
+  /**
+   * Create an instance
+   * @params [Integer] nodeId
+   * @return [Object] body of request
+   */
   createInstance = async (nodeId) => {
-    let response;
-    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/create_from_diagram`;
+    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances`;
     const body = {
       instance: {
         node_id: nodeId,
         instanceable_id: this.instanceableId,
-        instanceable_type: this.instanceableType,
+        instanceable_type: this.instanceableType
       }
     };
     const header = await this.setHeaders("POST", body);
-    const request = await fetch( url, header).catch(error => console.log(error));
-
-    // Display error or parse json
-    if (request.ok) {
-      response = await request.json();
-    } else {
-      response = request;
-    }
-    return await response;
+    return await fetch(url, header).catch(error => console.log(error));
   };
-
 
   // @params [Integer] nodeId, [Integer] answerId, [Integer] score
   // @return [Object] body of request
@@ -141,7 +133,7 @@ export default class Http {
       score: score
     };
     const header = await this.setHeaders("POST", body);
-    const request = await fetch( url, header).catch(error => console.log(error));
+    const request = await fetch(url, header).catch(error => console.log(error));
 
     // Display error or parse json
     if (request.ok) {
@@ -158,11 +150,11 @@ export default class Http {
   createQuestion = async (questionBody) => {
     let response;
     const url = `${this.url}/algorithms/${this.algorithm}/questions/create_from_diagram`;
-    questionBody['instanceable_id'] = this.instanceableId;
-    questionBody['instanceable_type'] = this.instanceableType;
+    questionBody["instanceable_id"] = this.instanceableId;
+    questionBody["instanceable_type"] = this.instanceableType;
 
     const header = await this.setHeaders("POST", questionBody);
-    const request = await fetch( url, header).catch(error => console.log(error));
+    const request = await fetch(url, header).catch(error => console.log(error));
 
     // Display error or parse json
     if (request.ok) {
@@ -191,7 +183,7 @@ export default class Http {
       final_diagnostic_id: this.finalDiagnostic
     };
     const header = await this.setHeaders("POST", body);
-    const request = await fetch( url, header).catch(error => console.log(error));
+    const request = await fetch(url, header).catch(error => console.log(error));
 
     // Display error or parse json
     if (request.ok) {
@@ -201,7 +193,6 @@ export default class Http {
     }
     return await response;
   };
-
 
   // @params [Integer] instanceId, [Integer] condID
   // @return [Object] body of request
@@ -227,7 +218,6 @@ export default class Http {
     return await response;
   };
 
-
   // @params [Integer] dfId, [Integer] excludedDfId
   // @return [Object] body of request
   // Exclude a final diagnostic
@@ -237,11 +227,11 @@ export default class Http {
     const body = {
       final_diagnostic: {
         id: dfId,
-        final_diagnostic_id: excludedDfId,
+        final_diagnostic_id: excludedDfId
       }
     };
     const header = await this.setHeaders("PUT", body);
-    const request = await fetch( url, header).catch(error => console.log(error));
+    const request = await fetch(url, header).catch(error => console.log(error));
     // Display error or parse json
     if (request.ok) {
       response = await request.json();
@@ -250,7 +240,6 @@ export default class Http {
     }
     return await response;
   };
-
 
   // @params [Integer] dfId
   // @return [Object] body of request
@@ -260,7 +249,7 @@ export default class Http {
 
     const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/${dfId}/remove_excluded_diagnostic`;
     const header = await this.setHeaders("PUT");
-    const request = await fetch( url, header).catch(error => console.log(error));
+    const request = await fetch(url, header).catch(error => console.log(error));
 
     // Display error or parse json
     if (request.ok) {
@@ -271,20 +260,19 @@ export default class Http {
     return await response;
   };
 
-
-  // @params [Integer] nodeId
-  // @return [Object] body of request
-  // Delete an instance
-  removeInstance = async (nodeId) => {
+  /**
+   * Delete an instance
+   * @params [Integer] nodeId
+   * @return [Object] body of request
+   */
+  removeInstance = async (instanceId) => {
     let response;
-    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/remove_from_diagram`;
+    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/${instanceId}`;
     const body = {
       instance: {
-        node_id: nodeId,
-        instanceable_id: this.instanceableId,
-        instanceable_type: this.instanceableType,
+        id: instanceId,
         final_diagnostic_id: this.finalDiagnostic
-      },
+      }
     };
     const header = await this.setHeaders("DELETE", body);
     const request = await fetch(url, header).catch(error => console.log(error));
@@ -298,7 +286,6 @@ export default class Http {
     return await response;
   };
 
-
   // @params [Integer] nodeId, [Integer] answerId
   // @return [Object] body of request
   // Delete a Link
@@ -309,11 +296,11 @@ export default class Http {
       instance: {
         node_id: nodeId,
         answer_id: answerId,
-        final_diagnostic_id: this.finalDiagnostic,
+        final_diagnostic_id: this.finalDiagnostic
       }
     };
     const header = await this.setHeaders("DELETE", body);
-    const request = await fetch( url, header).catch(error => console.log(error));
+    const request = await fetch(url, header).catch(error => console.log(error));
 
     // Display error or parse json
     if (request.ok) {
@@ -375,7 +362,7 @@ export default class Http {
   setHeaders = async (method = "GET", body = false) => {
     let header = {
       method: method,
-      headers: {},
+      headers: {}
     };
     if (method === "POST" || method === "PATCH" || method === "PUT" || method === "DELETE") {
       header.body = JSON.stringify(body);
@@ -441,7 +428,7 @@ export default class Http {
       }
     };
     const header = await this.setHeaders("PUT", body);
-    const request = await fetch( url, header).catch(error => console.log(error));
+    const request = await fetch(url, header).catch(error => console.log(error));
 
     // Display error or parse json
     if (request.ok) {
@@ -462,13 +449,13 @@ export default class Http {
       diagnostic_id: this.instanceableId,
       final_diagnostic_id: this.finalDiagnostic
     };
-    body['health_cares_' + type.substring(0, type.length-1)] = {
+    body["health_cares_" + type.substring(0, type.length - 1)] = {
       id: id,
       label_en: label,
       description_en: description
     };
     const header = await this.setHeaders("PUT", body);
-    const request = await fetch( url, header).catch(error => console.log(error));
+    const request = await fetch(url, header).catch(error => console.log(error));
 
     // Display error or parse json
     if (request.ok) {
@@ -479,19 +466,25 @@ export default class Http {
     return await response;
   };
 
-  // TODO: USED !
+  /**
+   * Set X and Y position in diagram
+   * @params [Integer] id
+   * @params [Integer] positionX
+   * @params [Integer] positionY
+   * @return [Object] body of request
+   */
   updateInstance = async (id, positionX, positionY) => {
     let response;
     const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/${id}/update_from_diagram`;
     const body = {
       instance: {
         position_x: positionX,
-        position_y: positionY,
+        position_y: positionY
       }
     };
 
     const header = await this.setHeaders("PUT", body);
-    const request = await fetch( url, header).catch(error => console.log(error));
+    const request = await fetch(url, header).catch(error => console.log(error));
 
     // Display error or parse json
     if (request.ok) {
@@ -508,11 +501,11 @@ export default class Http {
   updateQuestion = async (questionBody) => {
     let response;
     const url = `${this.url}/algorithms/${this.algorithm}/questions/${questionBody.question.id}/update_from_diagram`;
-    questionBody['instanceable_id'] = this.instanceableId;
-    questionBody['instanceable_type'] = this.instanceableType;
+    questionBody["instanceable_id"] = this.instanceableId;
+    questionBody["instanceable_type"] = this.instanceableType;
 
     const header = await this.setHeaders("PUT", questionBody);
-    const request = await fetch( url, header).catch(error => console.log(error));
+    const request = await fetch(url, header).catch(error => console.log(error));
 
     // Display error or parse json
     if (request.ok) {
@@ -522,7 +515,6 @@ export default class Http {
     }
     return await response;
   };
-
 
   // @params [Integer] id, [String] label, [String] description
   // @return [Object] body of request
@@ -553,19 +545,19 @@ export default class Http {
   // @return [Object] flash message
   // Validate diagnostic
   validateDiagnostic = async () => {
-   let response;
-   const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/validate`;
-   const body = null;
-   const header = await this.setHeaders("GET", body);
-   const request = await fetch(url, header).catch(error => console.log(error));
+    let response;
+    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/validate`;
+    const body = null;
+    const header = await this.setHeaders("GET", body);
+    const request = await fetch(url, header).catch(error => console.log(error));
 
-   // Display error or parse json
-   if (request.ok) {
-     response = await request.json();
-   } else {
-     response = request;
-   }
-   return await response;
+    // Display error or parse json
+    if (request.ok) {
+      response = await request.json();
+    } else {
+      response = request;
+    }
+    return await response;
   };
 
   // @params [Hash] body of the question
@@ -574,11 +566,11 @@ export default class Http {
   validateQuestion = async (questionBody) => {
     let response;
     const url = `${this.url}/algorithms/${this.algorithm}/questions/validate`;
-    questionBody['instanceable_id'] = this.instanceableId;
-    questionBody['instanceable_type'] = this.instanceableType;
+    questionBody["instanceable_id"] = this.instanceableId;
+    questionBody["instanceable_type"] = this.instanceableType;
 
     const header = await this.setHeaders("POST", questionBody);
-    const request = await fetch( url, header).catch(error => console.log(error));
+    const request = await fetch(url, header).catch(error => console.log(error));
 
     // Display error or parse json
     if (request.ok) {

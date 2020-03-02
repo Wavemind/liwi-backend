@@ -42,8 +42,18 @@ export default class AdvancedNodeModel extends NodeModel {
     // Set event listener
     this.registerListener({
       eventDidFire: _.debounce(
-        (event) =>
-          http.updateInstance(this.dbInstance.id, event.entity.position.x, event.entity.position.y),
+        (event) => {
+          switch(event.function) {
+            case 'positionChanged':
+              http.updateInstance(this.dbInstance.id, event.entity.position.x, event.entity.position.y);
+              break;
+            case 'entityRemoved':
+              http.removeInstance(this.dbInstance.id);
+              break;
+            default:
+              break;
+          }
+        },
         100
       )
     });

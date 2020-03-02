@@ -9,6 +9,7 @@ import AdvancedLinkFactory from "../AdvancedDiagram/link/AdvancedLinkFactory";
 import AdvancedNodeFactory from "../AdvancedDiagram/node/AdvancedNodeFactory";
 import AdvancedNodeModel from "../AdvancedDiagram/node/AdvancedNodeModel";
 import AvailableNodes from "../AvailableNodes";
+import FlashMessages from "../FlashMessages";
 
 
 export class Diagram extends React.Component {
@@ -25,15 +26,15 @@ export class Diagram extends React.Component {
 
     this.state = {
       engine: engine,
-      model: model,
+      model: model
     };
 
     this.initDiagram();
   }
 
   initDiagram = () => {
-    const {engine, model} = this.state;
-    const {questionsPerLevel} = this.props;
+    const { engine, model } = this.state;
+    const { questionsPerLevel } = this.props;
 
     let instances = [];
 
@@ -43,21 +44,41 @@ export class Diagram extends React.Component {
         let diagramInstance = new AdvancedNodeModel({ dbInstance: instance });
         instances.push(diagramInstance);
         model.addAll(diagramInstance);
-      })
+      });
     });
 
     // Load model into engine
     engine.setModel(model);
   };
 
+  // Create instance and init it in diagram when drop
+  onDropAction = async (event) => {
+    const { http, addMessage } = this.props;
+
+    let dbNode = JSON.parse(event.dataTransfer.getData("node"));
+    let result = await http.createInstance(dbNode.id);
+
+    if (result.status === 200) {
+
+    } else {
+      let messages = await result.json();
+      addMessage(messages, 'danger');
+    }
+  };
+
   render = () => {
-    const {engine} = this.state;
+    const { engine } = this.state;
 
     return (
       <div className="content">
         <div className="row">
           <AvailableNodes/>
-          <div className="col diagram-wrapper">
+          <FlashMessages/>
+          <div className="col diagram-wrapper"
+               onDrop={event => this.onDropAction(event)}
+               onDragOver={event => {
+                 event.preventDefault();
+               }}>
             <CanvasWidget
               className="srd-canvas"
               engine={engine}

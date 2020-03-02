@@ -519,3 +519,4 @@ en:
   technical_files:
     index:
       title: "Upload/Download APK"
+  already_exist: "This instance already exist"
