@@ -160,8 +160,8 @@ class UpdateQuestionForm extends React.Component {
 
   // Handle change of inputs in the form
   handleFormChange = (event) => {
-    const value = name === "isMandatory" ? event.target.checked : event.target.value;
     const name = event.target.name;
+    const value = name === "isMandatory" ? event.target.checked : event.target.value;
 
     this.setState({
       [name]: value
@@ -279,8 +279,7 @@ class UpdateQuestionForm extends React.Component {
                 type="checkbox"
                 label="Is Mandatory"
                 name="isMandatory"
-                checked={isMandatory}
-                value={isMandatory}
+                defaultChecked={isMandatory}
                 onChange={this.handleFormChange}
               />
             </Form.Group>
@@ -362,7 +361,7 @@ class UpdateQuestionForm extends React.Component {
         </Modal.Body>
         <Modal.Footer>
           {/*Save directly the question if it is a boolean*/}
-          {(['1', '7', '8'].includes(answerType)) ? (
+          {([1, 7, 8].includes(answerType)) ? (
             <Button variant="success" onClick={() => this.update()}>
               Save
             </Button>

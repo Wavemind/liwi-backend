@@ -90,10 +90,16 @@ class InstancesController < ApplicationController
     end
 
     instance.save
-
-    respond_to do |format|
-      format.html {}
-      format.json { render json: instance.as_json(include: [node: {include: [:formulations], methods: [:node_type, :type, :category_name]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}])}
+    if instance.node.is_a?(HealthCares::Drug)
+      respond_to do |format|
+        format.html {}
+        format.json { render json: instance.as_json(include: [node: {include: [:formulations], methods: [:node_type, :type, :category_name]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}])}
+      end
+    else
+      respond_to do |format|
+        format.html {}
+        format.json { render json: instance.as_json(include: [node: {methods: [:node_type, :type, :category_name]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}])}
+      end
     end
   end
 

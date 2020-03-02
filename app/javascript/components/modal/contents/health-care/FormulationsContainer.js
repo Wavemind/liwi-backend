@@ -131,6 +131,9 @@ class FormulationsContainer extends React.Component {
         await addMessage({ status: result.status, messages: result.messages });
         if (currentDrug.id === undefined) {
           set(["currentDbNode", "modalToOpen", "modalIsOpen"], [result.node, "CreateDrugInstance", true]);
+        } else {
+          set("currentDbNode", result.node);
+
         }
       } else {
         let i = 0;

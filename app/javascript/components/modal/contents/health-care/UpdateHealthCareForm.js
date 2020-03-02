@@ -22,6 +22,8 @@ class UpdateHealthCareForm extends React.Component {
     id: null,
     label: "",
     description: "",
+    isAntibiotic: false,
+    isAntiMalarial: false,
     type: "",
     errors: {}
   };
@@ -30,11 +32,12 @@ class UpdateHealthCareForm extends React.Component {
     const { currentNode } = this.props;
     const newCurrentNode = _.cloneDeep(currentNode);
 
-
     this.setState({
       id: newCurrentNode.id,
       label: newCurrentNode.label_translations["en"],
       description: newCurrentNode.description_translations === null ? "" : newCurrentNode.description_translations["en"],
+      isAntibiotic: newCurrentNode.is_antibiotic,
+      isAntiMalarial: newCurrentNode.is_anti_malarial,
       type: newCurrentNode.type === "HealthCares::Management" ? "managements" : "drugs"
     });
   }
@@ -73,12 +76,16 @@ class UpdateHealthCareForm extends React.Component {
     const {
       id,
       label,
-      description
+      description,
+      isAntibiotic,
+      isAntiMalarial
     } = this.state;
 
     let drug = {
       id: id,
       label_en: label,
+      is_antibiotic: isAntibiotic,
+      is_anti_malarial: isAntiMalarial,
       description_en: description,
       formulations_attributes: {}
     };
@@ -97,7 +104,7 @@ class UpdateHealthCareForm extends React.Component {
   // Set value of inputs in state
   updateState = (event) => {
     const key = event.target.name;
-    const value = event.target.value;
+    const value = ["isAntibiotic", "isAntiMalarial"].includes(key) ? event.target.checked : event.target.value;
     this.setState({ [key]: value });
   };
 
@@ -121,6 +128,8 @@ class UpdateHealthCareForm extends React.Component {
     const {
       label,
       description,
+      isAntibiotic,
+      isAntiMalarial,
       errors
     } = this.state;
 
@@ -148,6 +157,32 @@ class UpdateHealthCareForm extends React.Component {
               </InputGroup>
             </Form.Group>
           </Form.Row>
+
+          {(currentHealthCareType === 'drugs') ? (
+            <Form.Row>
+              <Form.Group as={Col}>
+                <Form.Check
+                  type="checkbox"
+                  label="Antibiotic"
+                  name="isAntibiotic"
+                  defaultChecked={isAntibiotic}
+                  onChange={this.updateState}
+                />
+              </Form.Group>
+
+              <Form.Group as={Col}>
+                <Form.Check
+                  type="checkbox"
+                  label="Anti malarial"
+                  name="isAntiMalarial"
+                  defaultChecked={isAntiMalarial}
+                  onChange={this.updateState}
+                />
+              </Form.Group>
+            </Form.Row>
+          ) : (
+            null
+          )}
 
           <Form.Row>
             <Form.Group as={Col}>

@@ -20,7 +20,7 @@ class CreateHealthCareForm extends React.Component {
   state = {
     label: "",
     description: "",
-    isAntiBiotic: null,
+    isAntibiotic: null,
     isAntiMalarial: null,
     errors: {}
   };
@@ -62,20 +62,23 @@ class CreateHealthCareForm extends React.Component {
 
     const {
       label,
-      isAntiBiotic,
+      isAntibiotic,
       isAntiMalarial,
       description
     } = this.state;
 
     let drug = {
       label_en: label,
-      is_antibiotic: isAntiBiotic,
+      is_antibiotic: isAntibiotic,
       is_anti_malarial: isAntiMalarial,
       description_en: description,
       formulations_attributes: {}
     };
 
+    console.log(drug)
+
     let result = await http.validateDrug(drug);
+
     if (result.ok === undefined || result.ok) {
       set(
         ['currentDrug', 'modalToOpen', 'modalIsOpen'],
@@ -90,6 +93,7 @@ class CreateHealthCareForm extends React.Component {
   updateState = (event) => {
     const key = event.target.name;
     const value = ["isAntibiotic", "isAntiMalarial"].includes(key) ? event.target.checked : event.target.value;
+
     this.setState({ [key]: value });
   };
 
@@ -111,7 +115,7 @@ class CreateHealthCareForm extends React.Component {
     } = this.props;
     const {
       label,
-      isAntiBiotic,
+      isAntibiotic,
       isAntiMalarial,
       description,
       errors
@@ -142,14 +146,15 @@ class CreateHealthCareForm extends React.Component {
             </Form.Group>
           </Form.Row>
 
+          {(currentHealthCareType === 'drugs') ? (
           <Form.Row>
             <Form.Group as={Col}>
               <Form.Check
                 type="checkbox"
                 label="Antibiotic"
-                name="isAntiBiotic"
-                value={isAntiBiotic}
-                onChange={this.handleFormChange}
+                name="isAntibiotic"
+                value={isAntibiotic}
+                onChange={this.updateState}
               />
             </Form.Group>
 
@@ -159,10 +164,13 @@ class CreateHealthCareForm extends React.Component {
                 label="Anti malarial"
                 name="isAntiMalarial"
                 value={isAntiMalarial}
-                onChange={this.handleFormChange}
+                onChange={this.updateState}
               />
             </Form.Group>
           </Form.Row>
+          ) : (
+            null
+          )}
 
           <Form.Row>
             <Form.Group as={Col}>
