@@ -7,11 +7,10 @@ RSpec.describe QuestionsSequencesController, type: :controller do
   create_instances
 
   before(:each) do
-    @predefined_syndrome = @algorithm.questions_sequences.create!(reference: 1, label_en: 'Label en', type: QuestionsSequences::PredefinedSyndrome)
+    @predefined_syndrome = @algorithm.questions_sequences.create!(label_en: 'Label en', type: QuestionsSequences::PredefinedSyndrome)
   end
 
   it 'adds translations without rendering the view' do
-
     put :update_translations, params: {
       algorithm_id: @algorithm.id,
       id: @predefined_syndrome.id,
@@ -38,7 +37,6 @@ RSpec.describe QuestionsSequencesController, type: :controller do
 
     expect(response).to render_template('diagnostics/update_translations')
     expect(response).to have_attributes(status: 422)
-
   end
 
   it 'returns error message when trying to remove a predefined syndrome who has an instance' do
@@ -60,4 +58,43 @@ RSpec.describe QuestionsSequencesController, type: :controller do
 
     expect(flash[:notice]).to eq I18n.t('flash_message.success_updated')
   end
+
+  # TODO: @manu missing create from diagram
+
+  it 'should work for [GET:new]' do
+    get :new, params: { algorithm_id: @algorithm.id }
+    expect(response.status).to eq(200)
+  end
+
+  it 'should work for [POST:create]' do
+    post :create, params: { algorithm_id: @algorithm.id, questions_sequence: { algorithm: @algorithm, label_en: 'Severe LRTI' } }
+    expect(response.status).to eq(302)
+  end
+
+  it 'should work for [get:edit]' do
+    get :edit, params: { algorithm_id: @algorithm.id, id: @predefined_syndrome.id }
+    expect(response.status).to eq(200)
+  end
+
+  it 'should work for [get:edit_scored]' do
+    get :edit_scored, params: { algorithm_id: @algorithm.id, id: @predefined_syndrome.id }
+    expect(response.status).to eq(200)
+  end
+
+  it 'should work for [GET:new_scored]' do
+    get :new_scored, params: { algorithm_id: @algorithm.id }
+    expect(response.status).to eq(200)
+  end
+
+  it 'should work for [PATCH:update]' do
+    patch :update, params: { algorithm_id: @algorithm.id, id: @predefined_syndrome.id, questions_sequence: { algorithm: @algorithm, label_en: 'Severe LRTI' } }
+    expect(response.status).to eq(302)
+  end
+
+  it 'should work for [PATCH:update_from_diagram]' do
+    patch :update_from_diagram, params: { algorithm_id: @algorithm.id, id: @predefined_syndrome.id, questions_sequence: { algorithm: @algorithm, label_en: 'Severe LRTI' } }
+    expect(response.status).to eq(200)
+  end
+
+
 end

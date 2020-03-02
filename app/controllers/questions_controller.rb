@@ -40,7 +40,7 @@ class QuestionsController < ApplicationController
 
   def update
     if @question.update(question_params)
-      if @question.answer_type.value == 'Boolean'
+      if %w(Boolean Present Positive).include?(@question.answer_type.value) || @question.is_a?(Questions::VitalSignTriage) || @question.is_a?(Questions::VitalSignConsultation)
         redirect_to algorithm_url(@algorithm, panel: 'questions'), notice: t('flash_message.success_updated')
       else
         render 'answers/edit'
@@ -80,10 +80,8 @@ class QuestionsController < ApplicationController
         flash[:alert] = @question.errors[:answers] if @question.errors[:answers].any?
 
         # Code to reassign corrects id to failing answers that failed after a validation fail. On wait for improvements
-        i = 0
-        question_params[:answers_attributes].each_pair do |key, value|
-          @question.answers[i].id = value[:id]
-          i+=1
+        question_params[:answers_attributes].each do |key, value|
+          @question.answers[key.to_i].id = value[:id]
         end
 
         render 'answers/new'

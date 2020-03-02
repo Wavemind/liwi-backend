@@ -7,7 +7,7 @@ RSpec.describe DrugsController, type: :controller do
   create_instances
 
   before(:each) do
-    @treatment = @algorithm.health_cares.treatments.create!(reference: 1, label_en: 'Label en')
+    @treatment = @algorithm.health_cares.treatments.create!(label_en: 'Label en')
   end
 
   it 'adds translations without rendering the view' do
@@ -61,6 +61,28 @@ RSpec.describe DrugsController, type: :controller do
     expect(response).to redirect_to algorithm_url(@algorithm, panel: 'treatments')
     expect(response).to have_attributes(status: 302)
     expect(flash[:notice]).to eq I18n.t('flash_message.success_updated')
+  end
+
+  # TODO: @manu missing update from diagram
+
+  it 'should work for [GET:new]' do
+    get :new, params: { algorithm_id: @algorithm.id }
+    expect(response.status).to eq(200)
+  end
+
+  it 'should work for [POST:create]' do
+    post :create, params: { algorithm_id: @algorithm.id, health_cares_treatment: { algorithm: @algorithm, label_en: 'Severe LRTI' } }
+    expect(response.status).to eq(302)
+  end
+
+  it 'should work for [get:edit]' do
+    get :edit, params: { algorithm_id: @algorithm.id, id: @management.id }
+    expect(response.status).to eq(200)
+  end
+
+  it 'should work for [PATCH:update]' do
+    patch :update, params: { algorithm_id: @algorithm.id, id: @management.id, health_cares_treatment: { algorithm: @algorithm, label_en: 'Severe LRTI' } }
+    expect(response.status).to eq(302)
   end
 
 end

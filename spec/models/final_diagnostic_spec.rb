@@ -10,38 +10,31 @@ RSpec.describe FinalDiagnostic, type: :model do
   end
 
   it 'is valid with valid attributes' do
-    final_diagnostic = FinalDiagnostic.new(label_en: 'Severe lower respiratory tract infection', description_en: 'A shot description',reference: '7', diagnostic: @dd7)
+    final_diagnostic = FinalDiagnostic.new(label_en: 'Severe lower respiratory tract infection', description_en: 'A shot description',diagnostic: @dd7)
     expect(final_diagnostic).to be_valid
   end
 
   it 'is invalid with invalid attributes' do
-    final_diagnostic = FinalDiagnostic.new(label_en: nil, description_en: 'A shot description',reference: '7', diagnostic: @dd7)
-    expect(final_diagnostic).to_not be_valid
-  end
-
-  it 'is invalid same reference' do
-    FinalDiagnostic.create!(label_en: 'Severe lower respiratory tract infection', description_en: 'A shot description',reference: '7', diagnostic: @dd7)
-    final_diagnostic = FinalDiagnostic.new(label_en: 'Severe lower respiratory tract infection', description_en: 'A shot description',reference: '7', diagnostic: @dd7)
-
+    final_diagnostic = FinalDiagnostic.new(label_en: nil, description_en: 'A shot description',diagnostic: @dd7)
     expect(final_diagnostic).to_not be_valid
   end
 
   it 'can include health cares' do
-    treatment = HealthCares::Treatment.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
-    management = HealthCares::Management.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
+    treatment = HealthCares::Treatment.create!(label_en: 'skin issue', algorithm: @algorithm)
+    management = HealthCares::Management.create!(label_en: 'skin issue', algorithm: @algorithm)
 
-    final_diagnostic = FinalDiagnostic.new(label_en: 'Severe lower respiratory tract infection', description_en: 'A shot description',reference: '7', diagnostic: @dd7)
+    final_diagnostic = FinalDiagnostic.new(label_en: 'Severe lower respiratory tract infection', description_en: 'A shot description',diagnostic: @dd7)
     final_diagnostic.health_cares << [management, treatment]
 
     expect(final_diagnostic).to be_valid
   end
 
   it 'returns correct list of available nodes' do
-    df = FinalDiagnostic.new(label_en: 'Severe lower respiratory tract infection', description_en: 'A shot description',reference: '7', diagnostic: @dd7)
+    df = FinalDiagnostic.new(label_en: 'Severe lower respiratory tract infection', description_en: 'A shot description',diagnostic: @dd7)
 
-    ps6 = QuestionsSequences::PredefinedSyndrome.create!(reference: '7', label_en: 'coucou', algorithm: @algorithm)
-    ps5 = QuestionsSequences::PredefinedSyndrome.create!(reference: '5', label_en: 'diarrhea', algorithm: @algorithm)
-    ps9 = QuestionsSequences::PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
+    ps6 = QuestionsSequences::PredefinedSyndrome.create!(label_en: 'coucou', algorithm: @algorithm)
+    ps5 = QuestionsSequences::PredefinedSyndrome.create!(label_en: 'diarrhea', algorithm: @algorithm)
+    ps9 = QuestionsSequences::PredefinedSyndrome.create!(label_en: 'skin issue', algorithm: @algorithm)
 
     Instance.create!(node: ps6, instanceable: @dd7, final_diagnostic: df)
 
@@ -51,12 +44,12 @@ RSpec.describe FinalDiagnostic, type: :model do
   end
 
   it 'generates diagram properly' do
-    dd1 = Diagnostic.create!(version: @version, reference: '1', label: 'lower respiratory tract infection (LRTI)', node: @cc)
-    dd1.final_diagnostics.create!(reference: '1', label_en: 'Df')
-    t1 = HealthCares::Treatment.create!(reference: '1', label_en: 'Treat', algorithm: @algorithm)
-    m1 = HealthCares::Management.create!(reference: '1', label_en: 'Manage', algorithm: @algorithm)
-    ps5 = QuestionsSequences::PredefinedSyndrome.create!(reference: '5', label_en: 'dia', algorithm: @algorithm)
-    ps9 = QuestionsSequences::PredefinedSyndrome.create!(reference: '9', label_en: 'skin issue', algorithm: @algorithm)
+    dd1 = Diagnostic.create!(version: @version, label: 'lower respiratory tract infection (LRTI)', node: @cc)
+    dd1.final_diagnostics.create!(label_en: 'Df')
+    t1 = HealthCares::Treatment.create!(label_en: 'Treat', algorithm: @algorithm)
+    m1 = HealthCares::Management.create!(label_en: 'Manage', algorithm: @algorithm)
+    ps5 = QuestionsSequences::PredefinedSyndrome.create!(label_en: 'dia', algorithm: @algorithm)
+    ps9 = QuestionsSequences::PredefinedSyndrome.create!(label_en: 'skin issue', algorithm: @algorithm)
     dd1_df1 = Instance.create!(instanceable: dd1, node: dd1.final_diagnostics.first)
     dd1_ps9 = Instance.create!(instanceable: dd1, node: ps9, final_diagnostic: dd1_df1.node)
     dd1_m1 = Instance.create!(instanceable: dd1, node: m1, final_diagnostic: dd1_df1.node)

@@ -13,29 +13,6 @@ class InstancesController < ApplicationController
     end
   end
 
-  def show
-    @children = @instance.children.includes(:node)
-    @child = Child.new
-
-    @conditions = @instance.conditions
-    @condition = Condition.new
-
-    if params[:diagnostic_id].present?
-      @algorithm = @instanceable.version.algorithm
-
-      add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
-      add_breadcrumb @instanceable.version.name, algorithm_version_url(@algorithm, @instanceable.version)
-      add_breadcrumb @instanceable.label, algorithm_version_diagnostic_url(@algorithm, @instanceable.version, @instanceable)
-      add_breadcrumb @instance.node.label
-    else
-      @algorithm = @instanceable.algorithm
-
-      add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
-      add_breadcrumb @instanceable.label, questions_sequence_url(@instanceable)
-      add_breadcrumb @instance.node.label
-    end
-  end
-
   def create
     @instance = Instance.new(instance_params)
     @instance.instanceable = @instanceable

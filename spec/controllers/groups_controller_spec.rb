@@ -23,4 +23,34 @@ RSpec.describe GroupsController, type: :controller do
 
     expect(@device.group_id).to equal(nil)
   end
+
+  it 'should work for [GET:index]' do
+    get :index
+    expect(response.status).to eq(200)
+  end
+
+  it 'should work for [GET:show]' do
+    get :show, params: { id: @group.id }
+    expect(response.status).to eq(200)
+  end
+
+  it 'should work for [GET:new]' do
+    get :new, xhr: true
+    expect(response.status).to eq(200)
+  end
+
+  it 'should work for [POST:create]' do
+    post :create, params: { group: { name: 'administrator', architecture: 'standalone', pin_code: '1234' } }
+    expect(response.status).to eq(302)
+  end
+
+  it 'should work for [GET:edit]' do
+    get :edit, params: { id: @group.id }
+    expect(response.status).to eq(200)
+  end
+
+  it 'should work for [PATCH:update]' do
+    patch :update, params: { id: @group.id, group: { name: 'administrator', architecture: 'standalone', pin_code: '1234' } }
+    expect(response.status).to eq(302)
+  end
 end
