@@ -2,17 +2,48 @@ import * as React from "react";
 
 import Http from "../http";
 import { getCategoryNode } from "../../helpers/nodeHelpers";
+import { defaultOrderedNodes } from "../../engine/constants";
 
 const defaultValue = {};
 const DiagramContext = React.createContext(defaultValue);
 
 export default class DiagramProvider extends React.Component {
+
   constructor(props) {
     super(props);
+    const {
+      availableNodes,
+      instanceable
+    } = this.props.value;
 
     // Init http class
     const http = new Http();
-    this.state = { ...this.state, ...props.value, http };
+
+    // Assign node to correct array
+    let orderedNodes = defaultOrderedNodes;
+
+    if (instanceable.type === "Diagnostic") {
+      orderedNodes.scored = [];
+      orderedNodes.finalDiagnostic = [];
+    } else if (instanceable.type === "FinalDiagnostic") {
+      orderedNodes.treatmentQuestion = [];
+      orderedNodes.scored = [];
+      orderedNodes.treatment = [];
+      orderedNodes.management = [];
+    } else if (instanceable.type === "QuestionsSequence") {
+      // If different predefined syndromes scored category
+      if (instanceable.category_name !== "Scored") {
+        orderedNodes.scored = [];
+      }
+    }
+
+    availableNodes.map((node) => {
+      let category = getCategoryNode(node);
+      orderedNodes[category].push(node);
+    });
+    /////////////////////////////////////////////////////////////
+
+    this.state = { ...this.state, ...props.value, http, orderedNodes };
   }
 
   // @params type, category
@@ -47,54 +78,6 @@ export default class DiagramProvider extends React.Component {
 
     return prefix;
   };
-
-  // Order available nodes list
-  orderNodes = async () => {
-    const {
-      availableNodes,
-      type,
-      instanceable
-    } = this.state;
-
-    let orderedNodes = {
-      assessmentTest: [],
-      backgroundCalculation: [],
-      demographic: [],
-      exposure: [],
-      observedPhysicalSign: [],
-      physicalExam: [],
-      symptom: [],
-      vaccine: [],
-      predefinedSyndrome: [],
-      comorbidity: [],
-      triage: [],
-      chronicCondition: []
-    };
-
-    if (type === "Diagnostic") {
-      orderedNodes.scored = [];
-      orderedNodes.finalDiagnostic = [];
-    } else if (type === "FinalDiagnostic") {
-      orderedNodes.treatmentQuestion = [];
-      orderedNodes.scored = [];
-      orderedNodes.treatment = [];
-      orderedNodes.management = [];
-    } else if (type === "QuestionsSequence") {
-      // If different predefined syndromes scored category
-      if (instanceable.category_name !== "Scored") {
-        orderedNodes.scored = [];
-      }
-    }
-
-    // Assign node to correct array
-    availableNodes.map((node) => {
-      let category = this.getCategoryNode(node);
-      orderedNodes[category].push(node);
-    });
-
-    this.setState({ orderedNodes });
-  };
-
 
   state = {
     getReferencePrefix: this.getReferencePrefix

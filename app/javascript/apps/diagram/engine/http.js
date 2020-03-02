@@ -479,6 +479,7 @@ export default class Http {
     return await response;
   };
 
+  // TODO: USED !
   updateInstance = async (id, positionX, positionY) => {
     let response;
     const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/${id}/update_from_diagram`;
