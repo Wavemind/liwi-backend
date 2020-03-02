@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe TreatmentsController, type: :controller do
+RSpec.describe DrugsController, type: :controller do
   login_user
   create_answer_type
   create_algorithm

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe HealthCares::Treatment, type: :model do
+RSpec.describe HealthCares::Drug, type: :model do
   create_answer_type
   create_algorithm
 
