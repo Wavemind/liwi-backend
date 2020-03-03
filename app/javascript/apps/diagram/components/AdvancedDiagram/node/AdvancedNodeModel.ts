@@ -8,10 +8,12 @@ import Http from "../../../engine/http";
 
 export interface AdvancedNodeModelOptions extends BaseModelOptions {
   dbInstance?: object;
+  addAvailableNode?: any;
 }
 
 export default class AdvancedNodeModel extends NodeModel {
   dbInstance: object;
+  addAvailableNode?: any;
 
   constructor(options: AdvancedNodeModelOptions = {}) {
     super({
@@ -19,7 +21,9 @@ export default class AdvancedNodeModel extends NodeModel {
       type: "advanced"
     });
     this.dbInstance = options.dbInstance || {};
+    this.addAvailableNode = options.addAvailableNode || {};
     const http = new Http();
+
     // inPort
     this.addPort(
       new AdvancedPortModel({
@@ -36,6 +40,7 @@ export default class AdvancedNodeModel extends NodeModel {
       }));
     });
 
+
     // Set Position
     this.setPosition(this.dbInstance.position_x, this.dbInstance.position_y);
 
@@ -49,6 +54,7 @@ export default class AdvancedNodeModel extends NodeModel {
               break;
             case 'entityRemoved':
               http.removeInstance(this.dbInstance.id);
+              this.addAvailableNode(this.dbInstance.node);
               break;
             default:
               break;
@@ -57,7 +63,6 @@ export default class AdvancedNodeModel extends NodeModel {
         100
       )
     });
-
   }
 
   // Get single in port
@@ -77,12 +82,14 @@ export default class AdvancedNodeModel extends NodeModel {
   serialize() {
     return {
       ...super.serialize(),
-      dbInstance: this.dbInstance
+      dbInstance: this.dbInstance,
+      addAvailableNode: this.addAvailableNode,
     };
   }
 
   deserialize(event): void {
     super.deserialize(event);
     this.dbInstance = event.data.dbInstance;
+    this.addAvailableNode = event.data.addAvailableNode;
   }
 }

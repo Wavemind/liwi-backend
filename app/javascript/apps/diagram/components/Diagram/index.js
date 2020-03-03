@@ -34,14 +34,17 @@ export class Diagram extends React.Component {
 
   initDiagram = () => {
     const { engine, model } = this.state;
-    const { questionsPerLevel } = this.props;
+    const { questionsPerLevel, addAvailableNode } = this.props;
 
     let instances = [];
 
     // Generate questions
     questionsPerLevel.map(level => {
       level.map(instance => {
-        let diagramInstance = new AdvancedNodeModel({ dbInstance: instance });
+        let diagramInstance = new AdvancedNodeModel({
+          dbInstance: instance,
+          addAvailableNode: addAvailableNode
+        });
         instances.push(diagramInstance);
         model.addAll(diagramInstance);
       });
@@ -52,30 +55,47 @@ export class Diagram extends React.Component {
   };
 
   // Create instance and init it in diagram when drop
-  onDropAction = async (event) => {
-    const { http, addMessage } = this.props;
+  onDropAction = async (event, positions) => {
+    const { http, addMessage, addAvailableNode, removeAvailableNode } = this.props;
+    const { engine } = this.state;
 
     let dbNode = JSON.parse(event.dataTransfer.getData("node"));
-    let result = await http.createInstance(dbNode.id);
+    let result = await http.createInstance(dbNode.id, positions.x, positions.y);
 
+    // Generate node if instance creation success
     if (result.status === 200) {
+      let dbInstance = await result.json();
 
+      // Generate node
+      let diagramInstance = new AdvancedNodeModel({
+        dbInstance: dbInstance,
+        addAvailableNode: addAvailableNode
+      });
+
+      // Display node in diagram
+      engine.getModel().addNode(diagramInstance);
+      engine.repaintCanvas();
+
+      // Remove node from available nodes list
+      removeAvailableNode(dbNode);
     } else {
       let messages = await result.json();
-      addMessage(messages, 'danger');
+      addMessage(messages, "danger");
     }
   };
 
   render = () => {
     const { engine } = this.state;
-
     return (
       <div className="content">
         <div className="row">
           <AvailableNodes/>
           <FlashMessages/>
           <div className="col diagram-wrapper"
-               onDrop={event => this.onDropAction(event)}
+               onDrop={event => {
+                 let positions = engine.getRelativeMousePoint(event);
+                 this.onDropAction(event, positions);
+               }}
                onDragOver={event => {
                  event.preventDefault();
                }}>

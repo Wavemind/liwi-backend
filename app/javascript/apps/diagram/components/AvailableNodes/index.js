@@ -13,6 +13,7 @@ class AvailableNodes extends React.Component {
   };
 
   shouldComponentUpdate(nextProps) {
+    console.log(this.props.orderedNodes, nextProps.orderedNodes)
     return !_.isEqual(this.props.orderedNodes, nextProps.orderedNodes);
   }
 

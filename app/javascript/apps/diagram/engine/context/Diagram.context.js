@@ -101,7 +101,7 @@ export default class DiagramProvider extends React.Component {
     const { messages } = this.state;
     messages.push({
       colorClass,
-      messages: newMessages,
+      messages: newMessages
     });
     this.setState({ messages });
   };
@@ -116,12 +116,51 @@ export default class DiagramProvider extends React.Component {
     this.setState({ messages });
   };
 
+  /**
+   * Add node in list of available node
+   * @param node
+   */
+  addAvailableNode = (node) => {
+    const { orderedNodes } = this.state;
+    let category = getCategoryNode(node);
+    const newOrderedNodes = {
+      ...orderedNodes,
+      [category]: [
+        ...orderedNodes[category], node
+      ]
+    };
+    this.setState({ orderedNodes: newOrderedNodes });
+  };
+
+  /**
+   * Remove node in list of available node
+   * @param node
+   */
+  removeAvailableNode = (node) => {
+    const { orderedNodes } = this.state;
+
+    let category = getCategoryNode(node);
+    let index = _.findIndex(orderedNodes[category], { "id": node.id });
+    orderedNodes[category].splice(index, 1);
+    const newOrderedNodes = {
+      ...orderedNodes,
+      [category]: [
+        ...orderedNodes[category]
+      ]
+    };
+    console.log(newOrderedNodes)
+    this.setState({ orderedNodes: newOrderedNodes });
+  };
+
   state = {
     addMessage: this.addMessage,
+    addAvailableNode: this.addAvailableNode,
     getReferencePrefix: this.getReferencePrefix,
-    set: this.setValState,
-    removeMessage: this.removeMessage,
     messages: [],
+    orderedNodes: {},
+    removeMessage: this.removeMessage,
+    removeAvailableNode: this.removeAvailableNode,
+    set: this.setValState,
   };
 
   render() {

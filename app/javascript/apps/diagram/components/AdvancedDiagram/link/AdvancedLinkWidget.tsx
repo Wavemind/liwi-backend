@@ -34,7 +34,7 @@ export default class AdvancedLinkWidget extends DefaultLinkWidget {
           {
             "data-linkid": link.getID(),
             "data-point": j,
-            onMouseDown: (event: MouseEvent) => {
+            onMouseDown: (event) => {
               this.addPointToLink(event, j + 1);
             }
           },

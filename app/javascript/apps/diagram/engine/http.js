@@ -103,13 +103,17 @@ export default class Http {
   /**
    * Create an instance
    * @params [Integer] nodeId
+   * @params [Integer] x
+   * @params [Integer] y
    * @return [Object] body of request
    */
-  createInstance = async (nodeId) => {
+  createInstance = async (nodeId, x, y) => {
     const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances`;
     const body = {
       instance: {
         node_id: nodeId,
+        position_x: x,
+        position_y: y,
         instanceable_id: this.instanceableId,
         instanceable_type: this.instanceableType
       }

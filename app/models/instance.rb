@@ -25,7 +25,7 @@ class Instance < ApplicationRecord
 
   before_destroy :remove_condition_from_children
 
-  validate :already_exist
+  validate :already_exist, on: :create
 
   # Enable recursive duplicating
   # https://github.com/amoeba-rb/amoeba#usage
