@@ -49,9 +49,9 @@ module ServiceMacros
       p25_1 = p25.answers.first
       p25_2 = p25.answers.second
 
-      t1 = HealthCares::Treatment.create!(algorithm: epoct, label: 'Amoxicillin', )
-      t2 = HealthCares::Treatment.create!(algorithm: epoct, label: 'IM ceftriaxone', )
-      t9 = HealthCares::Treatment.create!(algorithm: epoct, label: 'Oral rehydration', )
+      t1 = HealthCares::Drug.create!(algorithm: epoct, label: 'Amoxicillin', )
+      t2 = HealthCares::Drug.create!(algorithm: epoct, label: 'IM ceftriaxone', )
+      t9 = HealthCares::Drug.create!(algorithm: epoct, label: 'Oral rehydration', )
 
       m2 = HealthCares::Management.create!(algorithm: epoct, label: 'Refer', )
 

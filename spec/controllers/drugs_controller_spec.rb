@@ -7,14 +7,15 @@ RSpec.describe DrugsController, type: :controller do
   create_instances
 
   before(:each) do
-    @treatment = @algorithm.health_cares.treatments.create!(label_en: 'Label en')
+    @administration_route = AdministrationRoute.create!(category: 'enteral', name: 'orally')
+    @drug = @algorithm.health_cares.drugs.create!(type: 'HealthCares::Drug', label_en: 'Label en')
   end
 
   it 'adds translations without rendering the view' do
     put :update_translations, params: {
       algorithm_id: @algorithm.id,
-      id: @treatment.id,
-      health_cares_treatment: {
+      id: @drug.id,
+      health_cares_drug: {
         label_fr: 'Label fr',
       }
     }
@@ -22,15 +23,15 @@ RSpec.describe DrugsController, type: :controller do
     expect(response).to render_template('diagnostics/update_translations')
     expect(response).to have_attributes(status: 200)
 
-    @treatment.reload
-    expect(@treatment.label_fr).to eq('Label fr')
+    @drug.reload
+    expect(@drug.label_fr).to eq('Label fr')
   end
 
   it 'returns error when sending attributes with clearing a mandatory field' do
     put :update_translations, params: {
       algorithm_id: @algorithm.id,
-      id: @treatment.id,
-      health_cares_treatment: {
+      id: @drug.id,
+      health_cares_drug: {
         label_en: '',
       }
     }
@@ -39,31 +40,55 @@ RSpec.describe DrugsController, type: :controller do
     expect(response).to have_attributes(status: 422)
   end
 
-  it 'returns error message when trying to remove a treatment who has an instance' do
-    Instance.create!(instanceable: @dd7, node: @treatment)
+  it 'returns error message when trying to remove a drug who has an instance' do
+    Instance.create!(instanceable: @dd7, node: @drug)
 
     delete :destroy, params: {
       algorithm_id: @algorithm.id,
-      id: @treatment.id,
+      id: @drug.id,
     }
 
-    expect(response).to redirect_to algorithm_url(@algorithm, panel: 'treatments')
+    expect(response).to redirect_to algorithm_url(@algorithm, panel: 'drugs')
     expect(response).to have_attributes(status: 302)
     expect(flash[:alert]).to eq I18n.t('dependencies')
   end
 
-  it 'returns success full message when removing a treatment hasn\'t instance dependecy' do
+  it 'returns success full message when removing a drug hasn\'t instance dependecy' do
     delete :destroy, params: {
       algorithm_id: @algorithm.id,
-      id: @treatment.id,
+      id: @drug.id,
     }
 
-    expect(response).to redirect_to algorithm_url(@algorithm, panel: 'treatments')
+    expect(response).to redirect_to algorithm_url(@algorithm, panel: 'drugs')
     expect(response).to have_attributes(status: 302)
     expect(flash[:notice]).to eq I18n.t('flash_message.success_updated')
   end
 
-  # TODO: @manu missing update from diagram
+  it 'should work for [PATCH:update_from_diagram]' do
+    patch :update_from_diagram, params: {
+      algorithm_id: @algorithm.id,
+      id: @drug.id,
+      health_cares_drug: {
+        algorithm: @algorithm,
+        label_en: 'Severe LRTI',
+        is_antibiotic: true,
+        formulations_attributes:[
+          {
+            medication_form: 'suppository',
+            administration_route_id: @administration_route.id,
+            doses_per_day: 3,
+            unique_dose: 3
+          }
+        ]
+      }
+    }
+    @drug.reload
+
+    expect(response.status).to eq(200)
+    expect(@drug.formulations.count).to eq(1)
+    expect(@drug.is_antibiotic).to be(true)
+    expect(@drug.is_anti_malarial).to be(false)
+  end
 
   it 'should work for [GET:new]' do
     get :new, params: { algorithm_id: @algorithm.id }
@@ -71,17 +96,17 @@ RSpec.describe DrugsController, type: :controller do
   end
 
   it 'should work for [POST:create]' do
-    post :create, params: { algorithm_id: @algorithm.id, health_cares_treatment: { algorithm: @algorithm, label_en: 'Severe LRTI' } }
+    post :create, params: { algorithm_id: @algorithm.id, health_cares_drug: { algorithm: @algorithm, label_en: 'Severe LRTI' } }
     expect(response.status).to eq(302)
   end
 
   it 'should work for [get:edit]' do
-    get :edit, params: { algorithm_id: @algorithm.id, id: @management.id }
+    get :edit, params: { algorithm_id: @algorithm.id, id: @drug.id }
     expect(response.status).to eq(200)
   end
 
   it 'should work for [PATCH:update]' do
-    patch :update, params: { algorithm_id: @algorithm.id, id: @management.id, health_cares_treatment: { algorithm: @algorithm, label_en: 'Severe LRTI' } }
+    patch :update, params: { algorithm_id: @algorithm.id, id: @drug.id, health_cares_drug: { algorithm: @algorithm, label_en: 'Severe LRTI' } }
     expect(response.status).to eq(302)
   end
 

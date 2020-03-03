@@ -61,6 +61,7 @@ RSpec.describe QuestionsSequencesController, type: :controller do
 
   # TODO: @manu missing create from diagram
 
+
   it 'should work for [GET:new]' do
     get :new, params: { algorithm_id: @algorithm.id }
     expect(response.status).to eq(200)
@@ -91,10 +92,23 @@ RSpec.describe QuestionsSequencesController, type: :controller do
     expect(response.status).to eq(302)
   end
 
+  it 'should work for [POST:create_from_diagram]', focus: true do
+    post :create_from_diagram, params: {
+      algorithm_id: @algorithm.id,
+      instanceable_id: @predefined_syndrome.id,
+      instanceable_type: @predefined_syndrome.class.name,
+      questions_sequence:
+        {
+          algorithm: @algorithm,
+          label_en: 'Severe LRTI'
+        }
+    }
+    expect(response.status).to eq(200)
+  end
+
   it 'should work for [PATCH:update_from_diagram]' do
     patch :update_from_diagram, params: { algorithm_id: @algorithm.id, id: @predefined_syndrome.id, questions_sequence: { algorithm: @algorithm, label_en: 'Severe LRTI' } }
     expect(response.status).to eq(200)
   end
-
 
 end

@@ -28,7 +28,7 @@ RSpec.describe Diagnostic, type: :model do
   it 'generates diagram properly' do
     dd1 = Diagnostic.create!(version: @version, label: 'lower respiratory tract infection (LRTI)', node: @cc)
     dd1.final_diagnostics.create!(label_en: 'Df')
-    t1 = HealthCares::Treatment.create!(label_en: 'Treat', algorithm: @algorithm)
+    t1 = HealthCares::Drug.create!(label_en: 'Treat', algorithm: @algorithm)
     m1 = HealthCares::Management.create!(label_en: 'Manage', algorithm: @algorithm)
     ps5 = QuestionsSequences::PredefinedSyndrome.create!(label_en: 'dia', algorithm: @algorithm)
     ps9 = QuestionsSequences::PredefinedSyndrome.create!(label_en: 'skin issue', algorithm: @algorithm)
@@ -63,7 +63,7 @@ RSpec.describe Diagnostic, type: :model do
     before(:each) do
       @dd1 = Diagnostic.create!(version: @version, label: 'lower respiratory tract infection (LRTI)', node: @cc)
       @dd1.final_diagnostics.create!(label_en: 'Df')
-      t1 = HealthCares::Treatment.create!(label_en: 'Treat', algorithm: @algorithm)
+      t1 = HealthCares::Drug.create!(label_en: 'Treat', algorithm: @algorithm)
       m1 = HealthCares::Management.create!(label_en: 'Manage', algorithm: @algorithm)
       ps5 = QuestionsSequences::PredefinedSyndrome.create!(label_en: 'dia', algorithm: @algorithm)
       ps9 = QuestionsSequences::PredefinedSyndrome.create!(label_en: 'skin issue', algorithm: @algorithm)

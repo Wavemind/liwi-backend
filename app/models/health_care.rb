@@ -1,6 +1,8 @@
 # Define every drugs for a diagnostic
 class HealthCare < Node
 
+  has_many :formulations, foreign_key: 'node_id', dependent: :destroy
+
   scope :managements, ->() { where('type = ?', 'HealthCares::Management') }
   scope :drugs, ->() { where('type = ?', 'HealthCares::Drug') }
 
