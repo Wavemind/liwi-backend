@@ -8,6 +8,9 @@
 // layout file, like app/views/layouts/application.html.erb
 // Support component names relative to this directory:
 
+import "core-js/stable";
+import "regenerator-runtime/runtime";
+
 let componentRequireContext = require.context("apps", true);
 let ReactRailsUJS = require("react_ujs");
 ReactRailsUJS.useContext(componentRequireContext);

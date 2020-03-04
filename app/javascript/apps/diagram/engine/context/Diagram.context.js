@@ -122,7 +122,9 @@ export default class DiagramProvider extends React.Component {
    */
   addAvailableNode = (node) => {
     const { orderedNodes } = this.state;
+
     let category = getCategoryNode(node);
+
     const newOrderedNodes = {
       ...orderedNodes,
       [category]: [
@@ -140,15 +142,14 @@ export default class DiagramProvider extends React.Component {
     const { orderedNodes } = this.state;
 
     let category = getCategoryNode(node);
-    let index = _.findIndex(orderedNodes[category], { "id": node.id });
-    orderedNodes[category].splice(index, 1);
+    const newArray = orderedNodes[category].filter(e => e.id !== node.id);
+
     const newOrderedNodes = {
       ...orderedNodes,
       [category]: [
-        ...orderedNodes[category]
+        ...newArray
       ]
     };
-    console.log(newOrderedNodes)
     this.setState({ orderedNodes: newOrderedNodes });
   };
 
