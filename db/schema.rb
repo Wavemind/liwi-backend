@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_27_085907) do
+ActiveRecord::Schema.define(version: 2020_03_04_125139) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -34,6 +34,11 @@ ActiveRecord::Schema.define(version: 2020_01_27_085907) do
     t.datetime "updated_at", null: false
     t.index ["device_id"], name: "index_activities_on_device_id"
     t.index ["user_id"], name: "index_activities_on_user_id"
+  end
+
+  create_table "administration_routes", force: :cascade do |t|
+    t.string "category"
+    t.string "name"
   end
 
   create_table "algorithms", force: :cascade do |t|
@@ -125,6 +130,23 @@ ActiveRecord::Schema.define(version: 2020_01_27_085907) do
     t.index ["node_id"], name: "index_final_diagnostic_health_cares_on_node_id"
   end
 
+  create_table "formulations", force: :cascade do |t|
+    t.float "minimal_dose_per_kg"
+    t.float "maximal_dose_per_kg"
+    t.float "maximal_dose"
+    t.integer "medication_form"
+    t.integer "dose_form"
+    t.integer "liquid_concentration"
+    t.integer "doses_per_day"
+    t.integer "unique_dose"
+    t.integer "breakable"
+    t.boolean "by_age", default: false
+    t.bigint "node_id"
+    t.bigint "administration_route_id"
+    t.index ["administration_route_id"], name: "index_formulations_on_administration_route_id"
+    t.index ["node_id"], name: "index_formulations_on_node_id"
+  end
+
   create_table "group_accesses", force: :cascade do |t|
     t.boolean "access", default: true
     t.datetime "end_date"
@@ -153,6 +175,8 @@ ActiveRecord::Schema.define(version: 2020_01_27_085907) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "final_diagnostic_id"
+    t.integer "duration"
+    t.string "description"
     t.index ["final_diagnostic_id"], name: "index_instances_on_final_diagnostic_id"
     t.index ["instanceable_type", "instanceable_id"], name: "index_instances_on_instanceable_type_and_instanceable_id"
     t.index ["node_id"], name: "index_instances_on_node_id"
@@ -232,14 +256,15 @@ ActiveRecord::Schema.define(version: 2020_01_27_085907) do
     t.bigint "reference_table_y_id"
     t.bigint "snomed_id"
     t.string "snomed_label"
-    t.decimal "minimal_dose_per_kg"
-    t.decimal "maximal_dose_per_kg"
-    t.decimal "maximal_dose"
-    t.integer "treatment_type"
-    t.integer "pill_size"
-    t.integer "doses_per_day"
     t.integer "system"
     t.boolean "is_mandatory", default: false
+    t.bigint "administration_route_id"
+    t.boolean "is_anti_malarial", default: false
+    t.boolean "is_antibiotic", default: false
+    t.integer "step"
+    t.boolean "is_triage", default: false
+    t.boolean "is_identifiable", default: false
+    t.index ["administration_route_id"], name: "index_nodes_on_administration_route_id"
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
     t.index ["diagnostic_id"], name: "index_nodes_on_diagnostic_id"
@@ -320,9 +345,9 @@ ActiveRecord::Schema.define(version: 2020_01_27_085907) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "triage_questions_order", default: [], array: true
-    t.integer "triage_emergency_sign_order", default: [], array: true
+    t.integer "triage_unique_triage_question_order", default: [], array: true
     t.integer "triage_complaint_category_order", default: [], array: true
-    t.integer "triage_vital_sign_triage_order", default: [], array: true
+    t.integer "triage_basic_measurement_order", default: [], array: true
     t.integer "triage_chronic_condition_order", default: [], array: true
     t.index ["algorithm_id"], name: "index_versions_on_algorithm_id"
     t.index ["user_id"], name: "index_versions_on_user_id"
@@ -336,6 +361,7 @@ ActiveRecord::Schema.define(version: 2020_01_27_085907) do
   add_foreign_key "diagnostics", "versions"
   add_foreign_key "group_accesses", "groups"
   add_foreign_key "group_accesses", "versions"
+  add_foreign_key "nodes", "administration_routes"
   add_foreign_key "nodes", "algorithms"
   add_foreign_key "nodes", "answer_types"
   add_foreign_key "technical_files", "users"

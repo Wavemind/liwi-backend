@@ -21,7 +21,7 @@ class QuestionsController < ApplicationController
 
     if @question.save
       # Don't create answers if it is boolean type, since it is automatically created from the model
-      if %w(Boolean Present Positive).include?(@question.answer_type.value) || @question.is_a?(Questions::VitalSignTriage) || @question.is_a?(Questions::VitalSignConsultation)
+      if %w(Boolean Present Positive).include?(@question.answer_type.value) || @question.is_a?(Questions::BasicMeasurement) || @question.is_a?(Questions::VitalSignAnthropometric)
         redirect_to algorithm_url(@algorithm, panel: 'questions'), notice: t('flash_message.success_created')
       else
         # Create a new first answer for the form view
@@ -40,7 +40,7 @@ class QuestionsController < ApplicationController
 
   def update
     if @question.update(question_params)
-      if %w(Boolean Present Positive).include?(@question.answer_type.value) || @question.is_a?(Questions::VitalSignTriage) || @question.is_a?(Questions::VitalSignConsultation)
+      if %w(Boolean Present Positive).include?(@question.answer_type.value) || @question.is_a?(Questions::BasicMeasurement) || @question.is_a?(Questions::VitalSignAnthropometric)
         redirect_to algorithm_url(@algorithm, panel: 'questions'), notice: t('flash_message.success_updated')
       else
         render 'answers/edit'
@@ -188,6 +188,8 @@ class QuestionsController < ApplicationController
       :formula,
       :snomed_id,
       :snomed_label,
+      :is_triage,
+      :is_identifiable,
       answers_attributes: [
         :id,
         :reference,

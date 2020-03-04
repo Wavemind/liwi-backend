@@ -21,7 +21,7 @@ class VersionsService
     end
 
     # Add every vital sign consultation
-    @version.algorithm.questions.where(type: 'Questions::VitalSignConsultation').each do |vital_sign|
+    @version.algorithm.questions.where(type: 'Questions::VitalSignAnthropometric').each do |vital_sign|
       assign_node(vital_sign)
     end
 
@@ -129,9 +129,9 @@ class VersionsService
     hash = {}
 
     hash['orders'] = {}
-    hash['orders']['emergency_sign'] = @version.triage_emergency_sign_order
+    hash['orders']['unique_triage_question'] = @version.triage_unique_triage_question_order
     hash['orders']['complaint_category'] = @version.triage_complaint_category_order
-    hash['orders']['vital_sign_triage'] = @version.triage_vital_sign_triage_order
+    hash['orders']['basic_measurement'] = @version.triage_basic_measurement_order
     hash['orders']['chronic_condition'] = @version.triage_chronic_condition_order
     hash['orders']['other'] = @version.triage_questions_order
 
@@ -434,7 +434,7 @@ class VersionsService
       hash[health_care.id]['label'] = health_care.label
       hash[health_care.id]['description'] = health_care.description
       # Fields specific to treatments
-      hash[health_care.id]['weight_question_id'] = @version.algorithm.questions.find_by(type: 'Questions::VitalSignTriage', reference: '1').id
+      hash[health_care.id]['weight_question_id'] = @version.algorithm.questions.find_by(type: 'Questions::BasicMeasurement', reference: '1').id
       hash[health_care.id]['minimal_dose_per_kg'] = health_care.minimal_dose_per_kg
       hash[health_care.id]['maximal_dose_per_kg'] = health_care.maximal_dose_per_kg
       hash[health_care.id]['maximal_dose'] = health_care.maximal_dose
