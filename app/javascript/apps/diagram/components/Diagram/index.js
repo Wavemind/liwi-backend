@@ -86,6 +86,7 @@ export class Diagram extends React.Component {
 
   render = () => {
     const { engine } = this.state;
+
     return (
       <div className="content">
         <div className="row">
