@@ -174,8 +174,8 @@ class UpdateQuestionForm extends React.Component {
 
   // Handle change of inputs in the form
   handleFormChange = (event) => {
-    const value = name === "isMandatory" ? event.target.checked : event.target.value;
     const name = event.target.name;
+    const value = ["isIdentifiable", "isTriage", "isMandatory"].includes(name) ? event.target.checked : event.target.value;
 
     this.setState({
       [name]: value
