@@ -122,9 +122,13 @@ export default class Http {
     return await fetch(url, header).catch(error => console.log(error));
   };
 
-  // @params [Integer] nodeId, [Integer] answerId, [Integer] score
-  // @return [Object] body of request
-  // Create a Link
+  /**
+   * Create a link
+   * @params [Integer] instanceId
+   * @params [Integer] answerId
+   * @params [Integer] score
+   * @return [Object] body of request
+   */
   createLink = async (instanceId, answerId, score = null) => {
     const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/${instanceId}/create_link`;
     const body = {
