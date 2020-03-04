@@ -9,11 +9,11 @@ export default class AdvancedLinkFactory extends DefaultLinkFactory {
     super('advanced');
   }
 
-  generateModel(): AdvancedLinkModel {
+  generateModel(event) {
     return new AdvancedLinkModel();
   }
 
-  generateReactWidget(event): JSX.Element {
+  generateReactWidget(event) {
     return <AdvancedLinkWidget link={event.model} diagramEngine={this.engine} />;
   }
 }

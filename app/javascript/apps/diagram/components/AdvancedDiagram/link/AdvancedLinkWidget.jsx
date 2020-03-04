@@ -1,18 +1,18 @@
 import * as React from "react";
 import { DefaultLinkWidget } from "@projectstorm/react-diagrams";
-import { LinkWidget, PointModel } from "@projectstorm/react-diagrams-core";
+import { LinkWidget } from "@projectstorm/react-diagrams-core";
 
 import { AdvancedLinkArrowWidget } from "../../../helpers/nodeHelpers";
 
 export default class AdvancedLinkWidget extends DefaultLinkWidget {
-  generateArrow(point: PointModel, previousPoint: PointModel): JSX.Element {
+  generateArrow(point, previousPoint) {
     const { link } = this.props;
 
     return (
       <AdvancedLinkArrowWidget
         key={point.getID()}
-        point={point as any}
-        previousPoint={previousPoint as any}
+        point={point}
+        previousPoint={previousPoint}
         colorSelected={link.getOptions().selectedColor}
         color={link.getOptions().color}
       />

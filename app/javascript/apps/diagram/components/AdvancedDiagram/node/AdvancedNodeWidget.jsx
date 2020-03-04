@@ -1,22 +1,12 @@
 import * as React from "react";
-import { DiagramEngine, PortWidget } from "@projectstorm/react-diagrams-core";
+import { PortWidget } from "@projectstorm/react-diagrams-core";
 
 import { withDiagram } from "../../../engine/context/Diagram.context";
 import { getLabel } from "../../../helpers/nodeHelpers";
-import AdvancedNodeModel from "./AdvancedNodeModel";
 
-export interface AdvancedNodeWidgetProps {
-  node: AdvancedNodeModel;
-  engine: DiagramEngine;
-  getReferencePrefix: getReferencePrefix,
-  dbInstance: dbInstance,
-}
 
-export interface AdvancedNodeWidgetState {
-}
-
-class AdvancedNodeWidget extends React.Component<AdvancedNodeWidgetProps, AdvancedNodeWidgetState> {
-  constructor(props: AdvancedNodeWidgetProps) {
+class AdvancedNodeWidget extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {};
   }

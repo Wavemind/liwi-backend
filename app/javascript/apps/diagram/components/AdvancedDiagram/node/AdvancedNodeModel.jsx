@@ -1,21 +1,13 @@
 import * as _ from "lodash";
 import { NodeModel } from "@projectstorm/react-diagrams";
-import { BaseModelOptions } from "@projectstorm/react-canvas-core";
 
 import AdvancedPortModel from "../port/AdvancedPortModel";
 import { getLabel } from "../../../helpers/nodeHelpers";
 import Http from "../../../engine/http";
 
-export interface AdvancedNodeModelOptions extends BaseModelOptions {
-  dbInstance?: object;
-  addAvailableNode?: any;
-}
-
 export default class AdvancedNodeModel extends NodeModel {
-  dbInstance: object;
-  addAvailableNode?: any;
 
-  constructor(options: AdvancedNodeModelOptions = {}) {
+  constructor(options = {}) {
     super({
       ...options,
       type: "advanced"
@@ -66,14 +58,14 @@ export default class AdvancedNodeModel extends NodeModel {
   }
 
   // Get single in port
-  getInPort(): AdvancedPortModel[] {
+  getInPort() {
     return _.find(this.ports, portModel => {
       return portModel.options.in;
     });
   }
 
   // Get all out ports
-  getOutPorts(): AdvancedPortModel[] {
+  getOutPorts() {
     return _.filter(this.ports, portModel => {
       return !portModel.options.in;
     });
@@ -87,7 +79,7 @@ export default class AdvancedNodeModel extends NodeModel {
     };
   }
 
-  deserialize(event): void {
+  deserialize(event) {
     super.deserialize(event);
     this.dbInstance = event.data.dbInstance;
     this.addAvailableNode = event.data.addAvailableNode;

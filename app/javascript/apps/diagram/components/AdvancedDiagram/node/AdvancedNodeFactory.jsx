@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { AbstractReactFactory } from '@projectstorm/react-canvas-core';
-import { DiagramEngine } from '@projectstorm/react-diagrams-core';
 
 import AdvancedNodeModel from './AdvancedNodeModel';
 import AdvancedNodeWidget from './AdvancedNodeWidget';
 
-export default class AdvancedNodeFactory extends AbstractReactFactory<AdvancedNodeModel, DiagramEngine> {
+export default class AdvancedNodeFactory extends AbstractReactFactory {
   constructor() {
     super('advanced');
   }
@@ -14,7 +13,7 @@ export default class AdvancedNodeFactory extends AbstractReactFactory<AdvancedNo
     return new AdvancedNodeModel();
   }
 
-  generateReactWidget(event): JSX.Element {
-    return <AdvancedNodeWidget engine={this.engine as DiagramEngine} node={event.model} />;
+  generateReactWidget(event) {
+    return <AdvancedNodeWidget engine={this.engine} node={event.model} />;
   }
 }

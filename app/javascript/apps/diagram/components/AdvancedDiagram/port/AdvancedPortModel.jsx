@@ -4,7 +4,7 @@ import { DefaultPortModel } from "@projectstorm/react-diagrams";
 import AdvancedLinkModel from "../link/AdvancedLinkModel";
 
 export default class AdvancedPortModel extends DefaultPortModel {
-  createLinkModel(): AdvancedLinkModel | null {
+  createLinkModel() {
     return new AdvancedLinkModel();
   }
 }
