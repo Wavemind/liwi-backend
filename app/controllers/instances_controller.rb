@@ -2,9 +2,8 @@ class InstancesController < ApplicationController
 
   before_action :authenticate_user!
   before_action :set_instanceable, only: [:show, :create, :destroy, :by_reference, :create_from_diagram, :create_link, :remove_link, :create_from_final_diagnostic_diagram, :update_score]
-  before_action :set_instance, only: [:show, :destroy, :update_from_diagram]
-  before_action :set_child, only: [:create_link, :remove_link, :update_score]
-  before_action :set_parent, only: [:create_link, :remove_link, :update_score]
+  before_action :set_instance, only: [:show, :destroy, :update_from_diagram, :create_link]
+  before_action :set_child, only: [:remove_link, :update_score]
 
   def index
     respond_to do |format|
@@ -90,11 +89,11 @@ class InstancesController < ApplicationController
   # @params [Diagnostic] Current diagnostic, [Answer] Answer from parent of the link, [Node] child of the link
   # Create link in both way from diagram
   def create_link
-    condition = Condition.new(referenceable: @child_instance, first_conditionable: @parent_answer, top_level: true, score: params[:score])
+    condition = @instance.conditions.new(first_conditionable_type: 'Answer', first_conditionable_id: instance_params[:answer_id], top_level: true, score: instance_params[:score])
     if condition.save
-      render json: { status: 'success', statusText: t('flash_message.success_created') }
+      render json: condition
     else
-      render json: { status: 'danger', statusText: condition.errors.full_messages, ok: false }
+      render json: condition.errors.full_messages, status: 422
     end
   end
 
@@ -136,11 +135,6 @@ class InstancesController < ApplicationController
     @child_instance = @instanceable.components.find_by(node_id: @child_node.id, final_diagnostic_id: instance_params[:final_diagnostic_id])
   end
 
-  def set_parent
-    @parent_answer = Answer.find(instance_params[:answer_id])
-    @parent_instance = @instanceable.components.find_by(node_id: @parent_answer.node_id, final_diagnostic_id: instance_params[:final_diagnostic_id])
-  end
-
   def set_instance
     @instance = Instance.find(params[:id])
   end
@@ -164,6 +158,7 @@ class InstancesController < ApplicationController
       :instanceable_id,
       :instanceable_type,
       :answer_id,
+    :score,
       :final_diagnostic_id
     )
   end

@@ -20,7 +20,8 @@ export default class AdvancedNodeModel extends NodeModel {
     this.addPort(
       new AdvancedPortModel({
         in: true,
-        name: "in"
+        name: "in",
+        id: this.dbInstance.id
       })
     );
 
@@ -28,7 +29,8 @@ export default class AdvancedNodeModel extends NodeModel {
     this.dbInstance.node.answers.map(answer => {
       this.addPort(new AdvancedPortModel({
         in: false,
-        name: getLabel(answer)
+        name: getLabel(answer),
+        id: answer.id
       }));
     });
 

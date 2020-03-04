@@ -143,11 +143,10 @@ Rails.application.routes.draw do
         get 'by_reference'
         get 'load_conditions'
         post 'create_from_final_diagnostic_diagram'
-        post 'create_link'
-        delete 'remove_link'
       end
-
       member do
+        delete 'remove_link'
+        post 'create_link'
         put 'update_from_diagram'
       end
       resources :children, only: [:create, :destroy]

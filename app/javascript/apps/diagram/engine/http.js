@@ -125,27 +125,18 @@ export default class Http {
   // @params [Integer] nodeId, [Integer] answerId, [Integer] score
   // @return [Object] body of request
   // Create a Link
-  createLink = async (nodeId, answerId, score = null) => {
-    let response;
-    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/create_link`;
+  createLink = async (instanceId, answerId, score = null) => {
+    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/${instanceId}/create_link`;
     const body = {
       instance: {
-        node_id: nodeId,
+        id: instanceId,
         answer_id: answerId,
-        final_diagnostic_id: this.finalDiagnostic
+        final_diagnostic_id: this.finalDiagnostic,
+        score: score
       },
-      score: score
     };
     const header = await this.setHeaders("POST", body);
-    const request = await fetch(url, header).catch(error => console.log(error));
-
-    // Display error or parse json
-    if (request.ok) {
-      response = await request.json();
-    } else {
-      response = request;
-    }
-    return await response;
+    return await fetch(url, header).catch(error => console.log(error));
   };
 
   // @params [Hash] body of the question with its answers
