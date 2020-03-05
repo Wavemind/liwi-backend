@@ -49,8 +49,6 @@ class UpdateQuestionForm extends React.Component {
 
     let system = questionSystems.find((element) => {return element[1] === newCurrentNode.system});
 
-    console.log(newCurrentNode)
-
     this.setState({
       id: newCurrentNode.id,
       reference: newCurrentNode.reference,
