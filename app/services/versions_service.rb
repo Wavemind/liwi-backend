@@ -450,7 +450,7 @@ class VersionsService
           formulation_hash['dose_form'] = formulation.dose_form
           formulation_hash['unique_dose'] = formulation.unique_dose
           formulation_hash['by_age'] = formulation.by_age
-          formulation_hash['breakable'] = formulation.breakable
+          formulation_hash['breakable'] = formulation.breakable.present? ? I18n.t("formulations.breakables.#{formulation.breakable}.value") : nil
           formulation_hash['minimal_dose_per_kg'] = formulation.minimal_dose_per_kg
           formulation_hash['maximal_dose_per_kg'] = formulation.maximal_dose_per_kg
           formulation_hash['maximal_dose'] = formulation.maximal_dose

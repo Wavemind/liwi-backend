@@ -127,8 +127,10 @@ class FormulationsContainer extends React.Component {
       let result = currentDrug.id === undefined ? await http.createDrug(currentDrug, currentHealthCareType) : await http.updateDrug(currentDrug);
       if (result.ok === undefined || result.ok) {
         toggleModal();
-        this.resetFormulationLists();
+        this.resetFormulationLists(); // Reset medication forms list so the next drug will have all possibilities
         await addMessage({ status: result.status, messages: result.messages });
+
+        // If it is a drug creation, open the instance pop up
         if (currentDrug.id === undefined) {
           set(["currentDbNode", "modalToOpen", "modalIsOpen"], [result.node, "CreateDrugInstance", true]);
         } else {

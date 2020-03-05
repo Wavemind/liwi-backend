@@ -231,9 +231,15 @@ en:
       triage_question_missing: "Please select the triage question you want to put a condition on."
   formulations:
     breakables:
-      one: "No"
-      two: "In 2"
-      four: "In 4"
+      one:
+        label: "No"
+        value: 1
+      two:
+        label: "In 2"
+        value: 2
+      four:
+        label: "In 4"
+        value: 4
     errors:
       minimum_higher_than_maximum: "The minimum dose per kg can't be higher than the maximum dose per kg"
       maximum_per_kg_higher_than_maximum: "The maximum dose per kg can't be higher than the maximum dose per day"

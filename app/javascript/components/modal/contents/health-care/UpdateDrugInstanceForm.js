@@ -14,20 +14,13 @@ import { withDiagram } from "../../../../context/Diagram.context";
 class UpdateDrugInstanceForm extends React.Component {
   constructor(props) {
     super(props);
-  }
 
-  state = {
-    duration: 0,
-    description: ""
-  };
-
-  componentDidMount() {
     const { currentDrugInstance } = this.props;
 
-    this.setState({
+    this.state = {
       duration: currentDrugInstance.duration,
       description: currentDrugInstance.description
-    });
+    };
   }
 
   // Set the score props from input, so it triggers listener in Diagram.js and execute http request

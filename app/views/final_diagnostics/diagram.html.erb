@@ -22,7 +22,7 @@
         answersOperators: Answer.operators.as_json,
         medicationForms: Formulation.medication_forms.to_a.map(&:first),
         administrationRoutes: AdministrationRoute.generate_select_options,
-        breakableOptions: Formulation.breakables.map { |k, v| [t("formulations.breakables.#{k}"), k] }
+        breakableOptions: Formulation.breakables.map { |k, v| [t("formulations.breakables.#{k}.label"), k] }
       }
     }) %>
   </div>
