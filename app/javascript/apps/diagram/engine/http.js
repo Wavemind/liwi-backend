@@ -265,7 +265,6 @@ export default class Http {
    * @return [Object] body of request
    */
   removeInstance = async (instanceId) => {
-    let response;
     const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/${instanceId}`;
     const body = {
       instance: {
@@ -274,40 +273,26 @@ export default class Http {
       }
     };
     const header = await this.setHeaders("DELETE", body);
-    const request = await fetch(url, header).catch(error => console.log(error));
-
-    // Display error or parse json
-    if (request.ok) {
-      response = await request.json();
-    } else {
-      response = request;
-    }
-    return await response;
+    return await fetch(url, header).catch(error => console.log(error));
   };
 
-  // @params [Integer] nodeId, [Integer] answerId
-  // @return [Object] body of request
-  // Delete a Link
-  removeLink = async (nodeId, answerId) => {
-    let response;
-    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/remove_link`;
+  /**
+   * Delete a Link
+   * @params [Integer] nodeId
+   * @params [Integer] answerId
+   * @return [Object] body of request
+   */
+  removeLink = async (id, conditionId) => {
+    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/${id}/remove_link`;
     const body = {
       instance: {
-        node_id: nodeId,
-        answer_id: answerId,
+        id: id,
+        condition_id: conditionId,
         final_diagnostic_id: this.finalDiagnostic
       }
     };
     const header = await this.setHeaders("DELETE", body);
-    const request = await fetch(url, header).catch(error => console.log(error));
-
-    // Display error or parse json
-    if (request.ok) {
-      response = await request.json();
-    } else {
-      response = request;
-    }
-    return await response;
+    return await fetch(url, header).catch(error => console.log(error));
   };
 
   // @params [String] panel

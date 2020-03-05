@@ -2,8 +2,8 @@ class InstancesController < ApplicationController
 
   before_action :authenticate_user!
   before_action :set_instanceable, only: [:show, :create, :destroy, :by_reference, :create_from_diagram, :create_link, :remove_link, :create_from_final_diagnostic_diagram, :update_score]
-  before_action :set_instance, only: [:show, :destroy, :update_from_diagram, :create_link]
-  before_action :set_child, only: [:remove_link, :update_score]
+  before_action :set_instance, only: [:show, :destroy, :update_from_diagram, :create_link, :remove_link]
+  before_action :set_child, only: [:update_score]
 
   def index
     respond_to do |format|
@@ -97,12 +97,13 @@ class InstancesController < ApplicationController
     end
   end
 
-  # @params [Diagnostic] Current diagnostic, [Answer] Answer from parent of the link, [Node] child of the link
   # Remove a link from diagram and remove from both child and parent concerned
+  # @params [Instance] Parent of the link
+  # @params [Condition] condition of the answer
   def remove_link
-    condition = Condition.find_by(referenceable: @child_instance, first_conditionable: @parent_answer)
-    Instance.remove_condition(condition, @parent_instance)
-    render json: { status: 'success', message: t('flash_message.success_deleted') }
+    condition = Condition.find(instance_params[:condition_id])
+    Instance.remove_condition(condition, @instance)
+    render json: condition
   end
 
   # POST /diagnostics/:diagnostic_id/instances/update_from_diagram
@@ -158,7 +159,8 @@ class InstancesController < ApplicationController
       :instanceable_id,
       :instanceable_type,
       :answer_id,
-    :score,
+      :condition_id,
+      :score,
       :final_diagnostic_id
     )
   end

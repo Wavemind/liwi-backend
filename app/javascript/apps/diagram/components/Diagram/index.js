@@ -10,6 +10,7 @@ import AdvancedNodeFactory from "../AdvancedDiagram/node/AdvancedNodeFactory";
 import AdvancedNodeModel from "../AdvancedDiagram/node/AdvancedNodeModel";
 import AvailableNodes from "../AvailableNodes";
 import FlashMessages from "../FlashMessages";
+import { linkNode } from "../../helpers/nodeHelpers";
 
 
 export class Diagram extends React.Component {
@@ -34,19 +35,25 @@ export class Diagram extends React.Component {
 
   initDiagram = () => {
     const { engine, model } = this.state;
-    const { questionsPerLevel, addAvailableNode } = this.props;
+    const { questionsInstances, addAvailableNode } = this.props;
 
-    let instances = [];
+    let diagramNodes = [];
 
     // Generate questions
-    questionsPerLevel.map(level => {
-      level.map(instance => {
-        let diagramInstance = new AdvancedNodeModel({
-          dbInstance: instance,
-          addAvailableNode: addAvailableNode
-        });
-        instances.push(diagramInstance);
-        model.addAll(diagramInstance);
+    questionsInstances.map(instance => {
+      let diagramNode = new AdvancedNodeModel({
+        dbInstance: instance,
+        addAvailableNode: addAvailableNode
+      });
+      diagramNodes.push(diagramNode);
+      model.addAll(diagramNode);
+    });
+
+    // Generate link between nodes
+    diagramNodes.map(diagramNode => {
+      diagramNode.dbInstance.conditions.map(condition => {
+        let link = linkNode(diagramNodes, diagramNode, condition);
+        model.addLink(link)
       });
     });
 

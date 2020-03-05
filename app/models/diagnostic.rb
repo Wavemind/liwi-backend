@@ -125,31 +125,50 @@ class Diagnostic < ApplicationRecord
   # @return [Json]
   # Return questions in json format
   def questions_json
-    generate_questions_order.as_json(include: [conditions: { include: [first_conditionable: { methods: [:get_node] }, second_conditionable: { methods: [:get_node] }] }, node: { include: [:answers], methods: [:node_type, :category_name, :type] }])
+    components.not_health_care_conditions.joins(:node).includes(:conditions, :children, :node).where('nodes.type IN (?) OR nodes.type IN (?)', Question.descendants.map(&:name), QuestionsSequence.descendants.map(&:name)).as_json(
+      include: [
+        conditions: {
+          include: [
+            first_conditionable: {
+              methods: [
+                :get_node
+              ]
+            },
+          ]
+        },
+        node: {
+          include: [:answers],
+          methods: [
+            :node_type,
+            :category_name,
+            :type
+          ]
+        }
+      ])
   end
 
   # @return [Json]
   # Return final diagnostics in json format
   def final_diagnostics_json
-    components.final_diagnostics.includes(:node).as_json(include: [ node: {methods: [:node_type]}, conditions: { include: [first_conditionable: { include: [node: { include: [:answers]}], methods: [:get_node]}, second_conditionable: { methods: [:get_node]}]}])
+    components.final_diagnostics.includes(:node).as_json(include: [node: { methods: [:node_type] }, conditions: { include: [first_conditionable: { include: [node: { include: [:answers] }], methods: [:get_node] }, second_conditionable: { methods: [:get_node] }] }])
   end
 
   # @return [Json]
   # Return treatments and managements in json format
   def health_cares_json
-    components.treatments.as_json(include: [node: {methods: [:node_type, :type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}]) + components.managements.as_json(include: [node: {methods: [:node_type, :type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}])
+    components.treatments.as_json(include: [node: { methods: [:node_type, :type] }, conditions: { include: [first_conditionable: { methods: [:get_node] }] }]) + components.managements.as_json(include: [node: { methods: [:node_type, :type] }, conditions: { include: [first_conditionable: { methods: [:get_node] }] }])
   end
 
   # @return [Json]
   # Return available nodes in the algorithm in json format
   def available_nodes_json
     # Exclude triage questions if they have a condition on a CC which is not defined in this diagnostic
-    excluded_ids = version.components.select{|i| i.conditions.any? && i.conditions.map(&:first_conditionable).map(&:node).flatten.exclude?(node)}.map(&:node_id)
+    excluded_ids = version.components.select { |i| i.conditions.any? && i.conditions.map(&:first_conditionable).map(&:node).flatten.exclude?(node) }.map(&:node_id)
     # Exclude the questions that are already used in the diagnostic diagram (it still takes the questions used in the final diagnostic diagram, since it can be used in both diagram)
     excluded_ids += components.not_health_care_conditions.map(&:node_id)
 
     (
-      version.algorithm.questions.no_triage.no_treatment_condition.no_vital_sign.where.not(id: excluded_ids).includes(:answers) +
+    version.algorithm.questions.no_triage.no_treatment_condition.no_vital_sign.where.not(id: excluded_ids).includes(:answers) +
       version.algorithm.questions_sequences.where.not(id: excluded_ids).includes(:answers) +
       final_diagnostics.where.not(id: components.select(:node_id))
     ).as_json(methods: [:category_name, :node_type, :get_answers, :type])

@@ -31,13 +31,6 @@ export default class AdvancedLinkWidget extends DefaultLinkWidget {
       paths.push(
         this.generateLink(
           LinkWidget.generateLinePath(points[j], points[j + 1]),
-          {
-            "data-linkid": link.getID(),
-            "data-point": j,
-            onMouseDown: (event) => {
-              this.addPointToLink(event, j + 1);
-            }
-          },
           j
         )
       );
