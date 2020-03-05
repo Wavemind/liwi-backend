@@ -75,8 +75,6 @@ class CreateHealthCareForm extends React.Component {
       formulations_attributes: {}
     };
 
-    console.log(drug)
-
     let result = await http.validateDrug(drug);
 
     if (result.ok === undefined || result.ok) {

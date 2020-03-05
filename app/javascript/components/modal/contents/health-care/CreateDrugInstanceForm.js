@@ -2,7 +2,6 @@ import React from "react";
 import {
   Button,
   Modal,
-  FormControl,
   Form, Col, InputGroup
 } from "react-bootstrap";
 import { withDiagram } from "../../../../context/Diagram.context";
@@ -14,17 +13,13 @@ import { withDiagram } from "../../../../context/Diagram.context";
 class CreateDrugInstanceForm extends React.Component {
   constructor(props) {
     super(props);
-  }
 
-  state = {
-    duration: null,
-    description: ""
-  };
-
-  componentDidMount() {
     const { currentDbNode } = this.props;
 
-    this.setState({description: currentDbNode.description_translations['en']});
+    this.state = {
+      duration: null,
+      description: currentDbNode.description_translations['en']
+    };
   }
 
   // Set the score props from input, so it triggers listener in Diagram.js and execute http request
