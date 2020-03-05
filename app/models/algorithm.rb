@@ -18,7 +18,7 @@ class Algorithm < ApplicationRecord
   # Create all hardcoded questions related to reference tables and age.
   # Answer types ids : 3 is Integer, 4 is Decimal, 6 is Date
   def create_reference_table_questions
-    birth_date = questions.create!(label_en: 'Birth date', type: 'Questions::VitalSignTriage', stage: Question.stages[:registration], is_mandatory: true, answer_type_id: 6, is_default: true)
+    birth_date = questions.create!(label_en: 'Birth date', type: 'Questions::Demographic', stage: Question.stages[:registration], is_mandatory: true, answer_type_id: 6, is_default: true)
     age_in_days = questions.create!(label_en: 'Age in days', type: 'Questions::BackgroundCalculation', stage: Question.stages[:triage], is_mandatory: true, answer_type_id: 5, formula: '[ToDay(VT1)]', is_default: true)
     weight = questions.create!(label_en: 'Weight (kg)', type: 'Questions::VitalSignTriage', stage: Question.stages[:triage], is_mandatory: true, answer_type_id: 4, is_default: true)
     hr = questions.create!(label_en: 'Heart rate', type: 'Questions::VitalSignConsultation', stage: Question.stages[:consultation], answer_type_id: 4, is_default: true)
