@@ -4,6 +4,7 @@ RSpec.describe FinalDiagnosticsController, type: :controller do
   login_user
   create_answer_type
   create_algorithm
+  create_version
   create_diagnostic
 
   before(:each) do
@@ -100,6 +101,51 @@ RSpec.describe FinalDiagnosticsController, type: :controller do
 
     @df1.reload
     expect(@df1.label_he).to eq('Shalom')
+  end
+
+  it 'should work for [GET:index]' do
+    get :index, params: { algorithm_id: @algorithm.id, version_id: @version.id, diagnostic_id: @dd7.id }, xhr: true
+    expect(response.status).to eq(204)
+  end
+
+  it 'should work for [GET:new]' do
+    get :new, params: { algorithm_id: @algorithm.id, version_id: @version.id, diagnostic_id: @dd7.id }
+    expect(response.status).to eq(200)
+  end
+
+  it 'should work for [POST:create]' do
+    post :create, params: { algorithm_id: @algorithm.id, version_id: @version.id, diagnostic_id: @dd7.id, final_diagnostic: { reference: 2, label_en: 'df' } }
+    expect(response.status).to eq(302)
+  end
+
+  it 'should work for [GET:edit]' do
+    get :edit, params: { algorithm_id: @algorithm.id, version_id: @version.id, diagnostic_id: @dd7.id, id: @df1.id }
+    expect(response.status).to eq(200)
+  end
+
+  it 'should work for [PATCH:update]' do
+    post :create, params: { algorithm_id: @algorithm.id, version_id: @version.id, diagnostic_id: @dd7.id, id: @df1.id, final_diagnostic: { reference: 2, label_en: 'boom boom' } }
+    expect(response.status).to eq(302)
+  end
+
+  it 'should work for [DELETE:destroy]' do
+    delete :destroy, params: { algorithm_id: @algorithm.id, version_id: @version.id, diagnostic_id: @dd7.id, id: @df1.id }
+    expect(response.status).to eq(302)
+  end
+
+  it 'should work for [GET:diagram]' do
+    get :diagram, params: { algorithm_id: @algorithm.id, version_id: @version.id, diagnostic_id: @dd7.id, id: @df1.id }
+    expect(response.status).to eq(200)
+  end
+
+  it 'should work for [POST:create_from_diagram]' do
+    post :create_from_diagram, params: { algorithm_id: @algorithm.id, version_id: @version.id, diagnostic_id: @dd7.id, final_diagnostic: { reference: 2, label_en: 'df' } }
+    expect(response.status).to eq(200)
+  end
+
+  it 'should work for [PATCH:update_from_diagram]' do
+    post :update_from_diagram, params: { algorithm_id: @algorithm.id, version_id: @version.id, diagnostic_id: @dd7.id, id: @df1.id, final_diagnostic: { reference: 2, label_en: 'boom boom' } }
+    expect(response.status).to eq(200)
   end
 
 end

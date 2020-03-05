@@ -59,11 +59,11 @@ end
 group :test do
   gem 'capybara', '>= 2.15'
   gem 'selenium-webdriver'
+  gem 'webdrivers', '~> 4.2'
   gem 'chromedriver-helper'
   gem 'simplecov', require: false
   gem 'codacy-coverage', require: false
 end
-
 
 group :production do
   gem 'appsignal'

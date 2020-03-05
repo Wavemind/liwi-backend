@@ -12,9 +12,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :roles, only: [:index, :show, :new, :create, :edit, :update]
-
-  resources :technical_files, only: [:index, :new, :create]
+  resources :technical_files, only: [:index, :create]
   resources :settings, only: [:index]
   resources :languages, only: [:new, :create, :update, :destroy]
 
@@ -74,7 +72,7 @@ Rails.application.routes.draw do
         put 'update_translations'
       end
 
-      resources :answers, only: [:new, :create, :edit, :update] do
+      resources :answers, only: [:new, :update] do
         member do
           put 'update_translations'
         end
@@ -101,7 +99,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :questions_sequences, only: [:index, :new, :create, :edit, :update, :destroy, :new_scored, :edit_scored] do
+    resources :questions_sequences, only: [:index, :new, :create, :edit, :update, :destroy] do
       collection do
         get 'new_scored'
         post 'create_from_diagram'
@@ -115,7 +113,7 @@ Rails.application.routes.draw do
   end
 
   resources :questions_sequences, only: [] do
-    resources :instances, only: [:show, :destroy, :create, :by_reference] do
+    resources :instances, only: [:destroy, :create] do
       collection do
         get 'by_reference'
         post 'create_from_diagram'
@@ -124,13 +122,13 @@ Rails.application.routes.draw do
         delete 'remove_link'
         put 'update_score'
       end
-      resources :children, only: [:create, :destroy]
-      resources :conditions, only: [:create, :destroy]
-
+      resources :conditions, only: [:destroy]
     end
+
     collection do
       get 'reference_prefix'
     end
+
     member do
       get 'diagram'
       get 'validate'
@@ -138,22 +136,19 @@ Rails.application.routes.draw do
   end
 
   resources :diagnostics, only: [] do
-    resources :instances, only: [:show, :destroy, :create, :by_reference] do
+    resources :instances, only: [:show, :destroy, :create] do
       collection do
         get 'by_reference'
-        get 'load_conditions'
         post 'create_from_diagram'
         post 'create_from_final_diagnostic_diagram'
         post 'create_link'
         delete 'remove_from_diagram'
         delete 'remove_link'
       end
-      resources :children, only: [:create, :destroy]
-      resources :conditions, only: [:create, :destroy]
+      resources :conditions, only: [:destroy]
     end
 
     resources :conditions, only: [] do
-
       collection do
         post 'differential', to: 'conditions#add_diagnostic_condition'
       end
@@ -186,7 +181,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :questions, only: [:reference_prefix] do
+  resources :questions, only: [] do
     collection do
       get 'reference_prefix'
     end

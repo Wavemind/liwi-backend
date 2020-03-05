@@ -170,7 +170,6 @@ RSpec.describe QuestionsController, type: :controller do
     expect(response).to redirect_to algorithm_url(@algorithm, panel: 'questions')
     expect(response).to have_attributes(status: 302)
     expect(flash[:notice]).to eq I18n.t('flash_message.success_updated')
-
   end
 
   it 'create an unavailable answer if category is an assessment' do
@@ -178,4 +177,48 @@ RSpec.describe QuestionsController, type: :controller do
 
     expect(@question.answers.count).to equal(3)
   end
+
+  it 'should work for [GET:new]' do
+    get :new, params: { algorithm_id: @algorithm.id }
+    expect(response.status).to eq(200)
+  end
+
+  it 'should work for [GET:edit]' do
+    @question = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', is_mandatory: true, stage: Question.stages[:triage], answer_type: @boolean)
+
+    get :edit, params: { algorithm_id: @algorithm.id, id: @question.id }
+    expect(response.status).to eq(200)
+  end
+
+  it 'should work for [POST:create]' do
+    post :create, params: { algorithm_id: @algorithm.id, question: {algorithm: @algorithm, label_en: 'Cough', reference: '2', is_mandatory: true, stage: 'triage', answer_type: @boolean} }
+    expect(response.status).to eq(200)
+  end
+
+  it 'should work for [POST:update]' do
+    @question = Questions::AssessmentTest.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', is_mandatory: true, stage: Question.stages[:triage], answer_type: @boolean, unavailable: '1')
+    put :update, params: { algorithm_id: @algorithm.id, id: @question.id, question: {id: @question.id, algorithm: @algorithm, label_en: 'Cough', reference: '2', is_mandatory: true, stage: 'triage', answer_type: @boolean} }
+    expect(response.status).to eq(302)
+  end
+
+  # TODO @Manu
+  it 'should work for [POST:create_from_diagram]' do
+
+  end
+
+  # TODO @Manu
+  it 'should work for [PUT:update_from_diagram]' do
+
+  end
+
+  it 'should work for [GET:reference_prefix]' do
+    get :reference_prefix, params: { type: 'Questions::Demographic' }
+    expect(response.status).to eq(200)
+  end
+
+  it 'should work for [POST:validate]' do
+    put :validate, params: { algorithm_id: @algorithm.id, question: {algorithm: @algorithm, label_en: 'Cough', reference: '2', is_mandatory: true, stage: 'triage', answer_type: @boolean} }, xhr: true
+    expect(response.status).to eq(200)
+  end
+
 end

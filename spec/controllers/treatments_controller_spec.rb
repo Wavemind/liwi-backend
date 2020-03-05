@@ -63,4 +63,26 @@ RSpec.describe TreatmentsController, type: :controller do
     expect(flash[:notice]).to eq I18n.t('flash_message.success_updated')
   end
 
+  # TODO: @manu missing update from diagram
+
+  it 'should work for [GET:new]' do
+    get :new, params: { algorithm_id: @algorithm.id }
+    expect(response.status).to eq(200)
+  end
+
+  it 'should work for [POST:create]' do
+    post :create, params: { algorithm_id: @algorithm.id, health_cares_treatment: { algorithm: @algorithm, label_en: 'Severe LRTI' } }
+    expect(response.status).to eq(302)
+  end
+
+  it 'should work for [get:edit]' do
+    get :edit, params: { algorithm_id: @algorithm.id, id: @management.id }
+    expect(response.status).to eq(200)
+  end
+
+  it 'should work for [PATCH:update]' do
+    patch :update, params: { algorithm_id: @algorithm.id, id: @management.id, health_cares_treatment: { algorithm: @algorithm, label_en: 'Severe LRTI' } }
+    expect(response.status).to eq(302)
+  end
+
 end

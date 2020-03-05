@@ -135,7 +135,7 @@ class QuestionsController < ApplicationController
     end
   end
 
-  # GET algorithm/:algorithm_id/questions/validate
+  # POST algorithm/:algorithm_id/questions/validate
   # @params Question
   # @return errors messages if question is not valid
   def validate
