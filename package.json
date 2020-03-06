@@ -23,6 +23,7 @@
     "react-dom": "^16.8.6",
     "react-fade-in": "^0.1.8",
     "react-hot-loader": "^4.11.1",
+    "react-notifications": "^1.5.0-beta.0",
     "react_ujs": "^2.4.4",
     "resize-observer-polyfill": "^1.5.1",
     "style-loader": "^0.23.1"

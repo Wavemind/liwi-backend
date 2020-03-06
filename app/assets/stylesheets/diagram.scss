@@ -215,35 +215,11 @@
   text-align: center
 }
 
-
-// FLASH MESSAGES REACT
-.alerts-leave {
-  opacity: 1;
-  padding-bottom: 15px;
-  padding-top: 15px;
-  margin-bottom: 20px;
-  height: 50px;
-}
-.alerts-leave.alerts-leave-active {
-  overflow: hidden;
-  opacity: 0.01;
-  padding-top: 0;
-  padding-bottom: 0;
-  margin-bottom: 0;
-  height: 0;
-  transition: opacity 300ms ease-in,
-  padding-top 500ms ease-in,
-  padding-bottom 500ms ease-in,
-  margin-bottom 500ms ease-in,
-  height 500ms ease-in;
-}
-
 .node-category {
   .dropdown-toggle::after {
     right: 9px!important;
   }
 }
-
 
 .help {
   position:absolute;
@@ -293,4 +269,9 @@
 .displayedErrors {
   font-size: 13px;
   color: red;
+}
+
+// Flash messages
+.notification-container {
+  width: 500px;
 }

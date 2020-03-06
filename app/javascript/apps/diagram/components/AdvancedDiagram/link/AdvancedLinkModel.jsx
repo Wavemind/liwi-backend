@@ -1,6 +1,7 @@
-import { DefaultLinkModel } from "@projectstorm/react-diagrams";
 import * as React from "react";
 import * as _ from "lodash";
+import { DefaultLinkModel } from "@projectstorm/react-diagrams";
+import { NotificationManager } from "react-notifications";
 
 import Http from "../../../engine/http";
 
@@ -14,8 +15,8 @@ export default class AdvancedLinkModel extends DefaultLinkModel {
 
     this.dbConditionId = options.dbConditionId || {};
     this.parentInstanceId = options.parentInstanceId || {};
-
-    const http = new Http();
+    this.triggerEvent = options.triggerEvent || true;
+    this.http = new Http();
 
     // Set event listener
     this.registerListener({
@@ -25,13 +26,13 @@ export default class AdvancedLinkModel extends DefaultLinkModel {
             case "targetPortChanged":
               // Trigger only on user action
               if (event.entity.options.selected) {
-                this.createLink()
+                this.createLink();
               }
               break;
-            case 'entityRemoved':
+            case "entityRemoved":
               // Trigger only on user action
-              if (event.entity.options.selected) {
-                http.removeLink(this.parentInstanceId, this.dbConditionId);
+              if (event.entity.options.selected && this.triggerEvent) {
+                this.removeLink();
               }
               break;
             default:
@@ -43,20 +44,40 @@ export default class AdvancedLinkModel extends DefaultLinkModel {
     });
   }
 
+  /**
+   * Create link in database and assign value
+   */
   createLink() {
-    const http = new Http();
-
     let instanceId = this.targetPort.options.id;
     let answerId = this.sourcePort.options.id;
 
-    http.createLink(instanceId, answerId).then((result) => {
-      if (result.status === 200) {
-        result.json().then(dbCondition => {
-          this.dbConditionId = dbCondition.id;
+    this.http.createLink(instanceId, answerId).then(httpRequest => {
+      httpRequest.json().then(result => {
+        if (httpRequest.status === 200) {
+          this.dbConditionId = result.id;
           this.parentInstanceId = this.sourcePort.parent.options.dbInstance.id;
-        });
-      }
-    })
+        } else {
+          this.triggerEvent = false;
+          this.remove();
+          NotificationManager.error(result);
+        }
+      });
+    });
+  }
+
+  /**
+   * Remove link in database
+   */
+  removeLink() {
+    this.http.removeLink(this.parentInstanceId, this.dbConditionId).then(httpRequest => {
+      httpRequest.json().then(result => {
+        if (httpRequest.status !== 200) {
+          this.triggerEvent = false;
+          this.remove();
+          NotificationManager.error(result);
+        }
+      });
+    });
   }
 
   serialize() {
@@ -64,6 +85,8 @@ export default class AdvancedLinkModel extends DefaultLinkModel {
       ...super.serialize(),
       dbConditionId: this.dbConditionId,
       parentInstanceId: this.parentInstanceId,
+      triggerEvent: this.triggerEvent,
+      http: this.http
     };
   }
 
@@ -71,5 +94,6 @@ export default class AdvancedLinkModel extends DefaultLinkModel {
     super.deserialize(event);
     this.dbConditionId = event.data.dbConditionId;
     this.parentInstanceId = event.data.parentInstanceId;
+    this.triggerEvent = event.data.triggerEvent;
   }
 }

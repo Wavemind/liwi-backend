@@ -4,6 +4,7 @@ import { NodeModel } from "@projectstorm/react-diagrams";
 import AdvancedPortModel from "../port/AdvancedPortModel";
 import { getLabel } from "../../../helpers/nodeHelpers";
 import Http from "../../../engine/http";
+import { NotificationManager } from "react-notifications";
 
 export default class AdvancedNodeModel extends NodeModel {
 
@@ -14,7 +15,7 @@ export default class AdvancedNodeModel extends NodeModel {
     });
     this.dbInstance = options.dbInstance || {};
     this.addAvailableNode = options.addAvailableNode || {};
-    const http = new Http();
+    this.http = new Http();
 
     // inPort
     this.addPort(
@@ -34,21 +35,19 @@ export default class AdvancedNodeModel extends NodeModel {
       }));
     });
 
-
     // Set Position
     this.setPosition(this.dbInstance.position_x, this.dbInstance.position_y);
 
     // Set event listener
     this.registerListener({
-      eventDidFire: _.debounce(
+      eventWillFire: _.debounce(
         (event) => {
           switch(event.function) {
             case 'positionChanged':
-              http.updateInstance(this.dbInstance.id, event.entity.position.x, event.entity.position.y);
+              this.updateInstance(event);
               break;
             case 'entityRemoved':
-              http.removeInstance(this.dbInstance.id);
-              this.addAvailableNode(this.dbInstance.node);
+              this.removeInstance();
               break;
             default:
               break;
@@ -59,14 +58,52 @@ export default class AdvancedNodeModel extends NodeModel {
     });
   }
 
-  // Get single in port
+  /**
+   * Update x;y position in database
+   */
+  updateInstance(event) {
+    this.http.updateInstance(this.dbInstance.id, event.entity.position.x, event.entity.position.y).then(httpRequest => {
+      result.json().then(result => {
+        if (httpRequest.status !== 200) {
+          this.triggerEvent = false;
+          this.remove();
+          NotificationManager.error(result);
+        }
+      });
+    });
+  }
+
+  /**
+   * Remove instance in database
+   */
+  removeInstance() {
+    this.http.removeInstance(this.dbInstance.id).then(httpRequest => {
+      httpRequest.json().then(result => {
+        if (httpRequest.status === 200) {
+          this.addAvailableNode(this.dbInstance.node);
+        } else {
+          this.triggerEvent = false;
+          this.remove();
+          NotificationManager.error(result);
+        }
+      });
+    });
+  }
+
+  /**
+   * Get single in port
+   * @return in port
+   */
   getInPort() {
     return _.find(this.ports, portModel => {
       return portModel.options.in;
     });
   }
 
-  // Get all out ports
+  /**
+   * Get all out port
+   * @return array of out port
+   */
   getOutPorts() {
     return _.filter(this.ports, portModel => {
       return !portModel.options.in;
@@ -78,6 +115,7 @@ export default class AdvancedNodeModel extends NodeModel {
       ...super.serialize(),
       dbInstance: this.dbInstance,
       addAvailableNode: this.addAvailableNode,
+      http: this.http,
     };
   }
 

@@ -2,6 +2,7 @@
 import * as React from "react";
 import createEngine, { DiagramModel } from "@projectstorm/react-diagrams";
 import { CanvasWidget } from "@projectstorm/react-canvas-core";
+import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 // Internal import
 import { withDiagram } from "../../engine/context/Diagram.context";
@@ -9,7 +10,6 @@ import AdvancedLinkFactory from "../AdvancedDiagram/link/AdvancedLinkFactory";
 import AdvancedNodeFactory from "../AdvancedDiagram/node/AdvancedNodeFactory";
 import AdvancedNodeModel from "../AdvancedDiagram/node/AdvancedNodeModel";
 import AvailableNodes from "../AvailableNodes";
-import FlashMessages from "../FlashMessages";
 import { linkNode } from "../../helpers/nodeHelpers";
 
 
@@ -63,19 +63,18 @@ export class Diagram extends React.Component {
 
   // Create instance and init it in diagram when drop
   onDropAction = async (event, positions) => {
-    const { http, addMessage, addAvailableNode, removeAvailableNode } = this.props;
+    const { http, addAvailableNode, removeAvailableNode } = this.props;
     const { engine } = this.state;
 
     let dbNode = JSON.parse(event.dataTransfer.getData("node"));
-    let result = await http.createInstance(dbNode.id, positions.x, positions.y);
+    let httpRequest = await http.createInstance(dbNode.id, positions.x, positions.y);
+    let result = await httpRequest.json();
 
     // Generate node if instance creation success
-    if (result.status === 200) {
-      let dbInstance = await result.json();
-
+    if (httpRequest.status === 200) {
       // Generate node
       let diagramInstance = new AdvancedNodeModel({
-        dbInstance: dbInstance,
+        dbInstance: result,
         addAvailableNode: addAvailableNode
       });
 
@@ -86,8 +85,7 @@ export class Diagram extends React.Component {
       // Remove node from available nodes list
       removeAvailableNode(dbNode);
     } else {
-      let messages = await result.json();
-      addMessage(messages, "danger");
+      NotificationManager.error(result);
     }
   };
 
@@ -98,7 +96,7 @@ export class Diagram extends React.Component {
       <div className="content">
         <div className="row">
           <AvailableNodes/>
-          <FlashMessages/>
+          <NotificationContainer/>
           <div className="col diagram-wrapper"
                onDrop={event => {
                  let positions = engine.getRelativeMousePoint(event);

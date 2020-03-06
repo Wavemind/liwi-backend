@@ -3,8 +3,9 @@ import { DefaultLinkWidget } from "@projectstorm/react-diagrams";
 import { LinkWidget } from "@projectstorm/react-diagrams-core";
 
 import { AdvancedLinkArrowWidget } from "../../../helpers/nodeHelpers";
+import { withDiagram } from "../../../engine/context/Diagram.context";
 
-export default class AdvancedLinkWidget extends DefaultLinkWidget {
+class AdvancedLinkWidget extends DefaultLinkWidget {
   generateArrow(point, previousPoint) {
     const { link } = this.props;
 
@@ -36,11 +37,6 @@ export default class AdvancedLinkWidget extends DefaultLinkWidget {
       );
     }
 
-    // Render the circles
-    for (let i = 1; i < points.length - 1; i++) {
-      paths.push(this.generatePoint(points[i]));
-    }
-
     if (link.getTargetPort() !== null) {
       paths.push(this.generateArrow(points[points.length - 1], points[points.length - 2]));
     } else {
@@ -50,3 +46,5 @@ export default class AdvancedLinkWidget extends DefaultLinkWidget {
     return <g data-default-link-test={link.getOptions().testName}>{paths}</g>;
   }
 }
+
+export default withDiagram(AdvancedLinkWidget);

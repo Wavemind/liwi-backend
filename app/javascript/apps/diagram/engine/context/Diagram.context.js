@@ -93,30 +93,6 @@ export default class DiagramProvider extends React.Component {
   };
 
   /**
-   * Add message to flash message methods
-   * @param newMessages
-   * @param colorClass
-   */
-  addMessage = async (newMessages, colorClass) => {
-    const { messages } = this.state;
-    messages.push({
-      colorClass,
-      messages: newMessages
-    });
-    this.setState({ messages });
-  };
-
-  /**
-   * Remove message to flash message methods
-   * @param index
-   */
-  removeMessage = async (index) => {
-    const { messages } = this.state;
-    messages.splice(index, 1);
-    this.setState({ messages });
-  };
-
-  /**
    * Add node in list of available node
    * @param node
    */
@@ -154,12 +130,10 @@ export default class DiagramProvider extends React.Component {
   };
 
   state = {
-    addMessage: this.addMessage,
     addAvailableNode: this.addAvailableNode,
     getReferencePrefix: this.getReferencePrefix,
     messages: [],
     orderedNodes: {},
-    removeMessage: this.removeMessage,
     removeAvailableNode: this.removeAvailableNode,
     set: this.setValState,
   };
