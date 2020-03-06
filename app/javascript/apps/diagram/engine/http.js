@@ -458,7 +458,6 @@ export default class Http {
    * @return [Object] body of request
    */
   updateInstance = async (id, positionX, positionY) => {
-    let response;
     const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/${id}/update_from_diagram`;
     const body = {
       instance: {
@@ -468,15 +467,7 @@ export default class Http {
     };
 
     const header = await this.setHeaders("PUT", body);
-    const request = await fetch(url, header).catch(error => console.log(error));
-
-    // Display error or parse json
-    if (request.ok) {
-      response = await request.json();
-    } else {
-      response = request;
-    }
-    return await response;
+    return await fetch(url, header).catch(error => console.log(error));
   };
 
   // @params [Hash] body of the question with its answers

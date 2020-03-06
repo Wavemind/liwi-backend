@@ -63,7 +63,7 @@ export default class AdvancedNodeModel extends NodeModel {
    */
   updateInstance(event) {
     this.http.updateInstance(this.dbInstance.id, event.entity.position.x, event.entity.position.y).then(httpRequest => {
-      result.json().then(result => {
+      httpRequest.json().then(result => {
         if (httpRequest.status !== 200) {
           this.triggerEvent = false;
           this.remove();

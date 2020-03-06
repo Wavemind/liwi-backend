@@ -113,6 +113,7 @@ en:
       or_operator: "OR"
     validation:
       loop: "You are trying to do a loop in your diagnostic which is impossible."
+      link_already_exist: "Link already exists"
   deactivated: "Deactivate"
   delete: "Delete"
   destroy: "Remove"
