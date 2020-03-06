@@ -49,10 +49,10 @@ class Diagnostic < ApplicationRecord
     Node.joins(:instances).where('type = ? AND instances.instanceable_id = ? AND instances.instanceable_type = ?', 'HealthCares::Management', id, self.class.name)
   end
 
-  # @return [ActiveRecord::Relation] of treatments
-  # Get every treatments used in a diagnostic
-  def treatments
-    Node.joins(:instances).where('type = ? AND instances.instanceable_id = ? AND instances.instanceable_type = ?', 'HealthCares::Treatment', id, self.class.name)
+  # @return [ActiveRecord::Relation] of drugs
+  # Get every drugs used in a diagnostic
+  def drugs
+    Node.joins(:instances).where('type = ? AND instances.instanceable_id = ? AND instances.instanceable_type = ?', 'HealthCares::Drug', id, self.class.name)
   end
 
   # @param [Diagnostic]
@@ -135,9 +135,9 @@ class Diagnostic < ApplicationRecord
   end
 
   # @return [Json]
-  # Return treatments and managements in json format
+  # Return drugs and managements in json format
   def health_cares_json
-    components.treatments.as_json(include: [node: {methods: [:node_type, :type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}]) + components.managements.as_json(include: [node: {methods: [:node_type, :type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}])
+    components.drugs.as_json(include: [node: {methods: [:node_type, :type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}]) + components.managements.as_json(include: [node: {methods: [:node_type, :type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}])
   end
 
   # @return [Json]
@@ -174,9 +174,7 @@ class Diagnostic < ApplicationRecord
   def manual_validate
     components.includes(:node, :children, :conditions).each do |instance|
       if instance.node.is_a? FinalDiagnostic
-        unless instance.conditions.any?
-          errors.add(:basic, I18n.t('flash_message.diagnostic.final_diagnostic_no_condition', reference: instance.node.full_reference))
-        end
+        errors.add(:basic, I18n.t('flash_message.diagnostic.final_diagnostic_no_condition', reference: instance.node.full_reference)) unless instance.conditions.any?
       elsif instance.node.is_a?(Question) || instance.node.is_a?(QuestionsSequence)
         unless instance.children.any?
           if instance.final_diagnostic.nil?
@@ -190,6 +188,12 @@ class Diagnostic < ApplicationRecord
           instance.node.manual_validate
           errors.add(:basic, I18n.t('flash_message.diagnostic.error_in_questions_sequence', url: diagram_questions_sequence_url(instance.node), reference: instance.node.reference)) if instance.node.errors.messages.any?
         end
+      elsif instance.node.is_a?(HealthCares::Drug) && instance.node.formulations.map(&:by_age).include?(true)
+        age_missing = true
+        instance.conditions.each do |cond|
+          age_missing = false if cond.first_conditionable.is_a?(Answer) && cond.first_conditionable.node.formula.include?('D1')
+        end
+        errors.add(:basic, I18n.t('flash_message.diagnostic.drug_conditioned_by_age_without_age', url: diagram_algorithm_version_diagnostic_final_diagnostic_url(version.algorithm.id, version.id, id, instance.final_diagnostic_id).to_s, df_reference: instance.final_diagnostic.full_reference)) if age_missing
       end
     end
   end

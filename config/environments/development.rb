@@ -62,7 +62,7 @@ Rails.application.configure do
   # config.file_watcher = ActiveSupport::EventedFileUpdateChecker
   config.file_watcher = ActiveSupport::FileUpdateChecker
 
-  BetterErrors::Middleware.allow_ip! '0.0.0.0/0'
+  BetterErrors::Middleware.allow_ip! "0.0.0.0/0"
 
   # Mailcatcher
   config.action_mailer.perform_deliveries = true

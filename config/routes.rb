@@ -21,7 +21,7 @@ Rails.application.routes.draw do
       put 'archive', to: 'algorithms#archive', as: 'archive'
       put 'unarchive', to: 'algorithms#unarchive', as: 'unarchive'
       get 'questions', to: 'algorithms#questions', as: 'question'
-      get 'treatments', to: 'algorithms#treatments', as: 'treatment'
+      get 'drugs', to: 'algorithms#drugs', as: 'drug'
       get 'managements', to: 'algorithms#managements', as: 'management'
       get 'questions_sequences', to: 'algorithms#questions_sequences', as: 'questions_sequence'
       get 'questions_sequences_scored', to: 'algorithms#questions_sequences_scored', as: 'questions_sequence_scored'
@@ -89,9 +89,10 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :treatments, only: [:new, :create, :edit, :update, :destroy] do
+    resources :drugs, only: [:new, :create, :edit, :update, :destroy] do
       collection do
         post 'create_from_diagram'
+        post 'validate'
       end
       member do
         put 'update_from_diagram'
@@ -141,6 +142,7 @@ Rails.application.routes.draw do
         get 'by_reference'
         post 'create_from_diagram'
         post 'create_from_final_diagnostic_diagram'
+        put 'update_from_final_diagnostic_diagram'
         post 'create_link'
         delete 'remove_from_diagram'
         delete 'remove_link'

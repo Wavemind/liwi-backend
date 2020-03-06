@@ -24,9 +24,9 @@ class FinalDiagnostic < Node
   end
 
   # @return [Json]
-  # Return treatments and managements in json format
+  # Return drugs and managements in json format
   def health_cares_json
-    diagnostic.components.where(node_id: health_cares.map(&:id), final_diagnostic_id: id).as_json(include: [node: {methods: [:node_type, :type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}])
+    diagnostic.components.where(node_id: health_cares.map(&:id), final_diagnostic_id: id).as_json(include: [node: {include: [:formulations], methods: [:node_type, :type, :category_name]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}])
   end
 
   # @params [FinalDiagnostic]

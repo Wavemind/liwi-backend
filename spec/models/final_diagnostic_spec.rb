@@ -20,11 +20,11 @@ RSpec.describe FinalDiagnostic, type: :model do
   end
 
   it 'can include health cares' do
-    treatment = HealthCares::Treatment.create!(label_en: 'skin issue', algorithm: @algorithm)
+    drug = HealthCares::Drug.create!(label_en: 'skin issue', algorithm: @algorithm)
     management = HealthCares::Management.create!(label_en: 'skin issue', algorithm: @algorithm)
 
     final_diagnostic = FinalDiagnostic.new(label_en: 'Severe lower respiratory tract infection', description_en: 'A shot description',diagnostic: @dd7)
-    final_diagnostic.health_cares << [management, treatment]
+    final_diagnostic.health_cares << [management, drug]
 
     expect(final_diagnostic).to be_valid
   end
@@ -46,7 +46,7 @@ RSpec.describe FinalDiagnostic, type: :model do
   it 'generates diagram properly' do
     dd1 = Diagnostic.create!(version: @version, label: 'lower respiratory tract infection (LRTI)', node: @cc)
     dd1.final_diagnostics.create!(label_en: 'Df')
-    t1 = HealthCares::Treatment.create!(label_en: 'Treat', algorithm: @algorithm)
+    t1 = HealthCares::Drug.create!(label_en: 'Treat', algorithm: @algorithm)
     m1 = HealthCares::Management.create!(label_en: 'Manage', algorithm: @algorithm)
     ps5 = QuestionsSequences::PredefinedSyndrome.create!(label_en: 'dia', algorithm: @algorithm)
     ps9 = QuestionsSequences::PredefinedSyndrome.create!(label_en: 'skin issue', algorithm: @algorithm)

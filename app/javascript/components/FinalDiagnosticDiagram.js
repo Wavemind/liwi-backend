@@ -31,20 +31,20 @@ class FinalDiagnosticDiagram extends React.Component {
   }
 
   async shouldComponentUpdate(nextProps, nextState) {
-    if (this.props.currentDbNode !== nextProps.currentDbNode) {
+    if (this.props.currentDbNode !== nextProps.currentDbNode || (this.props.modalToOpen !== nextProps.modalToOpen && nextProps.modalToOpen === 'CreateDrugInstanceCompleted')) {
       const { engine } = this.state;
       const { currentDbNode, currentDiagramNode, getReferencePrefix } = nextProps;
       const model = engine.getDiagramModel();
 
       // Create or update node in diagram
-      if (nextProps.modalToOpen === 'CreateQuestionsSequence') {
+      if (['CreateQuestionsSequence', 'CreateQuestion', 'CreateAnswers'].includes(nextProps.modalToOpen)) {
         let node = this.createNode(currentDbNode, currentDbNode.answers);
         currentDbNode.answers.map((answer) => (node.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
         model.addAll(node);
-      } else if (nextProps.modalToOpen === 'UpdateQuestionsSequence' || nextProps.modalToOpen === 'UpdateHealthCare') {
+      } else if (['UpdateQuestionsSequence', 'UpdateHealthCare', 'UpdateFormulations', 'UpdateAnswers'].includes(nextProps.modalToOpen)) {
         currentDiagramNode.setReference(getReferencePrefix(currentDbNode.node_type, currentDbNode.type) + currentDbNode.reference);
         currentDiagramNode.setNode(currentDbNode);
-      } else if (nextProps.modalToOpen === 'CreateHealthCare') {
+      } else if (['CreateHealthCare', 'CreateFormulations', 'CreateDrugInstanceCompleted'].includes(nextProps.modalToOpen)) {
         let node = this.createNode(currentDbNode);
         model.addAll(node);
       }
@@ -96,7 +96,7 @@ class FinalDiagnosticDiagram extends React.Component {
       nodeLevels.push(currentLevel);
     });
 
-    // Create nodes for treatments and managements
+    // Create nodes for drugs and managements
     healthCares.map((healthCare) => {
       let node = this.createNode(healthCare.node);
       nodes.push(node);
@@ -135,7 +135,6 @@ class FinalDiagnosticDiagram extends React.Component {
         }
       });
     });
-
 
     // Set eventListener for create link
     model.addListener({
@@ -236,7 +235,8 @@ class FinalDiagnosticDiagram extends React.Component {
     const {
       removeNode,
       finalDiagnostic,
-      http
+      http,
+      set,
     } = this.props;
 
     let model = engine.getDiagramModel();
@@ -256,28 +256,35 @@ class FinalDiagnosticDiagram extends React.Component {
               let nodeDiagram = {};
               let result;
 
-
               // Create node
-              result = await http.createHealthCareInstance(nodeDb.id);
-              if (result.ok === undefined || result.ok) {
-                if (nodeDb.get_answers !== null) {
-                  nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers);
-                  nodeDb.get_answers.map((answer) => (nodeDiagram.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
-                } else {
-                  nodeDiagram = this.createNode(nodeDb);
-                }
-                removeNode(nodeDb);
+              if (nodeDb.category_name === 'drug') {
+                set(
+                  ["currentDbNode", "modalToOpen", "modalIsOpen"],
+                  [nodeDb, "CreateDrugInstance", true]
+                );
               } else {
-                this.addFlashMessage("danger", result);
+                result = await http.createHealthCareInstance(nodeDb.id);
+                if (result.ok === undefined || result.ok) {
+
+                  if (nodeDb.get_answers !== null && nodeDb.get_answers !== undefined) {
+                    nodeDiagram = this.createNode(nodeDb, nodeDb.get_answers);
+                    nodeDb.get_answers.map((answer) => (nodeDiagram.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
+                  } else {
+                    nodeDiagram = this.createNode(nodeDb);
+                  }
+                  removeNode(nodeDb);
+                } else {
+                  this.addFlashMessage("danger", result);
+                }
+
+                // Set position of node in canevas
+                nodeDiagram.x = points.x;
+                nodeDiagram.y = points.y;
+
+                // Update diagram nodes
+                model.addAll(nodeDiagram);
+                this.updateEngine(engine);
               }
-
-              // Set position of node in canevas
-              nodeDiagram.x = points.x;
-              nodeDiagram.y = points.y;
-
-              // Update diagram nodes
-              model.addAll(nodeDiagram);
-              this.updateEngine(engine);
             }}
             onDragOver={event => {
               event.preventDefault();

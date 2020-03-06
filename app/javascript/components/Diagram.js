@@ -80,7 +80,7 @@ class Diagram extends React.Component {
       } else if (nextProps.modalToOpen === 'UpdateFinalDiagnostic') {
         currentDiagramNode.setReference(getReferencePrefix(currentDbNode.node_type, currentDbNode.type) + currentDbNode.reference);
         currentDiagramNode.setNode(currentDbNode);
-      } else if (nextProps.modalToOpen === 'CreateQuestionsSequence' || nextProps.modalToOpen === 'CreateQuestion' || nextProps.modalToOpen === 'CreateAnswers') {
+      } else if (['CreateQuestionsSequence', 'CreateQuestion', 'CreateAnswers'].includes(nextProps.modalToOpen)) {
         let node = this.createNode(currentDbNode, currentDbNode.answers);
         currentDbNode.answers.map((answer) => (node.addOutPort(this.getFullLabel(answer), answer.reference, answer.id)));
         model.addAll(node);

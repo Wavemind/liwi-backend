@@ -63,7 +63,7 @@ class Node < ApplicationRecord
     self.is_a?(FinalDiagnostic) ? self.class.name : self.class.superclass.name
   end
 
-  # Return the final type of node -> physical_exam, predefined_syndrome, treatment, ...
+  # Return the final type of node -> physical_exam, predefined_syndrome, drug, ...
   def category_name
     if self.is_a?(QuestionsSequence) || self.is_a?(Question) || self.is_a?(HealthCare)
       self.class.variable

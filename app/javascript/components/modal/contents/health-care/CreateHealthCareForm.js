@@ -18,9 +18,10 @@ class CreateHealthCareForm extends React.Component {
   }
 
   state = {
-    reference: "",
     label: "",
     description: "",
+    isAntibiotic: null,
+    isAntiMalarial: null,
     errors: {}
   };
 
@@ -31,16 +32,14 @@ class CreateHealthCareForm extends React.Component {
       http,
       addMessage,
       set,
-      currentHealthCareType
     } = this.props;
 
     const {
-      reference,
       label,
-      description
+      description,
     } = this.state;
 
-    let result = await http.createHealthCare(currentHealthCareType, label, description);
+    let result = await http.createManagement(label, description);
     if (result.ok === undefined || result.ok) {
       toggleModal();
       await addMessage({ status: result.status, messages: result.messages });
@@ -54,23 +53,70 @@ class CreateHealthCareForm extends React.Component {
     }
   };
 
+  // Validate first the drug data. If it is valid, open the formulations form, if not display the errors
+  createFormulations = async () => {
+    const {
+      set,
+      http,
+    } = this.props;
+
+    const {
+      label,
+      isAntibiotic,
+      isAntiMalarial,
+      description
+    } = this.state;
+
+    let drug = {
+      label_en: label,
+      is_antibiotic: isAntibiotic,
+      is_anti_malarial: isAntiMalarial,
+      description_en: description,
+      formulations_attributes: {}
+    };
+
+    let result = await http.validateDrug(drug);
+
+    if (result.ok === undefined || result.ok) {
+      set(
+        ['currentDrug', 'modalToOpen', 'modalIsOpen'],
+        [drug, 'CreateFormulations', true]
+      );
+    } else {
+      this.handleErrors(result);
+    }
+  };
+
   // Set value of inputs in state
   updateState = (event) => {
     const key = event.target.name;
-    const value = event.target.value;
+    const value = ["isAntibiotic", "isAntiMalarial"].includes(key) ? event.target.checked : event.target.value;
+
     this.setState({ [key]: value });
+  };
+
+  // Display errors from response of the drug validation from rails if there is any
+  handleErrors = (result) => {
+    let newErrors = {};
+
+    if (result.errors.label_en !== undefined) {
+      newErrors.label_en = result.errors.label_en[0];
+    }
+
+    this.setState({ errors: newErrors });
   };
 
   render() {
     const {
       toggleModal,
-      currentHealthCareType
+      currentHealthCareType,
     } = this.props;
     const {
-      reference,
       label,
+      isAntibiotic,
+      isAntiMalarial,
       description,
-      errors,
+      errors
     } = this.state;
 
     return (
@@ -98,6 +144,32 @@ class CreateHealthCareForm extends React.Component {
             </Form.Group>
           </Form.Row>
 
+          {(currentHealthCareType === 'drugs') ? (
+          <Form.Row>
+            <Form.Group as={Col}>
+              <Form.Check
+                type="checkbox"
+                label="Antibiotic"
+                name="isAntibiotic"
+                value={isAntibiotic}
+                onChange={this.updateState}
+              />
+            </Form.Group>
+
+            <Form.Group as={Col}>
+              <Form.Check
+                type="checkbox"
+                label="Anti malarial"
+                name="isAntiMalarial"
+                value={isAntiMalarial}
+                onChange={this.updateState}
+              />
+            </Form.Group>
+          </Form.Row>
+          ) : (
+            null
+          )}
+
           <Form.Row>
             <Form.Group as={Col}>
               <Form.Label>Description</Form.Label>
@@ -117,10 +189,17 @@ class CreateHealthCareForm extends React.Component {
 
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={this.create}>
-            Create
-          </Button>
-          <Button variant="secondary" onClick={toggleModal}>
+          {/*Save directly the management but go to formulations for the drugs*/}
+          {(currentHealthCareType === 'drugs') ? (
+            <Button variant="primary" onClick={() => this.createFormulations()}>
+              Save and create formulations
+            </Button>
+          ) : (
+            <Button variant="success" onClick={() => this.create()}>
+            Save
+            </Button>
+          )}
+          <Button variant="secondary" onClick={() => toggleModal()}>
             Close
           </Button>
         </Modal.Footer>

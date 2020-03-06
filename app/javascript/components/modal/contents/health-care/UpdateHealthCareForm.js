@@ -20,9 +20,10 @@ class UpdateHealthCareForm extends React.Component {
 
   state = {
     id: null,
-    reference: "",
     label: "",
     description: "",
+    isAntibiotic: false,
+    isAntiMalarial: false,
     type: "",
     errors: {}
   };
@@ -33,10 +34,11 @@ class UpdateHealthCareForm extends React.Component {
 
     this.setState({
       id: newCurrentNode.id,
-      reference: newCurrentNode.reference,
       label: newCurrentNode.label_translations["en"],
       description: newCurrentNode.description_translations === null ? "" : newCurrentNode.description_translations["en"],
-      type: newCurrentNode.type === "HealthCares::Management" ? "managements" : "treatments"
+      isAntibiotic: newCurrentNode.is_antibiotic,
+      isAntiMalarial: newCurrentNode.is_anti_malarial,
+      type: newCurrentNode.type === "HealthCares::Management" ? "managements" : "drugs"
     });
   }
 
@@ -52,10 +54,9 @@ class UpdateHealthCareForm extends React.Component {
       id,
       label,
       description,
-      type
     } = this.state;
 
-    let result = await http.updateHealthCare(id, label, description, type);
+    let result = await http.updateManagement(id, label, description);
     if (result.ok === undefined || result.ok) {
       toggleModal();
       await addMessage({ status: result.status, messages: result.messages });
@@ -69,26 +70,73 @@ class UpdateHealthCareForm extends React.Component {
     }
   };
 
+  updateFormulations = async () => {
+    const { set, http } = this.props;
+
+    const {
+      id,
+      label,
+      description,
+      isAntibiotic,
+      isAntiMalarial
+    } = this.state;
+
+    let drug = {
+      id: id,
+      label_en: label,
+      is_antibiotic: isAntibiotic,
+      is_anti_malarial: isAntiMalarial,
+      description_en: description,
+      formulations_attributes: {}
+    };
+
+    let result = await http.validateDrug(drug);
+    if (result.ok === undefined || result.ok) {
+      set(
+        ['currentDrug', 'modalToOpen', 'modalIsOpen'],
+        [drug, 'UpdateFormulations', true]
+      );
+    } else {
+      this.handleErrors(result);
+    }
+  };
+
   // Set value of inputs in state
   updateState = (event) => {
     const key = event.target.name;
-    const value = event.target.value;
+    const value = ["isAntibiotic", "isAntiMalarial"].includes(key) ? event.target.checked : event.target.value;
     this.setState({ [key]: value });
   };
 
+  // Display errors from response of the drug validation from rails if there is any
+  handleErrors = (result) => {
+    let newErrors = {};
+
+    if (result.errors.label_en !== undefined) {
+      newErrors.label_en = result.errors.label_en[0];
+    }
+
+    this.setState({ errors: newErrors });
+  };
+
   render() {
-    const { toggleModal } = this.props;
     const {
-      reference,
+      toggleModal,
+      currentHealthCareType,
+    } = this.props;
+
+    const {
       label,
       description,
+      isAntibiotic,
+      isAntiMalarial,
       errors
     } = this.state;
 
     return (
-      <Form onSubmit={this.updateState}>
+      <Form onSubmit={this.create}>
         <Modal.Header>
-          <Modal.Title>Update health cares</Modal.Title>
+          <Modal.Title>Create an health cares</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form.Row>
@@ -110,6 +158,32 @@ class UpdateHealthCareForm extends React.Component {
             </Form.Group>
           </Form.Row>
 
+          {(currentHealthCareType === 'drugs') ? (
+            <Form.Row>
+              <Form.Group as={Col}>
+                <Form.Check
+                  type="checkbox"
+                  label="Antibiotic"
+                  name="isAntibiotic"
+                  defaultChecked={isAntibiotic}
+                  onChange={this.updateState}
+                />
+              </Form.Group>
+
+              <Form.Group as={Col}>
+                <Form.Check
+                  type="checkbox"
+                  label="Anti malarial"
+                  name="isAntiMalarial"
+                  defaultChecked={isAntiMalarial}
+                  onChange={this.updateState}
+                />
+              </Form.Group>
+            </Form.Row>
+          ) : (
+            null
+          )}
+
           <Form.Row>
             <Form.Group as={Col}>
               <Form.Label>Description</Form.Label>
@@ -129,10 +203,17 @@ class UpdateHealthCareForm extends React.Component {
 
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={this.update}>
-            Update
-          </Button>
-          <Button variant="secondary" onClick={toggleModal}>
+          {/*Save directly the managements but go to formulations for the drugs*/}
+          {(currentHealthCareType === 'drugs') ? (
+            <Button variant="primary" onClick={() => this.updateFormulations()}>
+              Save and edit formulations
+            </Button>
+          ) : (
+            <Button variant="success" onClick={() => this.update()}>
+              Save
+            </Button>
+          )}
+          <Button variant="secondary" onClick={() => toggleModal()}>
             Close
           </Button>
         </Modal.Footer>

@@ -31,7 +31,7 @@ class VersionsService
       hash['diagnostics'][diagnostic.id] = extract_diagnostic(diagnostic)
     end
 
-    # Set all questions/treatments/managements used in this version of algorithm
+    # Set all questions/drugs/managements used in this version of algorithm
     hash['nodes'] = generate_nodes
 
     hash['nodes'] = add_reference_links(hash['nodes'])
@@ -198,7 +198,7 @@ class VersionsService
     hash['id'] = final_diagnostic.id
     hash['label'] = final_diagnostic.label
     hash['type'] = final_diagnostic.node_type
-    hash['treatments'] = extract_health_cares(final_diagnostic.health_cares.treatments, instance.instanceable.id)
+    hash['drugs'] = extract_health_cares(final_diagnostic.health_cares.drugs, instance.instanceable.id)
     hash['managements'] = extract_health_cares(final_diagnostic.health_cares.managements, instance.instanceable.id)
     hash['excluding_final_diagnostics'] = final_diagnostic.final_diagnostic_id
     hash['cc'] = final_diagnostic.diagnostic.node_id
@@ -257,15 +257,17 @@ class VersionsService
     hash
   end
 
-  # @params activerecord collection [Treatment, Management]
+  # @params activerecord collection [Drug, Management]
   # @params [Integer] id of current diagnostic
   # @return hash
-  # Set metadata for treatments and managements (health cares)
+  # Set metadata for drugs and managements (health cares)
   def self.extract_health_cares(health_cares, diagnostic_id)
     hash = {}
     health_cares.each do |health_care|
       hash[health_care.id] = extract_conditions(health_care.instances.find_by_instanceable_id(diagnostic_id).conditions)
       hash[health_care.id]['id'] = health_care.id
+      hash[health_care.id]['duration'] = health_care.instances.find_by_instanceable_id(diagnostic_id).duration
+      hash[health_care.id]['description'] = health_care.instances.find_by_instanceable_id(diagnostic_id).description
 
       # Append the health care in order to list them all at the end of the json.
       assign_node(health_care)
@@ -433,14 +435,29 @@ class VersionsService
       hash[health_care.id]['reference'] = health_care.reference
       hash[health_care.id]['label'] = health_care.label
       hash[health_care.id]['description'] = health_care.description
-      # Fields specific to treatments
-      hash[health_care.id]['weight_question_id'] = @version.algorithm.questions.find_by(type: 'Questions::VitalSignTriage', reference: '1').id
-      hash[health_care.id]['minimal_dose_per_kg'] = health_care.minimal_dose_per_kg
-      hash[health_care.id]['maximal_dose_per_kg'] = health_care.maximal_dose_per_kg
-      hash[health_care.id]['maximal_dose'] = health_care.maximal_dose
-      hash[health_care.id]['doses_per_day'] = health_care.doses_per_day
-      hash[health_care.id]['treatment_type'] = health_care.treatment_type
-      hash[health_care.id]['pill_size'] = health_care.pill_size
+      # Fields specific to drugs
+      if health_care.is_a?(HealthCares::Drug)
+        hash[health_care.id]['weight_question_id'] = @version.algorithm.questions.find_by(type: 'Questions::VitalSignTriage', reference: '1').id
+
+        hash[health_care.id]['formulations'] = []
+        health_care.formulations.map do |formulation|
+          formulation_hash = {}
+          formulation_hash['']
+          formulation_hash['medication_form'] = formulation.medication_form
+          formulation_hash['administration_route_category'] = formulation.administration_route.category
+          formulation_hash['administration_route_name'] = formulation.administration_route.name
+          formulation_hash['liquid_concentration'] = formulation.liquid_concentration
+          formulation_hash['dose_form'] = formulation.dose_form
+          formulation_hash['unique_dose'] = formulation.unique_dose
+          formulation_hash['by_age'] = formulation.by_age
+          formulation_hash['breakable'] = formulation.breakable.present? ? I18n.t("formulations.breakables.#{formulation.breakable}.value") : nil
+          formulation_hash['minimal_dose_per_kg'] = formulation.minimal_dose_per_kg
+          formulation_hash['maximal_dose_per_kg'] = formulation.maximal_dose_per_kg
+          formulation_hash['maximal_dose'] = formulation.maximal_dose
+          formulation_hash['doses_per_day'] = formulation.doses_per_day
+          hash[health_care.id]['formulations'].push(formulation_hash)
+        end
+      end
     end
     hash
   end

@@ -14,6 +14,12 @@ en:
         node: "Complaint category"
   activated: "Activate"
   add: "Add"
+  administration_routes:
+    labels:
+      - ~
+      - "Enteral"
+      - "Parental or injectable"
+      - "Mucocutaneous"
   algorithms:
     index:
       columns:
@@ -32,7 +38,7 @@ en:
       subtitle_questions_sequences: "Questions sequences"
       subtitle_questions_sequences_scored: "Questions sequences scored"
       subtitle_questions: "Questions"
-      subtitle_treatments: "Treatments"
+      subtitle_drugs: "Drugs"
       subtitle_versions: "Versions list"
       title: "Details of %{name}"
   answer_type:
@@ -101,7 +107,7 @@ en:
     diagnostics: "Diagnostics"
     final_diagnostics: "Final diagnostics"
     questions_sequences: "Questions sequences"
-    treatments: "Treatments"
+    drugs: "Drugs"
     questions: "Questions"
     managements: "Managements"
   children:
@@ -171,7 +177,7 @@ en:
       managements: "Managements"
       questions_sequences: "Questions sequences"
       questions: "Questions"
-      treatments: "Treatments"
+      drugs: "Drugs"
   duplicate: "Duplicate"
   duplicated: "_duplicated"
   edit: "Edit"
@@ -190,7 +196,7 @@ en:
     edit:
       title: "Edit final diagnostic"
     show:
-      treatments: "Treatments"
+      drugs: "Drugs"
       managements: "Managements"
       excluded_diagnostic: "Excluded diagnostic"
       no_excluded_diagnostic: "There is no diagnosis excluded"
@@ -213,6 +219,7 @@ en:
       node_is_not_complaint_category: "The node you are linking to this diagnostic is not a Complaint Category."
       question_no_children: "The %{type} %{reference} is not linked to any children."
       valid: "This diagnostic is valid!"
+      drug_conditioned_by_age_without_age: "You have a Drug formulation that is conditioned by age but yet no age question above it. This error occurs in <u><a href='%{url}'>%{df_reference}</a></u>."
     questions_sequence:
       ps_no_condition: "The questions sequence you are describing has no condition."
       question_no_children: "The %{type} %{reference} is not linked to any children."
@@ -222,6 +229,20 @@ en:
       complaint_category_missing: "Please select the complaint category."
       invalids_diagnostics: "Your version contains diagnostics that are invalid : %{diagnostics}"
       triage_question_missing: "Please select the triage question you want to put a condition on."
+  formulations:
+    breakables:
+      one:
+        label: "No"
+        value: 1
+      two:
+        label: "In 2"
+        value: 2
+      four:
+        label: "In 4"
+        value: 4
+    errors:
+      minimum_higher_than_maximum: "The minimum dose per kg can't be higher than the maximum dose per kg"
+      maximum_per_kg_higher_than_maximum: "The maximum dose per kg can't be higher than the maximum dose per day"
   groups:
     add_device:
       success_add_device: "Device was successfully added to group"
@@ -259,9 +280,9 @@ en:
       management:
         label: "Management"
         reference_prefix: "M"
-      treatment:
-        label: "Treatment"
-        reference_prefix: "T"
+      drug:
+        label: "Drug"
+        reference_prefix: "DR"
   helps:
     diagram:
       arrow-title: "Arrow"
@@ -311,7 +332,7 @@ en:
         actions: "Actions"
   medical_case:
     validation:
-      wrong_node_type: "This node is not a management or a treatment."
+      wrong_node_type: "This node is not a management or a drug."
   nodes:
     validation:
       reference_used: "This reference is already used"
@@ -454,19 +475,19 @@ en:
     index:
       languages: "Languages"
   show: "Show"
-  treatments:
+  drugs:
     edit:
-      title: "Edit the treatment"
+      title: "Edit the drug"
     new:
-      title: "Create a treatment"
-    reference: "T"
+      title: "Create a drug"
+    reference: "DR"
     table:
       columns:
         reference: "Reference"
         label: "Label"
         description: "Description"
         actions: "Actions"
-    treatment_types:
+    medication_forms:
       liquid: "Liquid"
       pill: "Pill"
   unarchive: "Unarchive"

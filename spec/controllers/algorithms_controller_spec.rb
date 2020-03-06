@@ -57,8 +57,8 @@ RSpec.describe AlgorithmsController, type: :controller do
     expect(response.status).to eq(204)
   end
 
-  it 'should work for [GET:treatments]' do
-    get :treatments, params: { id: @algorithm.id }, xhr: true
+  it 'should work for [GET:drugs]' do
+    get :drugs, params: { id: @algorithm.id }, xhr: true
     expect(response.status).to eq(204)
   end
 

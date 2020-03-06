@@ -83,7 +83,6 @@ class Toolbar extends React.Component {
     const {
       type,
       instanceable,
-      getReferencePrefix
     } = this.props;
     const { isLoading } = this.state;
 
@@ -102,7 +101,7 @@ class Toolbar extends React.Component {
                 {type === "Diagnostic" ? (
                   <a className="dropdown-item" href="#" onClick={this.newFinalDiagnostic}>Final diagnostic</a>) : null}
                 {type === "FinalDiagnostic" ? (<a className="dropdown-item" href="#"
-                                                  onClick={() => this.newHealthCare("treatments")}>Treatment</a>) : null}
+                                                  onClick={() => this.newHealthCare("drugs")}>Drug</a>) : null}
                 {type === "FinalDiagnostic" ? (<a className="dropdown-item" href="#"
                                                   onClick={() => this.newHealthCare("managements")}>Management</a>) : null}
               </div>

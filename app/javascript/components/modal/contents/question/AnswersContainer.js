@@ -95,9 +95,6 @@ class AnswersContainer extends React.Component {
       });
 
       let newErrors = {};
-      if (result.errors.reference !== undefined) {
-        newErrors.reference = result.errors.reference[0];
-      }
 
       if (result.errors.label !== undefined) {
         newErrors.label = result.errors.label[0];
@@ -125,7 +122,6 @@ class AnswersContainer extends React.Component {
       nodeAnswers.map((answer, index) => {
         answers[index] = {
           id: answer.id,
-          reference: answer.reference,
           label_en: answer.label_translations['en'],
           operator: answersOperators[answer.operator],
           value: answer.value,
