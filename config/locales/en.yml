@@ -10,6 +10,8 @@ en:
         doses_per_day: "Number of doses per day"
         treatment_type: "Medication form"
         pill_size: "Pill minimal size (mg)"
+        is_triage: "Ask in triage if it is available"
+        is_identifiable: "This question can identify a patient"
       diagnostic:
         node: "Complaint category"
   activated: "Activate"
@@ -384,11 +386,17 @@ en:
       background_calculation:
         label: "Background calculation"
         reference_prefix: "BC"
+      basic_measurement:
+        label: "Basic measurement"
+        reference_prefix: "BM"
       complaint_category:
         label: "Complaint category"
         reference_prefix: "CC"
       chronic_condition:
         label: "Chronic condition"
+        reference_prefix: "CH"
+      consultation_related:
+        label: "Consultation related question"
         reference_prefix: "CH"
       demographic:
         label: "Demographics"
@@ -396,9 +404,6 @@ en:
       exposure:
         label: "Exposure"
         reference_prefix: "E"
-      emergency_sign:
-        label: "Emergency sign"
-        reference_prefix: "ES"
       observed_physical_sign:
         label: "Observed physical sign"
         reference_prefix: "OS"
@@ -411,15 +416,18 @@ en:
       treatment_question:
         label: "Additional Treatment question"
         reference_prefix: "TQ"
+      unique_triage_physical_sign:
+        label: "Unique triage physical sign"
+        reference_prefix: "UP"
+      unique_triage_question:
+        label: "Unique triage question"
+        reference_prefix: "UT"
       vaccine:
         label: "Vaccine"
         reference_prefix: "V"
-      vital_sign_consultation:
-        label: "Vital sign and anthropometric taken during consultation"
-        reference_prefix: "VC"
-      vital_sign_triage:
-        label: "Vital sign and anthropometric taken at triage"
-        reference_prefix: "VT"
+      vital_sign_anthropometric:
+        label: "Vital signs / anthropometric"
+        reference_prefix: "VS"
     errors:
       no_blank: "can't be blank"
       formula_wrong_characters: "Incorrect formula format. You can only use numbers, operators and questions references (between brackets)"

@@ -27,6 +27,8 @@ class CreateQuestionForm extends React.Component {
     type: "",
     stage: "",
     isMandatory: false,
+    isTriage: false,
+    isIdentifiable: false,
     answerType: "",
     unavailable: false,
     formula: "",
@@ -120,6 +122,8 @@ class CreateQuestionForm extends React.Component {
       stage,
       system,
       isMandatory,
+      isTriage,
+      isIdentifiable,
       answerType,
       unavailable,
       formula,
@@ -136,6 +140,8 @@ class CreateQuestionForm extends React.Component {
         stage: parseInt(stage),
         system: system,
         is_mandatory: isMandatory,
+        is_triage: isTriage,
+        is_identifiable: isIdentifiable,
         answer_type_id: parseInt(answerType),
         unavailable: unavailable,
         formula: formula,
@@ -149,7 +155,7 @@ class CreateQuestionForm extends React.Component {
   // Handle change of inputs in the form
   handleFormChange = (event) => {
     const name = event.target.name;
-    const value = ["unavailable", "isMandatory"].includes(name) ? event.target.checked : event.target.value;
+    const value = ["unavailable", "isMandatory", "isTriage", "isIdentifiable"].includes(name) ? event.target.checked : event.target.value;
 
     let stateToSet = {};
     stateToSet[name] = value;
@@ -159,21 +165,23 @@ class CreateQuestionForm extends React.Component {
       stateToSet['stageHidden'] = false;
 
       switch (value) {
-        case "Questions::EmergencySign":
+        case "Questions::UniqueTriageQuestion":
+        case "Questions::UniqueTriagePhysicalSign":
         case "Questions::ComplaintCategory":
-        case "Questions::VitalSignTriage":
+        case "Questions::BasicMeasurement":
           stateToSet['stage'] = "1";
           break;
-        case "Questions::ChronicCondition":
+        case "Questions::ConsultationRelated":
         case "Questions::Demographic":
-        case "Questions::Vaccine":
           stateToSet['stage'] = "0";
           break;
+        case "Questions::ChronicCondition":
         case "Questions::Exposure":
         case "Questions::ObservedPhysicalSign":
         case "Questions::PhysicalExam":
         case "Questions::Symptom":
-        case "Questions::VitalSignConsultation":
+        case "Questions::Vaccine":
+        case "Questions::VitalSignAnthropometric":
           stateToSet['stage'] = "3";
           break;
         case "Questions::AssessmentTest":
@@ -254,6 +262,8 @@ class CreateQuestionForm extends React.Component {
       system,
       systemHidden,
       isMandatory,
+      isTriage,
+      isIdentifiable,
       answerType,
       answerTypeDisabled,
       stageDisabled,
@@ -391,6 +401,30 @@ class CreateQuestionForm extends React.Component {
 
           <Form.Row>
             <Form.Group as={Col}>
+              <Form.Check
+                type="checkbox"
+                label="Ask in triage if it is available"
+                name="isTriage"
+                value={isTriage}
+                onChange={this.handleFormChange}
+              />
+            </Form.Group>
+          </Form.Row>
+
+          <Form.Row>
+            <Form.Group as={Col}>
+              <Form.Check
+                type="checkbox"
+                label="This question can identify a patient"
+                name="isIdentifiable"
+                value={isIdentifiable}
+                onChange={this.handleFormChange}
+              />
+            </Form.Group>
+          </Form.Row>
+
+          <Form.Row>
+            <Form.Group as={Col}>
               <Form.Label>Description</Form.Label>
               <InputGroup>
                 <Form.Control
@@ -439,7 +473,7 @@ class CreateQuestionForm extends React.Component {
         </Modal.Body>
         <Modal.Footer>
           {/*Save directly the question if it is a boolean*/}
-          {(['1', '7', '8'].includes(answerType) || ['Questions::VitalSignTriage', 'Questions::VitalSignConsultation'].includes(type)) ? (
+          {(['1', '7', '8'].includes(answerType) || ['Questions::BasicMeasurement', 'Questions::VitalSignAnthropometric'].includes(type)) ? (
             <Button variant="success" onClick={() => this.create()}>
               Save
             </Button>

@@ -1,9 +1,9 @@
 # Category of question who defines first basic question to possibly improve priority of a patient
-# Reference prefix : ES
-class Questions::EmergencySign < Question
+# Reference prefix : UT
+class Questions::UniqueTriageQuestion < Question
 
   def self.variable
-    'emergency_sign'
+    'unique_triage_question'
   end
 
 end

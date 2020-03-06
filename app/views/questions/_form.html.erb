@@ -10,6 +10,8 @@
 <%= f.input :label_en %>
 <%= f.input :snomed_label, prompt: t('type_here') %>
 <%= f.input :snomed_id, as: :hidden %>
+<%= f.input :is_triage, as: :boolean %>
+<%= f.input :is_identifiable, as: :boolean %>
 <%= f.input :description_en, as: :text %>
 
 <% unless f.object.persisted? %>

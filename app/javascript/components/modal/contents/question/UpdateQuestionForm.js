@@ -29,6 +29,8 @@ class UpdateQuestionForm extends React.Component {
     stage: "",
     system: "",
     isMandatory: false,
+    isTriage: false,
+    isIdentifiable: false,
     answerType: "",
     formula: "",
     snomedId: "",
@@ -54,6 +56,8 @@ class UpdateQuestionForm extends React.Component {
       type: newCurrentNode.type,
       description: newCurrentNode.description_translations === null ? "" : newCurrentNode.description_translations["en"],
       isMandatory: newCurrentNode.is_mandatory,
+      isTriage: newCurrentNode.is_triage,
+      isIdentifiable: newCurrentNode.is_identifiable,
       stage: questionStages[newCurrentNode.stage],
       system: system === undefined ? undefined : system[1],
       answerType: newCurrentNode.answer_type_id,
@@ -134,6 +138,8 @@ class UpdateQuestionForm extends React.Component {
       stage,
       system,
       isMandatory,
+      isTriage,
+      isIdentifiable,
       answerType,
       formula,
       snomedId,
@@ -149,6 +155,8 @@ class UpdateQuestionForm extends React.Component {
         stage: parseInt(stage),
         system: system,
         is_mandatory: isMandatory,
+        is_triage: isTriage,
+        is_identifiable: isIdentifiable,
         answer_type_id: parseInt(answerType),
         formula: formula,
         snomedId: parseInt(snomedId),
@@ -161,7 +169,7 @@ class UpdateQuestionForm extends React.Component {
   // Handle change of inputs in the form
   handleFormChange = (event) => {
     const name = event.target.name;
-    const value = name === "isMandatory" ? event.target.checked : event.target.value;
+    const value = ["isIdentifiable", "isTriage", "isMandatory"].includes(name) ? event.target.checked : event.target.value;
 
     this.setState({
       [name]: value
@@ -198,11 +206,9 @@ class UpdateQuestionForm extends React.Component {
       questionCategories,
       questionAnswerTypes,
       questionStages,
-      questionSystems,
-      getReferencePrefix
+      questionSystems
     } = this.props;
     const {
-      reference,
       label,
       description,
       errors,
@@ -210,6 +216,8 @@ class UpdateQuestionForm extends React.Component {
       stage,
       system,
       isMandatory,
+      isTriage,
+      isIdentifiable,
       answerType,
       formula,
       snomedLabel,
@@ -320,6 +328,30 @@ class UpdateQuestionForm extends React.Component {
                     <TextField {...params} label="Search a snomed label" variant="outlined" onChange={this.searchSnomed} fullWidth />
                   )}
                 />
+            </Form.Group>
+          </Form.Row>
+
+          <Form.Row>
+            <Form.Group as={Col}>
+              <Form.Check
+                type="checkbox"
+                label="Ask in triage if it is available"
+                name="isTriage"
+                defaultChecked={isTriage}
+                onChange={this.handleFormChange}
+              />
+            </Form.Group>
+          </Form.Row>
+
+          <Form.Row>
+            <Form.Group as={Col}>
+              <Form.Check
+                type="checkbox"
+                label="This question can identify a patient"
+                name="isIdentifiable"
+                defaultChecked={isIdentifiable}
+                onChange={this.handleFormChange}
+              />
             </Form.Group>
           </Form.Row>
 
