@@ -2,8 +2,8 @@ import * as React from "react";
 import { DefaultLinkWidget } from "@projectstorm/react-diagrams";
 import { LinkWidget } from "@projectstorm/react-diagrams-core";
 
-import { AdvancedLinkArrowWidget } from "../../../helpers/nodeHelpers";
-import { withDiagram } from "../../../engine/context/Diagram.context";
+import { AdvancedLinkArrowWidget } from "../../../../helpers/nodeHelpers";
+import { withDiagram } from "../../../../engine/context/Diagram.context";
 
 class AdvancedLinkWidget extends DefaultLinkWidget {
   generateArrow(point, previousPoint) {

@@ -3,7 +3,7 @@ import * as _ from "lodash";
 import { DefaultLinkModel } from "@projectstorm/react-diagrams";
 import { NotificationManager } from "react-notifications";
 
-import Http from "../../../engine/http";
+import Http from "../../../../engine/http";
 
 export default class AdvancedLinkModel extends DefaultLinkModel {
   constructor(options = {}) {

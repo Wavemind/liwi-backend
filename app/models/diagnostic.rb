@@ -125,7 +125,7 @@ class Diagnostic < ApplicationRecord
   # @return [Json]
   # Return questions in json format
   def questions_json
-    components.not_health_care_conditions.joins(:node).includes(:conditions, :children, :node).where('nodes.type IN (?) OR nodes.type IN (?)', Question.descendants.map(&:name), QuestionsSequence.descendants.map(&:name)).as_json(
+    (components.questions.not_health_care_conditions + components.questions_sequences.not_health_care_conditions).as_json(
       include: [
         conditions: {
           include: [
@@ -150,7 +150,25 @@ class Diagnostic < ApplicationRecord
   # @return [Json]
   # Return final diagnostics in json format
   def final_diagnostics_json
-    components.final_diagnostics.includes(:node).as_json(include: [node: { methods: [:node_type] }, conditions: { include: [first_conditionable: { include: [node: { include: [:answers] }], methods: [:get_node] }, second_conditionable: { methods: [:get_node] }] }])
+    components.final_diagnostics.includes(:node).as_json(
+      include: [
+        node: {
+          methods: [:node_type]
+        },
+        conditions: {
+          include: [
+            first_conditionable: {
+              include: [
+                node: {
+                  include: [:answers]
+                }
+              ],
+              methods: [:get_node]
+            }
+          ]
+        }
+      ]
+    )
   end
 
   # @return [Json]

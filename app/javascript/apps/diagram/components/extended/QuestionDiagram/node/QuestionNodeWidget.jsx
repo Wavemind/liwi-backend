@@ -1,11 +1,11 @@
 import * as React from "react";
 import { PortWidget } from "@projectstorm/react-diagrams-core";
 
-import { withDiagram } from "../../../engine/context/Diagram.context";
-import { getLabel } from "../../../helpers/nodeHelpers";
+import { withDiagram } from "../../../../engine/context/Diagram.context";
+import { getLabel } from "../../../../helpers/nodeHelpers";
 
 
-class AdvancedNodeWidget extends React.Component {
+class QuestionNodeWidget extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -67,4 +67,4 @@ class AdvancedNodeWidget extends React.Component {
   }
 }
 
-export default withDiagram(AdvancedNodeWidget);
+export default withDiagram(QuestionNodeWidget);

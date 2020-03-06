@@ -6,12 +6,13 @@ import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 // Internal import
 import { withDiagram } from "../../engine/context/Diagram.context";
-import AdvancedLinkFactory from "../AdvancedDiagram/link/AdvancedLinkFactory";
-import AdvancedNodeFactory from "../AdvancedDiagram/node/AdvancedNodeFactory";
-import AdvancedNodeModel from "../AdvancedDiagram/node/AdvancedNodeModel";
 import AvailableNodes from "../AvailableNodes";
 import { linkNode } from "../../helpers/nodeHelpers";
 
+import QuestionNodeModel from "../extended/QuestionDiagram/node/QuestionNodeModel";
+
+import QuestionLinkFactory from "../extended/QuestionDiagram/link/QuestionLinkFactory";
+import QuestionNodeFactory from "../extended/QuestionDiagram/node/QuestionNodeFactory";
 
 export class Diagram extends React.Component {
 
@@ -22,8 +23,8 @@ export class Diagram extends React.Component {
     const model = new DiagramModel();
 
     // Register our own factory
-    engine.getLinkFactories().registerFactory(new AdvancedLinkFactory());
-    engine.getNodeFactories().registerFactory(new AdvancedNodeFactory());
+    engine.getLinkFactories().registerFactory(new QuestionLinkFactory());
+    engine.getNodeFactories().registerFactory(new QuestionNodeFactory());
 
     this.state = {
       engine: engine,
@@ -35,13 +36,15 @@ export class Diagram extends React.Component {
 
   initDiagram = () => {
     const { engine, model } = this.state;
-    const { questionsInstances, addAvailableNode } = this.props;
+    const { instances, addAvailableNode } = this.props;
 
     let diagramNodes = [];
 
+    console.log(instances)
+
     // Generate questions
-    questionsInstances.map(instance => {
-      let diagramNode = new AdvancedNodeModel({
+    instances.map(instance => {
+      let diagramNode = new QuestionNodeModel({
         dbInstance: instance,
         addAvailableNode: addAvailableNode
       });
@@ -73,7 +76,7 @@ export class Diagram extends React.Component {
     // Generate node if instance creation success
     if (httpRequest.status === 200) {
       // Generate node
-      let diagramInstance = new AdvancedNodeModel({
+      let diagramInstance = new QuestionNodeModel({
         dbInstance: result,
         addAvailableNode: addAvailableNode
       });
