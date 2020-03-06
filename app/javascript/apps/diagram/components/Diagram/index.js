@@ -6,13 +6,16 @@ import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 // Internal import
 import { withDiagram } from "../../engine/context/Diagram.context";
-import AvailableNodes from "../AvailableNodes";
 import { linkNode } from "../../helpers/nodeHelpers";
+import AvailableNodes from "../AvailableNodes";
 
 import QuestionNodeModel from "../extended/QuestionDiagram/node/QuestionNodeModel";
 
 import QuestionLinkFactory from "../extended/QuestionDiagram/link/QuestionLinkFactory";
 import QuestionNodeFactory from "../extended/QuestionDiagram/node/QuestionNodeFactory";
+
+import FinalDiagnosticLinkFactory from "../extended/FinalDiagnosticDiagram/link/FinalDiagnosticLinkFactory";
+import FinalDiagnosticNodeFactory from "../extended/FinalDiagnosticDiagram/node/FinalDiagnosticNodeFactory";
 
 export class Diagram extends React.Component {
 
@@ -25,6 +28,9 @@ export class Diagram extends React.Component {
     // Register our own factory
     engine.getLinkFactories().registerFactory(new QuestionLinkFactory());
     engine.getNodeFactories().registerFactory(new QuestionNodeFactory());
+
+    engine.getLinkFactories().registerFactory(new FinalDiagnosticLinkFactory());
+    engine.getNodeFactories().registerFactory(new FinalDiagnosticNodeFactory());
 
     this.state = {
       engine: engine,
@@ -39,8 +45,6 @@ export class Diagram extends React.Component {
     const { instances, addAvailableNode } = this.props;
 
     let diagramNodes = [];
-
-    console.log(instances)
 
     // Generate questions
     instances.map(instance => {
