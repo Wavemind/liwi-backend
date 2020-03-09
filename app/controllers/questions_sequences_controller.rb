@@ -160,7 +160,8 @@ class QuestionsSequencesController < ApplicationController
       Language.description_params,
       :type,
       :algorithm_id,
-      :min_score
+      :min_score,
+      :node_id,
       )
   end
 

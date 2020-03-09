@@ -109,9 +109,9 @@ class Toolbar extends React.Component {
             </div>
           </div>
 
-          {type === "Diagnostic" ? (
+          {["Diagnostic", "QuestionsSequence"].includes(type) ? (
             <div className="col text-center justify-content-center align-self-center">
-              <span className="btn-transparent">{instanceable.node.reference_label}</span>
+              <span className="btn-transparent">{instanceable.node !== undefined ? `Conditioned by ${instanceable.node.reference_label}` : "Not conditioned by any complaint category"}</span>
             </div>
           ) : null}
 

@@ -4,6 +4,7 @@ class QuestionsSequence < Node
 
   has_many :answers, foreign_key: 'node_id', dependent: :destroy
   has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy
+  belongs_to :node, optional: true # Complaint category linked to the QS
 
   validates_presence_of :type
 

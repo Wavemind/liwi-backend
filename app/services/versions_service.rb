@@ -461,6 +461,7 @@ class VersionsService
       hash[questions_sequence.id]['qs'] = get_node_questions_sequences(questions_sequence, [])
       hash[questions_sequence.id]['dd'] = get_node_diagnostics(questions_sequence, [])
       hash[questions_sequence.id]['answer'] = nil
+      hash[questions_sequence.id]['conditioned_by_cc'] = questions_sequence.node_id # Complaint category id
 
       # Loop in each instance for defined condition
       questions_sequence.components.questions.includes(:conditions, :children, :nodes, node:[:answer_type, :answers]).each do |instance|

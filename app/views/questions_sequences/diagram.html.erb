@@ -8,7 +8,7 @@
     <%= react_component('Provider', {
       render: 'Diagram',
       context: {
-        instanceable: @questions_sequence.as_json(methods: :category_name),
+        instanceable: @questions_sequence.as_json(methods: :category_name, include: {node: {methods: :reference_label}}),
         instanceable_type: @questions_sequence.class.name,
         questions: @questions_sequence.questions_json,
         availableNodes: @questions_sequence.available_nodes_json,

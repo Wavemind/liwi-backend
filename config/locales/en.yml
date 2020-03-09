@@ -10,6 +10,7 @@ en:
         doses_per_day: "Number of doses per day"
         treatment_type: "Medication form"
         pill_size: "Pill minimal size (mg)"
+        node: "Complaint category"
       diagnostic:
         node: "Complaint category"
   activated: "Activate"
