@@ -437,7 +437,7 @@ class VersionsService
       hash[health_care.id]['description'] = health_care.description
       # Fields specific to drugs
       if health_care.is_a?(HealthCares::Drug)
-        hash[health_care.id]['weight_question_id'] = @version.algorithm.questions.find_by(type: 'Questions::VitalSignTriage', reference: '1').id
+        hash[health_care.id]['weight_question_id'] = @version.algorithm.questions.find_by(type: 'Questions::BasicMeasurement', reference: '1').id
 
         hash[health_care.id]['formulations'] = []
         health_care.formulations.map do |formulation|
