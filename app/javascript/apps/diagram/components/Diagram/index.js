@@ -6,7 +6,7 @@ import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 // Internal import
 import { withDiagram } from "../../engine/context/Diagram.context";
-import { linkNode } from "../../helpers/nodeHelpers";
+import { linkNode, createNode } from "../../helpers/nodeHelpers";
 import AvailableNodes from "../AvailableNodes";
 
 import QuestionNodeModel from "../extended/QuestionDiagram/node/QuestionNodeModel";
@@ -48,10 +48,7 @@ export class Diagram extends React.Component {
 
     // Generate questions
     instances.map(instance => {
-      let diagramNode = new QuestionNodeModel({
-        dbInstance: instance,
-        addAvailableNode: addAvailableNode
-      });
+      let diagramNode = createNode(instance, addAvailableNode);
       diagramNodes.push(diagramNode);
       model.addAll(diagramNode);
     });
@@ -80,10 +77,7 @@ export class Diagram extends React.Component {
     // Generate node if instance creation success
     if (httpRequest.status === 200) {
       // Generate node
-      let diagramInstance = new QuestionNodeModel({
-        dbInstance: result,
-        addAvailableNode: addAvailableNode
-      });
+      let diagramInstance = createNode(result, addAvailableNode);
 
       // Display node in diagram
       engine.getModel().addNode(diagramInstance);

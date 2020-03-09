@@ -2,7 +2,6 @@ import * as _ from "lodash";
 import { NodeModel } from "@projectstorm/react-diagrams";
 
 import AdvancedPortModel from "../port/AdvancedPortModel";
-import { getLabel } from "../../../../helpers/nodeHelpers";
 import Http from "../../../../engine/http";
 import { NotificationManager } from "react-notifications";
 
@@ -25,15 +24,6 @@ export default class AdvancedNodeModel extends NodeModel {
         id: this.dbInstance.id
       })
     );
-
-    // outPorts
-    this.dbInstance.node.answers.map(answer => {
-      this.addPort(new AdvancedPortModel({
-        in: false,
-        name: getLabel(answer),
-        id: answer.id
-      }));
-    });
 
     // Set Position
     this.setPosition(this.dbInstance.position_x, this.dbInstance.position_y);

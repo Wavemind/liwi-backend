@@ -1,5 +1,7 @@
 import * as React from 'react';
 import _ from "lodash";
+import QuestionNodeModel from "../components/extended/QuestionDiagram/node/QuestionNodeModel";
+import FinalDiagnosticNodeModel from "../components/extended/FinalDiagnosticDiagram/node/FinalDiagnosticNodeModel";
 
 /**
  * Get full label of an object
@@ -8,6 +10,36 @@ import _ from "lodash";
  */
 export const getLabel = (node) => {
   return node.label_translations["en"];
+};
+
+/**
+ * Generate diagram node by instance type
+ * @params [Object] instance
+ * @params [Function] addAvailableNode
+ * @return diagram node
+ */
+export const createNode = (instance, addAvailableNode) => {
+  let diagramNode;
+
+  switch(instance.node.node_type) {
+    case 'Question':
+      diagramNode = new QuestionNodeModel({
+        dbInstance: instance,
+        addAvailableNode: addAvailableNode
+      });
+      break;
+    case 'FinalDiagnostic':
+      diagramNode = new FinalDiagnosticNodeModel({
+        dbInstance: instance,
+        addAvailableNode: addAvailableNode
+      });
+      break;
+    default:
+      console.log("bah je suis la")
+      break;
+  }
+
+  return diagramNode;
 };
 
 /**

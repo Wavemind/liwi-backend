@@ -39,7 +39,7 @@ class InstancesController < ApplicationController
     instance = @instanceable.components.new(instance_params)
 
     if instance.save
-      render json: instance.as_json(include: {node: { include: [:answers], methods: [:node_type, :category_name, :type] }})
+      render json: instance.generate_json
     else
       render json: instance.errors.full_messages, status: 422
     end

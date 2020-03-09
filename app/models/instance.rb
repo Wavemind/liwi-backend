@@ -64,6 +64,17 @@ class Instance < ApplicationRecord
     node.reference_label
   end
 
+  # Return json formated of the instance depending on the node type
+  def generate_json
+    # TODO: Drug
+
+    if node.is_a? Question
+      self.as_json(include: { node: { include: [:answers], methods: [:node_type, :category_name, :type] } })
+    else
+      self.as_json(include: { node: { methods: [:node_type, :category_name, :type] } })
+    end
+  end
+
   private
 
   # Save if validation is true and node_id doesn't already exist in current diagnostic

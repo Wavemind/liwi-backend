@@ -9,7 +9,7 @@
     render: 'Diagram',
     context: {
       instanceable: @diagnostic.diagnostic_json,
-      instances: @diagnostic.questions_json,
+      instances: @diagnostic.questions_json + @diagnostic.final_diagnostics_json,
       availableNodes: @diagnostic.available_nodes_json,
       questionAnswerTypes: AnswerType.all.as_json(methods: :display_name),
       questionSystems: Question.systems.map { |k, v| [t("questions.systems.#{k}"), k] },
