@@ -195,6 +195,7 @@ Rails.application.routes.draw do
       resources :versions, only: [:index]
 
       get 'is_available', to: 'application#is_available'
+      get 'categories', to: 'application#categories'
     end
   end
 end
