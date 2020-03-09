@@ -10,7 +10,6 @@ export default class AdvancedNodeModel extends NodeModel {
   constructor(options = {}) {
     super({
       ...options,
-      type: "advanced"
     });
     this.dbInstance = options.dbInstance || {};
     this.addAvailableNode = options.addAvailableNode || {};
@@ -19,6 +18,7 @@ export default class AdvancedNodeModel extends NodeModel {
     // inPort
     this.addPort(
       new AdvancedPortModel({
+        locked: true,
         in: true,
         name: "in",
         id: this.dbInstance.id
@@ -87,6 +87,12 @@ export default class AdvancedNodeModel extends NodeModel {
   getInPort() {
     return _.find(this.ports, portModel => {
       return portModel.options.in;
+    });
+  }
+
+  getPortByName(name) {
+    return _.find(this.ports, portModel => {
+      return portModel.options.name === name;
     });
   }
 

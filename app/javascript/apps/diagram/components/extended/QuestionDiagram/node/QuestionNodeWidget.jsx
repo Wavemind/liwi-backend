@@ -22,9 +22,6 @@ class QuestionNodeWidget extends React.Component {
               &nbsp; {/*It need to have content in PortWidget to make a link*/}
             </PortWidget>
           </div>
-          {/*{(inPort !== undefined) ? (*/}
-          {/*  <div className="port srd-port in-port" data-name={inPort.name} data-nodeid={inPort.parent.id}/>*/}
-          {/*) : null}*/}
           <div className="col pl-2 pr-0 text-left">
             {getReferencePrefix(node.dbInstance.node.node_type, node.dbInstance.node.type) + node.dbInstance.node.reference}
           </div>

@@ -9,7 +9,8 @@ import { withDiagram } from "../../engine/context/Diagram.context";
 import { linkNode, createNode } from "../../helpers/nodeHelpers";
 import AvailableNodes from "../AvailableNodes";
 
-import QuestionNodeModel from "../extended/QuestionDiagram/node/QuestionNodeModel";
+import AdvancedLinkFactory from "../extended/AdvancedDiagram/link/AdvancedLinkFactory";
+import AdvancedNodeFactory from "../extended/AdvancedDiagram/node/AdvancedNodeFactory";
 
 import QuestionLinkFactory from "../extended/QuestionDiagram/link/QuestionLinkFactory";
 import QuestionNodeFactory from "../extended/QuestionDiagram/node/QuestionNodeFactory";
@@ -26,6 +27,9 @@ export class Diagram extends React.Component {
     const model = new DiagramModel();
 
     // Register our own factory
+    engine.getLinkFactories().registerFactory(new AdvancedLinkFactory());
+    engine.getNodeFactories().registerFactory(new AdvancedNodeFactory());
+
     engine.getLinkFactories().registerFactory(new QuestionLinkFactory());
     engine.getNodeFactories().registerFactory(new QuestionNodeFactory());
 

@@ -48,7 +48,7 @@ class AdvancedNodeWidget extends React.Component {
         <div>
           <div className="py-2 node-label">
             <div className="col text-center">
-              {getLabel(node.dbInstance.node)}
+              {getLabel(node.dbInstance.node)} PAS CELUI LA
             </div>
           </div>
           <div className="node-answers">

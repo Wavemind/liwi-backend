@@ -1,10 +1,10 @@
 import * as React from "react";
-import AdvancedLinkFactory from "../../AdvancedDiagram/link/AdvancedLinkFactory";
+import { DefaultLinkFactory } from "@projectstorm/react-diagrams";
 
 import QuestionLinkModel from "./QuestionLinkModel";
 import AdvancedLinkWidget from "../../AdvancedDiagram/link/AdvancedLinkWidget";
 
-export default class QuestionLinkFactory extends AdvancedLinkFactory {
+export default class QuestionLinkFactory extends DefaultLinkFactory {
   constructor() {
     super('question');
   }

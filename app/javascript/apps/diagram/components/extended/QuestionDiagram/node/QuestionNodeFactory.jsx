@@ -1,10 +1,10 @@
 import * as React from 'react';
+import { AbstractReactFactory } from "@projectstorm/react-canvas-core";
 
-import AdvancedNodeFactory from "../../AdvancedDiagram/node/AdvancedNodeFactory";
 import QuestionNodeModel from './QuestionNodeModel';
 import QuestionNodeWidget from './QuestionNodeWidget';
 
-export default class QuestionNodeFactory extends AdvancedNodeFactory {
+export default class QuestionNodeFactory extends AbstractReactFactory {
   constructor() {
     super('question');
   }
