@@ -2,11 +2,11 @@
 import * as React from "react";
 import createEngine, { DiagramModel } from "@projectstorm/react-diagrams";
 import { CanvasWidget } from "@projectstorm/react-canvas-core";
-import {NotificationContainer, NotificationManager} from 'react-notifications';
+import { NotificationContainer, NotificationManager } from "react-notifications";
 
 // Internal import
 import { withDiagram } from "../../engine/context/Diagram.context";
-import { linkNode, createNode } from "../../helpers/nodeHelpers";
+import { linkNode, createNode, linkFinalDiagnosticExclusion, getConditionPort } from "../../helpers/nodeHelpers";
 import AvailableNodes from "../AvailableNodes";
 
 import AdvancedLinkFactory from "../extended/AdvancedDiagram/link/AdvancedLinkFactory";
@@ -57,12 +57,22 @@ export class Diagram extends React.Component {
       model.addAll(diagramNode);
     });
 
-    // Generate link between nodes
+    // Generate link
     diagramNodes.map(diagramNode => {
+
+      // Link between nodes
       diagramNode.dbInstance.conditions.map(condition => {
-        let link = linkNode(diagramNodes, diagramNode, condition);
-        model.addLink(link)
+        let answerPort = getConditionPort(diagramNodes, condition.first_conditionable_id);
+        let link = linkNode(answerPort, diagramNode, condition);
+        model.addLink(link);
       });
+
+      //  Exclusion link
+      if (diagramNode.dbInstance.node.final_diagnostic_id !== null) {
+        let excludedFinalDiagnostic = _.find(diagramNodes, (node) => {return node.options.dbInstance.node_id === diagramNode.dbInstance.node.final_diagnostic_id});
+        let link = linkFinalDiagnosticExclusion(diagramNode, excludedFinalDiagnostic);
+        model.addLink(link);
+      }
     });
 
     // Load model into engine

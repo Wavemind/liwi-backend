@@ -6,40 +6,35 @@ import { NotificationManager } from "react-notifications";
 export default class FinalDiagnosticLinkModel extends AdvancedLinkModel {
 
   /**
-   * Create link in database and assign value
+   * Exclude an other final diagnostic
    */
   createLink() {
-    console.log("createLink ")
-    // let instanceId = this.targetPort.options.id;
-    // let answerId = this.sourcePort.options.id;
-    //
-    // this.http.createLink(instanceId, answerId).then(httpRequest => {
-    //   httpRequest.json().then(result => {
-    //     if (httpRequest.status === 200) {
-    //       this.dbConditionId = result.id;
-    //       this.parentInstanceId = this.sourcePort.parent.options.dbInstance.id;
-    //     } else {
-    //       this.triggerEvent = false;
-    //       this.remove();
-    //       NotificationManager.error(result);
-    //     }
-    //   });
-    // });
+    let excludedId = this.targetPort.options.nodeId;
+    let excludingId = this.sourcePort.options.nodeId;
+
+    this.http.excludeDiagnostic(excludingId, excludedId).then(httpRequest => {
+      httpRequest.json().then(result => {
+        if (httpRequest.status !== 200) {
+          this.triggerEvent = false;
+          this.remove();
+          NotificationManager.error(result);
+        }
+      });
+    });
   }
 
   /**
    * Remove link in database
    */
   removeLink() {
-    console.log("removeLink ")
-    // this.http.removeLink(this.parentInstanceId, this.dbConditionId).then(httpRequest => {
-    //   httpRequest.json().then(result => {
-    //     if (httpRequest.status !== 200) {
-    //       this.triggerEvent = false;
-    //       this.remove();
-    //       NotificationManager.error(result);
-    //     }
-    //   });
-    // });
+    this.http.removeExcluding(this.sourcePort.options.nodeId).then(httpRequest => {
+      httpRequest.json().then(result => {
+        if (httpRequest.status !== 200) {
+          this.triggerEvent = false;
+          this.remove();
+          NotificationManager.error(result);
+        }
+      });
+    });
   }
 }

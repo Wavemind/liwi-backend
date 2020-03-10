@@ -15,8 +15,12 @@ export default class FinalDiagnosticPortModel extends AdvancedPortModel {
   }
 
   canLinkToPort(port) {
-    console.info('finalDiagnostic - canLinkToPort', { from: this, to: port });
-    console.log(this.options.id === port.options.id);
-    return port.constructor.name !== 'AdvancedPortModel' && this.options.id !== port.options.id;
+    let valueReturned = port.constructor.name !== 'AdvancedPortModel' && this.options.id !== port.options.id && this.linkIsAvailable(port);
+
+    if (!valueReturned) {
+      _.find(this.getLinks(), (link) => {return link.targetPort === null}).remove();
+    }
+
+    return valueReturned;
   }
 }

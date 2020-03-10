@@ -217,46 +217,33 @@ export default class Http {
     return await response;
   };
 
-  // @params [Integer] dfId, [Integer] excludedDfId
-  // @return [Object] body of request
-  // Exclude a final diagnostic
-  excludeDiagnostic = async (dfId, excludedDfId) => {
-    let response;
+  /**
+   * Exclude a final diagnostic
+   * @params [Integer] nodeId
+   * @params [Integer] nodeId
+   * @return [Object] body of request
+   */
+  excludeDiagnostic = async (excludingId, excludedId) => {
     const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/add_excluded_diagnostic`;
     const body = {
       final_diagnostic: {
-        id: dfId,
-        final_diagnostic_id: excludedDfId
+        id: excludingId,
+        final_diagnostic_id: excludedId
       }
     };
     const header = await this.setHeaders("PUT", body);
-    const request = await fetch(url, header).catch(error => console.log(error));
-    // Display error or parse json
-    if (request.ok) {
-      response = await request.json();
-    } else {
-      response = request;
-    }
-    return await response;
+    return await fetch(url, header).catch(error => console.log(error));
   };
 
-  // @params [Integer] dfId
-  // @return [Object] body of request
-  // Remove excluding diagnostic
+  /**
+   * Remove excluding final diagnostic
+   * @params [Integer] dfId
+   * @return [Object] body of request
+   */
   removeExcluding = async (dfId) => {
-    let response;
-
     const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/${dfId}/remove_excluded_diagnostic`;
     const header = await this.setHeaders("PUT");
-    const request = await fetch(url, header).catch(error => console.log(error));
-
-    // Display error or parse json
-    if (request.ok) {
-      response = await request.json();
-    } else {
-      response = request;
-    }
-    return await response;
+    return await fetch(url, header).catch(error => console.log(error));
   };
 
   /**

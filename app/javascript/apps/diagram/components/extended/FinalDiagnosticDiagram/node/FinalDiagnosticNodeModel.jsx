@@ -14,7 +14,8 @@ export default class FinalDiagnosticModel extends AdvancedNodeModel {
         locked: true,
         in: true,
         name: "excludedInPort",
-        id: this.dbInstance.id
+        id: this.dbInstance.id,
+        nodeId: this.dbInstance.node_id
       })
     );
 
@@ -22,7 +23,8 @@ export default class FinalDiagnosticModel extends AdvancedNodeModel {
     this.addPort(new FinalDiagnosticPortModel({
       in: false,
       name: "excludingOutPort",
-      id: this.dbInstance.id
+      id: this.dbInstance.id,
+      nodeId: this.dbInstance.node_id
     }));
   }
 }
