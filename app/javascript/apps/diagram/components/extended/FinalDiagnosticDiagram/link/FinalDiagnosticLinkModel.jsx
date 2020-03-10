@@ -4,6 +4,15 @@ import AdvancedLinkModel from "../../AdvancedDiagram/link/AdvancedLinkModel";
 import { NotificationManager } from "react-notifications";
 
 export default class FinalDiagnosticLinkModel extends AdvancedLinkModel {
+  constructor(options = {}) {
+    super({
+      ...options
+    });
+
+    this.options.type = "finalDiagnostic";
+    this.options.width = 3;
+  }
+
 
   /**
    * Exclude an other final diagnostic

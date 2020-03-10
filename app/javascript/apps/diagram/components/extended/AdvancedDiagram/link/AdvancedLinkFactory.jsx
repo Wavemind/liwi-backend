@@ -14,6 +14,7 @@ export default class AdvancedLinkFactory extends DefaultLinkFactory {
   }
 
   generateReactWidget(event) {
+    console.log("ici")
     return <AdvancedLinkWidget link={event.model} diagramEngine={this.engine} />;
   }
 }

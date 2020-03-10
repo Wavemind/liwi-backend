@@ -11,6 +11,7 @@ export default class AdvancedNodeModel extends NodeModel {
     super({
       ...options,
     });
+    this.options.type = "advanced";
     this.dbInstance = options.dbInstance || {};
     this.addAvailableNode = options.addAvailableNode || {};
     this.http = new Http();

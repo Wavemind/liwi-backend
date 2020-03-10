@@ -7,11 +7,14 @@ import Http from "../../../../engine/http";
 
 export default class AdvancedLinkModel extends DefaultLinkModel {
   constructor(options = {}) {
+
     super({
-      ...options,
-      type: "advanced",
-      width: 3 // we specifically want this to also be width 10
+      ...options
     });
+
+    this.options.type = "advanced";
+    this.options.width = 3;
+    this.options.color = "rgb(51,47,46)";
 
     this.dbConditionId = options.dbConditionId || {};
     this.parentInstanceId = options.parentInstanceId || {};

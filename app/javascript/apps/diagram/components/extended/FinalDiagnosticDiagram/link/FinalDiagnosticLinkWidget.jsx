@@ -1,11 +1,12 @@
 import * as React from "react";
-import { DefaultLinkWidget } from "@projectstorm/react-diagrams";
 import { LinkWidget } from "@projectstorm/react-diagrams-core";
 
 import { AdvancedLinkArrowWidget } from "../../../../helpers/nodeHelpers";
 import { withDiagram } from "../../../../engine/context/Diagram.context";
+import { DefaultLinkWidget } from "@projectstorm/react-diagrams";
 
-class AdvancedLinkWidget extends DefaultLinkWidget {
+class FinalDiagnosticLinkWidget extends DefaultLinkWidget {
+
   generateArrow(point, previousPoint) {
     const { link } = this.props;
 
@@ -37,16 +38,14 @@ class AdvancedLinkWidget extends DefaultLinkWidget {
       );
     }
 
-    console.log("je suis dans l'advanced")
-
     if (link.getTargetPort() !== null) {
       paths.push(this.generateArrow(points[points.length - 1], points[points.length - 2]));
     } else {
       paths.push(this.generatePoint(points[points.length - 1]));
     }
 
-    return <g data-default-link-test={link.getOptions().testName}>{paths}</g>;
+    return <g stroke-dasharray="20" data-default-link-test={link.getOptions().testName}>{paths}</g>;
   }
 }
 
-export default withDiagram(AdvancedLinkWidget);
+export default withDiagram(FinalDiagnosticLinkWidget);

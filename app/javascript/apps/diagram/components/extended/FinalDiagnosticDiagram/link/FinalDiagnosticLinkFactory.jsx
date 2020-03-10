@@ -2,7 +2,7 @@ import * as React from "react";
 import { DefaultLinkFactory } from "@projectstorm/react-diagrams";
 
 import FinalDiagnosticLinkModel from "./FinalDiagnosticLinkModel";
-import AdvancedLinkWidget from "../../AdvancedDiagram/link/AdvancedLinkWidget";
+import FinalDiagnosticLinkWidget from "./FinalDiagnosticLinkWidget";
 
 export default class FinalDiagnosticLinkFactory extends DefaultLinkFactory {
   constructor() {
@@ -14,6 +14,6 @@ export default class FinalDiagnosticLinkFactory extends DefaultLinkFactory {
   }
 
   generateReactWidget(event) {
-    return <AdvancedLinkWidget link={event.model} diagramEngine={this.engine} />;
+    return <FinalDiagnosticLinkWidget link={event.model} diagramEngine={this.engine} />;
   }
 }

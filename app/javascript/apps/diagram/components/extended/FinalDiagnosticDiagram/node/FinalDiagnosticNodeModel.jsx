@@ -5,8 +5,9 @@ export default class FinalDiagnosticModel extends AdvancedNodeModel {
   constructor(options = {}) {
     super({
       ...options,
-      type: "finalDiagnostic"
     });
+
+    this.options.type = "finalDiagnostic";
 
     // excludedInPort
     this.addPort(
