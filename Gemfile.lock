@@ -157,6 +157,8 @@ GEM
       activerecord (>= 4.2.0)
     i18n (1.8.2)
       concurrent-ruby (~> 1.0)
+    i18n-js (3.6.0)
+      i18n (>= 0.6.6)
     io-like (0.3.1)
     ipaddress (0.8.3)
     jaro_winkler (1.5.4)
@@ -398,6 +400,7 @@ DEPENDENCIES
   devise_token_auth
   fog-aws
   hstore_translate
+  i18n-js
   jbuilder (~> 2.5)
   jquery-datatables
   jquery-rails

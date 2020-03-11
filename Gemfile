@@ -39,6 +39,7 @@ gem 'react-rails'
 gem 'webpacker', '~> 4.x'
 gem 'rqrcode'
 gem 'barby'
+gem 'i18n-js'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

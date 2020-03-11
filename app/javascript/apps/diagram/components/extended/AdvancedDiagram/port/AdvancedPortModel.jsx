@@ -1,5 +1,6 @@
 import * as React from "react";
 import { DefaultPortModel } from "@projectstorm/react-diagrams";
+import I18n from 'i18n-js';
 
 import AdvancedLinkModel from "../link/AdvancedLinkModel";
 import { NotificationManager } from "react-notifications";
@@ -39,7 +40,7 @@ export default class AdvancedPortModel extends DefaultPortModel {
 
     // Display error messages if link already exist
     if (valueReturned) {
-      NotificationManager.error("Link already exist");
+      NotificationManager.error(I18n.t("conditions.validation.link_already_exist"));
     }
 
     return !valueReturned;
