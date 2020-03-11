@@ -7,7 +7,6 @@ import { NotificationManager } from "react-notifications";
 
 export default class AdvancedPortModel extends DefaultPortModel {
   constructor(options = {}) {
-
     super({ ...options });
 
     this.options.type = "advanced";

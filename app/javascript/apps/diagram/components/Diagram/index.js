@@ -79,7 +79,7 @@ export class Diagram extends React.Component {
 
 
     if (readOnly) {
-      model.setLocked()
+      model.setLocked();
     }
 
     // Load model into engine
@@ -113,11 +113,11 @@ export class Diagram extends React.Component {
   };
 
   render = () => {
-    const {readOnly} = this.props;
+    const { readOnly } = this.props;
     const { engine } = this.state;
 
-    let diagramStyle = readOnly ? 'col diagram-wrapper-white' : 'col diagram-wrapper';
-    let canvasStyle = readOnly ? 'canvas srd-canvas-read-only' : 'canvas srd-canvas';
+    let diagramStyle = readOnly ? "col diagram-wrapper-white" : "col diagram-wrapper";
+    let canvasStyle = readOnly ? "canvas srd-canvas-read-only" : "canvas srd-canvas";
 
     return (
       <div className="content">
@@ -134,7 +134,7 @@ export class Diagram extends React.Component {
             <AdvancedCanvasWidget
               className={canvasStyle}
               engine={engine}
-              canZoom={false}
+              allowCanvasZoom={false}
             />
           </div>
         </div>
