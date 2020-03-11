@@ -46,7 +46,7 @@ export class Diagram extends React.Component {
 
   initDiagram = () => {
     const { engine, model } = this.state;
-    const { instances, addAvailableNode } = this.props;
+    const { instances, addAvailableNode, readOnly } = this.props;
 
     let diagramNodes = [];
 
@@ -76,6 +76,11 @@ export class Diagram extends React.Component {
         model.addLink(link);
       }
     });
+
+
+    if (readOnly) {
+      model.setLocked()
+    }
 
     // Load model into engine
     engine.setModel(model);
@@ -108,21 +113,28 @@ export class Diagram extends React.Component {
   };
 
   render = () => {
+    const {readOnly} = this.props;
     const { engine } = this.state;
+
+    let diagramStyle = readOnly ? 'col diagram-wrapper-white' : 'col diagram-wrapper';
+    let canvasStyle = readOnly ? 'canvas srd-canvas-read-only' : 'canvas srd-canvas';
 
     return (
       <div className="content">
         <div className="row">
-          <AvailableNodes/>
-          <NotificationContainer/>
-          <div className="col diagram-wrapper"
+          {!readOnly ? ([
+            <AvailableNodes/>,
+            <NotificationContainer/>
+          ]) : null}
+          <div className={diagramStyle}
                onDrop={event => this.onDropAction(event)}
                onDragOver={event => {
                  event.preventDefault();
                }}>
             <AdvancedCanvasWidget
-              className="canvas srd-canvas"
+              className={canvasStyle}
               engine={engine}
+              canZoom={false}
             />
           </div>
         </div>

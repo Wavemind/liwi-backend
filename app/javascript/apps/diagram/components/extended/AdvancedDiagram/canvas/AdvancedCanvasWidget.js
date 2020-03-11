@@ -60,13 +60,18 @@ export default class AdvancedCanvasWidget extends React.Component {
   }
 
   render() {
-    const { engine, className } = this.props;
+    const { engine, className, canZoom } = this.props;
     const model = engine.getModel();
 
     return (
       <div
         className={className}
         ref={this.ref}
+        onWheel={event => {
+          if (canZoom) {
+            engine.getActionEventBus().fireAction({ event });
+          }
+        }}
         onMouseDown={event => {
           engine.getActionEventBus().fireAction({ event });
         }}
