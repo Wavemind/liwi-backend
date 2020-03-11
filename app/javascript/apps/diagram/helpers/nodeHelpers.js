@@ -76,6 +76,7 @@ export const linkNode = (answerPort, diagramNode, condition) => {
   return link;
 };
 
+// TODO: add comment
 export const linkFinalDiagnosticExclusion = (diagramNode, excludedFinalDiagnostic) => {
   let excludedInPort = excludedFinalDiagnostic.getPortByName("excludedInPort");
   let excludingOutPort = diagramNode.getPortByName("excludingOutPort");

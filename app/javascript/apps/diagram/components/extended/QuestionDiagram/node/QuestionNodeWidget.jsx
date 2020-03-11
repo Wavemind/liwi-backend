@@ -19,7 +19,7 @@ class QuestionNodeWidget extends React.Component {
         <div className="port py-2 node-category">
           <div className="port srd-port in-port">
             <PortWidget engine={engine} port={node.getInPort()}>
-              &nbsp; {/*It need to have content in PortWidget to make a link*/}
+              {null}
             </PortWidget>
           </div>
           <div className="col pl-2 pr-0 text-left">
@@ -53,7 +53,7 @@ class QuestionNodeWidget extends React.Component {
               <div key={`div-${port.options.id}`} className="col px-0" style={{ position: "relative" }}>
                 <div key={`name-${port.options.id}`} className="py-1 text-center answer-split">{port.options.name}</div>
                 <PortWidget key={`port-${port.options.id}`} engine={engine} port={port} node={node} className="out-port">
-                  &nbsp; {/*It need to have content in PortWidget to make a link*/}
+                  {null}
                 </PortWidget>
               </div>
             ))}

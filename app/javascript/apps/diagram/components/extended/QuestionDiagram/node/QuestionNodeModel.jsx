@@ -4,10 +4,9 @@ import { getLabel } from "../../../../helpers/nodeHelpers";
 
 export default class QuestionNodeModel extends AdvancedNodeModel {
   constructor(options = {}) {
-    super({
-      ...options,
-      type: "question"
-    });
+    super({ ...options });
+
+    this.options.type = "question";
 
     // outPorts
     this.dbInstance.node.answers.map(answer => {

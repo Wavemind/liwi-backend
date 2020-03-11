@@ -13,7 +13,6 @@ class AdvancedNodeWidget extends React.Component {
 
   render() {
     const { getReferencePrefix, node, engine } = this.props;
-
     return (
       <div className="node">
         <div className="port py-2 node-category">
@@ -22,9 +21,6 @@ class AdvancedNodeWidget extends React.Component {
               &nbsp; {/*It need to have content in PortWidget to make a link*/}
             </PortWidget>
           </div>
-          {/*{(inPort !== undefined) ? (*/}
-          {/*  <div className="port srd-port in-port" data-name={inPort.name} data-nodeid={inPort.parent.id}/>*/}
-          {/*) : null}*/}
           <div className="col pl-2 pr-0 text-left">
             {getReferencePrefix(node.dbInstance.node.node_type, node.dbInstance.node.type) + node.dbInstance.node.reference}
           </div>
@@ -48,7 +44,7 @@ class AdvancedNodeWidget extends React.Component {
         <div>
           <div className="py-2 node-label">
             <div className="col text-center">
-              {getLabel(node.dbInstance.node)} PAS CELUI LA
+              {getLabel(node.dbInstance.node)}
             </div>
           </div>
           <div className="node-answers">

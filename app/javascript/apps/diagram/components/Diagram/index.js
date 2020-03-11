@@ -69,7 +69,9 @@ export class Diagram extends React.Component {
 
       //  Exclusion link
       if (diagramNode.dbInstance.node.final_diagnostic_id !== null) {
-        let excludedFinalDiagnostic = _.find(diagramNodes, (node) => {return node.options.dbInstance.node_id === diagramNode.dbInstance.node.final_diagnostic_id});
+        let excludedFinalDiagnostic = _.find(diagramNodes, (node) => {
+          return node.options.dbInstance.node_id === diagramNode.dbInstance.node.final_diagnostic_id;
+        });
         let link = linkFinalDiagnosticExclusion(diagramNode, excludedFinalDiagnostic);
         model.addLink(link);
       }
@@ -80,10 +82,11 @@ export class Diagram extends React.Component {
   };
 
   // Create instance and init it in diagram when drop
-  onDropAction = async (event, positions) => {
+  onDropAction = async (event) => {
     const { http, addAvailableNode, removeAvailableNode } = this.props;
     const { engine } = this.state;
 
+    let positions = engine.getRelativeMousePoint(event);
     let dbNode = JSON.parse(event.dataTransfer.getData("node"));
     let httpRequest = await http.createInstance(dbNode.id, positions.x, positions.y);
     let result = await httpRequest.json();
@@ -113,10 +116,7 @@ export class Diagram extends React.Component {
           <AvailableNodes/>
           <NotificationContainer/>
           <div className="col diagram-wrapper"
-               onDrop={event => {
-                 let positions = engine.getRelativeMousePoint(event);
-                 this.onDropAction(event, positions);
-               }}
+               onDrop={event => this.onDropAction(event)}
                onDragOver={event => {
                  event.preventDefault();
                }}>

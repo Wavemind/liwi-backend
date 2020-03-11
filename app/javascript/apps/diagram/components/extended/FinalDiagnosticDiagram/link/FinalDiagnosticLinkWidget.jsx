@@ -44,7 +44,7 @@ class FinalDiagnosticLinkWidget extends DefaultLinkWidget {
       paths.push(this.generatePoint(points[points.length - 1]));
     }
 
-    return <g stroke-dasharray="20" data-default-link-test={link.getOptions().testName}>{paths}</g>;
+    return <g strokeDasharray="20" data-default-link-test={link.getOptions().testName}>{paths}</g>;
   }
 }
 

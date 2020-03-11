@@ -8,9 +8,7 @@ import Http from "../../../../engine/http";
 export default class AdvancedLinkModel extends DefaultLinkModel {
   constructor(options = {}) {
 
-    super({
-      ...options
-    });
+    super({ ...options });
 
     this.options.type = "advanced";
     this.options.width = 3;
@@ -50,38 +48,35 @@ export default class AdvancedLinkModel extends DefaultLinkModel {
   /**
    * Create link in database and assign value
    */
-  createLink() {
+  createLink = async () => {
     let instanceId = this.targetPort.options.id;
     let answerId = this.sourcePort.options.id;
+    let httpRequest = await this.http.createLink(instanceId, answerId);
+    let result = await httpRequest.json();
 
-    this.http.createLink(instanceId, answerId).then(httpRequest => {
-      httpRequest.json().then(result => {
-        if (httpRequest.status === 200) {
-          this.dbConditionId = result.id;
-          this.parentInstanceId = this.sourcePort.parent.options.dbInstance.id;
-        } else {
-          this.triggerEvent = false;
-          this.remove();
-          NotificationManager.error(result);
-        }
-      });
-    });
-  }
+    if (httpRequest.status === 200) {
+      this.dbConditionId = result.id;
+      this.parentInstanceId = this.sourcePort.parent.options.dbInstance.id;
+    } else {
+      this.triggerEvent = false;
+      this.remove();
+      NotificationManager.error(result);
+    }
+  };
 
   /**
    * Remove link in database
    */
-  removeLink() {
-    this.http.removeLink(this.parentInstanceId, this.dbConditionId).then(httpRequest => {
-      httpRequest.json().then(result => {
-        if (httpRequest.status !== 200) {
-          this.triggerEvent = false;
-          this.remove();
-          NotificationManager.error(result);
-        }
-      });
-    });
-  }
+  removeLink = async () => {
+    let httpRequest = await this.http.removeLink(this.parentInstanceId, this.dbConditionId);
+    let result = await httpRequest.json();
+
+    if (httpRequest.status !== 200) {
+      this.triggerEvent = false;
+      this.remove();
+      NotificationManager.error(result);
+    }
+  };
 
   serialize() {
     return {

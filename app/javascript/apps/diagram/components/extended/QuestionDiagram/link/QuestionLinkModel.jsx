@@ -4,9 +4,7 @@ import AdvancedLinkModel from "../../AdvancedDiagram/link/AdvancedLinkModel";
 
 export default class QuestionLinkModel extends AdvancedLinkModel {
   constructor(options = {}) {
-    super({
-      ...options,
-      type: "question"
-    });
+    super({ ...options });
+    this.options.type = "question";
   }
 }

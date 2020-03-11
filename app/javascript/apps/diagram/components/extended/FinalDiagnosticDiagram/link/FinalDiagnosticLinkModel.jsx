@@ -5,9 +5,7 @@ import { NotificationManager } from "react-notifications";
 
 export default class FinalDiagnosticLinkModel extends AdvancedLinkModel {
   constructor(options = {}) {
-    super({
-      ...options
-    });
+    super({ ...options });
 
     this.options.type = "finalDiagnostic";
     this.options.width = 3;
@@ -17,33 +15,30 @@ export default class FinalDiagnosticLinkModel extends AdvancedLinkModel {
   /**
    * Exclude an other final diagnostic
    */
-  createLink() {
+  createLink = async () => {
     let excludedId = this.targetPort.options.nodeId;
     let excludingId = this.sourcePort.options.nodeId;
+    let httpRequest = await this.http.excludeDiagnostic(excludingId, excludedId);
+    let result = await httpRequest.json();
 
-    this.http.excludeDiagnostic(excludingId, excludedId).then(httpRequest => {
-      httpRequest.json().then(result => {
-        if (httpRequest.status !== 200) {
-          this.triggerEvent = false;
-          this.remove();
-          NotificationManager.error(result);
-        }
-      });
-    });
-  }
+    if (httpRequest.status !== 200) {
+      this.triggerEvent = false;
+      this.remove();
+      NotificationManager.error(result);
+    }
+  };
 
   /**
    * Remove link in database
    */
-  removeLink() {
-    this.http.removeExcluding(this.sourcePort.options.nodeId).then(httpRequest => {
-      httpRequest.json().then(result => {
-        if (httpRequest.status !== 200) {
-          this.triggerEvent = false;
-          this.remove();
-          NotificationManager.error(result);
-        }
-      });
-    });
-  }
+  removeLink = async () => {
+    let httpRequest = await this.http.removeExcluding(this.sourcePort.options.nodeId);
+    let result = await httpRequest.json();
+
+    if (httpRequest.status !== 200) {
+      this.triggerEvent = false;
+      this.remove();
+      NotificationManager.error(result);
+    }
+  };
 }

@@ -37,8 +37,6 @@ class AdvancedLinkWidget extends DefaultLinkWidget {
       );
     }
 
-    console.log("je suis dans l'advanced")
-
     if (link.getTargetPort() !== null) {
       paths.push(this.generateArrow(points[points.length - 1], points[points.length - 2]));
     } else {
