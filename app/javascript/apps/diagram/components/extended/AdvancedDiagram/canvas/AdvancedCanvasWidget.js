@@ -1,29 +1,15 @@
-import * as React from 'react';
-import { CanvasEngine } from '../../CanvasEngine';
-import {CanvasEngine}
-import { TransformLayerWidget } from '../layer/TransformLayerWidget';
-import styled from '@emotion/styled';
-import { SmartLayerWidget } from '../layer/SmartLayerWidget';
-import {SmartLay}
+import * as React from "react";
+import { SmartLayerWidget, TransformLayerWidget } from "@projectstorm/react-canvas-core";
 
-
-export const Canvas = styled.div`
-  position: relative;
-  cursor: move;
-  overflow: hidden;
-`;
-
-
-export class AdvancedCanvasWidget extends React.Component {
-  ref: React.RefObject<HTMLDivElement>;
-  keyUp: any;
-  keyDown: any;
-  canvasListener: any;
-
+export default class AdvancedCanvasWidget extends React.Component {
   constructor(props) {
     super(props);
 
+    this.keyUp = null;
+    this.keyDown = null;
+    this.canvasListener = null;
     this.ref = React.createRef();
+
     this.state = {
       action: null,
       diagramEngineListener: null
@@ -31,16 +17,18 @@ export class AdvancedCanvasWidget extends React.Component {
   }
 
   componentWillUnmount() {
-    this.props.engine.deregisterListener(this.canvasListener);
-    this.props.engine.setCanvas(null);
+    const { engine } = this.props;
+    engine.deregisterListener(this.canvasListener);
+    engine.setCanvas(null);
 
-    document.removeEventListener('keyup', this.keyUp);
-    document.removeEventListener('keydown', this.keyDown);
+    document.removeEventListener("keyup", this.keyUp);
+    document.removeEventListener("keydown", this.keyDown);
   }
 
   registerCanvas() {
-    this.props.engine.setCanvas(this.ref.current);
-    this.props.engine.iterateListeners(list => {
+    const { engine } = this.props;
+    engine.setCanvas(this.ref.current);
+    engine.iterateListeners(list => {
       list.rendered && list.rendered();
     });
   }
@@ -50,48 +38,48 @@ export class AdvancedCanvasWidget extends React.Component {
   }
 
   componentDidMount() {
-    this.canvasListener = this.props.engine.registerListener({
+    const { engine } = this.props;
+    this.canvasListener = engine.registerListener({
       repaintCanvas: () => {
         this.forceUpdate();
       }
     });
 
     this.keyDown = event => {
-      this.props.engine.getActionEventBus().fireAction({ event });
+      const { engine } = this.props;
+      engine.getActionEventBus().fireAction({ event });
     };
     this.keyUp = event => {
-      this.props.engine.getActionEventBus().fireAction({ event });
+      const { engine } = this.props;
+      engine.getActionEventBus().fireAction({ event });
     };
 
-    document.addEventListener('keyup', this.keyUp);
-    document.addEventListener('keydown', this.keyDown);
+    document.addEventListener("keyup", this.keyUp);
+    document.addEventListener("keydown", this.keyDown);
     this.registerCanvas();
   }
 
   render() {
-    const engine = this.props.engine;
+    const { engine, className } = this.props;
     const model = engine.getModel();
 
     return (
-      <div style={Canvas}
-        className={this.props.className}
+      <div
+        className={className}
         ref={this.ref}
-        onWheel={event => {
-          this.props.engine.getActionEventBus().fireAction({ event });
-        }}
         onMouseDown={event => {
-          this.props.engine.getActionEventBus().fireAction({ event });
+          engine.getActionEventBus().fireAction({ event });
         }}
         onMouseUp={event => {
-          this.props.engine.getActionEventBus().fireAction({ event });
+          engine.getActionEventBus().fireAction({ event });
         }}
         onMouseMove={event => {
-          this.props.engine.getActionEventBus().fireAction({ event });
+          engine.getActionEventBus().fireAction({ event });
         }}>
         {model.getLayers().map(layer => {
           return (
             <TransformLayerWidget layer={layer} key={layer.getID()}>
-              <SmartLayerWidget layer={layer} engine={this.props.engine} key={layer.getID()} />
+              <SmartLayerWidget layer={layer} engine={engine} key={layer.getID()}/>
             </TransformLayerWidget>
           );
         })}

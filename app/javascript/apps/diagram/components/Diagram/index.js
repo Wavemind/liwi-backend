@@ -1,12 +1,12 @@
 // External import
 import * as React from "react";
 import createEngine, { DiagramModel } from "@projectstorm/react-diagrams";
-import { CanvasWidget } from "@projectstorm/react-canvas-core";
 import { NotificationContainer, NotificationManager } from "react-notifications";
 
 // Internal import
 import { withDiagram } from "../../engine/context/Diagram.context";
 import { linkNode, createNode, linkFinalDiagnosticExclusion, getConditionPort } from "../../helpers/nodeHelpers";
+import AdvancedCanvasWidget from "../extended/AdvancedDiagram/canvas/AdvancedCanvasWidget";
 import AvailableNodes from "../AvailableNodes";
 
 import AdvancedLinkFactory from "../extended/AdvancedDiagram/link/AdvancedLinkFactory";
@@ -120,8 +120,8 @@ export class Diagram extends React.Component {
                onDragOver={event => {
                  event.preventDefault();
                }}>
-            <CanvasWidget
-              className="srd-canvas"
+            <AdvancedCanvasWidget
+              className="canvas srd-canvas"
               engine={engine}
             />
           </div>

@@ -35,6 +35,12 @@
   margin-bottom: 20px;
 }
 
+.canvas {
+  position: relative;
+  cursor: move;
+  overflow: hidden;
+}
+
 .srd-canvas {
   height: 92.5vh;
 }
