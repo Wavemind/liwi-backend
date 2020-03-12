@@ -15,32 +15,6 @@ class QuestionsSequence < Node
     [QuestionsSequences::PredefinedSyndrome, QuestionsSequences::Comorbidity, QuestionsSequences::Triage, QuestionsSequences::Scored]
   end
 
-  # @params [QuestionsSequence]
-  # Generate the ordered questions
-  def generate_questions_order
-    nodes = []
-    first_nodes = components.includes(:node, :conditions, :children).where(conditions: { referenceable_id: nil })
-    nodes << first_nodes
-    get_children(first_nodes, nodes)
-  end
-
-  # @params [Array][Instance], [Array][Node]
-  # Get children question nodes
-  def get_children(instances, nodes)
-    current_nodes = []
-    instances.includes(children: [:node]).map(&:children).flatten.each do |child|
-      current_nodes << child.node if child.node.is_a?(Question) || child.node.is_a?(QuestionsSequence)
-    end
-    if current_nodes.any?
-      current_instances = Instance.not_health_care_conditions.where('instanceable_id = ? AND instanceable_type = ? AND node_id IN (?)', id, 'Node', current_nodes.map(&:id).flatten)
-      current_instances.each { |instance| nodes = remove_old_node(nodes, instance) }
-      nodes << current_instances
-      get_children(current_instances, nodes)
-    else
-      nodes
-    end
-  end
-
   # @params [Array][Array][Instances] instances before delete, [Instance] instance to delete
   # @@return [Array][Array][Instances] instances after delete
   # Remove the duplicated node if it was already set before. We keep the last one in order to be coherent in the diagram.
@@ -55,7 +29,26 @@ class QuestionsSequence < Node
   # @return [Json]
   # Return questions in json format
   def questions_json
-    generate_questions_order.as_json(include: [conditions: { include: [first_conditionable: { methods: [:get_node] }, second_conditionable: { methods: [:get_node] }] }, node: { include: [:answers], methods: [:node_type, :category_name, :type] }])
+    (components.questions.not_health_care_conditions + components.questions_sequences.not_health_care_conditions).as_json(
+      include: [
+        conditions: {
+          include: [
+            first_conditionable: {
+              methods: [
+                :get_node
+              ]
+            },
+          ]
+        },
+        node: {
+          include: [:answers],
+          methods: [
+            :node_type,
+            :category_name,
+            :type
+          ]
+        }
+      ])
   end
 
   # @return [Json]
@@ -125,6 +118,17 @@ class QuestionsSequence < Node
       categories.push(current_category)
     end
     categories
+  end
+
+  def questions_sequence_json
+    {
+      id: id,
+      type: 'QuestionsSequence',
+      reference: reference,
+      label: label,
+      version_id: version_id,
+      category_name: category_name
+    }
   end
 
   private

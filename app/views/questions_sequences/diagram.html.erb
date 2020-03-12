@@ -5,20 +5,15 @@
 <div class="row">
   <div class="col-md-12">
     <p class="mx-0 my-0 metadata" data-type="<%= @questions_sequence.class.name %>" data-id="<%= @questions_sequence.id %>"  data-algorithm="<%= @questions_sequence.algorithm.id %>"></p>
-    <%= react_component('Provider', {
+    <%= react_component('diagram', {
       render: 'Diagram',
       context: {
         instanceable: @questions_sequence.as_json(methods: :category_name),
-        instanceable_type: @questions_sequence.class.name,
-        questions: @questions_sequence.questions_json,
+        instances: @questions_sequence.questions_json,
         availableNodes: @questions_sequence.available_nodes_json,
-        type: 'QuestionsSequence',
-        questionAnswerTypes: AnswerType.all.as_json(methods: :display_name),
-        questionSystems: Question.systems.map { |k, v| [t("questions.systems.#{k}"), k] },
-        questionStages: Question.stages.as_json,
         questionCategories: Question.categories('QuestionsSequence').as_json,
         questionsSequenceCategories: QuestionsSequence.categories.as_json,
-        answersOperators: Answer.operators.as_json,
+        readOnly: false
       }
     }) %>
   </div>

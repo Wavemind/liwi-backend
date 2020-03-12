@@ -23,6 +23,7 @@ export const createNode = (instance, addAvailableNode) => {
   let diagramNode;
 
   switch (instance.node.node_type) {
+    case "QuestionsSequence":
     case "Question":
       diagramNode = new QuestionNodeModel({
         dbInstance: instance,
@@ -42,7 +43,7 @@ export const createNode = (instance, addAvailableNode) => {
       });
       break;
     default:
-      console.log("bah je suis la");
+      console.log("Cette factory existe pas", instance.node.node_type);
       break;
   }
 
