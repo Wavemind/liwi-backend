@@ -83,34 +83,6 @@ class Diagnostic < ApplicationRecord
     end
   end
 
-  # @params [Diagnostic]
-  # Generate the ordered questions
-  def generate_questions_order
-    nodes = []
-    first_instances = components.not_health_care_conditions.includes(:conditions, :children, :node).where(conditions: { referenceable_id: nil }).where('nodes.type IN (?) OR nodes.type IN (?)', Question.descendants.map(&:name), QuestionsSequence.descendants.map(&:name))
-    nodes << first_instances
-    get_children(first_instances, nodes)
-  end
-
-
-  # @params [Array][Instance], [Array][Node]
-  # Get children question nodes
-  def get_children(instances, nodes)
-    current_nodes = []
-    instances.includes(:conditions, children: [:node]).map(&:children).flatten.each do |child|
-      current_nodes << child.node if child.node.is_a?(Question) || child.node.is_a?(QuestionsSequence)
-    end
-
-    if current_nodes.any?
-      current_instances = Instance.not_health_care_conditions.where('instanceable_id = ? AND instanceable_type = ? AND node_id IN (?)', id, self.class.name, current_nodes.map(&:id).flatten)
-      current_instances.each { |instance| nodes = remove_old_node(nodes, instance) }
-      nodes << current_instances
-      get_children(current_instances, nodes)
-    else
-      nodes
-    end
-  end
-
   # @params [Array][Array][Instances] instances before delete, [Instance] instance to delete
   # @return [Array][Array][Instances] instances after delete
   # Remove the duplicated node if it was already set before. We keep the last one in order to be coherent in the diagram.
@@ -246,6 +218,7 @@ class Diagnostic < ApplicationRecord
     I18n.t('diagnostics.reference') + reference.to_s
   end
 
+  # Automatic reference generation
   def generate_reference
     if version.diagnostics.count > 1
       self.reference = version.diagnostics.maximum(:reference) + 1
@@ -255,8 +228,9 @@ class Diagnostic < ApplicationRecord
     self.save
   end
 
+  # Construct diagnostic json
   def diagnostic_json
-    diagnostic = {
+    {
       id: id,
       type: 'Diagnostic',
       reference: reference,

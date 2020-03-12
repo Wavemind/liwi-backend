@@ -1,7 +1,7 @@
 class InstancesController < ApplicationController
 
   before_action :authenticate_user!
-  before_action :set_instanceable, only: [:show, :create, :destroy, :by_reference, :create_from_diagram, :create_link, :remove_link, :create_from_final_diagnostic_diagram, :update_score]
+  before_action :set_instanceable, only: [:show, :create, :destroy, :by_reference, :create_from_diagram, :create_link, :remove_link, :update_score]
   before_action :set_instance, only: [:show, :destroy, :update_from_diagram, :create_link, :remove_link]
   before_action :set_child, only: [:update_score]
 
@@ -38,6 +38,10 @@ class InstancesController < ApplicationController
   def create
     instance = @instanceable.components.new(instance_params)
 
+    if instance.node.is_a?(HealthCare)
+      FinalDiagnosticHealthCare.create!(final_diagnostic: FinalDiagnostic.find(instance_params[:final_diagnostic_id]), health_care: instance.node)
+    end
+
     if instance.save
       render json: instance.generate_json
     else
@@ -66,24 +70,6 @@ class InstancesController < ApplicationController
       @node = @instanceable.algorithm.nodes.find_by(reference: params[:reference]);
     end
     render json: polymorphic_url([@instanceable, @instanceable.components.find_by(node: @node)])
-  end
-
-  # POST /diagnostics/:diagnostic_id/instances/diagram_create
-  # @return JSON of instance
-  # Create an instances of node for final diagnostic diagram and return json format
-  def create_from_final_diagnostic_diagram
-    instance = @instanceable.components.new(instance_params)
-
-    if instance.node.is_a?(HealthCare)
-      FinalDiagnosticHealthCare.create!(final_diagnostic: FinalDiagnostic.find(instance_params[:final_diagnostic_id]), health_care: instance.node)
-    end
-
-    instance.save
-
-    respond_to do |format|
-      format.html {}
-      format.json { render json: instance }
-    end
   end
 
   # @params [Diagnostic] Current diagnostic, [Answer] Answer from parent of the link, [Node] child of the link

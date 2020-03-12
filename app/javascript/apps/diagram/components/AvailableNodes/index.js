@@ -6,12 +6,6 @@ import Category from "./Category";
 import { withDiagram } from "../../engine/context/Diagram.context"
 
 class AvailableNodes extends React.Component {
-
-  state = {
-    orderedNodes: {},
-    availableNodes: {}
-  };
-
   shouldComponentUpdate(nextProps) {
     return !_.isEqual(this.props.orderedNodes, nextProps.orderedNodes);
   }

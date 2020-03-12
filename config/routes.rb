@@ -142,7 +142,6 @@ Rails.application.routes.draw do
       collection do
         get 'by_reference'
         get 'load_conditions'
-        post 'create_from_final_diagnostic_diagram'
       end
       member do
         delete 'remove_link'

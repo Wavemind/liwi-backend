@@ -2,6 +2,7 @@ import * as React from "react";
 import _ from "lodash";
 import QuestionNodeModel from "../components/extended/QuestionDiagram/node/QuestionNodeModel";
 import FinalDiagnosticNodeModel from "../components/extended/FinalDiagnosticDiagram/node/FinalDiagnosticNodeModel";
+import HealthCareNodeModel from "../components/extended/HealthCareDiagram/node/HealthCareNodeModel";
 
 /**
  * Get full label of an object
@@ -30,6 +31,12 @@ export const createNode = (instance, addAvailableNode) => {
       break;
     case "FinalDiagnostic":
       diagramNode = new FinalDiagnosticNodeModel({
+        dbInstance: instance,
+        addAvailableNode: addAvailableNode
+      });
+      break;
+    case "HealthCare":
+      diagramNode = new HealthCareNodeModel({
         dbInstance: instance,
         addAvailableNode: addAvailableNode
       });

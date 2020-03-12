@@ -18,6 +18,9 @@ import QuestionNodeFactory from "../extended/QuestionDiagram/node/QuestionNodeFa
 import FinalDiagnosticLinkFactory from "../extended/FinalDiagnosticDiagram/link/FinalDiagnosticLinkFactory";
 import FinalDiagnosticNodeFactory from "../extended/FinalDiagnosticDiagram/node/FinalDiagnosticNodeFactory";
 
+import HealthCareLinkFactory from "../extended/HealthCareDiagram/link/HealthCareLinkFactory";
+import HealthCareNodeFactory from "../extended/HealthCareDiagram/node/HealthCareNodeFactory";
+
 export class Diagram extends React.Component {
 
   constructor(props) {
@@ -35,6 +38,9 @@ export class Diagram extends React.Component {
 
     engine.getLinkFactories().registerFactory(new FinalDiagnosticLinkFactory());
     engine.getNodeFactories().registerFactory(new FinalDiagnosticNodeFactory());
+
+    engine.getLinkFactories().registerFactory(new HealthCareLinkFactory());
+    engine.getNodeFactories().registerFactory(new HealthCareNodeFactory());
 
     this.state = {
       engine: engine,

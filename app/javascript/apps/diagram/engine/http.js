@@ -73,33 +73,6 @@ export default class Http {
     return await response;
   };
 
-  // @params [Integer] nodeId
-  // @return [Object] body of request
-  // Create an instance of a health care or a condition of it
-  createHealthCareInstance = async (nodeId) => {
-    let response;
-    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/create_from_final_diagnostic_diagram`;
-    const body = {
-      instance: {
-        node_id: nodeId,
-        instanceable_id: this.instanceableId,
-        instanceable_type: this.instanceableType,
-        final_diagnostic_id: this.finalDiagnostic
-      }
-    };
-    const header = await this.setHeaders("POST", body);
-    const request = await fetch(url, header).catch(error => console.log(error));
-
-    // Display error or parse json
-    if (request.ok) {
-      response = await request.json();
-    } else {
-      response = request;
-    }
-
-    return await response;
-  };
-
   /**
    * Create an instance
    * @params [Integer] nodeId
@@ -115,7 +88,8 @@ export default class Http {
         position_x: x,
         position_y: y,
         instanceable_id: this.instanceableId,
-        instanceable_type: this.instanceableType
+        instanceable_type: this.instanceableType,
+        final_diagnostic_id: this.finalDiagnostic
       }
     };
     const header = await this.setHeaders("POST", body);
