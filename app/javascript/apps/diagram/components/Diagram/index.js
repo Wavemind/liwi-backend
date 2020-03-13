@@ -8,6 +8,7 @@ import { withDiagram } from "../../engine/context/Diagram.context";
 import { linkNode, createNode, linkFinalDiagnosticExclusion, getConditionPort } from "../../helpers/nodeHelpers";
 import AdvancedCanvasWidget from "../extended/AdvancedDiagram/canvas/AdvancedCanvasWidget";
 import AvailableNodes from "../AvailableNodes";
+import AdvancedItemsActions from "../extended/AdvancedDiagram/AdvancedItemsActions";
 
 import AdvancedLinkFactory from "../extended/AdvancedDiagram/link/AdvancedLinkFactory";
 import AdvancedNodeFactory from "../extended/AdvancedDiagram/node/AdvancedNodeFactory";
@@ -29,8 +30,11 @@ export class Diagram extends React.Component {
   constructor(props) {
     super(props);
 
-    const engine = createEngine();
+    const engine = createEngine({registerDefaultDeleteItemsAction: false});
     const model = new DiagramModel();
+
+    // Override deleteKeys to control remove of node
+    engine.eventBus.registerAction(new AdvancedItemsActions());
 
     // Register our own factory
     engine.getLinkFactories().registerFactory(new AdvancedLinkFactory());
@@ -64,7 +68,7 @@ export class Diagram extends React.Component {
 
     // Generate questions
     instances.map(instance => {
-      let diagramNode = createNode(instance, addAvailableNode);
+      let diagramNode = createNode(instance, addAvailableNode, readOnly);
       diagramNodes.push(diagramNode);
       model.addAll(diagramNode);
     });
@@ -99,7 +103,7 @@ export class Diagram extends React.Component {
 
   // Create instance and init it in diagram when drop
   onDropAction = async (event) => {
-    const { http, addAvailableNode, removeAvailableNode } = this.props;
+    const { http, addAvailableNode, removeAvailableNode, readOnly } = this.props;
     const { engine } = this.state;
 
     let positions = engine.getRelativeMousePoint(event);
@@ -110,7 +114,7 @@ export class Diagram extends React.Component {
     // Generate node if instance creation success
     if (httpRequest.status === 200) {
       // Generate node
-      let diagramInstance = createNode(result, addAvailableNode);
+      let diagramInstance = createNode(result, addAvailableNode, readOnly);
 
       // Display node in diagram
       engine.getModel().addNode(diagramInstance);

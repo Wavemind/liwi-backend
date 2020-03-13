@@ -15,6 +15,7 @@ export default class AdvancedNodeModel extends NodeModel {
 
     this.dbInstance = options.dbInstance || {};
     this.addAvailableNode = options.addAvailableNode || {};
+    this.locked = options.locked;
     this.http = new Http();
 
     // inPort
