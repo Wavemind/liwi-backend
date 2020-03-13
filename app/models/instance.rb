@@ -68,7 +68,7 @@ class Instance < ApplicationRecord
   def generate_json
     # TODO: Drug
 
-    if node.is_a? Question
+    if node.is_a?(Question) || node.is_a?(QuestionsSequence)
       self.as_json(include: { node: { include: [:answers], methods: [:node_type, :category_name, :type] } })
     else
       self.as_json(include: { node: { methods: [:node_type, :category_name, :type] } })

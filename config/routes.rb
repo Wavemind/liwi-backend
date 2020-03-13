@@ -137,6 +137,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :instances, only: [:update]
+
   resources :diagnostics, only: [] do
     resources :instances, only: [:show, :destroy, :create, :by_reference] do
       collection do
@@ -146,7 +148,6 @@ Rails.application.routes.draw do
       member do
         delete 'remove_link'
         post 'create_link'
-        put 'update_from_diagram'
       end
       resources :children, only: [:create, :destroy]
       resources :conditions, only: [:create, :destroy]

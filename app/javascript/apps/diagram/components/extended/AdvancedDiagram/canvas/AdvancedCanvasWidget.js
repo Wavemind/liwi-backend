@@ -49,6 +49,7 @@ export default class AdvancedCanvasWidget extends React.Component {
       const { engine } = this.props;
       engine.getActionEventBus().fireAction({ event });
     };
+
     this.keyUp = event => {
       const { engine } = this.props;
       engine.getActionEventBus().fireAction({ event });

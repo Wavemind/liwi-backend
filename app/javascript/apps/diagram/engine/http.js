@@ -418,8 +418,8 @@ export default class Http {
    * @params [Integer] positionY
    * @return [Object] body of request
    */
-  updateInstance = async (id, positionX, positionY) => {
-    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/${id}/update_from_diagram`;
+  setInstancePosition = async (id, positionX, positionY) => {
+    const url = `${this.url}/instances/${id}`;
     const body = {
       instance: {
         position_x: positionX,

@@ -2,7 +2,7 @@ class InstancesController < ApplicationController
 
   before_action :authenticate_user!
   before_action :set_instanceable, only: [:show, :create, :destroy, :by_reference, :create_from_diagram, :create_link, :remove_link, :update_score]
-  before_action :set_instance, only: [:show, :destroy, :update_from_diagram, :create_link, :remove_link]
+  before_action :set_instance, only: [:show, :destroy, :update, :create_link, :remove_link]
   before_action :set_child, only: [:update_score]
 
   def index
@@ -95,7 +95,7 @@ class InstancesController < ApplicationController
   # POST /diagnostics/:diagnostic_id/instances/update_from_diagram
   # @return JSON of instance
   # Update an instances and return json format
-  def update_from_diagram
+  def update
     if @instance.update(instance_params)
      render json: @instance
     else

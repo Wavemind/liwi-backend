@@ -3,6 +3,7 @@ import _ from "lodash";
 import QuestionNodeModel from "../components/extended/QuestionDiagram/node/QuestionNodeModel";
 import FinalDiagnosticNodeModel from "../components/extended/FinalDiagnosticDiagram/node/FinalDiagnosticNodeModel";
 import HealthCareNodeModel from "../components/extended/HealthCareDiagram/node/HealthCareNodeModel";
+import QuestionsSequenceNodeModel  from "../components/extended/QuestionsSequenceDiagram/node/QuestionsSequenceNodeModel";
 
 /**
  * Get full label of an object
@@ -23,7 +24,6 @@ export const createNode = (instance, addAvailableNode) => {
   let diagramNode;
 
   switch (instance.node.node_type) {
-    case "QuestionsSequence":
     case "Question":
       diagramNode = new QuestionNodeModel({
         dbInstance: instance,
@@ -42,11 +42,16 @@ export const createNode = (instance, addAvailableNode) => {
         addAvailableNode: addAvailableNode
       });
       break;
+    case "QuestionsSequence":
+      diagramNode = new QuestionsSequenceNodeModel({
+        dbInstance: instance,
+        addAvailableNode: addAvailableNode
+      });
+      break;
     default:
-      console.log("Cette factory existe pas", instance.node.node_type);
+      console.log("Cette factory n'existe pas", instance.node.node_type);
       break;
   }
-
   return diagramNode;
 };
 

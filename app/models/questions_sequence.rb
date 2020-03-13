@@ -29,7 +29,7 @@ class QuestionsSequence < Node
   # @return [Json]
   # Return questions in json format
   def questions_json
-    (components.questions.not_health_care_conditions + components.questions_sequences.not_health_care_conditions).as_json(
+    (components.questions + components.questions_sequences).as_json(
       include: [
         conditions: {
           include: [

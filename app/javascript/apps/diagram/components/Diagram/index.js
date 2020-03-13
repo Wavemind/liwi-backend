@@ -21,6 +21,9 @@ import FinalDiagnosticNodeFactory from "../extended/FinalDiagnosticDiagram/node/
 import HealthCareLinkFactory from "../extended/HealthCareDiagram/link/HealthCareLinkFactory";
 import HealthCareNodeFactory from "../extended/HealthCareDiagram/node/HealthCareNodeFactory";
 
+import QuestionsSequenceLinkFactory from "../extended/QuestionsSequenceDiagram/link/QuestionsSequenceLinkFactory";
+import QuestionsSequenceNodeFactory from "../extended/QuestionsSequenceDiagram/node/QuestionsSequenceNodeFactory";
+
 export class Diagram extends React.Component {
 
   constructor(props) {
@@ -41,6 +44,9 @@ export class Diagram extends React.Component {
 
     engine.getLinkFactories().registerFactory(new HealthCareLinkFactory());
     engine.getNodeFactories().registerFactory(new HealthCareNodeFactory());
+
+    engine.getLinkFactories().registerFactory(new QuestionsSequenceLinkFactory());
+    engine.getNodeFactories().registerFactory(new QuestionsSequenceNodeFactory());
 
     this.state = {
       engine: engine,
@@ -82,7 +88,6 @@ export class Diagram extends React.Component {
         model.addLink(link);
       }
     });
-
 
     if (readOnly) {
       model.setLocked();

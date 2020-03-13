@@ -36,10 +36,12 @@ export default class AdvancedNodeModel extends NodeModel {
         (event) => {
           switch (event.function) {
             case "positionChanged":
-              this.updateInstance(event);
+              this.setInstancePosition(event);
               break;
             case "entityRemoved":
-              this.removeInstance();
+              if (!this.locked) {
+                this.removeInstance();
+              }
               break;
             default:
               break;
@@ -48,14 +50,15 @@ export default class AdvancedNodeModel extends NodeModel {
         100
       )
     });
+
   }
 
   /**
    * Update x;y position in database
    * @params [Object] event
    */
-  updateInstance = async (event) => {
-    let httpRequest = await this.http.updateInstance(this.dbInstance.id, event.entity.position.x, event.entity.position.y);
+  setInstancePosition = async (event) => {
+    let httpRequest = await this.http.setInstancePosition(this.dbInstance.id, event.entity.position.x, event.entity.position.y);
     let result = await httpRequest.json();
 
     if (httpRequest.status !== 200) {
