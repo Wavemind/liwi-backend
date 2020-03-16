@@ -2,7 +2,7 @@ import * as React from "react";
 
 import Http from "../http";
 import { getCategoryNode } from "../../helpers/nodeHelpers";
-import { defaultOrderedNodes } from "../../engine/constants";
+import { defaultOrderedNodes } from "../../engine/constants/default";
 
 const defaultValue = {};
 const DiagramContext = React.createContext(defaultValue);
@@ -135,7 +135,7 @@ export default class DiagramProvider extends React.Component {
     messages: [],
     orderedNodes: {},
     removeAvailableNode: this.removeAvailableNode,
-    set: this.setValState,
+    set: this.setValState
   };
 
   render() {
@@ -148,6 +148,7 @@ export default class DiagramProvider extends React.Component {
   }
 }
 
+// TODO: store in variable
 export const withDiagram = (Component) => (props) => (
   <DiagramContext.Consumer>
     {(store) => <Component {...store} {...props} />}

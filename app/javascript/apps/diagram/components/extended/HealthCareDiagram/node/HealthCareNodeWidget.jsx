@@ -25,9 +25,6 @@ class HealthCareNodeWidget extends React.Component {
           <div className="col pl-2 pr-0 text-left">
             {getReferencePrefix(node.dbInstance.node.node_type, node.dbInstance.node.type) + node.dbInstance.node.reference}
           </div>
-          <div className="col pl-0 pr-2 text-center">
-            {(node.dbInstance.node.category_name === "scored") ? node.dbInstance.node.min_score : ""}
-          </div>
           <div className="col pl-0 pr-2 text-right">
             {/*{(node.dbInstance.node.is_default === false) ? (*/}
             {/*  <div className="dropdown">*/}

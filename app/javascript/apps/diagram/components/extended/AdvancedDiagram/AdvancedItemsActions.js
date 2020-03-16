@@ -22,7 +22,6 @@ export default class AdvancedItemsActionOptions extends Action {
         if (keyCodes.indexOf(keyCode) !== -1 && _.isEqual({ ctrlKey, shiftKey, altKey, metaKey }, modifiers)) {
           _.forEach(this.engine.getModel().getSelectedEntities(), entity => {
             // only delete items which are not locked
-            console.log("coucou")
             if (!entity.locked) {
               entity.remove();
             }

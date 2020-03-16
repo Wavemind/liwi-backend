@@ -16,17 +16,21 @@ export default class AdvancedNodeModel extends NodeModel {
     this.dbInstance = options.dbInstance || {};
     this.addAvailableNode = options.addAvailableNode || {};
     this.locked = options.locked;
+    this.diagramType = options.diagramType;
     this.http = new Http();
 
-    // inPort
-    this.addPort(
-      new AdvancedPortModel({
-        locked: true,
-        in: true,
-        name: "in",
-        id: this.dbInstance.id
-      })
-    );
+    if (this.diagramType !=='scored' || (this.dbInstance.instanceable_id === this.dbInstance.node_id)) {
+      // inPort
+      this.addPort(
+        new AdvancedPortModel({
+          locked: true,
+          in: true,
+          name: "in",
+          id: this.dbInstance.id
+        })
+      );
+    }
+
 
     // Set Position
     this.setPosition(this.dbInstance.position_x, this.dbInstance.position_y);
@@ -51,7 +55,6 @@ export default class AdvancedNodeModel extends NodeModel {
         100
       )
     });
-
   }
 
   /**
@@ -121,7 +124,8 @@ export default class AdvancedNodeModel extends NodeModel {
       ...super.serialize(),
       dbInstance: this.dbInstance,
       addAvailableNode: this.addAvailableNode,
-      http: this.http
+      http: this.http,
+      diagramType: this.diagramType,
     };
   }
 
@@ -129,5 +133,6 @@ export default class AdvancedNodeModel extends NodeModel {
     super.deserialize(event);
     this.dbInstance = event.data.dbInstance;
     this.addAvailableNode = event.data.addAvailableNode;
+    this.diagramType = event.data.diagramType;
   }
 }

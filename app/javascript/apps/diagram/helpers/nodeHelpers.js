@@ -20,7 +20,7 @@ export const getLabel = (node) => {
  * @params [Function] addAvailableNode
  * @return diagram node
  */
-export const createNode = (instance, addAvailableNode, readOnly) => {
+export const createNode = (instance, addAvailableNode, readOnly, diagramType) => {
   let diagramNode;
 
   switch (instance.node.node_type) {
@@ -28,28 +28,32 @@ export const createNode = (instance, addAvailableNode, readOnly) => {
       diagramNode = new QuestionNodeModel({
         dbInstance: instance,
         addAvailableNode: addAvailableNode,
-        locked: readOnly
+        locked: readOnly,
+        diagramType: diagramType,
       });
       break;
     case "FinalDiagnostic":
       diagramNode = new FinalDiagnosticNodeModel({
         dbInstance: instance,
         addAvailableNode: addAvailableNode,
-        locked: readOnly
+        locked: readOnly,
+        diagramType: diagramType
       });
       break;
     case "HealthCare":
       diagramNode = new HealthCareNodeModel({
         dbInstance: instance,
         addAvailableNode: addAvailableNode,
-        locked: readOnly
+        locked: readOnly,
+        diagramType: diagramType
       });
       break;
     case "QuestionsSequence":
       diagramNode = new QuestionsSequenceNodeModel({
         dbInstance: instance,
         addAvailableNode: addAvailableNode,
-        locked: readOnly
+        locked: readOnly,
+        diagramType: diagramType
       });
       break;
     default:

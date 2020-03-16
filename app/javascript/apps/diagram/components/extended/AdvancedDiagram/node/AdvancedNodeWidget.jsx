@@ -13,6 +13,7 @@ class AdvancedNodeWidget extends React.Component {
 
   render() {
     const { getReferencePrefix, node, engine } = this.props;
+
     return (
       <div className="node">
         <div className="port py-2 node-category">
@@ -23,9 +24,6 @@ class AdvancedNodeWidget extends React.Component {
           </div>
           <div className="col pl-2 pr-0 text-left">
             {getReferencePrefix(node.dbInstance.node.node_type, node.dbInstance.node.type) + node.dbInstance.node.reference}
-          </div>
-          <div className="col pl-0 pr-2 text-center">
-            {(node.dbInstance.node.category_name === "scored") ? node.dbInstance.node.min_score : ""}
           </div>
           <div className="col pl-0 pr-2 text-right">
             {/*{(node.dbInstance.node.is_default === false) ? (*/}

@@ -1,9 +1,13 @@
 import * as React from "react";
 import * as _ from "lodash";
+import I18n from 'i18n-js';
 import { DefaultLinkModel } from "@projectstorm/react-diagrams";
 import { NotificationManager } from "react-notifications";
 
 import Http from "../../../../engine/http";
+import store from "../../../../engine/reducers/store";
+import { openModal } from "../../../../engine/reducers/creators.actions";
+import UpdateScoreForm from "../../../form/updateScoreForm";
 
 export default class AdvancedLinkModel extends DefaultLinkModel {
   constructor(options = {}) {
@@ -49,19 +53,28 @@ export default class AdvancedLinkModel extends DefaultLinkModel {
    * Create link in database and assign value
    */
   createLink = async () => {
-    let instanceId = this.targetPort.options.id;
-    let answerId = this.sourcePort.options.id;
-    let httpRequest = await this.http.createLink(instanceId, answerId);
-    let result = await httpRequest.json();
 
-    if (httpRequest.status === 200) {
-      this.dbConditionId = result.id;
-      this.parentInstanceId = this.sourcePort.parent.options.dbInstance.id;
-    } else {
-      this.triggerEvent = false;
-      this.remove();
-      NotificationManager.error(result);
+    if (this.targetPort.parent.diagramType === 'scored') {
+      this.options.selected = false;
+      const state$ = store.getState();
+      store.dispatch(
+        openModal(I18n.t("questions_sequences.edit.title"), <UpdateScoreForm/>)
+      );
     }
+
+    // let instanceId = this.targetPort.options.id;
+    // let answerId = this.sourcePort.options.id;
+    // let httpRequest = await this.http.createLink(instanceId, answerId);
+    // let result = await httpRequest.json();
+    //
+    // if (httpRequest.status === 200) {
+    //   this.dbConditionId = result.id;
+    //   this.parentInstanceId = this.sourcePort.parent.options.dbInstance.id;
+    // } else {
+    //   this.triggerEvent = false;
+    //   this.remove();
+    //   NotificationManager.error(result);
+    // }
   };
 
   /**

@@ -68,7 +68,7 @@ export class Diagram extends React.Component {
 
     // Generate questions
     instances.map(instance => {
-      let diagramNode = createNode(instance, addAvailableNode, readOnly);
+      let diagramNode = createNode(instance, addAvailableNode, readOnly, this.props.instanceable.category_name);
       diagramNodes.push(diagramNode);
       model.addAll(diagramNode);
     });
@@ -114,7 +114,7 @@ export class Diagram extends React.Component {
     // Generate node if instance creation success
     if (httpRequest.status === 200) {
       // Generate node
-      let diagramInstance = createNode(result, addAvailableNode, readOnly);
+      let diagramInstance = createNode(result, addAvailableNode, readOnly, this.props.instanceable.category_name);
 
       // Display node in diagram
       engine.getModel().addNode(diagramInstance);
