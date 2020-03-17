@@ -1,9 +1,8 @@
 class InstancesController < ApplicationController
 
   before_action :authenticate_user!
-  before_action :set_instanceable, only: [:show, :create, :destroy, :by_reference, :create_from_diagram, :create_link, :remove_link, :update_score]
+  before_action :set_instanceable, only: [:show, :create, :destroy, :by_reference, :create_from_diagram, :create_link, :remove_link]
   before_action :set_instance, only: [:show, :destroy, :update, :create_link, :remove_link]
-  before_action :set_child, only: [:update_score]
 
   def index
     respond_to do |format|
@@ -106,12 +105,12 @@ class InstancesController < ApplicationController
   # @params [Diagnostic] Current diagnostic, [Answer] Answer from parent of the link, [Node] child of the link
   # Update the score of a condition in a PSS
   def update_score
-    condition = Condition.find_by(first_conditionable: @parent_answer, referenceable: @child_instance)
+    condition = Condition.find(instance_params[:condition_id])
 
-    if condition.update!(score: params[:score])
-      render json: { status: 'success', message: t('flash_message.success_updated') }
+    if condition.update!(score: instance_params[:score])
+      render json: condition
     else
-      render json: { status: 'danger', message: condition.errors.full_messages }
+      render json: condition.errors.full_messages, status: 422
     end
   end
 

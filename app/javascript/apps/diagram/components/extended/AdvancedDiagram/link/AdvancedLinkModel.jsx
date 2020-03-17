@@ -7,7 +7,7 @@ import { NotificationManager } from "react-notifications";
 import Http from "../../../../engine/http";
 import store from "../../../../engine/reducers/store";
 import { openModal } from "../../../../engine/reducers/creators.actions";
-import UpdateScoreForm from "../../../form/updateScoreForm";
+
 
 export default class AdvancedLinkModel extends DefaultLinkModel {
   constructor(options = {}) {
@@ -20,6 +20,7 @@ export default class AdvancedLinkModel extends DefaultLinkModel {
 
     this.dbConditionId = options.dbConditionId || {};
     this.parentInstanceId = options.parentInstanceId || {};
+    this.score = options.score || 0;
     this.triggerEvent = options.triggerEvent || true;
     this.http = new Http();
 
@@ -54,27 +55,27 @@ export default class AdvancedLinkModel extends DefaultLinkModel {
    */
   createLink = async () => {
 
+    let instanceId = this.targetPort.options.id;
+    let answerId = this.sourcePort.options.id;
+
     if (this.targetPort.parent.diagramType === 'scored') {
       this.options.selected = false;
-      const state$ = store.getState();
       store.dispatch(
-        openModal(I18n.t("questions_sequences.edit.title"), <UpdateScoreForm/>)
+        openModal(I18n.t("questions_sequences.edit.title"), "UpdateScoreForm", {answerId, instanceId})
       );
-    }
+    } else {
+      let httpRequest = await this.http.createLink(instanceId, answerId);
+      let result = await httpRequest.json();
 
-    // let instanceId = this.targetPort.options.id;
-    // let answerId = this.sourcePort.options.id;
-    // let httpRequest = await this.http.createLink(instanceId, answerId);
-    // let result = await httpRequest.json();
-    //
-    // if (httpRequest.status === 200) {
-    //   this.dbConditionId = result.id;
-    //   this.parentInstanceId = this.sourcePort.parent.options.dbInstance.id;
-    // } else {
-    //   this.triggerEvent = false;
-    //   this.remove();
-    //   NotificationManager.error(result);
-    // }
+      if (httpRequest.status === 200) {
+        this.dbConditionId = result.id;
+        this.parentInstanceId = this.sourcePort.parent.options.dbInstance.id;
+      } else {
+        this.triggerEvent = false;
+        this.remove();
+        NotificationManager.error(result);
+      }
+    }
   };
 
   /**
@@ -96,6 +97,7 @@ export default class AdvancedLinkModel extends DefaultLinkModel {
       ...super.serialize(),
       dbConditionId: this.dbConditionId,
       parentInstanceId: this.parentInstanceId,
+      score: this.score,
       triggerEvent: this.triggerEvent,
       http: this.http
     };
@@ -105,6 +107,7 @@ export default class AdvancedLinkModel extends DefaultLinkModel {
     super.deserialize(event);
     this.dbConditionId = event.data.dbConditionId;
     this.parentInstanceId = event.data.parentInstanceId;
+    this.score = event.data.score;
     this.triggerEvent = event.data.triggerEvent;
   }
 }

@@ -62,13 +62,13 @@ export class Diagram extends React.Component {
 
   initDiagram = () => {
     const { engine, model } = this.state;
-    const { instances, addAvailableNode, readOnly } = this.props;
+    const { instances, addAvailableNode, readOnly, instanceable } = this.props;
 
     let diagramNodes = [];
 
     // Generate questions
     instances.map(instance => {
-      let diagramNode = createNode(instance, addAvailableNode, readOnly, this.props.instanceable.category_name);
+      let diagramNode = createNode(instance, addAvailableNode, readOnly, instanceable.category_name);
       diagramNodes.push(diagramNode);
       model.addAll(diagramNode);
     });
@@ -103,7 +103,7 @@ export class Diagram extends React.Component {
 
   // Create instance and init it in diagram when drop
   onDropAction = async (event) => {
-    const { http, addAvailableNode, removeAvailableNode, readOnly } = this.props;
+    const { http, addAvailableNode, removeAvailableNode, readOnly, instanceable } = this.props;
     const { engine } = this.state;
 
     let positions = engine.getRelativeMousePoint(event);
@@ -114,7 +114,7 @@ export class Diagram extends React.Component {
     // Generate node if instance creation success
     if (httpRequest.status === 200) {
       // Generate node
-      let diagramInstance = createNode(result, addAvailableNode, readOnly, this.props.instanceable.category_name);
+      let diagramInstance = createNode(result, addAvailableNode, readOnly, instanceable.category_name);
 
       // Display node in diagram
       engine.getModel().addNode(diagramInstance);

@@ -1,18 +1,19 @@
+import { actions } from "../constants/actions.reducer";
 export const initialState = {
   modal: {
     open: false,
     title: "",
     content: "",
+    params: {}
   }
 };
-import { actions } from "../constants/actions.reducer";
 
 export default function DiagramReducer(state, action) {
 
   switch (action.type) {
     // Open modal
     case actions.OPEN_MODAL: {
-      const {title, content } = action.payload;
+      const { title, content, params } = action.payload;
 
       return {
         ...state,
@@ -21,6 +22,7 @@ export default function DiagramReducer(state, action) {
           open: true,
           title,
           content,
+          params
         }
       };
     }
@@ -34,6 +36,7 @@ export default function DiagramReducer(state, action) {
           open: false,
           title: "",
           content: "",
+          params: {}
         }
       };
     }

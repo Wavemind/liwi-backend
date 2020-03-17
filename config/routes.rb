@@ -119,10 +119,12 @@ Rails.application.routes.draw do
       collection do
         get 'by_reference'
         post 'create_from_diagram'
-        post 'create_link'
         delete 'remove_from_diagram'
         delete 'remove_link'
         put 'update_score'
+      end
+      member do
+        post 'create_link'
       end
       resources :children, only: [:create, :destroy]
       resources :conditions, only: [:create, :destroy]

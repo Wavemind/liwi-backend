@@ -90,7 +90,13 @@ export const linkNode = (answerPort, diagramNode, condition) => {
   let inPort = diagramNode.getInPort();
   let link = answerPort.link(inPort);
 
+  // Add label to display score
+  if (condition.score) {
+    link.addLabel(condition.score);
+  }
+
   // Add value in link
+  link.score = condition.score;
   link.dbConditionId = condition.id;
   link.parentInstanceId = link.sourcePort.parent.options.dbInstance.id;
 

@@ -1,10 +1,11 @@
 import { actions } from "../constants/actions.reducer";
 
-export const openModal = (title, content) => ({
+export const openModal = (title, content, params) => ({
   type: actions.OPEN_MODAL,
   payload: {
     title,
     content,
+    params,
   }
 });
 
