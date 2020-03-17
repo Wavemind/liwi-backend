@@ -8,6 +8,7 @@ import { withDiagram } from "../../engine/context/Diagram.context";
 import { linkNode, createNode, linkFinalDiagnosticExclusion, getConditionPort } from "../../helpers/nodeHelpers";
 import AdvancedCanvasWidget from "../extended/AdvancedDiagram/canvas/AdvancedCanvasWidget";
 import AvailableNodes from "../AvailableNodes";
+import Toolbar from "../Toolbar";
 import AdvancedItemsActions from "../extended/AdvancedDiagram/AdvancedItemsActions";
 
 import AdvancedLinkFactory from "../extended/AdvancedDiagram/link/AdvancedLinkFactory";
@@ -138,6 +139,7 @@ export class Diagram extends React.Component {
       <div className="content">
         <div className="row">
           {!readOnly ? ([
+            <Toolbar/>,
             <AvailableNodes/>,
             <NotificationContainer/>
           ]) : null}
