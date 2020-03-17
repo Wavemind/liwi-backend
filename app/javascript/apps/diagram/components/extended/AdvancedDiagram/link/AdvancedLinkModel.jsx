@@ -54,7 +54,6 @@ export default class AdvancedLinkModel extends DefaultLinkModel {
    * Create link in database and assign value
    */
   createLink = async () => {
-
     let instanceId = this.targetPort.options.id;
     let answerId = this.sourcePort.options.id;
 

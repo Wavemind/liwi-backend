@@ -8,10 +8,7 @@ import AdvancedModal from "./components/Modal";
 
 export default class Root extends React.Component {
   render () {
-    const {
-      context,
-      render,
-    } = this.props;
+    const { context } = this.props;
 
     return (
       <Provider store={store}>
