@@ -312,6 +312,8 @@ class VersionsService
       hash[question.id]['system'] = question.system
       hash[question.id]['formula'] = format_formula(question.formula)
       hash[question.id]['category'] = question.category_name
+      hash[question.id]['is_triage'] = question.is_triage
+      hash[question.id]['is_identifiable'] = question.is_identifiable
       # Send Reference instead of actual display format to help f-e interpret the question correctly
       hash[question.id]['value_format'] = question.answer_type.value
       format = question.answer_type.display

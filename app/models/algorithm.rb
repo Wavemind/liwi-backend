@@ -23,7 +23,7 @@ class Algorithm < ApplicationRecord
     weight = questions.create!(label_en: 'Weight (kg)', type: 'Questions::BasicMeasurement', stage: Question.stages[:triage], is_mandatory: true, answer_type_id: 4, is_default: true)
     hr = questions.create!(label_en: 'Heart rate', type: 'Questions::VitalSignAnthropometric', stage: Question.stages[:consultation], answer_type_id: 4, is_default: true)
     rr = questions.create!(label_en: 'Respiratory rate', type: 'Questions::VitalSignAnthropometric', stage: Question.stages[:consultation], answer_type_id: 4, is_default: true)
-    muac = questions.create!(label_en: 'MUAC', description_en: 'Mid Upper Arm Circumference', type: 'Questions::VitalSignTriage', stage: Question.stages[:triage], answer_type_id: 4, is_default: true)
+    muac = questions.create!(label_en: 'MUAC', type: 'Questions::BasicMeasurement', description_en: 'Mid Upper Arm Circumference', stage: Question.stages[:triage], answer_type_id: 4, is_default: true)
 
     age = questions.create!(label_en: 'Age in months', type: 'Questions::BackgroundCalculation', stage: Question.stages[:registration], is_mandatory: true, answer_type_id: 5, formula: '[ToMonth(D1)]', is_default: true)
     age.answers.create([
@@ -36,20 +36,20 @@ class Algorithm < ApplicationRecord
       {label_en: 'more than 60 months', value: '60', operator: Answer.operators[:more_or_equal]},
      ])
 
-    z_score = questions.create!(label_en: 'Weight for age (z-score)', type: 'Questions::PhysicalExam', stage: Question.stages[:consultation], is_mandatory: true, answer_type_id: 3, reference_table_x_id: age_in_days.id, reference_table_y_id: weight.id, reference_table_male: "z_score_male_table", reference_table_female: "z_score_female_table", is_default: true)
+    z_score = questions.create!(label_en: 'Weight for age (z-score)', type: 'Questions::BackgroundCalculation', stage: Question.stages[:consultation], is_mandatory: true, answer_type_id: 3, reference_table_x_id: age_in_days.id, reference_table_y_id: weight.id, reference_table_male: "z_score_male_table", reference_table_female: "z_score_female_table", is_default: true)
     z_score.answers.create([
        {label_en: 'less than -3 z-score', value: '-3', operator: Answer.operators[:less]},
        {label_en: '-2 z-score', value: '-3, -2', operator: Answer.operators[:between]},
        {label_en: 'more than -2 z-score', value: '-2', operator: Answer.operators[:more_or_equal]},
      ])
 
-    hr_th = questions.create!(label_en: 'Heart rate in percentile', type: 'Questions::PhysicalExam', stage: Question.stages[:consultation], is_mandatory: true, answer_type_id: 3, reference_table_x_id: age.id, reference_table_y_id: hr.id, reference_table_male: "heart_rate_table", reference_table_female: "heart_rate_table", is_default: true)
+    hr_th = questions.create!(label_en: 'Heart rate in percentile', type: 'Questions::BackgroundCalculation', stage: Question.stages[:consultation], is_mandatory: true, answer_type_id: 3, reference_table_x_id: age.id, reference_table_y_id: hr.id, reference_table_male: "heart_rate_table", reference_table_female: "heart_rate_table", is_default: true)
     hr_th.answers.create([
        {label_en: 'less than 90th', value: '90', operator: Answer.operators[:less]},
        {label_en: 'more than 90th', value: '90', operator: Answer.operators[:more_or_equal]},
      ])
 
-    rr_th = questions.create!(label_en: 'Respiratory rate in percentile', type: 'Questions::PhysicalExam', stage: Question.stages[:consultation], is_mandatory: true, answer_type_id: 3, reference_table_x_id: age.id, reference_table_y_id: rr.id, reference_table_male: "respiratory_rate_table", reference_table_female: "respiratory_rate_table", is_default: true)
+    rr_th = questions.create!(label_en: 'Respiratory rate in percentile', type: 'Questions::BackgroundCalculation', stage: Question.stages[:consultation], is_mandatory: true, answer_type_id: 3, reference_table_x_id: age.id, reference_table_y_id: rr.id, reference_table_male: "respiratory_rate_table", reference_table_female: "respiratory_rate_table", is_default: true)
     rr_th.answers.create([
        {label_en: 'less than 75th', value: '75', operator: Answer.operators[:less]},
        {label_en: 'between 75th and 97th', value: '75, 97', operator: Answer.operators[:between]},
