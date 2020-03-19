@@ -4,12 +4,26 @@ import { Modal } from "react-bootstrap";
 import store from "../../engine/reducers/store";
 import { closeModal } from "../../engine/reducers/creators.actions";
 
-import UpdateScoreForm from "../form/updateScoreForm";
+import ScoreForm from "../form/ScoreForm";
 
 
 export default class AdvancedModal extends React.Component {
 
   closeModal = () => {
+    const {
+      state: {
+        modal: {
+          params
+        }
+      }
+    } = this.props;
+
+    if (params.content === 'ScoreForm' && params.method === 'create') {
+      params.diagramObject.remove();
+    }
+
+    params.engine.repaintCanvas();
+
     store.dispatch(
       closeModal()
     );
@@ -26,10 +40,10 @@ export default class AdvancedModal extends React.Component {
     } = this.props;
 
     switch (content) {
-      case "UpdateScoreForm":
-        return <UpdateScoreForm answerId={params.answerId} instanceId={params.instanceId}/>;
+      case "ScoreForm":
+        return <ScoreForm {...params} />;
       default:
-        console.log("Action exist pas");
+        console.log("Action n'existe pas");
         return null;
     }
   };

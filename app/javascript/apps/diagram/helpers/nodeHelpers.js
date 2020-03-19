@@ -3,7 +3,8 @@ import _ from "lodash";
 import QuestionNodeModel from "../components/extended/QuestionDiagram/node/QuestionNodeModel";
 import FinalDiagnosticNodeModel from "../components/extended/FinalDiagnosticDiagram/node/FinalDiagnosticNodeModel";
 import HealthCareNodeModel from "../components/extended/HealthCareDiagram/node/HealthCareNodeModel";
-import QuestionsSequenceNodeModel  from "../components/extended/QuestionsSequenceDiagram/node/QuestionsSequenceNodeModel";
+import QuestionsSequenceNodeModel
+  from "../components/extended/QuestionsSequenceDiagram/node/QuestionsSequenceNodeModel";
 
 /**
  * Get full label of an object
@@ -20,41 +21,29 @@ export const getLabel = (node) => {
  * @params [Function] addAvailableNode
  * @return diagram node
  */
-export const createNode = (instance, addAvailableNode, readOnly, diagramType) => {
+export const createNode = (instance, addAvailableNode, readOnly, diagramType, engine) => {
   let diagramNode;
+
+  let params = {
+    dbInstance: instance,
+    addAvailableNode: addAvailableNode,
+    locked: readOnly,
+    diagramType: diagramType,
+    engine: engine,
+  };
 
   switch (instance.node.node_type) {
     case "Question":
-      diagramNode = new QuestionNodeModel({
-        dbInstance: instance,
-        addAvailableNode: addAvailableNode,
-        locked: readOnly,
-        diagramType: diagramType,
-      });
+      diagramNode = new QuestionNodeModel(params);
       break;
     case "FinalDiagnostic":
-      diagramNode = new FinalDiagnosticNodeModel({
-        dbInstance: instance,
-        addAvailableNode: addAvailableNode,
-        locked: readOnly,
-        diagramType: diagramType
-      });
+      diagramNode = new FinalDiagnosticNodeModel(params);
       break;
     case "HealthCare":
-      diagramNode = new HealthCareNodeModel({
-        dbInstance: instance,
-        addAvailableNode: addAvailableNode,
-        locked: readOnly,
-        diagramType: diagramType
-      });
+      diagramNode = new HealthCareNodeModel(params);
       break;
     case "QuestionsSequence":
-      diagramNode = new QuestionsSequenceNodeModel({
-        dbInstance: instance,
-        addAvailableNode: addAvailableNode,
-        locked: readOnly,
-        diagramType: diagramType
-      });
+      diagramNode = new QuestionsSequenceNodeModel(params);
       break;
     default:
       console.log("Cette factory n'existe pas", instance.node.node_type);

@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as _ from "lodash";
-import I18n from 'i18n-js';
+import I18n from "i18n-js";
 import { DefaultLinkModel } from "@projectstorm/react-diagrams";
 import { NotificationManager } from "react-notifications";
 
@@ -20,7 +20,7 @@ export default class AdvancedLinkModel extends DefaultLinkModel {
 
     this.dbConditionId = options.dbConditionId || {};
     this.parentInstanceId = options.parentInstanceId || {};
-    this.score = options.score || 0;
+    this.score = options.score || "";
     this.triggerEvent = options.triggerEvent || true;
     this.http = new Http();
 
@@ -57,10 +57,17 @@ export default class AdvancedLinkModel extends DefaultLinkModel {
     let instanceId = this.targetPort.options.id;
     let answerId = this.sourcePort.options.id;
 
-    if (this.targetPort.parent.diagramType === 'scored') {
+    if (this.targetPort.parent.diagramType === "scored") {
       this.options.selected = false;
       store.dispatch(
-        openModal(I18n.t("questions_sequences.edit.title"), "UpdateScoreForm", {answerId, instanceId})
+        openModal(I18n.t("questions_sequences.edit.title"), "ScoreForm", {
+          answerId,
+          instanceId,
+          diagramObject: this,
+          engine: this.sourcePort.parent.engine,
+          score: this.score,
+          method: 'create'
+        })
       );
     } else {
       let httpRequest = await this.http.createLink(instanceId, answerId);
@@ -90,6 +97,13 @@ export default class AdvancedLinkModel extends DefaultLinkModel {
       NotificationManager.error(result);
     }
   };
+
+  /**
+   * Get first label
+   */
+  getLabel() {
+    return this.getLabels()[0];
+  }
 
   serialize() {
     return {

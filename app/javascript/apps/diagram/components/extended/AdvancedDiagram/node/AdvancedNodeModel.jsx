@@ -15,6 +15,7 @@ export default class AdvancedNodeModel extends NodeModel {
 
     this.dbInstance = options.dbInstance || {};
     this.addAvailableNode = options.addAvailableNode || {};
+    this.engine = options.engine || {};
     this.locked = options.locked;
     this.diagramType = options.diagramType;
     this.http = new Http();
@@ -124,6 +125,7 @@ export default class AdvancedNodeModel extends NodeModel {
       ...super.serialize(),
       dbInstance: this.dbInstance,
       addAvailableNode: this.addAvailableNode,
+      engine: this.engine,
       http: this.http,
       diagramType: this.diagramType,
     };
@@ -133,6 +135,7 @@ export default class AdvancedNodeModel extends NodeModel {
     super.deserialize(event);
     this.dbInstance = event.data.dbInstance;
     this.addAvailableNode = event.data.addAvailableNode;
+    this.engine = event.data.engine;
     this.diagramType = event.data.diagramType;
   }
 }

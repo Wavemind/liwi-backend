@@ -120,10 +120,10 @@ Rails.application.routes.draw do
         get 'by_reference'
         post 'create_from_diagram'
         delete 'remove_from_diagram'
-        delete 'remove_link'
         put 'update_score'
       end
       member do
+        delete 'remove_link'
         post 'create_link'
       end
       resources :children, only: [:create, :destroy]

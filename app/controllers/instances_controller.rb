@@ -107,7 +107,7 @@ class InstancesController < ApplicationController
   def update_score
     condition = Condition.find(instance_params[:condition_id])
 
-    if condition.update!(score: instance_params[:score])
+    if condition.update(score: instance_params[:score])
       render json: condition
     else
       render json: condition.errors.full_messages, status: 422

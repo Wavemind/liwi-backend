@@ -4,29 +4,53 @@ import { Form, Button, Alert } from "react-bootstrap";
 import { Formik } from "formik";
 
 import { updateScoreSchema } from "../../engine/constants/form";
+import { closeModal } from "../../engine/reducers/creators.actions";
 import Http from "../../engine/http";
+import store from "../../engine/reducers/store";
 
 
-export default class UpdateScoreForm extends React.Component {
+export default class ScoreForm extends React.Component {
+
   handleOnSubmit = async (values, actions) => {
-    const { instanceId, answerId } = this.props;
+    const { instanceId, answerId, diagramObject, engine, method } = this.props;
     let http = new Http();
+    let httpRequest = {};
 
-    let httpRequest = await http.createLink(instanceId, answerId, values.score);
+    if (method === "create") {
+      httpRequest = await http.createLink(instanceId, answerId, values.score);
+    } else {
+      httpRequest = await http.updateConditionScore(diagramObject.dbConditionId, values.score);
+    }
+
     let result = await httpRequest.json();
 
+    // Set score to link + set label with score + reload canvas + close modal
     if (httpRequest.status === 200) {
+      diagramObject.score = values.score;
 
+      if (method === "create") {
+        diagramObject.addLabel(values.score);
+      } else {
+        diagramObject.getLabel().setLabel(values.score)
+      }
+
+      engine.repaintCanvas();
+
+      store.dispatch(
+        closeModal()
+      );
     } else {
       actions.setStatus({ result });
     }
   };
 
   render() {
+    const { score } = this.props;
+
     return (
       <Formik
         validationSchema={updateScoreSchema}
-        initialValues={{ score: "" }}
+        initialValues={{ score: score }}
         onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
       >
         {({

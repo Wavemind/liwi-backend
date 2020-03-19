@@ -12,7 +12,7 @@ class Condition < ApplicationRecord
 
   before_destroy :remove_children, unless: Proc.new { self.referenceable.is_a?(Diagnostic) }
   before_validation :prevent_loop, unless: Proc.new { self.referenceable.is_a?(Diagnostic) || (self.referenceable.is_a?(Instance) && self.referenceable.instanceable.is_a?(Diagnostic) && self.referenceable.instanceable.duplicating) }
-  before_validation :already_exist
+  before_validation :already_exist, on: :create
 
   validates_presence_of :first_conditionable
 

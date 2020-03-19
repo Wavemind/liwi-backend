@@ -26,6 +26,8 @@ import HealthCareNodeFactory from "../extended/HealthCareDiagram/node/HealthCare
 import QuestionsSequenceLinkFactory from "../extended/QuestionsSequenceDiagram/link/QuestionsSequenceLinkFactory";
 import QuestionsSequenceNodeFactory from "../extended/QuestionsSequenceDiagram/node/QuestionsSequenceNodeFactory";
 
+import QuestionsSequenceScoreLabelFactory from "../extended/QuestionsSequenceScoreDiagram/label/QuestionsSequenceScoreLabelFactory";
+
 export class Diagram extends React.Component {
 
   constructor(props) {
@@ -53,6 +55,8 @@ export class Diagram extends React.Component {
     engine.getLinkFactories().registerFactory(new QuestionsSequenceLinkFactory());
     engine.getNodeFactories().registerFactory(new QuestionsSequenceNodeFactory());
 
+    engine.getLabelFactories().registerFactory(new QuestionsSequenceScoreLabelFactory());
+
     this.state = {
       engine: engine,
       model: model
@@ -69,7 +73,7 @@ export class Diagram extends React.Component {
 
     // Generate questions
     instances.map(instance => {
-      let diagramNode = createNode(instance, addAvailableNode, readOnly, instanceable.category_name);
+      let diagramNode = createNode(instance, addAvailableNode, readOnly, instanceable.category_name, engine);
       diagramNodes.push(diagramNode);
       model.addAll(diagramNode);
     });
@@ -115,7 +119,7 @@ export class Diagram extends React.Component {
     // Generate node if instance creation success
     if (httpRequest.status === 200) {
       // Generate node
-      let diagramInstance = createNode(result, addAvailableNode, readOnly, instanceable.category_name);
+      let diagramInstance = createNode(result, addAvailableNode, readOnly, instanceable.category_name, engine);
 
       // Display node in diagram
       engine.getModel().addNode(diagramInstance);

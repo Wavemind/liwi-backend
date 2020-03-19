@@ -248,14 +248,6 @@
   position: unset !important;
 }
 
-.srd-default-label {
-  pointer-events: all !important;
-}
-
-.srd-default-label:hover  {
-  cursor: pointer;
-}
-
 .liwi-toolbar {
   background-color: #808080;
 
@@ -280,4 +272,20 @@
 // Flash messages
 .notification-container {
   width: 500px;
+}
+
+// Diagram label
+.diagram-label {
+  pointer-events: all !important;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 5px;
+  color: white;
+  font-size: 12px;
+  padding: 4px 8px;
+  font-family: sans-serif;
+  user-select: none;
+
+  &:hover {
+    cursor: pointer;
+  }
 }

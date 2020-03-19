@@ -332,30 +332,22 @@ export default class Http {
     window.location = `${this.url}/questions_sequences/${qsId}/diagram`;
   };
 
-  // @params [Integer] nodeId, [Integer] answerId, [Integer] score
-  // @return [Object] body of request
-  // Update a condition to change its score
-  updateConditionScore = async (answerId, nodeId, score) => {
-    let response;
+  /**
+   * Update a condition to change its score
+   * @params [Integer] conditionId
+   * @params [Integer] score
+   * @return [Object] body of request
+   */
+  updateConditionScore = async (conditionId, score) => {
     const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/update_score`;
     const body = {
       instance: {
-        node_id: nodeId,
-        answer_id: answerId,
-        final_diagnostic_id: this.finalDiagnostic
+        condition_id: conditionId,
+        score: score,
       },
-      score: score
     };
     const header = await this.setHeaders("PUT", body);
-    const request = await fetch(url, header).catch(error => console.log(error));
-
-    // Display error or parse json
-    if (request.ok) {
-      response = await request.json();
-    } else {
-      response = request;
-    }
-    return await response;
+    return await fetch(url, header).catch(error => console.log(error));
   };
 
   // @params [Integer] id, [String] label, [String] description, [Integer] final_diagnostic_id
