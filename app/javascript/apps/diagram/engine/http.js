@@ -22,17 +22,22 @@ export default class Http {
     this.token = document.querySelector("meta[name='csrf-token']").content;
   }
 
-  // @params [Integer] nodeId
-  // @return [Object] body of request
-  // Create a final diagnostic
-  createFinalDiagnostic = async (label_en, description_en) => {
+    /**
+   * Create a final diagnostic
+   * @params [String] label_en
+   * @params [String] description_en
+   * @params [String] from
+   * @return [Object] body of request
+   */
+  createFinalDiagnostic = async (label_en, description_en, from) => {
     const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics`;
     const body = {
       final_diagnostic: {
         label_en,
         description_en,
         diagnostic_id: this.instanceableId
-      }
+      },
+      from,
     };
     const header = await this.setHeaders("POST", body);
     return await fetch(url, header).catch(error => console.log(error));
@@ -344,27 +349,18 @@ export default class Http {
   // @params [Integer] id, [String] label, [String] description, [Integer] final_diagnostic_id
   // @return [Object] body of request
   // Update final diagnostic node
-  updateFinalDiagnostic = async (id, label, description, final_diagnostic_id) => {
-    let response;
-    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/${id}/update_from_diagram`;
+  updateFinalDiagnostic = async (id, label_en, description_en, from) => {
+    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/${id}`;
     const body = {
       final_diagnostic: {
-        id: id,
-        label_en: label,
-        description_en: description,
-        final_diagnostic_id: final_diagnostic_id
-      }
+        id,
+        label_en,
+        description_en
+      },
+      from,
     };
     const header = await this.setHeaders("PUT", body);
-    const request = await fetch(url, header).catch(error => console.log(error));
-
-    // Display error or parse json
-    if (request.ok) {
-      response = await request.json();
-    } else {
-      response = request;
-    }
-    return await response;
+    return await fetch(url, header).catch(error => console.log(error));
   };
 
   // @params [Integer] id, [String] label, [String] description, [Integer] final_diagnostic_id

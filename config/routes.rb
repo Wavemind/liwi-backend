@@ -54,7 +54,6 @@ Rails.application.routes.draw do
           member do
             put 'remove_excluded_diagnostic'
             put 'update_translations'
-            put 'update_from_diagram'
             get 'diagram'
           end
           resources :final_diagnostic_health_cares, only: [:create, :destroy]

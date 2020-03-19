@@ -7,23 +7,27 @@ import { finalDiagnosticSchema } from "../schema";
 import DisplayErrors from "../DisplayErrors";
 import Http from "../../diagram/engine/http";
 
-export default class ScoreForm extends React.Component {
+export default class FinalDiagnosticForm extends React.Component {
 
   handleOnSubmit = async (values, actions) => {
-    const { method } = this.props;
+    const { method, from } = this.props;
     let http = new Http();
     let httpRequest = {};
 
     if (method === "create") {
-      httpRequest = await http.createFinalDiagnostic(values.label_en, values.description_en);
+      httpRequest = await http.createFinalDiagnostic(values.label_translations, values.description_translations, from);
     } else {
-      httpRequest = await http.updateFinalDiagnostic(values.id, values.label_en, values.description_en);
+      httpRequest = await http.updateFinalDiagnostic(values.id, values.label_translations, values.description_translations, from);
     }
 
     let result = await httpRequest.json();
 
     if (httpRequest.status === 200) {
+      if (from === 'rails') {
+        window.location.replace(result.url);
+      } else {
 
+      }
     } else {
       actions.setStatus({ result });
     }
@@ -35,7 +39,11 @@ export default class ScoreForm extends React.Component {
     return (
       <Formik
         validationSchema={finalDiagnosticSchema}
-        initialValues={{ finalDiagnostic }}
+        initialValues={{
+          id: finalDiagnostic.id || "",
+          label_translations: finalDiagnostic.label_translations?.en || "",
+          description_translations: finalDiagnostic.description_translations?.en || ""
+        }}
         onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
       >
         {({
