@@ -7,11 +7,11 @@ export default class QuestionsSequenceNodeModel extends AdvancedNodeModel {
     super({ ...options });
 
     this.options.type = "questionsSequence";
-    this.locked = this.dbInstance.instanceable_type === "Node" && this.dbInstance.instanceable_id === this.dbInstance.node_id;
+    this.locked = this.options.dbInstance.instanceable_type === "Node" && this.options.dbInstance.instanceable_id === this.options.dbInstance.node_id;
 
     if (!this.locked) {
       // outPorts
-      this.dbInstance.node.answers.map(answer => {
+      this.options.dbInstance.node.answers.map(answer => {
         this.addPort(new AdvancedPortModel({
           in: false,
           name: getLabel(answer),

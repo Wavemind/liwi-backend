@@ -20,14 +20,14 @@ export default class ScoreForm extends React.Component {
     if (method === "create") {
       httpRequest = await http.createLink(instanceId, answerId, values.score);
     } else {
-      httpRequest = await http.updateConditionScore(diagramObject.dbConditionId, values.score);
+      httpRequest = await http.updateConditionScore(diagramObject.options.dbConditionId, values.score);
     }
 
     let result = await httpRequest.json();
 
     // Set score to link + set label with score + reload canvas + close modal
     if (httpRequest.status === 200) {
-      diagramObject.score = values.score;
+      diagramObject.options.score = values.score;
 
       if (method === "create") {
         diagramObject.addLabel(values.score);

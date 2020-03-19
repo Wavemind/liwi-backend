@@ -6,11 +6,13 @@ import { Formik } from "formik";
 import { finalDiagnosticSchema } from "../schema";
 import DisplayErrors from "../DisplayErrors";
 import Http from "../../diagram/engine/http";
+import store from "../../diagram/engine/reducers/store";
+import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 
 export default class FinalDiagnosticForm extends React.Component {
 
   handleOnSubmit = async (values, actions) => {
-    const { method, from } = this.props;
+    const { method, from, engine, diagramObject } = this.props;
     let http = new Http();
     let httpRequest = {};
 
@@ -26,7 +28,14 @@ export default class FinalDiagnosticForm extends React.Component {
       if (from === 'rails') {
         window.location.replace(result.url);
       } else {
+        diagramObject.options.dbInstance.node = result.finalDiagnostic;
 
+        console.log(engine);
+        engine.repaintCanvas()
+
+        store.dispatch(
+          closeModal()
+        );
       }
     } else {
       actions.setStatus({ result });

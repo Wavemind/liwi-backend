@@ -17,11 +17,9 @@ export default class AdvancedLinkModel extends DefaultLinkModel {
     this.options.type = "advanced";
     this.options.width = 3;
     this.options.color = "rgb(51,47,46)";
+    this.options.score = options.score || "";
+    this.options.triggerEvent = options.triggerEvent || true;
 
-    this.dbConditionId = options.dbConditionId || {};
-    this.parentInstanceId = options.parentInstanceId || {};
-    this.score = options.score || "";
-    this.triggerEvent = options.triggerEvent || true;
     this.http = new Http();
 
     // Set event listener
@@ -37,7 +35,7 @@ export default class AdvancedLinkModel extends DefaultLinkModel {
               break;
             case "entityRemoved":
               // Trigger only on user action
-              if (event.entity.options.selected && this.triggerEvent && this.targetPort !== null) {
+              if (event.entity.options.selected && this.options.triggerEvent && this.options.targetPort !== null) {
                 this.removeLink();
               }
               break;
@@ -57,15 +55,15 @@ export default class AdvancedLinkModel extends DefaultLinkModel {
     let instanceId = this.targetPort.options.id;
     let answerId = this.sourcePort.options.id;
 
-    if (this.targetPort.parent.diagramType === "scored") {
+    if (this.targetPort.parent.options.diagramType === "scored") {
       this.options.selected = false;
       store.dispatch(
         openModal(I18n.t("questions_sequences.edit.title"), "ScoreForm", {
           answerId,
           instanceId,
           diagramObject: this,
-          engine: this.sourcePort.parent.engine,
-          score: this.score,
+          engine: this.sourcePort.parent.options.engine,
+          score: this.options.score,
           method: 'create'
         })
       );
@@ -74,10 +72,10 @@ export default class AdvancedLinkModel extends DefaultLinkModel {
       let result = await httpRequest.json();
 
       if (httpRequest.status === 200) {
-        this.dbConditionId = result.id;
-        this.parentInstanceId = this.sourcePort.parent.options.dbInstance.id;
+        this.options.dbConditionId = result.id;
+        this.options.parentInstanceId = this.sourcePort.parent.options.dbInstance.id;
       } else {
-        this.triggerEvent = false;
+        this.options.triggerEvent = false;
         this.remove();
         NotificationManager.error(result);
       }
@@ -88,11 +86,11 @@ export default class AdvancedLinkModel extends DefaultLinkModel {
    * Remove link in database
    */
   removeLink = async () => {
-    let httpRequest = await this.http.removeLink(this.parentInstanceId, this.dbConditionId);
+    let httpRequest = await this.http.removeLink(this.options.parentInstanceId, this.options.dbConditionId);
     let result = await httpRequest.json();
 
     if (httpRequest.status !== 200) {
-      this.triggerEvent = false;
+      this.options.triggerEvent = false;
       this.remove();
       NotificationManager.error(result);
     }

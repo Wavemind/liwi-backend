@@ -9,7 +9,7 @@ export default class QuestionNodeModel extends AdvancedNodeModel {
     this.options.type = "question";
 
     // outPorts
-    this.dbInstance.node.answers.map(answer => {
+    this.options.dbInstance.node.answers.map(answer => {
       this.addPort(new AdvancedPortModel({
         in: false,
         name: getLabel(answer),

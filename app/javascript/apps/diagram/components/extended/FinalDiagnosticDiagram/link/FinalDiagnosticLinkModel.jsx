@@ -11,7 +11,6 @@ export default class FinalDiagnosticLinkModel extends AdvancedLinkModel {
     this.options.width = 3;
   }
 
-
   /**
    * Exclude an other final diagnostic
    */
@@ -22,7 +21,7 @@ export default class FinalDiagnosticLinkModel extends AdvancedLinkModel {
     let result = await httpRequest.json();
 
     if (httpRequest.status !== 200) {
-      this.triggerEvent = false;
+      this.options.triggerEvent = false;
       this.remove();
       NotificationManager.error(result);
     }
@@ -36,7 +35,7 @@ export default class FinalDiagnosticLinkModel extends AdvancedLinkModel {
     let result = await httpRequest.json();
 
     if (httpRequest.status !== 200) {
-      this.triggerEvent = false;
+      this.options.triggerEvent = false;
       this.remove();
       NotificationManager.error(result);
     }

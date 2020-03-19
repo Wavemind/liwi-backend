@@ -25,10 +25,10 @@ class QuestionsSequenceNodeWidget extends React.Component {
             </div>
             : null}
           <div className="col pl-2 pr-0 text-left">
-            {getReferencePrefix(node.dbInstance.node.node_type, node.dbInstance.node.type) + node.dbInstance.node.reference}
+            {getReferencePrefix(node.options.dbInstance.node.node_type, node.options.dbInstance.node.type) + node.options.dbInstance.node.reference}
           </div>
           <div className="col pl-0 pr-2 text-center">
-            {(node.dbInstance.node.category_name === "scored") ? node.dbInstance.node.min_score : ""}
+            {(node.options.dbInstance.node.category_name === "scored") ? node.options.dbInstance.node.min_score : ""}
           </div>
           <div className="col pl-0 pr-2 text-right">
             {/*{(node.dbInstance.node.is_default === false) ? (*/}
@@ -47,7 +47,7 @@ class QuestionsSequenceNodeWidget extends React.Component {
         <div>
           <div className="py-2 node-label">
             <div className="col text-center">
-              {getLabel(node.dbInstance.node)}
+              {getLabel(node.options.dbInstance.node)}
             </div>
           </div>
           <div className="node-answers">

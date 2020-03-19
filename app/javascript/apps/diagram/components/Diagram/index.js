@@ -82,16 +82,16 @@ export class Diagram extends React.Component {
     diagramNodes.map(diagramNode => {
 
       // Link between nodes
-      diagramNode.dbInstance.conditions.map(condition => {
+      diagramNode.options.dbInstance.conditions.map(condition => {
         let answerPort = getConditionPort(diagramNodes, condition.first_conditionable_id);
         let link = linkNode(answerPort, diagramNode, condition);
         model.addLink(link);
       });
 
       //  Exclusion link
-      if (diagramNode.dbInstance.node.final_diagnostic_id !== null) {
+      if (diagramNode.options.dbInstance.node.final_diagnostic_id !== null) {
         let excludedFinalDiagnostic = _.find(diagramNodes, (node) => {
-          return node.options.dbInstance.node_id === diagramNode.dbInstance.node.final_diagnostic_id;
+          return node.options.dbInstance.node_id === diagramNode.options.dbInstance.node.final_diagnostic_id;
         });
         let link = linkFinalDiagnosticExclusion(diagramNode, excludedFinalDiagnostic);
         model.addLink(link);

@@ -85,9 +85,9 @@ export const linkNode = (answerPort, diagramNode, condition) => {
   }
 
   // Add value in link
-  link.score = condition.score;
-  link.dbConditionId = condition.id;
-  link.parentInstanceId = link.sourcePort.parent.options.dbInstance.id;
+  link.options.score = condition.score;
+  link.options.dbConditionId = condition.id;
+  link.options.parentInstanceId = link.sourcePort.parent.options.dbInstance.id;
 
   return link;
 };

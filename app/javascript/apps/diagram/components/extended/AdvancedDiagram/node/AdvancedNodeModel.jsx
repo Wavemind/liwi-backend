@@ -12,29 +12,23 @@ export default class AdvancedNodeModel extends NodeModel {
     super({ ...options });
 
     this.options.type = "advanced";
-
-    this.dbInstance = options.dbInstance || {};
-    this.addAvailableNode = options.addAvailableNode || {};
-    this.engine = options.engine || {};
-    this.locked = options.locked;
-    this.diagramType = options.diagramType;
     this.http = new Http();
 
-    if (this.diagramType !=='scored' || (this.dbInstance.instanceable_id === this.dbInstance.node_id)) {
+    if (this.options.diagramType !=='scored' || (this.options.dbInstance.instanceable_id === this.options.dbInstance.node_id)) {
       // inPort
       this.addPort(
         new AdvancedPortModel({
           locked: true,
           in: true,
           name: "in",
-          id: this.dbInstance.id
+          id: this.options.dbInstance.id
         })
       );
     }
 
 
     // Set Position
-    this.setPosition(this.dbInstance.position_x, this.dbInstance.position_y);
+    this.setPosition(this.options.dbInstance.position_x, this.options.dbInstance.position_y);
 
     // Set event listener
     this.registerListener({
@@ -63,11 +57,11 @@ export default class AdvancedNodeModel extends NodeModel {
    * @params [Object] event
    */
   setInstancePosition = async (event) => {
-    let httpRequest = await this.http.setInstancePosition(this.dbInstance.id, event.entity.position.x, event.entity.position.y);
+    let httpRequest = await this.http.setInstancePosition(this.options.dbInstance.id, event.entity.position.x, event.entity.position.y);
     let result = await httpRequest.json();
 
     if (httpRequest.status !== 200) {
-      this.triggerEvent = false;
+      this.options.triggerEvent = false;
       this.remove();
       NotificationManager.error(result);
     }
@@ -77,11 +71,11 @@ export default class AdvancedNodeModel extends NodeModel {
    * Remove instance in database
    */
   removeInstance = async () => {
-    let httpRequest = await this.http.removeInstance(this.dbInstance.id);
+    let httpRequest = await this.http.removeInstance(this.options.dbInstance.id);
     let result = await httpRequest.json();
 
     if (httpRequest.status === 200) {
-      this.addAvailableNode(this.dbInstance.node);
+      this.options.addAvailableNode(this.options.dbInstance.node);
     } else {
       this.triggerEvent = false;
       this.remove();
