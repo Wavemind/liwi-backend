@@ -31,7 +31,7 @@ export default class AdvancedLinkModel extends DefaultLinkModel {
           switch (event.function) {
             case "targetPortChanged":
               // Trigger only on user action
-              if (event.entity.options.selected) {
+              if (event.entity.options.selected !== undefined) {
                 this.createLink();
               }
               break;

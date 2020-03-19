@@ -9,16 +9,20 @@ import ScoreForm from "../form/ScoreForm";
 
 export default class AdvancedModal extends React.Component {
 
+  /**
+   * Close modal by redux and remove diagramObject if we're un score and create method
+   */
   closeModal = () => {
     const {
       state: {
         modal: {
+          content,
           params
         }
       }
     } = this.props;
 
-    if (params.content === 'ScoreForm' && params.method === 'create') {
+    if (content === 'ScoreForm' && params.method === 'create') {
       params.diagramObject.remove();
     }
 
@@ -29,6 +33,9 @@ export default class AdvancedModal extends React.Component {
     );
   };
 
+  /**
+   * Display content defined by content parameters of props
+   */
   getContent = () => {
     const {
       state: {
