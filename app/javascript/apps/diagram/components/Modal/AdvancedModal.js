@@ -4,7 +4,7 @@ import { Modal } from "react-bootstrap";
 import store from "../../engine/reducers/store";
 import { closeModal } from "../../engine/reducers/creators.actions";
 
-import ScoreForm from "../form/ScoreForm";
+import ScoreForm from "../../../form/ScoreForm";
 
 
 export default class AdvancedModal extends React.Component {

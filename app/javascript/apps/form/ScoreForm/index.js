@@ -1,12 +1,13 @@
 import * as React from "react";
 import I18n from "i18n-js";
-import { Form, Button, Alert } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import { Formik } from "formik";
 
-import { updateScoreSchema } from "../../engine/constants/form";
-import { closeModal } from "../../engine/reducers/creators.actions";
-import Http from "../../engine/http";
-import store from "../../engine/reducers/store";
+import { scoreSchema } from "../schema";
+import { closeModal } from "../../diagram/engine/reducers/creators.actions";
+import Http from "../../diagram/engine/http";
+import store from "../../diagram/engine/reducers/store";
+import DisplayErrors from "../DisplayErrors";
 
 
 export default class ScoreForm extends React.Component {
@@ -49,7 +50,7 @@ export default class ScoreForm extends React.Component {
 
     return (
       <Formik
-        validationSchema={updateScoreSchema}
+        validationSchema={scoreSchema}
         initialValues={{ score: score }}
         onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
       >
@@ -62,13 +63,7 @@ export default class ScoreForm extends React.Component {
             status
           }) => (
           <Form noValidate onSubmit={handleSubmit}>
-            {status ?
-              <Alert variant="danger">
-                <ul>
-                  {Object.keys(status).map(index => (<li>{status[index]}</li>))}
-                </ul>
-              </Alert>
-              : null}
+            {status ? <DisplayErrors errors={status}/> : null}
             <Form.Group controlId="validationFormik01">
               <Form.Label>{I18n.t("activerecord.attributes.condition.score")}</Form.Label>
               <Form.Control
@@ -82,6 +77,7 @@ export default class ScoreForm extends React.Component {
                 {errors.score}
               </Form.Control.Feedback>
             </Form.Group>
+
             <Button type="submit" disabled={isSubmitting}>
               {I18n.t("save")}
             </Button>

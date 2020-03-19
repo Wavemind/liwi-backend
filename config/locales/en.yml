@@ -1,6 +1,13 @@
 en:
   activerecord:
     attributes:
+      condition:
+        score: "Score"
+      diagnostic:
+        node: "Complaint category"
+      final_diagnostic:
+        label_translations: "Label"
+        description_translations: "Description"
       node:
         type: "Category"
         unavailable: "Can be unavailable ?"
@@ -10,10 +17,6 @@ en:
         doses_per_day: "Number of doses per day"
         treatment_type: "Medication form"
         pill_size: "Pill minimal size (mg)"
-      diagnostic:
-        node: "Complaint category"
-      condition:
-        score: "Score"
   activated: "Activate"
   add: "Add"
   algorithms:

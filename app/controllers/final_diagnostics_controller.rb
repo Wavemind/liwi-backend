@@ -85,16 +85,16 @@ class FinalDiagnosticsController < ApplicationController
   # POST
   # @return final_diagnostic node
   # Create a final diagnostic node from diagram
-  def create_from_diagram
-    final_diagnostic = @diagnostic.final_diagnostics.new(final_diagnostic_params)
-
-    if final_diagnostic.save
-      @diagnostic.components.create!(node: final_diagnostic)
-      render json: {status: 'success', messages: [t('flash_message.success_created')], node: final_diagnostic.as_json(methods: :node_type)}
-    else
-      render json: {status: 'danger', errors: final_diagnostic.errors.messages, ok: false}
-    end
-  end
+  # def create_from_diagram
+  #   final_diagnostic = @diagnostic.final_diagnostics.new(final_diagnostic_params)
+  #
+  #   if final_diagnostic.save
+  #     @diagnostic.components.create!(node: final_diagnostic)
+  #     render json: {status: 'success', messages: [t('flash_message.success_created')], node: final_diagnostic.as_json(methods: :node_type)}
+  #   else
+  #     render json: {status: 'danger', errors: final_diagnostic.errors.messages, ok: false}
+  #   end
+  # end
 
   # Generate react diagram
   def diagram
