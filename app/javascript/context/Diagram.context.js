@@ -41,14 +41,15 @@ export default class DiagramProvider extends React.Component {
       comorbidity: [],
       triage: [],
       chronicCondition: [],
+      consultationRelated: [],
     };
 
     if (type === "Diagnostic") {
       orderedNodes.scored = [];
       orderedNodes.finalDiagnostic = [];
     } else if (type === "FinalDiagnostic") {
-      orderedNodes.treatmentQuestion = [];
       orderedNodes.scored = [];
+      orderedNodes.treatmentQuestion = [];
       orderedNodes.drug = [];
       orderedNodes.management = [];
     } else if (type === "QuestionsSequence") {
