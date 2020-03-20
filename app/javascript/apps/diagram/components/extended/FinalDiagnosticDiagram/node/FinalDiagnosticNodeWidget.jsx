@@ -18,7 +18,6 @@ class FinalDiagnosticNodeWidget extends React.Component {
    * Open final diagnostic diagram
    */
   openDiagram() {
-    console.log(this.props);
     const { node, http } = this.props;
     http.showFinalDiagnosticDiagram(node.options.dbInstance.node.id);
   }

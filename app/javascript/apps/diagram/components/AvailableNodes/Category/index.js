@@ -5,10 +5,10 @@ import Item from "../Item";
 export default class Category extends React.Component {
 
   shouldComponentUpdate(nextProps) {
-    return this.props.nodes.length !== nextProps.nodes.length
+    return this.props.nodes.length !== nextProps.nodes.length;
   }
 
-  render = () => {
+  render() {
     const { nodes, index } = this.props;
 
     return (

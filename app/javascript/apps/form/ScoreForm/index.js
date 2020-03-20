@@ -32,7 +32,7 @@ export default class ScoreForm extends React.Component {
       if (method === "create") {
         diagramObject.addLabel(values.score);
       } else {
-        diagramObject.getLabel().setLabel(values.score)
+        diagramObject.getLabel().setLabel(values.score);
       }
 
       engine.repaintCanvas();

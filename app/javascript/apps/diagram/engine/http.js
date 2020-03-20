@@ -106,7 +106,7 @@ export default class Http {
         id: instanceId,
         answer_id: answerId,
         final_diagnostic_id: this.finalDiagnostic,
-        score: score
+        score
       }
     };
     const header = await this.setHeaders("POST", body);
@@ -243,7 +243,7 @@ export default class Http {
     const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/${id}/remove_link`;
     const body = {
       instance: {
-        id: id,
+        id,
         condition_id: conditionId,
         final_diagnostic_id: this.finalDiagnostic
       }
@@ -305,7 +305,7 @@ export default class Http {
    */
   setHeaders = async (method = "GET", body = false) => {
     let header = {
-      method: method,
+      method,
       headers: {}
     };
     if (method === "POST" || method === "PATCH" || method === "PUT" || method === "DELETE") {
@@ -343,7 +343,7 @@ export default class Http {
     const body = {
       instance: {
         condition_id: conditionId,
-        score: score
+        score
       }
     };
     const header = await this.setHeaders("PUT", body);
@@ -378,7 +378,7 @@ export default class Http {
       final_diagnostic_id: this.finalDiagnostic
     };
     body["health_cares_" + type.substring(0, type.length - 1)] = {
-      id: id,
+      id,
       label_en: label,
       description_en: description
     };
@@ -443,7 +443,7 @@ export default class Http {
     const url = `${this.url}/algorithms/${this.algorithm}/questions_sequences/${id}/update_from_diagram`;
     const body = {
       questions_sequence: {
-        id: id,
+        id,
         label_en: label,
         description_en: description,
         min_score: minScore

@@ -1,5 +1,6 @@
 // External import
 import * as React from "react";
+import * as _ from "lodash";
 import createEngine, { DiagramModel } from "@projectstorm/react-diagrams";
 import { NotificationContainer, NotificationManager } from "react-notifications";
 
@@ -26,14 +27,15 @@ import HealthCareNodeFactory from "../extended/HealthCareDiagram/node/HealthCare
 import QuestionsSequenceLinkFactory from "../extended/QuestionsSequenceDiagram/link/QuestionsSequenceLinkFactory";
 import QuestionsSequenceNodeFactory from "../extended/QuestionsSequenceDiagram/node/QuestionsSequenceNodeFactory";
 
-import QuestionsSequenceScoreLabelFactory from "../extended/QuestionsSequenceScoreDiagram/label/QuestionsSequenceScoreLabelFactory";
+import QuestionsSequenceScoreLabelFactory
+  from "../extended/QuestionsSequenceScoreDiagram/label/QuestionsSequenceScoreLabelFactory";
 
 export class Diagram extends React.Component {
 
   constructor(props) {
     super(props);
 
-    const engine = createEngine({registerDefaultDeleteItemsAction: false});
+    const engine = createEngine({ registerDefaultDeleteItemsAction: false });
     const model = new DiagramModel();
 
     // Override deleteKeys to control remove of node
@@ -58,8 +60,8 @@ export class Diagram extends React.Component {
     engine.getLabelFactories().registerFactory(new QuestionsSequenceScoreLabelFactory());
 
     this.state = {
-      engine: engine,
-      model: model
+      engine,
+      model
     };
 
     this.initDiagram();
@@ -68,7 +70,7 @@ export class Diagram extends React.Component {
   /**
    * Generate node + link based on database info and set it in diagram model
    */
-  initDiagram = () => {
+  initDiagram() {
     const { engine, model } = this.state;
     const { instances, addAvailableNode, readOnly, instanceable } = this.props;
 
@@ -138,7 +140,7 @@ export class Diagram extends React.Component {
     }
   };
 
-  render = () => {
+  render() {
     const { readOnly } = this.props;
     const { engine } = this.state;
 

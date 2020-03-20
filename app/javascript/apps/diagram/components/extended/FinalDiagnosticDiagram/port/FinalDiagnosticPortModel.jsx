@@ -6,9 +6,9 @@ import FinalDiagnosticLinkModel from "../link/FinalDiagnosticLinkModel";
 export default class FinalDiagnosticPortModel extends AdvancedPortModel {
   constructor(options = {}) {
     super({
-      ...options,
+      ...options
     });
-    this.options.type = 'finalDiagnostic';
+    this.options.type = "finalDiagnostic";
   }
 
   createLinkModel() {
@@ -16,10 +16,12 @@ export default class FinalDiagnosticPortModel extends AdvancedPortModel {
   }
 
   canLinkToPort(port) {
-    let valueReturned = port.options.type !== 'advanced' && this.options.id !== port.options.id && this.linkIsAvailable(port);
+    let valueReturned = port.options.type !== "advanced" && this.options.id !== port.options.id && this.linkIsAvailable(port);
 
     if (!valueReturned) {
-      _.find(this.getLinks(), (link) => {return link.targetPort === null}).remove();
+      _.find(this.getLinks(), link => {
+        return link.targetPort === null;
+      }).remove();
     }
 
     return valueReturned;

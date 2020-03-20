@@ -26,10 +26,10 @@ export const createNode = (instance, addAvailableNode, readOnly, diagramType, en
 
   let params = {
     dbInstance: instance,
-    addAvailableNode: addAvailableNode,
+    addAvailableNode,
     locked: readOnly,
-    diagramType: diagramType,
-    engine: engine,
+    diagramType,
+    engine,
   };
 
   switch (instance.node.node_type) {

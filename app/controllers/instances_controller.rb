@@ -96,7 +96,7 @@ class InstancesController < ApplicationController
   # Update an instances and return json format
   def update
     if @instance.update(instance_params)
-     render json: @instance
+      render json: @instance
     else
       render json: @instance.errors.full_messages, status: 422
     end

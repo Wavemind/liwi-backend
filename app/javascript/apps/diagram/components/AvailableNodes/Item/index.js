@@ -3,7 +3,7 @@ import { withDiagram } from "../../../engine/context/Diagram.context";
 
 class Item extends React.Component {
 
-  render = () => {
+  render() {
     const { node, getReferencePrefix } = this.props;
 
     return (

@@ -23,7 +23,7 @@ export default class AdvancedModal extends React.Component {
       }
     } = this.props;
 
-    if (content === 'ScoreForm' && params.method === 'create') {
+    if (content === "ScoreForm" && params.method === "create") {
       params.diagramObject.remove();
     }
 
@@ -63,13 +63,13 @@ export default class AdvancedModal extends React.Component {
       state: {
         modal: {
           open,
-          title,
+          title
         }
       }
     } = this.props;
 
     if (!open) {
-      return null
+      return null;
     }
 
     return (
