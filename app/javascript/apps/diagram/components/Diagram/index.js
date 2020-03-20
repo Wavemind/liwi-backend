@@ -65,6 +65,9 @@ export class Diagram extends React.Component {
     this.initDiagram();
   }
 
+  /**
+   * Generate node + link based on database info and set it in diagram model
+   */
   initDiagram = () => {
     const { engine, model } = this.state;
     const { instances, addAvailableNode, readOnly, instanceable } = this.props;
@@ -106,7 +109,10 @@ export class Diagram extends React.Component {
     engine.setModel(model);
   };
 
-  // Create instance and init it in diagram when drop
+  /**
+   * Create instance and init it in diagram when drop
+   * @params [Object] event
+   */
   onDropAction = async (event) => {
     const { http, addAvailableNode, removeAvailableNode, readOnly, instanceable } = this.props;
     const { engine } = this.state;
