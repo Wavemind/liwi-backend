@@ -31,7 +31,7 @@ class Item extends React.Component {
         </div>
       </div>
     );
-  };
+  }
 }
 
 export default withDiagram(Item);

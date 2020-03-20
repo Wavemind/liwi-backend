@@ -144,7 +144,7 @@ export default class Http {
       questions_sequence: {
         label_en: label,
         description_en: description,
-        type: type,
+        type,
         min_score: minScore
       },
       instanceable_id: this.instanceableId,

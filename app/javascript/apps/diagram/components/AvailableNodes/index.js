@@ -23,7 +23,7 @@ class AvailableNodes extends React.Component {
         </div>
       </div>
     );
-  };
+  }
 }
 
 export default withDiagram(AvailableNodes);

@@ -148,7 +148,6 @@ export default class DiagramProvider extends React.Component {
   }
 }
 
-// TODO: store in variable
 export const withDiagram = (Component) => (props) => (
   <DiagramContext.Consumer>
     {(store) => <Component {...store} {...props} />}

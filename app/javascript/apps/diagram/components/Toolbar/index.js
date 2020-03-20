@@ -52,7 +52,7 @@ class Toolbar extends React.Component {
       let panel = instanceable.category_name === "scored" ? "questions_sequences_scored" : "questions_sequences";
       http.redirectToAlgorithm(panel);
     }
-  };
+  }
 
   /**
    * Validate current diagram

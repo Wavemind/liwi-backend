@@ -39,5 +39,5 @@ export default class Category extends React.Component {
         </div>
       </div>
     );
-  };
+  }
 }

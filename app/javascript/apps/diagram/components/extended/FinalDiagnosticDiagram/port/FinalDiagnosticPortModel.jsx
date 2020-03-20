@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as _ from "lodash";
 
 import AdvancedPortModel from "../../AdvancedDiagram/port/AdvancedPortModel";
 import FinalDiagnosticLinkModel from "../link/FinalDiagnosticLinkModel";

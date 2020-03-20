@@ -1,5 +1,5 @@
 import * as React from "react";
-import * as _ from "lodash"
+import * as _ from "lodash";
 import { DefaultPortModel } from "@projectstorm/react-diagrams";
 import I18n from 'i18n-js';
 
