@@ -252,23 +252,23 @@ export default class Http {
     return await fetch(url, header).catch(error => console.log(error));
   };
 
-  // @params [String] panel
-  // @return [Object] body of request
-  // Redirect to algorithm panel
+  /**
+   * Redirect to algorithm panel
+   */
   redirectToAlgorithm = async (panel) => {
     window.location = `${this.url}/algorithms/${this.algorithm}?panel=${panel}`;
   };
 
-  // @params [Integer] dfId
-  // @return [Object] body of request
-  // Redirect to diagnostic
+  /**
+   * Redirect to diagnostic
+   */
   redirectToDiagnostic = async () => {
     window.location = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}`;
   };
 
-  // @params [Integer] dfId
-  // @return [Object] body of request
-  // Redirect to diagnostic diagram
+  /**
+   * Redirect to diagnostic diagram
+   */
   redirectToDiagnosticDiagram = async () => {
     window.location = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/diagram`;
   };
@@ -297,9 +297,12 @@ export default class Http {
     return await response;
   };
 
-  // @params [String] method, [Object] body
-  // @return [Object] header
-  // Set header credentials to communicate with server
+  /**
+   * Set header credentials to communicate with server
+   * @params [String] method
+   * @params [Object] body
+   * @return [Object] header
+   */
   setHeaders = async (method = "GET", body = false) => {
     let header = {
       method: method,
@@ -314,9 +317,10 @@ export default class Http {
     return header;
   };
 
-  // @params [Integer] dfId
-  // @return [Object] body of request
-  // Redirect to final diagnostic diagram
+  /**
+   * Redirect to final diagnostic diagram
+   * @params [Integer] dfId
+   */
   showFinalDiagnosticDiagram = async (dfId) => {
     window.location = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/${dfId}/diagram`;
   };

@@ -16,6 +16,11 @@ class Toolbar extends React.Component {
     };
   }
 
+  /**
+   * open modal to create a node
+   * @params [String] title
+   * @params [String] content
+   */
   createNode(title, content) {
     const { engine, addAvailableNode } = this.props;
     store.dispatch(
@@ -28,6 +33,30 @@ class Toolbar extends React.Component {
     );
   }
 
+  /**
+   * Redirect to diagnostic diagram
+   */
+  redirectToDiagnosticDiagram() {
+    const { http } = this.props;
+    http.redirectToDiagnosticDiagram();
+  }
+
+  /**
+   * Close and redirect user to list of...
+   */
+  save() {
+    const { http, instanceable } = this.props;
+    if (instanceable.type === "Diagnostic") {
+      http.redirectToDiagnostic();
+    } else {
+      let panel = instanceable.category_name === "scored" ? "questions_sequences_scored" : "questions_sequences";
+      http.redirectToAlgorithm(panel);
+    }
+  };
+
+  /**
+   * Validate current diagram
+   */
   validate = async () => {
     const { instanceable, http } = this.props;
     let httpRequest = {};
@@ -67,10 +96,11 @@ class Toolbar extends React.Component {
                 <a className="dropdown-item" key="questions" href="#">{I18n.t("toolbar.question")}</a>
                 <a className="dropdown-item" key="questionsSequence" href="#">{I18n.t("toolbar.questions_sequence")}</a>
                 {instanceable.type === "Diagnostic" ? (
-                  <a className="dropdown-item" key="finalDiagnostic" href="#" onClick={() => this.createNode(I18n.t("final_diagnostics.new.title"), "FinalDiagnosticForm")}>{I18n.t("toolbar.final_diagnostic")}</a>) : null}
+                  <a className="dropdown-item" key="finalDiagnostic" href="#"
+                     onClick={() => this.createNode(I18n.t("final_diagnostics.new.title"), "FinalDiagnosticForm")}>{I18n.t("toolbar.final_diagnostic")}</a>) : null}
                 {instanceable.type === "FinalDiagnostic" ? ([
-                  <a className="dropdown-item" key="treatment" href="#">{I18n.t("toolbar.treatment")}</a>,
-                  <a className="dropdown-item" key="management" href="#">{I18n.t("toolbar.management")}</a>])
+                    <a className="dropdown-item" key="treatment" href="#">{I18n.t("toolbar.treatment")}</a>,
+                    <a className="dropdown-item" key="management" href="#">{I18n.t("toolbar.management")}</a>])
                   : null}
               </div>
             </div>
@@ -84,11 +114,12 @@ class Toolbar extends React.Component {
               </button>
             ) : null}
             {instanceable.type === "FinalDiagnostic" ? (
-              <button key="diagnosticDiagram" type="button" className="btn btn-transparent">
+              <button key="diagnosticDiagram" type="button" className="btn btn-transparent"
+                      onClick={() => this.redirectToDiagnosticDiagram()}>
                 {I18n.t("toolbar.diagnostic_diagram")}
               </button>
             ) : (
-              <button key="save" type="button" className="btn btn-transparent">
+              <button key="save" type="button" className="btn btn-transparent" onClick={() => this.save()}>
                 {I18n.t("toolbar.save")}
               </button>
             )}

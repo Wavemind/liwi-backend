@@ -14,6 +14,18 @@ class FinalDiagnosticNodeWidget extends React.Component {
     this.state = {};
   }
 
+  /**
+   * Open final diagnostic diagram
+   */
+  openDiagram() {
+    console.log(this.props);
+    const { node, http } = this.props;
+    http.showFinalDiagnosticDiagram(node.options.dbInstance.node.id);
+  }
+
+  /**
+   * Open modal to edit final diagnostic
+   */
   editFinalDiagnostic() {
     const { node } = this.props;
     node.options.selected = false;
@@ -24,7 +36,7 @@ class FinalDiagnosticNodeWidget extends React.Component {
         diagramObject: node,
         engine: node.options.engine,
         method: "update",
-        from: "react",
+        from: "react"
       })
     );
   }
@@ -49,6 +61,7 @@ class FinalDiagnosticNodeWidget extends React.Component {
                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               </button>
               <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a className="dropdown-item" href="#" onClick={() => this.openDiagram()}>Open diagram</a>
                 <a className="dropdown-item" href="#" onClick={() => this.editFinalDiagnostic()}>Edit</a>
               </div>
             </div>
