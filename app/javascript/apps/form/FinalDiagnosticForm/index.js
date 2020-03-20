@@ -8,11 +8,12 @@ import DisplayErrors from "../DisplayErrors";
 import Http from "../../diagram/engine/http";
 import store from "../../diagram/engine/reducers/store";
 import { closeModal } from "../../diagram/engine/reducers/creators.actions";
+import { createNode } from "../../diagram/helpers/nodeHelpers";
 
 export default class FinalDiagnosticForm extends React.Component {
 
   handleOnSubmit = async (values, actions) => {
-    const { method, from, engine, diagramObject } = this.props;
+    const { method, from, engine, diagramObject, addAvailableNode } = this.props;
     let http = new Http();
     let httpRequest = {};
 
@@ -28,10 +29,20 @@ export default class FinalDiagnosticForm extends React.Component {
       if (from === 'rails') {
         window.location.replace(result.url);
       } else {
-        diagramObject.options.dbInstance.node = result.finalDiagnostic;
+        if (method === "create") {
 
-        console.log(engine);
-        engine.repaintCanvas()
+          console.log(result)
+
+          let diagramInstance = createNode(result, addAvailableNode, false, "Diagnostic", engine);
+
+          // Display node in diagram
+          engine.getModel().addNode(diagramInstance);
+        } else {
+          diagramObject.options.dbInstance.node = result;
+        }
+
+
+        engine.repaintCanvas();
 
         store.dispatch(
           closeModal()
@@ -49,9 +60,9 @@ export default class FinalDiagnosticForm extends React.Component {
       <Formik
         validationSchema={finalDiagnosticSchema}
         initialValues={{
-          id: finalDiagnostic.id || "",
-          label_translations: finalDiagnostic.label_translations?.en || "",
-          description_translations: finalDiagnostic.description_translations?.en || ""
+          id: finalDiagnostic?.id || "",
+          label_translations: finalDiagnostic?.label_translations?.en || "",
+          description_translations: finalDiagnostic?.description_translations?.en || ""
         }}
         onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
       >

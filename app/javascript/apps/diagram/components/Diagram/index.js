@@ -143,7 +143,7 @@ export class Diagram extends React.Component {
       <div className="content">
         <div className="row">
           {!readOnly ? ([
-            <Toolbar/>,
+            <Toolbar engine={engine}/>,
             <AvailableNodes/>,
             <NotificationContainer/>
           ]) : null}

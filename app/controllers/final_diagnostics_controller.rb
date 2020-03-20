@@ -36,7 +36,7 @@ class FinalDiagnosticsController < ApplicationController
       if params[:from] == 'rails'
         render json: { url: algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'final_diagnostics'), finalDiagnostic: @final_diagnostic }
       else
-        render json: { url: false, finalDiagnostic: @final_diagnostic }
+        render json: @final_diagnostic.get_instance_json
       end
     else
       render json: @final_diagnostic.errors.full_messages, status: 422
@@ -48,7 +48,7 @@ class FinalDiagnosticsController < ApplicationController
       if params[:from] == 'rails'
         render json: { url: algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'final_diagnostics'), finalDiagnostic: @final_diagnostic }
       else
-        render json: { url: false, finalDiagnostic: @final_diagnostic }
+        render json: @final_diagnostic.as_json(methods: [:node_type])
       end
     else
       render json: @final_diagnostic.errors.full_messages, status: 422

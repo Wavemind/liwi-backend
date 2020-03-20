@@ -1,11 +1,26 @@
 import React from "react";
+import I18n from "i18n-js";
+import store from "../../engine/reducers/store";
 import { withDiagram } from "../../engine/context/Diagram.context";
+import { openModal } from "../../engine/reducers/creators.actions";
 
 
 class Toolbar extends React.Component {
 
   constructor(props) {
     super(props);
+  }
+
+  createNode(title, content) {
+    const {engine, addAvailableNode} = this.props;
+    store.dispatch(
+      openModal(title, content, {
+        engine,
+        addAvailableNode,
+        method: "create",
+        from: "react",
+      })
+    );
   }
 
   render() {
@@ -23,7 +38,7 @@ class Toolbar extends React.Component {
               <div className="dropdown-menu">
                 <a className="dropdown-item" href="#">Question</a>
                 <a className="dropdown-item" href="#">Questions Sequence</a>
-                {instanceable.type === "Diagnostic" ? (<a className="dropdown-item" href="#" >Final diagnostic</a>) : null}
+                {instanceable.type === "Diagnostic" ? (<a className="dropdown-item" href="#" onClick={() => this.createNode(I18n.t("final_diagnostics.new.title"), 'FinalDiagnosticForm')}>Final diagnostic</a>) : null}
                 {instanceable.type === "FinalDiagnostic" ? (<a className="dropdown-item" href="#">Treatment</a>) : null}
                 {instanceable.type === "FinalDiagnostic" ? (<a className="dropdown-item" href="#">Management</a>) : null}
               </div>
