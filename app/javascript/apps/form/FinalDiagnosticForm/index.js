@@ -30,17 +30,11 @@ export default class FinalDiagnosticForm extends React.Component {
         window.location.replace(result.url);
       } else {
         if (method === "create") {
-
-          console.log(result)
-
           let diagramInstance = createNode(result, addAvailableNode, false, "Diagnostic", engine);
-
-          // Display node in diagram
           engine.getModel().addNode(diagramInstance);
         } else {
           diagramObject.options.dbInstance.node = result;
         }
-
 
         engine.repaintCanvas();
 
