@@ -514,6 +514,16 @@ en:
     treatment_types:
       liquid: "Liquid"
       pill: "Pill"
+  toolbar:
+    new: "New"
+    question: "Question"
+    questions_sequence: "Questions sequence"
+    final_diagnostic: "Final diagnostic"
+    treatment: "Treatment"
+    management: "Management"
+    validate: "Validate"
+    diagnostic_diagram: "Diagnostic diagram"
+    save: "Save"
   unarchive: "Unarchive"
   users:
     new:
