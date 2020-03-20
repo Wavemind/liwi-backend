@@ -64,7 +64,7 @@ export default class ScoreForm extends React.Component {
           }) => (
           <Form noValidate onSubmit={handleSubmit}>
             {status ? <DisplayErrors errors={status}/> : null}
-            <Form.Group controlId="validationFormik01">
+            <Form.Group controlId="validationScore">
               <Form.Label>{I18n.t("activerecord.attributes.condition.score")}</Form.Label>
               <Form.Control
                 type="number"

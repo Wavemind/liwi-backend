@@ -22,7 +22,7 @@ export default class Http {
     this.token = document.querySelector("meta[name='csrf-token']").content;
   }
 
-    /**
+  /**
    * Create a final diagnostic
    * @params [String] label_en
    * @params [String] description_en
@@ -37,7 +37,7 @@ export default class Http {
         description_en,
         diagnostic_id: this.instanceableId
       },
-      from,
+      from
     };
     const header = await this.setHeaders("POST", body);
     return await fetch(url, header).catch(error => console.log(error));
@@ -107,7 +107,7 @@ export default class Http {
         answer_id: answerId,
         final_diagnostic_id: this.finalDiagnostic,
         score: score
-      },
+      }
     };
     const header = await this.setHeaders("POST", body);
     return await fetch(url, header).catch(error => console.log(error));
@@ -339,8 +339,8 @@ export default class Http {
     const body = {
       instance: {
         condition_id: conditionId,
-        score: score,
-      },
+        score: score
+      }
     };
     const header = await this.setHeaders("PUT", body);
     return await fetch(url, header).catch(error => console.log(error));
@@ -357,7 +357,7 @@ export default class Http {
         label_en,
         description_en
       },
-      from,
+      from
     };
     const header = await this.setHeaders("PUT", body);
     return await fetch(url, header).catch(error => console.log(error));
@@ -457,22 +457,14 @@ export default class Http {
     return await response;
   };
 
-  // @return [Object] flash message
-  // Validate diagnostic
+  /**
+   * Validate diagnostic
+   * @return [Object] body of request
+   */
   validateDiagnostic = async () => {
-    let response;
     const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/validate`;
-    const body = null;
-    const header = await this.setHeaders("GET", body);
-    const request = await fetch(url, header).catch(error => console.log(error));
-
-    // Display error or parse json
-    if (request.ok) {
-      response = await request.json();
-    } else {
-      response = request;
-    }
-    return await response;
+    const header = await this.setHeaders("GET", null);
+    return await fetch(url, header).catch(error => console.log(error));
   };
 
   // @params [Hash] body of the question
@@ -496,22 +488,14 @@ export default class Http {
     return await response;
   };
 
-  // @return [Object] flash message
-  // Validate predefined syndrome scored
+  /**
+   * Validate a question sequence
+   * @return [Object] body of request
+   */
   validateQuestionsSequence = async () => {
-    let response;
     const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/validate`;
-    const body = null;
-    const header = await this.setHeaders("GET", body);
-    const request = await fetch(url, header).catch(error => console.log(error));
-
-    // Display error or parse json
-    if (request.ok) {
-      response = await request.json();
-    } else {
-      response = request;
-    }
-    return await response;
+    const header = await this.setHeaders("GET", null);
+    return await fetch(url, header).catch(error => console.log(error));
   };
 
 }

@@ -3,28 +3,56 @@ import I18n from "i18n-js";
 import store from "../../engine/reducers/store";
 import { withDiagram } from "../../engine/context/Diagram.context";
 import { openModal } from "../../engine/reducers/creators.actions";
+import { NotificationManager } from "react-notifications";
 
 
 class Toolbar extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      isLoading: false
+    };
   }
 
   createNode(title, content) {
-    const {engine, addAvailableNode} = this.props;
+    const { engine, addAvailableNode } = this.props;
     store.dispatch(
       openModal(title, content, {
         engine,
         addAvailableNode,
         method: "create",
-        from: "react",
+        from: "react"
       })
     );
   }
 
+  validate = async () => {
+    const { instanceable, http } = this.props;
+    let httpRequest = {};
+    this.setState({ isLoading: true });
+
+    if (instanceable.type === "Diagnostic") {
+      httpRequest = await http.validateDiagnostic();
+    } else {
+      httpRequest = await http.validateQuestionsSequence();
+    }
+
+    let result = await httpRequest.json();
+
+    if (httpRequest.status === 200) {
+      NotificationManager.info(result);
+    } else {
+      NotificationManager.error(result);
+    }
+
+    this.setState({ isLoading: false });
+  };
+
   render() {
     const { instanceable } = this.props;
+    const { isLoading } = this.state;
 
     return (
       <div className="col-md-12 liwi-toolbar">
@@ -38,18 +66,22 @@ class Toolbar extends React.Component {
               <div className="dropdown-menu">
                 <a className="dropdown-item" key="questions" href="#">{I18n.t("toolbar.question")}</a>
                 <a className="dropdown-item" key="questionsSequence" href="#">{I18n.t("toolbar.questions_sequence")}</a>
-                {instanceable.type === "Diagnostic" ? (<a className="dropdown-item" key="finalDiagnostic" href="#" onClick={() => this.createNode(I18n.t("final_diagnostics.new.title"), 'FinalDiagnosticForm')}>{I18n.t("toolbar.final_diagnostic")}</a>) : null}
-                {instanceable.type === "FinalDiagnostic" ? (<a className="dropdown-item" key="treatment" href="#">{I18n.t("toolbar.treatment")}</a>) : null}
-                {instanceable.type === "FinalDiagnostic" ? (<a className="dropdown-item" key="management" href="#">{I18n.t("toolbar.management")}</a>) : null}
+                {instanceable.type === "Diagnostic" ? (
+                  <a className="dropdown-item" key="finalDiagnostic" href="#" onClick={() => this.createNode(I18n.t("final_diagnostics.new.title"), "FinalDiagnosticForm")}>{I18n.t("toolbar.final_diagnostic")}</a>) : null}
+                {instanceable.type === "FinalDiagnostic" ? ([
+                  <a className="dropdown-item" key="treatment" href="#">{I18n.t("toolbar.treatment")}</a>,
+                  <a className="dropdown-item" key="management" href="#">{I18n.t("toolbar.management")}</a>])
+                  : null}
               </div>
             </div>
           </div>
 
           <div className="col text-right">
             {instanceable.type === "Diagnostic" || instanceable.type === "QuestionsSequence" ? (
-                <button key="validate" type="button" className="btn btn-transparent">
-                  <span>{I18n.t("toolbar.validate")}</span>
-                </button>
+              <button key="validate" type="button" className="btn btn-transparent" disabled={isLoading}
+                      onClick={() => this.validate()}>
+                <span>{isLoading ? "Loading" : I18n.t("toolbar.validate")}</span>
+              </button>
             ) : null}
             {instanceable.type === "FinalDiagnostic" ? (
               <button key="diagnosticDiagram" type="button" className="btn btn-transparent">

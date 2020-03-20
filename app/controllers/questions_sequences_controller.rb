@@ -131,9 +131,9 @@ class QuestionsSequencesController < ApplicationController
   def validate
     @questions_sequence.manual_validate
     if @questions_sequence.errors.messages.any?
-      render json: {status: 'danger', messages: @questions_sequence.errors.messages[:basic]}
+      render json: @questions_sequence.errors.messages[:basic], status: 422
     else
-      render json: {status: 'success', messages: [t('flash_message.diagnostic.valid')]}
+      render json: [t('flash_message.diagnostic.valid')], status: 200
     end
   end
 

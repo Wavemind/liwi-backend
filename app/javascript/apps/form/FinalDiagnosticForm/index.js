@@ -3,10 +3,10 @@ import I18n from "i18n-js";
 import { Form, Button } from "react-bootstrap";
 import { Formik } from "formik";
 
-import { finalDiagnosticSchema } from "../schema";
 import DisplayErrors from "../DisplayErrors";
 import Http from "../../diagram/engine/http";
 import store from "../../diagram/engine/reducers/store";
+import { finalDiagnosticSchema } from "../schema";
 import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
 
