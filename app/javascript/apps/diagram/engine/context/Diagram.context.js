@@ -28,7 +28,7 @@ export default class DiagramProvider extends React.Component {
     } else if (instanceable.type === "FinalDiagnostic") {
       orderedNodes.treatmentQuestion = [];
       orderedNodes.scored = [];
-      orderedNodes.treatment = [];
+      orderedNodes.drug = [];
       orderedNodes.management = [];
     } else if (instanceable.type === "QuestionsSequence") {
       // If different predefined syndromes scored category

@@ -1,7 +1,6 @@
 export const defaultOrderedNodes = {
   assessmentTest: [],
   backgroundCalculation: [],
-  demographic: [],
   exposure: [],
   observedPhysicalSign: [],
   physicalExam: [],
@@ -10,5 +9,5 @@ export const defaultOrderedNodes = {
   predefinedSyndrome: [],
   comorbidity: [],
   triage: [],
-  chronicCondition: []
+  chronicCondition: [],
 };
