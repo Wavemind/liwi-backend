@@ -100,18 +100,6 @@ export default class QuestionsSequenceForm extends React.Component {
             }) => (
             <Form noValidate onSubmit={handleSubmit}>
               {status ? <DisplayErrors errors={status}/> : null}
-              <Form.Group controlId="validationLabel">
-                <Form.Label>{I18n.t("activerecord.attributes.questions_sequence.label_translations")}</Form.Label>
-                <Form.Control
-                  name="label_translations"
-                  value={values.label_translations}
-                  onChange={handleChange}
-                  isInvalid={!!errors.label_translations}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.label_translations}
-                </Form.Control.Feedback>
-              </Form.Group>
 
               <Form.Group controlId="validationType">
                 <Form.Label>{I18n.t("activerecord.attributes.questions_sequence.type")}</Form.Label>
@@ -129,6 +117,19 @@ export default class QuestionsSequenceForm extends React.Component {
                 </Form.Control>
                 <Form.Control.Feedback type="invalid">
                   {errors.type}
+                </Form.Control.Feedback>
+              </Form.Group>
+
+              <Form.Group controlId="validationLabel">
+                <Form.Label>{I18n.t("activerecord.attributes.questions_sequence.label_translations")}</Form.Label>
+                <Form.Control
+                  name="label_translations"
+                  value={values.label_translations}
+                  onChange={handleChange}
+                  isInvalid={!!errors.label_translations}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.label_translations}
                 </Form.Control.Feedback>
               </Form.Group>
 
