@@ -53,7 +53,7 @@ export default class AdvancedModal extends React.Component {
         return <ScoreForm {...params} />;
       case "FinalDiagnosticForm":
         return <FinalDiagnosticForm {...params} />;
-      case "QuestionsSequence":
+      case "QuestionsSequenceForm":
         return <QuestionsSequenceForm {...params} />;
       default:
         console.log("Action n'existe pas");

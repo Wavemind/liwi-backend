@@ -56,7 +56,7 @@ export default class QuestionsSequenceForm extends React.Component {
         window.location.replace(result.url);
       } else {
         if (method === "create") {
-          let diagramInstance = createNode(result, addAvailableNode, false, "Diagnostic", engine);
+          let diagramInstance = createNode(result, addAvailableNode, false, result.node.category_name, engine);
           engine.getModel().addNode(diagramInstance);
         } else {
           diagramObject.options.dbInstance.node = result;
@@ -74,7 +74,7 @@ export default class QuestionsSequenceForm extends React.Component {
   };
 
   render() {
-    const { questionsSequence } = this.props;
+    const { questionsSequence, method } = this.props;
     const { categories, isLoading } = this.state;
 
     return (
@@ -101,24 +101,26 @@ export default class QuestionsSequenceForm extends React.Component {
             <Form noValidate onSubmit={handleSubmit}>
               {status ? <DisplayErrors errors={status}/> : null}
 
-              <Form.Group controlId="validationType">
-                <Form.Label>{I18n.t("activerecord.attributes.questions_sequence.type")}</Form.Label>
-                <Form.Control
-                  as="select"
-                  name="type"
-                  value={values.type}
-                  onChange={handleChange}
-                  isInvalid={!!errors.type}
-                >
-                  <option value="">{I18n.t("select")}</option>
-                  {categories.map(category => (
-                    <option key={category.reference_prefix} value={category.name}>{category.label}</option>
-                  ))}
-                </Form.Control>
-                <Form.Control.Feedback type="invalid">
-                  {errors.type}
-                </Form.Control.Feedback>
-              </Form.Group>
+              {method === "create" ?
+                <Form.Group controlId="validationType">
+                  <Form.Label>{I18n.t("activerecord.attributes.questions_sequence.type")}</Form.Label>
+                  <Form.Control
+                    as="select"
+                    name="type"
+                    value={values.type}
+                    onChange={handleChange}
+                    isInvalid={!!errors.type}
+                  >
+                    <option value="">{I18n.t("select")}</option>
+                    {categories.map(category => (
+                      <option key={category.reference_prefix} value={category.name}>{category.label}</option>
+                    ))}
+                  </Form.Control>
+                  <Form.Control.Feedback type="invalid">
+                    {errors.type}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                : null}
 
               <Form.Group controlId="validationLabel">
                 <Form.Label>{I18n.t("activerecord.attributes.questions_sequence.label_translations")}</Form.Label>

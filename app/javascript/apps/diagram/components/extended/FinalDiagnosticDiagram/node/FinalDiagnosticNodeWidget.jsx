@@ -4,14 +4,13 @@ import { PortWidget } from "@projectstorm/react-diagrams-core";
 
 import { withDiagram } from "../../../../engine/context/Diagram.context";
 import { getLabel } from "../../../../helpers/nodeHelpers";
-import store from "../../../../engine/reducers/store";
 import { openModal } from "../../../../engine/reducers/creators.actions";
+import store from "../../../../engine/reducers/store";
 
 
 class FinalDiagnosticNodeWidget extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
   }
 
   /**
@@ -60,8 +59,8 @@ class FinalDiagnosticNodeWidget extends React.Component {
                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               </button>
               <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a className="dropdown-item" href="#" onClick={() => this.openDiagram()}>Open diagram</a>
-                <a className="dropdown-item" href="#" onClick={() => this.editFinalDiagnostic()}>Edit</a>
+                <a className="dropdown-item" href="#" onClick={() => this.openDiagram()}>{I18n.t("open_treatments")}</a>
+                <a className="dropdown-item" href="#" onClick={() => this.editFinalDiagnostic()}>{I18n.t("edit")}</a>
               </div>
             </div>
           </div>

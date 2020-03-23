@@ -333,11 +333,13 @@ export default class Http {
     window.location = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/${dfId}/diagram`;
   };
 
-  // @params [Integer] psId
-  // @return [Object] body of request
-  // Redirect to predefined syndrome diagram
-  showQuestionsSequenceDiagram = async (qsId) => {
-    window.location = `${this.url}/questions_sequences/${qsId}/diagram`;
+  /**
+   * Redirect to questions sequences diagram
+   * @params [Integer] id
+   * @return [Object] body of request
+   */
+  showQuestionsSequenceDiagram = async (id) => {
+    window.location = `${this.url}/questions_sequences/${id}/diagram`;
   };
 
   /**
