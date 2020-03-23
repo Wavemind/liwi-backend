@@ -78,11 +78,7 @@ Rails.application.routes.draw do
     end
 
     resources :managements, only: [:new, :create, :edit, :update, :destroy] do
-      collection do
-        post 'create_from_diagram'
-      end
       member do
-        put 'update_from_diagram'
         put 'update_translations'
       end
     end

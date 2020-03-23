@@ -1,7 +1,7 @@
 class ManagementsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_management, only: [:edit, :update, :update_translations, :destroy, :update_from_diagram]
-  before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy, :create_from_diagram, :update_from_diagram]
+  before_action :set_management, only: [:edit, :update, :update_translations, :destroy]
+  before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_breadcrumb, only: [:new, :edit]
 
   def new
@@ -17,23 +17,33 @@ class ManagementsController < ApplicationController
 
   def create
     @management = @algorithm.health_cares.managements.new(management_params)
+    @management.type = HealthCares::Management
 
     if @management.save
-      redirect_to algorithm_url(@algorithm, panel: 'managements'), notice: t('flash_message.success_created')
+      if params[:from] == 'rails'
+        render json: { url: algorithm_url(@algorithm, panel: 'managements'), management: @management }
+      else
+        diagnostic = Diagnostic.find(params[:diagnostic_id])
+        final_diagnostic = FinalDiagnostic.find(params[:final_diagnostic_id])
+        final_diagnostic.health_cares << @management
+        diagnostic.components.create!(node: @management, final_diagnostic: final_diagnostic)
+
+        render json: @management.as_json(methods: [:node_type, :type])
+      end
     else
-      set_breadcrumb
-      add_breadcrumb t('breadcrumbs.new')
-      render :new
+      render json: @management.errors.full_messages, status: 422
     end
   end
 
   def update
     if @management.update(management_params)
-      redirect_to algorithm_url(@algorithm, panel: 'managements'), notice: t('flash_message.success_updated')
+      if params[:from] == 'rails'
+        render json: { url: algorithm_url(@algorithm, panel: 'managements'), management: @management }
+      else
+        render json: @management.as_json(methods: [:node_type, :type])
+      end
     else
-      set_breadcrumb
-      add_breadcrumb t('breadcrumbs.edit')
-      render :edit
+      render json: @management.errors.full_messages, status: 422
     end
   end
 
@@ -47,35 +57,6 @@ class ManagementsController < ApplicationController
       else
         redirect_to algorithm_url(@algorithm, panel: 'managements'), alert: t('error')
       end
-    end
-  end
-
-  # POST
-  # @return management node
-  # Create a management node from diagram
-  def create_from_diagram
-    management = @algorithm.health_cares.managements.new(management_params).becomes(HealthCares::Management)
-    management.type = HealthCares::Management
-
-    if management.save
-      diagnostic = Diagnostic.find(params[:diagnostic_id])
-      final_diagnostic = FinalDiagnostic.find(params[:final_diagnostic_id])
-      final_diagnostic.health_cares << management
-      diagnostic.components.create!(node: management, final_diagnostic: final_diagnostic)
-      render json: {status: 'success', messages: [t('flash_message.success_created')], node: management.as_json(methods: [:node_type, :type])}
-    else
-      render json: {status: 'danger', errors: management.errors.messages, ok: false}
-    end
-  end
-
-  # PUT
-  # @return management node
-  # Update a management node from diagram
-  def update_from_diagram
-    if @management.update(management_params)
-      render json: {status: 'success', messages: [t('flash_message.success_created')], node: @management.as_json(methods: [:node_type, :type])}
-    else
-      render json: {status: 'danger', errors: @management.errors.messages, ok: false}
     end
   end
 

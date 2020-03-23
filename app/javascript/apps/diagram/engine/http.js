@@ -43,30 +43,49 @@ export default class Http {
     return await fetch(url, header).catch(error => console.log(error));
   };
 
-  // @params [Integer] nodeId
-  // @return [Object] body of request
-  // Create an instance
-  createHealthCare = async (type, label, description) => {
-    let response;
-    const url = `${this.url}/algorithms/${this.algorithm}/${type}/create_from_diagram`;
+  /**
+   * Create a management
+   * @params [String] label_en
+   * @params [String] description_en
+   * @params [String] from
+   * @return [Object] body of request
+   */
+  createManagement = async (label_en, description_en, from) => {
+    const url = `${this.url}/algorithms/${this.algorithm}/managements`;
     const body = {
-      diagnostic_id: this.instanceableId,
-      final_diagnostic_id: this.finalDiagnostic
-    };
-    body["health_cares_" + type.substring(0, type.length - 1)] = {
-      label_en: label,
-      description_en: description
+      health_cares_management: {
+        label_en,
+        description_en,
+        diagnostic_id: this.instanceableId,
+        final_diagnostic_id: this.finalDiagnostic
+      },
+      from
     };
     const header = await this.setHeaders("POST", body);
-    const request = await fetch(url, header).catch(error => console.log(error));
+    return await fetch(url, header).catch(error => console.log(error));
+  };
 
-    // Display error or parse json
-    if (request.ok) {
-      response = await request.json();
-    } else {
-      response = request;
-    }
-    return await response;
+  /**
+   * Update a management
+   * @params [String] label_en
+   * @params [String] description_en
+   * @params [String] from
+   * @return [Object] body of request
+   */
+  updateManagement = async (id, label_en, description_en, from) => {
+    const url = `${this.url}/algorithms/${this.algorithm}/managements/${id}`;
+    const body = {
+      health_cares_management: {
+        id,
+        label_en,
+        description_en,
+        diagnostic_id: this.instanceableId,
+        final_diagnostic_id: this.finalDiagnostic
+      },
+      from
+    };
+    const header = await this.setHeaders("PUT", body);
+    return await fetch(url, header).catch(error => console.log(error));
   };
 
   /**
