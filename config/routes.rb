@@ -99,13 +99,11 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :questions_sequences, only: [:index, :new, :create, :edit, :update, :destroy, :new_scored, :edit_scored] do
+    resources :questions_sequences, only: [:index, :new, :create, :edit, :update, :destroy] do
       collection do
-        get 'new_scored'
         post 'create_from_diagram'
       end
       member do
-        get 'edit_scored'
         put 'update_from_diagram'
         put 'update_translations'
       end
@@ -130,6 +128,7 @@ Rails.application.routes.draw do
     end
     collection do
       get 'reference_prefix'
+      get 'categories'
     end
     member do
       get 'diagram'

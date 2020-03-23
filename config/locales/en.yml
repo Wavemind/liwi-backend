@@ -6,8 +6,8 @@ en:
       diagnostic:
         node: "Complaint category"
       final_diagnostic:
-        label_translations: "Label"
         description_translations: "Description"
+        label_translations: "Label"
       node:
         type: "Category"
         unavailable: "Can be unavailable ?"
@@ -17,6 +17,11 @@ en:
         doses_per_day: "Number of doses per day"
         treatment_type: "Medication form"
         pill_size: "Pill minimal size (mg)"
+      questions_sequence:
+        description_translations: "Description"
+        label_translations: "Label"
+        min_score: "Minimal score"
+        type: "Category"
   activated: "Activate"
   add: "Add"
   algorithms:

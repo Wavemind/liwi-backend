@@ -57,7 +57,7 @@ class QuestionsSequence < Node
     ids = components.not_health_care_conditions.select(:node_id)
     (
       algorithm.questions.no_triage.no_treatment_condition.no_vital_sign.where.not(id: ids) +
-      algorithm.questions_sequences.where.not(id: ids)
+      algorithm.questions_sequences.not_scored
     ).as_json(methods: [:category_name, :node_type, :get_answers, :type])
   end
 

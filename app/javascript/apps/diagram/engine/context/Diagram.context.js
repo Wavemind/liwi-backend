@@ -37,7 +37,7 @@ export default class DiagramProvider extends React.Component {
       }
     }
 
-    availableNodes.map((node) => {
+    availableNodes.map(node => {
       let category = getCategoryNode(node);
       orderedNodes[category].push(node);
     });
@@ -58,7 +58,7 @@ export default class DiagramProvider extends React.Component {
     switch (nodeType) {
       case "Question":
         const { questionCategories } = this.state;
-        questionCategories.map((category) => {
+        questionCategories.map(category => {
           if (category.name === nodeCategory || category.label === nodeCategory) {
             prefix = category.reference_prefix;
           }
@@ -66,7 +66,7 @@ export default class DiagramProvider extends React.Component {
         break;
       case "QuestionsSequence":
         const { questionsSequenceCategories } = this.state;
-        questionsSequenceCategories.map((category) => {
+        questionsSequenceCategories.map(category => {
           if (category.name === nodeCategory || category.label === nodeCategory) {
             prefix = category.reference_prefix;
           }

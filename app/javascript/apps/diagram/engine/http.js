@@ -134,33 +134,41 @@ export default class Http {
     return await response;
   };
 
-  // @params [Integer] nodeId
-  // @return [Object] body of request
-  // Create an instance
-  createQuestionsSequence = async (label, description, type, minScore) => {
-    let response;
-    const url = `${this.url}/algorithms/${this.algorithm}/questions_sequences/create_from_diagram`;
+  /**
+   * Create a question sequence
+   * @params [String] label
+   * @params [String] description
+   * @params [String] type
+   * @params [Number] min_score
+   * @params [String] from
+   * @return [Object] body of request
+   */
+  createQuestionsSequence = async (label, description, type, min_score, from) => {
+    const url = `${this.url}/algorithms/${this.algorithm}/questions_sequences`;
     const body = {
       questions_sequence: {
         label_en: label,
         description_en: description,
         type,
-        min_score: minScore
+        min_score
       },
       instanceable_id: this.instanceableId,
       instanceable_type: this.instanceableType,
-      final_diagnostic_id: this.finalDiagnostic
+      final_diagnostic_id: this.finalDiagnostic,
+      from
     };
     const header = await this.setHeaders("POST", body);
-    const request = await fetch(url, header).catch(error => console.log(error));
+    return await fetch(url, header).catch(error => console.log(error));
+  };
 
-    // Display error or parse json
-    if (request.ok) {
-      response = await request.json();
-    } else {
-      response = request;
-    }
-    return await response;
+  /**
+   * Fetch questions sequences categories
+   * @return [Object] body of request
+   */
+  fetchQuestionsSequenceCategories = async () => {
+    const url = `${this.url}/questions_sequences/categories`;
+    const header = await this.setHeaders("GET", null);
+    return await fetch(url, header).catch(error => console.log(error));
   };
 
   // @params [Integer] instanceId, [Integer] condID
@@ -435,30 +443,30 @@ export default class Http {
     return await response;
   };
 
-  // @params [Integer] id, [String] label, [String] description
-  // @return [Object] body of request
-  // Update predefined syndrome node
-  updateQuestionsSequence = async (id, label, description, minScore) => {
-    let response;
-    const url = `${this.url}/algorithms/${this.algorithm}/questions_sequences/${id}/update_from_diagram`;
+  /**
+   * Update a question sequence
+   * @params [Integer] id
+   * @params [String] label
+   * @params [String] description
+   * @params [String] type
+   * @params [Integer] min_score
+   * @params [String] from
+   * @return [Object] body of request
+   */
+  updateQuestionsSequence = async (id, label, description, type, min_score, from) => {
+    const url = `${this.url}/algorithms/${this.algorithm}/questions_sequences/${id}`;
     const body = {
       questions_sequence: {
         id,
         label_en: label,
         description_en: description,
-        min_score: minScore
-      }
+        type,
+        min_score
+      },
+      from
     };
     const header = await this.setHeaders("PUT", body);
-    const request = await fetch(url, header).catch(error => console.log(error));
-
-    // Display error or parse json
-    if (request.ok) {
-      response = await request.json();
-    } else {
-      response = request;
-    }
-    return await response;
+    return await fetch(url, header).catch(error => console.log(error));
   };
 
   /**
