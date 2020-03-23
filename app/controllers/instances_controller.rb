@@ -1,7 +1,7 @@
 class InstancesController < ApplicationController
 
   before_action :authenticate_user!
-  before_action :set_instanceable, only: [:show, :create, :destroy, :by_reference, :create_from_diagram, :create_link, :remove_link]
+  before_action :set_instanceable, only: [:show, :create, :destroy, :by_reference, :create_link, :remove_link]
   before_action :set_instance, only: [:show, :destroy, :update, :create_link, :remove_link]
 
   def index

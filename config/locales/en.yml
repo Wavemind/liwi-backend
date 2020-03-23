@@ -604,6 +604,7 @@ en:
   back: "Back"
   open_diagram: "Open diagram"
   open treatments: "Open treatments"
+  loading: "Loading.."
   help: "Help"
   type_here: "Type here"
   technical_files:

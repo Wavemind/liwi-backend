@@ -1,7 +1,7 @@
 class QuestionsSequencesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:new_scored, :new, :create, :edit, :update, :destroy, :questions_sequence, :create_from_diagram, :update_from_diagram]
-  before_action :set_questions_sequence, only: [:edit, :update, :destroy, :update_translations, :diagram, :validate, :update_from_diagram]
+  before_action :set_algorithm, only: [:new_scored, :new, :create, :edit, :update, :destroy, :questions_sequence]
+  before_action :set_questions_sequence, only: [:edit, :update, :destroy, :update_translations, :diagram, :validate]
   before_action :set_breadcrumb, only: [:edit, :diagram]
 
   layout 'diagram', only: [:diagram]
@@ -63,21 +63,6 @@ class QuestionsSequencesController < ApplicationController
     end
   end
 
-  # POST
-  # @return  node
-  # Create a questions sequence node from diagram and instance it
-  # def create_from_diagram
-  #   questions_sequence = @algorithm.questions_sequences.new(questions_sequence_params)
-  #   questions_sequence.becomes(Object.const_get(questions_sequence_params[:type])) if questions_sequence_params[:type].present?
-  #   if questions_sequence.save
-  #     questions_sequence.components.create!(node: questions_sequence)
-  #     Object.const_get(params[:instanceable_type].camelize.singularize).find(params[:instanceable_id]).components.create!(node: questions_sequence, final_diagnostic_id: params[:final_diagnostic_id])
-  #     render json: {status: 'success', messages: [t('flash_message.success_created')], node: questions_sequence.as_json(include: :answers, methods: [:node_type, :category_name, :type])}
-  #   else
-  #     render json: {status: 'danger', errors: questions_sequence.errors.messages, ok: false}
-  #   end
-  # end
-
   # React Diagram
   def diagram
   end
@@ -94,17 +79,6 @@ class QuestionsSequencesController < ApplicationController
   def reference_prefix
     render json: QuestionsSequence.reference_prefix_class(params[:type])
   end
-
-  # PUT
-  # @return questions_sequence node
-  # Update a questions sequence node from diagram
-  # def update_from_diagram
-  #   if @questions_sequence.update(questions_sequence_params)
-  #     render json: {status: 'success', messages: [t('flash_message.success_updated')], node: @questions_sequence.as_json(include: :answers, methods: [:category_name, :node_type, :type])}
-  #   else
-  #     render json: {status: 'danger', errors: @questions_sequence.errors.messages, ok: false}
-  #   end
-  # end
 
   # @params QuestionsSequence with the translations
   # Update the object with its translation without rendering a new page

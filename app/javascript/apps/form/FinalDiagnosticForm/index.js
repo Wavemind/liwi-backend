@@ -1,5 +1,6 @@
 import * as React from "react";
 import I18n from "i18n-js";
+import FadeIn from "react-fade-in";
 import { Form, Button } from "react-bootstrap";
 import { Formik } from "formik";
 
@@ -9,6 +10,7 @@ import store from "../../diagram/engine/reducers/store";
 import { finalDiagnosticSchema } from "../schema";
 import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
+
 
 export default class FinalDiagnosticForm extends React.Component {
 
@@ -26,7 +28,7 @@ export default class FinalDiagnosticForm extends React.Component {
     let result = await httpRequest.json();
 
     if (httpRequest.status === 200) {
-      if (from === 'rails') {
+      if (from === "rails") {
         window.location.replace(result.url);
       } else {
         if (method === "create") {
@@ -51,58 +53,60 @@ export default class FinalDiagnosticForm extends React.Component {
     const { finalDiagnostic } = this.props;
 
     return (
-      <Formik
-        validationSchema={finalDiagnosticSchema}
-        initialValues={{
-          id: finalDiagnostic?.id || "",
-          label_translations: finalDiagnostic?.label_translations?.en || "",
-          description_translations: finalDiagnostic?.description_translations?.en || ""
-        }}
-        onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
-      >
-        {({
-            handleSubmit,
-            handleChange,
-            isSubmitting,
-            values,
-            errors,
-            status
-          }) => (
-          <Form noValidate onSubmit={handleSubmit}>
-            {status ? <DisplayErrors errors={status}/> : null}
-            <Form.Group controlId="validationLabel">
-              <Form.Label>{I18n.t("activerecord.attributes.final_diagnostic.label_translations")}</Form.Label>
-              <Form.Control
-                name="label_translations"
-                value={values.label_translations}
-                onChange={handleChange}
-                isInvalid={!!errors.label_translations}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.label_translations}
-              </Form.Control.Feedback>
-            </Form.Group>
+      <FadeIn>
+        <Formik
+          validationSchema={finalDiagnosticSchema}
+          initialValues={{
+            id: finalDiagnostic?.id || "",
+            label_translations: finalDiagnostic?.label_translations?.en || "",
+            description_translations: finalDiagnostic?.description_translations?.en || ""
+          }}
+          onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
+        >
+          {({
+              handleSubmit,
+              handleChange,
+              isSubmitting,
+              values,
+              errors,
+              status
+            }) => (
+            <Form noValidate onSubmit={handleSubmit}>
+              {status ? <DisplayErrors errors={status}/> : null}
+              <Form.Group controlId="validationLabel">
+                <Form.Label>{I18n.t("activerecord.attributes.final_diagnostic.label_translations")}</Form.Label>
+                <Form.Control
+                  name="label_translations"
+                  value={values.label_translations}
+                  onChange={handleChange}
+                  isInvalid={!!errors.label_translations}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.label_translations}
+                </Form.Control.Feedback>
+              </Form.Group>
 
-            <Form.Group controlId="validationDescription">
-              <Form.Label>{I18n.t("activerecord.attributes.final_diagnostic.description_translations")}</Form.Label>
-              <Form.Control
-                name="description_translations"
-                as="textarea"
-                value={values.description_translations}
-                onChange={handleChange}
-                isInvalid={!!errors.description_translations}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.description_translations}
-              </Form.Control.Feedback>
-            </Form.Group>
+              <Form.Group controlId="validationDescription">
+                <Form.Label>{I18n.t("activerecord.attributes.final_diagnostic.description_translations")}</Form.Label>
+                <Form.Control
+                  name="description_translations"
+                  as="textarea"
+                  value={values.description_translations}
+                  onChange={handleChange}
+                  isInvalid={!!errors.description_translations}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.description_translations}
+                </Form.Control.Feedback>
+              </Form.Group>
 
-            <Button type="submit" disabled={isSubmitting}>
-              {I18n.t("save")}
-            </Button>
-          </Form>
-        )}
-      </Formik>
+              <Button type="submit" disabled={isSubmitting}>
+                {I18n.t("save")}
+              </Button>
+            </Form>
+          )}
+        </Formik>
+      </FadeIn>
     );
   }
 }
