@@ -553,7 +553,7 @@ en:
     question: "Question"
     questions_sequence: "Questions sequence"
     final_diagnostic: "Final diagnostic"
-    treatment: "Treatment"
+    drug: "Drug"
     management: "Management"
     validate: "Validate"
     diagnostic_diagram: "Diagnostic diagram"

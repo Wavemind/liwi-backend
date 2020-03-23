@@ -99,7 +99,7 @@ class Toolbar extends React.Component {
                   <a className="dropdown-item" key="finalDiagnostic" href="#"
                      onClick={() => this.createNode(I18n.t("final_diagnostics.new.title"), "FinalDiagnosticForm")}>{I18n.t("toolbar.final_diagnostic")}</a>) : null}
                 {instanceable.type === "FinalDiagnostic" ? ([
-                    <a className="dropdown-item" key="treatment" href="#">{I18n.t("toolbar.treatment")}</a>,
+                    <a className="dropdown-item" key="drug" href="#">{I18n.t("toolbar.drug")}</a>,
                     <a className="dropdown-item" key="management" href="#">{I18n.t("toolbar.management")}</a>])
                   : null}
               </div>
