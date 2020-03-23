@@ -13,7 +13,7 @@ class QuestionsSequencesController < ApplicationController
     add_breadcrumb t('breadcrumbs.new')
 
     @questions_sequence = QuestionsSequence.new
-    @questions_sequence.type = nil
+    @questions_sequence.type = params[:type]
   end
 
   def edit

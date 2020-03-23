@@ -4,6 +4,6 @@
 
 <div class="row justify-content-center mt-5">
   <div class="col-md-8">
-    <%= react_component('form/QuestionsSequenceForm', { questionsSequence: @questions_sequence, method: 'create', from: 'rails' }) %>
+    <%= react_component('form/QuestionsSequenceForm', { questionsSequence: @questions_sequence.as_json(methods: [:type]), method: 'create', from: 'rails' }) %>
   </div>
 </div>

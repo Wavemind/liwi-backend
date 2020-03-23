@@ -1,8 +1,0 @@
-<%= f.input :type, as: :hidden, input_html: { value: 'QuestionsSequences::Scored' } %>
-
-<%= f.input :reference, prepend: (f.object.persisted? ? false : (t('questions_sequences.categories.scored.reference_prefix'))), disabled: f.object.persisted? %>
-<%= f.input :label_en %>
-<%= f.input :min_score %>
-<%= f.input :description_en, as: :text %>
-
-<%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
