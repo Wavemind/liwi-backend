@@ -48,7 +48,7 @@ GEM
       railties (>= 4.2)
     amoeba (3.1.0)
       activerecord (>= 3.2.6)
-    appsignal (2.10.2)
+    appsignal (2.10.4)
       rack
     archive-zip (0.12.0)
       io-like (~> 0.3.0)
@@ -62,20 +62,21 @@ GEM
       execjs (~> 2.0)
     barby (0.6.8)
     bcrypt (3.1.13)
-    better_errors (2.5.1)
+    better_errors (2.6.0)
       coderay (>= 1.0.0)
       erubi (>= 1.0.0)
       rack (>= 0.9.0)
     bindex (0.8.1)
     binding_of_caller (0.8.0)
       debug_inspector (>= 0.0.1)
-    bootsnap (1.4.5)
+    bootsnap (1.4.6)
       msgpack (~> 1.0)
     bootstrap (4.1.3)
       autoprefixer-rails (>= 6.0.3)
       popper_js (>= 1.12.9, < 2)
       sass (>= 3.5.2)
-    breadcrumbs_on_rails (3.0.1)
+    breadcrumbs_on_rails (4.0.0)
+      rails (>= 5.0)
     builder (3.2.4)
     bullet (6.1.0)
       activesupport (>= 3.0.0)
@@ -99,7 +100,7 @@ GEM
       nokogiri (~> 1.8)
     chunky_png (1.3.11)
     cocoon (1.2.14)
-    codacy-coverage (2.2.0)
+    codacy-coverage (2.2.1)
       simplecov
     coderay (1.1.2)
     coffee-rails (4.2.2)
@@ -109,10 +110,10 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.12.2)
-    concurrent-ruby (1.1.5)
+    concurrent-ruby (1.1.6)
     connection_pool (2.2.2)
     crass (1.0.6)
-    database_cleaner (1.8.2)
+    database_cleaner (1.8.3)
     debug_inspector (0.0.3)
     devise (4.7.1)
       bcrypt (~> 3.0)
@@ -156,6 +157,8 @@ GEM
       activerecord (>= 4.2.0)
     i18n (1.8.2)
       concurrent-ruby (~> 1.0)
+    i18n-js (3.6.0)
+      i18n (>= 0.6.6)
     io-like (0.3.1)
     ipaddress (0.8.3)
     jaro_winkler (1.5.4)
@@ -198,17 +201,18 @@ GEM
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
     nio4r (2.5.2)
-    nokogiri (1.10.7)
+    nokogiri (1.10.8)
       mini_portile2 (~> 2.4.0)
     orm_adapter (0.5.0)
     parallel (1.19.1)
-    parser (2.7.0.2)
+    parser (2.7.0.3)
       ast (~> 2.4.0)
     pg (1.2.2)
     popper_js (1.16.0)
     public_suffix (4.0.3)
-    puma (3.12.2)
-    rack (2.2.1)
+    puma (4.3.3)
+      nio4r (~> 2.0)
+    rack (2.2.2)
     rack-cors (1.1.1)
       rack (>= 2.0.0)
     rack-proxy (0.6.5)
@@ -254,7 +258,7 @@ GEM
       execjs
       railties (>= 3.2)
       tilt
-    regexp_parser (1.6.0)
+    regexp_parser (1.7.0)
     responders (3.0.0)
       actionpack (>= 5.0)
       railties (>= 5.0)
@@ -306,12 +310,16 @@ GEM
     sass-listen (4.0.0)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
-    sass-rails (5.1.0)
-      railties (>= 5.2.0)
-      sass (~> 3.1)
-      sprockets (>= 2.8, < 4.0)
-      sprockets-rails (>= 2.0, < 4.0)
-      tilt (>= 1.1, < 3)
+    sass-rails (6.0.0)
+      sassc-rails (~> 2.1, >= 2.1.1)
+    sassc (2.2.1)
+      ffi (~> 1.9)
+    sassc-rails (2.1.2)
+      railties (>= 4.0.0)
+      sassc (>= 2.0)
+      sprockets (> 3.0)
+      sprockets-rails
+      tilt
     seed_dump (3.3.1)
       activerecord (>= 4)
       activesupport (>= 4)
@@ -321,15 +329,15 @@ GEM
     simple_form (5.0.2)
       actionpack (>= 5.0)
       activemodel (>= 5.0)
-    simplecov (0.18.1)
+    simplecov (0.18.5)
       docile (~> 1.1)
-      simplecov-html (~> 0.11.0)
-    simplecov-html (0.11.0)
+      simplecov-html (~> 0.11)
+    simplecov-html (0.12.2)
     spring (2.1.0)
     spring-watcher-listen (2.0.1)
       listen (>= 2.7, < 4.0)
       spring (>= 1.2, < 3.0)
-    sprockets (3.7.2)
+    sprockets (4.0.0)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
     sprockets-rails (3.2.1)
@@ -355,11 +363,7 @@ GEM
       activemodel (>= 5.0)
       bindex (>= 0.4.0)
       railties (>= 5.0)
-    webdrivers (4.2.0)
-      nokogiri (~> 1.6)
-      rubyzip (>= 1.3.0)
-      selenium-webdriver (>= 3.0, < 4.0)
-    webpacker (3.6.0)
+    webpacker (4.2.2)
       activesupport (>= 4.2)
       rack-proxy (>= 0.6.1)
       railties (>= 4.2)
@@ -396,6 +400,7 @@ DEPENDENCIES
   devise_token_auth
   fog-aws
   hstore_translate
+  i18n-js
   jbuilder (~> 2.5)
   jquery-datatables
   jquery-rails
@@ -405,7 +410,7 @@ DEPENDENCIES
   momentjs-rails
   nilify_blanks
   pg
-  puma (~> 3.11)
+  puma
   rack-cors
   rails (~> 5.2.1)
   rails-controller-testing
@@ -413,7 +418,7 @@ DEPENDENCIES
   rqrcode
   rspec-rails (~> 3.8)
   rubocop-airbnb
-  sass-rails (~> 5.0)
+  sass-rails
   seed_dump
   selenium-webdriver
   simple_form
@@ -424,11 +429,10 @@ DEPENDENCIES
   tzinfo-data
   uglifier (>= 1.3.0)
   web-console (>= 3.3.0)
-  webdrivers (~> 4.2)
-  webpacker (~> 3)
+  webpacker (~> 4.x)
 
 RUBY VERSION
-   ruby 2.5.1p57
+   ruby 2.6.0p0
 
 BUNDLED WITH
-   2.0.2
+   1.17.2

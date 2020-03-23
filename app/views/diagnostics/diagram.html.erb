@@ -4,25 +4,17 @@
 </div>
 <div class="row">
   <div class="col-md-12">
-    <p class="mx-0 my-0 metadata" data-type="<%= @diagnostic.class.name %>" data-id="<%= @diagnostic.id %>" data-version="<%= @diagnostic.version.id %>"  data-algorithm="<%= @diagnostic.version.algorithm.id %>"></p>
-    <%= react_component('Provider', {
-    render: 'Diagram',
-    context: {
-      instanceable: @diagnostic.as_json(include: {node: {methods: :reference_label}}),
-      instanceableType: @diagnostic.class.name,
-      questions: @diagnostic.questions_json,
-      finalDiagnostics: @diagnostic.final_diagnostics_json,
-      availableNodes: @diagnostic.available_nodes_json,
-      type: 'Diagnostic',
-      questionAnswerTypes: AnswerType.all.as_json(methods: :display_name),
-      questionSystems: Question.systems.map { |k, v| [t("questions.systems.#{k}"), k] },
-      questionStages: Question.stages,
-      questionCategories: Question.categories('Diagnostic').as_json,
-      questionsSequenceCategories: QuestionsSequence.categories.as_json,
-      answersOperators: Answer.operators.as_json,
-      readOnly: false
-    }
-  }) %>
+    <p class="mx-0 my-0 metadata" data-type="<%= @diagnostic.class.name %>" data-id="<%= @diagnostic.id %>" data-version="<%= @diagnostic.version.id %>" data-algorithm="<%= @diagnostic.version.algorithm.id %>"></p>
+    <%= react_component('diagram', {
+      context: {
+        instanceable: @diagnostic.diagnostic_json,
+        instances: @diagnostic.questions_json + @diagnostic.final_diagnostics_json,
+        availableNodes: @diagnostic.available_nodes_json,
+        questionCategories: Question.categories('Diagnostic').as_json,
+        questionsSequenceCategories: QuestionsSequence.categories.as_json,
+        readOnly: false
+      }
+    }) %>
     <button type="button" class="btn btn-sm btn-info help" data-toggle="popover" data-placement="top" data-html="true" data-content="<%= render 'helps/diagram' %>">
       <i class="material-icons">
         help_outline

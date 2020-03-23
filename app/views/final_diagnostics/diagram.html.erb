@@ -5,24 +5,14 @@
 <div class="row">
   <div class="col-md-12">
     <p class="mx-0 my-0 metadata" data-type="<%= @diagnostic.class.name %>" data-id="<%= @diagnostic.id %>" data-version="<%= @diagnostic.version.id %>" data-algorithm="<%= @diagnostic.version.algorithm.id %>" data-final_diagnostic="<%= @final_diagnostic.id %>"></p>
-    <%= react_component('Provider', {
-      render: 'FinalDiagnosticDiagram',
+    <%= react_component('diagram', {
       context: {
-        instanceable: @diagnostic,
-        questions: @final_diagnostic.health_care_questions_json,
-        finalDiagnostic: @final_diagnostic,
-        healthCares: @final_diagnostic.health_cares_json,
+        instanceable: @final_diagnostic.diagnostic_json,
+        instances: @final_diagnostic.health_care_questions_json + @final_diagnostic.health_cares_json,
         availableNodes: @final_diagnostic.available_nodes_health_cares_json,
-        type: 'FinalDiagnostic',
-        questionAnswerTypes: AnswerType.all.as_json(methods: :display_name),
-        questionSystems: Question.systems.map { |k, v| [t("questions.systems.#{k}"), k] },
-        questionStages: Question.stages.as_json,
         questionCategories: Question.categories('FinalDiagnostic').as_json,
         questionsSequenceCategories: QuestionsSequence.categories.as_json,
-        answersOperators: Answer.operators.as_json,
-        medicationForms: Formulation.medication_forms.to_a.map(&:first),
-        administrationRoutes: AdministrationRoute.generate_select_options,
-        breakableOptions: Formulation.breakables.map { |k, v| [t("formulations.breakables.#{k}.label"), k] }
+        readOnly: false
       }
     }) %>
   </div>

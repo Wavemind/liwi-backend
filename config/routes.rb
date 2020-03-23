@@ -47,13 +47,11 @@ Rails.application.routes.draw do
 
         resources :final_diagnostics, only: [:index, :new, :create, :edit, :update, :delete, :destroy, :update_translations] do
           collection do
-            post 'create_from_diagram'
             put 'add_excluded_diagnostic'
           end
           member do
             put 'remove_excluded_diagnostic'
             put 'update_translations'
-            put 'update_from_diagram'
             get 'diagram'
           end
           resources :final_diagnostic_health_cares, only: [:create, :destroy]
@@ -102,11 +100,9 @@ Rails.application.routes.draw do
 
     resources :questions_sequences, only: [:index, :new, :create, :edit, :update, :destroy] do
       collection do
-        get 'new_scored'
         post 'create_from_diagram'
       end
       member do
-        get 'edit_scored'
         put 'update_from_diagram'
         put 'update_translations'
       end
@@ -118,16 +114,19 @@ Rails.application.routes.draw do
       collection do
         get 'by_reference'
         post 'create_from_diagram'
-        post 'create_link'
         delete 'remove_from_diagram'
-        delete 'remove_link'
         put 'update_score'
+      end
+      member do
+        delete 'remove_link'
+        post 'create_link'
       end
       resources :conditions, only: [:destroy]
     end
 
     collection do
       get 'reference_prefix'
+      get 'categories'
     end
 
     member do
@@ -136,16 +135,17 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :instances, only: [:update]
+
   resources :diagnostics, only: [] do
     resources :instances, only: [:show, :destroy, :create] do
       collection do
         get 'by_reference'
-        post 'create_from_diagram'
-        post 'create_from_final_diagnostic_diagram'
-        put 'update_from_final_diagnostic_diagram'
-        post 'create_link'
-        delete 'remove_from_diagram'
+        get 'load_conditions'
+      end
+      member do
         delete 'remove_link'
+        post 'create_link'
       end
       resources :conditions, only: [:destroy]
     end

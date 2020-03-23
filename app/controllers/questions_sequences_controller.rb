@@ -1,7 +1,7 @@
 class QuestionsSequencesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:new_scored, :edit_scored, :new, :create, :edit, :update, :destroy, :questions_sequence, :create_from_diagram, :update_from_diagram]
-  before_action :set_questions_sequence, only: [:edit, :edit_scored, :update, :destroy, :update_translations, :diagram, :validate, :update_from_diagram]
+  before_action :set_algorithm, only: [:new_scored, :new, :create, :edit, :update, :destroy, :questions_sequence, :create_from_diagram, :update_from_diagram]
+  before_action :set_questions_sequence, only: [:edit, :update, :destroy, :update_translations, :diagram, :validate, :update_from_diagram]
   before_action :set_breadcrumb, only: [:edit, :diagram]
 
   layout 'diagram', only: [:diagram]
@@ -26,26 +26,25 @@ class QuestionsSequencesController < ApplicationController
 
     if @questions_sequence.save
       @questions_sequence.components.create!(node: @questions_sequence)
-      redirect_to diagram_questions_sequence_url(@questions_sequence), notice: t('flash_message.success_updated')
-    else
-      set_breadcrumb
-      add_breadcrumb t('breadcrumbs.new')
-
-      if @questions_sequence.is_a?(QuestionsSequences::Scored)
-        render :new_scored
+      if params[:from] == 'rails'
+        render json: { url: diagram_questions_sequence_url(@questions_sequence), questionsSequence: @questions_sequence }
       else
-        render :new
+        render json: @questions_sequence
       end
+    else
+      render json: @questions_sequence.errors.full_messages, status: 422
     end
   end
 
   def update
     if @questions_sequence.update(questions_sequence_params)
-      redirect_to algorithm_url(@algorithm, panel: 'questions_sequences'), notice: t('flash_message.success_updated')
+      if params[:from] == 'rails'
+        render json: { url: algorithm_url(@algorithm, panel: 'questions_sequences'), questionsSequence: @questions_sequence }
+      else
+        render json: @questions_sequence.as_json(methods: [:node_type])
+      end
     else
-      set_breadcrumb
-      add_breadcrumb t('breadcrumbs.edit')
-      render :edit
+      render json: @questions_sequence.errors.full_messages, status: 422
     end
   end
 
@@ -65,35 +64,26 @@ class QuestionsSequencesController < ApplicationController
   # POST
   # @return  node
   # Create a questions sequence node from diagram and instance it
-  def create_from_diagram
-    questions_sequence = @algorithm.questions_sequences.new(questions_sequence_params)
-    questions_sequence.becomes(Object.const_get(questions_sequence_params[:type])) if questions_sequence_params[:type].present?
-    if questions_sequence.save
-      questions_sequence.components.create!(node: questions_sequence)
-      Object.const_get(params[:instanceable_type].camelize.singularize).find(params[:instanceable_id]).components.create!(node: questions_sequence, final_diagnostic_id: params[:final_diagnostic_id])
-      render json: {status: 'success', messages: [t('flash_message.success_created')], node: questions_sequence.as_json(include: :answers, methods: [:node_type, :category_name, :type])}
-    else
-      render json: {status: 'danger', errors: questions_sequence.errors.messages, ok: false}
-    end
-  end
+  # def create_from_diagram
+  #   questions_sequence = @algorithm.questions_sequences.new(questions_sequence_params)
+  #   questions_sequence.becomes(Object.const_get(questions_sequence_params[:type])) if questions_sequence_params[:type].present?
+  #   if questions_sequence.save
+  #     questions_sequence.components.create!(node: questions_sequence)
+  #     Object.const_get(params[:instanceable_type].camelize.singularize).find(params[:instanceable_id]).components.create!(node: questions_sequence, final_diagnostic_id: params[:final_diagnostic_id])
+  #     render json: {status: 'success', messages: [t('flash_message.success_created')], node: questions_sequence.as_json(include: :answers, methods: [:node_type, :category_name, :type])}
+  #   else
+  #     render json: {status: 'danger', errors: questions_sequence.errors.messages, ok: false}
+  #   end
+  # end
 
   # React Diagram
   def diagram
   end
 
-  # @params QuestionSequence scored
-  # Update a QuestionSequence scored
-  def edit_scored
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'questions_sequences_scored')
-    add_breadcrumb @questions_sequence.label
-  end
-
-  # Create a new QuestionSequence scored
-  def new_scored
-    add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'questions_sequences_scored')
-
-    @questions_sequence = QuestionsSequence.new
-    @questions_sequence.type = nil
+  # GET
+  # @return give sub categories of questions sequence
+  def categories
+    render json: QuestionsSequence.categories
   end
 
   # GET algorithm/:algorithm_id/questions_sequences/reference_prefix/:type
@@ -106,13 +96,13 @@ class QuestionsSequencesController < ApplicationController
   # PUT
   # @return questions_sequence node
   # Update a questions sequence node from diagram
-  def update_from_diagram
-    if @questions_sequence.update(questions_sequence_params)
-      render json: {status: 'success', messages: [t('flash_message.success_updated')], node: @questions_sequence.as_json(include: :answers, methods: [:category_name, :node_type, :type])}
-    else
-      render json: {status: 'danger', errors: @questions_sequence.errors.messages, ok: false}
-    end
-  end
+  # def update_from_diagram
+  #   if @questions_sequence.update(questions_sequence_params)
+  #     render json: {status: 'success', messages: [t('flash_message.success_updated')], node: @questions_sequence.as_json(include: :answers, methods: [:category_name, :node_type, :type])}
+  #   else
+  #     render json: {status: 'danger', errors: @questions_sequence.errors.messages, ok: false}
+  #   end
+  # end
 
   # @params QuestionsSequence with the translations
   # Update the object with its translation without rendering a new page
@@ -131,9 +121,9 @@ class QuestionsSequencesController < ApplicationController
   def validate
     @questions_sequence.manual_validate
     if @questions_sequence.errors.messages.any?
-      render json: {status: 'danger', messages: @questions_sequence.errors.messages[:basic]}
+      render json: @questions_sequence.errors.messages[:basic], status: 422
     else
-      render json: {status: 'success', messages: [t('flash_message.diagnostic.valid')]}
+      render json: [t('flash_message.diagnostic.valid')], status: 200
     end
   end
 

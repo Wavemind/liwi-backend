@@ -1,6 +1,13 @@
 en:
   activerecord:
     attributes:
+      condition:
+        score: "Score"
+      diagnostic:
+        node: "Complaint category"
+      final_diagnostic:
+        description_translations: "Description"
+        label_translations: "Label"
       node:
         type: "Category"
         unavailable: "Can be unavailable ?"
@@ -12,8 +19,11 @@ en:
         pill_size: "Pill minimal size (mg)"
         is_triage: "Ask in triage if it is available"
         is_identifiable: "This question can identify a patient"
-      diagnostic:
-        node: "Complaint category"
+      questions_sequence:
+        description_translations: "Description"
+        label_translations: "Label"
+        min_score: "Minimal score"
+        type: "Category"
   activated: "Activate"
   add: "Add"
   administration_routes:
@@ -43,6 +53,7 @@ en:
       subtitle_drugs: "Drugs"
       subtitle_versions: "Versions list"
       title: "Details of %{name}"
+  already_exist: "This instance already exist"
   answer_type:
     labels:
       - ~
@@ -121,6 +132,7 @@ en:
       or_operator: "OR"
     validation:
       loop: "You are trying to do a loop in your diagnostic which is impossible."
+      link_already_exist: "Link already exists"
   deactivated: "Deactivate"
   delete: "Delete"
   destroy: "Remove"
@@ -184,6 +196,44 @@ en:
   duplicated: "_duplicated"
   edit: "Edit"
   error: "An error occured"
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: must be accepted
+      blank: can't be blank
+      confirmation: doesn't match %{attribute}
+      empty: can't be empty
+      equal_to: must be equal to %{count}
+      even: must be even
+      exclusion: is reserved
+      greater_than: must be greater than %{count}
+      greater_than_or_equal_to: must be greater than or equal to %{count}
+      inclusion: is not included in the list
+      invalid: is invalid
+      less_than: must be less than %{count}
+      less_than_or_equal_to: must be less than or equal to %{count}
+      model_invalid: 'Validation failed: %{errors}'
+      not_a_number: is not a number
+      not_an_integer: must be an integer
+      odd: must be odd
+      other_than: must be other than %{count}
+      present: must be blank
+      required: must exist
+      taken: has already been taken
+      too_long:
+        one: is too long (maximum is 1 character)
+        other: is too long (maximum is %{count} characters)
+      too_short:
+        one: is too short (minimum is 1 character)
+        other: is too short (minimum is %{count} characters)
+      wrong_length:
+        one: is the wrong length (should be 1 character)
+        other: is the wrong length (should be %{count} characters)
+    template:
+      body: 'There were problems with the following fields:'
+      header:
+        one: 1 error prohibited this %{model} from being saved
+        other: "%{count} errors prohibited this %{model} from being saved"
   dependencies: "Node have dependencies"
   final_diagnostics:
     new:
@@ -498,6 +548,16 @@ en:
     medication_forms:
       liquid: "Liquid"
       pill: "Pill"
+  toolbar:
+    new: "New"
+    question: "Question"
+    questions_sequence: "Questions sequence"
+    final_diagnostic: "Final diagnostic"
+    treatment: "Treatment"
+    management: "Management"
+    validate: "Validate"
+    diagnostic_diagram: "Diagnostic diagram"
+    save: "Save"
   unarchive: "Unarchive"
   users:
     new:
@@ -532,7 +592,7 @@ en:
     new:
       title: "Add an algorithm version"
     edit:
-      title: "Edit this algorithm"
+      title: "Edit an algorithm version"
     show:
       subtitle_diagnostics: "Diagnostics"
       subtitle_questions_order: "Triage questions order"
