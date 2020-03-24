@@ -4,7 +4,7 @@
 </div>
 <div class="row">
   <div class="col-md-12">
-    <p class="mx-0 my-0 metadata" data-type="<%= @diagnostic.class.name %>" data-id="<%= @diagnostic.id %>" data-version="<%= @diagnostic.version.id %>" data-algorithm="<%= @diagnostic.version.algorithm.id %>" data-final_diagnostic="<%= @final_diagnostic.id %>"></p>
+    <p class="mx-0 my-0 metadata" data-type="<%= @final_diagnostic.node_type %>" data-id="<%= @diagnostic.id %>" data-version="<%= @diagnostic.version.id %>" data-algorithm="<%= @diagnostic.version.algorithm.id %>" data-final_diagnostic="<%= @final_diagnostic.id %>"></p>
     <%= react_component('diagram', {
       context: {
         instanceable: @final_diagnostic.diagnostic_json,

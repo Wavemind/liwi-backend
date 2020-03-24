@@ -90,6 +90,12 @@ class QuestionsController < ApplicationController
     end
   end
 
+  # GET
+  # @return give sub categories of questions sequence
+  def lists
+    render json: Question.list_attributes(params[:diagram_type])
+  end
+
   # POST
   # @return  node
   # Create a question node from diagram and instance it

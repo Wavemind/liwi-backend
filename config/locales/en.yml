@@ -5,11 +5,11 @@ en:
         score: "Score"
       diagnostic:
         node: "Complaint category"
-      final_diagnostic:
-        description_translations: "Description"
-        label_translations: "Label"
       node:
         type: "Category"
+        description_translations: "Description"
+        label_translations: "Label"
+
         unavailable: "Can be unavailable ?"
         minimal_dose_per_kg: "Minimal dose/kg"
         maximal_dose_per_kg: "Maximal dose/kg"
@@ -19,9 +19,15 @@ en:
         pill_size: "Pill minimal size (mg)"
         is_triage: "Ask in triage if it is available"
         is_identifiable: "This question can identify a patient"
+      question:
+        answer_type: "Answer type"
+        formula: "Formula"
+        is_mandatory: "Mandatory"
+        snomed: "Snomed label"
+        stage: "Stage"
+        system: "System"
+        unavailable: "Test can be unavailable"
       questions_sequence:
-        description_translations: "Description"
-        label_translations: "Label"
         min_score: "Minimal score"
         type: "Category"
   activated: "Activate"

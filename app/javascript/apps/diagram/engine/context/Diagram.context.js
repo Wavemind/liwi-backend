@@ -2,7 +2,7 @@ import * as React from "react";
 
 import Http from "../http";
 import { getCategoryNode } from "../../helpers/nodeHelpers";
-import { defaultOrderedNodes } from "../../engine/constants/default";
+import { DEFAULT_ORDERED_NODES } from "../../engine/constants/default";
 
 const defaultValue = {};
 const DiagramContext = React.createContext(defaultValue);
@@ -20,7 +20,7 @@ export default class DiagramProvider extends React.Component {
     const http = new Http();
 
     // Assign node to correct array
-    let orderedNodes = defaultOrderedNodes;
+    let orderedNodes = DEFAULT_ORDERED_NODES;
 
     if (instanceable.type === "Diagnostic") {
       orderedNodes.scored = [];
@@ -38,6 +38,7 @@ export default class DiagramProvider extends React.Component {
     }
 
     availableNodes.map(node => {
+      console.log(node);
       let category = getCategoryNode(node);
       orderedNodes[category].push(node);
     });

@@ -10,6 +10,11 @@ export const finalDiagnosticSchema = yup.object().shape({
   description_translations: yup.string()
 });
 
+export const questionSchema = yup.object().shape({
+  label_translations: yup.string().required(I18n.t("errors.messages.required")),
+  description_translations: yup.string()
+});
+
 export const questionSequencesSchema = yup.object().shape({
   type : yup.string().required(I18n.t("errors.messages.required")),
   label_translations: yup.string().required(I18n.t("errors.messages.required")),

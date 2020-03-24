@@ -2,8 +2,10 @@
 
 <%= render 'utils/dependency_warning', node: @question %>
 
-<div class="row justify-content-center">
-  <%= simple_form_for @question.becomes(Question), url: algorithm_question_url(@algorithm, @question), html: { class: 'form-horizontal' }, wrapper: :input_group do |f| %>
-    <%= render 'form', f: f %>
-  <% end %>
+<p class="mx-0 my-0 metadata" data-type="<%= @question.node_type %>" data-algorithm="<%= @algorithm.id %>" data-question="<%= @question.id %>"></p>
+
+<div class="row justify-content-center mt-5">
+  <div class="col-md-8">
+    <%= react_component('form/FinalDiagnosticForm', { question: @question, method: 'update', from: 'rails' }) %>
+  </div>
 </div>

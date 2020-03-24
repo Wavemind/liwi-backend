@@ -4,7 +4,7 @@
 </div>
 <div class="row">
   <div class="col-md-12">
-    <p class="mx-0 my-0 metadata" data-type="<%= @questions_sequence.class.name %>" data-id="<%= @questions_sequence.id %>"  data-algorithm="<%= @questions_sequence.algorithm.id %>"></p>
+    <p class="mx-0 my-0 metadata" data-type="<%= @questions_sequence.node_type %>" data-id="<%= @questions_sequence.id %>"  data-algorithm="<%= @questions_sequence.algorithm.id %>"></p>
     <%= react_component('diagram', {
       context: {
         instanceable: @questions_sequence.as_json(methods: :category_name),

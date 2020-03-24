@@ -27,7 +27,7 @@ class Question < Node
   # Return questions which has not triage stage
   scope :no_triage, ->() { where.not(stage: Question.stages[:triage]).or(where(stage: nil)) }
   scope :no_treatment_condition, ->() { where.not(type: 'Questions::TreatmentQuestion') }
-  scope :diagrams_included, ->() { where.not(type: %w(Questions::VitalSignAnthropometric Questions::BasicMeasurement Questions::Demographic)) }
+  scope :diagrams_included, ->() { where.not(type: %w(Questions::VitalSignAnthropometric Questions::BasicMeasurement Questions::Demographic Questions::ConsultationRelated)) }
 
   accepts_nested_attributes_for :answers, allow_destroy: true
 
@@ -68,8 +68,8 @@ class Question < Node
   # Return a hash with all question categories with their name, label and prefix
   def self.categories(diagram_class_name)
     categories = []
-    excluded_categories = [Questions::ComplaintCategory, Questions::BasicMeasurement, Questions::VitalSignAnthropometric, Questions::UniqueTriageQuestion, Questions::UniqueTriagePhysicalSign]
-    excluded_categories.push(Questions::TreatmentQuestion) unless diagram_class_name == 'FinalDiagnostic'
+    excluded_categories = [Questions::ComplaintCategory, Questions::BasicMeasurement, Questions::VitalSignAnthropometric, Questions::UniqueTriageQuestion, Questions::UniqueTriagePhysicalSign] unless diagram_class_name == 'Question'
+    excluded_categories.push(Questions::TreatmentQuestion) unless %w(FinalDiagnostic Question).include?(diagram_class_name)
     self.descendants.each do |category|
       unless excluded_categories.include?(category)
         current_category = {}
@@ -80,6 +80,15 @@ class Question < Node
       end
     end
     categories
+  end
+
+  def self.list_attributes(diagram_type)
+    attributes = {}
+    attributes['categories'] = categories(diagram_type)
+    attributes['answer_types'] = AnswerType.all.as_json(methods: :display_name)
+    attributes['systems'] = Question.systems.map { |k, v| [I18n.t("questions.systems.#{k}"), k] }
+    attributes['stages'] = Question.stages
+    attributes
   end
 
   # Automatically create the answers, since they can't be changed

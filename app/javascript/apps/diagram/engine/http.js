@@ -12,11 +12,13 @@ export default class Http {
 
   constructor() {
     let data = document.querySelector(".metadata");
+    console.log(data.dataset.type);
 
     this.url = window.location.origin;
     this.instanceableId = data.dataset.id;
     this.finalDiagnostic = data.dataset.final_diagnostic;
-    this.instanceableType = data.dataset.type === "Diagnostic" ? "diagnostics" : "questions_sequences";
+    this.diagramType = data.dataset.type;
+    this.instanceableType = ["Diagnostic", "FinalDiagnostic"].includes(data.dataset.type) ? "diagnostics" : "questions_sequences";
     this.version = data.dataset.version;
     this.algorithm = data.dataset.algorithm;
     this.token = document.querySelector("meta[name='csrf-token']").content;
@@ -167,6 +169,16 @@ export default class Http {
    */
   fetchQuestionsSequenceCategories = async () => {
     const url = `${this.url}/questions_sequences/categories`;
+    const header = await this.setHeaders("GET", null);
+    return await fetch(url, header).catch(error => console.log(error));
+  };
+
+  /**
+   * Fetch questions sequences categories
+   * @return [Object] body of request
+   */
+  fetchQuestionsLists = async () => {
+    const url = `${this.url}/questions/lists?diagram_type=${this.diagramType}`;
     const header = await this.setHeaders("GET", null);
     return await fetch(url, header).catch(error => console.log(error));
   };

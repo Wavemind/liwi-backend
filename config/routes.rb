@@ -185,6 +185,7 @@ Rails.application.routes.draw do
 
   resources :questions, only: [] do
     collection do
+      get 'lists'
       get 'reference_prefix'
     end
   end

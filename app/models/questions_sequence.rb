@@ -54,10 +54,10 @@ class QuestionsSequence < Node
   # @return [Json]
   # Return available nodes in the algorithm in json format
   def available_nodes_json
-    ids = components.not_health_care_conditions.select(:node_id)
+    ids = components.map(&:node_id)
     (
       algorithm.questions.no_triage.no_treatment_condition.diagrams_included.where.not(id: ids) +
-      algorithm.questions_sequences.not_scored
+      algorithm.questions_sequences.not_scored.where.not(id: ids)
     ).as_json(methods: [:category_name, :node_type, :get_answers, :type])
   end
 

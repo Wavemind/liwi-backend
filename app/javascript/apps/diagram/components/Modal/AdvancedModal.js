@@ -7,6 +7,7 @@ import { closeModal } from "../../engine/reducers/creators.actions";
 import ScoreForm from "../../../form/ScoreForm";
 import FinalDiagnosticForm from "../../../form/FinalDiagnosticForm";
 import QuestionsSequenceForm from "../../../form/QuestionsSequenceForm";
+import QuestionForm from "../../../form/QuestionForm";
 
 
 export default class AdvancedModal extends React.Component {
@@ -53,6 +54,8 @@ export default class AdvancedModal extends React.Component {
         return <ScoreForm {...params} />;
       case "FinalDiagnosticForm":
         return <FinalDiagnosticForm {...params} />;
+      case "QuestionForm":
+        return <QuestionForm {...params} />;
       case "QuestionsSequence":
         return <QuestionsSequenceForm {...params} />;
       default:
