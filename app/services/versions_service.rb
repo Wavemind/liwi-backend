@@ -198,8 +198,8 @@ class VersionsService
     hash['id'] = final_diagnostic.id
     hash['label'] = final_diagnostic.label
     hash['type'] = final_diagnostic.node_type
-    hash['drugs'] = extract_health_cares(final_diagnostic.health_cares.drugs, instance.instanceable.id)
-    hash['managements'] = extract_health_cares(final_diagnostic.health_cares.managements, instance.instanceable.id)
+    hash['drugs'] = extract_health_cares(final_diagnostic.health_cares.drugs, instance.instanceable.id, final_diagnostic.id)
+    hash['managements'] = extract_health_cares(final_diagnostic.health_cares.managements, instance.instanceable.id, final_diagnostic.id)
     hash['excluding_final_diagnostics'] = final_diagnostic.final_diagnostic_id
     hash['cc'] = final_diagnostic.diagnostic.node_id
     hash
@@ -261,13 +261,14 @@ class VersionsService
   # @params [Integer] id of current diagnostic
   # @return hash
   # Set metadata for drugs and managements (health cares)
-  def self.extract_health_cares(health_cares, diagnostic_id)
+  def self.extract_health_cares(health_cares, diagnostic_id, final_diagnostic_id)
     hash = {}
     health_cares.each do |health_care|
-      hash[health_care.id] = extract_conditions(health_care.instances.find_by_instanceable_id(diagnostic_id).conditions)
+      instance = health_care.instances.find_by(instanceable_id: diagnostic_id, final_diagnostic_id: final_diagnostic_id)
+      hash[health_care.id] = extract_conditions(instance.conditions)
       hash[health_care.id]['id'] = health_care.id
-      hash[health_care.id]['duration'] = health_care.instances.find_by_instanceable_id(diagnostic_id).duration
-      hash[health_care.id]['description'] = health_care.instances.find_by_instanceable_id(diagnostic_id).description
+      hash[health_care.id]['duration'] = instance.duration
+      hash[health_care.id]['description'] = instance.description
 
       # Append the health care in order to list them all at the end of the json.
       assign_node(health_care)
