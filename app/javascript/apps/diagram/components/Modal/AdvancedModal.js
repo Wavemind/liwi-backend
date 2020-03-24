@@ -8,6 +8,7 @@ import ScoreForm from "../../../form/ScoreForm";
 import FinalDiagnosticForm from "../../../form/FinalDiagnosticForm";
 import QuestionsSequenceForm from "../../../form/QuestionsSequenceForm";
 import QuestionForm from "../../../form/QuestionForm";
+import ManagementForm from "../../../form/ManagementForm";
 
 
 export default class AdvancedModal extends React.Component {
@@ -56,8 +57,10 @@ export default class AdvancedModal extends React.Component {
         return <FinalDiagnosticForm {...params} />;
       case "QuestionForm":
         return <QuestionForm {...params} />;
-      case "QuestionsSequence":
+      case "QuestionsSequenceForm":
         return <QuestionsSequenceForm {...params} />;
+      case "ManagementForm":
+        return <ManagementForm {...params} />;
       default:
         console.log("Action n'existe pas");
         return null;

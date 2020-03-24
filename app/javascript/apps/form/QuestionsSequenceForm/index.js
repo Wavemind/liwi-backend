@@ -1,14 +1,17 @@
 import * as React from "react";
 import I18n from "i18n-js";
+import FadeIn from "react-fade-in";
 import { Form, Button } from "react-bootstrap";
 import { Formik } from "formik";
 
 import DisplayErrors from "../DisplayErrors";
 import Http from "../../diagram/engine/http";
 import store from "../../diagram/engine/reducers/store";
+import Loader from "../Loader";
 import { questionSequencesSchema } from "../schema";
 import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
+
 
 export default class QuestionsSequenceForm extends React.Component {
 
@@ -56,7 +59,7 @@ export default class QuestionsSequenceForm extends React.Component {
         window.location.replace(result.url);
       } else {
         if (method === "create") {
-          let diagramInstance = createNode(result, addAvailableNode, false, "Diagnostic", engine);
+          let diagramInstance = createNode(result, addAvailableNode, false, result.node.category_name, engine);
           engine.getModel().addNode(diagramInstance);
         } else {
           diagramObject.options.dbInstance.node = result;
@@ -74,100 +77,104 @@ export default class QuestionsSequenceForm extends React.Component {
   };
 
   render() {
-    const { questionsSequence } = this.props;
+    const { questionsSequence, method } = this.props;
     const { categories, isLoading } = this.state;
 
     return (
-      isLoading ? null :
-        <Formik
-          validationSchema={questionSequencesSchema}
-          initialValues={{
-            id: questionsSequence?.id || "",
-            type: questionsSequence?.type || "",
-            label_translations: questionsSequence?.label_translations?.en || "",
-            description_translations: questionsSequence?.description_translations?.en || "",
-            min_score: questionsSequence?.min_score || ""
-          }}
-          onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
-        >
-          {({
-              handleSubmit,
-              handleChange,
-              isSubmitting,
-              values,
-              errors,
-              status
-            }) => (
-            <Form noValidate onSubmit={handleSubmit}>
-              {status ? <DisplayErrors errors={status}/> : null}
+      isLoading ? <Loader/> :
+        <FadeIn>
+          <Formik
+            validationSchema={questionSequencesSchema}
+            initialValues={{
+              id: questionsSequence?.id || "",
+              type: questionsSequence?.type || "",
+              label_translations: questionsSequence?.label_translations?.en || "",
+              description_translations: questionsSequence?.description_translations?.en || "",
+              min_score: questionsSequence?.min_score || ""
+            }}
+            onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
+          >
+            {({
+                handleSubmit,
+                handleChange,
+                isSubmitting,
+                values,
+                errors,
+                status
+              }) => (
+              <Form noValidate onSubmit={handleSubmit}>
+                {status ? <DisplayErrors errors={status}/> : null}
 
-              <Form.Group controlId="validationType">
-                <Form.Label>{I18n.t("activerecord.attributes.questions_sequence.type")}</Form.Label>
-                <Form.Control
-                  as="select"
-                  name="type"
-                  value={values.type}
-                  onChange={handleChange}
-                  isInvalid={!!errors.type}
-                >
-                  <option value="">{I18n.t("select")}</option>
-                  {categories.map(category => (
-                    <option key={category.reference_prefix} value={category.name}>{category.label}</option>
-                  ))}
-                </Form.Control>
-                <Form.Control.Feedback type="invalid">
-                  {errors.type}
-                </Form.Control.Feedback>
-              </Form.Group>
+                {method === "create" ?
+                  <Form.Group controlId="validationType">
+                    <Form.Label>{I18n.t("activerecord.attributes.questions_sequence.type")}</Form.Label>
+                    <Form.Control
+                      as="select"
+                      name="type"
+                      value={values.type}
+                      onChange={handleChange}
+                      isInvalid={!!errors.type}
+                    >
+                      <option value="">{I18n.t("select")}</option>
+                      {categories.map(category => (
+                        <option key={category.reference_prefix} value={category.name}>{category.label}</option>
+                      ))}
+                    </Form.Control>
+                    <Form.Control.Feedback type="invalid">
+                      {errors.type}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                  : null}
 
-              <Form.Group controlId="validationLabel">
-                <Form.Label>{I18n.t("activerecord.attributes.questions_sequence.label_translations")}</Form.Label>
-                <Form.Control
-                  name="label_translations"
-                  value={values.label_translations}
-                  onChange={handleChange}
-                  isInvalid={!!errors.label_translations}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.label_translations}
-                </Form.Control.Feedback>
-              </Form.Group>
-
-              {values.type === "QuestionsSequences::Scored" ?
-                <Form.Group controlId="validationMinScore">
-                  <Form.Label>{I18n.t("activerecord.attributes.questions_sequence.min_score")}</Form.Label>
+                <Form.Group controlId="validationLabel">
+                  <Form.Label>{I18n.t("activerecord.attributes.questions_sequence.label_translations")}</Form.Label>
                   <Form.Control
-                    name="min_score"
-                    value={values.min_score}
+                    name="label_translations"
+                    value={values.label_translations}
                     onChange={handleChange}
-                    isInvalid={!!errors.min_score}
+                    isInvalid={!!errors.label_translations}
                   />
                   <Form.Control.Feedback type="invalid">
-                    {errors.min_score}
+                    {errors.label_translations}
                   </Form.Control.Feedback>
                 </Form.Group>
-                : null}
 
-              <Form.Group controlId="validationDescription">
-                <Form.Label>{I18n.t("activerecord.attributes.questions_sequence.description_translations")}</Form.Label>
-                <Form.Control
-                  name="description_translations"
-                  as="textarea"
-                  value={values.description_translations}
-                  onChange={handleChange}
-                  isInvalid={!!errors.description_translations}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.description_translations}
-                </Form.Control.Feedback>
-              </Form.Group>
+                {values.type === "QuestionsSequences::Scored" ?
+                  <Form.Group controlId="validationMinScore">
+                    <Form.Label>{I18n.t("activerecord.attributes.questions_sequence.min_score")}</Form.Label>
+                    <Form.Control
+                      name="min_score"
+                      value={values.min_score}
+                      onChange={handleChange}
+                      isInvalid={!!errors.min_score}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.min_score}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                  : null}
 
-              <Button type="submit" disabled={isSubmitting}>
-                {I18n.t("save")}
-              </Button>
-            </Form>
-          )}
-        </Formik>
+                <Form.Group controlId="validationDescription">
+                  <Form.Label>{I18n.t("activerecord.attributes.questions_sequence.description_translations")}</Form.Label>
+                  <Form.Control
+                    name="description_translations"
+                    as="textarea"
+                    value={values.description_translations}
+                    onChange={handleChange}
+                    isInvalid={!!errors.description_translations}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.description_translations}
+                  </Form.Control.Feedback>
+                </Form.Group>
+
+                <Button type="submit" disabled={isSubmitting}>
+                  {I18n.t("save")}
+                </Button>
+              </Form>
+            )}
+          </Formik>
+        </FadeIn>
     );
   }
 }

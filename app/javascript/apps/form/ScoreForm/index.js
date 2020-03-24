@@ -1,5 +1,6 @@
 import * as React from "react";
 import I18n from "i18n-js";
+import FadeIn from "react-fade-in";
 import { Form, Button } from "react-bootstrap";
 import { Formik } from "formik";
 
@@ -49,41 +50,43 @@ export default class ScoreForm extends React.Component {
     const { score } = this.props;
 
     return (
-      <Formik
-        validationSchema={scoreSchema}
-        initialValues={{ score: score }}
-        onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
-      >
-        {({
-            handleSubmit,
-            handleChange,
-            isSubmitting,
-            values,
-            errors,
-            status
-          }) => (
-          <Form noValidate onSubmit={handleSubmit}>
-            {status ? <DisplayErrors errors={status}/> : null}
-            <Form.Group controlId="validationScore">
-              <Form.Label>{I18n.t("activerecord.attributes.condition.score")}</Form.Label>
-              <Form.Control
-                type="number"
-                name="score"
-                value={values.score}
-                onChange={handleChange}
-                isInvalid={!!errors.score}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.score}
-              </Form.Control.Feedback>
-            </Form.Group>
+      <FadeIn>
+        <Formik
+          validationSchema={scoreSchema}
+          initialValues={{ score: score }}
+          onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
+        >
+          {({
+              handleSubmit,
+              handleChange,
+              isSubmitting,
+              values,
+              errors,
+              status
+            }) => (
+            <Form noValidate onSubmit={handleSubmit}>
+              {status ? <DisplayErrors errors={status}/> : null}
+              <Form.Group controlId="validationScore">
+                <Form.Label>{I18n.t("activerecord.attributes.condition.score")}</Form.Label>
+                <Form.Control
+                  type="number"
+                  name="score"
+                  value={values.score}
+                  onChange={handleChange}
+                  isInvalid={!!errors.score}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.score}
+                </Form.Control.Feedback>
+              </Form.Group>
 
-            <Button type="submit" disabled={isSubmitting}>
-              {I18n.t("save")}
-            </Button>
-          </Form>
-        )}
-      </Formik>
+              <Button type="submit" disabled={isSubmitting}>
+                {I18n.t("save")}
+              </Button>
+            </Form>
+          )}
+        </Formik>
+      </FadeIn>
     );
   }
 }

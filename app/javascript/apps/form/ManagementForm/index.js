@@ -7,12 +7,12 @@ import { Formik } from "formik";
 import DisplayErrors from "../DisplayErrors";
 import Http from "../../diagram/engine/http";
 import store from "../../diagram/engine/reducers/store";
-import { finalDiagnosticSchema } from "../schema";
+import { managementSchema } from "../schema";
 import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
 
 
-export default class FinalDiagnosticForm extends React.Component {
+export default class ManagementForm extends React.Component {
 
   handleOnSubmit = async (values, actions) => {
     const { method, from, engine, diagramObject, addAvailableNode } = this.props;
@@ -20,9 +20,9 @@ export default class FinalDiagnosticForm extends React.Component {
     let httpRequest = {};
 
     if (method === "create") {
-      httpRequest = await http.createFinalDiagnostic(values.label_translations, values.description_translations, from);
+      httpRequest = await http.createManagement(values.label_translations, values.description_translations, from);
     } else {
-      httpRequest = await http.updateFinalDiagnostic(values.id, values.label_translations, values.description_translations, from);
+      httpRequest = await http.updateManagement(values.id, values.label_translations, values.description_translations, from);
     }
 
     let result = await httpRequest.json();
@@ -32,7 +32,7 @@ export default class FinalDiagnosticForm extends React.Component {
         window.location.replace(result.url);
       } else {
         if (method === "create") {
-          let diagramInstance = createNode(result, addAvailableNode, false, "Diagnostic", engine);
+          let diagramInstance = createNode(result, addAvailableNode, false, result.node.category_name, engine);
           engine.getModel().addNode(diagramInstance);
         } else {
           diagramObject.options.dbInstance.node = result;
@@ -50,16 +50,16 @@ export default class FinalDiagnosticForm extends React.Component {
   };
 
   render() {
-    const { finalDiagnostic } = this.props;
+    const { management } = this.props;
 
     return (
       <FadeIn>
         <Formik
-          validationSchema={finalDiagnosticSchema}
+          validationSchema={managementSchema}
           initialValues={{
-            id: finalDiagnostic?.id || "",
-            label_translations: finalDiagnostic?.label_translations?.en || "",
-            description_translations: finalDiagnostic?.description_translations?.en || ""
+            id: management?.id || "",
+            label_translations: management?.label_translations?.en || "",
+            description_translations: management?.description_translations?.en || ""
           }}
           onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
         >
@@ -74,7 +74,7 @@ export default class FinalDiagnosticForm extends React.Component {
             <Form noValidate onSubmit={handleSubmit}>
               {status ? <DisplayErrors errors={status}/> : null}
               <Form.Group controlId="validationLabel">
-                <Form.Label>{I18n.t("activerecord.attributes.final_diagnostic.label_translations")}</Form.Label>
+                <Form.Label>{I18n.t("activerecord.attributes.node.label_translations")}</Form.Label>
                 <Form.Control
                   name="label_translations"
                   value={values.label_translations}
@@ -87,7 +87,7 @@ export default class FinalDiagnosticForm extends React.Component {
               </Form.Group>
 
               <Form.Group controlId="validationDescription">
-                <Form.Label>{I18n.t("activerecord.attributes.final_diagnostic.description_translations")}</Form.Label>
+                <Form.Label>{I18n.t("activerecord.attributes.node.description_translations")}</Form.Label>
                 <Form.Control
                   name="description_translations"
                   as="textarea"

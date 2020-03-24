@@ -91,6 +91,31 @@ class QuestionsSequence < Node
     end
   end
 
+  # Get instance of final_diagnostic in a diagnostic
+  def get_instance_json(instanceable)
+    instances.where(instanceable: instanceable).includes(:node).as_json(
+      include: [
+        node: {
+          include: [:answers],
+          methods: [
+            :node_type,
+            :category_name,
+            :type
+          ]
+        },
+        conditions: {
+          include: [
+            first_conditionable: {
+              methods: [
+                :get_node
+              ]
+            },
+          ]
+        },
+      ]
+    ).first
+  end
+
   # Return the reference prefix from a QS instance
   def reference_prefix
     return '' unless type.present?

@@ -2,8 +2,10 @@
 
 <%= render 'utils/dependency_warning', node: @management %>
 
-<div class="row justify-content-center">
-  <%= simple_form_for @management, url: algorithm_management_url(@algorithm, @management), html: { class: 'form-horizontal' }, wrapper: :input_group do |f| %>
-    <%= render 'form', f: f %>
-  <% end %>
+<p class="mx-0 my-0 metadata" data-algorithm="<%= @algorithm.id %>"></p>
+
+<div class="row justify-content-center mt-5">
+  <div class="col-md-8">
+    <%= react_component('form/ManagementForm', { management: @management, method: 'update', from: 'rails' }) %>
+  </div>
 </div>

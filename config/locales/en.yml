@@ -608,7 +608,9 @@ en:
   warning_dependency: "Warning ! Editing this node will affect :"
   close: "Close"
   back: "Back"
-  open_diagram: "Open diagram editor"
+  open_diagram: "Open diagram"
+  open treatments: "Open treatments"
+  loading: "Loading.."
   help: "Help"
   type_here: "Type here"
   technical_files:
