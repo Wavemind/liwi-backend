@@ -3,11 +3,45 @@ import { PortWidget } from "@projectstorm/react-diagrams-core";
 
 import { withDiagram } from "../../../../engine/context/Diagram.context";
 import { getLabel } from "../../../../helpers/nodeHelpers";
+import I18n from "i18n-js";
+import store from "../../../../engine/reducers/store";
+import { openModal } from "../../../../engine/reducers/creators.actions";
 
 
 class HealthCareNodeWidget extends React.Component {
   constructor(props) {
     super(props);
+  }
+
+  /**
+   * Open modal to edit health care
+   */
+  editHealthCare() {
+    const { node } = this.props;
+    node.options.selected = false;
+
+    let params = {
+      diagramObject: node,
+      engine: node.options.engine,
+      method: "update",
+      from: "react"
+    };
+
+    if (node.options.dbInstance.node.type === "HealthCares::Management") {
+      store.dispatch(
+        openModal(I18n.t("managements.edit.title"), "ManagementForm", {
+          management: node.options.dbInstance.node,
+          ...params
+        })
+      );
+    } else {
+      store.dispatch(
+        openModal(I18n.t("drugs.edit.title"), "DrugForm", {
+          drugs: node.options.dbInstance.node,
+          ...params
+        })
+      );
+    }
   }
 
   render() {
@@ -25,17 +59,16 @@ class HealthCareNodeWidget extends React.Component {
             {getReferencePrefix(node.options.dbInstance.node.node_type, node.options.dbInstance.node.type) + node.options.dbInstance.node.reference}
           </div>
           <div className="col pl-0 pr-2 text-right">
-            {/*{(node.dbInstance.node.is_default === false) ? (*/}
-            {/*  <div className="dropdown">*/}
-            {/*    <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"*/}
-            {/*            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">*/}
-            {/*    </button>*/}
-            {/*    <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">*/}
-            {/*      {(node.dbInstance.node.node_type === "QuestionsSequence") ? (<a className="dropdown-item" href="#" onClick={() => this.openDiagram(node.dbInstance.node.id)}>Open diagram</a>) : null}*/}
-            {/*      <a className="dropdown-item" href="#" onClick={() => this.editNode(node)}>Edit</a>*/}
-            {/*    </div>*/}
-            {/*  </div>*/}
-            {/*) : null}*/}
+            {(node.options.dbInstance.node.is_default === false) ? (
+              <div className="dropdown">
+                <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                </button>
+                <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a className="dropdown-item" href="#" onClick={() => this.editHealthCare()}>{I18n.t("edit")}</a>
+                </div>
+              </div>
+            ) : null}
           </div>
         </div>
         <div>

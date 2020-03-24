@@ -56,9 +56,9 @@ export default class Http {
       health_cares_management: {
         label_en,
         description_en,
-        diagnostic_id: this.instanceableId,
-        final_diagnostic_id: this.finalDiagnostic
       },
+      diagnostic_id: this.instanceableId,
+      final_diagnostic_id: this.finalDiagnostic,
       from
     };
     const header = await this.setHeaders("POST", body);
@@ -79,9 +79,9 @@ export default class Http {
         id,
         label_en,
         description_en,
-        diagnostic_id: this.instanceableId,
-        final_diagnostic_id: this.finalDiagnostic
       },
+      diagnostic_id: this.instanceableId,
+      final_diagnostic_id: this.finalDiagnostic,
       from
     };
     const header = await this.setHeaders("PUT", body);

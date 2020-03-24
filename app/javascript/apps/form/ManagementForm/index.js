@@ -32,7 +32,7 @@ export default class ManagementForm extends React.Component {
         window.location.replace(result.url);
       } else {
         if (method === "create") {
-          let diagramInstance = createNode(result, addAvailableNode, false, "Diagnostic", engine);
+          let diagramInstance = createNode(result, addAvailableNode, false, result.node.category_name, engine);
           engine.getModel().addNode(diagramInstance);
         } else {
           diagramObject.options.dbInstance.node = result;

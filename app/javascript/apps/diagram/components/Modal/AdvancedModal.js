@@ -7,6 +7,7 @@ import { closeModal } from "../../engine/reducers/creators.actions";
 import ScoreForm from "../../../form/ScoreForm";
 import FinalDiagnosticForm from "../../../form/FinalDiagnosticForm";
 import QuestionsSequenceForm from "../../../form/QuestionsSequenceForm";
+import ManagementForm from "../../../form/ManagementForm";
 
 
 export default class AdvancedModal extends React.Component {
@@ -55,6 +56,8 @@ export default class AdvancedModal extends React.Component {
         return <FinalDiagnosticForm {...params} />;
       case "QuestionsSequenceForm":
         return <QuestionsSequenceForm {...params} />;
+      case "ManagementForm":
+        return <ManagementForm {...params} />;
       default:
         console.log("Action n'existe pas");
         return null;

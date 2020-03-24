@@ -26,7 +26,6 @@ export default class AdvancedNodeModel extends NodeModel {
       );
     }
 
-
     // Set Position
     this.setPosition(this.options.dbInstance.position_x, this.options.dbInstance.position_y);
 
