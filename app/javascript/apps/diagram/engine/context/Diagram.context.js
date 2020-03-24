@@ -38,11 +38,9 @@ export default class DiagramProvider extends React.Component {
     }
 
     availableNodes.map(node => {
-      console.log(node);
       let category = getCategoryNode(node);
       orderedNodes[category].push(node);
     });
-    /////////////////////////////////////////////////////////////
 
     this.state = { ...this.state, ...props.value, http, orderedNodes };
   }

@@ -12,7 +12,6 @@ export default class Http {
 
   constructor() {
     let data = document.querySelector(".metadata");
-    console.log(data.dataset.type);
 
     this.url = window.location.origin;
     this.instanceableId = data.dataset.id;

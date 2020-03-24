@@ -1,6 +1,7 @@
 import * as React from "react";
 import I18n from "i18n-js";
 import {Form, Button} from "react-bootstrap";
+import FadeIn from "react-fade-in";
 import {Formik} from "formik";
 
 import DisplayErrors from "../DisplayErrors";
@@ -9,6 +10,11 @@ import store from "../../diagram/engine/reducers/store";
 import {questionSchema} from "../schema";
 import {closeModal} from "../../diagram/engine/reducers/creators.actions";
 import {createNode} from "../../diagram/helpers/nodeHelpers";
+import Loader from "../QuestionsSequenceForm";
+import {CATEGORIES_DISPLAYING_SYSTEM, CATEGORIES_DISABLING_ANSWER_TYPE} from "../../diagram/engine/constants/default";
+import InputGroup from "react-bootstrap/InputGroup";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import TextField from "@material-ui/core/TextField";
 
 export default class FinalDiagnosticForm extends React.Component {
   constructor() {
@@ -29,9 +35,6 @@ export default class FinalDiagnosticForm extends React.Component {
 
     httpRequest = await http.fetchQuestionsLists();
     let result = await httpRequest.json();
-
-    console.log(result)
-    console.log(httpRequest.status);
 
     if (httpRequest.status === 200) {
       this.setState({
@@ -82,10 +85,10 @@ export default class FinalDiagnosticForm extends React.Component {
    * @param {Object} event
    */
   searchSnomed = async (event) => {
-    const { http } = this.props;
+    const http = new Http();
 
     let response = await http.searchSnomed(event.target.value);
-    this.setState({ snomedResults: response.items });
+    this.setState({snomedResults: response.items});
   };
 
   /**
@@ -100,245 +103,260 @@ export default class FinalDiagnosticForm extends React.Component {
     });
   };
 
+  categoryChanges = (event) => {
+    let fieldsToSet = []
+    switch(event.target.value) {
+
+        "Questions::BackgroundCalculation"
+        "Questions::BasicMeasurement"
+        "Questions::ChronicCondition"
+        "Questions::ConsultationRelated"
+        "Questions::ComplaintCategory"
+        "Questions::Demographic"
+        "Questions::Exposure"
+        "Questions::ObservedPhysicalSign"
+        "Questions::PhysicalExam"
+        "Questions::Symptom"
+        "Questions::TreatmentQuestion"
+        "Questions::UniqueTriagePhysicalSign"
+        "Questions::UniqueTriageQuestion"
+        "Questions::Vaccine"
+        "Questions::VitalSignAnthropometric"
+      case "Questions::AssessmentTest":
+      case "Questions::AssessmentTest":
+      case "Questions::AssessmentTest":
+      case "Questions::AssessmentTest":
+      case "Questions::AssessmentTest":
+        // code block
+        break;
+      case "Questions::AssessmentTest":
+        // code block
+        break;
+      default:
+        fieldsToSet.push(["stage", ""]);
+    }
+    console.log(value);
+
+    return fieldsToSet;
+  };
+
   render() {
     const {question} = this.props;
-    const {lists, snomedResults} = this.state;
-
-    console.log(lists);
-    // console.log(answer_types);
-    // console.log(categories);
-    // console.log(stages);
-    // console.log(systems);
+    const {lists: {answer_types, categories, stages, systems}, snomedResults, isLoading} = this.state;
 
     return (
-      <Formik
-        validationSchema={questionSchema}
-        initialValues={{
-          id: question?.id || "",
-          type: question?.type || "",
-          system: question?.system || "",
-          answer_type: question?.answer_type || "",
-          stage: question?.stage || "",
-          is_mandatory: question?.is_mandatory || "",
-          label_translations: question?.label_translations?.en || "",
-          snomed: question?.snomed_label || "",
-          description_translations: question?.description_translations?.en || "",
-          unavailable: question?.unavailable || "",
-          formula: question?.formula || ""
-        }}
-        onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
-      >
-        {({
-            handleSubmit,
-            handleChange,
-            isSubmitting,
-            values,
-            errors,
-            status
-          }) => (
-          <Form noValidate onSubmit={handleSubmit}>
-            {status ? <DisplayErrors errors={status}/> : null}
+      isLoading ? <Loader/> :
+        <FadeIn>
+          <Formik
+            validationSchema={questionSchema}
+            initialValues={{
+              id: question?.id || "",
+              type: question?.type || "",
+              system: question?.system || "",
+              answer_type: question?.answer_type_id || "",
+              stage: question?.stage || "",
+              is_mandatory: question?.is_mandatory || "",
+              label_translations: question?.label_translations?.en || "",
+              snomed: question?.snomed_label || "",
+              description_translations: question?.description_translations?.en || "",
+              unavailable: question?.unavailable || "",
+              formula: question?.formula || ""
+            }}
+            onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
+          >
+            {({
+                handleSubmit,
+                handleChange,
+                isSubmitting,
+                setFieldValue,
+                values,
+                errors,
+                status
+              }) => (
+              <Form noValidate onSubmit={handleSubmit}>
+                {status ? <DisplayErrors errors={status}/> : null}
 
-            <Form.Row>
-              <Form.Group controlId="validationCategory">
-                <Form.Label>{I18n.t("activerecord.attributes.node.type")}</Form.Label>
-                <Form.Control
-                  as="select"
-                  name="type"
-                  value={values.type}
-                  onChange={handleChange}
-                  isInvalid={!!errors.type}
-                >
-                  <option value="">Select the category</option>
-                  {categories.map((category) => (
-                    <option value={category.name}>{category.label}</option>
-                  ))}
-                </Form.Control>
-                <Form.Control.Feedback type="invalid">
-                  {errors.type}
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Form.Row>
+                  <Form.Group controlId="validationCategory">
+                    <Form.Label>{I18n.t("activerecord.attributes.node.type")}</Form.Label>
+                    <Form.Control
+                      as="select"
+                      name="type"
+                      value={values.type}
+                      onChange={(e) => {handleChange(e); this.categoryChanges(e).forEach(element => setFieldValue(element[0], element[1]));}}
+                      isInvalid={!!errors.type}
+                    >
+                      <option value="">Select the category</option>
+                      {categories.map((category) => (
+                        <option value={category.name}>{category.label}</option>
+                      ))}
+                    </Form.Control>
+                    <Form.Control.Feedback type="invalid">
+                      {errors.type}
+                    </Form.Control.Feedback>
+                  </Form.Group>
 
-            {CATEGORIES_DISPLAYING_SYSTEM.includes(value.type) ?
-              <Form.Row>
-                <Form.Group controlId="validationSystem">
-                  <Form.Label>{I18n.t("activerecord.attributes.question.system")}</Form.Label>
-                  <Form.Control
-                    as="select"
-                    name="system"
-                    value={values.system}
-                    onChange={handleChange}
-                    isInvalid={!!errors.system}
-                  >
-                    <option value="">Select the system</option>
-                    {systems.map((system) => (
-                      <option value={system[1]}>{system[0]}</option>
-                    ))}
-                  </Form.Control>
-                  <Form.Control.Feedback type="invalid">
-                    {errors.system}
-                  </Form.Control.Feedback>
-                </Form.Group>
-              </Form.Row>
-              : null}
+                {CATEGORIES_DISPLAYING_SYSTEM.includes(values.type) ?
+                    <Form.Group controlId="validationSystem">
+                      <Form.Label>{I18n.t("activerecord.attributes.question.system")}</Form.Label>
+                      <Form.Control
+                        as="select"
+                        name="system"
+                        value={values.system}
+                        onChange={handleChange}
+                        isInvalid={!!errors.system}
+                      >
+                        <option value="">Select the system</option>
+                        {systems.map((system) => (
+                          <option value={system[1]}>{system[0]}</option>
+                        ))}
+                      </Form.Control>
+                      <Form.Control.Feedback type="invalid">
+                        {errors.system}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                  : null}
 
-            <Form.Row>
-              <Form.Group controlId="validationAnswerType">
-                <Form.Label>{I18n.t("activerecord.attributes.question.answer_type")}</Form.Label>
-                <Form.Control
-                  as="select"
-                  name="answerType"
-                  value={values.answer_type}
-                  onChange={handleChange}
-                  disabled={CATEGORIES_DISABLING_ANSWER_TYPE.includes(values.type)}
-                  isInvalid={!!errors.answer_type}
-                >
-                  <option value="">Select the type of answers expected</option>
-                  {answer_types.map((answerType) => (
-                    <option value={answerType.id}>{answerType.display_name}</option>
-                  ))}
-                </Form.Control>
-                <Form.Control.Feedback type="invalid">
-                  {errors.answer_type}
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Form.Row>
+                  <Form.Group controlId="validationAnswerType">
+                    <Form.Label>{I18n.t("activerecord.attributes.question.answer_type")}</Form.Label>
+                    <Form.Control
+                      as="select"
+                      name="answer_type"
+                      value={values.answer_type}
+                      onChange={handleChange}
+                      disabled={CATEGORIES_DISABLING_ANSWER_TYPE.includes(values.type)}
+                      isInvalid={!!errors.answer_type}
+                    >
+                      <option value="">Select the type of answers expected</option>
+                      {answer_types.map((answerType) => (
+                        <option value={answerType.id}>{answerType.display_name}</option>
+                      ))}
+                    </Form.Control>
+                    <Form.Control.Feedback type="invalid">
+                      {errors.answer_type}
+                    </Form.Control.Feedback>
+                  </Form.Group>
 
-            {values.type === "Questions::BackgroundCalculation" ?
-              <Form.Row>
-                <Form.Group controlId="validationStage">
-                  <Form.Label>{I18n.t("activerecord.attributes.question.stage")}</Form.Label>
-                  <Form.Control
-                    as="select"
-                    name="stage"
-                    value={values.stage}
-                    onChange={handleChange}
-                    disabled={values.type !== ""}
-                    isInvalid={!!errors.stage}
-                  >
-                    <option value="">Select the stage</option>
-                    {Object.keys(stages).map(function (key) {
-                      return <option value={stages[key]}>{key.charAt(0).toUpperCase() + key.slice(1)}</option>;
-                    })}
-                  </Form.Control>
-                  <Form.Control.Feedback type="invalid">
-                    {errors.stage}
-                  </Form.Control.Feedback>
-                </Form.Group>
-              </Form.Row>
-              : null}
+                  {values.type !== "Questions::BackgroundCalculation" ?
+                    <Form.Group controlId="validationStage">
+                      <Form.Label>{I18n.t("activerecord.attributes.question.stage")}</Form.Label>
+                      <Form.Control
+                        as="select"
+                        name="stage"
+                        value={values.stage}
+                        onChange={handleChange}
+                        disabled={values.type !== ""}
+                        isInvalid={!!errors.stage}
+                      >
+                        <option value="">Select the stage</option>
+                        {Object.keys(stages).map(function (key) {
+                          return <option value={stages[key]}>{key.charAt(0).toUpperCase() + key.slice(1)}</option>;
+                        })}
+                      </Form.Control>
+                      <Form.Control.Feedback type="invalid">
+                        {errors.stage}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                  : null}
 
-            <Form.Row>
-              <Form.Group controlId="validationIsMandatory">
-                <Form.Label>{I18n.t("activerecord.attributes.question.is_mandatory")}</Form.Label>
-                <Form.Control
-                  type="checkbox"
-                  name="is_mandatory"
-                  value={values.is_mandatory}
-                  onChange={handleChange}
-                  isInvalid={!!errors.is_mandatory}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.is_mandatory}
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Form.Row>
+                  <Form.Group controlId="validationIsMandatory">
+                    <Form.Label>{I18n.t("activerecord.attributes.question.is_mandatory")}</Form.Label>
+                    <Form.Control
+                      type="checkbox"
+                      name="is_mandatory"
+                      value={values.is_mandatory}
+                      onChange={handleChange}
+                      isInvalid={!!errors.is_mandatory}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.is_mandatory}
+                    </Form.Control.Feedback>
+                  </Form.Group>
 
-            <Form.Row>
-              <Form.Group controlId="validationLabel">
-                <Form.Label>{I18n.t("activerecord.attributes.node.label_translations")}</Form.Label>
-                <Form.Control
-                  name="label_translations"
-                  value={values.label_translations}
-                  onChange={handleChange}
-                  isInvalid={!!errors.label_translations}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.label_translations}
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Form.Row>
+                  <Form.Group controlId="validationLabel">
+                    <Form.Label>{I18n.t("activerecord.attributes.node.label_translations")}</Form.Label>
+                    <Form.Control
+                      name="label_translations"
+                      value={values.label_translations}
+                      onChange={handleChange}
+                      isInvalid={!!errors.label_translations}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.label_translations}
+                    </Form.Control.Feedback>
+                  </Form.Group>
 
-            <Form.Row>
-              <Form.Group controlId="validationLabel">
-                <Form.Label>{I18n.t("activerecord.attributes.question.snomed")}</Form.Label>
-                <InputGroup>
-                  <Autocomplete
-                    options={snomedResults}
-                    getOptionLabel={option => option.fsn.term}
-                    autoComplete
-                    includeInputInList
-                    freeSolo
-                    disableOpenOnFocus
-                    onChange={this.snomedChange}
-                    renderInput={params => (
-                      <TextField {...params} label="Search a snomed label" variant="outlined"
-                                 onChange={this.searchSnomed} fullWidth/>
-                    )}
-                  />
-                </InputGroup>
-              </Form.Group>
-            </Form.Row>
+                  <Form.Group controlId="validationLabel">
+                    <Form.Label>{I18n.t("activerecord.attributes.question.snomed")}</Form.Label>
+                    <InputGroup>
+                      <Autocomplete
+                        options={snomedResults}
+                        getOptionLabel={option => option.fsn.term}
+                        autoComplete
+                        includeInputInList
+                        freeSolo
+                        disableOpenOnFocus
+                        onChange={this.snomedChange}
+                        renderInput={params => (
+                          <TextField {...params} label="Search a snomed label" variant="outlined"
+                                     onChange={this.searchSnomed} fullWidth/>
+                        )}
+                      />
+                    </InputGroup>
+                  </Form.Group>
 
-            <Form.Row>
-              <Form.Group controlId="validationDescription">
-                <Form.Label>{I18n.t("activerecord.attributes.node.description_translations")}</Form.Label>
-                <Form.Control
-                  name="description_translations"
-                  as="textarea"
-                  value={values.description_translations}
-                  onChange={handleChange}
-                  isInvalid={!!errors.description_translations}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.description_translations}
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Form.Row>
+                  <Form.Group controlId="validationDescription">
+                    <Form.Label>{I18n.t("activerecord.attributes.node.description_translations")}</Form.Label>
+                    <Form.Control
+                      name="description_translations"
+                      as="textarea"
+                      value={values.description_translations}
+                      onChange={(e) => this.test(handleChange, e)}
+                      isInvalid={!!errors.description_translations}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.description_translations}
+                    </Form.Control.Feedback>
+                  </Form.Group>
 
-            {values.type === "Questions::AssessmentTest" ?
-              <Form.Row>
-                <Form.Group controlId="validationDescription">
-                  <Form.Label>{I18n.t("activerecord.attributes.question.unavailable")}</Form.Label>
-                  <Form.Control
-                    name="unavailable"
-                    as="textarea"
-                    value={values.unavailable}
-                    onChange={handleChange}
-                    isInvalid={!!errors.unavailable}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.unavailable}
-                  </Form.Control.Feedback>
-                </Form.Group>
-              </Form.Row>
-            : null}
+                {values.type === "Questions::AssessmentTest" ?
+                    <Form.Group controlId="validationDescription">
+                      <Form.Label>{I18n.t("activerecord.attributes.question.unavailable")}</Form.Label>
+                      <Form.Control
+                        name="unavailable"
+                        as="checkbox"
+                        value={values.unavailable}
+                        onChange={handleChange}
+                        isInvalid={!!errors.unavailable}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.unavailable}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                  : null}
 
-            {values.answer_type === "5" ?
-              <Form.Row>
-                <Form.Group controlId="validationFormula">
-                  <Form.Label>{I18n.t("activerecord.attributes.question.formula")}</Form.Label>
-                  <Form.Control
-                    name="formula"
-                    as="textarea"
-                    value={values.formula}
-                    onChange={handleChange}
-                    isInvalid={!!errors.formula}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.formula}
-                  </Form.Control.Feedback>
-                </Form.Group>
-              </Form.Row>
-              : null}
+                {values.answer_type === "5" ?
+                    <Form.Group controlId="validationFormula">
+                      <Form.Label>{I18n.t("activerecord.attributes.question.formula")}</Form.Label>
+                      <Form.Control
+                        name="formula"
+                        as="textarea"
+                        value={values.formula}
+                        onChange={handleChange}
+                        isInvalid={!!errors.formula}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.formula}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                  : null}
 
-            <Button type="submit" disabled={isSubmitting}>
-              {I18n.t("save")}
-            </Button>
-          </Form>
-        )}
-      </Formik>
+                <Button type="submit" disabled={isSubmitting}>
+                  {I18n.t("save")}
+                </Button>
+              </Form>
+            )}
+          </Formik>
+        </FadeIn>
     );
   }
-}
+};
