@@ -182,6 +182,16 @@ export default class Http {
   };
 
   /**
+   * Fetch drug medication forms
+   * @return [Object] body of request
+   */
+  fetchDrugMedicationForms = async () => {
+    const url = `${this.url}/drugs/medication_forms`;
+    const header = await this.setHeaders("GET", null);
+    return await fetch(url, header).catch(error => console.log(error));
+  };
+
+  /**
    * Fetch questions sequences categories
    * @return [Object] body of request
    */

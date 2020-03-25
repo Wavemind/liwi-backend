@@ -66,6 +66,13 @@ class DrugsController < ApplicationController
     end
   end
 
+  # GET
+  # @return Array
+  # medication forms list
+  def medication_forms
+    render json: Formulation.medication_forms
+  end
+
   # PUT
   # @return final_diagnostic node
   # Update a drug node from diagram

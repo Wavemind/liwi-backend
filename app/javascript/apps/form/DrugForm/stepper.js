@@ -4,8 +4,8 @@ import Http from "../../diagram/engine/http";
 import store from "../../diagram/engine/reducers/store";
 import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
-import DrugForm from "../DrugForm";
-import FormulationForm from "../FormulationForm";
+import DrugForm from "./drugForm";
+import FormulationForm from "./formulationForm";
 
 export default class StepperDrugForm extends React.Component {
 
@@ -15,10 +15,11 @@ export default class StepperDrugForm extends React.Component {
     const {drug} = props;
 
     this.state = {
-      step: 1,
+      step: 2,
       drug: {
         id: drug?.id || "",
         label_translations: drug?.label_translations?.en || "",
+        formulations: drug?.formulations || []
       }
     };
   }
@@ -50,6 +51,7 @@ export default class StepperDrugForm extends React.Component {
 
   render() {
     const {step, drug} = this.state;
+    const {method} = this.props;
 
     switch (step) {
       case 1:
@@ -64,6 +66,7 @@ export default class StepperDrugForm extends React.Component {
         return (
           <FormulationForm
             formData={drug}
+            method={method}
             setFormData={this.setFormData}
             nextStep={this.nextStep}
             previousStep={this.previousStep}

@@ -180,6 +180,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :drugs, only: [] do
+    collection do
+      get 'medication_forms'
+    end
+  end
+
   # API
   namespace :api do
     namespace :v1 do

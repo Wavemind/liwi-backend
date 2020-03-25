@@ -5,12 +5,8 @@ en:
         score: "Score"
       diagnostic:
         node: "Complaint category"
-      node:
-        type: "Category"
-        description_translations: "Description"
-        label_translations: "Label"
-
-        unavailable: "Can be unavailable ?"
+      formulation:
+        by_age: "Treatment conditioned by age"
         minimal_dose_per_kg: "Minimal dose/kg"
         maximal_dose_per_kg: "Maximal dose/kg"
         maximal_dose: "Maximal dose"
@@ -19,6 +15,10 @@ en:
         pill_size: "Pill minimal size (mg)"
         is_triage: "Ask in triage if it is available"
         is_identifiable: "This question can identify a patient"
+      node:
+        type: "Category"
+        description_translations: "Description"
+        label_translations: "Label"
       question:
         answer_type: "Answer type"
         formula: "Formula"
@@ -554,8 +554,8 @@ en:
         description: "Description"
         actions: "Actions"
     medication_forms:
-      liquid: "Liquid"
-      pill: "Pill"
+      select: "Select a medication form"
+      required: "Medication form has to be filled"
   toolbar:
     new: "New"
     question: "Question"
