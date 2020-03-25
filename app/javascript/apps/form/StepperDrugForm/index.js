@@ -44,14 +44,14 @@ export default class StepperDrugForm extends React.Component {
 
   render() {
     const {step, drug} = this.state;
-console.log(step);
+
     switch (step) {
       case 1:
         return (
           <DrugForm
             formData={drug}
-            setFormData={this.setFormData}
-            nextStep={this.nextStep}
+            setFormData={() => this.setFormData()}
+            nextStep={() => this.nextStep()}
           />
         );
       case 2:

@@ -16,22 +16,26 @@ export default class DrugForm extends React.Component {
         <Formik
           validationSchema={drugSchema}
           initialValues={formData}
-          onSubmit={nextStep}
-          handleChange={(truc) => console.log(truc)}
+          onSubmit={values => {
+            setFormData(values);
+            nextStep();
+          }}
         >
           {({
               handleChange,
+              handleSubmit,
               values,
               errors,
+            touched,
             }) => (
-            <Form noValidate>
+            <Form noValidate onSubmit={handleSubmit}>
               <Form.Group controlId="validationLabel">
                 <Form.Label>{I18n.t("activerecord.attributes.drug.label_translations")}</Form.Label>
                 <Form.Control
                   name="label_translations"
                   value={values.label_translations}
                   onChange={handleChange}
-                  isInvalid={!!errors.label_translations}
+                  isInvalid={touched.label_translations && !!errors.label_translations}
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.label_translations}
@@ -45,7 +49,7 @@ export default class DrugForm extends React.Component {
                   as="textarea"
                   value={values.description_translations}
                   onChange={handleChange}
-                  isInvalid={!!errors.description_translations}
+                  isInvalid={touched.description_translations && !!errors.description_translations}
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.description_translations}
