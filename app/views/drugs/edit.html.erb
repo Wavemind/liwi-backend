@@ -2,8 +2,10 @@
 
 <%= render 'utils/dependency_warning', node: @drug %>
 
-<div class="row justify-content-center">
-  <%= simple_form_for @drug, url: algorithm_drug_url(@algorithm, @drug), html: { class: 'form-horizontal' }, wrapper: :input_group do |f| %>
-    <%= render 'form', f: f %>
-  <% end %>
+<p class="mx-0 my-0 metadata"></p>
+
+<div class="row justify-content-center mt-5">
+  <div class="col-md-8">
+    <%= react_component('form/StepperDrugForm', { drug: @drug, method: 'update', from: 'rails' }) %>
+  </div>
 </div>

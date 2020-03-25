@@ -5,6 +5,11 @@ export const scoreSchema = yup.object().shape({
   score: yup.number().required(I18n.t("errors.messages.required"))
 });
 
+export const drugSchema = yup.object().shape({
+  label_translations: yup.string().required(I18n.t("errors.messages.required")),
+  description_translations: yup.string()
+});
+
 export const finalDiagnosticSchema = yup.object().shape({
   label_translations: yup.string().required(I18n.t("errors.messages.required")),
   description_translations: yup.string()
