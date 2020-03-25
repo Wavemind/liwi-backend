@@ -1,54 +1,25 @@
-<h1><%= t('.title', name: @diagnostic.label) %></h1>
+<h1><%= t('.title', name: @diagnostic.label) %> <%= link_to(I18n.t('open_diagram'), diagram_algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], params[:id]), class: 'btn btn-primary') %></h1>
 
 <ul class="nav nav-tabs" id="myTab" role="tablist">
   <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:panel].blank? || params[:panel] == 'diagram'%>" id="diagram-tab" data-toggle="tab" href="#diagram" role="tab" aria-controls="diagram" aria-selected="false"><%= t('.diagram') %></a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'final_diagnostics'%>" id="final_diagnostics-tab" data-toggle="tab" href="#final_diagnostics" role="tab" aria-controls="final_diagnostics" aria-selected="false"><%= t('.subtitle_final_diagnostics')  %> </a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'excluding_diagnostics'%>" id="excluding_diagnostics-tab" data-toggle="tab" href="#excluding_diagnostics" role="tab" aria-controls="excluding_diagnostics" aria-selected="false"><%= t('.excluding_diagnostics') %></a>
+    <a class="nav-link <%= 'active' if params[:panel].blank? || params[:panel] == 'final_diagnostics'%>" id="final_diagnostics-tab" data-toggle="tab" href="#final_diagnostics" role="tab" aria-controls="final_diagnostics" aria-selected="false"><%= t('.subtitle_final_diagnostics')  %> </a>
   </li>
   <li class="nav-item">
     <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'translations'%>" id="translations-tab" data-toggle="tab" href="#translations" role="tab" aria-controls="translations" aria-selected="false"><%= t('.translations') %></a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'differential_conditions'%>" id="differential_conditions-tab" data-toggle="tab" href="#differential_conditions" role="tab" aria-controls="differential_conditions" aria-selected="false"><%= t('.differential_diagnostic_conditions') %></a>
   </li>
 </ul>
 
 
 <div class="tab-content mt-4 ml-4" id="diagnostic-table">
-  <div class="tab-pane fade  <%= 'show active' if params[:panel].blank? || params[:panel] == 'diagram'%>" id="diagram" role="tabpanel" aria-labelledby="diagram-tab">
-    <div class="row">
-      <div class="col text-right">
-        <%= link_to(I18n.t('open_diagram'), diagram_algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], params[:id]), class: 'btn btn-primary') %>
-      </div>
+    <div class="tab-pane fade <%= 'show active' if params[:panel].blank? || params[:panel] == 'final_diagnostics'%>" id="final_diagnostics" role="tabpanel" aria-labelledby="final_diagnostics-tab">
 
-      <div class="col-md-12 diagram-container scrollable">
-        <p class="mx-0 my-0 metadata" data-type="<%= @diagnostic.class.name %>" data-id="<%= @diagnostic.id %>" data-version="<%= @diagnostic.version.id %>"  data-algorithm="<%= @diagnostic.version.algorithm.id %>"></p>
-        <%= react_component('diagram', {
-          context: {
-            instanceable: @diagnostic.diagnostic_json,
-            instances: @diagnostic.questions_json + @diagnostic.final_diagnostics_json,
-            availableNodes: @diagnostic.available_nodes_json,
-            questionAnswerTypes: AnswerType.all.as_json(methods: :display_name),
-            questionSystems: Question.systems.map { |k, v| [t("questions.systems.#{k}"), k] },
-            questionStages: Question.stages,
-            questionCategories: Question.categories('Diagnostic').as_json,
-            questionsSequenceCategories: QuestionsSequence.categories.as_json,
-            answersOperators: Answer.operators.as_json,
-            readOnly: true
-          }
-        }) %>
-      </div>
-    </div>
-  </div>
+    <h3><%= t('.excluding_diagnostics') %></h3>
 
-  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'final_diagnostics'%>" id="final_diagnostics" role="tabpanel" aria-labelledby="final_diagnostics-tab">
-    <h3><%= t('.subtitle_final_diagnostics') %></h3>
+    <%= render 'excluding' %>
 
+    <hr class="mt-5"/>
+
+    <h3 class="mt-5"><%= t('.subtitle_final_diagnostics') %></h3>
     <%= link_to new_algorithm_version_diagnostic_final_diagnostic_url(@algorithm, @version, @diagnostic) do %>
       <button type="button" class="btn btn-outline-secondary"><%= t('add') %></button>
     <% end %>
@@ -56,20 +27,8 @@
     <%= render 'final_diagnostics/table' %>
   </div>
 
-  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'excluding_diagnostics'%>" id="excluding_diagnostics" role="tabpanel" aria-labelledby="excluding_diagnostics-tab">
-    <h3><%= t('.excluding_diagnostics') %></h3>
-
-    <%= render 'excluding' %>
-  </div>
-
   <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'translations'%>" id="translations" role="tabpanel" aria-labelledby="translations-tab">
     <%= render 'translations' %>
-  </div>
-
-  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'differential_conditions'%>" id="differential_conditions" role="tabpanel" aria-labelledby="differential_conditions-tab">
-    <h3><%= t('.differential_diagnostic_conditions') %></h3>
-
-    <%= render 'conditions/differential_table' %>
   </div>
 </div>
 

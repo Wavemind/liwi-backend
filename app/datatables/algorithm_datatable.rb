@@ -4,6 +4,7 @@ class AlgorithmDatatable < AjaxDatatablesRails::ActiveRecord
   def_delegator :@view, :link_to
   def_delegator :@view, :edit_algorithm_url
   def_delegator :@view, :algorithm_url
+  def_delegator :@view, :algorithm_version_url
   def_delegator :@view, :archive_algorithm_url
   def_delegator :@view, :unarchive_algorithm_url
 
@@ -20,6 +21,14 @@ class AlgorithmDatatable < AjaxDatatablesRails::ActiveRecord
     }
   end
 
+  def versions(record)
+    badges = ''
+    record.versions.map do |version|
+      badges += " <span class='badge badge-info'>#{link_to(version.name, algorithm_version_url(record, version))}</span>"
+    end
+    badges
+  end
+
   def data
     records.map do |record|
       actions = link_to(I18n.t('show'), algorithm_url(record), class: 'btn btn-outline-primary') + " " + link_to(I18n.t('edit'), edit_algorithm_url(record), class: 'btn btn-outline-info') + " "
@@ -27,7 +36,7 @@ class AlgorithmDatatable < AjaxDatatablesRails::ActiveRecord
       {
         name: record.name,
         description: record.description,
-        nb_versions: record.versions.count,
+        versions: versions(record).html_safe,
         creator: record.user.full_name,
         actions: actions
       }

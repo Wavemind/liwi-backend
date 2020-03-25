@@ -46,6 +46,7 @@ en:
         version_count: "Amount of versions"
         creator: "Creator"
         actions: "Actions"
+        versions: "Versions"
       title: "Algorithms"
     new:
       title: "Add an algorithm"

@@ -5,6 +5,7 @@ class DiagnosticDatatable < AjaxDatatablesRails::ActiveRecord
   def_delegator :@view, :duplicate_algorithm_version_diagnostic_url
   def_delegator :@view, :edit_algorithm_version_diagnostic_url
   def_delegator :@view, :algorithm_version_diagnostic_url
+  def_delegator :@view, :diagram_algorithm_version_diagnostic_url
   def_delegator :@view, :date_format
 
   def initialize(params, opts = {})
@@ -22,7 +23,8 @@ class DiagnosticDatatable < AjaxDatatablesRails::ActiveRecord
 
   def data
     records.map do |record|
-      actions = link_to(I18n.t('show'), algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], record), class: 'btn btn-outline-primary') + " " +
+      actions = link_to(I18n.t('open_diagram'), diagram_algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], record), class: 'btn btn-outline-primary') + " " +
+        link_to(I18n.t('show'), algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], record), class: 'btn btn-outline-primary') + " " +
         link_to(I18n.t('edit'), edit_algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], record), class: 'btn btn-outline-info') + " " +
         link_to(I18n.t('duplicate'), duplicate_algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], record), class: 'btn btn-outline-info', method: :post) + " " +
         link_to(I18n.t('delete'), algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], record), class: 'btn btn-outline-danger', method: :delete, data: { confirm: 'Are you sure?' })

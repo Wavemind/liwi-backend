@@ -9,7 +9,7 @@ jQuery(document).ready(function () {
     "columns": [
       { "data": "name" },
       { "data": "description" },
-      { "data": "nb_versions" },
+      { "data": "versions" },
       { "data": "creator" },
       { "data": "actions", "className": "text-right" },
     ],
