@@ -26,7 +26,7 @@ export default class DrugForm extends React.Component {
               handleSubmit,
               values,
               errors,
-            touched,
+              touched
             }) => (
             <Form noValidate onSubmit={handleSubmit}>
               <Form.Group controlId="validationLabel">
