@@ -493,6 +493,7 @@ en:
       formula_reference_not_date: "The question '%{reference}' is not in date format."
       formula_reference_not_numeric: "The question '%{reference}' is not in numeric format."
       formula_reference_no_underscore: "The reference must contain an underscore (ex: A_1)"
+      snomed_fetch_failed: "The server could not retrieve any data from snomed."
     new:
       title: "New question"
     priorities:

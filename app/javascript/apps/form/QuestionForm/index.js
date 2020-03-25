@@ -23,6 +23,7 @@ export default class FinalDiagnosticForm extends React.Component {
     this.state = {
       lists: {},
       snomedResults: [],
+      snomedError: undefined,
       isLoading: true
     };
 
@@ -87,8 +88,19 @@ export default class FinalDiagnosticForm extends React.Component {
   searchSnomed = async (event) => {
     const http = new Http();
 
-    let response = await http.searchSnomed(event.target.value);
-    this.setState({snomedResults: response.items});
+    let httpRequest = {};
+
+    httpRequest = await http.searchSnomed(event.target.value);
+
+    if (httpRequest?.status === 200) {
+      let result = await httpRequest.json();
+      this.setState({
+        snomedResults: result.items,
+        snomedError: undefined
+      });
+    } else {
+      this.setState({snomedError: {message: I18n.t('questions.errors.snomed_fetch_failed')}});
+    }
   };
 
   /**
@@ -103,21 +115,25 @@ export default class FinalDiagnosticForm extends React.Component {
     });
   };
 
+  // Set value of answer type and stage depending on what category was chosen
   categoryChanges = (event) => {
     let fieldsToSet = [];
-    const category = event.target.value
+    const category = event.target.value;
 
     // Set stage
     switch(category) {
       case "Questions::ConsultationRelated":
       case "Questions::Demographic":
-        fieldsToSet.push(["stage", "registration"]);
+        fieldsToSet.push(["stage", "0"]);
         break;
       case "Questions::BasicMeasurement":
       case "Questions::ComplaintCategory":
       case "Questions::UniqueTriagePhysicalSign":
       case "Questions::UniqueTriageQuestion":
-        fieldsToSet.push(["stage", "triage"]);
+        fieldsToSet.push(["stage", "1"]);
+        break;
+      case "Questions::AssessmentTest":
+        fieldsToSet.push(["stage", "2"]);
         break;
       case "Questions::ChronicCondition":
       case "Questions::Exposure":
@@ -126,13 +142,10 @@ export default class FinalDiagnosticForm extends React.Component {
       case "Questions::Symptom":
       case "Questions::Vaccine":
       case "Questions::VitalSignAnthropometric":
-        fieldsToSet.push(["stage", "consultation"]);
-        break;
-      case "Questions::AssessmentTest":
-        fieldsToSet.push(["stage", "test"]);
+        fieldsToSet.push(["stage", "3"]);
         break;
       case "Questions::TreatmentQuestion":
-        fieldsToSet.push(["stage", "diagnosis_management"]);
+        fieldsToSet.push(["stage", "4"]);
         break;
       default:
         fieldsToSet.push(["stage", ""]);
@@ -146,14 +159,12 @@ export default class FinalDiagnosticForm extends React.Component {
     } else if (category === "Questions::BackgroundCalculation") {
       fieldsToSet.push(["answer_type", "5"]);
     }
-
-
     return fieldsToSet;
   };
 
   render() {
     const {question} = this.props;
-    const {lists: {answer_types, categories, stages, systems}, snomedResults, isLoading} = this.state;
+    const {lists: {answer_types, categories, stages, systems}, snomedResults, isLoading, snomedError} = this.state;
 
     return (
       isLoading ? <Loader/> :
@@ -180,12 +191,14 @@ export default class FinalDiagnosticForm extends React.Component {
                 handleChange,
                 isSubmitting,
                 setFieldValue,
+                touched,
                 values,
                 errors,
                 status
               }) => (
               <Form noValidate onSubmit={handleSubmit}>
                 {status ? <DisplayErrors errors={status}/> : null}
+                {snomedError ? <DisplayErrors errors={snomedError}/> : null}
 
                   <Form.Group controlId="validationCategory">
                     <Form.Label>{I18n.t("activerecord.attributes.node.type")}</Form.Label>
@@ -194,7 +207,7 @@ export default class FinalDiagnosticForm extends React.Component {
                       name="type"
                       value={values.type}
                       onChange={(e) => {handleChange(e); this.categoryChanges(e).forEach(element => setFieldValue(element[0], element[1]));}}
-                      isInvalid={!!errors.type}
+                      isInvalid={touched.category && !!errors.type}
                     >
                       <option value="">Select the category</option>
                       {categories.map((category) => (
@@ -214,7 +227,7 @@ export default class FinalDiagnosticForm extends React.Component {
                         name="system"
                         value={values.system}
                         onChange={handleChange}
-                        isInvalid={!!errors.system}
+                        isInvalid={touched.system && !!errors.system}
                       >
                         <option value="">Select the system</option>
                         {systems.map((system) => (
@@ -235,7 +248,7 @@ export default class FinalDiagnosticForm extends React.Component {
                       value={values.answer_type}
                       onChange={handleChange}
                       disabled={CATEGORIES_DISABLING_ANSWER_TYPE.includes(values.type)}
-                      isInvalid={!!errors.answer_type}
+                      isInvalid={touched.answer_type && !!errors.answer_type}
                     >
                       <option value="">Select the type of answers expected</option>
                       {answer_types.map((answerType) => (
@@ -256,7 +269,7 @@ export default class FinalDiagnosticForm extends React.Component {
                         value={values.stage}
                         onChange={handleChange}
                         disabled={values.type !== ""}
-                        isInvalid={!!errors.stage}
+                        isInvalid={touched.stage && !!errors.stage}
                       >
                         <option value="">Select the stage</option>
                         {Object.keys(stages).map(function (key) {
@@ -276,7 +289,7 @@ export default class FinalDiagnosticForm extends React.Component {
                       name="is_mandatory"
                       value={values.is_mandatory}
                       onChange={handleChange}
-                      isInvalid={!!errors.is_mandatory}
+                      isInvalid={touched.is_mandatory && !!errors.is_mandatory}
                     />
                     <Form.Control.Feedback type="invalid">
                       {errors.is_mandatory}
@@ -289,7 +302,7 @@ export default class FinalDiagnosticForm extends React.Component {
                       name="label_translations"
                       value={values.label_translations}
                       onChange={handleChange}
-                      isInvalid={!!errors.label_translations}
+                      isInvalid={touched.label_translations && !!errors.label_translations}
                     />
                     <Form.Control.Feedback type="invalid">
                       {errors.label_translations}
@@ -321,8 +334,8 @@ export default class FinalDiagnosticForm extends React.Component {
                       name="description_translations"
                       as="textarea"
                       value={values.description_translations}
-                      onChange={(e) => this.test(handleChange, e)}
-                      isInvalid={!!errors.description_translations}
+                      onChange={handleChange}
+                      isInvalid={touched.description_translations && !!errors.description_translations}
                     />
                     <Form.Control.Feedback type="invalid">
                       {errors.description_translations}
@@ -337,7 +350,7 @@ export default class FinalDiagnosticForm extends React.Component {
                         as="checkbox"
                         value={values.unavailable}
                         onChange={handleChange}
-                        isInvalid={!!errors.unavailable}
+                        isInvalid={touched.unavailable && !!errors.unavailable}
                       />
                       <Form.Control.Feedback type="invalid">
                         {errors.unavailable}
@@ -353,7 +366,7 @@ export default class FinalDiagnosticForm extends React.Component {
                         as="textarea"
                         value={values.formula}
                         onChange={handleChange}
-                        isInvalid={!!errors.formula}
+                        isInvalid={touched.formula && !!errors.formula}
                       />
                       <Form.Control.Feedback type="invalid">
                         {errors.formula}

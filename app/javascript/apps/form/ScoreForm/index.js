@@ -60,6 +60,7 @@ export default class ScoreForm extends React.Component {
               handleSubmit,
               handleChange,
               isSubmitting,
+              touched,
               values,
               errors,
               status
@@ -73,7 +74,7 @@ export default class ScoreForm extends React.Component {
                   name="score"
                   value={values.score}
                   onChange={handleChange}
-                  isInvalid={!!errors.score}
+                  isInvalid={touched.score && !!errors.score}
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.score}
