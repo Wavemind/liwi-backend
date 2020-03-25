@@ -68,7 +68,7 @@ class Question < Node
   # Return a hash with all question categories with their name, label and prefix
   def self.categories(diagram_class_name)
     categories = []
-    excluded_categories = [Questions::ComplaintCategory, Questions::BasicMeasurement, Questions::VitalSignAnthropometric, Questions::UniqueTriageQuestion, Questions::UniqueTriagePhysicalSign] unless diagram_class_name == 'Question'
+    excluded_categories = diagram_class_name == 'Question' ? [] : [Questions::ComplaintCategory, Questions::BasicMeasurement, Questions::VitalSignAnthropometric, Questions::UniqueTriageQuestion, Questions::UniqueTriagePhysicalSign]
     excluded_categories.push(Questions::TreatmentQuestion) unless %w(FinalDiagnostic Question).include?(diagram_class_name)
     self.descendants.each do |category|
       unless excluded_categories.include?(category)

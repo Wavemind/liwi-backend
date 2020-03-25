@@ -67,6 +67,7 @@ export default class FinalDiagnosticForm extends React.Component {
               handleSubmit,
               handleChange,
               isSubmitting,
+              touched,
               values,
               errors,
               status
@@ -79,7 +80,7 @@ export default class FinalDiagnosticForm extends React.Component {
                   name="label_translations"
                   value={values.label_translations}
                   onChange={handleChange}
-                  isInvalid={!!errors.label_translations}
+                  isInvalid={touched.label_translations && !!errors.label_translations}
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.label_translations}
@@ -93,7 +94,7 @@ export default class FinalDiagnosticForm extends React.Component {
                   as="textarea"
                   value={values.description_translations}
                   onChange={handleChange}
-                  isInvalid={!!errors.description_translations}
+                  isInvalid={touched.description_translations && !!errors.description_translations}
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.description_translations}

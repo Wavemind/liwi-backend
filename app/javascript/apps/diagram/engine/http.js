@@ -327,7 +327,7 @@ export default class Http {
     const request = await fetch(url).catch(error => console.log(error));
 
     // Display error or parse json
-    if (request.ok) {
+    if (request?.ok) {
       response = await request.json();
     } else {
       response = request;

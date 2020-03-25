@@ -17,11 +17,11 @@ export const CATEGORIES_DISABLING_ANSWER_TYPE = [
   "Questions::BackgroundCalculation",
   "Questions::BasicMeasurement",
   "Questions::Vaccine",
-  "Questions::VitalSign"
+  "Questions::VitalSignAnthropometric"
 ];
 
 export const CATEGORIES_DISPLAYING_SYSTEM = [
-  "Questions::Exposure",
-  "Questions::PhysicalExam",
   "Questions::ObservedPhysicalSign",
+  "Questions::PhysicalExam",
+  "Questions::Symptom",
 ];

@@ -99,6 +99,7 @@ export default class QuestionsSequenceForm extends React.Component {
                 handleChange,
                 isSubmitting,
                 values,
+                touched,
                 errors,
                 status
               }) => (
@@ -113,7 +114,7 @@ export default class QuestionsSequenceForm extends React.Component {
                       name="type"
                       value={values.type}
                       onChange={handleChange}
-                      isInvalid={!!errors.type}
+                      isInvalid={touched.type && !!errors.type}
                     >
                       <option value="">{I18n.t("select")}</option>
                       {categories.map(category => (
@@ -132,7 +133,7 @@ export default class QuestionsSequenceForm extends React.Component {
                     name="label_translations"
                     value={values.label_translations}
                     onChange={handleChange}
-                    isInvalid={!!errors.label_translations}
+                    isInvalid={touched.label_translations && !!errors.label_translations}
                   />
                   <Form.Control.Feedback type="invalid">
                     {errors.label_translations}
@@ -146,7 +147,7 @@ export default class QuestionsSequenceForm extends React.Component {
                       name="min_score"
                       value={values.min_score}
                       onChange={handleChange}
-                      isInvalid={!!errors.min_score}
+                      isInvalid={touched.min_score && !!errors.min_score}
                     />
                     <Form.Control.Feedback type="invalid">
                       {errors.min_score}
@@ -161,7 +162,7 @@ export default class QuestionsSequenceForm extends React.Component {
                     as="textarea"
                     value={values.description_translations}
                     onChange={handleChange}
-                    isInvalid={!!errors.description_translations}
+                    isInvalid={touched.description_translations && !!errors.description_translations}
                   />
                   <Form.Control.Feedback type="invalid">
                     {errors.description_translations}
