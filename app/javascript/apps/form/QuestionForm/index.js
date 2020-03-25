@@ -104,38 +104,49 @@ export default class FinalDiagnosticForm extends React.Component {
   };
 
   categoryChanges = (event) => {
-    let fieldsToSet = []
-    switch(event.target.value) {
+    let fieldsToSet = [];
+    const category = event.target.value
 
-        "Questions::BackgroundCalculation"
-        "Questions::BasicMeasurement"
-        "Questions::ChronicCondition"
-        "Questions::ConsultationRelated"
-        "Questions::ComplaintCategory"
-        "Questions::Demographic"
-        "Questions::Exposure"
-        "Questions::ObservedPhysicalSign"
-        "Questions::PhysicalExam"
-        "Questions::Symptom"
-        "Questions::TreatmentQuestion"
-        "Questions::UniqueTriagePhysicalSign"
-        "Questions::UniqueTriageQuestion"
-        "Questions::Vaccine"
-        "Questions::VitalSignAnthropometric"
-      case "Questions::AssessmentTest":
-      case "Questions::AssessmentTest":
-      case "Questions::AssessmentTest":
-      case "Questions::AssessmentTest":
-      case "Questions::AssessmentTest":
-        // code block
+    // Set stage
+    switch(category) {
+      case "Questions::ConsultationRelated":
+      case "Questions::Demographic":
+        fieldsToSet.push(["stage", "registration"]);
+        break;
+      case "Questions::BasicMeasurement":
+      case "Questions::ComplaintCategory":
+      case "Questions::UniqueTriagePhysicalSign":
+      case "Questions::UniqueTriageQuestion":
+        fieldsToSet.push(["stage", "triage"]);
+        break;
+      case "Questions::ChronicCondition":
+      case "Questions::Exposure":
+      case "Questions::ObservedPhysicalSign":
+      case "Questions::PhysicalExam":
+      case "Questions::Symptom":
+      case "Questions::Vaccine":
+      case "Questions::VitalSignAnthropometric":
+        fieldsToSet.push(["stage", "consultation"]);
         break;
       case "Questions::AssessmentTest":
-        // code block
+        fieldsToSet.push(["stage", "test"]);
+        break;
+      case "Questions::TreatmentQuestion":
+        fieldsToSet.push(["stage", "diagnosis_management"]);
         break;
       default:
         fieldsToSet.push(["stage", ""]);
     }
-    console.log(value);
+
+    // Set answer type
+    if (["Questions::ComplaintCategory", "Questions::Vaccine"].includes(category)) {
+      fieldsToSet.push(["answer_type", "1"]);
+    } else if (["Questions::BasicMeasurement", "Questions::VitalSignAnthropometric"].includes(category)) {
+      fieldsToSet.push(["answer_type", "4"]);
+    } else if (category === "Questions::BackgroundCalculation") {
+      fieldsToSet.push(["answer_type", "5"]);
+    }
+
 
     return fieldsToSet;
   };
