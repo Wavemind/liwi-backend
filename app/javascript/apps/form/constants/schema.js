@@ -1,5 +1,5 @@
 import I18n from "i18n-js";
-import {CATEGORIES_DISPLAYING_SYSTEM} from "../diagram/engine/constants/default";
+import {CATEGORIES_DISPLAYING_SYSTEM} from "../../diagram/engine/constants/default";
 let yup = require("yup");
 
 export const scoreSchema = yup.object().shape({

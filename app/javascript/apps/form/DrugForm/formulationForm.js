@@ -1,32 +1,30 @@
 import * as React from "react";
 import I18n from "i18n-js";
 import FadeIn from "react-fade-in";
-import {Form, Button, Accordion} from "react-bootstrap";
-import FormulationFields from "./formulationFields"
+import { Form, Button, Card, Col } from "react-bootstrap";
+import FormulationFields from "./formulationFields";
 
 import Http from "../../diagram/engine/http";
-import Loader from "../Loader";
-
+import Loader from "../components/Loader";
+import {DEFAULT_FORMULATION_VALUE} from "../constants/constants";
 export default class FormulationForm extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      errors: {},
-      formulations: {0: {}},
-      formulationComponentAttributes: {},
+      formulations: [],
+      formulationComponentAttributes: [],
       availableMedicationForms: [],
-      selectedForms: [],
       medicationForm: null,
-      medicationFormError: null,
-      isLoading: true,
-      accordionIndex: 0,
+      isLoading: true
+
     };
+
     this.init();
   }
 
   init = async () => {
-    const {method} = this.props
+    const { method } = this.props;
     let http = new Http();
     let httpRequest = {};
 
@@ -45,7 +43,6 @@ export default class FormulationForm extends React.Component {
     }
   };
 
-
   // Build the drug formulations hashes, empty if this is a create form or with its answers if it is an update
   buildFormulations = () => {
     const {
@@ -63,7 +60,7 @@ export default class FormulationForm extends React.Component {
 
     // build formulations
     drugFormulations.map((formulation, index) => {
-      availableMedicationForms.splice( availableMedicationForms.indexOf(formulation.medication_form), 1 );
+      availableMedicationForms.splice(availableMedicationForms.indexOf(formulation.medication_form), 1);
       selectedForms.push(formulation.medication_form);
 
       formulations[index] = {
@@ -80,11 +77,17 @@ export default class FormulationForm extends React.Component {
         breakable: formulation.breakable,
         by_age: formulation.by_age,
         _destroy: false
-      }
+      };
     });
 
     for (let i = 0; i < drugFormulations.length; i++) {
-      formulationComponents[i] = <CreateFormulationForm medicationForm={formulations[i].medication_form} setActiveAccordion={this.setActiveAccordion} setFormulation={this.setFormulation} removeFormulation={this.removeFormulation} formulations={formulations} index={i} errors={{}} update={true} />
+      formulationComponents[i] = <CreateFormulationForm medicationForm={formulations[i].medication_form}
+                                                        setActiveAccordion={this.setActiveAccordion}
+                                                        setFormulation={this.setFormulation}
+                                                        removeFormulation={this.removeFormulation}
+                                                        formulations={formulations}
+                                                        index={i}
+                                                        update={true}/>;
     }
 
     this.setState({
@@ -93,45 +96,42 @@ export default class FormulationForm extends React.Component {
     });
   };
 
-
-  setActiveAccordion = (index) => {
-    this.setState({accordionIndex: index});
-  };
-
   handleMedicationFormChange = (event) => {
     this.setState({ medicationForm: event.target.value });
   };
 
-  newFormulation = () => {
-    let {
-      formulationComponentAttributes,
-      formulations,
+  addFormulation = () => {
+    const { setFormData, formData } = this.props;
+    const {
       medicationForm,
-      availableMedicationForms,
-      selectedForms
+      availableMedicationForms
     } = this.state;
 
-    if (medicationForm === null) {
-      this.setState({ medicationFormError: I18n.t('drugs.medication_forms.required') });
-    } else {
-      let lastIndex = parseInt(Object.keys(formulations)[Object.keys(formulations).length-1]) + 1;
-      formulations[lastIndex] = {medication_form: medicationForm};
-      formulationComponentAttributes[lastIndex] = {formulations, index:lastIndex} ;
+    formData.formulations.push({
+      medication_form: medicationForm,
+      ...(JSON.parse(DEFAULT_FORMULATION_VALUE))
+    });
 
-      delete availableMedicationForms[medicationForm];
-      // TODO Check if necessary, remove if not
-      selectedForms.push(medicationForm);
+    setFormData("formulations", formData.formulations);
+    delete availableMedicationForms[medicationForm];
 
-      this.setState({
-        availableMedicationForms: availableMedicationForms,
-        selectedForms: selectedForms,
-        accordionIndex: lastIndex,
-        formulationComponentAttributes,
-        formulations,
-        medicationForm: "",
-        medicationFormError: ""
-      });
-    }
+    this.setState({
+      availableMedicationForms,
+      medicationForm: null
+    });
+  };
+
+  removeFormulation(key) {
+    const { formData, setFormData } = this.props;
+    const {availableMedicationForms} = this.state;
+    let medicationForm = formData.formulations[key];
+console.log(medicationForm);
+console.log(availableMedicationForms);
+    availableMedicationForms.push(medicationForm);
+    this.setState({medicationForm});
+
+    formData.formulations.splice(key, 1);
+    setFormData("formulations", formData.formulations);
   }
 
   save() {
@@ -139,63 +139,88 @@ export default class FormulationForm extends React.Component {
   }
 
   labelMedicationForm(medicationForm) {
-    return medicationForm.charAt(0).toUpperCase() + medicationForm.slice(1)
+    return medicationForm.charAt(0).toUpperCase() + medicationForm.slice(1);
   }
 
-
   render() {
-    const {formData, setFormData, nextStep} = this.props;
+    const { formData, nextStep } = this.props;
     const {
       availableMedicationForms,
-      medicationFormError,
-      accordionIndex,
-      formulationComponentAttributes,
+      medicationForm,
       isLoading
     } = this.state;
 
     return (
       isLoading ? <Loader/> :
         <FadeIn>
-          <Accordion activeKey={accordionIndex} defaultActiveKey={Object.keys(formulationComponentAttributes).length - 1}>
-            {Object.keys(formulationComponentAttributes).map((key) => {
-              <FormulationFields
-                setActiveAccordion={this.setActiveAccordion}
-                setFormulation={this.setFormulation}
-                removeFormulation={this.removeFormulation}
-                formulations={formulationComponentAttributes[key].formulations}
-                index={formulationComponentAttributes[key].index}
-                errors={{}} />;
-            })}
-          </Accordion>
+          <div id="accordion">
+            {formData.formulations.map((formulation, key) => (
+              <Form.Row key={key}>
+                <Col lg="10">
+                  <Card key={key}>
+                    <div className="card-header" id={`heading-${key}`}>
+                      <h5 className="mb-0">
+                        <button
+                          className="btn btn-link"
+                          data-toggle="collapse"
+                          data-target={`#collapse-${key}`}
+                          aria-expanded={key === formData.formulations.length - 1}
+                          aria-controls={`collapse-${key}`}
+                        >
+                          {this.labelMedicationForm(formulation.medication_form)}
+                        </button>
+                      </h5>
+                    </div>
+                    <div
+                      id={`collapse-${key}`}
+                      className={`collapse ${key === formData.formulations.length - 1 ? "show" : null}`}
+                      aria-labelledby={`heading-${key}`}
+                      data-parent="#accordion">
+                      <div className="card-body">
+                        <FormulationFields
+                          setFormulation={this.setFormulation}
+                          formulations={formulation}
+                          index={key}
+                        />
+                      </div>
+                    </div>
+                  </Card>
+                </Col>
+                <Col>
+                  <Button variant="danger" onClick={() => this.removeFormulation(key)}>{I18n.t("remove")}</Button>
+                </Col>
+              </Form.Row>
+            ))}
+          </div>
+
+          <hr/>
 
           <Form.Row>
-            <Form.Group controlId="validationMedicationForm">
+            <Col lg="11">
               <Form.Control
                 as="select"
                 name="medicationForm"
                 onChange={this.handleMedicationFormChange}
-                isInvalid={!!medicationFormError}
               >
-                <option value="">{I18n.t('drugs.medication_forms.select')}</option>
+                <option value="">{I18n.t("drugs.medication_forms.select")}</option>
                 {Object.keys(availableMedicationForms).map(medicationForm => (
-                  <option key={medicationForm}
-                          value={medicationForm}>{this.labelMedicationForm(medicationForm)}</option>
+                  <option
+                    key={medicationForm}
+                    value={medicationForm}>{this.labelMedicationForm(medicationForm)}</option>
                 ))}
-
               </Form.Control>
-              <Form.Control.Feedback type="invalid">
-                {medicationFormError}
-              </Form.Control.Feedback>
-            </Form.Group>
+            </Col>
 
-            <Button variant="primary" onClick={() => this.newFormulation()}>
-              New formulation
-            </Button>
-
-            <Button variant="success" onClick={() => this.save()}>
-              Validate
-            </Button>
+            <Col>
+              <Button variant="primary" onClick={() => this.addFormulation()} disabled={medicationForm === null}>
+                {I18n.t("add")}
+              </Button>
+            </Col>
           </Form.Row>
+
+          <Button variant="success" onClick={() => this.save()}>
+            Validate
+          </Button>
 
         </FadeIn>
     );

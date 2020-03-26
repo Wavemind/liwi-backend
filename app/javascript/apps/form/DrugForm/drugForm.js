@@ -4,7 +4,7 @@ import FadeIn from "react-fade-in";
 import { Form, Button } from "react-bootstrap";
 import { Formik } from "formik";
 
-import { drugSchema } from "../schema";
+import { drugSchema } from "../constants/schema";
 
 
 export default class DrugForm extends React.Component {

@@ -4,10 +4,10 @@ import FadeIn from "react-fade-in";
 import { Form, Button } from "react-bootstrap";
 import { Formik } from "formik";
 
-import DisplayErrors from "../DisplayErrors";
+import DisplayErrors from "../components/DisplayErrors";
 import Http from "../../diagram/engine/http";
 import store from "../../diagram/engine/reducers/store";
-import { managementSchema } from "../schema";
+import { managementSchema } from "../constants/schema";
 import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
 
