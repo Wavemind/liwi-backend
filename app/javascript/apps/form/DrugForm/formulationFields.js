@@ -49,7 +49,6 @@ export default class FormulationFields extends React.Component {
   render() {
     const { unity } = this.state;
     const {
-      setFormulation,
       formulation,
       breakables,
       administrationRoutes,

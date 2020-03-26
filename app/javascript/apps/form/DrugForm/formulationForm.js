@@ -36,7 +36,7 @@ export default class FormulationForm extends React.Component {
     if (httpRequest.status === 200) {
       this.setState({
         breakables: result.breakables,
-        administrationRoutes: result.administration_route,
+        administrationRoutes: result.administration_routes,
         medicationForms: result.medication_forms,
         isLoading: false
       });
@@ -144,7 +144,7 @@ export default class FormulationForm extends React.Component {
   }
 
   render() {
-    const { formData, nextStep } = this.props;
+    const { formData, nextStep, setFormData } = this.props;
     const {
       selectedMedicationForm,
       medicationForms,
@@ -181,7 +181,7 @@ export default class FormulationForm extends React.Component {
                       data-parent="#accordion">
                       <div className="card-body">
                         <FormulationFields
-                          setFormulation={this.setFormulation}
+                          setFormData={setFormData}
                           formulation={formulation}
                           breakables={breakables}
                           administrationRoutes={administrationRoutes}
