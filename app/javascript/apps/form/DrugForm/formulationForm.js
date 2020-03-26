@@ -12,12 +12,12 @@ export default class FormulationForm extends React.Component {
     super(props);
 
     this.state = {
+      breakables: [],
+      administrationRoutes: [],
+      medicationForms: [],
       formulations: [],
       formulationComponentAttributes: [],
-      availableMedicationForms: [],
-      lists: [],
-      selectedForms: [],
-      medicationForm: null,
+      selectedMedicationForm: "",
       isLoading: true
 
     };
@@ -35,8 +35,9 @@ export default class FormulationForm extends React.Component {
 
     if (httpRequest.status === 200) {
       this.setState({
-        lists: result,
-        availableMedicationForms: result.medication_forms,
+        breakables: result.breakables,
+        administrationRoutes: result.administration_route,
+        medicationForms: result.medication_forms,
         isLoading: false
       });
     }
@@ -50,12 +51,10 @@ export default class FormulationForm extends React.Component {
   buildFormulations = () => {
     const {
       formData,
-      medicationForms
     } = this.props;
 
     let {
       availableMedicationForms,
-      selectedForms
     } = this.state;
     let formulations = {};
     let formulationComponents = {};
@@ -64,7 +63,6 @@ export default class FormulationForm extends React.Component {
     // build formulations
     drugFormulations.map((formulation, index) => {
       availableMedicationForms.splice(availableMedicationForms.indexOf(formulation.medication_form), 1);
-      selectedForms.push(formulation.medication_form);
 
       formulations[index] = {
         id: formulation.id,
@@ -100,38 +98,42 @@ export default class FormulationForm extends React.Component {
   };
 
   handleMedicationFormChange = (event) => {
-    this.setState({ medicationForm: event.target.value });
+    this.setState({ selectedMedicationForm: event.target.value });
   };
 
   addFormulation = () => {
     const { setFormData, formData } = this.props;
     const {
-      medicationForm,
-      availableMedicationForms
+      selectedMedicationForm,
+      medicationForms
     } = this.state;
 
+    let newMedicationFroms = [...medicationForms];
+    let index = newMedicationFroms.indexOf(selectedMedicationForm);
+
     formData.formulations.push({
-      medication_form: medicationForm,
+      medication_form: selectedMedicationForm,
       ...(JSON.parse(DEFAULT_FORMULATION_VALUE))
     });
 
-    setFormData("formulations", formData.formulations);
-    delete availableMedicationForms[medicationForm];
+    newMedicationFroms.splice(index, 1);
 
+    setFormData("formulations", formData.formulations);
     this.setState({
-      availableMedicationForms,
-      medicationForm: null
+      medicationForms: newMedicationFroms,
+      selectedMedicationForm: null
     });
   };
 
   removeFormulation(key) {
     const { formData, setFormData } = this.props;
-    const {availableMedicationForms} = this.state;
-    let medicationForm = formData.formulations[key];
-console.log(medicationForm);
-console.log(availableMedicationForms);
-    availableMedicationForms.push(medicationForm);
-    this.setState({medicationForm});
+    const {medicationForms} = this.state;
+
+    let selectedMedicationForm = formData.formulations[key].medication_form;
+    let newMedicationFroms = [...medicationForms];
+
+    newMedicationFroms.push(selectedMedicationForm);
+    this.setState({medicationForms: newMedicationFroms});
 
     formData.formulations.splice(key, 1);
     setFormData("formulations", formData.formulations);
@@ -141,17 +143,14 @@ console.log(availableMedicationForms);
 
   }
 
-  labelMedicationForm(medicationForm) {
-    return medicationForm.charAt(0).toUpperCase() + medicationForm.slice(1);
-  }
-
   render() {
     const { formData, nextStep } = this.props;
     const {
-      availableMedicationForms,
-      medicationForm,
+      selectedMedicationForm,
+      medicationForms,
       isLoading,
-      lists
+      breakables,
+      administrationRoutes,
     } = this.state;
 
     return (
@@ -171,7 +170,7 @@ console.log(availableMedicationForms);
                           aria-expanded={key === formData.formulations.length - 1}
                           aria-controls={`collapse-${key}`}
                         >
-                          {this.labelMedicationForm(formulation.medication_form)}
+                          {formulation.medication_form}
                         </button>
                       </h5>
                     </div>
@@ -184,7 +183,8 @@ console.log(availableMedicationForms);
                         <FormulationFields
                           setFormulation={this.setFormulation}
                           formulations={formulation}
-                          lists={lists}
+                          breakables={breakables}
+                          administrationRoutes={administrationRoutes}
                           index={key}
                         />
                       </div>
@@ -208,16 +208,16 @@ console.log(availableMedicationForms);
                 onChange={this.handleMedicationFormChange}
               >
                 <option value="">{I18n.t("drugs.medication_forms.select")}</option>
-                {Object.keys(availableMedicationForms).map(medicationForm => (
+                {medicationForms.map(medicationForm => (
                   <option
                     key={medicationForm}
-                    value={medicationForm}>{this.labelMedicationForm(medicationForm)}</option>
+                    value={medicationForm}>{medicationForm}</option>
                 ))}
               </Form.Control>
             </Col>
 
             <Col>
-              <Button variant="primary" onClick={() => this.addFormulation()} disabled={medicationForm === null}>
+              <Button variant="primary" onClick={() => this.addFormulation()} disabled={selectedMedicationForm === ""}>
                 {I18n.t("add")}
               </Button>
             </Col>
