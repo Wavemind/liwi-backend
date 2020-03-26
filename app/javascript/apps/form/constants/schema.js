@@ -1,5 +1,6 @@
 import I18n from "i18n-js";
-import {CATEGORIES_DISPLAYING_SYSTEM} from "../../diagram/engine/constants/default";
+import { CATEGORIES_DISPLAYING_SYSTEM } from "../../diagram/engine/constants/default";
+
 let yup = require("yup");
 
 export const scoreSchema = yup.object().shape({
@@ -40,7 +41,7 @@ export const managementSchema = yup.object().shape({
 });
 
 export const questionSequencesSchema = yup.object().shape({
-  type : yup.string().required(I18n.t("errors.messages.required")),
+  type: yup.string().required(I18n.t("errors.messages.required")),
   label_translations: yup.string().required(I18n.t("errors.messages.required")),
   description_translations: yup.string(),
   min_score: yup.number()
@@ -50,7 +51,7 @@ export const questionSequencesSchema = yup.object().shape({
     })
 });
 
-export const formulationSchema = yup.object().shape({
+export const formulationSchema = yup.array().of(yup.object().shape({
   doses_per_day: yup.number().required(I18n.t("errors.messages.required")),
   administration_route_id: yup.number().required(I18n.t("errors.messages.required")),
   by_age: yup.boolean(),
@@ -88,9 +89,9 @@ export const formulationSchema = yup.object().shape({
       is: (medication_form) => ["tablet", "capsule", "suspension", "syrup"].includes(medication_form),
       then: yup.number().required(I18n.t("errors.messages.required"))
     }),
-  maximal_dose_per_kg : yup.number()
+  maximal_dose_per_kg: yup.number()
     .when("medication_form", {
       is: (medication_form) => ["tablet", "capsule", "suspension", "syrup"].includes(medication_form),
       then: yup.number().required(I18n.t("errors.messages.required"))
-    }),
-});
+    })
+})).required('Must have friends').min(1, 'Minimum of 3 friends');

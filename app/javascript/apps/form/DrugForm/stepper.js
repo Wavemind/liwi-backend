@@ -12,7 +12,7 @@ export default class StepperDrugForm extends React.Component {
   constructor(props) {
     super(props);
 
-    const {drug} = props;
+    const { drug } = props;
 
     this.state = {
       step: 2,
@@ -30,28 +30,28 @@ export default class StepperDrugForm extends React.Component {
    * @param value
    */
   setFormData = (prop, value) => {
-    this.setState({ drug: {[prop]: value }});
+    this.setState({ drug: { [prop]: value } });
   };
 
   /**
    * Set step to next
    */
   nextStep = () => {
-    const {step} = this.state;
-    this.setState({step: step + 1})
+    const { step } = this.state;
+    this.setState({ step: step + 1 });
   };
 
   /**
    * Set step to previous
    */
   previousStep = () => {
-    const {step} = this.state;
-    this.setState({step: step - 1})
+    const { step } = this.state;
+    this.setState({ step: step - 1 });
   };
 
   render() {
-    const {step, drug} = this.state;
-    const {method} = this.props;
+    const { step, drug } = this.state;
+    const { method } = this.props;
 
     switch (step) {
       case 1:
