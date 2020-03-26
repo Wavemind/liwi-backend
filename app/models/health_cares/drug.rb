@@ -8,4 +8,12 @@ class HealthCares::Drug < HealthCare
     'drug'
   end
 
+  def self.list_attributes
+    attributes = {}
+    attributes['medication_forms'] = Formulation.medication_forms
+    attributes['breakables'] = Formulation.breakables.map { |k, v| [I18n.t("formulations.breakables.#{k}.label"), k] }
+    attributes['administration_routes'] = AdministrationRoute.generate_select_options
+    attributes
+  end
+
 end

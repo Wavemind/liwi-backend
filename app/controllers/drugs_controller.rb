@@ -67,10 +67,10 @@ class DrugsController < ApplicationController
   end
 
   # GET
-  # @return Array
-  # medication forms list
-  def medication_forms
-    render json: Formulation.medication_forms
+  # @return Hash
+  # Return attributes of drug and formulation that are listed
+  def lists
+    render json: HealthCares::Drug.list_attributes
   end
 
   # PUT

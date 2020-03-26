@@ -13,8 +13,9 @@ en:
         doses_per_day: "Number of doses per day"
         treatment_type: "Medication form"
         pill_size: "Pill minimal size (mg)"
-        is_triage: "Ask in triage if it is available"
-        is_identifiable: "This question can identify a patient"
+        unique_dose: "Amount of elements per dose"
+        liquid_concentration: "Concentration (mg in dose)"
+        dose_form: "Dose form (%{unity})"
       node:
         type: "Category"
         description_translations: "Description"
@@ -27,6 +28,8 @@ en:
         stage: "Stage"
         system: "System"
         unavailable: "Test can be unavailable"
+        is_triage: "Ask in triage if it is available"
+        is_identifiable: "This question can identify a patient"
       questions_sequence:
         min_score: "Minimal score"
         type: "Category"
@@ -542,6 +545,8 @@ en:
       languages: "Languages"
   show: "Show"
   drugs:
+    breakable:
+      select:  "Is the tablet breakable ?"
     edit:
       title: "Edit the drug"
     new:

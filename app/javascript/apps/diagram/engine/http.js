@@ -186,7 +186,7 @@ export default class Http {
    * @return [Object] body of request
    */
   fetchDrugMedicationForms = async () => {
-    const url = `${this.url}/drugs/medication_forms`;
+    const url = `${this.url}/drugs/lists`;
     const header = await this.setHeaders("GET", null);
     return await fetch(url, header).catch(error => console.log(error));
   };

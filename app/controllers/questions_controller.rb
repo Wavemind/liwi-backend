@@ -91,7 +91,8 @@ class QuestionsController < ApplicationController
   end
 
   # GET
-  # @return give sub categories of questions sequence
+  # @return Hash
+  # Return attributes of question that are listed
   def lists
     render json: Question.list_attributes(params[:diagram_type])
   end

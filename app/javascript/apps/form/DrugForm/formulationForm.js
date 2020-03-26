@@ -15,6 +15,8 @@ export default class FormulationForm extends React.Component {
       formulations: [],
       formulationComponentAttributes: [],
       availableMedicationForms: [],
+      lists: [],
+      selectedForms: [],
       medicationForm: null,
       isLoading: true
 
@@ -33,7 +35,8 @@ export default class FormulationForm extends React.Component {
 
     if (httpRequest.status === 200) {
       this.setState({
-        availableMedicationForms: result,
+        lists: result,
+        availableMedicationForms: result.medication_forms,
         isLoading: false
       });
     }
@@ -147,7 +150,8 @@ console.log(availableMedicationForms);
     const {
       availableMedicationForms,
       medicationForm,
-      isLoading
+      isLoading,
+      lists
     } = this.state;
 
     return (
@@ -180,6 +184,7 @@ console.log(availableMedicationForms);
                         <FormulationFields
                           setFormulation={this.setFormulation}
                           formulations={formulation}
+                          lists={lists}
                           index={key}
                         />
                       </div>
@@ -221,7 +226,6 @@ console.log(availableMedicationForms);
           <Button variant="success" onClick={() => this.save()}>
             Validate
           </Button>
-
         </FadeIn>
     );
   }

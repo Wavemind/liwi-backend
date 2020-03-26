@@ -182,7 +182,7 @@ Rails.application.routes.draw do
 
   resources :drugs, only: [] do
     collection do
-      get 'medication_forms'
+      get 'lists'
     end
   end
 
