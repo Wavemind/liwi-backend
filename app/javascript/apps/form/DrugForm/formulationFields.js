@@ -55,8 +55,6 @@ export default class FormulationFields extends React.Component {
       index
     } = this.props;
 
-    console.log(this.props.administrationRoutes);
-
     return (
       <FadeIn>
         <Formik
@@ -129,12 +127,12 @@ export default class FormulationFields extends React.Component {
                   </Form.Control.Feedback>
                 </Form.Group>
 
-                {values.medication_form === "capsule" ?
+                {(values.medication_form === "capsule" && !values.by_age) ?
                   <Form.Group>
                   </Form.Group>
-                  : null}
+                : null}
 
-                {values.medication_form === "tablet" ?
+                {(values.medication_form === "tablet" && !values.by_age) ?
                   <Form.Group controlId="validationBreakable">
                     <Form.Label>{I18n.t("drugs.breakable.select")}</Form.Label>
                     <Form.Control
@@ -154,7 +152,7 @@ export default class FormulationFields extends React.Component {
                   </Form.Group>
                   : null}
 
-                {!["capsule", "tablet", "suspension", "syrup"].includes(values.medication_form) ?
+                {(!["capsule", "tablet", "suspension", "syrup"].includes(values.medication_form) || values.by_age) ?
                   <Form.Group controlId="validationUniqueDose">
                     <Form.Label>{I18n.t("activerecord.attributes.formulation.unique_dose")}</Form.Label>
                     <Form.Control
@@ -170,7 +168,7 @@ export default class FormulationFields extends React.Component {
                   </Form.Group>
                   : null}
 
-                {["suspension", "syrup"].includes(values.medication_form) ?
+                {(["suspension", "syrup"].includes(values.medication_form) && !values.by_age) ?
                   <Form.Group controlId="validationLiquidConcentration">
                     <Form.Label>{I18n.t("activerecord.attributes.formulation.liquid_concentration")}</Form.Label>
                     <Form.Control
@@ -187,7 +185,7 @@ export default class FormulationFields extends React.Component {
                   : null}
               </Form.Row>
 
-              {["capsule", "tablet", "suspension", "syrup"].includes(values.medication_form) ?
+              {(["capsule", "tablet", "suspension", "syrup"].includes(values.medication_form) && !values.by_age) ?
                 <>
                   <Form.Row>
                     <Form.Group controlId="validationDoseForm">
