@@ -182,7 +182,7 @@ export default class FormulationForm extends React.Component {
                       <div className="card-body">
                         <FormulationFields
                           setFormulation={this.setFormulation}
-                          formulations={formulation}
+                          formulation={formulation}
                           breakables={breakables}
                           administrationRoutes={administrationRoutes}
                           index={key}
