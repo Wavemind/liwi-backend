@@ -49,3 +49,7 @@ export const questionSequencesSchema = yup.object().shape({
       then: yup.number().required(I18n.t("errors.messages.required"))
     })
 });
+
+export const formulationSchema = yup.object().shape({
+
+});

@@ -5,7 +5,7 @@ import { Form } from "react-bootstrap";
 import { Formik } from "formik";
 
 import DisplayErrors from "../components/DisplayErrors";
-import { drugSchema, questionSequencesSchema } from "../constants/schema";
+import { formulationSchema } from "../constants/schema";
 
 export default class FormulationFields extends React.Component {
 
@@ -60,6 +60,7 @@ export default class FormulationFields extends React.Component {
     return (
       <FadeIn>
         <Formik
+          validationSchema={formulationSchema}
           initialValues={formulation}
           onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
         >
