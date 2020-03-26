@@ -55,7 +55,7 @@ export default class FormulationFields extends React.Component {
       index
     } = this.props;
 
-    console.log(this.props);
+    console.log(this.props.administrationRoutes);
 
     return (
       <FadeIn>
@@ -75,19 +75,28 @@ export default class FormulationFields extends React.Component {
             }) => (
             <Form noValidate onSubmit={handleSubmit}>
               <Form.Row>
-                <Form.Group controlId="administration_route_id">
-                  {/*<Form.Label>Administration route</Form.Label>*/}
-
-                  {/*<Select*/}
-                  {/*value={administrationRoutes.map((ar) => ar.options).flat()[administration_route_id - 1]}*/}
-                  {/*options={administrationRoutes}*/}
-                  {/*onChange={(val) => {*/}
-                  {/*this.handleFormChange({target: {name: 'administration_route_id', value: val.value}})*/}
-                  {/*}}*/}
-                  {/*/>*/}
-                  {/*<span style={administrationRouteErrorsStyle}>*/}
-                  {/*{errors.administration_route}*/}
-                  {/*</span>*/}
+                <Form.Group controlId="validationAdministrationRouteId">
+                  <Form.Label>Administration route</Form.Label>
+                  <Form.Control
+                    as="select"
+                    name="administration_route_id"
+                    value={values.administration_route_id}
+                    onChange={handleChange}
+                    isInvalid={touched.administration_route_id && !!errors.administration_route_id}
+                  >
+                    <option value="">{I18n.t("select")}</option>
+                    {administrationRoutes.map(administrationRoute => (
+                      <>
+                        <option key={administrationRoute.value} value={administrationRoute.value} disabled className="font-weight-bold">{administrationRoute.label}</option>
+                        {administrationRoute.options.map(option => (
+                          <option key={option.value} value={option.value}>{option.label}</option>
+                        ))}
+                      </>
+                    ))}
+                  </Form.Control>
+                  <Form.Control.Feedback type="invalid">
+                    {errors.administration_route_id}
+                  </Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Group controlId="validationDosesPerDay">
