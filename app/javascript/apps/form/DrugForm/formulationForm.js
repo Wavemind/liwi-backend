@@ -153,6 +153,8 @@ export default class FormulationForm extends React.Component {
       administrationRoutes,
     } = this.state;
 
+    console.log(formData.formulations);
+
     return (
       isLoading ? <Loader/> :
         <FadeIn>
@@ -198,7 +200,9 @@ export default class FormulationForm extends React.Component {
             ))}
           </div>
 
-          <hr/>
+          {formData.formulations.length > 0 ?
+            <hr/>
+          : null}
 
           <Form.Row>
             <Col lg="11">

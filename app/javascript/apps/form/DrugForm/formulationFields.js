@@ -74,7 +74,7 @@ export default class FormulationFields extends React.Component {
             <Form noValidate onSubmit={handleSubmit}>
               <Form.Row>
                 <Form.Group controlId="validationAdministrationRouteId">
-                  <Form.Label>Administration route</Form.Label>
+                  <Form.Label>{I18n.t("activerecord.attributes.formulation.administration_route_id")}</Form.Label>
                   <Form.Control
                     as="select"
                     name="administration_route_id"
