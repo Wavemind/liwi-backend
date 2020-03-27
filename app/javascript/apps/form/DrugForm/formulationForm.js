@@ -2,11 +2,13 @@ import * as React from "react";
 import I18n from "i18n-js";
 import FadeIn from "react-fade-in";
 import { Form, Button, Card, Col } from "react-bootstrap";
-import { FieldArray, Formik } from "formik";
+import { FieldArray, Formik, ErrorMessage } from "formik";
 
 import FormulationFields from "./formulationFields";
 import Http from "../../diagram/engine/http";
 import Loader from "../components/Loader";
+let yup = require("yup");
+
 import { DEFAULT_FORMULATION_VALUE } from "../constants/constants";
 import { formulationSchema } from "../constants/schema";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
@@ -22,7 +24,7 @@ export default class FormulationForm extends React.Component {
       breakables: [],
       administrationRoutes: [],
       medicationForms: [],
-      formulations: [],
+      formulations: { test: {} },
       formulationComponentAttributes: [],
       selectedMedicationForm: "",
       isLoading: true
@@ -55,6 +57,9 @@ export default class FormulationForm extends React.Component {
 
   handleOnSubmit = async (values, actions) => {
     await actions.validateForm();
+    formulationSchema.validate(values).catch(function (err) {
+      console.log(err);
+    });
     console.log(values)
   };
 
@@ -94,12 +99,12 @@ export default class FormulationForm extends React.Component {
 
     for (let i = 0; i < drugFormulations.length; i++) {
       formulationComponents[i] = <CreateFormulationForm medicationForm={formulations[i].medication_form}
-                                                        setActiveAccordion={this.setActiveAccordion}
-                                                        setFormulation={this.setFormulation}
-                                                        removeFormulation={this.removeFormulation}
-                                                        formulations={formulations}
-                                                        index={i}
-                                                        update={true}/>;
+        setActiveAccordion={this.setActiveAccordion}
+        setFormulation={this.setFormulation}
+        removeFormulation={this.removeFormulation}
+        formulations={formulations}
+        index={i}
+        update={true} />;
     }
 
     this.setState({
@@ -122,7 +127,7 @@ export default class FormulationForm extends React.Component {
     let newMedicationFroms = [...medicationForms];
     let index = newMedicationFroms.indexOf(selectedMedicationForm);
 
-    formData.formulations.push({
+    formData.formulations.test.push({
       medication_form: selectedMedicationForm,
       administration_route_id: "",
       minimal_dose_per_kg: "",
@@ -174,7 +179,7 @@ export default class FormulationForm extends React.Component {
     } = this.state;
 
     return (
-      isLoading ? <Loader/> :
+      isLoading ? <Loader /> :
         <FadeIn>
           <Formik
             validationSchema={formulationSchema}
@@ -182,96 +187,99 @@ export default class FormulationForm extends React.Component {
             onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
           >
             {({
-                handleSubmit,
-                handleChange,
-                isSubmitting,
-                values,
-                touched,
-                errors,
-                status
-              }) => (
-              <Form noValidate onSubmit={handleSubmit}>
-                <div id="accordion">
-                  {values.map((formulation, key) => (
-                    <Form.Row key={key}>
-                      <Col lg="10">
-                        <Card key={key}>
-                          <div className="card-header" id={`heading-${key}`}>
-                            <h5 className="mb-0">
-                              <button
-                                className="btn btn-link"
-                                data-toggle="collapse"
-                                data-target={`#collapse-${key}`}
-                                aria-expanded={key === values - 1}
-                                aria-controls={`collapse-${key}`}
-                              >
-                                {formulation.medication_form}
-                              </button>
-                            </h5>
-                          </div>
-                          <div
-                            id={`collapse-${key}`}
-                            className={`collapse ${key === values.length - 1 ? "show" : null}`}
-                            aria-labelledby={`heading-${key}`}
-                            data-parent="#accordion">
-                            <div className="card-body">
-                              <FieldArray
-                                name="formulations"
-                                render={arrayHelpers => (
-                                <FormulationFields
-                                  breakables={breakables}
-                                  administrationRoutes={administrationRoutes}
-                                  handleChange={handleChange}
-                                  touched={touched}
-                                  errors={errors}
-                                  values={values}
-                                  index={key}
-                                  arrayHelpers={arrayHelpers}
-                                />
-                                )}
-                              />
+              handleSubmit,
+              handleChange,
+              isSubmitting,
+              values,
+              touched,
+              errors,
+              status
+            }) => (
+                <Form noValidate onSubmit={handleSubmit}>
+                  {console.log(errors)}
+                  {console.log(values)}
+                  {console.log("tr", touched)}
+                  <div id="accordion">
+                    {values.test.map((formulation, key) => (
+                      <Form.Row key={key}>
+                        <Col lg="10">
+                          <Card key={key}>
+                            <div className="card-header" id={`heading-${key}`}>
+                              <h5 className="mb-0">
+                                <button
+                                  className="btn btn-link"
+                                  data-toggle="collapse"
+                                  data-target={`#collapse-${key}`}
+                                  aria-expanded={key === values.test - 1}
+                                  aria-controls={`collapse-${key}`}
+                                >
+                                  {formulation.medication_form}
+                                </button>
+                              </h5>
                             </div>
-                          </div>
-                        </Card>
-                      </Col>
-                      <Col>
-                        <Button type="button" variant="danger" onClick={() => this.removeFormulation(key)}>{I18n.t("remove")}</Button>
-                      </Col>
-                    </Form.Row>
-                  ))}
-                </div>
+                            <div
+                              id={`collapse-${key}`}
+                              className={`collapse ${key === values.test.length - 1 ? "show" : null}`}
+                              aria-labelledby={`heading-${key}`}
+                              data-parent="#accordion">
+                              <div className="card-body">
+                                <FieldArray
+                                  name="formulations"
+                                  render={arrayHelpers => (
+                                    <FormulationFields
+                                      breakables={breakables}
+                                      administrationRoutes={administrationRoutes}
+                                      handleChange={handleChange}
+                                      touched={touched}
+                                      errors={errors}
+                                      values={values}
+                                      index={key}
+                                      arrayHelpers={arrayHelpers}
+                                    />
+                                  )}
+                                />
+                              </div>
+                            </div>
+                          </Card>
+                        </Col>
+                        <Col>
+                          <Button type="button" variant="danger" onClick={() => this.removeFormulation(key)}>{I18n.t("remove")}</Button>
+                        </Col>
+                      </Form.Row>
+                    ))}
+                  </div>
 
-                {formData.formulations.length > 0 ? <hr/> : null}
+                  {formData.formulations.length > 0 ? <hr /> : null}
 
-                <Form.Row>
-                  <Col lg="11">
-                    <Form.Control
-                      as="select"
-                      name="medicationForm"
-                      onChange={this.handleMedicationFormChange}
-                    >
-                      <option value="">{I18n.t("drugs.medication_forms.select")}</option>
-                      {medicationForms.map(medicationForm => (
-                        <option
-                          key={medicationForm}
-                          value={medicationForm}>{medicationForm}</option>
-                      ))}
-                    </Form.Control>
-                  </Col>
+                  < Form.Row >
+                    <Col lg="11">
+                      <Form.Control
+                        as="select"
+                        name="medicationForm"
+                        onChange={this.handleMedicationFormChange}
+                      >
+                        <option value="">{I18n.t("drugs.medication_forms.select")}</option>
+                        {medicationForms.map(medicationForm => (
+                          <option
+                            key={medicationForm}
+                            value={medicationForm}>{medicationForm}</option>
+                        ))}
+                      </Form.Control>
+                    </Col>
 
-                  <Col>
-                    <Button type="button" variant="primary" onClick={() => this.addFormulation()}
-                            disabled={selectedMedicationForm === ""}>
-                      {I18n.t("add")}
-                    </Button>
-                  </Col>
-                </Form.Row>
+                    <Col>
+                      <Button type="button" variant="primary" onClick={() => this.addFormulation()}
+                        disabled={selectedMedicationForm === ""}>
+                        {I18n.t("add")}
+                      </Button>
+                    </Col>
+                  </Form.Row>
 
-                <Button type="submit" variant="success" disabled={isSubmitting}>
-                  {I18n.t("save")}
-                </Button>
-              </Form>
-            )}
+                  <Button type="submit" variant="success" disabled={isSubmitting}>
+                    {I18n.t("save")}
+                  </Button>
+                </Form>
+              )}
           </Formik>
         </FadeIn>
     );

@@ -13,11 +13,10 @@ export default class Root extends React.Component {
     return (
       <Provider store={store}>
         <DiagramProvider value={{ ...context }}>
-          <AdvancedModal/>
-          <Diagram/>
+          <AdvancedModal />
+          <Diagram />
         </DiagramProvider>
       </Provider>
     );
   }
 }
-

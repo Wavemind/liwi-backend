@@ -51,47 +51,12 @@ export const questionSequencesSchema = yup.object().shape({
     })
 });
 
-export const formulationSchema = yup.array().of(yup.object().shape({
-  doses_per_day: yup.number().required(I18n.t("errors.messages.required")),
-  administration_route_id: yup.number().required(I18n.t("errors.messages.required")),
-  by_age: yup.boolean(),
-  breakable: yup.string()
-    .when("medication_form", {
-      is: (medication_form) => medication_form === "tablet",
-      then: yup.string().required(I18n.t("errors.messages.required"))
-    }),
-  unique_dose: yup.number()
-    .when("medication_form", {
-      is: (medication_form) => !["tablet", "capsule", "suspension", "syrup"].includes(medication_form),
-      then: yup.number().required(I18n.t("errors.messages.required"))
-    })
-    .when("by_age", {
-      is: true,
-      then: yup.number().required(I18n.t("errors.messages.required"))
-    }),
-  liquid_concentration: yup.number()
-    .when("medication_form", {
-      is: (medication_form) => ["suspension", "syrup"].includes(medication_form),
-      then: yup.number().required(I18n.t("errors.messages.required"))
-    }),
-  dose_form: yup.number()
-    .when("medication_form", {
-      is: (medication_form) => ["tablet", "capsule", "suspension", "syrup"].includes(medication_form),
-      then: yup.number().required(I18n.t("errors.messages.required"))
-    }),
-  maximal_dose: yup.number()
-    .when("medication_form", {
-      is: (medication_form) => ["tablet", "capsule", "suspension", "syrup"].includes(medication_form),
-      then: yup.number().required(I18n.t("errors.messages.required"))
-    }),
-  minimal_dose_per_kg: yup.number()
-    .when("medication_form", {
-      is: (medication_form) => ["tablet", "capsule", "suspension", "syrup"].includes(medication_form),
-      then: yup.number().required(I18n.t("errors.messages.required"))
-    }),
-  maximal_dose_per_kg: yup.number()
-    .when("medication_form", {
-      is: (medication_form) => ["tablet", "capsule", "suspension", "syrup"].includes(medication_form),
-      then: yup.number().required(I18n.t("errors.messages.required"))
-    })
-})).required('Must have friends').min(1, 'Minimum of 3 friends');
+export const formulationSchema = yup.object().shape({
+  breakable: yup.string().required("Obligatoire"),
+  test: yup.array().of(yup.object().shape({
+    breakable: yup.string().required("Very obligatoire"),
+    doses_per_day: yup.number().required(I18n.t("errors.messages.required")),
+    administration_route_id: yup.number().required(I18n.t("errors.messages.required")),
+    by_age: yup.boolean()
+  }))
+});

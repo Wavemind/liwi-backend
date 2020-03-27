@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 2020_03_04_125139) do
   end
 
   create_table "administration_routes", force: :cascade do |t|
-    t.string "category"
+    t.integer "category"
     t.string "name"
   end
 
@@ -121,6 +121,21 @@ ActiveRecord::Schema.define(version: 2020_03_04_125139) do
     t.index ["version_id"], name: "index_diagnostics_on_version_id"
   end
 
+  create_table "drug_formulations", force: :cascade do |t|
+    t.float "minimal_dose_per_kg"
+    t.float "maximal_dose_per_kg"
+    t.float "maximal_dose"
+    t.integer "medication_form"
+    t.integer "pill_size"
+    t.integer "liquid_concentration"
+    t.integer "doses_per_day"
+    t.integer "unique_dose"
+    t.bigint "node_id"
+    t.bigint "administration_route_id"
+    t.index ["administration_route_id"], name: "index_drug_formulations_on_administration_route_id"
+    t.index ["node_id"], name: "index_drug_formulations_on_node_id"
+  end
+
   create_table "final_diagnostic_health_cares", force: :cascade do |t|
     t.bigint "node_id"
     t.bigint "final_diagnostic_id"
@@ -128,23 +143,6 @@ ActiveRecord::Schema.define(version: 2020_03_04_125139) do
     t.datetime "updated_at", null: false
     t.index ["final_diagnostic_id"], name: "index_final_diagnostic_health_cares_on_final_diagnostic_id"
     t.index ["node_id"], name: "index_final_diagnostic_health_cares_on_node_id"
-  end
-
-  create_table "formulations", force: :cascade do |t|
-    t.float "minimal_dose_per_kg"
-    t.float "maximal_dose_per_kg"
-    t.float "maximal_dose"
-    t.integer "medication_form"
-    t.integer "dose_form"
-    t.integer "liquid_concentration"
-    t.integer "doses_per_day"
-    t.integer "unique_dose"
-    t.integer "breakable"
-    t.boolean "by_age", default: false
-    t.bigint "node_id"
-    t.bigint "administration_route_id"
-    t.index ["administration_route_id"], name: "index_formulations_on_administration_route_id"
-    t.index ["node_id"], name: "index_formulations_on_node_id"
   end
 
   create_table "group_accesses", force: :cascade do |t|
@@ -175,10 +173,10 @@ ActiveRecord::Schema.define(version: 2020_03_04_125139) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "final_diagnostic_id"
-    t.integer "duration"
-    t.string "description"
     t.integer "position_x", default: 100
     t.integer "position_y", default: 100
+    t.integer "duration"
+    t.string "description"
     t.index ["final_diagnostic_id"], name: "index_instances_on_final_diagnostic_id"
     t.index ["instanceable_type", "instanceable_id"], name: "index_instances_on_instanceable_type_and_instanceable_id"
     t.index ["node_id"], name: "index_instances_on_node_id"
