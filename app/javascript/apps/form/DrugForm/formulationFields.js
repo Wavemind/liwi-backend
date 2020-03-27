@@ -2,15 +2,13 @@ import * as React from "react";
 import I18n from "i18n-js";
 import FadeIn from "react-fade-in";
 import { Form } from "react-bootstrap";
-import { ErrorMessage, Formik } from "formik";
 
 import DisplayErrors from "../components/DisplayErrors";
-import { formulationSchema } from "../constants/schema";
 
 export default class FormulationFields extends React.Component {
   constructor(props) {
     super(props);
-    const { values } = this.props;
+    const { arrayHelpers: { form: { values } } } = this.props;
     const unity = ["suspension", "syrup"].includes(values.medication_form)
       ? "ml"
       : "mg";
@@ -46,21 +44,37 @@ export default class FormulationFields extends React.Component {
     this.forceUpdate(); // Since there is no more state component does not rerender itself. I force it to make the form work. TODO better way to do so
   };
 
+  displayErrors(input) {
+    const {
+      index, arrayHelpers: { form: { errors } }
+    } = this.props;
+
+    return errors?.formulations !== undefined && errors?.formulations[index]?.[input];
+  }
+
+  isInvalid(input) {
+    const {
+      index, arrayHelpers: { form: { errors } }
+    } = this.props;
+
+    return errors?.formulations !== undefined && !!errors?.formulations[index]?.[input];
+  }
+
   render() {
     const { unity } = this.state;
     const {
       breakables,
       administrationRoutes,
-      handleChange,
-      touched,
-      errors,
-      values,
-      index,
-      arrayHelpers: { form }
+      arrayHelpers: {
+        form: {
+          handleChange,
+          values,
+        }
+      },
+      index
     } = this.props;
 
-    console.log(form.values);
-    console.log(form.errors);
+    let formulation = values.formulations[index];
 
     return (
       <FadeIn>
@@ -73,10 +87,9 @@ export default class FormulationFields extends React.Component {
             </Form.Label>
             <Form.Control
               as="select"
-              name={`test.${index}.administration_route_id`}
-              value={values.test[index].administration_route_id}
-              onChange={form.handleChange}
-              isInvalid={errors?.test !== undefined && !!errors?.test[index]?.administration_route_id}
+              name={`formulations.${index}.administration_route_id`}
+              value={formulation.administration_route_id}
+              onChange={handleChange}
             >
               <option value="">{I18n.t("select")}</option>
               {administrationRoutes.map(administrationRoute => (
@@ -98,10 +111,153 @@ export default class FormulationFields extends React.Component {
               ))}
             </Form.Control>
             <Form.Control.Feedback type="invalid">
-              {errors?.test !== undefined && errors?.test[index]?.administration_route_id}}
+              {this.displayErrors("administration_route_id")}
+            </Form.Control.Feedback>
+          </Form.Group>
+
+          <Form.Group controlId={`${index}-validationDosesPerDay`}>
+            <Form.Label>{I18n.t("activerecord.attributes.formulation.doses_per_day")}</Form.Label>
+            <Form.Control
+              type="number"
+              name={`formulations.${index}.doses_per_day`}
+              value={formulation.doses_per_day}
+              onChange={handleChange}
+            />
+            <Form.Control.Feedback type="invalid">
+              {this.displayErrors("doses_per_day")}
             </Form.Control.Feedback>
           </Form.Group>
         </Form.Row>
+
+        <Form.Row>
+          <Form.Group controlId={`${index}-validationByAge`}>
+            <Form.Label>{I18n.t("activerecord.attributes.formulation.by_age")}</Form.Label>
+            <Form.Check
+              type="checkbox"
+              name={`formulations.${index}.by_age`}
+              value={formulation.by_age}
+              onChange={handleChange}
+            />
+            <Form.Control.Feedback type="invalid">
+              {this.displayErrors("by_age")}
+            </Form.Control.Feedback>
+          </Form.Group>
+
+          {(formulation.medication_form === "capsule" && !formulation.by_age) ?
+            <Form.Group>
+            </Form.Group>
+            : null}
+
+          {(formulation.medication_form === "tablet" && !formulation.by_age) ?
+            <Form.Group controlId={`${index}-validationBreakable`}>
+              <Form.Label>{I18n.t("drugs.breakable.select")}</Form.Label>
+              <Form.Control
+                as="select"
+                name={`formulations.${index}.breakable`}
+                onChange={handleChange}
+                value={formulation.breakable}
+              >
+                <option value="">{I18n.t("select")}</option>
+                {breakables.map(breakable => (
+                  <option value={breakable[1]}>{breakable[0]}</option>
+                ))}
+              </Form.Control>
+              <Form.Control.Feedback type="invalid">
+                {this.displayErrors("breakable")}
+              </Form.Control.Feedback>
+            </Form.Group>
+            : null}
+
+          {(!["capsule", "tablet", "suspension", "syrup"].includes(formulation.medication_form) || formulation.by_age) ?
+            <Form.Group controlId={`${index}-validationUniqueDose`}>
+              <Form.Label>{I18n.t("activerecord.attributes.formulation.unique_dose")}</Form.Label>
+              <Form.Control
+                type="number"
+                name={`formulations.${index}.unique_dose`}
+                value={formulation.unique_dose}
+                onChange={handleChange}
+              />
+              <Form.Control.Feedback type="invalid">
+                {this.displayErrors("unique_dose")}
+              </Form.Control.Feedback>
+            </Form.Group>
+            : null}
+
+          {(["suspension", "syrup"].includes(formulation.medication_form) && !formulation.by_age) ?
+            <Form.Group controlId={`${index}-validationLiquidConcentration`}>
+              <Form.Label>{I18n.t("activerecord.attributes.formulation.liquid_concentration")}</Form.Label>
+              <Form.Control
+                type="number"
+                name={`formulations.${index}.liquid_concentration`}
+                value={formulation.liquid_concentration}
+                onChange={handleChange}
+              />
+              <Form.Control.Feedback type="invalid">
+                {this.displayErrors("liquid_concentration")}
+              </Form.Control.Feedback>
+            </Form.Group>
+            : null}
+        </Form.Row>
+
+        {(["capsule", "tablet", "suspension", "syrup"].includes(formulation.medication_form) && !formulation.by_age) ?
+          <>
+            <Form.Row>
+              <Form.Group controlId={`${index}-validationDoseForm`}>
+                <Form.Label>{I18n.t("activerecord.attributes.formulation.dose_form", { unity })}</Form.Label>
+                <Form.Control
+                  type="number"
+                  name={`formulations.${index}.dose_form`}
+                  value={formulation.dose_form}
+                  onChange={handleChange}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {this.displayErrors("dose_form")}
+                </Form.Control.Feedback>
+              </Form.Group>
+
+              <Form.Group controlId={`${index}-validationMaximalDose`}>
+                <Form.Label>{I18n.t("activerecord.attributes.formulation.maximal_dose")}</Form.Label>
+                <Form.Control
+                  type="number"
+                  name={`formulations.${index}.maximal_dose`}
+                  value={formulation.maximal_dose}
+                  onChange={handleChange}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {this.displayErrors("maximal_dose")}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Form.Row>
+
+            <Form.Row>
+              <Form.Group controlId={`${index}-validationMinimalDosePerKg`}>
+                <Form.Label>{I18n.t("activerecord.attributes.formulation.minimal_dose_per_kg")}</Form.Label>
+                <Form.Control
+                  type="number"
+                  name={`formulations.${index}.minimal_dose_per_kg`}
+                  value={formulation.minimal_dose_per_kg}
+                  onChange={handleChange}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {this.displayErrors("minimal_dose_per_kg")}
+                </Form.Control.Feedback>
+              </Form.Group>
+
+              <Form.Group controlId={`${index}-validationMaximalDosePerKg`}>
+                <Form.Label>{I18n.t("activerecord.attributes.formulation.maximal_dose_per_kg")}</Form.Label>
+                <Form.Control
+                  type="number"
+                  name={`formulations.${index}.maximal_dose_per_kg`}
+                  value={formulation.maximal_dose_per_kg}
+                  onChange={handleChange}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {this.displayErrors("maximal_dose_per_kg")}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Form.Row>
+          </>
+          : null}
       </FadeIn>
     );
   }

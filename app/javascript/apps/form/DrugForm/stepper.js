@@ -20,7 +20,7 @@ export default class StepperDrugForm extends React.Component {
         id: drug?.id || "",
         label_translations: drug?.label_translations?.en || "",
         description_translations: drug?.description_translations?.en || "",
-        formulations: drug?.formulations ||  { test: [] }
+        formulations: drug?.formulations ||  []
       }
     };
   }
@@ -31,7 +31,7 @@ export default class StepperDrugForm extends React.Component {
    * @param value
    */
   setFormData = (prop, value) => {
-    this.setState({ drug: { [prop]: value } });
+    this.setState({ drug: { ...this.state.drug, [prop]: value } });
   };
 
   /**

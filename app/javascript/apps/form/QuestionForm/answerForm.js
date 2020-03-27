@@ -2,7 +2,7 @@ import * as React from "react";
 import I18n from "i18n-js";
 import FadeIn from "react-fade-in";
 import { Form, Button, Card, Col } from "react-bootstrap";
-import AnswerFields from "./formulationFields";
+import AnswerFields from "./answerFields";
 
 import Http from "../../diagram/engine/http";
 import Loader from "../components/Loader";
