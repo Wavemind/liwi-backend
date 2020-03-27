@@ -13,6 +13,19 @@ triage = Role.create!(name: 'Triage', stage: Role.stages[:triage])
 test = Role.create!(name: 'Test', stage: Role.stages[:test])
 consultation = Role.create!(name: 'Consultation', stage: Role.stages[:consultation])
 
+# Administration routes
+AdministrationRoute.create!(category: 'Enteral', name: 'Orally')
+AdministrationRoute.create!(category: 'Enteral', name: 'Sublingually')
+AdministrationRoute.create!(category: 'Enteral', name: 'Rectally')
+AdministrationRoute.create!(category: 'Parenteral injectable', name: 'IV')
+AdministrationRoute.create!(category: 'Parenteral injectable', name: 'IM')
+AdministrationRoute.create!(category: 'Parenteral injectable', name: 'SC')
+AdministrationRoute.create!(category: 'Mucocutaneous', name: 'Otic')
+AdministrationRoute.create!(category: 'Mucocutaneous', name: 'Nasally')
+AdministrationRoute.create!(category: 'Mucocutaneous', name: 'Inhalation')
+AdministrationRoute.create!(category: 'Mucocutaneous', name: 'Cutaneous')
+AdministrationRoute.create!(category: 'Mucocutaneous', name: 'Transdermally')
+
 # User
 quentin = User.create!(first_name: 'Quentin', last_name: 'Girard', email: 'quentin.girard@wavemind.ch', password: '123456', password_confirmation: '123456')
 alain = User.create!(first_name: 'Alain', last_name: 'Fresco', email: 'alain.fresco@wavemind.ch', password: '123456', password_confirmation: '123456')

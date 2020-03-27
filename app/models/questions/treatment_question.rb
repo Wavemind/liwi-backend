@@ -1,4 +1,4 @@
-# Category of question concerning question for treatments
+# Category of question concerning question for drugs
 # Reference prefix : TQ
 class Questions::TreatmentQuestion < Question
 

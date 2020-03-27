@@ -23,16 +23,16 @@ RSpec.describe MedicalCase, type: :model do
   end
 
   it 'can include health cares' do
-    treatment = HealthCares::Treatment.create!(label_en: 'skin issue', algorithm: @algorithm)
+    drug = HealthCares::Drug.create!(label_en: 'skin issue', algorithm: @algorithm)
     management = HealthCares::Management.create!(label_en: 'skin issue', algorithm: @algorithm)
 
     medical_case = MedicalCase.new(version: @version, patient: @patient)
-    medical_case.nodes << [management, treatment]
+    medical_case.nodes << [management, drug]
 
     expect(medical_case).to be_valid
   end
 
-  it 'cannot include a node which is not a health care (Management/Treatment)' do
+  it 'cannot include a node which is not a health care (Management/Drug)' do
     predefined_syndrome = QuestionsSequences::PredefinedSyndrome.create!(label_en: 'skin issue', algorithm: @algorithm)
 
     medical_case = MedicalCase.new(version: @version, patient: @patient)

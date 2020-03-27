@@ -8,7 +8,7 @@
     <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'questions'%>" id="profile-tab" data-toggle="tab" href="#questions" role="tab" aria-controls="profile" aria-selected="false"><%= t('.subtitle_questions')  %> </a>
   </li>
   <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'treatments'%>" id="contact-tab" data-toggle="tab" href="#treatments" role="tab" aria-controls="contact" aria-selected="false"><%= t('.subtitle_treatments') %></a>
+    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'drugs'%>" id="contact-tab" data-toggle="tab" href="#drugs" role="tab" aria-controls="contact" aria-selected="false"><%= t('.subtitle_drugs') %></a>
   </li>
   <li class="nav-item">
     <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'managements'%>" id="contact-tab" data-toggle="tab" href="#managements" role="tab" aria-controls="contact" aria-selected="false"><%= t('.subtitle_managements') %></a>
@@ -40,14 +40,14 @@
 
     <%= render 'questions/table' %>
   </div>
-  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'treatments'%>" id="treatments" role="tabpanel" aria-labelledby="treatments-tab">
-    <h3><%= t('.subtitle_treatments') %></h3>
+  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'drugs'%>" id="drugs" role="tabpanel" aria-labelledby="drugs-tab">
+    <h3><%= t('.subtitle_drugs') %></h3>
 
-    <%= link_to new_algorithm_treatment_url(@algorithm) do %>
+    <%= link_to new_algorithm_drug_url(@algorithm) do %>
       <button type="button" class="btn btn-outline-primary"><%= t('add') %></button>
     <% end %>
 
-    <%= render 'treatments/table' %>
+    <%= render 'drugs/table' %>
   </div>
   <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'managements'%>" id="managements" role="tabpanel" aria-labelledby="managements-tab">
     <h3><%= t('.subtitle_managements') %></h3>
@@ -71,7 +71,7 @@
   <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'questions_sequences_scored'%>" id="questions_sequences_scored" role="tabpanel" aria-labelledby="questions_sequences_scored-tab">
     <h3><%= t('.subtitle_questions_sequences_scored') %></h3>
 
-    <%= link_to new_scored_algorithm_questions_sequences_url(@algorithm) do %>
+    <%= link_to new_algorithm_questions_sequence_url(@algorithm, type: 'QuestionsSequences::Scored') do %>
       <button type="button" class="btn btn-outline-primary"><%= t('add') %></button>
     <% end %>
 

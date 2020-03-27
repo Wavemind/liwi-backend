@@ -108,9 +108,9 @@ class DiagnosticsController < ApplicationController
   def validate
     @diagnostic.manual_validate
     if @diagnostic.errors.messages.any?
-      render json: {status: 'danger', messages: @diagnostic.errors.messages[:basic]}
+      render json: @diagnostic.errors.messages[:basic], status: 422
     else
-      render json: {status: 'success', messages: [t('flash_message.diagnostic.valid')]}
+      render json: [t('flash_message.diagnostic.valid')], status: 200
     end
   end
 

@@ -35,6 +35,12 @@
   margin-bottom: 20px;
 }
 
+.canvas {
+  position: relative;
+  cursor: move;
+  overflow: hidden;
+}
+
 .srd-canvas {
   height: 92.5vh;
 }
@@ -215,35 +221,11 @@
   text-align: center
 }
 
-
-// FLASH MESSAGES REACT
-.alerts-leave {
-  opacity: 1;
-  padding-bottom: 15px;
-  padding-top: 15px;
-  margin-bottom: 20px;
-  height: 50px;
-}
-.alerts-leave.alerts-leave-active {
-  overflow: hidden;
-  opacity: 0.01;
-  padding-top: 0;
-  padding-bottom: 0;
-  margin-bottom: 0;
-  height: 0;
-  transition: opacity 300ms ease-in,
-  padding-top 500ms ease-in,
-  padding-bottom 500ms ease-in,
-  margin-bottom 500ms ease-in,
-  height 500ms ease-in;
-}
-
 .node-category {
   .dropdown-toggle::after {
     right: 9px!important;
   }
 }
-
 
 .help {
   position:absolute;
@@ -266,14 +248,6 @@
   position: unset !important;
 }
 
-.srd-default-label {
-  pointer-events: all !important;
-}
-
-.srd-default-label:hover  {
-  cursor: pointer;
-}
-
 .liwi-toolbar {
   background-color: #808080;
 
@@ -293,4 +267,25 @@
 .displayedErrors {
   font-size: 13px;
   color: red;
+}
+
+// Flash messages
+.notification-container {
+  width: 500px;
+}
+
+// Diagram label
+.diagram-label {
+  pointer-events: all !important;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 5px;
+  color: white;
+  font-size: 12px;
+  padding: 4px 8px;
+  font-family: sans-serif;
+  user-select: none;
+
+  &:hover {
+    cursor: pointer;
+  }
 }

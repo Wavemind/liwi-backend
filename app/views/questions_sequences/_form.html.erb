@@ -1,8 +1,0 @@
-<%= f.input :type, collection: QuestionsSequence.descendants.reject{ |k| k==QuestionsSequences::Scored}, value_method: :name, label_method: :display_label, prompt: t('select'), disabled: f.object.persisted? %>
-
-<%= f.input :label_en %>
-<%= f.association :node, collection: @algorithm.questions.where(type: 'Questions::ComplaintCategory'), label_method: :reference_label, prompt: t('select')  %>
-
-<%= f.input :description_en, as: :text %>
-
-<%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>

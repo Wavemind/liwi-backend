@@ -12,6 +12,7 @@ class Condition < ApplicationRecord
 
   before_destroy :remove_children, unless: Proc.new { self.referenceable.is_a?(Diagnostic) }
   before_validation :prevent_loop, unless: Proc.new { self.referenceable.is_a?(Diagnostic) || (self.referenceable.is_a?(Instance) && self.referenceable.instanceable.is_a?(Diagnostic) && self.referenceable.instanceable.duplicating) }
+  before_validation :already_exist, on: :create
 
   validates_presence_of :first_conditionable
 
@@ -25,6 +26,13 @@ class Condition < ApplicationRecord
   # Return the id displayed for the view
   def display_condition
     "(#{first_conditionable.display_condition} #{I18n.t("conditions.operators.#{operator}") unless operator.nil?} #{second_conditionable.display_condition unless second_conditionable.nil?})"
+  end
+
+  # @params [String, String]
+  # @return [Object]
+  # Return an object (Answer or Condition) from a string with id and class name
+  def create_conditionable(conditionable)
+    conditionable.split(',')[1].constantize.find(conditionable.split(',')[0])
   end
 
   # Create children from conditions automatically
@@ -41,21 +49,6 @@ class Condition < ApplicationRecord
       parent.children.create!(node: referenceable.node) unless parent.nil? || parent.children.where(node: referenceable.node).any?
     elsif second_conditionable.is_a?(Condition)
       second_conditionable.create_children
-    end
-  end
-
-  # Remove child by instanceable type and first/second conditionable id
-  def remove_children
-    if first_conditionable.is_a?(Answer)
-      node_answers_ids = first_conditionable.node.answers.map(&:id) - [first_conditionable_id]
-      child = Child.find_by(instance: first_conditionable.node.instances.find_by(instanceable: referenceable.instanceable, final_diagnostic: referenceable.final_diagnostic), node: referenceable.node)
-      child.destroy! unless referenceable.conditions.where(first_conditionable_id: node_answers_ids, first_conditionable_type: 'Answer').or(referenceable.conditions.where(second_conditionable_id: node_answers_ids, second_conditionable_type: 'Answer')).any?
-    end
-
-    if second_conditionable.is_a?(Answer)
-      node_answers_ids = second_conditionable.node.answers.map(&:id) - [second_conditionable_id]
-      child = Child.find_by(instance: second_conditionable.node.instances.find_by(instanceable: referenceable.instanceable, final_diagnostic: referenceable.final_diagnostic), node: referenceable.node)
-      child.destroy! unless referenceable.conditions.where(first_conditionable_id: node_answers_ids, first_conditionable_type: 'Answer').or(referenceable.conditions.where(second_conditionable_id: node_answers_ids, second_conditionable_type: 'Answer')).any?
     end
   end
 
@@ -83,6 +76,8 @@ class Condition < ApplicationRecord
     false
   end
 
+  private
+
   # Before creating a condition, verify that it is not doing a loop. Create the Child in the opposite way in the process
   def prevent_loop
     ActiveRecord::Base.transaction(requires_new: true) do
@@ -94,10 +89,25 @@ class Condition < ApplicationRecord
     end
   end
 
-  # @params [String, String]
-  # @return [Object]
-  # Return an object (Answer or Condition) from a string with id and class name
-  def create_conditionable(conditionable)
-    conditionable.split(',')[1].constantize.find(conditionable.split(',')[0])
+  # Remove child by instanceable type and first/second conditionable id
+  def remove_children
+    if first_conditionable.is_a?(Answer)
+      node_answers_ids = first_conditionable.node.answers.map(&:id) - [first_conditionable_id]
+      child = Child.find_by(instance: first_conditionable.node.instances.find_by(instanceable: referenceable.instanceable, final_diagnostic: referenceable.final_diagnostic), node: referenceable.node)
+      child.destroy! unless referenceable.conditions.where(first_conditionable_id: node_answers_ids, first_conditionable_type: 'Answer').or(referenceable.conditions.where(second_conditionable_id: node_answers_ids, second_conditionable_type: 'Answer')).any?
+    end
+
+    if second_conditionable.is_a?(Answer)
+      node_answers_ids = second_conditionable.node.answers.map(&:id) - [second_conditionable_id]
+      child = Child.find_by(instance: second_conditionable.node.instances.find_by(instanceable: referenceable.instanceable, final_diagnostic: referenceable.final_diagnostic), node: referenceable.node)
+      child.destroy! unless referenceable.conditions.where(first_conditionable_id: node_answers_ids, first_conditionable_type: 'Answer').or(referenceable.conditions.where(second_conditionable_id: node_answers_ids, second_conditionable_type: 'Answer')).any?
+    end
+  end
+
+  # Throw an error if condition with same referenceable and first_conditionable already exist
+  def already_exist
+    if Condition.exists?(referenceable: referenceable, first_conditionable: first_conditionable)
+      self.errors.add(:base, I18n.t('conditions.validation.link_already_exist'))
+    end
   end
 end

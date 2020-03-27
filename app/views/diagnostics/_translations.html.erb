@@ -72,11 +72,11 @@
       <% end %>
 
       <hr/>
-      <h4><%= t('.treatments') %></h4>
+      <h4><%= t('.drugs') %></h4>
 
-      <% @diagnostic.treatments.each do |treatment| %>
-        <%= simple_form_for treatment, url: update_translations_algorithm_treatment_url(@diagnostic.version.algorithm, treatment), method: :put, remote: true, html: {class: 'form-horizontal'} do |f| %>
-          <%= render 'node_translation', f: f, node: treatment, language: language %>
+      <% @diagnostic.drugs.each do |drug| %>
+        <%= simple_form_for drug, url: update_translations_algorithm_drug_url(@diagnostic.version.algorithm, drug), method: :put, remote: true, html: {class: 'form-horizontal'} do |f| %>
+          <%= render 'node_translation', f: f, node: drug, language: language %>
         <% end %>
       <% end %>
     </div>

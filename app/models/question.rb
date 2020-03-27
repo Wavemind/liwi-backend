@@ -4,6 +4,7 @@ class Question < Node
   after_create :create_boolean, if: Proc.new { answer_type.value == 'Boolean' }
   after_create :create_positive, if: Proc.new { answer_type.value == 'Positive' }
   after_create :create_present, if: Proc.new { answer_type.value == 'Present' }
+
   after_create :push_in_versions, if: Proc.new { stage == 'triage' }
   before_destroy :remove_from_versions, if: Proc.new { stage == 'triage' }
 
@@ -26,7 +27,7 @@ class Question < Node
   # Return questions which has not triage stage
   scope :no_triage, ->() { where.not(stage: Question.stages[:triage]).or(where(stage: nil)) }
   scope :no_treatment_condition, ->() { where.not(type: 'Questions::TreatmentQuestion') }
-  scope :no_vital_sign, ->() { where.not(type: %w(Questions::VitalSignConsultation Questions::VitalSignTriage)) }
+  scope :diagrams_included, ->() { where.not(type: %w(Questions::VitalSignAnthropometric Questions::BasicMeasurement Questions::Demographic)) }
 
   accepts_nested_attributes_for :answers, allow_destroy: true
 
@@ -35,18 +36,20 @@ class Question < Node
     [
         Questions::AssessmentTest,
         Questions::BackgroundCalculation,
+        Questions::BasicMeasurement,
         Questions::ChronicCondition,
+        Questions::ConsultationRelated,
         Questions::ComplaintCategory,
         Questions::Demographic,
-        Questions::EmergencySign,
         Questions::Exposure,
         Questions::ObservedPhysicalSign,
         Questions::PhysicalExam,
         Questions::Symptom,
         Questions::TreatmentQuestion,
+        Questions::UniqueTriagePhysicalSign,
+        Questions::UniqueTriageQuestion,
         Questions::Vaccine,
-        Questions::VitalSignConsultation,
-        Questions::VitalSignTriage,
+        Questions::VitalSignAnthropometric,
     ]
   end
 
@@ -65,7 +68,7 @@ class Question < Node
   # Return a hash with all question categories with their name, label and prefix
   def self.categories(diagram_class_name)
     categories = []
-    excluded_categories = [Questions::ComplaintCategory, Questions::VitalSignTriage, Questions::VitalSignConsultation, Questions::EmergencySign]
+    excluded_categories = [Questions::ComplaintCategory, Questions::BasicMeasurement, Questions::VitalSignAnthropometric, Questions::UniqueTriageQuestion, Questions::UniqueTriagePhysicalSign]
     excluded_categories.push(Questions::TreatmentQuestion) unless diagram_class_name == 'FinalDiagnostic'
     self.descendants.each do |category|
       unless excluded_categories.include?(category)
@@ -115,12 +118,12 @@ class Question < Node
   # Get the right field from the node type<
   def version_field_to_set
     case type
-    when 'Questions::EmergencySign'
-      return 'triage_emergency_sign_order'
+    when 'Questions::UniqueTriageQuestion'
+      return 'triage_unique_triage_question_order'
     when 'Questions::ComplaintCategory'
       return 'triage_complaint_category_order'
-    when 'Questions::VitalSignTriage'
-      return 'triage_vital_sign_triage_order'
+    when 'Questions::BasicMeasurement'
+      return 'triage_basic_measurement_order'
     when 'Questions::ChronicCondition'
       return 'triage_chronic_condition_order'
     else
@@ -182,7 +185,7 @@ class Question < Node
 
   # Ensure that the formula is in a correct format
   def validate_formula
-    errors.add(:formula, I18n.t('questions.errors.formula_wrong _characters')) if formula.match(/^(\[(.*?)\]|[ \(\)\*\/\+\-|0-9])*$/).nil?
+    errors.add(:formula, I18n.t('questions.errors.formula_wrong_characters')) if formula.match(/^(\[(.*?)\]|[ \(\)\*\/\+\-|0-9])*$/).nil?
     # Extract references and functions from the formula
     formula.scan(/\[.*?\]/).each do |reference|
       # Check for date functions ToDay() or ToMonth() and remove element if it's correct

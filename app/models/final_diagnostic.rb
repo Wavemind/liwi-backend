@@ -24,36 +24,23 @@ class FinalDiagnostic < Node
   end
 
   # @return [Json]
-  # Return treatments and managements in json format
+  # Return drugs and managements in json format
   def health_cares_json
-    diagnostic.components.where(node_id: health_cares.map(&:id), final_diagnostic_id: id).as_json(include: [node: {methods: [:node_type, :type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}])
-  end
-
-  # @params [FinalDiagnostic]
-  # Generate the ordered conditions of health cares
-  def generate_health_care_conditions_order
-    nodes = []
-    first_instances = components.joins(:node).includes(:conditions, :children).where(conditions: { referenceable_id: nil }).where('nodes.type IN (?) OR nodes.type IN (?)', Question.descendants.map(&:name), QuestionsSequence.descendants.map(&:name))
-    nodes << first_instances
-    get_children(first_instances, nodes)
-  end
-
-  # @params [Array][Instance], [Array][Node]
-  # Get children question nodes
-  def get_children(instances, nodes)
-    current_nodes = []
-    instances.includes(:conditions, children: [:node]).map(&:children).flatten.each do |child|
-      current_nodes << child.node if child.node.is_a?(Question) || child.node.is_a?(QuestionsSequence)
-    end
-    if current_nodes.any?
-      current_instances = Instance.health_care_conditions.where('instanceable_id = ? AND instanceable_type = ? AND node_id IN (?)', diagnostic.id, diagnostic.class.name, current_nodes.map(&:id).flatten)
-
-      current_instances.each { |instance| nodes = remove_old_node(nodes, instance) }
-      nodes << current_instances
-      get_children(current_instances, nodes)
-    else
-      nodes
-    end
+    diagnostic.components.where(node_id: health_cares.map(&:id), final_diagnostic_id: id).as_json(
+      include: [
+        node: {
+          include: [:formulations],
+          methods: [:node_type, :type]
+        },
+        conditions: {
+          include: [
+            first_conditionable: {
+              methods: [:get_node]
+            }
+          ]
+        }
+      ]
+    )
   end
 
   # @params [Array][Array][Instances] instances before delete, [Instance] instance to delete
@@ -69,7 +56,26 @@ class FinalDiagnostic < Node
 
   # Return all questions for Final Diagnostic diagram as json
   def health_care_questions_json
-    generate_health_care_conditions_order.as_json(include: [conditions: { include: [first_conditionable: { methods: [:get_node] }, second_conditionable: { methods: [:get_node] }] }, node: { include: [:answers], methods: [:node_type, :category_name, :type] }])
+    (components.questions.health_care_conditions + components.questions_sequences.health_care_conditions).as_json(
+      include: [
+        conditions: {
+          include: [
+            first_conditionable: {
+              methods: [
+                :get_node
+              ]
+            },
+          ]
+        },
+        node: {
+          include: [:answers],
+          methods: [
+            :node_type,
+            :category_name,
+            :type
+          ]
+        }
+      ])
   end
 
   # @return [Json]
@@ -77,7 +83,7 @@ class FinalDiagnostic < Node
   def available_nodes_health_cares_json
     ids = components.select(:node_id)
     (
-      diagnostic.version.algorithm.questions.no_triage.no_vital_sign.where.not(id: ids) +
+      diagnostic.version.algorithm.questions.no_triage.diagrams_included.where.not(id: ids) +
       diagnostic.version.algorithm.questions_sequences.where.not(id: ids) +
       diagnostic.version.algorithm.health_cares.where.not(id: ids)
     ).as_json(methods: [:category_name, :node_type, :get_answers, :type])
@@ -105,5 +111,40 @@ class FinalDiagnostic < Node
   # Link the DF to its algorithm (from diagnostic)
   def link_algorithm
     self.algorithm = diagnostic.version.algorithm
+  end
+
+  # Get instance of final_diagnostic in a diagnostic
+  def get_instance_json
+      instances.where(instanceable: diagnostic).includes(:node).as_json(
+      include: [
+        node: {
+          methods: [:node_type]
+        },
+        conditions: {
+          include: [
+            first_conditionable: {
+              include: [
+                node: {
+                  include: [:answers]
+                }
+              ],
+              methods: [:get_node]
+            }
+          ]
+        }
+      ]
+    ).first
+  end
+
+  # Construct diagnostic json
+  def diagnostic_json
+    {
+      id: diagnostic.id,
+      type: 'FinalDiagnostic',
+      reference: diagnostic.reference,
+      label: diagnostic.label,
+      version_id: diagnostic.version_id,
+      chief_complaint_label: diagnostic.node.reference_label
+    }
   end
 end

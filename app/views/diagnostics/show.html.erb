@@ -28,17 +28,17 @@
 
       <div class="col-md-12 diagram-container scrollable">
         <p class="mx-0 my-0 metadata" data-type="<%= @diagnostic.class.name %>" data-id="<%= @diagnostic.id %>" data-version="<%= @diagnostic.version.id %>"  data-algorithm="<%= @diagnostic.version.algorithm.id %>"></p>
-        <%= react_component('Provider', {
-          render: 'Diagram',
+        <%= react_component('diagram', {
           context: {
-            instanceable: @diagnostic,
-            instanceableType: @diagnostic.class.name,
-            questions: @diagnostic.questions_json,
-            finalDiagnostics: @diagnostic.final_diagnostics_json,
+            instanceable: @diagnostic.diagnostic_json,
+            instances: @diagnostic.questions_json + @diagnostic.final_diagnostics_json,
             availableNodes: @diagnostic.available_nodes_json,
+            questionAnswerTypes: AnswerType.all.as_json(methods: :display_name),
+            questionSystems: Question.systems.map { |k, v| [t("questions.systems.#{k}"), k] },
+            questionStages: Question.stages,
             questionCategories: Question.categories('Diagnostic').as_json,
             questionsSequenceCategories: QuestionsSequence.categories.as_json,
-            type: 'Diagnostic',
+            answersOperators: Answer.operators.as_json,
             readOnly: true
           }
         }) %>

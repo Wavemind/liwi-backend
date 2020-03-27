@@ -13,17 +13,19 @@ class Instance < ApplicationRecord
   scope :managements, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'HealthCares::Management') }
   scope :questions, ->() { joins(:node).includes(:conditions).where('nodes.type IN (?)', Question.descendants.map(&:name)) }
   scope :questions_sequences, ->() { joins(:node).includes(:conditions).where('nodes.type IN (?)', QuestionsSequence.descendants.map(&:name)) }
-  scope :treatments, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'HealthCares::Treatment') }
+  scope :drugs, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'HealthCares::Drug') }
   scope :final_diagnostics, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'FinalDiagnostic') }
 
   scope :triage_complaint_category, ->() { joins(:node).where('nodes.stage = ? AND nodes.type = ?', Question.stages[:triage], 'Questions::ComplaintCategory') }
-  scope :triage_under_complaint_category, ->() { joins(:node).where('nodes.type NOT IN (?)', %w(Questions::EmergencySign Questions::ComplaintCategory)) }
+  scope :triage_under_complaint_category, ->() { joins(:node).where('nodes.type NOT IN (?)', %w(Questions::UniqueTriageQuestion Questions::ComplaintCategory)) }
 
   # Allow to filter if the node is used as a health care condition or as a final diagnostic condition. A node can be used in both of them.
   scope :health_care_conditions, ->() { joins(:node).includes(:conditions).where.not(final_diagnostic: nil).or(joins(:node).includes(:conditions).where("nodes.type LIKE 'HealthCares::%'")) }
   scope :not_health_care_conditions, ->() { includes(:conditions).where(final_diagnostic_id: nil) }
 
   before_destroy :remove_condition_from_children
+
+  validate :already_exist, on: :create
 
   # Enable recursive duplicating
   # https://github.com/amoeba-rb/amoeba#usage
@@ -60,5 +62,25 @@ class Instance < ApplicationRecord
   # Return the reference label of its node
   def reference_label
     node.reference_label
+  end
+
+  # Return json formated of the instance depending on the node type
+  def generate_json
+    # TODO: Drug
+
+    if node.is_a?(Question) || node.is_a?(QuestionsSequence)
+      self.as_json(include: { node: { include: [:answers], methods: [:node_type, :category_name, :type] } })
+    else
+      self.as_json(include: { node: { methods: [:node_type, :category_name, :type] } })
+    end
+  end
+
+  private
+
+  # Save if validation is true and node_id doesn't already exist in current diagnostic
+  def already_exist
+    if instanceable.components.find_by(node_id: node_id, final_diagnostic_id: final_diagnostic_id)
+      errors.add(:base, I18n.t('.already_exist'))
+    end
   end
 end

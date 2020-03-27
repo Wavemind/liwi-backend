@@ -13,13 +13,13 @@
  */
 @import "bootstrap";
 @import "datatables";
-@import "storm-react-diagrams/src/sass/main";
 @import "diagram";
 /*
     DEMO STYLEa
 */
-@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
-@import "https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css";
+@import url(https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700);
+@import url(https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css);
+@import "react-notifications/lib/notifications.css";
 
 body {
   font-family: 'Poppins', sans-serif;

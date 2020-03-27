@@ -103,12 +103,12 @@ class AlgorithmsController < ApplicationController
   end
 
   # @params algorithm [Algorithm] current algorithm
-  # @return json of treatments
-  # All treatments available for current algorithm
-  def treatments
+  # @return json of drugs
+  # All drugs available for current algorithm
+  def drugs
     respond_to do |format|
       format.html
-      format.json { render json: TreatmentDatatable.new(params, view_context: view_context) }
+      format.json { render json: DrugDatatable.new(params, view_context: view_context) }
     end
   end
 

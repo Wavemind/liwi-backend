@@ -2,8 +2,10 @@
 
 <%= render 'utils/dependency_warning', node: @questions_sequence %>
 
-<div class="row justify-content-center">
-  <%= simple_form_for @questions_sequence.becomes(QuestionsSequence), url: algorithm_questions_sequence_url(@algorithm, @questions_sequence), html: { class: 'form-horizontal' }, wrapper: :input_group do |f| %>
-    <%= render 'form', f: f %>
-  <% end %>
+<p class="mx-0 my-0 metadata" data-algorithm="<%= @algorithm.id %>"></p>
+
+<div class="row justify-content-center mt-5">
+  <div class="col-md-8">
+    <%= react_component('form/QuestionsSequenceForm', { questionsSequence: @questions_sequence.as_json(methods: [:type]), method: 'update', from: 'rails' }) %>
+  </div>
 </div>

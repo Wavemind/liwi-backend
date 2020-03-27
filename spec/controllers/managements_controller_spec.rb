@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'json'
 
 RSpec.describe ManagementsController, type: :controller do
   login_user
@@ -63,7 +64,13 @@ RSpec.describe ManagementsController, type: :controller do
     expect(flash[:notice]).to eq I18n.t('flash_message.success_updated')
   end
 
-  # TODO: @manu missing update from diagram
+  it 'should work for [PATCH:update_from_diagram]' do
+    put :update_from_diagram, params: { algorithm_id: @algorithm.id, id: @management.id, health_cares_management: { algorithm: @algorithm, label_en: 'Severe LRTI' } }
+
+    node = JSON.parse(response.body)['node']
+    expect(response.status).to eq(200)
+    expect(node['label_translations']['en']).to eq('Severe LRTI')
+  end
 
   it 'should work for [GET:new]' do
     get :new, params: { algorithm_id: @algorithm.id }

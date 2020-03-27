@@ -1,6 +1,13 @@
 en:
   activerecord:
     attributes:
+      condition:
+        score: "Score"
+      diagnostic:
+        node: "Complaint category"
+      final_diagnostic:
+        description_translations: "Description"
+        label_translations: "Label"
       node:
         type: "Category"
         unavailable: "Can be unavailable ?"
@@ -11,10 +18,21 @@ en:
         treatment_type: "Medication form"
         pill_size: "Pill minimal size (mg)"
         node: "Complaint category"
-      diagnostic:
-        node: "Complaint category"
+        is_triage: "Ask in triage if it is available"
+        is_identifiable: "This question can identify a patient"
+      questions_sequence:
+        description_translations: "Description"
+        label_translations: "Label"
+        min_score: "Minimal score"
+        type: "Category"
   activated: "Activate"
   add: "Add"
+  administration_routes:
+    labels:
+      - ~
+      - "Enteral"
+      - "Parental or injectable"
+      - "Mucocutaneous"
   algorithms:
     index:
       columns:
@@ -33,9 +51,10 @@ en:
       subtitle_questions_sequences: "Questions sequences"
       subtitle_questions_sequences_scored: "Questions sequences scored"
       subtitle_questions: "Questions"
-      subtitle_treatments: "Treatments"
+      subtitle_drugs: "Drugs"
       subtitle_versions: "Versions list"
       title: "Details of %{name}"
+  already_exist: "This instance already exist"
   answer_type:
     labels:
       - ~
@@ -102,7 +121,7 @@ en:
     diagnostics: "Diagnostics"
     final_diagnostics: "Final diagnostics"
     questions_sequences: "Questions sequences"
-    treatments: "Treatments"
+    drugs: "Drugs"
     questions: "Questions"
     managements: "Managements"
   children:
@@ -114,6 +133,7 @@ en:
       or_operator: "OR"
     validation:
       loop: "You are trying to do a loop in your diagnostic which is impossible."
+      link_already_exist: "Link already exists"
   deactivated: "Deactivate"
   delete: "Delete"
   destroy: "Remove"
@@ -172,11 +192,49 @@ en:
       managements: "Managements"
       questions_sequences: "Questions sequences"
       questions: "Questions"
-      treatments: "Treatments"
+      drugs: "Drugs"
   duplicate: "Duplicate"
   duplicated: "_duplicated"
   edit: "Edit"
   error: "An error occured"
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: must be accepted
+      blank: can't be blank
+      confirmation: doesn't match %{attribute}
+      empty: can't be empty
+      equal_to: must be equal to %{count}
+      even: must be even
+      exclusion: is reserved
+      greater_than: must be greater than %{count}
+      greater_than_or_equal_to: must be greater than or equal to %{count}
+      inclusion: is not included in the list
+      invalid: is invalid
+      less_than: must be less than %{count}
+      less_than_or_equal_to: must be less than or equal to %{count}
+      model_invalid: 'Validation failed: %{errors}'
+      not_a_number: is not a number
+      not_an_integer: must be an integer
+      odd: must be odd
+      other_than: must be other than %{count}
+      present: must be blank
+      required: must exist
+      taken: has already been taken
+      too_long:
+        one: is too long (maximum is 1 character)
+        other: is too long (maximum is %{count} characters)
+      too_short:
+        one: is too short (minimum is 1 character)
+        other: is too short (minimum is %{count} characters)
+      wrong_length:
+        one: is the wrong length (should be 1 character)
+        other: is the wrong length (should be %{count} characters)
+    template:
+      body: 'There were problems with the following fields:'
+      header:
+        one: 1 error prohibited this %{model} from being saved
+        other: "%{count} errors prohibited this %{model} from being saved"
   dependencies: "Node have dependencies"
   final_diagnostics:
     new:
@@ -191,7 +249,7 @@ en:
     edit:
       title: "Edit final diagnostic"
     show:
-      treatments: "Treatments"
+      drugs: "Drugs"
       managements: "Managements"
       excluded_diagnostic: "Excluded diagnostic"
       no_excluded_diagnostic: "There is no diagnosis excluded"
@@ -214,6 +272,7 @@ en:
       node_is_not_complaint_category: "The node you are linking to this diagnostic is not a Complaint Category."
       question_no_children: "The %{type} %{reference} is not linked to any children."
       valid: "This diagnostic is valid!"
+      drug_conditioned_by_age_without_age: "You have a Drug formulation that is conditioned by age but yet no age question above it. This error occurs in <u><a href='%{url}'>%{df_reference}</a></u>."
     questions_sequence:
       ps_no_condition: "The questions sequence you are describing has no condition."
       question_no_children: "The %{type} %{reference} is not linked to any children."
@@ -223,6 +282,20 @@ en:
       complaint_category_missing: "Please select the complaint category."
       invalids_diagnostics: "Your version contains diagnostics that are invalid : %{diagnostics}"
       triage_question_missing: "Please select the triage question you want to put a condition on."
+  formulations:
+    breakables:
+      one:
+        label: "No"
+        value: 1
+      two:
+        label: "In 2"
+        value: 2
+      four:
+        label: "In 4"
+        value: 4
+    errors:
+      minimum_higher_than_maximum: "The minimum dose per kg can't be higher than the maximum dose per kg"
+      maximum_per_kg_higher_than_maximum: "The maximum dose per kg can't be higher than the maximum dose per day"
   groups:
     add_device:
       success_add_device: "Device was successfully added to group"
@@ -260,9 +333,9 @@ en:
       management:
         label: "Management"
         reference_prefix: "M"
-      treatment:
-        label: "Treatment"
-        reference_prefix: "T"
+      drug:
+        label: "Drug"
+        reference_prefix: "DR"
   helps:
     diagram:
       arrow-title: "Arrow"
@@ -312,7 +385,7 @@ en:
         actions: "Actions"
   medical_case:
     validation:
-      wrong_node_type: "This node is not a management or a treatment."
+      wrong_node_type: "This node is not a management or a drug."
   nodes:
     validation:
       reference_used: "This reference is already used"
@@ -364,11 +437,17 @@ en:
       background_calculation:
         label: "Background calculation"
         reference_prefix: "BC"
+      basic_measurement:
+        label: "Basic measurement"
+        reference_prefix: "BM"
       complaint_category:
         label: "Complaint category"
         reference_prefix: "CC"
       chronic_condition:
         label: "Chronic condition"
+        reference_prefix: "CH"
+      consultation_related:
+        label: "Consultation related question"
         reference_prefix: "CH"
       demographic:
         label: "Demographics"
@@ -376,9 +455,6 @@ en:
       exposure:
         label: "Exposure"
         reference_prefix: "E"
-      emergency_sign:
-        label: "Emergency sign"
-        reference_prefix: "ES"
       observed_physical_sign:
         label: "Observed physical sign"
         reference_prefix: "OS"
@@ -391,15 +467,18 @@ en:
       treatment_question:
         label: "Additional Treatment question"
         reference_prefix: "TQ"
+      unique_triage_physical_sign:
+        label: "Unique triage physical sign"
+        reference_prefix: "UP"
+      unique_triage_question:
+        label: "Unique triage question"
+        reference_prefix: "UT"
       vaccine:
         label: "Vaccine"
         reference_prefix: "V"
-      vital_sign_consultation:
-        label: "Vital sign and anthropometric taken during consultation"
-        reference_prefix: "VC"
-      vital_sign_triage:
-        label: "Vital sign and anthropometric taken at triage"
-        reference_prefix: "VT"
+      vital_sign_anthropometric:
+        label: "Vital signs / anthropometric"
+        reference_prefix: "VS"
     errors:
       no_blank: "can't be blank"
       formula_wrong_characters: "Incorrect formula format. You can only use numbers, operators and questions references (between brackets)"
@@ -455,21 +534,31 @@ en:
     index:
       languages: "Languages"
   show: "Show"
-  treatments:
+  drugs:
     edit:
-      title: "Edit the treatment"
+      title: "Edit the drug"
     new:
-      title: "Create a treatment"
-    reference: "T"
+      title: "Create a drug"
+    reference: "DR"
     table:
       columns:
         reference: "Reference"
         label: "Label"
         description: "Description"
         actions: "Actions"
-    treatment_types:
+    medication_forms:
       liquid: "Liquid"
       pill: "Pill"
+  toolbar:
+    new: "New"
+    question: "Question"
+    questions_sequence: "Questions sequence"
+    final_diagnostic: "Final diagnostic"
+    drug: "Drug"
+    management: "Management"
+    validate: "Validate"
+    diagnostic_diagram: "Diagnostic diagram"
+    save: "Save"
   unarchive: "Unarchive"
   users:
     new:
@@ -504,7 +593,7 @@ en:
     new:
       title: "Add an algorithm version"
     edit:
-      title: "Edit this algorithm"
+      title: "Edit an algorithm version"
     show:
       subtitle_diagnostics: "Diagnostics"
       subtitle_questions_order: "Triage questions order"

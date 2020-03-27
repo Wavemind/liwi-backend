@@ -1,12 +1,12 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.5.1'
+ruby '2.6.0'
 
 gem 'rails', '~> 5.2.1'
 gem 'pg'
-gem 'puma', '~> 3.11'
-gem 'sass-rails', '~> 5.0'
+gem 'puma'
+gem 'sass-rails'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.2'
 gem 'turbolinks', '~> 5'
@@ -36,12 +36,15 @@ gem 'hstore_translate'
 gem 'nilify_blanks'
 gem 'rails-controller-testing'
 gem 'react-rails'
-gem 'webpacker', '~> 3'
+gem 'webpacker', '~> 4.x'
 gem 'rqrcode'
 gem 'barby'
+gem 'i18n-js'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'better_errors'
+  gem 'binding_of_caller'
 end
 
 group :development do
@@ -50,8 +53,6 @@ group :development do
   gem 'listen', '>= 3.0.5', '< 3.2'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
-  gem 'better_errors'
-  gem 'binding_of_caller'
   gem 'bullet'
   gem 'seed_dump'
 end

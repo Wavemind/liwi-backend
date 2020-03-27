@@ -49,10 +49,10 @@ class Diagnostic < ApplicationRecord
     Node.joins(:instances).where('type = ? AND instances.instanceable_id = ? AND instances.instanceable_type = ?', 'HealthCares::Management', id, self.class.name)
   end
 
-  # @return [ActiveRecord::Relation] of treatments
-  # Get every treatments used in a diagnostic
-  def treatments
-    Node.joins(:instances).where('type = ? AND instances.instanceable_id = ? AND instances.instanceable_type = ?', 'HealthCares::Treatment', id, self.class.name)
+  # @return [ActiveRecord::Relation] of drugs
+  # Get every drugs used in a diagnostic
+  def drugs
+    Node.joins(:instances).where('type = ? AND instances.instanceable_id = ? AND instances.instanceable_type = ?', 'HealthCares::Drug', id, self.class.name)
   end
 
   # @param [Diagnostic]
@@ -83,34 +83,6 @@ class Diagnostic < ApplicationRecord
     end
   end
 
-  # @params [Diagnostic]
-  # Generate the ordered questions
-  def generate_questions_order
-    nodes = []
-    first_instances = components.not_health_care_conditions.includes(:conditions, :children, :node).where(conditions: { referenceable_id: nil }).where('nodes.type IN (?) OR nodes.type IN (?)', Question.descendants.map(&:name), QuestionsSequence.descendants.map(&:name))
-    nodes << first_instances
-    get_children(first_instances, nodes)
-  end
-
-
-  # @params [Array][Instance], [Array][Node]
-  # Get children question nodes
-  def get_children(instances, nodes)
-    current_nodes = []
-    instances.includes(:conditions, children: [:node]).map(&:children).flatten.each do |child|
-      current_nodes << child.node if child.node.is_a?(Question) || child.node.is_a?(QuestionsSequence)
-    end
-
-    if current_nodes.any?
-      current_instances = Instance.not_health_care_conditions.where('instanceable_id = ? AND instanceable_type = ? AND node_id IN (?)', id, self.class.name, current_nodes.map(&:id).flatten)
-      current_instances.each { |instance| nodes = remove_old_node(nodes, instance) }
-      nodes << current_instances
-      get_children(current_instances, nodes)
-    else
-      nodes
-    end
-  end
-
   # @params [Array][Array][Instances] instances before delete, [Instance] instance to delete
   # @return [Array][Array][Instances] instances after delete
   # Remove the duplicated node if it was already set before. We keep the last one in order to be coherent in the diagram.
@@ -125,31 +97,68 @@ class Diagnostic < ApplicationRecord
   # @return [Json]
   # Return questions in json format
   def questions_json
-    generate_questions_order.as_json(include: [conditions: { include: [first_conditionable: { methods: [:get_node] }, second_conditionable: { methods: [:get_node] }] }, node: { include: [:answers], methods: [:node_type, :category_name, :type] }])
+    (components.questions.not_health_care_conditions + components.questions_sequences.not_health_care_conditions).as_json(
+      include: [
+        conditions: {
+          include: [
+            first_conditionable: {
+              methods: [
+                :get_node
+              ]
+            },
+          ]
+        },
+        node: {
+          include: [:answers],
+          methods: [
+            :node_type,
+            :category_name,
+            :type
+          ]
+        }
+      ])
   end
 
   # @return [Json]
   # Return final diagnostics in json format
   def final_diagnostics_json
-    components.final_diagnostics.includes(:node).as_json(include: [ node: {methods: [:node_type]}, conditions: { include: [first_conditionable: { include: [node: { include: [:answers]}], methods: [:get_node]}, second_conditionable: { methods: [:get_node]}]}])
+    components.final_diagnostics.includes(:node).as_json(
+      include: [
+        node: {
+          methods: [:node_type]
+        },
+        conditions: {
+          include: [
+            first_conditionable: {
+              include: [
+                node: {
+                  include: [:answers]
+                }
+              ],
+              methods: [:get_node]
+            }
+          ]
+        }
+      ]
+    )
   end
 
   # @return [Json]
-  # Return treatments and managements in json format
+  # Return drugs and managements in json format
   def health_cares_json
-    components.treatments.as_json(include: [node: {methods: [:node_type, :type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}]) + components.managements.as_json(include: [node: {methods: [:node_type, :type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}])
+    components.drugs.as_json(include: [node: {methods: [:node_type, :type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}]) + components.managements.as_json(include: [node: {methods: [:node_type, :type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}])
   end
 
   # @return [Json]
   # Return available nodes in the algorithm in json format
   def available_nodes_json
     # Exclude triage questions if they have a condition on a CC which is not defined in this diagnostic
-    excluded_ids = version.components.select{|i| i.conditions.any? && i.conditions.map(&:first_conditionable).map(&:node).flatten.exclude?(node)}.map(&:node_id)
+    excluded_ids = version.components.select { |i| i.conditions.any? && i.conditions.map(&:first_conditionable).map(&:node).flatten.exclude?(node) }.map(&:node_id)
     # Exclude the questions that are already used in the diagnostic diagram (it still takes the questions used in the final diagnostic diagram, since it can be used in both diagram)
     excluded_ids += components.not_health_care_conditions.map(&:node_id)
 
     (
-      version.algorithm.questions.no_triage.no_treatment_condition.no_vital_sign.where.not(id: excluded_ids).includes(:answers) +
+      version.algorithm.questions.no_triage.no_treatment_condition.diagrams_included.where.not(id: excluded_ids).includes(:answers) +
       version.algorithm.questions_sequences.where.not(id: excluded_ids).includes(:answers) +
       final_diagnostics.where.not(id: components.select(:node_id))
     ).as_json(methods: [:category_name, :node_type, :get_answers, :type])
@@ -174,9 +183,7 @@ class Diagnostic < ApplicationRecord
   def manual_validate
     components.includes(:node, :children, :conditions).each do |instance|
       if instance.node.is_a? FinalDiagnostic
-        unless instance.conditions.any?
-          errors.add(:basic, I18n.t('flash_message.diagnostic.final_diagnostic_no_condition', reference: instance.node.full_reference))
-        end
+        errors.add(:basic, I18n.t('flash_message.diagnostic.final_diagnostic_no_condition', reference: instance.node.full_reference)) unless instance.conditions.any?
       elsif instance.node.is_a?(Question) || instance.node.is_a?(QuestionsSequence)
         unless instance.children.any?
           if instance.final_diagnostic.nil?
@@ -190,6 +197,12 @@ class Diagnostic < ApplicationRecord
           instance.node.manual_validate
           errors.add(:basic, I18n.t('flash_message.diagnostic.error_in_questions_sequence', url: diagram_questions_sequence_url(instance.node), reference: instance.node.reference)) if instance.node.errors.messages.any?
         end
+      elsif instance.node.is_a?(HealthCares::Drug) && instance.node.formulations.map(&:by_age).include?(true)
+        age_missing = true
+        instance.conditions.each do |cond|
+          age_missing = false if cond.first_conditionable.is_a?(Answer) && cond.first_conditionable.node.formula.include?('D1')
+        end
+        errors.add(:basic, I18n.t('flash_message.diagnostic.drug_conditioned_by_age_without_age', url: diagram_algorithm_version_diagnostic_final_diagnostic_url(version.algorithm.id, version.id, id, instance.final_diagnostic_id).to_s, df_reference: instance.final_diagnostic.full_reference)) if age_missing
       end
     end
   end
@@ -209,6 +222,7 @@ class Diagnostic < ApplicationRecord
     I18n.t('diagnostics.reference') + reference.to_s
   end
 
+  # Automatic reference generation
   def generate_reference
     if version.diagnostics.count > 1
       self.reference = version.diagnostics.maximum(:reference) + 1
@@ -216,5 +230,17 @@ class Diagnostic < ApplicationRecord
       self.reference = 1
     end
     self.save
+  end
+
+  # Construct diagnostic json
+  def diagnostic_json
+    {
+      id: id,
+      type: 'Diagnostic',
+      reference: reference,
+      label: label,
+      version_id: version_id,
+      chief_complaint_label: node.reference_label
+    }
   end
 end

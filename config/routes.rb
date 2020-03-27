@@ -21,7 +21,7 @@ Rails.application.routes.draw do
       put 'archive', to: 'algorithms#archive', as: 'archive'
       put 'unarchive', to: 'algorithms#unarchive', as: 'unarchive'
       get 'questions', to: 'algorithms#questions', as: 'question'
-      get 'treatments', to: 'algorithms#treatments', as: 'treatment'
+      get 'drugs', to: 'algorithms#drugs', as: 'drug'
       get 'managements', to: 'algorithms#managements', as: 'management'
       get 'questions_sequences', to: 'algorithms#questions_sequences', as: 'questions_sequence'
       get 'questions_sequences_scored', to: 'algorithms#questions_sequences_scored', as: 'questions_sequence_scored'
@@ -47,13 +47,11 @@ Rails.application.routes.draw do
 
         resources :final_diagnostics, only: [:index, :new, :create, :edit, :update, :delete, :destroy, :update_translations] do
           collection do
-            post 'create_from_diagram'
             put 'add_excluded_diagnostic'
           end
           member do
             put 'remove_excluded_diagnostic'
             put 'update_translations'
-            put 'update_from_diagram'
             get 'diagram'
           end
           resources :final_diagnostic_health_cares, only: [:create, :destroy]
@@ -89,9 +87,10 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :treatments, only: [:new, :create, :edit, :update, :destroy] do
+    resources :drugs, only: [:new, :create, :edit, :update, :destroy] do
       collection do
         post 'create_from_diagram'
+        post 'validate'
       end
       member do
         put 'update_from_diagram'
@@ -101,11 +100,9 @@ Rails.application.routes.draw do
 
     resources :questions_sequences, only: [:index, :new, :create, :edit, :update, :destroy] do
       collection do
-        get 'new_scored'
         post 'create_from_diagram'
       end
       member do
-        get 'edit_scored'
         put 'update_from_diagram'
         put 'update_translations'
       end
@@ -117,16 +114,19 @@ Rails.application.routes.draw do
       collection do
         get 'by_reference'
         post 'create_from_diagram'
-        post 'create_link'
         delete 'remove_from_diagram'
-        delete 'remove_link'
         put 'update_score'
+      end
+      member do
+        delete 'remove_link'
+        post 'create_link'
       end
       resources :conditions, only: [:destroy]
     end
 
     collection do
       get 'reference_prefix'
+      get 'categories'
     end
 
     member do
@@ -135,15 +135,17 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :instances, only: [:update]
+
   resources :diagnostics, only: [] do
     resources :instances, only: [:show, :destroy, :create] do
       collection do
         get 'by_reference'
-        post 'create_from_diagram'
-        post 'create_from_final_diagnostic_diagram'
-        post 'create_link'
-        delete 'remove_from_diagram'
+        get 'load_conditions'
+      end
+      member do
         delete 'remove_link'
+        post 'create_link'
       end
       resources :conditions, only: [:destroy]
     end
@@ -195,6 +197,7 @@ Rails.application.routes.draw do
       resources :versions, only: [:index]
 
       get 'is_available', to: 'application#is_available'
+      get 'categories', to: 'application#categories'
     end
   end
 end

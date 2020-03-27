@@ -61,7 +61,7 @@ jQuery(document).ready(function() {
             if (["CC", "V"].includes(response.responseText)) {
               $("#question_answer_type_displayed").val("1").attr("disabled", true);
               $("#question_answer_type_hidden").val("1");
-            } else if (["VC", "VT"].includes(response.responseText)) { // Force answer type to numerif if it is a vital sign (triage or consultation)
+            } else if (["BM", "VS"].includes(response.responseText)) { // Force answer type to numeric if it is a vital sign or a basic measurement
               $("#question_answer_type_displayed").val("4").attr("disabled", true);
               $("#question_answer_type_hidden").val("4");
             } else if (response.responseText === "BC") { // Force formula answer type when the category is a Background Calculation
@@ -74,13 +74,13 @@ jQuery(document).ready(function() {
           }
 
           // Force stage depending on the category
-          if (["CC", "ES", "VT"].includes(response.responseText)) { // Force triage stage for Complaint category emergency sign and vital sign triage
+          if (["BM", "CC", "UP", "UT"].includes(response.responseText)) { // Force triage stage for Complaint categories, triage questions and physical signs, basic measurements
             $("#question_stage_displayed").val("triage").attr("disabled", true);
             $("#question_stage_hidden").val("triage");
-          } else if (["CH", "V", "D"].includes(response.responseText)) { // Force registration stage for Chronic Condition, Vaccine and Demographic categories
+          } else if (["D", "CR"].includes(response.responseText)) { // Force registration stage for Chronic Condition, Vaccine and Demographic categories
             $("#question_stage_displayed").val("registration").attr("disabled", true);
             $("#question_stage_hidden").val("registration")
-          } else if (["E", "PE", "OS", "S", "VC"].includes(response.responseText)) { // Force consultation stage for Exposure, Background calculation, Physical exam, Observed physical signs, Symptom and vital sign consultation categories
+          } else if (["CH", "V", "E", "PE", "OS", "S", "VS"].includes(response.responseText)) { // Force consultation stage for Exposure, Background calculation, Physical exam, Observed physical signs, Symptom and vital sign categories
             $("#question_stage_displayed").val("consultation").attr("disabled", true);
             $("#question_stage_hidden").val("consultation")
           }  else if (response.responseText === "A") { // Force test stage for Assessment test category
