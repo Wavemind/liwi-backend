@@ -55,11 +55,12 @@ export default class FormulationFields extends React.Component {
       touched,
       errors,
       values,
-      index
+      index,
+      arrayHelpers,
     } = this.props;
 
-    console.log("les erreurs", errors);
-    console.log("les values", values);
+    console.log(values);
+    console.log(errors);
 
     return (
       <FadeIn>
@@ -76,9 +77,11 @@ export default class FormulationFields extends React.Component {
               <option value="">{I18n.t("select")}</option>
               {administrationRoutes.map(administrationRoute => (
                 <>
-                  <option key={administrationRoute.value}
-                          value={administrationRoute.value} disabled
-                          className="font-weight-bold"
+                  <option
+                    key={administrationRoute.value}
+                    value={administrationRoute.value}
+                    disabled
+                    className="font-weight-bold"
                   >
                     {administrationRoute.label}
                   </option>
@@ -89,7 +92,8 @@ export default class FormulationFields extends React.Component {
               ))}
             </Form.Control>
             <Form.Control.Feedback type="invalid">
-              {errors?.administration_route_id}
+              <ErrorMessage name={`${index}.administration_route_id`} />
+              {/*{errors?.administration_route_id}*/}
             </Form.Control.Feedback>
           </Form.Group>
 

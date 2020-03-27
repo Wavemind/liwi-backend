@@ -2,7 +2,7 @@ import * as React from "react";
 import I18n from "i18n-js";
 import FadeIn from "react-fade-in";
 import { Form, Button, Card, Col } from "react-bootstrap";
-import { Formik } from "formik";
+import { FieldArray, Formik } from "formik";
 
 import FormulationFields from "./formulationFields";
 import Http from "../../diagram/engine/http";
@@ -173,8 +173,6 @@ export default class FormulationForm extends React.Component {
       administrationRoutes
     } = this.state;
 
-    console.log(formData.formulations)
-
     return (
       isLoading ? <Loader/> :
         <FadeIn>
@@ -217,6 +215,9 @@ export default class FormulationForm extends React.Component {
                             aria-labelledby={`heading-${key}`}
                             data-parent="#accordion">
                             <div className="card-body">
+                              <FieldArray
+                                name="formulations"
+                                render={arrayHelpers => (
                                 <FormulationFields
                                   breakables={breakables}
                                   administrationRoutes={administrationRoutes}
@@ -225,7 +226,10 @@ export default class FormulationForm extends React.Component {
                                   errors={errors}
                                   values={values}
                                   index={key}
+                                  arrayHelpers={arrayHelpers}
                                 />
+                                )}
+                              />
                             </div>
                           </div>
                         </Card>
