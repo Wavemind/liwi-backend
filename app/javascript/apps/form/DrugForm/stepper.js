@@ -26,12 +26,20 @@ export default class StepperDrugForm extends React.Component {
   }
 
   /**
-   * Set value in context
+   * Set value in context for formulations
    * @param prop
    * @param value
    */
-  setFormData = (prop, value) => {
+  setFormulationData = (prop, value) => {
     this.setState({ drug: { ...this.state.drug, [prop]: value } });
+  };
+
+  /**
+   * Set value in context for meta data
+   * @param values
+   */
+  setMetaData = (values) => {
+    this.setState({ drug: values });
   };
 
   /**
@@ -59,7 +67,7 @@ export default class StepperDrugForm extends React.Component {
         return (
           <DrugForm
             formData={drug}
-            setFormData={this.setFormData}
+            setFormData={this.setMetaData}
             nextStep={this.nextStep}
           />
         );
@@ -68,7 +76,7 @@ export default class StepperDrugForm extends React.Component {
           <FormulationForm
             formData={drug}
             method={method}
-            setFormData={this.setFormData}
+            setFormData={this.setFormulationData}
             nextStep={this.nextStep}
             previousStep={this.previousStep}
           />

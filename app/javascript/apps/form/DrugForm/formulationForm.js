@@ -56,58 +56,8 @@ export default class FormulationForm extends React.Component {
 
   handleOnSubmit = async (values, actions) => {
     const { setFormData } = this.props;
-    console.log(values)
+    console.log(values);
     setFormData(values);
-  };
-
-  // Build the drug formulations hashes, empty if this is a create form or with its answers if it is an update
-  buildFormulations = () => {
-    const {
-      formData
-    } = this.props;
-
-    let {
-      availableMedicationForms
-    } = this.state;
-    let formulations = {};
-    let formulationComponents = {};
-    let drugFormulations = formData.formulations;
-
-    // build formulations
-    drugFormulations.map((formulation, index) => {
-      availableMedicationForms.splice(availableMedicationForms.indexOf(formulation.medication_form), 1);
-
-      formulations[index] = {
-        id: formulation.id,
-        administration_route_id: parseInt(formulation.administration_route_id),
-        minimal_dose_per_kg: parseInt(formulation.minimal_dose_per_kg),
-        maximal_dose_per_kg: parseInt(formulation.maximal_dose_per_kg),
-        maximal_dose: parseInt(formulation.maximal_dose),
-        medication_form: formulation.medication_form,
-        dose_form: parseInt(formulation.dose_form),
-        liquid_concentration: parseInt(formulation.liquid_concentration),
-        doses_per_day: parseInt(formulation.doses_per_day),
-        unique_dose: parseInt(formulation.unique_dose),
-        breakable: formulation.breakable,
-        by_age: formulation.by_age,
-        _destroy: false
-      };
-    });
-
-    for (let i = 0; i < drugFormulations.length; i++) {
-      formulationComponents[i] = <CreateFormulationForm medicationForm={formulations[i].medication_form}
-                                                        setActiveAccordion={this.setActiveAccordion}
-                                                        setFormulation={this.setFormulation}
-                                                        removeFormulation={this.removeFormulation}
-                                                        formulations={formulations}
-                                                        index={i}
-                                                        update={true}/>;
-    }
-
-    this.setState({
-      formulations,
-      formulationComponents
-    });
   };
 
   handleMedicationFormChange = (event) => {
@@ -122,16 +72,7 @@ export default class FormulationForm extends React.Component {
 
     arrayHelpers.push({
         medication_form: selectedMedicationForm,
-        administration_route_id: "",
-        minimal_dose_per_kg: "",
-        maximal_dose_per_kg: "",
-        maximal_dose: "",
-        doses_per_day: "",
-        dose_form: "",
-        breakable: "",
-        unique_dose: "",
-        liquid_concentration: "",
-        by_age: ""
+        ...JSON.parse(DEFAULT_FORMULATION_VALUE)
       }
     );
 
@@ -162,7 +103,7 @@ export default class FormulationForm extends React.Component {
   }
 
   render() {
-    const { formData, nextStep, setFormData } = this.props;
+    const { formData, nextStep, previousStep } = this.props;
     const {
       selectedMedicationForm,
       medicationForms,
@@ -186,7 +127,6 @@ export default class FormulationForm extends React.Component {
                 status
               }) => (
               <Form noValidate onSubmit={handleSubmit}>
-
                 <FieldArray
                   name="formulations"
                   render={arrayHelpers => (
@@ -228,6 +168,7 @@ export default class FormulationForm extends React.Component {
                             </Col>
                             <Col>
                               <Button
+                                className="float-right"
                                 type="button"
                                 variant="danger"
                                 onClick={() => this.removeFormulation(key, arrayHelpers)}>{I18n.t("remove")}</Button>
@@ -255,16 +196,29 @@ export default class FormulationForm extends React.Component {
                         </Col>
 
                         <Col>
-                          <Button type="button" variant="primary" onClick={() => this.addFormulation(arrayHelpers)}
-                                  disabled={selectedMedicationForm === ""}>
+                          <Button
+                            type="button"
+                            variant="primary"
+                            onClick={() => this.addFormulation(arrayHelpers)}
+                            disabled={selectedMedicationForm === ""}
+                          >
                             {I18n.t("add")}
                           </Button>
                         </Col>
                       </Form.Row>
 
-                      <Button type="submit" variant="success" disabled={isSubmitting}>
-                        {I18n.t("save")}
-                      </Button>
+                      <Form.Row className="mt-5">
+                        <Col>
+                          <Button type="button" variant="default" onClick={() => previousStep()}>
+                            {I18n.t("back")}
+                          </Button>
+                        </Col>
+                        <Col>
+                          <Button className="float-right" type="submit" variant="success" disabled={isSubmitting}>
+                            {I18n.t("save")}
+                          </Button>
+                        </Col>
+                      </Form.Row>
                     </>
                   )}
                 />

@@ -1,7 +1,7 @@
 import * as React from "react";
 import I18n from "i18n-js";
 import FadeIn from "react-fade-in";
-import { Form } from "react-bootstrap";
+import { Form, Col } from "react-bootstrap";
 
 import DisplayErrors from "../components/DisplayErrors";
 
@@ -79,7 +79,7 @@ export default class FormulationFields extends React.Component {
     return (
       <FadeIn>
         <Form.Row>
-          <Form.Group controlId={`${index}-validationAdministrationRouteId`}>
+          <Form.Group as={Col} controlId={`${index}-validationAdministrationRouteId`}>
             <Form.Label>
               {I18n.t(
                 "activerecord.attributes.formulation.administration_route_id"
@@ -116,7 +116,7 @@ export default class FormulationFields extends React.Component {
             </Form.Control.Feedback>
           </Form.Group>
 
-          <Form.Group controlId={`${index}-validationDosesPerDay`}>
+          <Form.Group as={Col} controlId={`${index}-validationDosesPerDay`}>
             <Form.Label>{I18n.t("activerecord.attributes.formulation.doses_per_day")}</Form.Label>
             <Form.Control
               type="number"
@@ -132,7 +132,7 @@ export default class FormulationFields extends React.Component {
         </Form.Row>
 
         <Form.Row>
-          <Form.Group controlId={`${index}-validationByAge`}>
+          <Form.Group as={Col} controlId={`${index}-validationByAge`}>
             <Form.Label>{I18n.t("activerecord.attributes.formulation.by_age")}</Form.Label>
             <Form.Check
               type="checkbox"
@@ -147,12 +147,12 @@ export default class FormulationFields extends React.Component {
           </Form.Group>
 
           {(formulation.medication_form === "capsule" && !formulation.by_age) ?
-            <Form.Group>
+            <Form.Group as={Col}>
             </Form.Group>
             : null}
 
           {(formulation.medication_form === "tablet" && !formulation.by_age) ?
-            <Form.Group controlId={`${index}-validationBreakable`}>
+            <Form.Group as={Col} controlId={`${index}-validationBreakable`}>
               <Form.Label>{I18n.t("drugs.breakable.select")}</Form.Label>
               <Form.Control
                 as="select"
@@ -173,7 +173,7 @@ export default class FormulationFields extends React.Component {
             : null}
 
           {(!["capsule", "tablet", "suspension", "syrup"].includes(formulation.medication_form) || formulation.by_age) ?
-            <Form.Group controlId={`${index}-validationUniqueDose`}>
+            <Form.Group as={Col} controlId={`${index}-validationUniqueDose`}>
               <Form.Label>{I18n.t("activerecord.attributes.formulation.unique_dose")}</Form.Label>
               <Form.Control
                 type="number"
@@ -189,7 +189,7 @@ export default class FormulationFields extends React.Component {
             : null}
 
           {(["suspension", "syrup"].includes(formulation.medication_form) && !formulation.by_age) ?
-            <Form.Group controlId={`${index}-validationLiquidConcentration`}>
+            <Form.Group as={Col} controlId={`${index}-validationLiquidConcentration`}>
               <Form.Label>{I18n.t("activerecord.attributes.formulation.liquid_concentration")}</Form.Label>
               <Form.Control
                 type="number"
@@ -208,7 +208,7 @@ export default class FormulationFields extends React.Component {
         {(["capsule", "tablet", "suspension", "syrup"].includes(formulation.medication_form) && !formulation.by_age) ?
           <>
             <Form.Row>
-              <Form.Group controlId={`${index}-validationDoseForm`}>
+              <Form.Group as={Col} controlId={`${index}-validationDoseForm`}>
                 <Form.Label>{I18n.t("activerecord.attributes.formulation.dose_form", { unity })}</Form.Label>
                 <Form.Control
                   type="number"
@@ -222,7 +222,7 @@ export default class FormulationFields extends React.Component {
                 </Form.Control.Feedback>
               </Form.Group>
 
-              <Form.Group controlId={`${index}-validationMaximalDose`}>
+              <Form.Group as={Col} controlId={`${index}-validationMaximalDose`}>
                 <Form.Label>{I18n.t("activerecord.attributes.formulation.maximal_dose")}</Form.Label>
                 <Form.Control
                   type="number"
@@ -238,7 +238,7 @@ export default class FormulationFields extends React.Component {
             </Form.Row>
 
             <Form.Row>
-              <Form.Group controlId={`${index}-validationMinimalDosePerKg`}>
+              <Form.Group as={Col} controlId={`${index}-validationMinimalDosePerKg`}>
                 <Form.Label>{I18n.t("activerecord.attributes.formulation.minimal_dose_per_kg")}</Form.Label>
                 <Form.Control
                   type="number"
@@ -252,7 +252,7 @@ export default class FormulationFields extends React.Component {
                 </Form.Control.Feedback>
               </Form.Group>
 
-              <Form.Group controlId={`${index}-validationMaximalDosePerKg`}>
+              <Form.Group as={Col} controlId={`${index}-validationMaximalDosePerKg`}>
                 <Form.Label>{I18n.t("activerecord.attributes.formulation.maximal_dose_per_kg")}</Form.Label>
                 <Form.Control
                   type="number"

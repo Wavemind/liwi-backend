@@ -57,7 +57,7 @@ export default class DrugForm extends React.Component {
               </Form.Group>
 
               <Button type="submit">
-                {I18n.t("save")}
+                {I18n.t("next")}
               </Button>
             </Form>
           )}
