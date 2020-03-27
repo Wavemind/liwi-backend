@@ -8,6 +8,7 @@ import DrugForm from "./drugForm";
 import FormulationForm from "./formulationForm";
 
 export default class StepperDrugForm extends React.Component {
+
   constructor(props) {
     super(props);
 
@@ -18,7 +19,8 @@ export default class StepperDrugForm extends React.Component {
       drug: {
         id: drug?.id || "",
         label_translations: drug?.label_translations?.en || "",
-        formulations: drug?.formulations || { test: [] }
+        description_translations: drug?.description_translations?.en || "",
+        formulations: drug?.formulations ||  { test: [] }
       }
     };
   }
