@@ -3,6 +3,7 @@ class Node < ApplicationRecord
 
   # DF are not linked to algorithm this way, but through diagnostic > version
   belongs_to :algorithm, optional: true
+
   has_many :children
   has_many :instances, dependent: :destroy
   has_many :medias, as: :fileable
