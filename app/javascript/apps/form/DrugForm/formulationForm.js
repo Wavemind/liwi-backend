@@ -55,11 +55,9 @@ export default class FormulationForm extends React.Component {
   };
 
   handleOnSubmit = async (values, actions) => {
-    await actions.validateForm();
-    formulationSchema.validate(values).catch(function(err) {
-      console.log(err);
-    });
-    console.log(values);
+    const { setFormData } = this.props;
+    console.log(values)
+    setFormData(values);
   };
 
   // Build the drug formulations hashes, empty if this is a create form or with its answers if it is an update
@@ -117,7 +115,6 @@ export default class FormulationForm extends React.Component {
   };
 
   addFormulation = (arrayHelpers) => {
-    const { setFormData, formData } = this.props;
     const {
       selectedMedicationForm,
       medicationForms

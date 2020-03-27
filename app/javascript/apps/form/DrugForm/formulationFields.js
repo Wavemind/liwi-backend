@@ -90,6 +90,7 @@ export default class FormulationFields extends React.Component {
               name={`formulations.${index}.administration_route_id`}
               value={formulation.administration_route_id}
               onChange={handleChange}
+              isInvalid={this.isInvalid("administration_route_id")}
             >
               <option value="">{I18n.t("select")}</option>
               {administrationRoutes.map(administrationRoute => (
@@ -122,6 +123,7 @@ export default class FormulationFields extends React.Component {
               name={`formulations.${index}.doses_per_day`}
               value={formulation.doses_per_day}
               onChange={handleChange}
+              isInvalid={this.isInvalid("doses_per_day")}
             />
             <Form.Control.Feedback type="invalid">
               {this.displayErrors("doses_per_day")}
@@ -137,6 +139,7 @@ export default class FormulationFields extends React.Component {
               name={`formulations.${index}.by_age`}
               value={formulation.by_age}
               onChange={handleChange}
+              isInvalid={this.isInvalid("by_age")}
             />
             <Form.Control.Feedback type="invalid">
               {this.displayErrors("by_age")}
@@ -156,6 +159,7 @@ export default class FormulationFields extends React.Component {
                 name={`formulations.${index}.breakable`}
                 onChange={handleChange}
                 value={formulation.breakable}
+                isInvalid={this.isInvalid("breakable")}
               >
                 <option value="">{I18n.t("select")}</option>
                 {breakables.map(breakable => (
@@ -176,6 +180,7 @@ export default class FormulationFields extends React.Component {
                 name={`formulations.${index}.unique_dose`}
                 value={formulation.unique_dose}
                 onChange={handleChange}
+                isInvalid={this.isInvalid("unique_dose")}
               />
               <Form.Control.Feedback type="invalid">
                 {this.displayErrors("unique_dose")}
@@ -191,6 +196,7 @@ export default class FormulationFields extends React.Component {
                 name={`formulations.${index}.liquid_concentration`}
                 value={formulation.liquid_concentration}
                 onChange={handleChange}
+                isInvalid={this.isInvalid("liquid_concentration")}
               />
               <Form.Control.Feedback type="invalid">
                 {this.displayErrors("liquid_concentration")}
@@ -209,6 +215,7 @@ export default class FormulationFields extends React.Component {
                   name={`formulations.${index}.dose_form`}
                   value={formulation.dose_form}
                   onChange={handleChange}
+                  isInvalid={this.isInvalid("dose_form")}
                 />
                 <Form.Control.Feedback type="invalid">
                   {this.displayErrors("dose_form")}
@@ -222,6 +229,7 @@ export default class FormulationFields extends React.Component {
                   name={`formulations.${index}.maximal_dose`}
                   value={formulation.maximal_dose}
                   onChange={handleChange}
+                  isInvalid={this.isInvalid("maximal_dose")}
                 />
                 <Form.Control.Feedback type="invalid">
                   {this.displayErrors("maximal_dose")}
@@ -237,6 +245,7 @@ export default class FormulationFields extends React.Component {
                   name={`formulations.${index}.minimal_dose_per_kg`}
                   value={formulation.minimal_dose_per_kg}
                   onChange={handleChange}
+                  isInvalid={this.isInvalid("minimal_dose_per_kg")}
                 />
                 <Form.Control.Feedback type="invalid">
                   {this.displayErrors("minimal_dose_per_kg")}
@@ -250,6 +259,7 @@ export default class FormulationFields extends React.Component {
                   name={`formulations.${index}.maximal_dose_per_kg`}
                   value={formulation.maximal_dose_per_kg}
                   onChange={handleChange}
+                  isInvalid={this.isInvalid("maximal_dose_per_kg")}
                 />
                 <Form.Control.Feedback type="invalid">
                   {this.displayErrors("maximal_dose_per_kg")}
