@@ -1,6 +1,9 @@
 en:
   activerecord:
     attributes:
+      answer:
+        operator: "Operator"
+        value: "Value"
       condition:
         score: "Score"
       diagnostic:

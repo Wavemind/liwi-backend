@@ -7,6 +7,12 @@ export const scoreSchema = yup.object().shape({
   score: yup.number().required(I18n.t("errors.messages.required"))
 });
 
+export const answerSchema = yup.object().shape({
+  label_translations: yup.string().required(I18n.t("errors.messages.required")),
+  operator: yup.string().required(I18n.t("errors.messages.required")),
+  value: yup.string().required(I18n.t("errors.messages.required")),
+});
+
 export const drugSchema = yup.object().shape({
   label_translations: yup.string().required(I18n.t("errors.messages.required")),
   description_translations: yup.string()
@@ -24,7 +30,10 @@ export const questionSchema = yup.object().shape({
     then: yup.string().required(I18n.t("errors.messages.required"))
   }),
   answer_type: yup.string().required(I18n.t("errors.messages.required")),
-  stage: yup.string().required(I18n.t("errors.messages.required")),
+  stage: yup.string().when("answer_type", {
+    is: (type) => type !== "Questions::BackgroundCalculation",
+    then: yup.string().required(I18n.t("errors.messages.required"))
+  }),
   label_translations: yup.string().required(I18n.t("errors.messages.required")),
   description_translations: yup.string(),
   snomed: yup.string(),
@@ -94,4 +103,4 @@ export const formulationSchema = yup.array().of(yup.object().shape({
       is: (medication_form) => ["tablet", "capsule", "suspension", "syrup"].includes(medication_form),
       then: yup.number().required(I18n.t("errors.messages.required"))
     })
-})).required('Must have friends').min(1, 'Minimum of 3 friends');
+})).required('Must have at least 1 formulation').min(1, 'Must have at least 1 formulation');

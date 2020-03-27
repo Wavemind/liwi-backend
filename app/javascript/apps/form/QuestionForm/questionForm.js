@@ -44,41 +44,41 @@ export default class FinalDiagnosticForm extends React.Component {
       });
     }
   };
-
-  handleOnSubmit = async (values, actions) => {
-    const {method, from, engine, diagramObject, addAvailableNode} = this.props;
-    let http = new Http();
-    let httpRequest = {};
-
-    if (method === "create") {
-      httpRequest = await http.createQuestion(values.label_translations, values.description_translations, from);
-    } else {
-      httpRequest = await http.updateQuestion(values.id, values.label_translations, values.description_translations, from);
-    }
-
-    let result = await httpRequest.json();
-
-    if (httpRequest.status === 200) {
-      if (from === 'rails') {
-        window.location.replace(result.url);
-      } else {
-        if (method === "create") {
-          let diagramInstance = createNode(result, addAvailableNode, false, "Diagnostic", engine);
-          engine.getModel().addNode(diagramInstance);
-        } else {
-          diagramObject.options.dbInstance.node = result;
-        }
-
-        engine.repaintCanvas();
-
-        store.dispatch(
-          closeModal()
-        );
-      }
-    } else {
-      actions.setStatus({result});
-    }
-  };
+  //
+  // handleOnSubmit = async (values, actions) => {
+  //   const {method, from, engine, diagramObject, addAvailableNode} = this.props;
+  //   let http = new Http();
+  //   let httpRequest = {};
+  //
+  //   if (method === "create") {
+  //     httpRequest = await http.createQuestion(values.label_translations, values.description_translations, from);
+  //   } else {
+  //     httpRequest = await http.updateQuestion(values.id, values.label_translations, values.description_translations, from);
+  //   }
+  //
+  //   let result = await httpRequest.json();
+  //
+  //   if (httpRequest.status === 200) {
+  //     if (from === 'rails') {
+  //       window.location.replace(result.url);
+  //     } else {
+  //       if (method === "create") {
+  //         let diagramInstance = createNode(result, addAvailableNode, false, "Diagnostic", engine);
+  //         engine.getModel().addNode(diagramInstance);
+  //       } else {
+  //         diagramObject.options.dbInstance.node = result;
+  //       }
+  //
+  //       engine.repaintCanvas();
+  //
+  //       store.dispatch(
+  //         closeModal()
+  //       );
+  //     }
+  //   } else {
+  //     actions.setStatus({result});
+  //   }
+  // };
 
   /**
    * Search in snomed api to get results
@@ -163,7 +163,8 @@ export default class FinalDiagnosticForm extends React.Component {
   };
 
   render() {
-    const {question} = this.props;
+    const { formData, setFormData, nextStep } = this.props;
+
     const {lists: {answer_types, categories, stages, systems}, snomedResults, isLoading, snomedError} = this.state;
 
     return (
@@ -171,20 +172,26 @@ export default class FinalDiagnosticForm extends React.Component {
         <FadeIn>
           <Formik
             validationSchema={questionSchema}
-            initialValues={{
-              id: question?.id || "",
-              type: question?.type || "",
-              system: question?.system || "",
-              answer_type: question?.answer_type_id || "",
-              stage: question?.stage || "",
-              is_mandatory: question?.is_mandatory || "",
-              label_translations: question?.label_translations?.en || "",
-              snomed: question?.snomed_label || "",
-              description_translations: question?.description_translations?.en || "",
-              unavailable: question?.unavailable || "",
-              formula: question?.formula || ""
+            // initialValues={{
+            //   id: question?.id || "",
+            //   type: question?.type || "",
+            //   system: question?.system || "",
+            //   answer_type: question?.answer_type_id || "",
+            //   stage: question?.stage || "",
+            //   is_mandatory: question?.is_mandatory || "",
+            //   label_translations: question?.label_translations?.en || "",
+            //   snomed: question?.snomed_label || "",
+            //   description_translations: question?.description_translations?.en || "",
+            //   unavailable: question?.unavailable || "",
+            //   formula: question?.formula || ""
+            // }}
+            initialValues={formData}
+
+            // onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
+            onSubmit={values => {
+              setFormData(values);
+              nextStep();
             }}
-            onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
           >
             {({
                 handleSubmit,
