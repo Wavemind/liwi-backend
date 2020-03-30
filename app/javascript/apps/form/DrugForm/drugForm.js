@@ -32,27 +32,27 @@ export default class DrugForm extends React.Component {
               <Form.Group controlId="validationLabel">
                 <Form.Label>{I18n.t("activerecord.attributes.node.label_translations")}</Form.Label>
                 <Form.Control
-                  name="label_translations"
-                  value={values.label_translations}
+                  name="label_en"
+                  value={values.label_en}
                   onChange={handleChange}
-                  isInvalid={touched.label_translations && !!errors.label_translations}
+                  isInvalid={touched.label_en && !!errors.label_en}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {errors.label_translations}
+                  {errors.label_en}
                 </Form.Control.Feedback>
               </Form.Group>
 
               <Form.Group controlId="validationDescription">
                 <Form.Label>{I18n.t("activerecord.attributes.node.description_translations")}</Form.Label>
                 <Form.Control
-                  name="description_translations"
+                  name="description_en"
                   as="textarea"
-                  value={values.description_translations}
+                  value={values.description_en}
                   onChange={handleChange}
-                  isInvalid={touched.description_translations && !!errors.description_translations}
+                  isInvalid={touched.description_en && !!errors.description_en}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {errors.description_translations}
+                  {errors.description_en}
                 </Form.Control.Feedback>
               </Form.Group>
 

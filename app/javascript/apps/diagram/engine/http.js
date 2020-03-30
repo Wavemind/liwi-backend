@@ -23,6 +23,26 @@ export default class Http {
     this.token = document.querySelector("meta[name='csrf-token']").content;
   }
 
+
+  /**
+   * Create a drug
+   * @params [Hash] drug body
+   * @return [Object] body of request
+   */
+  createDrug = async (drugBody, from) => {
+    const url = `${this.url}/algorithms/${this.algorithm}/drugs/create_from_diagram`;
+    const body = {
+      diagnostic_id: this.instanceableId,
+      final_diagnostic_id: this.finalDiagnostic,
+      from
+    };
+    body['health_cares_drug'] = drugBody;
+    console.log(drugBody);
+
+    const header = await this.setHeaders("POST", body);
+    return await fetch( url, header).catch(error => console.log(error));
+  };
+
   /**
    * Create a final diagnostic
    * @params [String] label_en
