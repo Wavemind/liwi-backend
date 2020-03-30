@@ -10,10 +10,6 @@ import Loader from "../components/Loader";
 
 import { DEFAULT_FORMULATION_VALUE } from "../constants/constants";
 import { formulationSchema } from "../constants/schema";
-import { createNode } from "../../diagram/helpers/nodeHelpers";
-import store from "../../diagram/engine/reducers/store";
-import { closeModal } from "../../diagram/engine/reducers/creators.actions";
-import DisplayErrors from "../components/DisplayErrors";
 
 const humanizeString = require("humanize-string");
 
@@ -54,41 +50,10 @@ export default class FormulationForm extends React.Component {
     }
   };
 
-  handleOnSubmit = async (values, actions) => {
-    const { setFormData, method, from, engine, diagramObject, addAvailableNode } = this.props;
-    let http = new Http();
-    let httpRequest = {};
-
-    setFormData(values);
-
-    if (method === "create") {
-      // httpRequest = await http.createFinalDiagnostic(values.label_translations, values.description_translations, from);
-    } else {
-      // httpRequest = await http.updateFinalDiagnostic(values.id, values.label_translations, values.description_translations, from);
-    }
-
-    let result = await httpRequest.json();
-
-    if (httpRequest.status === 200) {
-      if (from === "rails") {
-        window.location.replace(result.url);
-      } else {
-        if (method === "create") {
-          let diagramInstance = createNode(result, addAvailableNode, false, "Diagnostic", engine);
-          engine.getModel().addNode(diagramInstance);
-        } else {
-          diagramObject.options.dbInstance.node = result;
-        }
-
-        engine.repaintCanvas();
-
-        store.dispatch(
-          closeModal()
-        );
-      }
-    } else {
-      actions.setStatus({ result });
-    }
+  handleOnSubmit = async (values) => {
+    const { setFormData, save } = this.props;
+    await setFormData('formulations_attributes', values.formulations_attributes);
+    save();
   };
 
   handleMedicationFormChange = (event) => {
@@ -134,7 +99,7 @@ export default class FormulationForm extends React.Component {
       <>
         {humanizeString(name)} <Badge variant="danger">
         {errors?.formulations_attributes !== undefined && errors?.formulations_attributes[key] !== undefined && Object.keys(errors?.formulations_attributes[key]).length}
-        </Badge>
+      </Badge>
       </>
     );
   };
@@ -161,11 +126,9 @@ export default class FormulationForm extends React.Component {
             {({
                 handleSubmit,
                 isSubmitting,
-                values,
-                status
+                values
               }) => (
               <Form noValidate onSubmit={handleSubmit}>
-                {status ? <DisplayErrors errors={status}/> : null}
                 <FieldArray
                   name="formulations_attributes"
                   render={arrayHelpers => (
