@@ -6,7 +6,6 @@ import { Formik } from "formik";
 
 import { drugSchema } from "../constants/schema";
 
-
 export default class DrugForm extends React.Component {
   render() {
     const { formData, setFormData, nextStep } = this.props;
