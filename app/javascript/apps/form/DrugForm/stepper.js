@@ -20,9 +20,9 @@ export default class StepperDrugForm extends React.Component {
       step: 1,
       drug: {
         id: drug?.id || "",
-        label_translations: drug?.label_translations?.en || "",
-        description_translations: drug?.description_translations?.en || "",
-        formulations_attributes: drug?.formulations || []
+        label_en: drug?.label_translations?.en || "",
+        description_en: drug?.description_translations?.en || "",
+        formulations_attributes: drug?.formulations ||  []
       }
     };
   }
@@ -35,10 +35,9 @@ export default class StepperDrugForm extends React.Component {
     const { drug } = this.state;
     let http = new Http();
     let httpRequest = {};
-console.log(drug)
-
+console.log(drug);
     if (method === "create") {
-      // httpRequest = await http.createFinalDiagnostic(values.label_translations, values.description_translations, from);
+      httpRequest = await http.createDrug(drug, from);
     } else {
       // httpRequest = await http.updateFinalDiagnostic(values.id, values.label_translations, values.description_translations, from);
     }

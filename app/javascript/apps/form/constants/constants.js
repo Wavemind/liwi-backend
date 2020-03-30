@@ -1,4 +1,5 @@
 export const DEFAULT_FORMULATION_VALUE = JSON.stringify({
+  id: "",
   administration_route_id: "",
   minimal_dose_per_kg: "",
   maximal_dose_per_kg: "",

@@ -41,6 +41,7 @@ export default class FormulationFields extends React.Component {
         form: {
           handleChange,
           values,
+          errors
         }
       },
       index
