@@ -16,6 +16,7 @@
     "@types/node": "^11.11.6",
     "core-js": "3",
     "formik": "^2.1.4",
+    "humanize-string": "^2.1.0",
     "i18n-js": "^3.5.1",
     "lodash": "^4.17.15",
     "material-ui": "^0.20.2",

@@ -1,7 +1,7 @@
 import * as React from "react";
 import I18n from "i18n-js";
 import FadeIn from "react-fade-in";
-import { Form, Button, Card, Col } from "react-bootstrap";
+import { Form, Button, Card, Col, Badge } from "react-bootstrap";
 import { FieldArray, Formik } from "formik";
 
 import FormulationFields from "./formulationFields";
@@ -14,6 +14,7 @@ import { createNode } from "../../diagram/helpers/nodeHelpers";
 import store from "../../diagram/engine/reducers/store";
 import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 
+const humanizeString = require("humanize-string");
 
 export default class FormulationForm extends React.Component {
   constructor(props) {
@@ -102,6 +103,16 @@ export default class FormulationForm extends React.Component {
 
   }
 
+  displayLabel = (name, errors, key) => {
+    return (
+      <>
+        {humanizeString(name)} <Badge variant="danger">
+        {errors?.formulations !== undefined && errors?.formulations[key] !== undefined && Object.keys(errors?.formulations[key]).length}
+        </Badge>
+      </>
+    );
+  };
+
   render() {
     const { formData, nextStep, previousStep } = this.props;
     const {
@@ -118,6 +129,7 @@ export default class FormulationForm extends React.Component {
           <Formik
             validationSchema={formulationSchema}
             initialValues={formData}
+            validateOnChange={false}
             onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
           >
             {({
@@ -136,17 +148,17 @@ export default class FormulationForm extends React.Component {
                           <Form.Row key={key}>
                             <Col lg="10">
                               <Card key={`card-${key}`}>
-                                <div className="card-header" id={`heading-${key}`}>
+                                <div className="card-header px-0 py-0" id={`heading-${key}`}>
                                   <h5 className="mb-0">
                                     <button
                                       type="button"
-                                      className="btn btn-link"
+                                      className="btn btn-block px-2 py-3"
                                       data-toggle="collapse"
                                       data-target={`#collapse-${key}`}
                                       aria-expanded={key === values.formulations - 1}
                                       aria-controls={`collapse-${key}`}
                                     >
-                                      {formulation.medication_form}
+                                      {this.displayLabel(formulation.medication_form, arrayHelpers.form.errors, key)}
                                     </button>
                                   </h5>
                                 </div>
@@ -190,7 +202,7 @@ export default class FormulationForm extends React.Component {
                             {medicationForms.map(medicationForm => (
                               <option
                                 key={medicationForm}
-                                value={medicationForm}>{medicationForm}</option>
+                                value={medicationForm}>{humanizeString(medicationForm)}</option>
                             ))}
                           </Form.Control>
                         </Col>
