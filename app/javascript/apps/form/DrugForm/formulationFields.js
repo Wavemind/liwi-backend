@@ -3,8 +3,6 @@ import I18n from "i18n-js";
 import FadeIn from "react-fade-in";
 import { Form, Col } from "react-bootstrap";
 
-import DisplayErrors from "../components/DisplayErrors";
-
 export default class FormulationFields extends React.Component {
   constructor(props) {
     super(props);
@@ -18,38 +16,12 @@ export default class FormulationFields extends React.Component {
     };
   }
 
-  // Push the formulation object to the container
-  handleFormChange = (e) => {
-    // Get the name and value by additional param for Select (can't get it in the usual way...)
-    const name = event.target.name !== undefined ? event.target.name : e.target.name;
-    let value = null;
-    if (name === "by_age") {
-      value = event.target.checked;
-    } else if (name === "administration_route_id") {
-      value = e.target.value;
-    } else {
-      value = event.target.value;
-    }
-
-    const {
-      index,
-      formulations,
-      setFormulation
-    } = this.props;
-
-    let formulation = formulations[index];
-    formulation[name] = value;
-
-    setFormulation(index, formulation);
-    this.forceUpdate(); // Since there is no more state component does not rerender itself. I force it to make the form work. TODO better way to do so
-  };
-
   displayErrors(input) {
     const {
       index, arrayHelpers: { form: { errors } }
     } = this.props;
 
-    return errors?.formulations !== undefined && errors?.formulations[index]?.[input];
+    return errors?.formulations_attributes !== undefined && errors?.formulations_attributes[index]?.[input];
   }
 
   isInvalid(input) {
@@ -57,7 +29,7 @@ export default class FormulationFields extends React.Component {
       index, arrayHelpers: { form: { errors } }
     } = this.props;
 
-    return errors?.formulations !== undefined && !!errors?.formulations[index]?.[input];
+    return errors?.formulations_attributes !== undefined && !!errors?.formulations_attributes[index]?.[input];
   }
 
   render() {
@@ -74,7 +46,7 @@ export default class FormulationFields extends React.Component {
       index
     } = this.props;
 
-    let formulation = values.formulations[index];
+    let formulation = values.formulations_attributes[index];
 
     return (
       <FadeIn>
@@ -87,7 +59,7 @@ export default class FormulationFields extends React.Component {
             </Form.Label>
             <Form.Control
               as="select"
-              name={`formulations.${index}.administration_route_id`}
+              name={`formulations_attributes.${index}.administration_route_id`}
               value={formulation.administration_route_id}
               onChange={handleChange}
               isInvalid={this.isInvalid("administration_route_id")}
@@ -120,7 +92,7 @@ export default class FormulationFields extends React.Component {
             <Form.Label>{I18n.t("activerecord.attributes.formulation.doses_per_day")}</Form.Label>
             <Form.Control
               type="number"
-              name={`formulations.${index}.doses_per_day`}
+              name={`formulations_attributes.${index}.doses_per_day`}
               value={formulation.doses_per_day}
               onChange={handleChange}
               isInvalid={this.isInvalid("doses_per_day")}
@@ -136,7 +108,7 @@ export default class FormulationFields extends React.Component {
             <Form.Label>{I18n.t("activerecord.attributes.formulation.by_age")}</Form.Label>
             <Form.Check
               type="checkbox"
-              name={`formulations.${index}.by_age`}
+              name={`formulations_attributes.${index}.by_age`}
               value={formulation.by_age}
               onChange={handleChange}
               isInvalid={this.isInvalid("by_age")}
@@ -156,7 +128,7 @@ export default class FormulationFields extends React.Component {
               <Form.Label>{I18n.t("drugs.breakable.select")}</Form.Label>
               <Form.Control
                 as="select"
-                name={`formulations.${index}.breakable`}
+                name={`formulations_attributes.${index}.breakable`}
                 onChange={handleChange}
                 value={formulation.breakable}
                 isInvalid={this.isInvalid("breakable")}
@@ -177,7 +149,7 @@ export default class FormulationFields extends React.Component {
               <Form.Label>{I18n.t("activerecord.attributes.formulation.unique_dose")}</Form.Label>
               <Form.Control
                 type="number"
-                name={`formulations.${index}.unique_dose`}
+                name={`formulations_attributes.${index}.unique_dose`}
                 value={formulation.unique_dose}
                 onChange={handleChange}
                 isInvalid={this.isInvalid("unique_dose")}
@@ -193,7 +165,7 @@ export default class FormulationFields extends React.Component {
               <Form.Label>{I18n.t("activerecord.attributes.formulation.liquid_concentration")}</Form.Label>
               <Form.Control
                 type="number"
-                name={`formulations.${index}.liquid_concentration`}
+                name={`formulations_attributes.${index}.liquid_concentration`}
                 value={formulation.liquid_concentration}
                 onChange={handleChange}
                 isInvalid={this.isInvalid("liquid_concentration")}
@@ -212,7 +184,7 @@ export default class FormulationFields extends React.Component {
                 <Form.Label>{I18n.t("activerecord.attributes.formulation.dose_form", { unity })}</Form.Label>
                 <Form.Control
                   type="number"
-                  name={`formulations.${index}.dose_form`}
+                  name={`formulations_attributes.${index}.dose_form`}
                   value={formulation.dose_form}
                   onChange={handleChange}
                   isInvalid={this.isInvalid("dose_form")}
@@ -226,7 +198,7 @@ export default class FormulationFields extends React.Component {
                 <Form.Label>{I18n.t("activerecord.attributes.formulation.maximal_dose")}</Form.Label>
                 <Form.Control
                   type="number"
-                  name={`formulations.${index}.maximal_dose`}
+                  name={`formulations_attributes.${index}.maximal_dose`}
                   value={formulation.maximal_dose}
                   onChange={handleChange}
                   isInvalid={this.isInvalid("maximal_dose")}
@@ -242,7 +214,7 @@ export default class FormulationFields extends React.Component {
                 <Form.Label>{I18n.t("activerecord.attributes.formulation.minimal_dose_per_kg")}</Form.Label>
                 <Form.Control
                   type="number"
-                  name={`formulations.${index}.minimal_dose_per_kg`}
+                  name={`formulations_attributes.${index}.minimal_dose_per_kg`}
                   value={formulation.minimal_dose_per_kg}
                   onChange={handleChange}
                   isInvalid={this.isInvalid("minimal_dose_per_kg")}
@@ -256,7 +228,7 @@ export default class FormulationFields extends React.Component {
                 <Form.Label>{I18n.t("activerecord.attributes.formulation.maximal_dose_per_kg")}</Form.Label>
                 <Form.Control
                   type="number"
-                  name={`formulations.${index}.maximal_dose_per_kg`}
+                  name={`formulations_attributes.${index}.maximal_dose_per_kg`}
                   value={formulation.maximal_dose_per_kg}
                   onChange={handleChange}
                   isInvalid={this.isInvalid("maximal_dose_per_kg")}

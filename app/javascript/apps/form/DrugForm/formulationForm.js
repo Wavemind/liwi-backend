@@ -120,7 +120,7 @@ export default class FormulationForm extends React.Component {
 
   removeFormulation(key, arrayHelpers) {
     const { medicationForms } = this.state;
-    let selectedMedicationForm = arrayHelpers.form.values.formulations[key].medication_form;
+    let selectedMedicationForm = arrayHelpers.form.values.formulations_attributes[key].medication_form;
     let newMedicationFroms = [...medicationForms];
 
     arrayHelpers.remove(key);
@@ -133,7 +133,7 @@ export default class FormulationForm extends React.Component {
     return (
       <>
         {humanizeString(name)} <Badge variant="danger">
-        {errors?.formulations !== undefined && errors?.formulations[key] !== undefined && Object.keys(errors?.formulations[key]).length}
+        {errors?.formulations_attributes !== undefined && errors?.formulations_attributes[key] !== undefined && Object.keys(errors?.formulations_attributes[key]).length}
         </Badge>
       </>
     );
@@ -167,11 +167,11 @@ export default class FormulationForm extends React.Component {
               <Form noValidate onSubmit={handleSubmit}>
                 {status ? <DisplayErrors errors={status}/> : null}
                 <FieldArray
-                  name="formulations"
+                  name="formulations_attributes"
                   render={arrayHelpers => (
                     <>
                       <div id="accordion">
-                        {values.formulations.map((formulation, key) => (
+                        {values.formulations_attributes.map((formulation, key) => (
                           <Form.Row key={key}>
                             <Col lg="10">
                               <Card key={`card-${key}`}>
@@ -182,7 +182,7 @@ export default class FormulationForm extends React.Component {
                                       className="btn btn-block px-2 py-3"
                                       data-toggle="collapse"
                                       data-target={`#collapse-${key}`}
-                                      aria-expanded={key === values.formulations - 1}
+                                      aria-expanded={key === values.formulations_attributes - 1}
                                       aria-controls={`collapse-${key}`}
                                     >
                                       {this.displayLabel(formulation.medication_form, arrayHelpers.form.errors, key)}
@@ -191,7 +191,7 @@ export default class FormulationForm extends React.Component {
                                 </div>
                                 <div
                                   id={`collapse-${key}`}
-                                  className={`collapse ${key === values.formulations.length - 1 ? "show" : null}`}
+                                  className={`collapse ${key === values.formulations_attributes.length - 1 ? "show" : null}`}
                                   aria-labelledby={`heading-${key}`}
                                   data-parent="#accordion">
                                   <div className="card-body">
@@ -216,7 +216,7 @@ export default class FormulationForm extends React.Component {
                         ))}
                       </div>
 
-                      {values.formulations.length > 0 ? <hr/> : null}
+                      {values.formulations_attributes.length > 0 ? <hr/> : null}
 
                       <Form.Row>
                         <Col lg="11">
@@ -236,6 +236,7 @@ export default class FormulationForm extends React.Component {
 
                         <Col>
                           <Button
+                            className="float-right"
                             type="button"
                             variant="primary"
                             onClick={() => this.addFormulation(arrayHelpers)}

@@ -61,7 +61,7 @@ export const questionSequencesSchema = yup.object().shape({
 });
 
 export const formulationSchema = yup.object().shape({
-  formulations: yup.array().of(yup.object().shape({
+  formulations_attributes: yup.array().of(yup.object().shape({
     doses_per_day: yup.number().required(I18n.t("errors.messages.required")),
     administration_route_id: yup.number().required(I18n.t("errors.messages.required")),
     by_age: yup.boolean(),
