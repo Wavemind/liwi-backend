@@ -104,5 +104,5 @@ export const formulationSchema = yup.object().shape({
         is: (medication_form) => ["tablet", "capsule", "suspension", "syrup"].includes(medication_form),
         then: yup.number().required(I18n.t("errors.messages.required"))
       })
-  })).required("Must have at least 1 formulation").min(1, "Must have at least 1 formulation")
+  }))
 });

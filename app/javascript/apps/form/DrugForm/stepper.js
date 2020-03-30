@@ -17,7 +17,7 @@ export default class StepperDrugForm extends React.Component {
 
     this.state = {
       errors: null,
-      step: 2,
+      step: 1,
       drug: {
         id: drug?.id || "",
         label_translations: drug?.label_translations?.en || "",
@@ -27,12 +27,16 @@ export default class StepperDrugForm extends React.Component {
     };
   }
 
+  /**
+   * Send value to server
+   */
   save = async () => {
     const { method, from, engine, diagramObject, addAvailableNode } = this.props;
     const { drug } = this.state;
     let http = new Http();
     let httpRequest = {};
 console.log(drug)
+
     if (method === "create") {
       // httpRequest = await http.createFinalDiagnostic(values.label_translations, values.description_translations, from);
     } else {

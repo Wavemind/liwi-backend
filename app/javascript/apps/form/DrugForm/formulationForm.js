@@ -52,7 +52,7 @@ export default class FormulationForm extends React.Component {
 
   handleOnSubmit = async (values) => {
     const { setFormData, save } = this.props;
-    await setFormData('formulations_attributes', values.formulations_attributes);
+    await setFormData("formulations_attributes", values.formulations_attributes);
     save();
   };
 
@@ -126,7 +126,7 @@ export default class FormulationForm extends React.Component {
             {({
                 handleSubmit,
                 isSubmitting,
-                values
+                values,
               }) => (
               <Form noValidate onSubmit={handleSubmit}>
                 <FieldArray
@@ -217,7 +217,7 @@ export default class FormulationForm extends React.Component {
                           </Button>
                         </Col>
                         <Col>
-                          <Button className="float-right" type="submit" variant="success" disabled={isSubmitting}>
+                          <Button className="float-right" type="submit" variant="success" disabled={isSubmitting || values.formulations_attributes.length === 0}>
                             {I18n.t("save")}
                           </Button>
                         </Col>
