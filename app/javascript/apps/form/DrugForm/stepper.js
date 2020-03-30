@@ -77,7 +77,6 @@ export default class StepperDrugForm extends React.Component {
             formData={drug}
             method={method}
             setFormData={this.setFormulationData}
-            nextStep={this.nextStep}
             previousStep={this.previousStep}
           />
         );

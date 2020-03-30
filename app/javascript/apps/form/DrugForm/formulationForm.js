@@ -13,6 +13,7 @@ import { formulationSchema } from "../constants/schema";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
 import store from "../../diagram/engine/reducers/store";
 import { closeModal } from "../../diagram/engine/reducers/creators.actions";
+import DisplayErrors from "../components/DisplayErrors";
 
 const humanizeString = require("humanize-string");
 
@@ -24,8 +25,6 @@ export default class FormulationForm extends React.Component {
       breakables: [],
       administrationRoutes: [],
       medicationForms: [],
-      formulations: { test: {} },
-      formulationComponentAttributes: [],
       selectedMedicationForm: "",
       isLoading: true
     };
@@ -56,9 +55,40 @@ export default class FormulationForm extends React.Component {
   };
 
   handleOnSubmit = async (values, actions) => {
-    const { setFormData } = this.props;
-    console.log(values);
+    const { setFormData, method, from, engine, diagramObject, addAvailableNode } = this.props;
+    let http = new Http();
+    let httpRequest = {};
+
     setFormData(values);
+
+    if (method === "create") {
+      // httpRequest = await http.createFinalDiagnostic(values.label_translations, values.description_translations, from);
+    } else {
+      // httpRequest = await http.updateFinalDiagnostic(values.id, values.label_translations, values.description_translations, from);
+    }
+
+    let result = await httpRequest.json();
+
+    if (httpRequest.status === 200) {
+      if (from === "rails") {
+        window.location.replace(result.url);
+      } else {
+        if (method === "create") {
+          let diagramInstance = createNode(result, addAvailableNode, false, "Diagnostic", engine);
+          engine.getModel().addNode(diagramInstance);
+        } else {
+          diagramObject.options.dbInstance.node = result;
+        }
+
+        engine.repaintCanvas();
+
+        store.dispatch(
+          closeModal()
+        );
+      }
+    } else {
+      actions.setStatus({ result });
+    }
   };
 
   handleMedicationFormChange = (event) => {
@@ -99,10 +129,6 @@ export default class FormulationForm extends React.Component {
     this.setState({ medicationForms: newMedicationFroms });
   }
 
-  save() {
-
-  }
-
   displayLabel = (name, errors, key) => {
     return (
       <>
@@ -114,7 +140,7 @@ export default class FormulationForm extends React.Component {
   };
 
   render() {
-    const { formData, nextStep, previousStep } = this.props;
+    const { formData, previousStep } = this.props;
     const {
       selectedMedicationForm,
       medicationForms,
@@ -139,6 +165,7 @@ export default class FormulationForm extends React.Component {
                 status
               }) => (
               <Form noValidate onSubmit={handleSubmit}>
+                {status ? <DisplayErrors errors={status}/> : null}
                 <FieldArray
                   name="formulations"
                   render={arrayHelpers => (
