@@ -57,20 +57,16 @@ class DrugsController < ApplicationController
     drug = HealthCares::Drug.new(drug_params).becomes(HealthCares::Drug)
     drug.algorithm = @algorithm
 
-    puts '***'
-    puts drug.inspect
-    puts '***'
-    puts drug_params
-    puts '***'
+    if drug.save && drug.update(drug_params)
+      if params[:from] === 'react'
+        final_diagnostic = FinalDiagnostic.find(params[:final_diagnostic_id])
+        final_diagnostic.health_cares << drug
 
-    if drug.save
-      final_diagnostic = FinalDiagnostic.find(params[:final_diagnostic_id])
-      final_diagnostic.health_cares << drug
-      render json: {status: 'success', messages: [t('flash_message.success_created')], node: drug.as_json(include: [:formulations], methods: [:node_type, :type, :category_name])}
+        render json: drug.get_instance_json
+      else
+        render json: { url: algorithm_url(@algorithm, panel: 'drugs') }
+      end
     else
-      puts '**'
-      puts drug.errors.messages
-      puts '**'
       render json: drug.errors.full_messages, status: 422
     end
   end

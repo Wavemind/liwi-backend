@@ -13,19 +13,27 @@ export default class StepperDrugForm extends React.Component {
   constructor(props) {
     super(props);
 
-    const { drug } = props;
+    const { drug, method } = props;
 
     this.state = {
       errors: null,
       step: 1,
-      drug: {
-        id: drug?.id || "",
-        label_en: drug?.label_translations?.en || "",
-        description_en: drug?.description_translations?.en || "",
-        formulations_attributes: drug?.formulations ||  []
-      }
+      drug: this.drugBody(drug, method)
     };
   }
+
+  drugBody = (drug, method) => {
+    let body = {
+      label_en: drug?.label_translations?.en || "",
+      description_en: drug?.description_translations?.en || "",
+      formulations_attributes: drug?.formulations ||  []
+    };
+
+    if (method === "update") {
+      body['id'] = drug.id
+    }
+    return body;
+  };
 
   save = async () => {
     const { method, from, engine, diagramObject, addAvailableNode } = this.props;

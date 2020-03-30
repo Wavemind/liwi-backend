@@ -6,8 +6,8 @@ import { Form, Col } from "react-bootstrap";
 export default class FormulationFields extends React.Component {
   constructor(props) {
     super(props);
-    const { arrayHelpers: { form: { values } } } = this.props;
-    const unity = ["suspension", "syrup"].includes(values.medication_form)
+    const { index, arrayHelpers: { form: { values } } } = this.props;
+    const unity = ["suspension", "syrup"].includes(values.formulations_attributes[index].medication_form)
       ? "ml"
       : "mg";
 
