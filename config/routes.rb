@@ -85,11 +85,9 @@ Rails.application.routes.draw do
 
     resources :drugs, only: [:new, :create, :edit, :update, :destroy] do
       collection do
-        post 'create_from_diagram'
         post 'validate'
       end
       member do
-        put 'update_from_diagram'
         put 'update_translations'
       end
     end

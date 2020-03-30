@@ -30,14 +30,13 @@ export default class Http {
    * @return [Object] body of request
    */
   createDrug = async (drugBody, from) => {
-    const url = `${this.url}/algorithms/${this.algorithm}/drugs/create_from_diagram`;
+    const url = `${this.url}/algorithms/${this.algorithm}/drugs`;
     const body = {
       diagnostic_id: this.instanceableId,
       final_diagnostic_id: this.finalDiagnostic,
       from
     };
     body['health_cares_drug'] = drugBody;
-    console.log(drugBody);
 
     const header = await this.setHeaders("POST", body);
     return await fetch( url, header).catch(error => console.log(error));

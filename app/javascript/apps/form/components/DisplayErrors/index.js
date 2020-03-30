@@ -9,7 +9,7 @@ export default class DisplayErrors extends React.Component {
     return (
       <Alert variant="danger">
         <ul>
-          {Object.keys(errors).map(index => (<li>{errors[index]}</li>))}
+          {Object.keys(errors).map(index => (<li key={index}>{errors[index]}</li>))}
         </ul>
       </Alert>
     );

@@ -9,5 +9,5 @@ export const DEFAULT_FORMULATION_VALUE = JSON.stringify({
   breakable: "",
   unique_dose: "",
   liquid_concentration: "",
-  by_age: ""
+  by_age: false
 });

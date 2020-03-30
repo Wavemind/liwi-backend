@@ -1,6 +1,6 @@
 class DrugsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy, :create_from_diagram, :update_from_diagram, :validate]
+  before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy, :validate]
   before_action :set_drug, only: [:edit, :update, :update_translations, :destroy, :update_from_diagram]
   before_action :set_breadcrumb, only: [:new, :edit]
 
@@ -16,14 +16,20 @@ class DrugsController < ApplicationController
   end
 
   def create
-    @drug = @algorithm.health_cares.drugs.new(drug_params)
+    drug = HealthCares::Drug.new(drug_params).becomes(HealthCares::Drug)
+    drug.algorithm = @algorithm
 
-    if @drug.save
-      redirect_to algorithm_url(@algorithm, panel: 'drugs'), notice: t('flash_message.success_created')
+    if drug.save && drug.update(drug_params)
+      if params[:from] === 'rails'
+        render json: { url: algorithm_url(@algorithm, panel: 'drugs') }
+      else
+        final_diagnostic = FinalDiagnostic.find(params[:final_diagnostic_id])
+        final_diagnostic.health_cares << drug
+
+        render json: drug.get_instance_json
+      end
     else
-      set_breadcrumb
-      add_breadcrumb t('breadcrumbs.new')
-      render :new
+      render json: drug.errors.full_messages, status: 422
     end
   end
 
@@ -50,27 +56,6 @@ class DrugsController < ApplicationController
     end
   end
 
-  # POST
-  # @return final_diagnostic node
-  # Create a drug node from diagram
-  def create_from_diagram
-    drug = HealthCares::Drug.new(drug_params).becomes(HealthCares::Drug)
-    drug.algorithm = @algorithm
-
-    if drug.save && drug.update(drug_params)
-      if params[:from] === 'react'
-        final_diagnostic = FinalDiagnostic.find(params[:final_diagnostic_id])
-        final_diagnostic.health_cares << drug
-
-        render json: drug.get_instance_json
-      else
-        render json: { url: algorithm_url(@algorithm, panel: 'drugs') }
-      end
-    else
-      render json: drug.errors.full_messages, status: 422
-    end
-  end
-
   # GET
   # @return Hash
   # Return attributes of drug and formulation that are listed
@@ -83,9 +68,9 @@ class DrugsController < ApplicationController
   # Update a drug node from diagram
   def update_from_diagram
     if @drug.update(drug_params)
-      render json: {status: 'success', messages: [t('flash_message.success_updated')], node: @drug.as_json(include: [:formulations], methods: [:node_type, :type, :category_name])}
+      render json: { status: 'success', messages: [t('flash_message.success_updated')], node: @drug.as_json(include: [:formulations], methods: [:node_type, :type, :category_name]) }
     else
-      render json: {status: 'danger', errors: @drug.errors.messages, ok: false}
+      render json: { status: 'danger', errors: @drug.errors.messages, ok: false }
     end
   end
 
@@ -93,10 +78,10 @@ class DrugsController < ApplicationController
   # Update the object with its translation without rendering a new page
   def update_translations
     if @drug.update(drug_params)
-      @json = { status: 'success', message: t('flash_message.success_updated')}
+      @json = { status: 'success', message: t('flash_message.success_updated') }
       render 'diagnostics/update_translations', formats: :js, status: :ok
     else
-      @json = { status: 'alert', message: t('flash_message.update_fail')}
+      @json = { status: 'alert', message: t('flash_message.update_fail') }
       render 'diagnostics/update_translations', formats: :js, status: :unprocessable_entity
     end
   end
@@ -109,9 +94,9 @@ class DrugsController < ApplicationController
     drug.algorithm = @algorithm
 
     if drug.valid?
-      render json: {status: 'success', messages: ['valid']}
+      render json: { status: 'success', messages: ['valid'] }
     else
-      render json: {status: 'danger', errors: drug.errors.messages, ok: false}
+      render json: { status: 'danger', errors: drug.errors.messages, ok: false }
     end
   end
 
