@@ -35,6 +35,9 @@ export default class StepperDrugForm extends React.Component {
     return body;
   };
 
+  /**
+   * Send value to server
+   */
   save = async () => {
     const { method, from, engine, diagramObject, addAvailableNode } = this.props;
     const { drug } = this.state;
