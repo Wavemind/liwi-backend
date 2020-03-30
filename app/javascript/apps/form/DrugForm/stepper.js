@@ -12,7 +12,6 @@ export default class StepperDrugForm extends React.Component {
 
   constructor(props) {
     super(props);
-
     const { drug, method } = props;
 
     this.state = {
@@ -43,7 +42,7 @@ export default class StepperDrugForm extends React.Component {
     const { drug } = this.state;
     let http = new Http();
     let httpRequest = {};
-console.log(drug);
+
     if (method === "create") {
       httpRequest = await http.createDrug(drug, from);
     } else {

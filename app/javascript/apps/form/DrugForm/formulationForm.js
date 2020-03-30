@@ -10,6 +10,7 @@ import Loader from "../components/Loader";
 
 import { DEFAULT_FORMULATION_VALUE } from "../constants/constants";
 import { formulationSchema } from "../constants/schema";
+import * as _ from "lodash";
 
 const humanizeString = require("humanize-string");
 
@@ -29,7 +30,7 @@ export default class FormulationForm extends React.Component {
   }
 
   init = async () => {
-    const { method } = this.props;
+    const {formData, method} = this.props;
     let http = new Http();
     let httpRequest = {};
 
@@ -37,16 +38,20 @@ export default class FormulationForm extends React.Component {
     let result = await httpRequest.json();
 
     if (httpRequest.status === 200) {
+
+      // Remove medication_forms already used by existing formulations
+      if (method === 'update') {
+        result.medication_forms = _.filter(result.medication_forms, (medication_form) => {
+          return _.some(formData.formulations_attributes, (formulation) => formulation.medication_form !== medication_form);
+        })
+      }
+
       this.setState({
         breakables: result.breakables,
         administrationRoutes: result.administration_routes,
         medicationForms: result.medication_forms,
         isLoading: false
       });
-    }
-
-    if (method === "update") {
-      this.buildFormulations();
     }
   };
 
