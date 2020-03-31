@@ -23,10 +23,7 @@ class DrugsController < ApplicationController
       if params[:from] === 'rails'
         render json: { url: algorithm_url(@algorithm, panel: 'drugs') }
       else
-        final_diagnostic = FinalDiagnostic.find(params[:final_diagnostic_id])
-        final_diagnostic.health_cares << drug
-
-        render json: drug.get_instance_json
+        render json: drug.as_json(include: [:formulations], methods: [:node_type, :type, :category_name])
       end
     else
       render json: drug.errors.full_messages, status: 422

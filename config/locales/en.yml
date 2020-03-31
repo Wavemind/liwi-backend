@@ -20,6 +20,9 @@ en:
         unique_dose: "Amount of elements per dose"
         liquid_concentration: "Concentration (mg in dose)"
         dose_form: "Dose form (%{unity})"
+      instance:
+        duration: "Duration (days)"
+        description: "Description"
       node:
         type: "Category"
         description_translations: "Description"
@@ -371,12 +374,14 @@ en:
       date-title: "How to make some calculation from a date ?"
       date-content: "In some case, you will need to calculate the patient's age in months. In order to do so, you have to use a function. The available functions are 'ToMonth' and 'ToDay'. Those will return the number of months or days between the given date (ex: birth date) and the time the question will be asked.<br />Ex: ToMonth(D1).<br />Please remember that the question has to be in a date format in order to work."
   instances:
-    table:
-      columns:
-        type: "Type"
+    new:
+      title_drug: "Add fields for your drug instance"
     show:
       children: "Children"
       title: "Details of %{name} in %{node}"
+    table:
+      columns:
+        type: "Type"
   languages:
     description: "description_"
     edit:
@@ -620,7 +625,7 @@ en:
   close: "Close"
   back: "Back"
   open_diagram: "Open diagram"
-  open treatments: "Open treatments"
+  open_treatments: "Open treatments"
   next: "Next"
   loading: "Loading.."
   help: "Help"

@@ -133,7 +133,7 @@ export default class Http {
    * @params [Integer] y
    * @return [Object] body of request
    */
-  createInstance = async (nodeId, x, y) => {
+  createInstance = async (nodeId, x, y, duration = '', description = '') => {
     const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances`;
     const body = {
       instance: {
@@ -142,7 +142,9 @@ export default class Http {
         position_y: y,
         instanceable_id: this.instanceableId,
         instanceable_type: this.instanceableType,
-        final_diagnostic_id: this.finalDiagnostic
+        final_diagnostic_id: this.finalDiagnostic,
+        duration,
+        description,
       }
     };
     const header = await this.setHeaders("POST", body);
@@ -493,12 +495,14 @@ export default class Http {
    * @params [Integer] positionY
    * @return [Object] body of request
    */
-  setInstancePosition = async (id, positionX, positionY) => {
+  updateInstance = async (id, positionX, positionY, duration = '', description = '') => {
     const url = `${this.url}/instances/${id}`;
     const body = {
       instance: {
         position_x: positionX,
-        position_y: positionY
+        position_y: positionY,
+        duration,
+        description,
       }
     };
 
