@@ -79,27 +79,27 @@ export const formulationSchema = yup.object().shape({
         is: true,
         then: yup.number().required(I18n.t("errors.messages.required"))
       }),
-    liquid_concentration: yup.number()
+    liquid_concentration: yup.number().nullable()
       .when(['medication_form', 'by_age'], {
         is: (medication_form, by_age) => ["suspension", "syrup"].includes(medication_form) && by_age === false,
         then: yup.number().required(I18n.t("errors.messages.required"))
       }),
-    dose_form: yup.number()
+    dose_form: yup.number().nullable()
       .when(['medication_form', 'by_age'], {
         is: (medication_form, by_age) => ["tablet", "capsule", "suspension", "syrup"].includes(medication_form) && by_age === false,
         then: yup.number().required(I18n.t("errors.messages.required"))
       }),
-    maximal_dose: yup.number()
+    maximal_dose: yup.number().nullable()
       .when(['medication_form', 'by_age'], {
         is: (medication_form, by_age) => ["tablet", "capsule", "suspension", "syrup"].includes(medication_form) && by_age === false,
         then: yup.number().required(I18n.t("errors.messages.required"))
       }),
-    minimal_dose_per_kg: yup.number()
+    minimal_dose_per_kg: yup.number().nullable()
       .when(['medication_form', 'by_age'], {
         is: (medication_form, by_age) => ["tablet", "capsule", "suspension", "syrup"].includes(medication_form) && by_age === false,
         then: yup.number().required(I18n.t("errors.messages.required"))
       }),
-    maximal_dose_per_kg: yup.number()
+    maximal_dose_per_kg: yup.number().nullable()
       .when(['medication_form', 'by_age'], {
         is: (medication_form, by_age) => ["tablet", "capsule", "suspension", "syrup"].includes(medication_form) && by_age === false,
         then: yup.number().required(I18n.t("errors.messages.required"))
