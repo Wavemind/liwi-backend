@@ -1,7 +1,7 @@
 class DrugsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy, :validate]
-  before_action :set_drug, only: [:edit, :update, :update_translations, :destroy, :update_from_diagram]
+  before_action :set_drug, only: [:edit, :update, :update_translations, :destroy]
   before_action :set_breadcrumb, only: [:new, :edit]
 
   def new
@@ -35,11 +35,13 @@ class DrugsController < ApplicationController
 
   def update
     if @drug.update(drug_params)
-      redirect_to algorithm_url(@algorithm, panel: 'drugs'), notice: t('flash_message.success_updated')
+      if params[:from] == 'rails'
+        render json: { url: algorithm_url(@algorithm, panel: 'drugs') }
+      else
+        render json: @drug.as_json(include: [:formulations], methods: [:node_type, :type, :category_name])
+      end
     else
-      set_breadcrumb
-      add_breadcrumb t('breadcrumbs.edit')
-      render :edit
+      render json: @drug.errors.full_messages, status: 422
     end
   end
 
@@ -61,17 +63,6 @@ class DrugsController < ApplicationController
   # Return attributes of drug and formulation that are listed
   def lists
     render json: HealthCares::Drug.list_attributes
-  end
-
-  # PUT
-  # @return final_diagnostic node
-  # Update a drug node from diagram
-  def update_from_diagram
-    if @drug.update(drug_params)
-      render json: { status: 'success', messages: [t('flash_message.success_updated')], node: @drug.as_json(include: [:formulations], methods: [:node_type, :type, :category_name]) }
-    else
-      render json: { status: 'danger', errors: @drug.errors.messages, ok: false }
-    end
   end
 
   # @params Drug with the translations

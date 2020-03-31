@@ -43,10 +43,12 @@ export default class StepperDrugForm extends React.Component {
     let http = new Http();
     let httpRequest = {};
 
+    console.log(drug)
+
     if (method === "create") {
       httpRequest = await http.createDrug(drug, from);
     } else {
-      // httpRequest = await http.updateFinalDiagnostic(values.id, values.label_translations, values.description_translations, from);
+      httpRequest = await http.updateDrug(drug, from);
     }
 
     let result = await httpRequest.json();

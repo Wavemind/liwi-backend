@@ -65,12 +65,12 @@ export const formulationSchema = yup.object().shape({
     doses_per_day: yup.number().required(I18n.t("errors.messages.required")),
     administration_route_id: yup.number().required(I18n.t("errors.messages.required")),
     by_age: yup.boolean(),
-    breakable: yup.string()
+    breakable: yup.string().nullable()
       .when(['medication_form', 'by_age'], {
         is: (medication_form, by_age) => medication_form === "tablet" && by_age === false,
         then: yup.string().required(I18n.t("errors.messages.required"))
       }),
-    unique_dose: yup.number()
+    unique_dose: yup.number().nullable()
       .when("medication_form", {
         is: (medication_form) => !["tablet", "capsule", "suspension", "syrup"].includes(medication_form),
         then: yup.number().required(I18n.t("errors.messages.required"))

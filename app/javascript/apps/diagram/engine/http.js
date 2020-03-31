@@ -29,17 +29,19 @@ export default class Http {
    * @params [Hash] drug body
    * @return [Object] body of request
    */
-  createDrug = async (drugBody, from) => {
+  createDrug = async (drug, from) => {
     const url = `${this.url}/algorithms/${this.algorithm}/drugs`;
     const body = {
+      health_cares_drug: {
+        drug
+      },
       diagnostic_id: this.instanceableId,
       final_diagnostic_id: this.finalDiagnostic,
       from
     };
-    body['health_cares_drug'] = drugBody;
 
     const header = await this.setHeaders("POST", body);
-    return await fetch( url, header).catch(error => console.log(error));
+    return await fetch(url, header).catch(error => console.log(error));
   };
 
   /**
@@ -99,6 +101,26 @@ export default class Http {
         id,
         label_en,
         description_en,
+      },
+      diagnostic_id: this.instanceableId,
+      final_diagnostic_id: this.finalDiagnostic,
+      from
+    };
+    const header = await this.setHeaders("PUT", body);
+    return await fetch(url, header).catch(error => console.log(error));
+  };
+
+  /**
+   * Update drug
+   * @params [Object] drug
+   * @params [String] from
+   * @return [Object] body of request
+   */
+  updateDrug = async (drug, from) => {
+    const url = `${this.url}/algorithms/${this.algorithm}/drugs/${drug.id}`;
+    const body = {
+      health_cares_drug: {
+        drug
       },
       diagnostic_id: this.instanceableId,
       final_diagnostic_id: this.finalDiagnostic,
@@ -419,9 +441,14 @@ export default class Http {
     return await fetch(url, header).catch(error => console.log(error));
   };
 
-  // @params [Integer] id, [String] label, [String] description, [Integer] final_diagnostic_id
-  // @return [Object] body of request
-  // Update final diagnostic node
+  /**
+   * Update final diagnostic
+   * @params [Integer] id
+   * @params [Integer] label
+   * @params [Integer] description_en
+   * @params [Integer] from
+   * @return [Object] body of request
+   */
   updateFinalDiagnostic = async (id, label_en, description_en, from) => {
     const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/${id}`;
     const body = {
