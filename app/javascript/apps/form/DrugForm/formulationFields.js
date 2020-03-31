@@ -16,6 +16,11 @@ export default class FormulationFields extends React.Component {
     };
   }
 
+  /**
+   * Display label error
+   * @params [String] input
+   * @return [String] label
+   */
   displayErrors(input) {
     const {
       index, arrayHelpers: { form: { errors } }
@@ -24,6 +29,11 @@ export default class FormulationFields extends React.Component {
     return errors?.formulations_attributes !== undefined && errors?.formulations_attributes[index]?.[input];
   }
 
+  /**
+   * Test if input has an error
+   * @params [String] input
+   * @return [Boolean] error ?
+   */
   isInvalid(input) {
     const {
       index, arrayHelpers: { form: { errors } }

@@ -29,6 +29,9 @@ export default class FormulationForm extends React.Component {
     this.init();
   }
 
+  /**
+   * Fetch medication form, breakable and administration routes at the initialization of formulationForm
+   */
   init = async () => {
     const {formData, method} = this.props;
     let http = new Http();
@@ -55,16 +58,28 @@ export default class FormulationForm extends React.Component {
     }
   };
 
+  /**
+   * Set formulation attributes in stepper.js state + launch save method in stepper.js
+   * @params [Object] values
+   */
   handleOnSubmit = async (values) => {
     const { setFormData, save } = this.props;
     await setFormData("formulations_attributes", values.formulations_attributes);
     save();
   };
 
+  /**
+   * Set value of medication form dropdown list
+   * @params [Object] event
+   */
   handleMedicationFormChange = (event) => {
     this.setState({ selectedMedicationForm: event.target.value });
   };
 
+  /**
+   * Add formulation in formulations array of formik "values" variable
+   * @params [Object] arrayHelpers
+   */
   addFormulation = (arrayHelpers) => {
     const {
       selectedMedicationForm,
@@ -88,6 +103,11 @@ export default class FormulationForm extends React.Component {
     });
   };
 
+  /**
+   * Remove formulation in formulations array of formik "values" variable
+   * @params [Integer] key
+   * @params [Object] arrayHelpers
+   */
   removeFormulation(key, arrayHelpers) {
     const { medicationForms } = this.state;
     let selectedMedicationForm = arrayHelpers.form.values.formulations_attributes[key].medication_form;
@@ -99,6 +119,13 @@ export default class FormulationForm extends React.Component {
     this.setState({ medicationForms: newMedicationFroms });
   }
 
+  /**
+   * Display label + number of errors in accordion label
+   * @params [String] name
+   * @params [Object] errors
+   * @params [Integer] key
+   * @return [Component] label with number of errors
+   */
   displayLabel = (name, errors, key) => {
     return (
       <>

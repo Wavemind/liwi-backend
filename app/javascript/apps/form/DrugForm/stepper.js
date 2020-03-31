@@ -19,6 +19,12 @@ export default class StepperDrugForm extends React.Component {
     };
   }
 
+  /**
+   * Define state body for drug. State change if we're in create or update method
+   * @params [Object] drug
+   * @params [String] method
+   * @return [Object] drug object for state
+   */
   drugBody = (drug, method) => {
     let body = {
       label_en: drug?.label_translations?.en || "",
