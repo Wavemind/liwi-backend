@@ -32,9 +32,7 @@ export default class Http {
   createDrug = async (drug, from) => {
     const url = `${this.url}/algorithms/${this.algorithm}/drugs`;
     const body = {
-      health_cares_drug: {
-        drug
-      },
+      health_cares_drug: drug,
       diagnostic_id: this.instanceableId,
       final_diagnostic_id: this.finalDiagnostic,
       from
@@ -119,9 +117,7 @@ export default class Http {
   updateDrug = async (drug, from) => {
     const url = `${this.url}/algorithms/${this.algorithm}/drugs/${drug.id}`;
     const body = {
-      health_cares_drug: {
-        drug
-      },
+      health_cares_drug: drug,
       diagnostic_id: this.instanceableId,
       final_diagnostic_id: this.finalDiagnostic,
       from
