@@ -30,7 +30,7 @@ import QuestionsSequenceNodeFactory from "../extended/QuestionsSequenceDiagram/n
 
 import QuestionsSequenceScoreLabelFactory
   from "../extended/QuestionsSequenceScoreDiagram/label/QuestionsSequenceScoreLabelFactory";
-import {openModal} from "../../engine/reducers/creators.actions";
+import { openModal } from "../../engine/reducers/creators.actions";
 import I18n from "i18n-js";
 
 export class Diagram extends React.Component {
@@ -125,9 +125,8 @@ export class Diagram extends React.Component {
     let positions = engine.getRelativeMousePoint(event);
     let dbNode = JSON.parse(event.dataTransfer.getData("node"));
 
-    console.log(dbNode);
-
-    if (dbNode.type === 'HealthCares::Drug') {
+    // Launch modal when dropping a drug to set value in instance
+    if (dbNode.type === "HealthCares::Drug") {
       store.dispatch(
         openModal(I18n.t("drugs.edit.title"), "DrugInstanceForm", {
           drug: dbNode,
