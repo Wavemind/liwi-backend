@@ -88,7 +88,7 @@ export default class AdvancedModal extends React.Component {
     }
 
     return (
-      <Modal show={open} onHide={() => this.closeModal()}>
+      <Modal size="lg" show={open} onHide={() => this.closeModal()}>
         <Modal.Header closeButton>
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
