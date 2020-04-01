@@ -11,3 +11,10 @@ export const DEFAULT_FORMULATION_VALUE = JSON.stringify({
   liquid_concentration: "",
   by_age: false
 });
+
+export const DEFAULT_ANSWER_VALUE = JSON.stringify({
+  id: "",
+  label_en: "",
+  operator: "",
+  value: "",
+});

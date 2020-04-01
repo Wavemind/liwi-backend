@@ -229,6 +229,16 @@ export default class Http {
   };
 
   /**
+   * Fetch answer operators
+   * @return [Object] body of request
+   */
+  fetchAnswerOperators = async () => {
+    const url = `${this.url}/answers/operators`;
+    const header = await this.setHeaders("GET", null);
+    return await fetch(url, header).catch(error => console.log(error));
+  };
+
+  /**
    * Fetch questions sequences categories
    * @return [Object] body of request
    */

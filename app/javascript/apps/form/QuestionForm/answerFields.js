@@ -1,11 +1,7 @@
 import * as React from "react";
 import I18n from "i18n-js";
 import FadeIn from "react-fade-in";
-import {Form} from "react-bootstrap";
-import {Formik} from "formik";
-
-import DisplayErrors from "../components/DisplayErrors";
-import {formulationSchema} from "../constants/schema";
+import { Form, Col } from "react-bootstrap";
 
 export default class AnswerFields extends React.Component {
 
@@ -13,98 +9,98 @@ export default class AnswerFields extends React.Component {
     super(props);
   }
 
-  // Push the answer object to the container
-  handleFormChange = (e) => {
-    // Get the name and value by additional param for Select (can't get it in the usual way...)
-    const name = event.target.name !== undefined ? event.target.name : e.target.name;
-    let value = null;
-    if (name === "by_age") {
-      value = event.target.checked;
-    } else if (name === "administration_route_id") {
-      value = e.target.value;
-    } else {
-      value = event.target.value;
-    }
-
+  /**
+   * Display label error
+   * @params [String] input
+   * @return [String] label
+   */
+  displayErrors(input) {
     const {
-      index,
-      formulations,
-      setFormulation
+      index, arrayHelpers: { form: { errors } }
     } = this.props;
 
-    let formulation = formulations[index];
-    formulation[name] = value;
+    return errors?.answers_attributes !== undefined && errors?.answers_attributes[index]?.[input];
+  }
 
-    setFormulation(index, formulation);
-    this.forceUpdate(); // Since there is no more state component does not rerender itself. I force it to make the form work. TODO better way to do so
-  };
+  /**
+   * Test if input has an error
+   * @params [String] input
+   * @return [Boolean] error ?
+   */
+  isInvalid(input) {
+    const {
+      index, arrayHelpers: { form: { errors } }
+    } = this.props;
 
+    return errors?.answers_attributes !== undefined && !!errors?.answers_attributes[index]?.[input];
+  }
 
   render() {
     const {
-      answer,
-      operators,
-      values,
+      arrayHelpers: {
+        form: {
+          handleChange,
+          values
+        }
+      },
       index,
-      handleChange,
-      answer_type
+      operators
     } = this.props;
+
+    let answer = values.answers_attributes[index];
 
     return (
       <FadeIn>
         <Form.Row>
-          <Form.Group controlId="validationLabelTranslations">
+          <Form.Group as={Col} controlId="validationLabelTranslations">
             <Form.Label>{I18n.t("activerecord.attributes.node.label_translations")}</Form.Label>
             <Form.Control
-              as="text"
-              name="label_en"
+              name={`answers_attributes.${index}.label_en`}
+              value={answer.label_en}
               onChange={handleChange}
-              value={values[index].label_translations}
-              isInvalid={touched.label_translations && !!errors.label_translations}>
+              isInvalid={this.isInvalid("label_en")}>
             </Form.Control>
             <Form.Control.Feedback type="invalid">
-              {errors.label_translations}
+              {this.displayErrors("label_en")}
             </Form.Control.Feedback>
           </Form.Group>
+
+          {/*Do not ask for value and operator if it is an array*/}
+          {values.answer_type !== 2 ? (
+            <>
+              <Form.Group as={Col} controlId="validationOperator">
+                <Form.Label>{I18n.t("activerecord.attributes.answer.operator")}</Form.Label>
+                <Form.Control
+                  as="select"
+                  name={`answers_attributes.${index}.operator`}
+                  onChange={handleChange}
+                  value={answer.operator}
+                  isInvalid={this.isInvalid("operator")}>
+                  <option value="">{I18n.t("select")}</option>
+                  {operators.map(operator => (
+                    <option key={`operator-${operator[1]}`} value={operator[1]}>{operator[0]}</option>
+                  ))}
+                </Form.Control>
+                <Form.Control.Feedback type="invalid">
+                  {this.displayErrors("operator")}
+                </Form.Control.Feedback>
+              </Form.Group>
+
+              <Form.Group as={Col} controlId="validationValue">
+                <Form.Label>{I18n.t("activerecord.attributes.answer.value")}</Form.Label>
+                <Form.Control
+                  name={`answers_attributes.${index}.value`}
+                  onChange={handleChange}
+                  value={answer.value}
+                  isInvalid={this.isInvalid("value")}>
+                </Form.Control>
+                <Form.Control.Feedback type="invalid">
+                  {this.displayErrors("value")}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </>
+          ) : null}
         </Form.Row>
-
-        {/*Do not ask for value and operator if it is an array*/}
-        {(values.answer_type !== 2) ? (
-          <Form.Row>
-
-            <Form.Group controlId="validationOperator">
-              <Form.Label>{I18n.t("activerecord.attributes.answer.operator")}</Form.Label>
-              <Form.Control
-                as="select"
-                name="operator"
-                onChange={handleChange}
-                value={values[index].operator}
-                isInvalid={touched.operator && !!errors.operator}>
-                <option value="">{I18n.t("select")}</option>
-                {operators.map(operator => (
-                  <option value={operator[1]}>{operator[0]}</option>
-                ))}
-              </Form.Control>
-              <Form.Control.Feedback type="invalid">
-                {errors.operator}
-              </Form.Control.Feedback>
-            </Form.Group>
-
-            <Form.Group controlId="validationValue">
-              <Form.Label>{I18n.t("activerecord.attributes.answer.value")}</Form.Label>
-              <Form.Control
-                as="text"
-                name="value"
-                onChange={handleChange}
-                value={values[index].value}
-                isInvalid={touched.value && !!errors.value}>
-              </Form.Control>
-              <Form.Control.Feedback type="invalid">
-                {errors.value}
-              </Form.Control.Feedback>
-            </Form.Group>
-          </Form.Row>
-        ) : null}
       </FadeIn>
     );
   }

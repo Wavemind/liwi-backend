@@ -2,18 +2,14 @@ import * as React from "react";
 import I18n from "i18n-js";
 import { Form, Button } from "react-bootstrap";
 import FadeIn from "react-fade-in";
-import InputGroup from "react-bootstrap/InputGroup";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
 import { Formik } from "formik";
 
 import DisplayErrors from "../components/DisplayErrors";
 import Http from "../../diagram/engine/http";
-import store from "../../diagram/engine/reducers/store";
-import { questionSchema } from "../constants/schema";
-import { closeModal } from "../../diagram/engine/reducers/creators.actions";
-import { createNode } from "../../diagram/helpers/nodeHelpers";
 import Loader from "../QuestionsSequenceForm";
+import { questionSchema } from "../constants/schema";
 import { CATEGORIES_DISPLAYING_SYSTEM, CATEGORIES_DISABLING_ANSWER_TYPE } from "../../diagram/engine/constants/default";
 
 const humanizeString = require("humanize-string");
@@ -26,7 +22,6 @@ export default class FinalDiagnosticForm extends React.Component {
       snomedResults: [],
       snomedError: null,
       isLoading: true,
-      isFetchingSnomed: false
     };
 
     this.init();
@@ -52,11 +47,10 @@ export default class FinalDiagnosticForm extends React.Component {
 
   /**
    * Search in snomed api to get results
-   * @param {Object} event
+   * @param [Object] event
    */
   searchSnomed = async (event) => {
     const http = new Http();
-    this.setState({ isFetchingSnomed: true });
     let httpRequest = {};
 
     httpRequest = await http.searchSnomed(event.target.value);
@@ -66,7 +60,6 @@ export default class FinalDiagnosticForm extends React.Component {
       this.setState({
         snomedResults: result.items,
         snomedError: null,
-        isFetchingSnomed: false
       });
     } else {
       this.setState({ snomedError: { message: I18n.t("questions.errors.snomed_fetch_failed") } });
@@ -75,7 +68,7 @@ export default class FinalDiagnosticForm extends React.Component {
 
   /**
    * Save id and value of snomed selected
-   * @param {Object} event
+   * @param [Object] event
    */
   snomedChange = async (event, value) => {
     this.setState({
@@ -142,7 +135,6 @@ export default class FinalDiagnosticForm extends React.Component {
       snomedResults,
       isLoading,
       snomedError,
-      isFetchingSnomed
     } = this.state;
 
     return (
@@ -180,15 +172,15 @@ export default class FinalDiagnosticForm extends React.Component {
                       handleChange(e);
                       this.categoryChanges(e).forEach(element => setFieldValue(element[0], element[1]));
                     }}
-                    isInvalid={touched.category && !!errors.category}
+                    isInvalid={touched.type && !!errors.type}
                   >
                     <option value="">{I18n.t("select")}</option>
                     {categories.map(category => (
-                      <option value={category.name}>{category.label}</option>
+                      <option key={`category-${category.label}`} value={category.name}>{category.label}</option>
                     ))}
                   </Form.Control>
                   <Form.Control.Feedback type="invalid">
-                    {errors.category}
+                    {errors.type}
                   </Form.Control.Feedback>
                 </Form.Group>
 
@@ -204,7 +196,7 @@ export default class FinalDiagnosticForm extends React.Component {
                     >
                       <option value="">{I18n.t("select")}</option>
                       {systems.map(system => (
-                        <option value={system[1]}>{system[0]}</option>
+                        <option key={`system-${system[1]}`} value={system[1]}>{system[0]}</option>
                       ))}
                     </Form.Control>
                     <Form.Control.Feedback type="invalid">
@@ -225,7 +217,7 @@ export default class FinalDiagnosticForm extends React.Component {
                   >
                     <option value="">{I18n.t("select")}</option>
                     {answerTypes.map(answerType => (
-                      <option value={answerType.id}>{answerType.display_name}</option>
+                      <option key={`answerType-${answerType.id}`} value={answerType.id}>{answerType.display_name}</option>
                     ))}
                   </Form.Control>
                   <Form.Control.Feedback type="invalid">
@@ -246,7 +238,7 @@ export default class FinalDiagnosticForm extends React.Component {
                     >
                       <option value="">{I18n.t("select")}</option>
                       {Object.keys(stages).map(key => (
-                        <option value={stages[key]}>{humanizeString(key)}</option>
+                        <option key={`stages-${stages[key]}`} value={stages[key]}>{humanizeString(key)}</option>
                       ))}
                     </Form.Control>
                     <Form.Control.Feedback type="invalid">

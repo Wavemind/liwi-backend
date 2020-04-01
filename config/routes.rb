@@ -61,12 +61,10 @@ Rails.application.routes.draw do
 
     resources :questions, only: [:new, :create, :edit, :update, :destroy] do
       collection do
-        post 'create_from_diagram'
         post 'validate'
       end
       member do
         put 'answers'
-        put 'update_from_diagram'
         put 'update_translations'
       end
 
@@ -181,6 +179,12 @@ Rails.application.routes.draw do
   resources :drugs, only: [] do
     collection do
       get 'lists'
+    end
+  end
+
+  resources :answers, only: [] do
+    collection do
+      get 'operators'
     end
   end
 

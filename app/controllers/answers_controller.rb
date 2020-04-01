@@ -4,7 +4,6 @@ class AnswersController < ApplicationController
   before_action :set_question, only: [:new, :update]
   before_action :set_algorithm, only: [:new, :update]
 
-
   def new
     @answer = Answer.new
   end
@@ -15,6 +14,10 @@ class AnswersController < ApplicationController
     else
       render :edit
     end
+  end
+
+  def operators
+    render json: Answer.operators.map { |k, v| [I18n.t("answers.operators.#{k}"), k] }
   end
 
   # @params Answer with the translations

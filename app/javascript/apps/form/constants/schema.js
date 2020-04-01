@@ -8,9 +8,11 @@ export const scoreSchema = yup.object().shape({
 });
 
 export const answerSchema = yup.object().shape({
-  label_translations: yup.string().required(I18n.t("errors.messages.required")),
-  operator: yup.string().required(I18n.t("errors.messages.required")),
-  value: yup.string().required(I18n.t("errors.messages.required"))
+  answers_attributes: yup.array().of(yup.object().shape({
+    label_en: yup.string().required(I18n.t("errors.messages.required")),
+    operator: yup.string().required(I18n.t("errors.messages.required")),
+    value: yup.string().required(I18n.t("errors.messages.required"))
+  }))
 });
 
 export const drugSchema = yup.object().shape({
