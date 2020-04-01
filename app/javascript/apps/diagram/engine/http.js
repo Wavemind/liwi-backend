@@ -370,16 +370,11 @@ export default class Http {
     window.location = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/diagram`;
   };
 
-  // @params [Integer] dfId
-  // @return [Object] body of request
-  // Redirect to diagnostic
-  redirectToFinalDiagnostic = async () => {
-    window.location = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics`;
-  };
-
-  // @params [String] term
-  // @return [Object] json with results
-  // Search for snomed results from search string
+  /**
+   * Search for snomed results from search string
+   * @params [String] term
+   * @return [Object] json with results
+   */
   searchSnomed = async (term) => {
     const url = `https://browser.ihtsdotools.org/snowstorm/snomed-ct/MAIN/concepts?term=${term}&limit=50`;
     return await fetch(url).catch(error => console.log(error));
