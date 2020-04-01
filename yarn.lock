@@ -6900,10 +6900,10 @@ react-lifecycles-compat@^3.0.4:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
-react-notifications@^1.5.0-beta.0:
-  version "1.5.0-beta.0"
-  resolved "https://registry.yarnpkg.com/react-notifications/-/react-notifications-1.5.0-beta.0.tgz#4793ca541e1860d83ca48e8bec6ad9e77f0238e4"
-  integrity sha512-TJOI5pPIgGHntBX0X1yBfecjNhEFeVJ3Br7/bJVNNt+fpJBjAaMZ6wf+pGNRsluLloBTQ8zeZY+EKTI+ldA4Cg==
+react-notifications@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/react-notifications/-/react-notifications-1.5.0.tgz#bf6ab2809c17d9403644f3144cf197fc3c4e8509"
+  integrity sha512-RBKRuACD5kCbroh5wTrsYOV9MEop9raVQTgk5/sJ4ExMrYV2fMrSrisOdAnE95KLnicWYZMpfGemhJrNONIUvw==
   dependencies:
     classnames "^2.1.1"
     prop-types "^15.5.10"

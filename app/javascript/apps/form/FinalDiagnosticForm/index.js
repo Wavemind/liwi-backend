@@ -80,7 +80,7 @@ export default class FinalDiagnosticForm extends React.Component {
             <Form noValidate onSubmit={handleSubmit}>
               {status ? <DisplayErrors errors={status}/> : null}
               <Form.Group controlId="validationLabel">
-                <Form.Label>{I18n.t("activerecord.attributes.final_diagnostic.label_translations")}</Form.Label>
+                <Form.Label>{I18n.t("activerecord.attributes.node.label_translations")}</Form.Label>
                 <Form.Control
                   name="label_translations"
                   value={values.label_translations}
@@ -93,7 +93,7 @@ export default class FinalDiagnosticForm extends React.Component {
               </Form.Group>
 
               <Form.Group controlId="validationDescription">
-                <Form.Label>{I18n.t("activerecord.attributes.final_diagnostic.description_translations")}</Form.Label>
+                <Form.Label>{I18n.t("activerecord.attributes.node.description_translations")}</Form.Label>
                 <Form.Control
                   name="description_translations"
                   as="textarea"
