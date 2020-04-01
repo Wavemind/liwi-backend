@@ -16,5 +16,31 @@ export const DEFAULT_ANSWER_VALUE = JSON.stringify({
   id: "",
   label_en: "",
   operator: "",
-  value: "",
+  value: ""
 });
+
+export const CATEGORIES_DISABLING_ANSWER_TYPE = [
+  "Questions::ComplaintCategory",
+  "Questions::BackgroundCalculation",
+  "Questions::BasicMeasurement",
+  "Questions::Vaccine",
+  "Questions::VitalSignAnthropometric"
+];
+
+export const CATEGORIES_DISPLAYING_SYSTEM = [
+  "Questions::ObservedPhysicalSign",
+  "Questions::PhysicalExam",
+  "Questions::Symptom"
+];
+
+export const NO_ANSWERS_ATTACHED_TYPE = [
+  "Questions::VitalSignAnthropometric",
+  "Questions::BasicMeasurement",
+  "Questions::Demographic"
+];
+
+export const NO_ANSWERS_ATTACHED_ANSWER_TYPE = [
+  "1",
+  "7",
+  "8"
+];

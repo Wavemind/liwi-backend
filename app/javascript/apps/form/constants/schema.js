@@ -1,5 +1,5 @@
 import I18n from "i18n-js";
-import { CATEGORIES_DISPLAYING_SYSTEM } from "../../diagram/engine/constants/default";
+import { CATEGORIES_DISPLAYING_SYSTEM } from "./constants";
 
 let yup = require("yup");
 
@@ -10,8 +10,8 @@ export const scoreSchema = yup.object().shape({
 export const answerSchema = yup.object().shape({
   answers_attributes: yup.array().of(yup.object().shape({
     label_en: yup.string().required(I18n.t("errors.messages.required")),
-    operator: yup.string().required(I18n.t("errors.messages.required")),
-    value: yup.string().required(I18n.t("errors.messages.required"))
+    operator: yup.string(),
+    value: yup.string()
   }))
 });
 
@@ -31,18 +31,18 @@ export const questionSchema = yup.object().shape({
     is: (type) => CATEGORIES_DISPLAYING_SYSTEM.includes(type),
     then: yup.string().required(I18n.t("errors.messages.required"))
   }),
-  answer_type: yup.string().required(I18n.t("errors.messages.required")),
+  answer_type_id: yup.string().required(I18n.t("errors.messages.required")),
   stage: yup.string().when("answer_type", {
     is: (type) => type !== "Questions::BackgroundCalculation",
     then: yup.string().required(I18n.t("errors.messages.required"))
   }),
-  label_translations: yup.string().required(I18n.t("errors.messages.required")),
-  description_translations: yup.string(),
+  label_en: yup.string().required(I18n.t("errors.messages.required")),
+  description_en: yup.string(),
   snomed: yup.string(),
-  formula: yup.number()
-    .when("answer_type", {
-      is: (answer_type) => answer_type === "5",
-      then: yup.number().required(I18n.t("errors.messages.required"))
+  formula: yup.string()
+    .when("answer_type_id", {
+      is: (answer_type_id) => answer_type_id === "5",
+      then: yup.string().required(I18n.t("errors.messages.required"))
     })
 });
 

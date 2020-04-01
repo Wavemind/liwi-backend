@@ -47,7 +47,7 @@ export default class AnswerForm extends React.Component {
    */
   handleOnSubmit = async (values) => {
     const { setFormData, save } = this.props;
-    await setFormData("answers_attributes", values.formulations_attributes);
+    await setFormData("answers_attributes", values.answers_attributes);
     save();
   };
 

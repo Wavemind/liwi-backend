@@ -17,7 +17,7 @@ export default class StepperQuestionForm extends React.Component {
 
     this.state = {
       errors: null,
-      step: 2,
+      step: 1,
       question: this.questionBody(question, method)
     };
   }
@@ -32,13 +32,13 @@ export default class StepperQuestionForm extends React.Component {
     let body = {
       type: question?.type || "",
       system: question?.system || "",
-      answer_type: question?.answer_type_id || "",
+      answer_type_id: question?.answer_type_id || "",
       stage: question?.stage || "",
-      is_mandatory: question?.is_mandatory || "",
-      label_translations: question?.label_translations?.en || "",
+      is_mandatory: question?.is_mandatory || false,
+      label_en: question?.label_translations?.en || "",
       snomed: question?.snomed_label || "",
-      description_translations: question?.description_translations?.en || "",
-      unavailable: question?.unavailable || "",
+      description_en: question?.description_translations?.en || "",
+      unavailable: question?.unavailable || false,
       formula: question?.formula || "",
       answers_attributes: question?.answers || []
     };
@@ -54,11 +54,12 @@ export default class StepperQuestionForm extends React.Component {
    */
   save = async () => {
     const { method, from, engine, diagramObject, addAvailableNode } = this.props;
+    const {question} = this.state;
     let http = new Http();
     let httpRequest = {};
 
     if (method === "create") {
-      // httpRequest = await http.createFinalDiagnostic(values.label_translations, values.description_translations, from);
+      httpRequest = await http.createQuestion(question, from);
     } else {
       // httpRequest = await http.updateFinalDiagnostic(values.id, values.label_translations, values.description_translations, from);
     }
@@ -88,7 +89,7 @@ export default class StepperQuestionForm extends React.Component {
   };
 
   /**
-   * Set value in context for formulations
+   * Set value in context for answers
    * @param prop
    * @param value
    */
@@ -131,6 +132,7 @@ export default class StepperQuestionForm extends React.Component {
             formData={question}
             setFormData={this.setMetaData}
             nextStep={this.nextStep}
+            save={this.save}
             method={method}
           />
         );

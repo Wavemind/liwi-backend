@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:new, :create, :edit, :update, :answers, :destroy, :create_from_diagram, :validate]
+  before_action :set_algorithm, only: [:new, :create, :edit, :update, :answers, :destroy, :validate]
   before_action :set_breadcrumb, only: [:new, :edit]
   before_action :set_question, only: [:edit, :update, :answers, :category_reference, :update_translations, :destroy, :update_from_diagram]
 
@@ -17,24 +17,24 @@ class QuestionsController < ApplicationController
   end
 
   def create
-    @question = @algorithm.questions.new(question_params)
+    ActiveRecord::Base.transaction(requires_new: true) do
+      question = @algorithm.questions.new(question_params).becomes(Object.const_get(question_params[:type]))
+      question.becomes(Object.const_get(question_params[:type])) if question_params[:type].present?
+      question.unavailable = question_params[:unavailable] if question.is_a? Questions::AssessmentTest # Manually done it because the form could not handle it
 
-    if @question.save
-      # Don't create answers if it is boolean type, since it is automatically created from the model
-      if %w(Boolean Present Positive).include?(@question.answer_type.value) || @question.is_a?(Questions::BasicMeasurement) || @question.is_a?(Questions::VitalSignAnthropometric)
-        redirect_to algorithm_url(@algorithm, panel: 'questions'), notice: t('flash_message.success_created')
+      # in order to add answers after creation (which can't be done if the question has no id), we also remove reference from params so it will not fail validation
+      if question.save && question.update(question_params.except(:reference)) && question.validate_overlap
+        if params[:from] == 'rails'
+          render json: {url: algorithm_url(@algorithm, panel: 'questions')}
+        else
+          instanceable = Object.const_get(params[:instanceable_type].camelize.singularize).find(params[:instanceable_id])
+          instanceable.components.create!(node: question, final_diagnostic_id: params[:final_diagnostic_id])
+          render json: question.as_json(include: :answers, methods: [:node_type, :category_name, :type])
+        end
       else
-        # Create a new first answer for the form view
-        @question.answers.new
-        # Clear the error messages to not have any validation errors before filling the form
-        @question.answers.first.errors.clear
-        render 'answers/new'
+        render json: question.errors.full_messages, status: 422
+        raise ActiveRecord::Rollback, ''
       end
-    else
-      set_breadcrumb
-      add_breadcrumb t('breadcrumbs.new')
-
-      render :new
     end
   end
 
@@ -101,23 +101,7 @@ class QuestionsController < ApplicationController
   # @return  node
   # Create a question node from diagram and instance it
   def create_from_diagram
-    ActiveRecord::Base.transaction(requires_new: true) do
-      question = @algorithm.questions.new(question_params).becomes(Object.const_get(question_params[:type]))
-      question.becomes(Object.const_get(question_params[:type])) if question_params[:type].present?
 
-      question.unavailable = question_params[:unavailable] if question.is_a? Questions::AssessmentTest # Manually done it because the form could not handle it
-
-      # in order to add answers after creation (which can't be done if the question has no id), we also remove reference from params so it will not fail validation
-      if question.save && question.update(question_params.except(:reference)) && question.validate_overlap
-        instanceable = Object.const_get(params[:instanceable_type].camelize.singularize).find(params[:instanceable_id])
-        instanceable.components.create!(node: question, final_diagnostic_id: params[:final_diagnostic_id])
-        render json: {status: 'success', messages: [t('flash_message.success_created')], node: question.as_json(include: :answers, methods: [:node_type, :category_name, :type])}
-      else
-        errors = (question.answer_type.value == 'Boolean') ? question.errors.messages : question.answers.map(&:errors).map(&:messages)
-        render json: {status: 'danger', errors: errors, overlap_errors: question.errors[:answers], ok: false}
-        raise ActiveRecord::Rollback, ''
-      end
-    end
   end
 
   # GET algorithm/:algorithm_id/version/:version_id/questions/reference_prefix/:type

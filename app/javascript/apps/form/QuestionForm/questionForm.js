@@ -10,7 +10,7 @@ import DisplayErrors from "../components/DisplayErrors";
 import Http from "../../diagram/engine/http";
 import Loader from "../QuestionsSequenceForm";
 import { questionSchema } from "../constants/schema";
-import { CATEGORIES_DISPLAYING_SYSTEM, CATEGORIES_DISABLING_ANSWER_TYPE } from "../../diagram/engine/constants/default";
+import { CATEGORIES_DISPLAYING_SYSTEM, CATEGORIES_DISABLING_ANSWER_TYPE, NO_ANSWERS_ATTACHED_TYPE, NO_ANSWERS_ATTACHED_ANSWER_TYPE } from "../constants/constants";
 
 const humanizeString = require("humanize-string");
 
@@ -26,6 +26,22 @@ export default class FinalDiagnosticForm extends React.Component {
 
     this.init();
   }
+
+  /**
+   * Create question or go throw next step (answerForm)
+   * @params [Object] values
+   * @params [Object] actions
+   */
+  handleOnSubmit = async (values, actions) => {
+    const { setFormData, save, nextStep } = this.props;
+    setFormData(values);
+    console.log(values.answer_type_id)
+    if (NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(values.answer_type_id) || NO_ANSWERS_ATTACHED_TYPE.includes(values.type)) {
+      save();
+    } else {
+      nextStep();
+    }
+  };
 
   /**
    * Fetch questions parameters for form
@@ -91,16 +107,16 @@ export default class FinalDiagnosticForm extends React.Component {
     switch (category) {
       case "Questions::ConsultationRelated":
       case "Questions::Demographic":
-        fieldsToSet.push(["stage", "0"]);
+        fieldsToSet.push(["stage", "registration"]);
         break;
       case "Questions::BasicMeasurement":
       case "Questions::ComplaintCategory":
       case "Questions::UniqueTriagePhysicalSign":
       case "Questions::UniqueTriageQuestion":
-        fieldsToSet.push(["stage", "1"]);
+        fieldsToSet.push(["stage", "triage"]);
         break;
       case "Questions::AssessmentTest":
-        fieldsToSet.push(["stage", "2"]);
+        fieldsToSet.push(["stage", "test"]);
         break;
       case "Questions::ChronicCondition":
       case "Questions::Exposure":
@@ -109,10 +125,10 @@ export default class FinalDiagnosticForm extends React.Component {
       case "Questions::Symptom":
       case "Questions::Vaccine":
       case "Questions::VitalSignAnthropometric":
-        fieldsToSet.push(["stage", "3"]);
+        fieldsToSet.push(["stage", "consultation"]);
         break;
       case "Questions::TreatmentQuestion":
-        fieldsToSet.push(["stage", "4"]);
+        fieldsToSet.push(["stage", "diagnosis_management"]);
         break;
       default:
         fieldsToSet.push(["stage", ""]);
@@ -120,17 +136,17 @@ export default class FinalDiagnosticForm extends React.Component {
 
     // Set answer type
     if (["Questions::ComplaintCategory", "Questions::Vaccine"].includes(category)) {
-      fieldsToSet.push(["answer_type", "1"]);
+      fieldsToSet.push(["answer_type_id", "1"]);
     } else if (["Questions::BasicMeasurement", "Questions::VitalSignAnthropometric"].includes(category)) {
-      fieldsToSet.push(["answer_type", "4"]);
+      fieldsToSet.push(["answer_type_id", "4"]);
     } else if (category === "Questions::BackgroundCalculation") {
-      fieldsToSet.push(["answer_type", "5"]);
+      fieldsToSet.push(["answer_type_id", "5"]);
     }
     return fieldsToSet;
   };
 
   render() {
-    const { formData, setFormData, nextStep } = this.props;
+    const { formData, setFormData, nextStep, save } = this.props;
 
     const {
       answerTypes,
@@ -148,9 +164,8 @@ export default class FinalDiagnosticForm extends React.Component {
           <Formik
             validationSchema={questionSchema}
             initialValues={formData}
-            onSubmit={values => {
-              setFormData(values);
-              nextStep();
+            onSubmit={(values, actions) => {
+              this.handleOnSubmit(values, actions);
             }}
           >
             {({
@@ -214,11 +229,11 @@ export default class FinalDiagnosticForm extends React.Component {
                   <Form.Label>{I18n.t("activerecord.attributes.question.answer_type")}</Form.Label>
                   <Form.Control
                     as="select"
-                    name="answer_type"
-                    value={values.answer_type}
+                    name="answer_type_id"
+                    value={values.answer_type_id}
                     onChange={handleChange}
                     disabled={CATEGORIES_DISABLING_ANSWER_TYPE.includes(values.type)}
-                    isInvalid={touched.answer_type && !!errors.answer_type}
+                    isInvalid={touched.answer_type_id && !!errors.answer_type_id}
                   >
                     <option value="">{I18n.t("select")}</option>
                     {answerTypes.map(answerType => (
@@ -227,7 +242,7 @@ export default class FinalDiagnosticForm extends React.Component {
                     ))}
                   </Form.Control>
                   <Form.Control.Feedback type="invalid">
-                    {errors.answer_type}
+                    {errors.answer_type_id}
                   </Form.Control.Feedback>
                 </Form.Group>
 
@@ -244,7 +259,7 @@ export default class FinalDiagnosticForm extends React.Component {
                     >
                       <option value="">{I18n.t("select")}</option>
                       {Object.keys(stages).map(key => (
-                        <option key={`stages-${stages[key]}`} value={stages[key]}>{humanizeString(key)}</option>
+                        <option key={`stages-${stages[key]}`} value={key}>{humanizeString(key)}</option>
                       ))}
                     </Form.Control>
                     <Form.Control.Feedback type="invalid">
@@ -270,13 +285,13 @@ export default class FinalDiagnosticForm extends React.Component {
                 <Form.Group controlId="validationLabel">
                   <Form.Label>{I18n.t("activerecord.attributes.node.label_translations")}</Form.Label>
                   <Form.Control
-                    name="label_translations"
-                    value={values.label_translations}
+                    name="label_en"
+                    value={values.label_en}
                     onChange={handleChange}
-                    isInvalid={touched.label_translations && !!errors.label_translations}
+                    isInvalid={touched.label_en && !!errors.label_en}
                   />
                   <Form.Control.Feedback type="invalid">
-                    {errors.label_translations}
+                    {errors.label_en}
                   </Form.Control.Feedback>
                 </Form.Group>
 
@@ -303,23 +318,23 @@ export default class FinalDiagnosticForm extends React.Component {
                 <Form.Group controlId="validationDescription">
                   <Form.Label>{I18n.t("activerecord.attributes.node.description_translations")}</Form.Label>
                   <Form.Control
-                    name="description_translations"
+                    name="description_en"
                     as="textarea"
-                    value={values.description_translations}
+                    value={values.description_en}
                     onChange={handleChange}
-                    isInvalid={touched.description_translations && !!errors.description_translations}
+                    isInvalid={touched.description_en && !!errors.description_en}
                   />
                   <Form.Control.Feedback type="invalid">
-                    {errors.description_translations}
+                    {errors.description_en}
                   </Form.Control.Feedback>
                 </Form.Group>
 
                 {values.type === "Questions::AssessmentTest" ?
                   <Form.Group controlId="validationUnavailable">
                     <Form.Label>{I18n.t("activerecord.attributes.question.unavailable")}</Form.Label>
-                    <Form.Control
+                    <Form.Check
+                      type="checkbox"
                       name="unavailable"
-                      as="checkbox"
                       value={values.unavailable}
                       onChange={handleChange}
                       isInvalid={touched.unavailable && !!errors.unavailable}
@@ -330,7 +345,7 @@ export default class FinalDiagnosticForm extends React.Component {
                   </Form.Group>
                   : null}
 
-                {values.answer_type === "5" ?
+                {values.answer_type_id === "5" ?
                   <Form.Group controlId="validationFormula">
                     <Form.Label>{I18n.t("activerecord.attributes.question.formula")}</Form.Label>
                     <Form.Control
@@ -346,8 +361,8 @@ export default class FinalDiagnosticForm extends React.Component {
                   </Form.Group>
                   : null}
 
-                <Button type="submit" disabled={isSubmitting}>
-                  {I18n.t("save")}
+                <Button className="float-right" type="submit" disabled={isSubmitting}>
+                  {I18n.t("next")}
                 </Button>
               </Form>
             )}
