@@ -12,7 +12,7 @@ export default class QuestionsSequenceScoreLabelWidget extends React.Component {
     const { model } = this.props;
 
     let diagramObject = model.parent;
-    let engine = diagramObject.sourcePort.parent.engine;
+    let engine = diagramObject.sourcePort.parent.options.engine;
     let instanceId = diagramObject.targetPort.options.id;
     let answerId = diagramObject.sourcePort.options.id;
     let method = 'update';

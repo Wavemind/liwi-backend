@@ -119,7 +119,7 @@ export default class AnswerForm extends React.Component {
 
                     <Form.Row className="mt-5">
                       <Col>
-                        <Button type="button" variant="primary" onClick={() => previousStep()}>
+                        <Button type="button" variant="default" onClick={() => previousStep()}>
                           {I18n.t("back")}
                         </Button>
                       </Col>
