@@ -37,7 +37,7 @@ class HealthCareNodeWidget extends React.Component {
     } else {
       store.dispatch(
         openModal(I18n.t("drugs.edit.title"), "DrugForm", {
-          drugs: node.options.dbInstance.node,
+          drug: node.options.dbInstance.node,
           ...params
         })
       );

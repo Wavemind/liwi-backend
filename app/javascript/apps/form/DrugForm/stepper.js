@@ -5,6 +5,8 @@ import DrugForm from "./drugForm";
 import FormulationForm from "./formulationForm";
 import InstanceForm from "./instanceForm";
 import DisplayErrors from "../components/DisplayErrors";
+import store from "../../diagram/engine/reducers/store";
+import {closeModal} from "../../diagram/engine/reducers/creators.actions";
 
 export default class StepperDrugForm extends React.Component {
 
@@ -43,7 +45,7 @@ export default class StepperDrugForm extends React.Component {
    * Send value to server
    */
   save = async () => {
-    const { method, from, diagramObject } = this.props;
+    const { method, from, diagramObject, engine } = this.props;
     const { drug } = this.state;
     let http = new Http();
     let httpRequest = {};
@@ -64,6 +66,11 @@ export default class StepperDrugForm extends React.Component {
           this.setState({step: 3, createdDrug: result})
         } else {
           diagramObject.options.dbInstance.node = result;
+          engine.repaintCanvas();
+
+          store.dispatch(
+            closeModal()
+          );
         }
       }
     } else {

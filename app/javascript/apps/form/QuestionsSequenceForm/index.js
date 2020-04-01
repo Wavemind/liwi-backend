@@ -108,7 +108,7 @@ export default class QuestionsSequenceForm extends React.Component {
 
                 {method === "create" ?
                   <Form.Group controlId="validationType">
-                    <Form.Label>{I18n.t("activerecord.attributes.questions_sequence.type")}</Form.Label>
+                    <Form.Label>{I18n.t("activerecord.attributes.node.type")}</Form.Label>
                     <Form.Control
                       as="select"
                       name="type"
@@ -128,7 +128,7 @@ export default class QuestionsSequenceForm extends React.Component {
                   : null}
 
                 <Form.Group controlId="validationLabel">
-                  <Form.Label>{I18n.t("activerecord.attributes.questions_sequence.label_translations")}</Form.Label>
+                  <Form.Label>{I18n.t("activerecord.attributes.node.label_translations")}</Form.Label>
                   <Form.Control
                     name="label_translations"
                     value={values.label_translations}
@@ -156,7 +156,7 @@ export default class QuestionsSequenceForm extends React.Component {
                   : null}
 
                 <Form.Group controlId="validationDescription">
-                  <Form.Label>{I18n.t("activerecord.attributes.questions_sequence.description_translations")}</Form.Label>
+                  <Form.Label>{I18n.t("activerecord.attributes.node.description_translations")}</Form.Label>
                   <Form.Control
                     name="description_translations"
                     as="textarea"
