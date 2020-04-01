@@ -148,7 +148,7 @@ export default class StepperQuestionForm extends React.Component {
           </>
         );
       default:
-        return "boom boom";
+        return <h1>{I18n.t('something_went_wrong')}</h1>;
     }
   }
 }

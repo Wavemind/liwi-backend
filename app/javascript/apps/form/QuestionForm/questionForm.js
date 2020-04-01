@@ -1,9 +1,9 @@
 import * as React from "react";
 import I18n from "i18n-js";
-import { Form, Button } from "react-bootstrap";
 import FadeIn from "react-fade-in";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
+import { Form, Button } from "react-bootstrap";
 import { Formik } from "formik";
 
 import DisplayErrors from "../components/DisplayErrors";
@@ -21,12 +21,15 @@ export default class FinalDiagnosticForm extends React.Component {
     this.state = {
       snomedResults: [],
       snomedError: null,
-      isLoading: true,
+      isLoading: true
     };
 
     this.init();
   }
 
+  /**
+   * Fetch questions parameters for form
+   */
   init = async () => {
     let http = new Http();
     let httpRequest = {};
@@ -59,7 +62,7 @@ export default class FinalDiagnosticForm extends React.Component {
 
       this.setState({
         snomedResults: result.items,
-        snomedError: null,
+        snomedError: null
       });
     } else {
       this.setState({ snomedError: { message: I18n.t("questions.errors.snomed_fetch_failed") } });
@@ -77,7 +80,9 @@ export default class FinalDiagnosticForm extends React.Component {
     });
   };
 
-  // Set value of answer type and stage depending on what category was chosen
+  /**
+   * Set value of answer type and stage depending on what category was chosen
+   */
   categoryChanges = (event) => {
     let fieldsToSet = [];
     const category = event.target.value;
@@ -134,7 +139,7 @@ export default class FinalDiagnosticForm extends React.Component {
       systems,
       snomedResults,
       isLoading,
-      snomedError,
+      snomedError
     } = this.state;
 
     return (
@@ -217,7 +222,8 @@ export default class FinalDiagnosticForm extends React.Component {
                   >
                     <option value="">{I18n.t("select")}</option>
                     {answerTypes.map(answerType => (
-                      <option key={`answerType-${answerType.id}`} value={answerType.id}>{answerType.display_name}</option>
+                      <option key={`answerType-${answerType.id}`}
+                              value={answerType.id}>{answerType.display_name}</option>
                     ))}
                   </Form.Control>
                   <Form.Control.Feedback type="invalid">

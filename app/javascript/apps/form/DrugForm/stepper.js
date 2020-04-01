@@ -6,7 +6,7 @@ import FormulationForm from "./formulationForm";
 import InstanceForm from "./instanceForm";
 import DisplayErrors from "../components/DisplayErrors";
 import store from "../../diagram/engine/reducers/store";
-import {closeModal} from "../../diagram/engine/reducers/creators.actions";
+import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 
 export default class StepperDrugForm extends React.Component {
 
@@ -32,11 +32,11 @@ export default class StepperDrugForm extends React.Component {
     let body = {
       label_en: drug?.label_translations?.en || "",
       description_en: drug?.description_translations?.en || "",
-      formulations_attributes: drug?.formulations ||  []
+      formulations_attributes: drug?.formulations || []
     };
 
     if (method === "update") {
-      body['id'] = drug.id
+      body["id"] = drug.id;
     }
     return body;
   };
@@ -63,7 +63,7 @@ export default class StepperDrugForm extends React.Component {
         window.location.replace(result.url);
       } else {
         if (method === "create") {
-          this.setState({step: 3, createdDrug: result})
+          this.setState({ step: 3, createdDrug: result });
         } else {
           diagramObject.options.dbInstance.node = result;
           engine.repaintCanvas();
@@ -137,20 +137,20 @@ export default class StepperDrugForm extends React.Component {
             />
           </>
         );
-    case 3:
-      return (
-        <InstanceForm
-          engine={engine}
-          diagramObject={diagramObject}
-          addAvailableNode={addAvailableNode}
-          method={method}
-          drug={createdDrug}
-          positions={{x: 100, y: 100}}
-          from={from}
-        />
-      );
+      case 3:
+        return (
+          <InstanceForm
+            engine={engine}
+            diagramObject={diagramObject}
+            addAvailableNode={addAvailableNode}
+            method={method}
+            drug={createdDrug}
+            positions={{ x: 100, y: 100 }}
+            from={from}
+          />
+        );
       default:
-        return "boom boom";
+        return <h1>{I18n.t('something_went_wrong')}</h1>;
     }
   }
 }

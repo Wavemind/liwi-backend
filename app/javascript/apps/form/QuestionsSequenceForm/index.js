@@ -26,6 +26,9 @@ export default class QuestionsSequenceForm extends React.Component {
     this.initForm();
   }
 
+  /**
+   * Fetch questions sequence categories
+   */
   initForm = async () => {
     let http = new Http();
     let httpRequest = {};
@@ -41,6 +44,11 @@ export default class QuestionsSequenceForm extends React.Component {
     }
   };
 
+  /**
+   * Create or update value in database + update diagram if we're editting from diagram
+   * @param [Object] values
+   * @param [Object] actions
+   */
   handleOnSubmit = async (values, actions) => {
     const { method, from, engine, diagramObject, addAvailableNode } = this.props;
     let http = new Http();

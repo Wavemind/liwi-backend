@@ -630,6 +630,7 @@ en:
   loading: "Loading.."
   help: "Help"
   type_here: "Type here"
+  something_went_wrong: "Something went wrong"
   technical_files:
     index:
       title: "Upload/Download APK"

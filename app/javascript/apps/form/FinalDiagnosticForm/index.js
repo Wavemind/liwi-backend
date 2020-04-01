@@ -14,6 +14,11 @@ import { createNode } from "../../diagram/helpers/nodeHelpers";
 
 export default class FinalDiagnosticForm extends React.Component {
 
+  /**
+   * Create or update value in database + update diagram if we're editting from diagram
+   * @params [Object] values
+   * @params [Object] actions
+   */
   handleOnSubmit = async (values, actions) => {
     const { method, from, engine, diagramObject, addAvailableNode } = this.props;
     let http = new Http();

@@ -13,6 +13,11 @@ import DisplayErrors from "../components/DisplayErrors";
 
 export default class ScoreForm extends React.Component {
 
+  /**
+   * Create or update value in database + update diagram if we're editting from diagram
+   * @param [Object] values
+   * @param [Object] actions
+   */
   handleOnSubmit = async (values, actions) => {
     const { instanceId, answerId, diagramObject, engine, method } = this.props;
     let http = new Http();

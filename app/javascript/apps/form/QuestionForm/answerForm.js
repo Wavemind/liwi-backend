@@ -23,6 +23,9 @@ export default class AnswerForm extends React.Component {
     this.init();
   }
 
+  /**
+   * Fetch answer operators
+   */
   init = async () => {
     let http = new Http();
     let httpRequest = {};
@@ -48,10 +51,19 @@ export default class AnswerForm extends React.Component {
     save();
   };
 
+  /**
+   * Add answer in answers array of formik "values" variable
+   * @params [Object] arrayHelpers
+   */
   addAnswer = (arrayHelpers) => {
     arrayHelpers.push(JSON.parse(DEFAULT_ANSWER_VALUE));
   };
 
+  /**
+   * Remove answer in answers array of formik "values" variable
+   * @params [Integer] key
+   * @params [Object] arrayHelpers
+   */
   removeAnswer(arrayHelpers, key) {
     arrayHelpers.remove(key);
   }

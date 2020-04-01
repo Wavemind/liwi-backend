@@ -4,20 +4,24 @@ import FadeIn from "react-fade-in";
 import { Form, Button } from "react-bootstrap";
 import { Formik } from "formik";
 
-import {drugInstanceSchema} from "../constants/schema";
 import Http from "../../diagram/engine/http";
-import {createNode} from "../../diagram/helpers/nodeHelpers";
 import store from "../../diagram/engine/reducers/store";
-import {closeModal} from "../../diagram/engine/reducers/creators.actions";
+import DisplayErrors from "../components/DisplayErrors";
+import { drugInstanceSchema } from "../constants/schema";
+import { createNode } from "../../diagram/helpers/nodeHelpers";
+import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 
 export default class InstanceForm extends React.Component {
 
+  /**
+   * Create or update value in database + update diagram if we're editting from diagram
+   * @params [Object] values
+   * @params [Object] actions
+   */
   handleOnSubmit = async (values, actions) => {
     const { method, engine, diagramObject, addAvailableNode, drug, positions, removeAvailableNode, from } = this.props;
     let http = new Http();
     let httpRequest = {};
-
-    console.log(positions);
 
     if (method === "create") {
       httpRequest = await http.createInstance(drug.id, positions.x, positions.y, values.duration, values.description);
@@ -57,10 +61,6 @@ export default class InstanceForm extends React.Component {
       drug
     } = this.props;
 
-    console.log(drug);
-    console.log(method);
-
-
     return (
       <FadeIn>
         <Formik
@@ -81,6 +81,7 @@ export default class InstanceForm extends React.Component {
               status
             }) => (
             <Form noValidate onSubmit={handleSubmit}>
+              {status ? <DisplayErrors errors={status}/> : null}
               <Form.Group controlId="validationDuration">
                 <Form.Label>{I18n.t("activerecord.attributes.instance.duration")}</Form.Label>
                 <Form.Control
@@ -108,7 +109,7 @@ export default class InstanceForm extends React.Component {
                 </Form.Control.Feedback>
               </Form.Group>
 
-              <Button type="submit">
+              <Button type="submit" disabled={isSubmitting}>
                 {I18n.t("save")}
               </Button>
             </Form>
