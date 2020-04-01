@@ -55,7 +55,7 @@ export default class DrugForm extends React.Component {
                 </Form.Control.Feedback>
               </Form.Group>
 
-              <Button type="submit">
+              <Button className="float-right" type="submit">
                 {I18n.t("next")}
               </Button>
             </Form>

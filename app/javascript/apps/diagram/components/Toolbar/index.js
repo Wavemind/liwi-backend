@@ -4,6 +4,7 @@ import store from "../../engine/reducers/store";
 import { withDiagram } from "../../engine/context/Diagram.context";
 import { openModal } from "../../engine/reducers/creators.actions";
 import { NotificationManager } from "react-notifications";
+import ReactHtmlParser from 'react-html-parser';
 
 
 class Toolbar extends React.Component {
@@ -73,7 +74,9 @@ class Toolbar extends React.Component {
     if (httpRequest.status === 200) {
       NotificationManager.info(result);
     } else {
-      NotificationManager.error(result);
+      result.map(error => (
+        NotificationManager.error(ReactHtmlParser(error), "", 10000)
+      ))
     }
 
     this.setState({ isLoading: false });

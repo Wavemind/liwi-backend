@@ -24,7 +24,7 @@ class QuestionsSequenceNodeWidget extends React.Component {
   /**
    * Open modal to edit questions sequence
    */
-  editFinalDiagnostic() {
+  editQuestionsSequences() {
     const { node } = this.props;
     node.options.selected = false;
 
@@ -66,7 +66,7 @@ class QuestionsSequenceNodeWidget extends React.Component {
                 </button>
                 <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                   <a className="dropdown-item" href="#" onClick={() => this.openDiagram()}>{I18n.t("open_diagram")}</a>
-                  <a className="dropdown-item" href="#" onClick={() => this.editFinalDiagnostic()}>{I18n.t("edit")}</a>
+                  <a className="dropdown-item" href="#" onClick={() => this.editQuestionsSequences()}>{I18n.t("edit")}</a>
                 </div>
               </div>
             ) : null}
