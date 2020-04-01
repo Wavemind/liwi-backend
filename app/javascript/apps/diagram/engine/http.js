@@ -369,19 +369,10 @@ export default class Http {
 
   // @params [String] term
   // @return [Object] json with results
-  // Search for snomet results from search string
+  // Search for snomed results from search string
   searchSnomed = async (term) => {
-    let response;
     const url = `https://browser.ihtsdotools.org/snowstorm/snomed-ct/MAIN/concepts?term=${term}&limit=50`;
-    const request = await fetch(url).catch(error => console.log(error));
-
-    // Display error or parse json
-    if (request?.ok) {
-      response = await request.json();
-    } else {
-      response = request;
-    }
-    return await response;
+    return await fetch(url).catch(error => console.log(error));
   };
 
   /**
