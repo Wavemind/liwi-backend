@@ -3,6 +3,7 @@ import * as React from "react";
 import Http from "../../diagram/engine/http";
 import DrugForm from "./drugForm";
 import FormulationForm from "./formulationForm";
+import InstanceForm from "./instanceForm";
 import DisplayErrors from "../components/DisplayErrors";
 
 export default class StepperDrugForm extends React.Component {
@@ -60,7 +61,7 @@ export default class StepperDrugForm extends React.Component {
         window.location.replace(result.url);
       } else {
         if (method === "create") {
-          this.setState({step: 3, createdDrug: result.drug})
+          this.setState({step: 3, createdDrug: result})
         } else {
           diagramObject.options.dbInstance.node = result;
         }
@@ -105,7 +106,7 @@ export default class StepperDrugForm extends React.Component {
 
   render() {
     const { errors, step, drug, createdDrug } = this.state;
-    const { method, engine, diagramObject, addAvailableNode } = this.props;
+    const { method, engine, diagramObject, addAvailableNode, from } = this.props;
 
     switch (step) {
       case 1:
@@ -131,12 +132,14 @@ export default class StepperDrugForm extends React.Component {
         );
     case 3:
       return (
-        <FormulationForm
+        <InstanceForm
           engine={engine}
           diagramObject={diagramObject}
           addAvailableNode={addAvailableNode}
           method={method}
           drug={createdDrug}
+          positions={{x: 100, y: 100}}
+          from={from}
         />
       );
       default:

@@ -51,6 +51,11 @@ export const managementSchema = yup.object().shape({
   description_translations: yup.string()
 });
 
+export const drugInstanceSchema = yup.object().shape({
+  duration: yup.string().required(I18n.t("errors.messages.required")),
+  description: yup.string()
+});
+
 export const questionSequencesSchema = yup.object().shape({
   type: yup.string().required(I18n.t("errors.messages.required")),
   label_translations: yup.string().required(I18n.t("errors.messages.required")),

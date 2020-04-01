@@ -146,7 +146,9 @@ class InstancesController < ApplicationController
       :answer_id,
       :condition_id,
       :score,
-      :final_diagnostic_id
+      :final_diagnostic_id,
+      :duration,
+      :description
     )
   end
 end

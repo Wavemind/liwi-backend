@@ -11,6 +11,7 @@ import AdvancedCanvasWidget from "../extended/AdvancedDiagram/canvas/AdvancedCan
 import AvailableNodes from "../AvailableNodes";
 import Toolbar from "../Toolbar";
 import AdvancedItemsActions from "../extended/AdvancedDiagram/AdvancedItemsActions";
+import store from "../../engine/reducers/store";
 
 import AdvancedLinkFactory from "../extended/AdvancedDiagram/link/AdvancedLinkFactory";
 import AdvancedNodeFactory from "../extended/AdvancedDiagram/node/AdvancedNodeFactory";
@@ -29,6 +30,8 @@ import QuestionsSequenceNodeFactory from "../extended/QuestionsSequenceDiagram/n
 
 import QuestionsSequenceScoreLabelFactory
   from "../extended/QuestionsSequenceScoreDiagram/label/QuestionsSequenceScoreLabelFactory";
+import {openModal} from "../../engine/reducers/creators.actions";
+import I18n from "i18n-js";
 
 export class Diagram extends React.Component {
 
@@ -121,22 +124,38 @@ export class Diagram extends React.Component {
 
     let positions = engine.getRelativeMousePoint(event);
     let dbNode = JSON.parse(event.dataTransfer.getData("node"));
-    let httpRequest = await http.createInstance(dbNode.id, positions.x, positions.y);
-    let result = await httpRequest.json();
 
-    // Generate node if instance creation success
-    if (httpRequest.status === 200) {
-      // Generate node
-      let diagramInstance = createNode(result, addAvailableNode, readOnly, instanceable.category_name, engine);
+    console.log(dbNode);
 
-      // Display node in diagram
-      engine.getModel().addNode(diagramInstance);
-      engine.repaintCanvas();
-
-      // Remove node from available nodes list
-      removeAvailableNode(dbNode);
+    if (dbNode.type === 'HealthCares::Drug') {
+      store.dispatch(
+        openModal(I18n.t("drugs.edit.title"), "DrugInstanceForm", {
+          drug: dbNode,
+          method: "create",
+          from: "react",
+          engine: engine,
+          removeAvailableNode,
+          positions
+        })
+      );
     } else {
-      NotificationManager.error(result);
+      let httpRequest = await http.createInstance(dbNode.id, positions.x, positions.y);
+      let result = await httpRequest.json();
+
+      // Generate node if instance creation success
+      if (httpRequest.status === 200) {
+        // Generate node
+        let diagramInstance = createNode(result, addAvailableNode, readOnly, instanceable.category_name, engine);
+
+        // Display node in diagram
+        engine.getModel().addNode(diagramInstance);
+        engine.repaintCanvas();
+
+        // Remove node from available nodes list
+        removeAvailableNode(dbNode);
+      } else {
+        NotificationManager.error(result);
+      }
     }
   };
 
