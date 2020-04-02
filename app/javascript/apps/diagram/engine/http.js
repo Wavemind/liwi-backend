@@ -258,6 +258,12 @@ export default class Http {
     return await fetch(url, header).catch(error => console.log(error));
   };
 
+  searchComplaintCategories = async (term) => {
+    const url = `${this.url}/algorithms/${this.algorithm}/search_complaint_category?term=${term}`;
+    const header = await this.setHeaders("GET", null);
+    return await fetch(url, header).catch(error => console.log(error));
+  };
+
   // @params [Integer] instanceId, [Integer] condID
   // @return [Object] body of request
   // Remove condition

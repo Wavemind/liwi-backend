@@ -11,6 +11,8 @@ import Loader from "../components/Loader";
 import { questionSequencesSchema } from "../constants/schema";
 import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import TextField from "@material-ui/core/TextField";
 
 
 export default class QuestionsSequenceForm extends React.Component {
@@ -20,6 +22,8 @@ export default class QuestionsSequenceForm extends React.Component {
 
     this.state = {
       categories: [],
+      complaintCategories: [],
+      complaintCategoryErrors: null,
       isLoading: true
     };
 
@@ -43,6 +47,28 @@ export default class QuestionsSequenceForm extends React.Component {
       });
     }
   };
+
+  /**
+   * Search in complaint category to get results
+   * @param [Object] event
+   */
+  searchComplaintCategory = async (event) => {
+    const http = new Http();
+    let httpRequest = {};
+
+    httpRequest = await http.searchComplaintCategories(event.target.value);
+    if (httpRequest?.status === 200) {
+      let result = await httpRequest.json();
+
+      this.setState({
+        complaintCategories: result.items,
+        complaintCategoryErrors: null
+      });
+    } else {
+      this.setState({ complaintCategoryErrors: { message: I18n.t("errors.fetch_failed") } });
+    }
+  };
+
 
   /**
    * Create or update value in database + update diagram if we're editting from diagram
@@ -86,7 +112,7 @@ export default class QuestionsSequenceForm extends React.Component {
 
   render() {
     const { questionsSequence, method } = this.props;
-    const { categories, isLoading } = this.state;
+    const { categories, isLoading, complaintCategories, complaintCategoryErrors } = this.state;
 
     return (
       isLoading ? <Loader/> :
@@ -113,6 +139,7 @@ export default class QuestionsSequenceForm extends React.Component {
               }) => (
               <Form noValidate onSubmit={handleSubmit}>
                 {status ? <DisplayErrors errors={status}/> : null}
+                {complaintCategoryErrors ? <DisplayErrors errors={complaintCategoryErrors}/> : null}
 
                 {method === "create" ?
                   <Form.Group controlId="validationType">
@@ -146,6 +173,27 @@ export default class QuestionsSequenceForm extends React.Component {
                   <Form.Control.Feedback type="invalid">
                     {errors.label_translations}
                   </Form.Control.Feedback>
+                </Form.Group>
+
+                <Form.Group controlId="validationComplaintCategories">
+                  <Form.Label>{I18n.t("activerecord.attributes.node.node_id")}</Form.Label>
+                  <Autocomplete
+                    multiple
+                    name="node_id"
+                    options={complaintCategories}
+                    getOptionLabel={option => option.fsn.term}
+                    autoComplete
+                    includeInputInList
+                    freeSolo
+                    disableOpenOnFocus
+                    onChange={this.complaintCategoryChange}
+                    renderInput={params => (
+                      <TextField
+                        {...params}
+                        variant="filled"
+                        onChange={this.searchComplaintCategory} fullWidth/>
+                    )}
+                  />
                 </Form.Group>
 
                 {values.type === "QuestionsSequences::Scored" ?

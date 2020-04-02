@@ -40,6 +40,7 @@ gem 'webpacker', '~> 4.x'
 gem 'rqrcode'
 gem 'barby'
 gem 'i18n-js'
+gem 'pg_search'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

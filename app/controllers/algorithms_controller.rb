@@ -1,6 +1,6 @@
 class AlgorithmsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:show, :edit, :update, :archive, :unarchive, :questions]
+  before_action :set_algorithm, only: [:show, :edit, :update, :archive, :unarchive, :questions, :search_complaint_category]
 
   def index
     add_breadcrumb t('breadcrumbs.algorithms')
@@ -110,6 +110,10 @@ class AlgorithmsController < ApplicationController
       format.html
       format.json { render json: DrugDatatable.new(params, view_context: view_context) }
     end
+  end
+
+  def search_complaint_category
+    render json: @algorithm.questions.where(:type, 'Questions::ComplaintCategory')
   end
 
   # PUT algorithms/:id/unarchive
