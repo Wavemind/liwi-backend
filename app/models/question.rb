@@ -55,13 +55,13 @@ class Question < Node
 
   # Get the reference prefix according to the type
   def reference_prefix
-    return '' unless type.present?
+    return '' if type.blank?
     I18n.t("questions.categories.#{Object.const_get(type).variable}.reference_prefix")
   end
 
   # Get the reference prefix according to the type
   def self.reference_prefix_class(type)
-    return '' unless type.present?
+    return '' if type.blank?
     I18n.t("questions.categories.#{Object.const_get(type).variable}.reference_prefix")
   end
 
@@ -82,6 +82,7 @@ class Question < Node
     categories
   end
 
+  # TODO: COMMENTAIRE
   def self.list_attributes(diagram_type)
     attributes = {}
     attributes['categories'] = categories(diagram_type)
@@ -174,6 +175,7 @@ class Question < Node
     errors.messages.blank?
   end
 
+  # TODO: COMMENTAIRE
   def self.get_type_from_prefix(prefix)
     Question.descendants.each do |category|
       Question.reference_prefix_class(category.name)
@@ -181,6 +183,7 @@ class Question < Node
     end
   end
 
+  # TODO: COMMENTAIRE
   def instance_dependencies?
     dependencies.map(&:instanceable).present?
   end
