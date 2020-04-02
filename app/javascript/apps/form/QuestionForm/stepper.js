@@ -46,6 +46,8 @@ export default class StepperQuestionForm extends React.Component {
     if (method === "update") {
       body["id"] = question.id;
       body['answers_attributes'] = [];
+
+      // Generate hash cause of label_translation
       question.answers.map(answer => {
         body['answers_attributes'].push({
           id: answer.id,
@@ -82,7 +84,6 @@ export default class StepperQuestionForm extends React.Component {
         window.location.replace(result.url);
       } else {
         if (method === "create") {
-          console.log(result);
           let diagramInstance = createNode(result, addAvailableNode, false, result.node.category_name, engine);
           engine.getModel().addNode(diagramInstance);
         } else {

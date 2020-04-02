@@ -184,6 +184,7 @@ export default class Http {
       question,
       instanceable_id: this.instanceableId,
       instanceable_type: this.instanceableType,
+      final_diagnostic_id: this.finalDiagnostic,
       from
     };
     const header = await this.setHeaders("POST", body);
@@ -515,6 +516,7 @@ export default class Http {
       question,
       instanceable_id: this.instanceableId,
       instanceable_type: this.instanceableType,
+      final_diagnostic_id: this.finalDiagnostic,
       from
     };
     const header = await this.setHeaders("PUT", body);
