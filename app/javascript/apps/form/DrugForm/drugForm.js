@@ -55,6 +55,34 @@ export default class DrugForm extends React.Component {
                 </Form.Control.Feedback>
               </Form.Group>
 
+              <Form.Group controlId="validationIsAntiMalarial">
+                <Form.Check
+                  name="is_anti_malarial"
+                  label={I18n.t("activerecord.attributes.drug.is_anti_malarial")}
+                  value={values.is_anti_malarial }
+                  checked={values.is_anti_malarial }
+                  onChange={handleChange}
+                  isInvalid={touched.is_anti_malarial  && !!errors.is_anti_malarial }
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.is_anti_malarial }
+                </Form.Control.Feedback>
+              </Form.Group>
+
+              <Form.Group controlId="validationIsAntibiotic">
+                <Form.Check
+                  name="is_antibiotic"
+                  label={I18n.t("activerecord.attributes.drug.is_antibiotic")}
+                  value={values.is_antibiotic }
+                  checked={values.is_antibiotic }
+                  onChange={handleChange}
+                  isInvalid={touched.is_antibiotic  && !!errors.is_antibiotic }
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.is_antibiotic }
+                </Form.Control.Feedback>
+              </Form.Group>
+
               <Button className="float-right" type="submit">
                 {I18n.t("next")}
               </Button>

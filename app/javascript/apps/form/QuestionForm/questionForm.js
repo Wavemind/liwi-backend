@@ -344,6 +344,34 @@ export default class FinalDiagnosticForm extends React.Component {
                   </Form.Group>
                   : null}
 
+                <Form.Group controlId="validationIsTriage">
+                  <Form.Check
+                    name="is_triage"
+                    label={I18n.t("activerecord.attributes.question.is_triage")}
+                    value={values.is_triage}
+                    checked={values.is_triage}
+                    onChange={handleChange}
+                    isInvalid={touched.is_triage && !!errors.is_triage}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.is_triage}
+                  </Form.Control.Feedback>
+                </Form.Group>
+
+                <Form.Group controlId="validationIsIdnetifiable">
+                  <Form.Check
+                    name="is_identifiable"
+                    label={I18n.t("activerecord.attributes.question.is_identifiable")}
+                    value={values.is_identifiable}
+                    checked={values.is_identifiable}
+                    onChange={handleChange}
+                    isInvalid={touched.is_identifiable && !!errors.is_identifiable}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.is_identifiable}
+                  </Form.Control.Feedback>
+                </Form.Group>
+
                 {values.answer_type_id === 5 ?
                   <Form.Group controlId="validationFormula">
                     <Form.Label>{I18n.t("activerecord.attributes.question.formula")}</Form.Label>

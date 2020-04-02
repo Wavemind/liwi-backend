@@ -32,6 +32,8 @@ export default class StepperDrugForm extends React.Component {
     let body = {
       label_en: drug?.label_translations?.en || "",
       description_en: drug?.description_translations?.en || "",
+      is_anti_malarial : drug?.is_anti_malarial || false,
+      is_antibiotic : drug?.is_antibiotic || "",
       formulations_attributes: drug?.formulations || []
     };
 

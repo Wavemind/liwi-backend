@@ -4,6 +4,9 @@ en:
       answer:
         operator: "Operator"
         value: "Value"
+      drug:
+        is_anti_malarial: "Is anti malarial"
+        is_antibiotic: "Is antibiotic"
       condition:
         score: "Score"
       diagnostic:

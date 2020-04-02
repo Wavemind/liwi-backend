@@ -17,7 +17,9 @@ export const answerSchema = yup.object().shape({
 
 export const drugSchema = yup.object().shape({
   label_en: yup.string().required(I18n.t("errors.messages.required")),
-  description_en: yup.string()
+  description_en: yup.string(),
+  is_anti_malarial : yup.boolean(),
+  is_antibiotic: yup.boolean(),
 });
 
 export const finalDiagnosticSchema = yup.object().shape({
@@ -36,6 +38,9 @@ export const questionSchema = yup.object().shape({
     is: (type) => type !== "Questions::BackgroundCalculation",
     then: yup.string().required(I18n.t("errors.messages.required"))
   }),
+  is_mandatory: yup.boolean(),
+  is_triage: yup.boolean(),
+  is_identifiable: yup.boolean(),
   label_en: yup.string().required(I18n.t("errors.messages.required")),
   description_en: yup.string(),
   snomed: yup.string(),
