@@ -1,6 +1,6 @@
 class QuestionsSequencesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:new_scored, :new, :create, :edit, :update, :destroy, :questions_sequence]
+  before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy, :lists]
   before_action :set_questions_sequence, only: [:edit, :update, :destroy, :update_translations, :diagram, :validate]
   before_action :set_breadcrumb, only: [:edit, :diagram]
 
@@ -69,8 +69,11 @@ class QuestionsSequencesController < ApplicationController
 
   # GET
   # @return give sub categories of questions sequence
-  def categories
-    render json: QuestionsSequence.categories
+  def lists
+    render json: {
+      categories: QuestionsSequence.categories,
+      complaint_categories: @algorithm.questions.where(type: 'Questions::ComplaintCategory')
+    }
   end
 
   # GET algorithm/:algorithm_id/questions_sequences/reference_prefix/:type
@@ -128,7 +131,7 @@ class QuestionsSequencesController < ApplicationController
       :algorithm_id,
       :min_score,
       :node_id,
-      )
+    )
   end
 
 end

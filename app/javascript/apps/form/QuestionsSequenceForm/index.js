@@ -13,6 +13,7 @@ import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
+import Chip from "@material-ui/core/Chip";
 
 
 export default class QuestionsSequenceForm extends React.Component {
@@ -23,7 +24,6 @@ export default class QuestionsSequenceForm extends React.Component {
     this.state = {
       categories: [],
       complaintCategories: [],
-      complaintCategoryErrors: null,
       isLoading: true
     };
 
@@ -37,36 +37,27 @@ export default class QuestionsSequenceForm extends React.Component {
     let http = new Http();
     let httpRequest = {};
 
-    httpRequest = await http.fetchQuestionsSequenceCategories();
+    httpRequest = await http.fetchQuestionsSequenceLists();
     let result = await httpRequest.json();
-
+console.log(result)
     if (httpRequest.status === 200) {
       this.setState({
-        categories: result,
+        categories: result.categories,
+        complaintCategories: result.complaint_categories,
         isLoading: false
       });
     }
   };
 
   /**
-   * Search in complaint category to get results
+   * Save id and value of snomed selected
    * @param [Object] event
    */
-  searchComplaintCategory = async (event) => {
-    const http = new Http();
-    let httpRequest = {};
-
-    httpRequest = await http.searchComplaintCategories(event.target.value);
-    if (httpRequest?.status === 200) {
-      let result = await httpRequest.json();
-
-      this.setState({
-        complaintCategories: result.items,
-        complaintCategoryErrors: null
-      });
-    } else {
-      this.setState({ complaintCategoryErrors: { message: I18n.t("errors.fetch_failed") } });
-    }
+  complaintCategoryChange = async (event, value) => {
+    this.setState({
+      snomedId: value.id,
+      snomedLabel: value.fsn.term
+    });
   };
 
 
@@ -112,7 +103,7 @@ export default class QuestionsSequenceForm extends React.Component {
 
   render() {
     const { questionsSequence, method } = this.props;
-    const { categories, isLoading, complaintCategories, complaintCategoryErrors } = this.state;
+    const { categories, isLoading, complaintCategories } = this.state;
 
     return (
       isLoading ? <Loader/> :
@@ -139,8 +130,7 @@ export default class QuestionsSequenceForm extends React.Component {
               }) => (
               <Form noValidate onSubmit={handleSubmit}>
                 {status ? <DisplayErrors errors={status}/> : null}
-                {complaintCategoryErrors ? <DisplayErrors errors={complaintCategoryErrors}/> : null}
-
+                {console.log(values)}
                 {method === "create" ?
                   <Form.Group controlId="validationType">
                     <Form.Label>{I18n.t("activerecord.attributes.node.type")}</Form.Label>
@@ -176,21 +166,25 @@ export default class QuestionsSequenceForm extends React.Component {
                 </Form.Group>
 
                 <Form.Group controlId="validationComplaintCategories">
-                  <Form.Label>{I18n.t("activerecord.attributes.node.node_id")}</Form.Label>
+                  <Form.Label>{I18n.t("activerecord.attributes.node.node")}</Form.Label>
                   <Autocomplete
                     multiple
                     name="node_id"
-                    options={complaintCategories}
-                    getOptionLabel={option => option.fsn.term}
+                    options={complaintCategories.map(option => option.label_translations.en)}
                     autoComplete
                     includeInputInList
                     freeSolo
                     disableOpenOnFocus
-                    onChange={this.complaintCategoryChange}
+                    onChange={handleChange}
+                    renderTags={(value, getTagProps) =>
+                      value.map((option, index) => (
+                        <Chip variant="outlined" label={option} {...getTagProps({ index })} />
+                      ))
+                    }
                     renderInput={params => (
                       <TextField
                         {...params}
-                        variant="filled"
+                        variant="outlined"
                         onChange={this.searchComplaintCategory} fullWidth/>
                     )}
                   />

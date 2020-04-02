@@ -239,11 +239,11 @@ export default class Http {
   };
 
   /**
-   * Fetch questions sequences categories
+   * Fetch questions sequences categories + complaint categories
    * @return [Object] body of request
    */
-  fetchQuestionsSequenceCategories = async () => {
-    const url = `${this.url}/questions_sequences/categories`;
+  fetchQuestionsSequenceLists = async () => {
+    const url = `${this.url}/algorithms/${this.algorithm}/questions_sequences/lists`;
     const header = await this.setHeaders("GET", null);
     return await fetch(url, header).catch(error => console.log(error));
   };
@@ -254,12 +254,6 @@ export default class Http {
    */
   fetchQuestionsLists = async () => {
     const url = `${this.url}/questions/lists?diagram_type=${this.diagramType}`;
-    const header = await this.setHeaders("GET", null);
-    return await fetch(url, header).catch(error => console.log(error));
-  };
-
-  searchComplaintCategories = async (term) => {
-    const url = `${this.url}/algorithms/${this.algorithm}/search_complaint_category?term=${term}`;
     const header = await this.setHeaders("GET", null);
     return await fetch(url, header).catch(error => console.log(error));
   };

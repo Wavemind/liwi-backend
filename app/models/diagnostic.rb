@@ -109,7 +109,7 @@ class Diagnostic < ApplicationRecord
           ]
         },
         node: {
-          include: [:answers],
+          include: [:answers, :complaint_categories],
           methods: [
             :node_type,
             :category_name,
