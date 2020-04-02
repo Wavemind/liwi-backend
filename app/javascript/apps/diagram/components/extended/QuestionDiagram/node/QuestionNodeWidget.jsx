@@ -1,14 +1,35 @@
 import * as React from "react";
 import { PortWidget } from "@projectstorm/react-diagrams-core";
+import I18n from "i18n-js";
 
+import store from "../../../../engine/reducers/store";
 import { withDiagram } from "../../../../engine/context/Diagram.context";
 import { getLabel } from "../../../../helpers/nodeHelpers";
+import { openModal } from "../../../../engine/reducers/creators.actions";
 
 
 class QuestionNodeWidget extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
+  }
+
+  /**
+   * Open modal to edit final diagnostic
+   */
+  editQuestion() {
+    const { node } = this.props;
+    node.options.selected = false;
+
+    store.dispatch(
+      openModal(I18n.t("questions.edit.title"), "QuestionForm", {
+        question: node.options.dbInstance.node,
+        diagramObject: node,
+        engine: node.options.engine,
+        method: "update",
+        from: "react"
+      })
+    );
   }
 
   render() {
@@ -28,17 +49,16 @@ class QuestionNodeWidget extends React.Component {
             {getReferencePrefix(node.options.dbInstance.node.node_type, node.options.dbInstance.node.type) + node.options.dbInstance.node.reference}
           </div>
           <div className="col pl-0 pr-2 text-right">
-            {/*{(node.dbInstance.node.is_default === false) ? (*/}
-            {/*  <div className="dropdown">*/}
-            {/*    <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"*/}
-            {/*            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">*/}
-            {/*    </button>*/}
-            {/*    <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">*/}
-            {/*      {(node.dbInstance.node.node_type === "QuestionsSequence") ? (<a className="dropdown-item" href="#" onClick={() => this.openDiagram(node.dbInstance.node.id)}>Open diagram</a>) : null}*/}
-            {/*      <a className="dropdown-item" href="#" onClick={() => this.editNode(node)}>Edit</a>*/}
-            {/*    </div>*/}
-            {/*  </div>*/}
-            {/*) : null}*/}
+            {(node.options.dbInstance.node.is_default === false) ? (
+              <div className="dropdown">
+                <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                </button>
+                <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a className="dropdown-item" href="#" onClick={() => this.editQuestion()}>{I18n.t("edit")}</a>
+                </div>
+              </div>
+            ) : null}
           </div>
         </div>
         <div>

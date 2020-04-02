@@ -182,8 +182,8 @@ export default class Http {
     const url = `${this.url}/algorithms/${this.algorithm}/questions/`;
     const body = {
       question,
-      diagnostic_id: this.instanceableId,
-      final_diagnostic_id: this.finalDiagnostic,
+      instanceable_id: this.instanceableId,
+      instanceable_type: this.instanceableType,
       from
     };
     const header = await this.setHeaders("POST", body);
@@ -503,15 +503,18 @@ export default class Http {
     return await fetch(url, header).catch(error => console.log(error));
   };
 
-  // @params [Hash] body of the question with its answers
-  // @return [Object] body of request
-  // Update a question and its answers
+  /**
+   * Update a question and its answers
+   * @params [Object] question
+   * @params [String] from
+   * @return [Object] body of request
+   */
   updateQuestion = async (question, from) => {
     const url = `${this.url}/algorithms/${this.algorithm}/questions/${question.id}`;
     const body = {
       question,
-      diagnostic_id: this.instanceableId,
-      final_diagnostic_id: this.finalDiagnostic,
+      instanceable_id: this.instanceableId,
+      instanceable_type: this.instanceableType,
       from
     };
     const header = await this.setHeaders("PUT", body);

@@ -16,7 +16,7 @@ export const DEFAULT_ANSWER_VALUE = JSON.stringify({
   id: "",
   label_en: "",
   operator: "",
-  value: ""
+  value: "",
 });
 
 export const CATEGORIES_DISABLING_ANSWER_TYPE = [

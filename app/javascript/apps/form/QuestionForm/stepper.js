@@ -45,6 +45,17 @@ export default class StepperQuestionForm extends React.Component {
 
     if (method === "update") {
       body["id"] = question.id;
+      body['answers_attributes'] = [];
+      question.answers.map(answer => {
+        body['answers_attributes'].push({
+          id: answer.id,
+          label_en: answer.label_translations.en,
+          operator: answer.operator,
+          value: answer.value,
+        })
+      })
+    } else {
+      body["answers_attributes"] = []
     }
     return body;
   };
@@ -71,7 +82,8 @@ export default class StepperQuestionForm extends React.Component {
         window.location.replace(result.url);
       } else {
         if (method === "create") {
-          let diagramInstance = createNode(result, addAvailableNode, false, "Diagnostic", engine);
+          console.log(result);
+          let diagramInstance = createNode(result, addAvailableNode, false, result.node.category_name, engine);
           engine.getModel().addNode(diagramInstance);
         } else {
           diagramObject.options.dbInstance.node = result;

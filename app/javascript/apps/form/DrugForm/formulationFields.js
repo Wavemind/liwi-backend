@@ -117,7 +117,7 @@ export default class FormulationFields extends React.Component {
           <Form.Group as={Col} controlId={`${index}-validationByAge`}>
             <Form.Label>{I18n.t("activerecord.attributes.formulation.by_age")}</Form.Label>
             <Form.Check
-              type="checkbox"
+              checked={formulation.by_age}
               name={`formulations_attributes.${index}.by_age`}
               value={formulation.by_age}
               onChange={handleChange}

@@ -28,8 +28,8 @@ class QuestionsController < ApplicationController
           render json: {url: algorithm_url(@algorithm, panel: 'questions')}
         else
           instanceable = Object.const_get(params[:instanceable_type].camelize.singularize).find(params[:instanceable_id])
-          instanceable.components.create!(node: question, final_diagnostic_id: params[:final_diagnostic_id])
-          render json: question.as_json(include: :answers, methods: [:node_type, :category_name, :type])
+          instance = instanceable.components.create!(node: question, final_diagnostic_id: params[:final_diagnostic_id])
+          render json: instance.generate_json
         end
       else
         render json: question.errors.full_messages, status: 422

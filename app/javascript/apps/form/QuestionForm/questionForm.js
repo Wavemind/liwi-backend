@@ -268,11 +268,11 @@ export default class FinalDiagnosticForm extends React.Component {
                   : null}
 
                 <Form.Group controlId="validationIsMandatory">
-                  <Form.Label>{I18n.t("activerecord.attributes.question.is_mandatory")}</Form.Label>
                   <Form.Check
-                    type="checkbox"
                     name="is_mandatory"
+                    label={I18n.t("activerecord.attributes.question.is_mandatory")}
                     value={values.is_mandatory}
+                    checked={values.is_mandatory}
                     onChange={handleChange}
                     isInvalid={touched.is_mandatory && !!errors.is_mandatory}
                   />
@@ -330,11 +330,11 @@ export default class FinalDiagnosticForm extends React.Component {
 
                 {values.type === "Questions::AssessmentTest" ?
                   <Form.Group controlId="validationUnavailable">
-                    <Form.Label>{I18n.t("activerecord.attributes.question.unavailable")}</Form.Label>
                     <Form.Check
-                      type="checkbox"
                       name="unavailable"
+                      label={I18n.t("activerecord.attributes.question.unavailable")}
                       value={values.unavailable}
+                      checked={values.unavailable}
                       onChange={handleChange}
                       isInvalid={touched.unavailable && !!errors.unavailable}
                     />
