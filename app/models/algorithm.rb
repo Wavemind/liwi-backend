@@ -62,5 +62,7 @@ class Algorithm < ApplicationRecord
        {label_en: '-2 z-score', value: '-3, -2', operator: Answer.operators[:between]},
        {label_en: 'more than -2 z-score', value: '-2', operator: Answer.operators[:more_or_equal]},
      ])
+
+    cc_general = questions.create!(label_en: 'General', type: 'Questions::ComplaintCategory', stage: Question.stages[:triage], is_mandatory: true, answer_type_id: 1, is_default: true)
   end
 end

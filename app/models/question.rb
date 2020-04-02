@@ -18,6 +18,8 @@ class Question < Node
 
   belongs_to :reference_table_x, class_name: 'Question', optional: true
   belongs_to :reference_table_y, class_name: 'Question', optional: true
+  has_many :node_complaint_categories, foreign_key: 'node_id' # Complaint category linked to the question
+  has_many :complaint_categories, through: :node_complaint_categories
 
   before_validation :validate_formula, if: Proc.new { self.formula.present? }
   validates_presence_of :stage, unless: Proc.new { self.is_a? Questions::BackgroundCalculation }

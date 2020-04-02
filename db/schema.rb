@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_04_125139) do
+ActiveRecord::Schema.define(version: 2020_03_27_124218) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -235,6 +235,13 @@ ActiveRecord::Schema.define(version: 2020_03_04_125139) do
     t.datetime "updated_at", null: false
     t.index ["patient_id"], name: "index_medical_cases_on_patient_id"
     t.index ["version_id"], name: "index_medical_cases_on_version_id"
+  end
+
+  create_table "node_complaint_categories", force: :cascade do |t|
+    t.bigint "node_id"
+    t.bigint "complaint_category_id"
+    t.index ["complaint_category_id"], name: "index_node_complaint_categories_on_complaint_category_id"
+    t.index ["node_id"], name: "index_node_complaint_categories_on_node_id"
   end
 
   create_table "nodes", force: :cascade do |t|

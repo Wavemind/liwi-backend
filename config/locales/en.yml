@@ -30,6 +30,7 @@ en:
         type: "Category"
         description_translations: "Description"
         label_translations: "Label"
+        node: "Complaint category"
       question:
         answer_type: "Answer type"
         formula: "Formula"

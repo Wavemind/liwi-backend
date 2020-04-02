@@ -324,6 +324,7 @@ class VersionsService
       hash[question.id]['qs'] = get_node_questions_sequences(question, [])
       hash[question.id]['dd'] = get_node_diagnostics(question, [])
       hash[question.id]['cc'] = get_node_complaint_categories(question, [])
+      hash[question.id]['conditioned_by_cc'] = question.complaint_categories.map(&:id)
       hash[question.id]['referenced_in'] = []
       hash[question.id]['counter'] = 0
       hash[question.id]['value'] = nil
@@ -331,7 +332,13 @@ class VersionsService
       hash[question.id]['reference_table_y_id'] = question.reference_table_y_id
       hash[question.id]['reference_table_male'] = question.reference_table_male
       hash[question.id]['reference_table_female'] = question.reference_table_female
-      hash[question.id]['answer'] = nil
+      if question.is_a?(Questions::ComplaintCategory) && question.is_default
+        hash[question.id]['cc_general'] = true
+        hash[question.id]['answer'] = question.answers.first.id
+      else
+        hash[question.id]['cc_general'] = true
+        hash[question.id]['answer'] = nil
+      end
       hash[question.id]['answers'] = {}
 
       question.answers.each do |answer|
@@ -480,6 +487,7 @@ class VersionsService
       hash[questions_sequence.id]['answers'] = push_questions_sequence_answers(questions_sequence)
       hash[questions_sequence.id]['qs'] = get_node_questions_sequences(questions_sequence, [])
       hash[questions_sequence.id]['dd'] = get_node_diagnostics(questions_sequence, [])
+      hash[questions_sequence.id]['conditioned_by_cc'] = questions_sequence.complaint_categories.map(&:id)
       hash[questions_sequence.id]['answer'] = nil
 
       # Loop in each instance for defined condition
