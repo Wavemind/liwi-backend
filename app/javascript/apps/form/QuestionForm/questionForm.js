@@ -35,7 +35,6 @@ export default class FinalDiagnosticForm extends React.Component {
   handleOnSubmit = async (values, actions) => {
     const { setFormData, save, nextStep } = this.props;
     setFormData(values);
-    console.log(values.answer_type_id)
     if (NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(values.answer_type_id) || NO_ANSWERS_ATTACHED_TYPE.includes(values.type)) {
       save();
     } else {
@@ -136,17 +135,17 @@ export default class FinalDiagnosticForm extends React.Component {
 
     // Set answer type
     if (["Questions::ComplaintCategory", "Questions::Vaccine"].includes(category)) {
-      fieldsToSet.push(["answer_type_id", "1"]);
+      fieldsToSet.push(["answer_type_id", 1]);
     } else if (["Questions::BasicMeasurement", "Questions::VitalSignAnthropometric"].includes(category)) {
-      fieldsToSet.push(["answer_type_id", "4"]);
+      fieldsToSet.push(["answer_type_id", 4]);
     } else if (category === "Questions::BackgroundCalculation") {
-      fieldsToSet.push(["answer_type_id", "5"]);
+      fieldsToSet.push(["answer_type_id", 5]);
     }
     return fieldsToSet;
   };
 
   render() {
-    const { formData, setFormData, nextStep, save } = this.props;
+    const { formData } = this.props;
 
     const {
       answerTypes,
@@ -231,7 +230,7 @@ export default class FinalDiagnosticForm extends React.Component {
                     as="select"
                     name="answer_type_id"
                     value={values.answer_type_id}
-                    onChange={handleChange}
+                    onChange={e => {setFieldValue('answer_type_id', e.target.value !== "" ? parseInt(e.target.value) : e.target.value); }}
                     disabled={CATEGORIES_DISABLING_ANSWER_TYPE.includes(values.type)}
                     isInvalid={touched.answer_type_id && !!errors.answer_type_id}
                   >
@@ -345,7 +344,7 @@ export default class FinalDiagnosticForm extends React.Component {
                   </Form.Group>
                   : null}
 
-                {values.answer_type_id === "5" ?
+                {values.answer_type_id === 5 ?
                   <Form.Group controlId="validationFormula">
                     <Form.Label>{I18n.t("activerecord.attributes.question.formula")}</Form.Label>
                     <Form.Control

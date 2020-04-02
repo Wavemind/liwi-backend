@@ -506,22 +506,16 @@ export default class Http {
   // @params [Hash] body of the question with its answers
   // @return [Object] body of request
   // Update a question and its answers
-  updateQuestion = async (questionBody) => {
-    let response;
-    const url = `${this.url}/algorithms/${this.algorithm}/questions/${questionBody.question.id}/update_from_diagram`;
-    questionBody["instanceable_id"] = this.instanceableId;
-    questionBody["instanceable_type"] = this.instanceableType;
-
-    const header = await this.setHeaders("PUT", questionBody);
-    const request = await fetch(url, header).catch(error => console.log(error));
-
-    // Display error or parse json
-    if (request.ok) {
-      response = await request.json();
-    } else {
-      response = request;
-    }
-    return await response;
+  updateQuestion = async (question, from) => {
+    const url = `${this.url}/algorithms/${this.algorithm}/questions/${question.id}`;
+    const body = {
+      question,
+      diagnostic_id: this.instanceableId,
+      final_diagnostic_id: this.finalDiagnostic,
+      from
+    };
+    const header = await this.setHeaders("PUT", body);
+    return await fetch(url, header).catch(error => console.log(error));
   };
 
   /**

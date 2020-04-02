@@ -2,7 +2,7 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_algorithm, only: [:new, :create, :edit, :update, :answers, :destroy, :validate]
   before_action :set_breadcrumb, only: [:new, :edit]
-  before_action :set_question, only: [:edit, :update, :answers, :category_reference, :update_translations, :destroy, :update_from_diagram]
+  before_action :set_question, only: [:edit, :update, :category_reference, :update_translations, :destroy]
 
   def new
     add_breadcrumb t('breadcrumbs.new')
@@ -39,17 +39,18 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if @question.update(question_params)
-      if %w(Boolean Present Positive).include?(@question.answer_type.value) || @question.is_a?(Questions::BasicMeasurement) || @question.is_a?(Questions::VitalSignAnthropometric)
-        redirect_to algorithm_url(@algorithm, panel: 'questions'), notice: t('flash_message.success_updated')
-      else
-        render 'answers/edit'
-      end
-    else
-      set_breadcrumb
-      add_breadcrumb t('breadcrumbs.edit')
+    ActiveRecord::Base.transaction(requires_new: true) do
+      if @question.update(question_params) && @question.validate_overlap
+        if params[:from] == 'rails'
+          render json: {url: algorithm_url(@algorithm, panel: 'questions')}
+        else
+          render json: @question.as_json(include: :answers, methods: [:node_type, :category_name, :type])
+        end
 
-      render :edit
+      else
+        render json: question.errors.full_messages, status: 422
+        raise ActiveRecord::Rollback, ''
+      end
     end
   end
 
@@ -66,30 +67,6 @@ class QuestionsController < ApplicationController
     end
   end
 
-  # PUT algorithm/:algorithm_id/version/:version_id/questions/:id/answers
-  # @params question [Question] object question contain multiple answers
-  # @return redirect to algorithms#index with flash message
-  # Create answers related to the current question
-  def answers
-    ActiveRecord::Base.transaction(requires_new: true) do
-      @question.answers.reload
-
-      if @question.update(question_params) && @question.validate_overlap
-        redirect_to algorithm_url(@algorithm, panel: 'questions'), notice: t('flash_message.success_updated')
-      else
-        flash[:alert] = @question.errors[:answers] if @question.errors[:answers].any?
-
-        # Code to reassign corrects id to failing answers that failed after a validation fail. On wait for improvements
-        question_params[:answers_attributes].each do |key, value|
-          @question.answers[key.to_i].id = value[:id]
-        end
-
-        render 'answers/new'
-        raise ActiveRecord::Rollback, ''
-      end
-    end
-  end
-
   # GET
   # @return Hash
   # Return attributes of question that are listed
@@ -97,33 +74,11 @@ class QuestionsController < ApplicationController
     render json: Question.list_attributes(params[:diagram_type])
   end
 
-  # POST
-  # @return  node
-  # Create a question node from diagram and instance it
-  def create_from_diagram
-
-  end
-
   # GET algorithm/:algorithm_id/version/:version_id/questions/reference_prefix/:type
   # @params Question child
   # @return json with the reference prefix of the child
   def reference_prefix
     render json: Question.reference_prefix_class(params[:type])
-  end
-
-  # PUT
-  # @return questions_sequence node
-  # Update a questions sequence node from diagram
-  def update_from_diagram
-    ActiveRecord::Base.transaction(requires_new: true) do
-      if @question.update(question_params) && @question.validate_overlap
-        render json: {status: 'success', messages: [t('flash_message.success_updated')], node: @question.as_json(include: :answers, methods: [:category_name, :node_type, :type])}
-      else
-        errors = (@question.answer_type.value == 'Boolean') ? @question.errors.messages : @question.answers.map(&:errors).map(&:messages)
-        render json: {status: 'danger', errors: errors, overlap_errors: @question.errors[:answers], ok: false}
-        raise ActiveRecord::Rollback, ''
-      end
-    end
   end
 
   # POST algorithm/:algorithm_id/questions/validate

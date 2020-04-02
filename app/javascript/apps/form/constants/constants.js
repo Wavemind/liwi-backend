@@ -40,7 +40,7 @@ export const NO_ANSWERS_ATTACHED_TYPE = [
 ];
 
 export const NO_ANSWERS_ATTACHED_ANSWER_TYPE = [
-  "1",
-  "7",
-  "8"
+  1,
+  7,
+  8
 ];

@@ -64,11 +64,10 @@ Rails.application.routes.draw do
         post 'validate'
       end
       member do
-        put 'answers'
         put 'update_translations'
       end
 
-      resources :answers, only: [:new, :update] do
+      resources :answers, only: [] do
         member do
           put 'update_translations'
         end

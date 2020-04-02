@@ -1,20 +1,6 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_answer, only: [:edit, :update, :update_translations]
-  before_action :set_question, only: [:new, :update]
-  before_action :set_algorithm, only: [:new, :update]
-
-  def new
-    @answer = Answer.new
-  end
-
-  def update
-    if @answer.update(answer_params)
-      redirect_to algorithm_url(@algorithm, panel: 'questions'), notice: t('flash_message.success_updated')
-    else
-      render :edit
-    end
-  end
+  before_action :set_answer, only: [:update_translations]
 
   def operators
     render json: Answer.operators.map { |k, v| [I18n.t("answers.operators.#{k}"), k] }
@@ -33,10 +19,6 @@ class AnswersController < ApplicationController
   end
 
   private
-
-  def set_question
-    @question = Question.find(params[:question_id])
-  end
 
   def set_answer
     @answer = Answer.find(params[:id])

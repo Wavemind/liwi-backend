@@ -41,7 +41,7 @@ export const questionSchema = yup.object().shape({
   snomed: yup.string(),
   formula: yup.string()
     .when("answer_type_id", {
-      is: (answer_type_id) => answer_type_id === "5",
+      is: (answer_type_id) => answer_type_id === 5,
       then: yup.string().required(I18n.t("errors.messages.required"))
     })
 });

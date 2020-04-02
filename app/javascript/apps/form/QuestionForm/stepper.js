@@ -61,7 +61,7 @@ export default class StepperQuestionForm extends React.Component {
     if (method === "create") {
       httpRequest = await http.createQuestion(question, from);
     } else {
-      // httpRequest = await http.updateFinalDiagnostic(values.id, values.label_translations, values.description_translations, from);
+      httpRequest = await http.updateQuestion(question, from);
     }
 
     let result = await httpRequest.json();
