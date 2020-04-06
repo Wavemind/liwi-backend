@@ -7,8 +7,6 @@ class QuestionsSequence < Node
   has_many :node_complaint_categories, foreign_key: 'node_id' # Complaint category linked to the QS
   has_many :complaint_categories, through: :node_complaint_categories
 
-  accepts_nested_attributes_for :complaint_categories, allow_destroy: false
-
   validates_presence_of :type
 
   scope :scored, ->() { where(type: 'QuestionsSequences::Scored') }

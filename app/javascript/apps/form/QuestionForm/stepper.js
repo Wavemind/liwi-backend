@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as _ from "lodash";
 
 import Http from "../../diagram/engine/http";
 import store from "../../diagram/engine/reducers/store";
@@ -7,6 +8,7 @@ import { createNode } from "../../diagram/helpers/nodeHelpers";
 import QuestionForm from "./questionForm";
 import AnswerForm from "./answerForm";
 import DisplayErrors from "../components/DisplayErrors";
+
 
 export default class StepperQuestionForm extends React.Component {
 
@@ -42,24 +44,25 @@ export default class StepperQuestionForm extends React.Component {
       formula: question?.formula || "",
       is_triage: question?.is_triage || false,
       is_identifiable: question?.is_identifiable || false,
+      complaint_categories_attributes: question?.complaint_categories || [],
       answers_attributes: question?.answers || []
     };
 
     if (method === "update") {
       body["id"] = question.id;
-      body['answers_attributes'] = [];
+      body["answers_attributes"] = [];
 
       // Generate hash cause of label_translation
       question.answers.map(answer => {
-        body['answers_attributes'].push({
+        body["answers_attributes"].push({
           id: answer.id,
           label_en: answer.label_translations.en,
           operator: answer.operator,
-          value: answer.value,
-        })
-      })
+          value: answer.value
+        });
+      });
     } else {
-      body["answers_attributes"] = []
+      body["answers_attributes"] = [];
     }
     return body;
   };
@@ -69,9 +72,13 @@ export default class StepperQuestionForm extends React.Component {
    */
   save = async () => {
     const { method, from, engine, diagramObject, addAvailableNode } = this.props;
-    const {question} = this.state;
+    const { question } = this.state;
     let http = new Http();
     let httpRequest = {};
+    let complaint_category_ids = [];
+    question.complaint_categories_attributes.map(cc => (complaint_category_ids.push(cc.id)));
+    _.set(question, "complaint_category_ids", complaint_category_ids);
+    _.unset(question, "complaint_categories_attributes");
 
     if (method === "create") {
       httpRequest = await http.createQuestion(question, from);
@@ -165,7 +172,7 @@ export default class StepperQuestionForm extends React.Component {
           </>
         );
       default:
-        return <h1>{I18n.t('something_went_wrong')}</h1>;
+        return <h1>{I18n.t("something_went_wrong")}</h1>;
     }
   }
 }

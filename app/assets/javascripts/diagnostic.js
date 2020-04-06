@@ -19,13 +19,3 @@ jQuery(document).ready(function () {
     }]
   });
 });
-
-function editInstance() {
-  $.ajax({
-    url: window.location.origin + "/diagnostics/" + this.dataset.diagnostic + "/instances/by_reference",
-    data: {reference: this.dataset.reference},
-    complete: function (response) {
-      window.location.href = response.responseText
-    }
-  });
-}

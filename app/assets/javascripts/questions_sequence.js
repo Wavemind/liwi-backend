@@ -40,22 +40,4 @@ jQuery(document).ready(function () {
       'orderable': false,
     }]
   });
-
-  // Update the prepend every time the user pick another category
-  $("#questions_sequence_type").change(function() {
-    var prepend = $(this).closest("form").find(".input-group-text");
-    var type = $("#questions_sequence_type option:selected").val();
-
-    if (type.trim()){
-      $.ajax({
-        url: window.location.origin + "/questions_sequences/reference_prefix",
-        data: {type: type},
-        complete: function(response){
-          prepend.text(response.responseText);
-        }
-      });
-    } else {
-      prepend.text("_");
-    }
-  });
 });

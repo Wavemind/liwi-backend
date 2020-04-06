@@ -6,6 +6,6 @@
 
 <div class="row justify-content-center mt-5">
   <div class="col-md-8">
-    <%= react_component('form/QuestionForm/stepper', { question: @question.as_json(include: [:answers], methods: [:type]), method: 'update', from: 'rails' }) %>
+    <%= react_component('form/QuestionForm/stepper', { question: @question.as_json(include: [:answers, :complaint_categories], methods: [:type]), method: 'update', from: 'rails' }) %>
   </div>
 </div>

@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:new, :create, :edit, :update, :answers, :destroy, :validate]
+  before_action :set_algorithm, only: [:new, :create, :edit, :update, :answers, :destroy, :validate, :lists]
   before_action :set_breadcrumb, only: [:new, :edit]
   before_action :set_question, only: [:edit, :update, :category_reference, :update_translations, :destroy]
 
@@ -47,7 +47,7 @@ class QuestionsController < ApplicationController
         if params[:from] == 'rails'
           render json: {url: algorithm_url(@algorithm, panel: 'questions')}
         else
-          render json: @question.as_json(include: :answers, methods: [:node_type, :category_name, :type])
+          render json: @question.as_json(include: [:answers, :complaint_categories], methods: [:node_type, :category_name, :type])
         end
 
       else
@@ -74,7 +74,7 @@ class QuestionsController < ApplicationController
   # @return Hash
   # Return attributes of question that are listed
   def lists
-    render json: Question.list_attributes(params[:diagram_type])
+    render json: Question.list_attributes(params[:diagram_type], @algorithm)
   end
 
   # GET algorithm/:algorithm_id/version/:version_id/questions/reference_prefix/:type
@@ -139,6 +139,7 @@ class QuestionsController < ApplicationController
       :snomed_label,
       :is_triage,
       :is_identifiable,
+      complaint_category_ids: [],
       answers_attributes: [
         :id,
         :reference,

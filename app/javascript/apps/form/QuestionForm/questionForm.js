@@ -1,7 +1,7 @@
 import * as React from "react";
 import I18n from "i18n-js";
 import FadeIn from "react-fade-in";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import Autocomplete, { createFilterOptions } from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
 import { Form, Button } from "react-bootstrap";
 import { Formik } from "formik";
@@ -11,8 +11,12 @@ import Http from "../../diagram/engine/http";
 import Loader from "../QuestionsSequenceForm";
 import { questionSchema } from "../constants/schema";
 import { CATEGORIES_DISPLAYING_SYSTEM, CATEGORIES_DISABLING_ANSWER_TYPE, NO_ANSWERS_ATTACHED_TYPE, NO_ANSWERS_ATTACHED_ANSWER_TYPE } from "../constants/constants";
+import Chip from "@material-ui/core/Chip";
 
 const humanizeString = require("humanize-string");
+const filterOptions = createFilterOptions({
+  stringify: option => option.label_translations.en
+});
 
 export default class FinalDiagnosticForm extends React.Component {
   constructor() {
@@ -58,6 +62,7 @@ export default class FinalDiagnosticForm extends React.Component {
         categories: result.categories,
         stages: result.stages,
         systems: result.systems,
+        complaintCategories: result.complaint_categories,
         isLoading: false
       });
     }
@@ -154,7 +159,8 @@ export default class FinalDiagnosticForm extends React.Component {
       systems,
       snomedResults,
       isLoading,
-      snomedError
+      snomedError,
+      complaintCategories
     } = this.state;
 
     return (
@@ -163,9 +169,7 @@ export default class FinalDiagnosticForm extends React.Component {
           <Formik
             validationSchema={questionSchema}
             initialValues={formData}
-            onSubmit={(values, actions) => {
-              this.handleOnSubmit(values, actions);
-            }}
+            onSubmit={(values, actions) => (this.handleOnSubmit(values, actions))}
           >
             {({
                 handleSubmit,
@@ -310,6 +314,34 @@ export default class FinalDiagnosticForm extends React.Component {
                         {...params}
                         variant="outlined"
                         onChange={this.searchSnomed} fullWidth/>
+                    )}
+                  />
+                </Form.Group>
+
+                <Form.Group controlId="validationComplaintCategories">
+                  <Form.Label>{I18n.t("activerecord.attributes.node.node")}</Form.Label>
+                  <Autocomplete
+                    multiple
+                    autoComplete
+                    includeInputInList
+                    disableOpenOnFocus
+                    freeSolo
+                    name="complaint_categories_attributes"
+                    options={complaintCategories.map(option => option)}
+                    defaultValue={formData?.complaint_categories_attributes}
+                    filterOptions={filterOptions}
+                    onChange={(_, value) => setFieldValue("complaint_categories_attributes", value)}
+                    renderOption={(option) => option.label_translations.en}
+                    renderTags={(value, getTagProps) => (
+                      value.map((option, index) => (
+                        <Chip variant="outlined" label={option.label_translations.en} {...getTagProps({ index })} />
+                      ))
+                    )}
+                    renderInput={params => (
+                      <TextField
+                        {...params}
+                        variant="outlined"
+                        fullWidth/>
                     )}
                   />
                 </Form.Group>
