@@ -24,7 +24,7 @@
     "prop-types": "^15.7.2",
     "rails-erb-loader": "^5.5.2",
     "react": "^16.12.0",
-    "react-bootstrap": "^1.0.0-beta.14",
+    "react-bootstrap": "1.0.0-beta.13",
     "react-dom": "^16.8.6",
     "react-fade-in": "^0.1.8",
     "react-hot-loader": "^4.11.1",
