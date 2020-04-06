@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as _ from "lodash";
 import I18n from "i18n-js";
 import FadeIn from "react-fade-in";
 import { Form, Button } from "react-bootstrap";
@@ -12,9 +13,14 @@ import { questionSequencesSchema } from "../constants/schema";
 import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
 import Autocomplete from "@material-ui/lab/Autocomplete";
+import { createFilterOptions } from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
 import Chip from "@material-ui/core/Chip";
 
+
+const filterOptions = createFilterOptions({
+  stringify: option => option.label_translations.en
+});
 
 export default class QuestionsSequenceForm extends React.Component {
 
@@ -39,7 +45,7 @@ export default class QuestionsSequenceForm extends React.Component {
 
     httpRequest = await http.fetchQuestionsSequenceLists();
     let result = await httpRequest.json();
-console.log(result)
+
     if (httpRequest.status === 200) {
       this.setState({
         categories: result.categories,
@@ -50,18 +56,6 @@ console.log(result)
   };
 
   /**
-   * Save id and value of snomed selected
-   * @param [Object] event
-   */
-  complaintCategoryChange = async (event, value) => {
-    this.setState({
-      snomedId: value.id,
-      snomedLabel: value.fsn.term
-    });
-  };
-
-
-  /**
    * Create or update value in database + update diagram if we're editting from diagram
    * @param [Object] values
    * @param [Object] actions
@@ -70,11 +64,13 @@ console.log(result)
     const { method, from, engine, diagramObject, addAvailableNode } = this.props;
     let http = new Http();
     let httpRequest = {};
+    let complaint_category_ids = [];
+    values.complaint_categories_attributes.map(cc => (complaint_category_ids.push(cc.id)));
 
     if (method === "create") {
-      httpRequest = await http.createQuestionsSequence(values.label_translations, values.description_translations, values.type, values.min_score, from);
+      httpRequest = await http.createQuestionsSequence(values.label_translations, values.description_translations, values.type, values.min_score, complaint_category_ids, from);
     } else {
-      httpRequest = await http.updateQuestionsSequence(values.id, values.label_translations, values.description_translations, values.type, values.min_score, from);
+      httpRequest = await http.updateQuestionsSequence(values.id, values.label_translations, values.description_translations, values.type, values.min_score, complaint_category_ids, from);
     }
 
     let result = await httpRequest.json();
@@ -115,7 +111,8 @@ console.log(result)
               type: questionsSequence?.type || "",
               label_translations: questionsSequence?.label_translations?.en || "",
               description_translations: questionsSequence?.description_translations?.en || "",
-              min_score: questionsSequence?.min_score || ""
+              min_score: questionsSequence?.min_score || "",
+              complaint_categories_attributes: questionsSequence?.complaint_categories || []
             }}
             onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
           >
@@ -126,11 +123,11 @@ console.log(result)
                 values,
                 touched,
                 errors,
-                status
+                status,
+                setFieldValue
               }) => (
               <Form noValidate onSubmit={handleSubmit}>
                 {status ? <DisplayErrors errors={status}/> : null}
-                {console.log(values)}
                 {method === "create" ?
                   <Form.Group controlId="validationType">
                     <Form.Label>{I18n.t("activerecord.attributes.node.type")}</Form.Label>
@@ -169,23 +166,26 @@ console.log(result)
                   <Form.Label>{I18n.t("activerecord.attributes.node.node")}</Form.Label>
                   <Autocomplete
                     multiple
-                    name="node_id"
-                    options={complaintCategories.map(option => option.label_translations.en)}
                     autoComplete
                     includeInputInList
-                    freeSolo
                     disableOpenOnFocus
-                    onChange={handleChange}
-                    renderTags={(value, getTagProps) =>
+                    freeSolo
+                    name="complaint_categories_attributes"
+                    options={complaintCategories.map(option => option)}
+                    defaultValue={questionsSequence?.complaint_categories}
+                    filterOptions={filterOptions}
+                    onChange={(_, value) => setFieldValue("complaint_categories_attributes", value)}
+                    renderOption={(option) => option.label_translations.en}
+                    renderTags={(value, getTagProps) => (
                       value.map((option, index) => (
-                        <Chip variant="outlined" label={option} {...getTagProps({ index })} />
+                        <Chip variant="outlined" label={option.label_translations.en} {...getTagProps({ index })} />
                       ))
-                    }
+                    )}
                     renderInput={params => (
                       <TextField
                         {...params}
                         variant="outlined"
-                        onChange={this.searchComplaintCategory} fullWidth/>
+                        fullWidth/>
                     )}
                   />
                 </Form.Group>

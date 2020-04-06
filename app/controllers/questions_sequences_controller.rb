@@ -27,7 +27,7 @@ class QuestionsSequencesController < ApplicationController
     if @questions_sequence.save
       @questions_sequence.components.create!(node: @questions_sequence)
       if params[:from] == 'rails'
-        render json: { url: diagram_questions_sequence_url(@questions_sequence), questionsSequence: @questions_sequence }
+        render json: { url: diagram_questions_sequence_url(@questions_sequence) }
       else
         instanceable = Object.const_get(params[:instanceable_type].camelize.singularize).find(params[:instanceable_id])
         instanceable.components.create!(node: @questions_sequence, final_diagnostic_id: params[:final_diagnostic_id])
@@ -41,9 +41,9 @@ class QuestionsSequencesController < ApplicationController
   def update
     if @questions_sequence.update(questions_sequence_params)
       if params[:from] == 'rails'
-        render json: { url: algorithm_url(@algorithm, panel: 'questions_sequences'), questionsSequence: @questions_sequence }
+        render json: { url: algorithm_url(@algorithm, panel: 'questions_sequences') }
       else
-        render json: @questions_sequence.as_json(methods: [:node_type])
+        render json: @questions_sequence.as_json(include: [:complaint_categories], methods: [:node_type, :type, :category_name])
       end
     else
       render json: @questions_sequence.errors.full_messages, status: 422
@@ -131,6 +131,7 @@ class QuestionsSequencesController < ApplicationController
       :algorithm_id,
       :min_score,
       :node_id,
+      complaint_category_ids: []
     )
   end
 

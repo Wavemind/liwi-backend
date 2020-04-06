@@ -197,17 +197,19 @@ export default class Http {
    * @params [String] description
    * @params [String] type
    * @params [Number] min_score
+   * @params [Object] complaint_categories_attributes
    * @params [String] from
    * @return [Object] body of request
    */
-  createQuestionsSequence = async (label, description, type, min_score, from) => {
+  createQuestionsSequence = async (label, description, type, min_score, complaint_category_ids, from) => {
     const url = `${this.url}/algorithms/${this.algorithm}/questions_sequences`;
     const body = {
       questions_sequence: {
         label_en: label,
         description_en: description,
         type,
-        min_score
+        min_score,
+        complaint_category_ids
       },
       instanceable_id: this.instanceableId,
       instanceable_type: this.instanceableType,
@@ -533,7 +535,7 @@ export default class Http {
    * @params [String] from
    * @return [Object] body of request
    */
-  updateQuestionsSequence = async (id, label, description, type, min_score, from) => {
+  updateQuestionsSequence = async (id, label, description, type, min_score, complaint_category_ids, from) => {
     const url = `${this.url}/algorithms/${this.algorithm}/questions_sequences/${id}`;
     const body = {
       questions_sequence: {
@@ -541,7 +543,8 @@ export default class Http {
         label_en: label,
         description_en: description,
         type,
-        min_score
+        min_score,
+        complaint_category_ids
       },
       from
     };
