@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as _ from "lodash";
 import I18n from "i18n-js";
 import FadeIn from "react-fade-in";
 import { Form, Button } from "react-bootstrap";
@@ -12,8 +13,14 @@ import { questionSequencesSchema } from "../constants/schema";
 import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
 import Autocomplete from "@material-ui/lab/Autocomplete";
+import { createFilterOptions } from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
+import Chip from "@material-ui/core/Chip";
 
+
+const filterOptions = createFilterOptions({
+  stringify: option => option.label_translations.en
+});
 
 export default class QuestionsSequenceForm extends React.Component {
 
@@ -23,7 +30,6 @@ export default class QuestionsSequenceForm extends React.Component {
     this.state = {
       categories: [],
       complaintCategories: [],
-      complaintCategoryErrors: null,
       isLoading: true
     };
 
@@ -37,38 +43,17 @@ export default class QuestionsSequenceForm extends React.Component {
     let http = new Http();
     let httpRequest = {};
 
-    httpRequest = await http.fetchQuestionsSequenceCategories();
+    httpRequest = await http.fetchQuestionsSequenceLists();
     let result = await httpRequest.json();
 
     if (httpRequest.status === 200) {
       this.setState({
-        categories: result,
+        categories: result.categories,
+        complaintCategories: result.complaint_categories,
         isLoading: false
       });
     }
   };
-
-  /**
-   * Search in complaint category to get results
-   * @param [Object] event
-   */
-  searchComplaintCategory = async (event) => {
-    const http = new Http();
-    let httpRequest = {};
-
-    httpRequest = await http.searchComplaintCategories(event.target.value);
-    if (httpRequest?.status === 200) {
-      let result = await httpRequest.json();
-
-      this.setState({
-        complaintCategories: result.items,
-        complaintCategoryErrors: null
-      });
-    } else {
-      this.setState({ complaintCategoryErrors: { message: I18n.t("errors.fetch_failed") } });
-    }
-  };
-
 
   /**
    * Create or update value in database + update diagram if we're editting from diagram
@@ -79,11 +64,13 @@ export default class QuestionsSequenceForm extends React.Component {
     const { method, from, engine, diagramObject, addAvailableNode } = this.props;
     let http = new Http();
     let httpRequest = {};
+    let complaint_category_ids = [];
+    values.complaint_categories_attributes.map(cc => (complaint_category_ids.push(cc.id)));
 
     if (method === "create") {
-      httpRequest = await http.createQuestionsSequence(values.label_translations, values.description_translations, values.type, values.min_score, from);
+      httpRequest = await http.createQuestionsSequence(values.label_translations, values.description_translations, values.type, values.min_score, complaint_category_ids, from);
     } else {
-      httpRequest = await http.updateQuestionsSequence(values.id, values.label_translations, values.description_translations, values.type, values.min_score, from);
+      httpRequest = await http.updateQuestionsSequence(values.id, values.label_translations, values.description_translations, values.type, values.min_score, complaint_category_ids, from);
     }
 
     let result = await httpRequest.json();
@@ -112,7 +99,7 @@ export default class QuestionsSequenceForm extends React.Component {
 
   render() {
     const { questionsSequence, method } = this.props;
-    const { categories, isLoading, complaintCategories, complaintCategoryErrors } = this.state;
+    const { categories, isLoading, complaintCategories } = this.state;
 
     return (
       isLoading ? <Loader/> :
@@ -124,7 +111,8 @@ export default class QuestionsSequenceForm extends React.Component {
               type: questionsSequence?.type || "",
               label_translations: questionsSequence?.label_translations?.en || "",
               description_translations: questionsSequence?.description_translations?.en || "",
-              min_score: questionsSequence?.min_score || ""
+              min_score: questionsSequence?.min_score || "",
+              complaint_categories_attributes: questionsSequence?.complaint_categories || []
             }}
             onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
           >
@@ -135,12 +123,11 @@ export default class QuestionsSequenceForm extends React.Component {
                 values,
                 touched,
                 errors,
-                status
+                status,
+                setFieldValue
               }) => (
               <Form noValidate onSubmit={handleSubmit}>
                 {status ? <DisplayErrors errors={status}/> : null}
-                {complaintCategoryErrors ? <DisplayErrors errors={complaintCategoryErrors}/> : null}
-
                 {method === "create" ?
                   <Form.Group controlId="validationType">
                     <Form.Label>{I18n.t("activerecord.attributes.node.type")}</Form.Label>
@@ -176,22 +163,29 @@ export default class QuestionsSequenceForm extends React.Component {
                 </Form.Group>
 
                 <Form.Group controlId="validationComplaintCategories">
-                  <Form.Label>{I18n.t("activerecord.attributes.node.node_id")}</Form.Label>
+                  <Form.Label>{I18n.t("activerecord.attributes.node.node")}</Form.Label>
                   <Autocomplete
                     multiple
-                    name="node_id"
-                    options={complaintCategories}
-                    getOptionLabel={option => option.fsn.term}
                     autoComplete
                     includeInputInList
-                    freeSolo
                     disableOpenOnFocus
-                    onChange={this.complaintCategoryChange}
+                    freeSolo
+                    name="complaint_categories_attributes"
+                    options={complaintCategories.map(option => option)}
+                    defaultValue={questionsSequence?.complaint_categories}
+                    filterOptions={filterOptions}
+                    onChange={(_, value) => setFieldValue("complaint_categories_attributes", value)}
+                    renderOption={(option) => option.label_translations.en}
+                    renderTags={(value, getTagProps) => (
+                      value.map((option, index) => (
+                        <Chip variant="outlined" label={option.label_translations.en} {...getTagProps({ index })} />
+                      ))
+                    )}
                     renderInput={params => (
                       <TextField
                         {...params}
-                        variant="filled"
-                        onChange={this.searchComplaintCategory} fullWidth/>
+                        variant="outlined"
+                        fullWidth/>
                     )}
                   />
                 </Form.Group>

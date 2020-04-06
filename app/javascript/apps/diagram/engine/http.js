@@ -197,17 +197,19 @@ export default class Http {
    * @params [String] description
    * @params [String] type
    * @params [Number] min_score
+   * @params [Object] complaint_categories_attributes
    * @params [String] from
    * @return [Object] body of request
    */
-  createQuestionsSequence = async (label, description, type, min_score, from) => {
+  createQuestionsSequence = async (label, description, type, min_score, complaint_category_ids, from) => {
     const url = `${this.url}/algorithms/${this.algorithm}/questions_sequences`;
     const body = {
       questions_sequence: {
         label_en: label,
         description_en: description,
         type,
-        min_score
+        min_score,
+        complaint_category_ids
       },
       instanceable_id: this.instanceableId,
       instanceable_type: this.instanceableType,
@@ -239,11 +241,11 @@ export default class Http {
   };
 
   /**
-   * Fetch questions sequences categories
+   * Fetch questions sequences categories + complaint categories
    * @return [Object] body of request
    */
-  fetchQuestionsSequenceCategories = async () => {
-    const url = `${this.url}/questions_sequences/categories`;
+  fetchQuestionsSequenceLists = async () => {
+    const url = `${this.url}/algorithms/${this.algorithm}/questions_sequences/lists`;
     const header = await this.setHeaders("GET", null);
     return await fetch(url, header).catch(error => console.log(error));
   };
@@ -254,12 +256,6 @@ export default class Http {
    */
   fetchQuestionsLists = async () => {
     const url = `${this.url}/questions/lists?diagram_type=${this.diagramType}`;
-    const header = await this.setHeaders("GET", null);
-    return await fetch(url, header).catch(error => console.log(error));
-  };
-
-  searchComplaintCategories = async (term) => {
-    const url = `${this.url}/algorithms/${this.algorithm}/search_complaint_category?term=${term}`;
     const header = await this.setHeaders("GET", null);
     return await fetch(url, header).catch(error => console.log(error));
   };
@@ -539,7 +535,7 @@ export default class Http {
    * @params [String] from
    * @return [Object] body of request
    */
-  updateQuestionsSequence = async (id, label, description, type, min_score, from) => {
+  updateQuestionsSequence = async (id, label, description, type, min_score, complaint_category_ids, from) => {
     const url = `${this.url}/algorithms/${this.algorithm}/questions_sequences/${id}`;
     const body = {
       questions_sequence: {
@@ -547,7 +543,8 @@ export default class Http {
         label_en: label,
         description_en: description,
         type,
-        min_score
+        min_score,
+        complaint_category_ids
       },
       from
     };

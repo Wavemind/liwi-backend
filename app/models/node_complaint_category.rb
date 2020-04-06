@@ -1,7 +1,8 @@
-# health cares for a final diagnostic
+# TODO
 class NodeComplaintCategory < ApplicationRecord
 
-  belongs_to :node
-  belongs_to :complaint_categories, class_name: 'Node', foreign_key: 'complaint_category_id'
+  # TODO: MANU CHECK
+  belongs_to :node, optional: true
+  belongs_to :complaint_category, class_name: 'Node', foreign_key: 'complaint_category_id'
 
 end

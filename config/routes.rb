@@ -21,7 +21,6 @@ Rails.application.routes.draw do
       put 'archive', to: 'algorithms#archive', as: 'archive'
       put 'unarchive', to: 'algorithms#unarchive', as: 'unarchive'
       get 'questions', to: 'algorithms#questions', as: 'question'
-      get 'search_complaint_category', to: 'algorithms#search_complaint_category', as: 'search_complaint_category'
       get 'drugs', to: 'algorithms#drugs', as: 'drug'
       get 'managements', to: 'algorithms#managements', as: 'management'
       get 'questions_sequences', to: 'algorithms#questions_sequences', as: 'questions_sequence'
@@ -91,6 +90,9 @@ Rails.application.routes.draw do
     end
 
     resources :questions_sequences, only: [:index, :new, :create, :edit, :update, :destroy] do
+      collection do
+        get 'lists'
+      end
       member do
         put 'update_translations'
       end
@@ -112,7 +114,6 @@ Rails.application.routes.draw do
 
     collection do
       get 'reference_prefix'
-      get 'categories'
     end
 
     member do
