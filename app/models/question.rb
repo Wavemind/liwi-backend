@@ -23,7 +23,7 @@ class Question < Node
 
   before_validation :validate_formula, if: Proc.new { self.formula.present? }
   validates_presence_of :stage, unless: Proc.new { self.is_a? Questions::BackgroundCalculation }
-  validates_presence_of :formula, if: Proc.new { self.answer_type.display == 'Formula'}
+  validates_presence_of :formula, if: Proc.new { self.answer_type.display == 'Formula' }
   validates_presence_of :type
 
   # Return questions which has not triage stage
@@ -36,22 +36,22 @@ class Question < Node
   # Preload the children of class Question
   def self.descendants
     [
-        Questions::AssessmentTest,
-        Questions::BackgroundCalculation,
-        Questions::BasicMeasurement,
-        Questions::ChronicCondition,
-        Questions::ConsultationRelated,
-        Questions::ComplaintCategory,
-        Questions::Demographic,
-        Questions::Exposure,
-        Questions::ObservedPhysicalSign,
-        Questions::PhysicalExam,
-        Questions::Symptom,
-        Questions::TreatmentQuestion,
-        Questions::UniqueTriagePhysicalSign,
-        Questions::UniqueTriageQuestion,
-        Questions::Vaccine,
-        Questions::VitalSignAnthropometric,
+      Questions::AssessmentTest,
+      Questions::BackgroundCalculation,
+      Questions::BasicMeasurement,
+      Questions::ChronicCondition,
+      Questions::ConsultationRelated,
+      Questions::ComplaintCategory,
+      Questions::Demographic,
+      Questions::Exposure,
+      Questions::ObservedPhysicalSign,
+      Questions::PhysicalExam,
+      Questions::Symptom,
+      Questions::TreatmentQuestion,
+      Questions::UniqueTriagePhysicalSign,
+      Questions::UniqueTriageQuestion,
+      Questions::Vaccine,
+      Questions::VitalSignAnthropometric,
     ]
   end
 
@@ -85,13 +85,14 @@ class Question < Node
   end
 
   # TODO: COMMENTAIRE
-  def self.list_attributes(diagram_type)
-    attributes = {}
-    attributes['categories'] = categories(diagram_type)
-    attributes['answer_types'] = AnswerType.all.as_json(methods: :display_name)
-    attributes['systems'] = Question.systems.map { |k, v| [I18n.t("questions.systems.#{k}"), k] }
-    attributes['stages'] = Question.stages
-    attributes
+  def self.list_attributes(diagram_type, algorithm)
+    {
+      categories: categories(diagram_type),
+      answer_types: AnswerType.all.as_json(methods: :display_name),
+      systems: Question.systems.map { |k, v| [I18n.t("questions.systems.#{k}"), k] },
+      stages: Question.stages,
+      complaint_categories: algorithm.questions.where(type: 'Questions::ComplaintCategory')
+    }
   end
 
   # Automatically create the answers, since they can't be changed

@@ -62,6 +62,7 @@ Rails.application.routes.draw do
     resources :questions, only: [:new, :create, :edit, :update, :destroy] do
       collection do
         post 'validate'
+        get 'lists'
       end
       member do
         put 'update_translations'
@@ -172,7 +173,6 @@ Rails.application.routes.draw do
 
   resources :questions, only: [] do
     collection do
-      get 'lists'
       get 'reference_prefix'
     end
   end

@@ -182,7 +182,7 @@ export class Diagram extends React.Component {
             <AdvancedCanvasWidget
               className={canvasStyle}
               engine={engine}
-              allowCanvasZoom={false}
+              allowCanvasZoom={true}
             />
           </div>
         </div>

@@ -255,7 +255,7 @@ export default class Http {
    * @return [Object] body of request
    */
   fetchQuestionsLists = async () => {
-    const url = `${this.url}/questions/lists?diagram_type=${this.diagramType}`;
+    const url = `${this.url}/algorithms/${this.algorithm}/questions/lists?diagram_type=${this.diagramType}`;
     const header = await this.setHeaders("GET", null);
     return await fetch(url, header).catch(error => console.log(error));
   };
