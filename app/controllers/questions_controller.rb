@@ -18,12 +18,15 @@ class QuestionsController < ApplicationController
 
   def create
     ActiveRecord::Base.transaction(requires_new: true) do
-      question = @algorithm.questions.new(question_params).becomes(Object.const_get(question_params[:type]))
+      question = @algorithm.questions.new(question_params)
+
       question.becomes(Object.const_get(question_params[:type])) if question_params[:type].present?
       question.unavailable = question_params[:unavailable] if question.is_a? Questions::AssessmentTest # Manually done it because the form could not handle it
 
+      question.answers.map { |f| f.node = question } # No idea Why we have to do this
+
       # in order to add answers after creation (which can't be done if the question has no id), we also remove reference from params so it will not fail validation
-      if question.save && question.update(question_params.except(:reference)) && question.validate_overlap
+      if question.validate_overlap && question.save
         if params[:from] == 'rails'
           render json: {url: algorithm_url(@algorithm, panel: 'questions')}
         else

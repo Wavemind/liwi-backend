@@ -16,10 +16,11 @@ class DrugsController < ApplicationController
   end
 
   def create
-    drug = HealthCares::Drug.new(drug_params).becomes(HealthCares::Drug)
+    drug = HealthCares::Drug.new(drug_params)
     drug.algorithm = @algorithm
+    drug.formulations.map { |f| f.node = drug }
 
-    if drug.save && drug.update(drug_params)
+    if drug.save
       if params[:from] === 'rails'
         render json: { url: algorithm_url(@algorithm, panel: 'drugs') }
       else
