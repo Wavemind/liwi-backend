@@ -314,7 +314,6 @@ export default class FinalDiagnosticForm extends React.Component {
                     autoComplete
                     includeInputInList
                     freeSolo
-                    disableOpenOnFocus
                     onChange={this.snomedChange}
                     renderInput={params => (
                       <TextField
