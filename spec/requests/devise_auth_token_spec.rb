@@ -20,7 +20,7 @@ describe 'Whether access is ocurring properly', type: :request do
     Device.create!(mac_address: '64:DB:43:D5:31:5C', group: group_wavemind)
 
     epoct = Algorithm.create!(name: 'ePoct', description: 'loremp ipsum', user: @current_user)
-    epoc_first = Version.create!(name: 'first_trial', algorithm: epoct, user: @current_user)
+    epoc_first = Version.create!(name: 'first_trial', description: 'A small description', algorithm: epoct, user: @current_user)
 
     group_wavemind.versions << epoc_first
     group_wavemind.save

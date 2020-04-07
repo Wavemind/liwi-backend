@@ -5,7 +5,7 @@ RSpec.describe MedicalCase, type: :model do
   create_algorithm
 
   before(:each) do
-    @version = Version.create!(name: '1.0', user: @user, algorithm: @algorithm)
+    @version = Version.create!(name: '1.0', description: 'A small description', user: @user, algorithm: @algorithm)
     @patient = Patient.create!(first_name: 'John', last_name: 'Do')
 
     boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')

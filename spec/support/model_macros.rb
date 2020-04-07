@@ -12,7 +12,7 @@ module ModelMacros
     before(:each) do
       user = User.create!(first_name: 'Alain', last_name: 'Fresco', email: 'manu.barchichat@wavemind.ch', password: '123456', password_confirmation: '123456')
       algorithm = Algorithm.create!(name: 'Liwi', user: user)
-      @version = Version.create!(name: 'first_trial', algorithm: algorithm, user: user)
+      @version = Version.create!(name: 'first_trial', description: 'Small description', algorithm: algorithm, user: user)
     end
   end
 
@@ -31,7 +31,7 @@ module ModelMacros
 
   def create_diagnostic
     before(:each) do
-      epoc_first = Version.create!(name: 'first_trial', algorithm: @algorithm, user: @user)
+      epoc_first = Version.create!(name: 'first_trial', description: 'A small description', algorithm: @algorithm, user: @user)
       boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
       @cc = @algorithm.questions.create!(answer_type: boolean, label_en: 'CC11', stage: Question.stages[:triage], type: 'Questions::ComplaintCategory')
       @dd7 = Diagnostic.create!(version: epoc_first, label_en: 'Severe LRTI', node: @cc)
@@ -48,7 +48,7 @@ module ModelMacros
   def create_instances
     before(:each) do
       # Version
-      epoc_first = Version.create!(name: 'first_trial', algorithm: @algorithm, user: @user)
+      epoc_first = Version.create!(name: 'first_trial', description: 'A small description', algorithm: @algorithm, user: @user)
 
       # Questions
       s2 = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', stage: Question.stages[:triage], answer_type: @boolean)

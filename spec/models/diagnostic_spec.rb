@@ -10,7 +10,7 @@ RSpec.describe Diagnostic, type: :model do
     boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
     @cc = @algorithm.questions.create!(answer_type: boolean, label_en: 'CC11', stage: Question.stages[:triage], type: 'Questions::ComplaintCategory')
 
-    @version = Version.create!(name: '1.3.2', user: user, algorithm: @algorithm)
+    @version = Version.create!(name: '1.3.2', description: 'Small description', user: user, algorithm: @algorithm)
   end
 
   it 'is valid with valid attributes' do

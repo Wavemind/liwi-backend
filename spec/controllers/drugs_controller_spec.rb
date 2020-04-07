@@ -64,8 +64,23 @@ RSpec.describe DrugsController, type: :controller do
     expect(flash[:notice]).to eq I18n.t('flash_message.success_updated')
   end
 
-  it 'should work for [PATCH:update_from_diagram]' do
-    patch :update_from_diagram, params: {
+  it 'should work for [GET:new]' do
+    get :new, params: { algorithm_id: @algorithm.id }
+    expect(response.status).to eq(200)
+  end
+
+  it 'should work for [POST:create]' do
+    post :create, params: { algorithm_id: @algorithm.id, health_cares_drug: { algorithm: @algorithm, label_en: 'Severe LRTI' } }
+    expect(response.status).to eq(200)
+  end
+
+  it 'should work for [get:edit]' do
+    get :edit, params: { algorithm_id: @algorithm.id, id: @drug.id }
+    expect(response.status).to eq(200)
+  end
+
+  it 'should work for [PATCH:update]' do
+    patch :update, params: {
       algorithm_id: @algorithm.id,
       id: @drug.id,
       health_cares_drug: {
@@ -88,25 +103,6 @@ RSpec.describe DrugsController, type: :controller do
     expect(@drug.formulations.count).to eq(1)
     expect(@drug.is_antibiotic).to be(true)
     expect(@drug.is_anti_malarial).to be(false)
-  end
-
-  it 'should work for [GET:new]' do
-    get :new, params: { algorithm_id: @algorithm.id }
-    expect(response.status).to eq(200)
-  end
-
-  it 'should work for [POST:create]' do
-    post :create, params: { algorithm_id: @algorithm.id, health_cares_drug: { algorithm: @algorithm, label_en: 'Severe LRTI' } }
-    expect(response.status).to eq(302)
-  end
-
-  it 'should work for [get:edit]' do
-    get :edit, params: { algorithm_id: @algorithm.id, id: @drug.id }
-    expect(response.status).to eq(200)
-  end
-
-  it 'should work for [PATCH:update]' do
-    patch :update, params: { algorithm_id: @algorithm.id, id: @drug.id, health_cares_drug: { algorithm: @algorithm, label_en: 'Severe LRTI' } }
     expect(response.status).to eq(302)
   end
 

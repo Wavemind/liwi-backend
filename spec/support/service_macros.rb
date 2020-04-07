@@ -13,7 +13,7 @@ module ServiceMacros
 
       emmanuel = User.create!(first_name: 'Emmanuel', last_name: 'Barchichat', email: 'emmanuel.barchichat@wavemind.ch', password: '123456', password_confirmation: '123456')
       epoct = Algorithm.create!(name: 'ePoct', description: 'loremp ipsum', user: emmanuel)
-      epoc_first = Version.create!(name: 'first_trial', algorithm: epoct, user: emmanuel)
+      epoc_first = Version.create!(name: 'first_trial', description: 'A small description', algorithm: epoct, user: emmanuel)
 
       @cc = epoct.questions.create!(answer_type: boolean, label_en: 'CC11', stage: Question.stages[:triage], type: 'Questions::ComplaintCategory')
 

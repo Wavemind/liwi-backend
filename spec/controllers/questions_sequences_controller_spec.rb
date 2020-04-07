@@ -59,16 +59,22 @@ RSpec.describe QuestionsSequencesController, type: :controller do
     expect(flash[:notice]).to eq I18n.t('flash_message.success_updated')
   end
 
-  # TODO: @manu missing create from diagram
-
-
   it 'should work for [GET:new]' do
     get :new, params: { algorithm_id: @algorithm.id }
     expect(response.status).to eq(200)
   end
 
   it 'should work for [POST:create]' do
-    post :create, params: { algorithm_id: @algorithm.id, questions_sequence: { algorithm: @algorithm, label_en: 'Severe LRTI' } }
+    post :create_from_diagram, params: {
+      algorithm_id: @algorithm.id,
+      instanceable_id: @predefined_syndrome.id,
+      instanceable_type: @predefined_syndrome.class.name,
+      questions_sequence:
+        {
+          algorithm: @algorithm,
+          label_en: 'Severe LRTI'
+        }
+    }
     expect(response.status).to eq(302)
   end
 
@@ -90,25 +96,6 @@ RSpec.describe QuestionsSequencesController, type: :controller do
   it 'should work for [PATCH:update]' do
     patch :update, params: { algorithm_id: @algorithm.id, id: @predefined_syndrome.id, questions_sequence: { algorithm: @algorithm, label_en: 'Severe LRTI' } }
     expect(response.status).to eq(302)
-  end
-
-  it 'should work for [POST:create_from_diagram]', focus: true do
-    post :create_from_diagram, params: {
-      algorithm_id: @algorithm.id,
-      instanceable_id: @predefined_syndrome.id,
-      instanceable_type: @predefined_syndrome.class.name,
-      questions_sequence:
-        {
-          algorithm: @algorithm,
-          label_en: 'Severe LRTI'
-        }
-    }
-    expect(response.status).to eq(200)
-  end
-
-  it 'should work for [PATCH:update_from_diagram]' do
-    patch :update_from_diagram, params: { algorithm_id: @algorithm.id, id: @predefined_syndrome.id, questions_sequence: { algorithm: @algorithm, label_en: 'Severe LRTI' } }
-    expect(response.status).to eq(200)
   end
 
 end

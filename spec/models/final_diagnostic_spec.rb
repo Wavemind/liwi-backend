@@ -6,7 +6,7 @@ RSpec.describe FinalDiagnostic, type: :model do
   create_diagnostic
 
   before(:each) do
-    @version = Version.create!(name: '1.3.2', user: @user, algorithm: @algorithm)
+    @version = Version.create!(name: '1.3.2', description: 'A small description', user: @user, algorithm: @algorithm)
   end
 
   it 'is valid with valid attributes' do
