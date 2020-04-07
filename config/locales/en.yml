@@ -346,6 +346,8 @@ en:
         created_at: "Created on"
         end_date: "Archived date"
       archived: "Archive"
+      devices: "Devices"
+      medical_staff: "Medical staff"
     form:
       medical_staffs: "Medical staff"
   group_accesses:

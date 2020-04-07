@@ -9,4 +9,8 @@ class MedicalStaff < ApplicationRecord
   validates_presence_of :last_name
   validates_presence_of :role
 
+  def full_name
+    "#{first_name} #{last_name}"
+  end
+
 end
