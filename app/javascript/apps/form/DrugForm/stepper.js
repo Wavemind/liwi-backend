@@ -17,7 +17,7 @@ export default class StepperDrugForm extends React.Component {
 
     this.state = {
       errors: null,
-      step: 1,
+      step: 2,
       drug: this.drugBody(drug, method),
       createdDrug: {}
     };

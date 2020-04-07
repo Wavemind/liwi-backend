@@ -324,32 +324,34 @@ export default class FinalDiagnosticForm extends React.Component {
                   />
                 </Form.Group>
 
-                <Form.Group controlId="validationComplaintCategories">
-                  <Form.Label>{I18n.t("activerecord.attributes.node.node")}</Form.Label>
-                  <Autocomplete
-                    autoComplete
-                    multiple
-                    freeSolo
-                    filterSelectedOptions
-                    name="complaint_categories_attributes"
-                    options={complaintCategories.map(option => option)}
-                    defaultValue={formData?.complaint_categories_attributes}
-                    filterOptions={filterOptions}
-                    onChange={(_, value) => setFieldValue("complaint_categories_attributes", value)}
-                    renderOption={(option) => option.label_translations.en}
-                    renderTags={(value, getTagProps) => (
-                      value.map((option, index) => (
-                        <Chip variant="outlined" label={option.label_translations.en} {...getTagProps({ index })} />
-                      ))
-                    )}
-                    renderInput={params => (
-                      <TextField
-                        {...params}
-                        variant="outlined"
-                        fullWidth/>
-                    )}
-                  />
-                </Form.Group>
+                {values.type !== "Questions::ComplaintCategory" ?
+                  <Form.Group controlId="validationComplaintCategories">
+                    <Form.Label>{I18n.t("activerecord.attributes.node.node")}</Form.Label>
+                    <Autocomplete
+                      autoComplete
+                      multiple
+                      freeSolo
+                      filterSelectedOptions
+                      name="complaint_categories_attributes"
+                      options={complaintCategories.map(option => option)}
+                      defaultValue={formData?.complaint_categories_attributes}
+                      filterOptions={filterOptions}
+                      onChange={(_, value) => setFieldValue("complaint_categories_attributes", value)}
+                      renderOption={(option) => option.label_translations.en}
+                      renderTags={(value, getTagProps) => (
+                        value.map((option, index) => (
+                          <Chip variant="outlined" label={option.label_translations.en} {...getTagProps({ index })} />
+                        ))
+                      )}
+                      renderInput={params => (
+                        <TextField
+                          {...params}
+                          variant="outlined"
+                          fullWidth/>
+                      )}
+                    />
+                  </Form.Group>
+                  : null}
 
                 <Form.Group controlId="validationDescription">
                   <Form.Label>{I18n.t("activerecord.attributes.node.description_translations")}</Form.Label>
