@@ -1,5 +1,6 @@
 import * as React from "react";
 import * as _ from "lodash";
+import I18n from "i18n-js";
 
 import Http from "../../diagram/engine/http";
 import store from "../../diagram/engine/reducers/store";

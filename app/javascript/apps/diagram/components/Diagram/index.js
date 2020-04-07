@@ -133,7 +133,7 @@ export class Diagram extends React.Component {
           drug: dbNode,
           method: "create",
           from: "react",
-          engine: engine,
+          engine,
           removeAvailableNode,
           positions
         })

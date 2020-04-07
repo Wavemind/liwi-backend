@@ -10,7 +10,12 @@ import DisplayErrors from "../components/DisplayErrors";
 import Http from "../../diagram/engine/http";
 import Loader from "../QuestionsSequenceForm";
 import { questionSchema } from "../constants/schema";
-import { CATEGORIES_DISPLAYING_SYSTEM, CATEGORIES_DISABLING_ANSWER_TYPE, NO_ANSWERS_ATTACHED_TYPE, NO_ANSWERS_ATTACHED_ANSWER_TYPE } from "../constants/constants";
+import {
+  CATEGORIES_DISPLAYING_SYSTEM,
+  CATEGORIES_DISABLING_ANSWER_TYPE,
+  NO_ANSWERS_ATTACHED_TYPE,
+  NO_ANSWERS_ATTACHED_ANSWER_TYPE
+} from "../constants/constants";
 import Chip from "@material-ui/core/Chip";
 
 const humanizeString = require("humanize-string");
@@ -234,7 +239,9 @@ export default class FinalDiagnosticForm extends React.Component {
                     as="select"
                     name="answer_type_id"
                     value={values.answer_type_id}
-                    onChange={e => {setFieldValue('answer_type_id', e.target.value !== "" ? parseInt(e.target.value) : e.target.value); }}
+                    onChange={e => {
+                      setFieldValue("answer_type_id", e.target.value !== "" ? parseInt(e.target.value) : e.target.value);
+                    }}
                     disabled={CATEGORIES_DISABLING_ANSWER_TYPE.includes(values.type)}
                     isInvalid={touched.answer_type_id && !!errors.answer_type_id}
                   >

@@ -33,7 +33,7 @@ export default class FormulationForm extends React.Component {
    * Fetch medication form, breakable and administration routes at the initialization of formulationForm
    */
   init = async () => {
-    const {formData, method} = this.props;
+    const { formData, method } = this.props;
     let http = new Http();
     let httpRequest = {};
 
@@ -43,10 +43,10 @@ export default class FormulationForm extends React.Component {
     if (httpRequest.status === 200) {
 
       // Remove medication_forms already used by existing formulations
-      if (method === 'update') {
+      if (method === "update") {
         result.medication_forms = _.filter(result.medication_forms, (medication_form) => {
           return _.some(formData.formulations_attributes, (formulation) => formulation.medication_form !== medication_form);
-        })
+        });
       }
 
       this.setState({
@@ -158,7 +158,7 @@ export default class FormulationForm extends React.Component {
             {({
                 handleSubmit,
                 isSubmitting,
-                values,
+                values
               }) => (
               <Form noValidate onSubmit={handleSubmit}>
                 <FieldArray
@@ -249,7 +249,8 @@ export default class FormulationForm extends React.Component {
                           </Button>
                         </Col>
                         <Col>
-                          <Button className="float-right" type="submit" variant="success" disabled={isSubmitting || values.formulations_attributes.length === 0}>
+                          <Button className="float-right" type="submit" variant="success"
+                                  disabled={isSubmitting || values.formulations_attributes.length === 0}>
                             {I18n.t("save")}
                           </Button>
                         </Col>

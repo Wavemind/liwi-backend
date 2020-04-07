@@ -4,7 +4,7 @@ import store from "../../engine/reducers/store";
 import { withDiagram } from "../../engine/context/Diagram.context";
 import { openModal } from "../../engine/reducers/creators.actions";
 import { NotificationManager } from "react-notifications";
-import ReactHtmlParser from 'react-html-parser';
+import ReactHtmlParser from "react-html-parser";
 
 
 class Toolbar extends React.Component {
@@ -76,7 +76,7 @@ class Toolbar extends React.Component {
     } else {
       result.map(error => (
         NotificationManager.error(ReactHtmlParser(error), "", 10000)
-      ))
+      ));
     }
 
     this.setState({ isLoading: false });
@@ -91,17 +91,23 @@ class Toolbar extends React.Component {
         <div className="row">
           <div className="col">
             <div className="btn-group">
-              <button key="new" type="button" className="btn btn-transparent" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <button key="new" type="button" className="btn btn-transparent" data-toggle="dropdown"
+                      aria-haspopup="true" aria-expanded="false">
                 {I18n.t("toolbar.new")}
               </button>
               <div className="dropdown-menu">
-                <a className="dropdown-item" key="questions" href="#" onClick={() => this.createNode(I18n.t("questions.new.title"), "QuestionForm")}>{I18n.t("toolbar.question")}</a>
-                <a className="dropdown-item" key="questionsSequence" href="#" onClick={() => this.createNode(I18n.t("questions_sequences.new.title"), "QuestionsSequenceForm")}>{I18n.t("toolbar.questions_sequence")}</a>
+                <a className="dropdown-item" key="questions" href="#"
+                   onClick={() => this.createNode(I18n.t("questions.new.title"), "QuestionForm")}>{I18n.t("toolbar.question")}</a>
+                <a className="dropdown-item" key="questionsSequence" href="#"
+                   onClick={() => this.createNode(I18n.t("questions_sequences.new.title"), "QuestionsSequenceForm")}>{I18n.t("toolbar.questions_sequence")}</a>
                 {instanceable.type === "Diagnostic" ? (
-                  <a className="dropdown-item" key="finalDiagnostic" href="#" onClick={() => this.createNode(I18n.t("final_diagnostics.new.title"), "FinalDiagnosticForm")}>{I18n.t("toolbar.final_diagnostic")}</a>) : null}
+                  <a className="dropdown-item" key="finalDiagnostic" href="#"
+                     onClick={() => this.createNode(I18n.t("final_diagnostics.new.title"), "FinalDiagnosticForm")}>{I18n.t("toolbar.final_diagnostic")}</a>) : null}
                 {instanceable.type === "FinalDiagnostic" ? ([
-                    <a className="dropdown-item" key="drug" href="#" onClick={() => this.createNode(I18n.t("drugs.new.title"), "DrugForm")}>{I18n.t("toolbar.drug")}</a>,
-                    <a className="dropdown-item" key="management" href="#" onClick={() => this.createNode(I18n.t("managements.new.title"), "ManagementForm")}>{I18n.t("toolbar.management")}</a>])
+                    <a className="dropdown-item" key="drug" href="#"
+                       onClick={() => this.createNode(I18n.t("drugs.new.title"), "DrugForm")}>{I18n.t("toolbar.drug")}</a>,
+                    <a className="dropdown-item" key="management" href="#"
+                       onClick={() => this.createNode(I18n.t("managements.new.title"), "ManagementForm")}>{I18n.t("toolbar.management")}</a>])
                   : null}
               </div>
             </div>
