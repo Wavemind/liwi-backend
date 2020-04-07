@@ -158,6 +158,7 @@ class VersionsController < ApplicationController
     params.require(:version).permit(
       :id,
       :name,
+      :description,
       :triage_unique_triage_question_order,
       :triage_complaint_category_order,
       :triage_basic_measurement_order,

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_27_124218) do
+ActiveRecord::Schema.define(version: 2020_04_07_072855) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -357,6 +357,7 @@ ActiveRecord::Schema.define(version: 2020_03_27_124218) do
     t.integer "triage_complaint_category_order", default: [], array: true
     t.integer "triage_basic_measurement_order", default: [], array: true
     t.integer "triage_chronic_condition_order", default: [], array: true
+    t.text "description"
     t.index ["algorithm_id"], name: "index_versions_on_algorithm_id"
     t.index ["user_id"], name: "index_versions_on_user_id"
   end
