@@ -346,6 +346,8 @@ en:
         created_at: "Created on"
         end_date: "Archived date"
       archived: "Archive"
+    form:
+      medical_staffs: "Medical staff"
   group_accesses:
     new:
       title: "New release"
@@ -409,6 +411,10 @@ en:
   medical_case:
     validation:
       wrong_node_type: "This node is not a management or a drug."
+  medical_staffs:
+    roles:
+      registration_nurse: "Registration nurse"
+      clinician: "Clinician"
   nodes:
     validation:
       reference_used: "This reference is already used"

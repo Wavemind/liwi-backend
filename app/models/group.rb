@@ -4,6 +4,7 @@ class Group < ApplicationRecord
   has_many :devices
   has_many :group_accesses
   has_many :versions, through: :group_accesses
+  has_many :medical_staffs
 
   enum architecture: [:standalone, :client_server]
 
@@ -13,6 +14,8 @@ class Group < ApplicationRecord
 
   after_validation :validate_code_pin
   after_validation :validate_ips
+
+  accepts_nested_attributes_for :medical_staffs, reject_if: :all_blank, allow_destroy: true
 
   private
 

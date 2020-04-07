@@ -6,5 +6,17 @@
   <%= f.input :main_data_ip %>
   <%= f.input :pin_code %>
 
+  <hr/>
+  <h2><%= t('.medical_staffs')%></h2>
+
+  <%= f.simple_fields_for :medical_staffs do |ff| %>
+    <%= render 'medical_staffs/fields', f: ff %>
+  <% end %>
+
+  <div class="links">
+    <%= link_to_add_association "<button class='btn btn-outline-success'>#{t('add')}</button>".html_safe, f, :medical_staffs, partial: 'medical_staffs/fields' %>
+  </div>
+
+
   <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
 <% end %>

@@ -101,7 +101,15 @@ class GroupsController < ApplicationController
       :local_data_ip,
       :main_data_ip,
       :pin_code,
-      device_ids: []
+      device_ids: [],
+      medical_staffs_attributes: [
+        :id,
+        :first_name,
+        :last_name,
+        :role,
+        :_destroy
+      ]
+
     )
   end
 end
