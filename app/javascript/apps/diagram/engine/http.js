@@ -260,30 +260,6 @@ export default class Http {
     return await fetch(url, header).catch(error => console.log(error));
   };
 
-  // @params [Integer] instanceId, [Integer] condID
-  // @return [Object] body of request
-  // Remove condition
-  removeCondition = async (instanceId, condID) => {
-    let response;
-    const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/${instanceId}/conditions/${condID}`;
-    const body = {
-      instance: {
-        instanceable_id: this.instanceableId,
-        instanceable_type: this.instanceableType
-      }
-    };
-    const header = await this.setHeaders("DELETE", body);
-    const request = await fetch(url, header).catch(error => console.log(error));
-
-    // Display error or parse json
-    if (request.ok) {
-      response = await request.json();
-    } else {
-      response = request;
-    }
-    return await response;
-  };
-
   /**
    * Exclude a final diagnostic
    * @params [Integer] nodeId
@@ -457,33 +433,6 @@ export default class Http {
     return await fetch(url, header).catch(error => console.log(error));
   };
 
-  // @params [Integer] id, [String] label, [String] description, [Integer] final_diagnostic_id
-  // @return [Object] body of request
-  // Update final diagnostic node
-  updateHealthCare = async (id, label, description, type) => {
-    let response;
-    const url = `${this.url}/algorithms/${this.algorithm}/${type}/${id}/update_from_diagram`;
-    const body = {
-      diagnostic_id: this.instanceableId,
-      final_diagnostic_id: this.finalDiagnostic
-    };
-    body["health_cares_" + type.substring(0, type.length - 1)] = {
-      id,
-      label_en: label,
-      description_en: description
-    };
-    const header = await this.setHeaders("PUT", body);
-    const request = await fetch(url, header).catch(error => console.log(error));
-
-    // Display error or parse json
-    if (request.ok) {
-      response = await request.json();
-    } else {
-      response = request;
-    }
-    return await response;
-  };
-
   /**
    * Set X and Y position in diagram
    * @params [Integer] id
@@ -560,27 +509,6 @@ export default class Http {
     const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/validate`;
     const header = await this.setHeaders("GET", null);
     return await fetch(url, header).catch(error => console.log(error));
-  };
-
-  // @params [Hash] body of the question
-  // @return [Object] body of request
-  // Validate the question itself
-  validateQuestion = async (questionBody) => {
-    let response;
-    const url = `${this.url}/algorithms/${this.algorithm}/questions/validate`;
-    questionBody["instanceable_id"] = this.instanceableId;
-    questionBody["instanceable_type"] = this.instanceableType;
-
-    const header = await this.setHeaders("POST", questionBody);
-    const request = await fetch(url, header).catch(error => console.log(error));
-
-    // Display error or parse json
-    if (request.ok) {
-      response = await request.json();
-    } else {
-      response = request;
-    }
-    return await response;
   };
 
   /**
