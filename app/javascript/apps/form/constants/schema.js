@@ -34,7 +34,7 @@ export const questionSchema = yup.object().shape({
     then: yup.string().required(I18n.t("errors.messages.required"))
   }),
   answer_type_id: yup.string().required(I18n.t("errors.messages.required")),
-  stage: yup.string().when("answer_type", {
+  stage: yup.string().when("type", {
     is: (type) => type !== "Questions::BackgroundCalculation",
     then: yup.string().required(I18n.t("errors.messages.required"))
   }),
