@@ -33,8 +33,8 @@ export default class StepperDrugForm extends React.Component {
     let body = {
       label_en: drug?.label_translations?.en || "",
       description_en: drug?.description_translations?.en || "",
-      is_anti_malarial : drug?.is_anti_malarial || false,
-      is_antibiotic : drug?.is_antibiotic || "",
+      is_anti_malarial: drug?.is_anti_malarial || false,
+      is_antibiotic: drug?.is_antibiotic || "",
       formulations_attributes: drug?.formulations || []
     };
 
@@ -121,15 +121,19 @@ export default class StepperDrugForm extends React.Component {
     switch (step) {
       case 1:
         return (
-          <DrugForm
-            formData={drug}
-            setFormData={this.setMetaData}
-            nextStep={this.nextStep}
-          />
+          <>
+            <h1 className="mb-5">{method === "create" ? I18n.t("drugs.new.title") : I18n.t("drugs.edit.title")}</h1>
+            <DrugForm
+              formData={drug}
+              setFormData={this.setMetaData}
+              nextStep={this.nextStep}
+            />
+          </>
         );
       case 2:
         return (
           <>
+            <h1 className="mb-5">{method === "create" ? I18n.t("formulations.new.title") : I18n.t("formulations.edit.title")}</h1>
             {errors ? <DisplayErrors errors={errors}/> : null}
             <FormulationForm
               formData={drug}
@@ -153,7 +157,7 @@ export default class StepperDrugForm extends React.Component {
           />
         );
       default:
-        return <h1>{I18n.t('something_went_wrong')}</h1>;
+        return <h1>{I18n.t("something_went_wrong")}</h1>;
     }
   }
 }

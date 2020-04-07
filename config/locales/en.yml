@@ -95,9 +95,9 @@ en:
       present: "Present"
       "yes": "Yes"
     edit:
-      title: "Edit related answers of %{name} question"
+      title: "Edit answers"
     new:
-      title: "Create related answers of %{name} question"
+      title: "Create answers"
     operators:
       between: ">=, <"
       less: "<"
@@ -317,6 +317,10 @@ en:
     errors:
       minimum_higher_than_maximum: "The minimum dose per kg can't be higher than the maximum dose per kg"
       maximum_per_kg_higher_than_maximum: "The maximum dose per kg can't be higher than the maximum dose per day"
+    new:
+      title: "New formulations"
+    edit:
+      title: "Edit formulations"
   groups:
     add_device:
       success_add_device: "Device was successfully added to group"

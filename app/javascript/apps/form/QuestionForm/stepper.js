@@ -152,6 +152,8 @@ export default class StepperQuestionForm extends React.Component {
     switch (step) {
       case 1:
         return (
+          <>
+          <h1>{method === 'create' ? I18n.t("questions.new.title") : I18n.t("questions.edit.title")}</h1>
           <QuestionForm
             formData={question}
             setFormData={this.setMetaData}
@@ -159,10 +161,12 @@ export default class StepperQuestionForm extends React.Component {
             save={this.save}
             method={method}
           />
+          </>
         );
       case 2:
         return (
           <>
+            <h1>{method === 'create' ? I18n.t("answers.new.title") : I18n.t("answers.edit.title")}</h1>
             {errors ? <DisplayErrors errors={errors}/> : null}
             <AnswerForm
               formData={question}
