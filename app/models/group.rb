@@ -15,6 +15,8 @@ class Group < ApplicationRecord
   after_validation :validate_code_pin
   after_validation :validate_ips
 
+  after_create :generate_token
+
   accepts_nested_attributes_for :medical_staffs, reject_if: :all_blank, allow_destroy: true
 
   private
@@ -31,5 +33,12 @@ class Group < ApplicationRecord
     elsif standalone?
       self.errors.add(:main_data_ip, I18n.t('groups.errors.ip_invalid')) if main_data_ip.present? && main_data_ip.match('^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$').nil?
     end
+  end
+
+  def generate_token
+    key = SecureRandom.random_bytes(32)
+    crypt = ActiveSupport::MessageEncryptor.new(key)
+    self.token = crypt.encrypt_and_sign(pin_code)
+    self.save
   end
 end
