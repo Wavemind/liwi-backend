@@ -1,5 +1,8 @@
 import * as React from "react";
-import * as _ from "lodash";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import { createFilterOptions } from "@material-ui/lab/Autocomplete";
+import TextField from "@material-ui/core/TextField";
+import Chip from "@material-ui/core/Chip";
 import I18n from "i18n-js";
 import FadeIn from "react-fade-in";
 import { Form, Button } from "react-bootstrap";
@@ -12,11 +15,6 @@ import Loader from "../components/Loader";
 import { questionSequencesSchema } from "../constants/schema";
 import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import { createFilterOptions } from "@material-ui/lab/Autocomplete";
-import TextField from "@material-ui/core/TextField";
-import Chip from "@material-ui/core/Chip";
-import { Fragment } from "react";
 
 
 const filterOptions = createFilterOptions({
@@ -166,11 +164,10 @@ export default class QuestionsSequenceForm extends React.Component {
                 <Form.Group controlId="validationComplaintCategories">
                   <Form.Label>{I18n.t("activerecord.attributes.node.node")}</Form.Label>
                   <Autocomplete
-                    multiple
                     autoComplete
-                    includeInputInList
-                    disableOpenOnFocus
+                    multiple
                     freeSolo
+                    filterSelectedOptions
                     name="complaint_categories_attributes"
                     options={complaintCategories.map(option => option)}
                     defaultValue={questionsSequence?.complaint_categories}

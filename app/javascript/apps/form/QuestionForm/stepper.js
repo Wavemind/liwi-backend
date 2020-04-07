@@ -76,6 +76,7 @@ export default class StepperQuestionForm extends React.Component {
     let http = new Http();
     let httpRequest = {};
     let complaint_category_ids = [];
+
     question.complaint_categories_attributes.map(cc => (complaint_category_ids.push(cc.id)));
     _.set(question, "complaint_category_ids", complaint_category_ids);
     _.unset(question, "complaint_categories_attributes");

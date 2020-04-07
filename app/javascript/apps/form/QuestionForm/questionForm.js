@@ -36,7 +36,7 @@ export default class FinalDiagnosticForm extends React.Component {
    * @params [Object] values
    * @params [Object] actions
    */
-  handleOnSubmit = async (values, actions) => {
+  handleOnSubmit = async (values) => {
     const { setFormData, save, nextStep } = this.props;
     setFormData(values);
     if (NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(values.answer_type_id) || NO_ANSWERS_ATTACHED_TYPE.includes(values.type)) {
@@ -169,7 +169,7 @@ export default class FinalDiagnosticForm extends React.Component {
           <Formik
             validationSchema={questionSchema}
             initialValues={formData}
-            onSubmit={(values, actions) => (this.handleOnSubmit(values, actions))}
+            onSubmit={(values) => (this.handleOnSubmit(values))}
           >
             {({
                 handleSubmit,
@@ -321,11 +321,10 @@ export default class FinalDiagnosticForm extends React.Component {
                 <Form.Group controlId="validationComplaintCategories">
                   <Form.Label>{I18n.t("activerecord.attributes.node.node")}</Form.Label>
                   <Autocomplete
-                    multiple
                     autoComplete
-                    includeInputInList
-                    disableOpenOnFocus
+                    multiple
                     freeSolo
+                    filterSelectedOptions
                     name="complaint_categories_attributes"
                     options={complaintCategories.map(option => option)}
                     defaultValue={formData?.complaint_categories_attributes}

@@ -59,15 +59,6 @@ export default class AnswerForm extends React.Component {
     arrayHelpers.push(JSON.parse(DEFAULT_ANSWER_VALUE));
   };
 
-  /**
-   * Remove answer in answers array of formik "values" variable
-   * @params [Integer] key
-   * @params [Object] arrayHelpers
-   */
-  removeAnswer(arrayHelpers, key) {
-    arrayHelpers.remove(key);
-  }
-
   render() {
     const { isLoading, operators } = this.state;
     const { formData, previousStep } = this.props;
@@ -104,7 +95,7 @@ export default class AnswerForm extends React.Component {
                           <Button
                             className="float-right"
                             variant="danger"
-                            onClick={() => this.removeAnswer(arrayHelpers, key)}
+                            onClick={() => arrayHelpers.remove(key)}
                           >
                             {I18n.t("remove")}
                           </Button>
