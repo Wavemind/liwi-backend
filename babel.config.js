@@ -1,4 +1,4 @@
-module.exports = function (api) {
+module.exports = function(api) {
   var validEnv = ["development", "test", "production"];
   var currentEnv = api.env();
   var isDevelopmentEnv = api.env("development");
@@ -76,6 +76,7 @@ module.exports = function (api) {
         }
       ],
       isProductionEnv && [
+        "babel-plugin-transform-react-remove-prop-types",
         {
           removeImport: true
         }
