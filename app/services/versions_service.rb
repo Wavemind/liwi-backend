@@ -110,12 +110,11 @@ class VersionsService
   # Build a hash of metadata about the algorithm and algorithm version
   def self.extract_version_metadata
     hash = {}
-    hash['id'] = @version.id
-    hash['algorithm_id'] = @version.algorithm.id
-    hash['name'] = @version.algorithm.name
-    hash['version'] = @version.name
     hash['version_id'] = @version.id
-    hash['description'] = @version.algorithm.description
+    hash['version_name'] = @version.name
+    hash['description'] = @version.description
+    hash['algorithm_id'] = @version.algorithm.id
+    hash['algorithm_name'] = @version.algorithm.name
     hash['triage'] = extract_triage_metadata
     hash['author'] = @version.user.full_name
     hash['created_at'] = @version.created_at
