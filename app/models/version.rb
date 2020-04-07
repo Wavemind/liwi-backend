@@ -16,6 +16,7 @@ class Version < ApplicationRecord
   has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy
 
   validates_presence_of :name
+  validates_presence_of :description
 
   after_create :instantiate_questions
 
