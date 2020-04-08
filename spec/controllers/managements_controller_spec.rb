@@ -78,7 +78,7 @@ RSpec.describe ManagementsController, type: :controller do
   end
 
   it 'should work for [POST:create]' do
-    post :create, params: { algorithm_id: @algorithm.id, diagnostic_id: @dd7.id, health_cares_management: { algorithm: @algorithm, label_en: 'Severe LRTI' } }
+    post :create, params: { from: 'rails', algorithm_id: @algorithm.id, diagnostic_id: @dd7.id, health_cares_management: { algorithm: @algorithm, label_en: 'Severe LRTI' } }
     expect(response.status).to eq(302)
   end
 
