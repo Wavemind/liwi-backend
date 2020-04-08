@@ -103,7 +103,6 @@ RSpec.describe DrugsController, type: :controller do
     expect(@drug.formulations.count).to eq(1)
     expect(@drug.is_antibiotic).to be(true)
     expect(@drug.is_anti_malarial).to be(false)
-    expect(response.status).to eq(302)
   end
 
 end

@@ -65,7 +65,7 @@ RSpec.describe QuestionsSequencesController, type: :controller do
   end
 
   it 'should work for [POST:create]' do
-    post :create_from_diagram, params: {
+    post :create, params: {
       algorithm_id: @algorithm.id,
       instanceable_id: @predefined_syndrome.id,
       instanceable_type: @predefined_syndrome.class.name,
@@ -75,7 +75,7 @@ RSpec.describe QuestionsSequencesController, type: :controller do
           label_en: 'Severe LRTI'
         }
     }
-    expect(response.status).to eq(302)
+    expect(response.status).to eq(200)
   end
 
   it 'should work for [get:edit]' do
@@ -83,19 +83,9 @@ RSpec.describe QuestionsSequencesController, type: :controller do
     expect(response.status).to eq(200)
   end
 
-  it 'should work for [get:edit_scored]' do
-    get :edit_scored, params: { algorithm_id: @algorithm.id, id: @predefined_syndrome.id }
-    expect(response.status).to eq(200)
-  end
-
-  it 'should work for [GET:new_scored]' do
-    get :new_scored, params: { algorithm_id: @algorithm.id }
-    expect(response.status).to eq(200)
-  end
-
   it 'should work for [PATCH:update]' do
     patch :update, params: { algorithm_id: @algorithm.id, id: @predefined_syndrome.id, questions_sequence: { algorithm: @algorithm, label_en: 'Severe LRTI' } }
-    expect(response.status).to eq(302)
+    expect(response.status).to eq(200)
   end
 
 end

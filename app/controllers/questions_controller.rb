@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:new, :create, :edit, :update, :answers, :destroy, :validate, :lists]
+  before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy, :validate, :lists]
   before_action :set_breadcrumb, only: [:new, :edit]
   before_action :set_question, only: [:edit, :update, :category_reference, :update_translations, :destroy]
 
@@ -133,7 +133,9 @@ class QuestionsController < ApplicationController
       :description_en,
       Language.description_params,
       :answer_type_id,
+      :answer_type,
       :unavailable,
+      :formula,
       :formula,
       :snomed_id,
       :snomed_label,

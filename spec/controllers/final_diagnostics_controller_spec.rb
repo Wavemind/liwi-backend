@@ -115,7 +115,7 @@ RSpec.describe FinalDiagnosticsController, type: :controller do
 
   it 'should work for [POST:create]' do
     post :create, params: { algorithm_id: @algorithm.id, version_id: @version.id, diagnostic_id: @dd7.id, final_diagnostic: { reference: 2, label_en: 'df' } }
-    expect(response.status).to eq(302)
+    expect(response.status).to eq(200)
   end
 
   it 'should work for [GET:edit]' do
@@ -125,7 +125,7 @@ RSpec.describe FinalDiagnosticsController, type: :controller do
 
   it 'should work for [PATCH:update]' do
     post :create, params: { algorithm_id: @algorithm.id, version_id: @version.id, diagnostic_id: @dd7.id, id: @df1.id, final_diagnostic: { reference: 2, label_en: 'boom boom' } }
-    expect(response.status).to eq(302)
+    expect(response.status).to eq(200)
   end
 
   it 'should work for [DELETE:destroy]' do
@@ -135,16 +135,6 @@ RSpec.describe FinalDiagnosticsController, type: :controller do
 
   it 'should work for [GET:diagram]' do
     get :diagram, params: { algorithm_id: @algorithm.id, version_id: @version.id, diagnostic_id: @dd7.id, id: @df1.id }
-    expect(response.status).to eq(200)
-  end
-
-  it 'should work for [POST:create_from_diagram]' do
-    post :create_from_diagram, params: { algorithm_id: @algorithm.id, version_id: @version.id, diagnostic_id: @dd7.id, final_diagnostic: { reference: 2, label_en: 'df' } }
-    expect(response.status).to eq(200)
-  end
-
-  it 'should work for [PATCH:update_from_diagram]' do
-    post :update_from_diagram, params: { algorithm_id: @algorithm.id, version_id: @version.id, diagnostic_id: @dd7.id, id: @df1.id, final_diagnostic: { reference: 2, label_en: 'boom boom' } }
     expect(response.status).to eq(200)
   end
 

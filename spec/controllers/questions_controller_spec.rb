@@ -7,52 +7,14 @@ RSpec.describe QuestionsController, type: :controller do
   create_instances
   create_question
 
-  it 'render answer if question is valid' do
-    post :create, params: {
-      algorithm_id: @algorithm.id,
-      question: {
-        label_en: 'Cough',
-        type: 'Questions::Symptom',
-        stage: 'triage',
-        answer_type_id: @input_integer.id
-      }
-    }
-    expect(response).to render_template('answers/new')
-  end
-
-  it 'redirect_to to algorithm if question\'s category is boolean and valid' do
-    post :create, params: {
-      algorithm_id: @algorithm.id,
-      question: {
-        label_en: 'Cough',
-        type: 'Questions::Symptom',
-        priority: 'basic',
-        stage: 'triage',
-        answer_type_id: @boolean.id
-      }
-    }
-    expect(response).to redirect_to algorithm_url(@algorithm, panel: 'questions')
-  end
-
-  it 'render new if question is invalid' do
-    post :create, params: {
-      algorithm_id: @algorithm.id,
-      question: {
-        label_en: nil,
-        type: 'Questions::Symptom',
-        answer_type_id: @input_float.id
-      }
-    }
-    expect(response).to render_template(:new)
-  end
-
-  it 'create an answer for current question if attributes is invalid' do
+  it 'create an answer for current question if attributes is invalid'  do
     @question = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', stage: Question.stages[:triage], answer_type: @input_integer)
 
     expect {
-      put :answers, params: {
-        algorithm_id: @algorithm.id,
+      put :update, params: {
         id: @question.id,
+        algorithm_id: @algorithm.id,
+        from: 'rails',
         question: {
           id: @question.id,
           answers_attributes: [
@@ -71,9 +33,10 @@ RSpec.describe QuestionsController, type: :controller do
     @question = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', stage: Question.stages[:triage], answer_type: @input_integer)
 
     expect {
-      put :answers, params: {
-        algorithm_id: @algorithm.id,
+      put :update, params: {
         id: @question.id,
+        algorithm_id: @algorithm.id,
+        from: 'rails',
         question: {
           id: @question.id,
           answers_attributes: [
@@ -97,9 +60,10 @@ RSpec.describe QuestionsController, type: :controller do
     @question = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', stage: Question.stages[:triage], answer_type: @input_integer)
 
     expect {
-      put :answers, params: {
-        algorithm_id: @algorithm.id,
+      put :update, params: {
         id: @question.id,
+        algorithm_id: @algorithm.id,
+        from: 'rails',
         question: {
           id: @question.id,
           answers_attributes: [
@@ -145,7 +109,6 @@ RSpec.describe QuestionsController, type: :controller do
 
     expect(response).to render_template('diagnostics/update_translations')
     expect(response).to have_attributes(status: 422)
-
   end
 
   it 'returns error message when trying to remove a question who has an instance' do
@@ -198,17 +161,7 @@ RSpec.describe QuestionsController, type: :controller do
   it 'should work for [POST:update]' do
     @question = Questions::AssessmentTest.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', is_mandatory: true, stage: Question.stages[:triage], answer_type: @boolean, unavailable: '1')
     put :update, params: { algorithm_id: @algorithm.id, id: @question.id, question: {id: @question.id, algorithm: @algorithm, label_en: 'Cough', reference: '2', is_mandatory: true, stage: 'triage', answer_type: @boolean} }
-    expect(response.status).to eq(302)
-  end
-
-  # TODO @Manu
-  it 'should work for [POST:create_from_diagram]' do
-
-  end
-
-  # TODO @Manu
-  it 'should work for [PUT:update_from_diagram]' do
-
+    expect(response.status).to eq(200)
   end
 
   it 'should work for [GET:reference_prefix]' do

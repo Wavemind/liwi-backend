@@ -12,7 +12,6 @@ class Condition < ApplicationRecord
 
   before_destroy :remove_children, unless: Proc.new { self.referenceable.is_a?(Diagnostic) }
   before_validation :prevent_loop, unless: Proc.new { self.referenceable.is_a?(Diagnostic) || (self.referenceable.is_a?(Instance) && self.referenceable.instanceable.is_a?(Diagnostic) && self.referenceable.instanceable.duplicating) }
-  before_validation :already_exist, on: :create
 
   validates_presence_of :first_conditionable
 
@@ -104,10 +103,4 @@ class Condition < ApplicationRecord
     end
   end
 
-  # Throw an error if condition with same referenceable and first_conditionable already exist
-  def already_exist
-    if Condition.exists?(referenceable: referenceable, first_conditionable: first_conditionable)
-      self.errors.add(:base, I18n.t('conditions.validation.link_already_exist'))
-    end
-  end
 end

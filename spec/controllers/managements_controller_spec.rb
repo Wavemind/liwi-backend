@@ -78,18 +78,18 @@ RSpec.describe ManagementsController, type: :controller do
   end
 
   it 'should work for [POST:create]' do
-    post :create, params: { algorithm_id: @algorithm.id, health_cares_management: { algorithm: @algorithm, label_en: 'Severe LRTI' } }
+    post :create, params: { algorithm_id: @algorithm.id, diagnostic_id: @dd7.id, health_cares_management: { algorithm: @algorithm, label_en: 'Severe LRTI' } }
     expect(response.status).to eq(302)
   end
 
-  it 'should work for [get:edit]' do
+  it 'should work for [GET:edit]' do
     get :edit, params: { algorithm_id: @algorithm.id, id: @management.id }
     expect(response.status).to eq(200)
   end
 
   it 'should work for [PATCH:update]' do
     patch :update, params: { algorithm_id: @algorithm.id, id: @management.id, health_cares_management: { algorithm: @algorithm, label_en: 'Severe LRTI' } }
-    expect(response.status).to eq(302)
+    expect(response.status).to eq(200)
   end
 
 end
