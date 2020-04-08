@@ -13,9 +13,7 @@ RSpec.describe Instance, type: :model do
 
   it 'is invalid with invalid attributes' do
     instance = Instance.new(instanceable: @dd7, node: nil)
-    instance2 = Instance.new(instanceable: nil, node: @question)
     expect(instance).to_not be_valid
-    expect(instance2).to_not be_valid
   end
 
   it 'removes condition from children' do

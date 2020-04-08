@@ -43,7 +43,7 @@ RSpec.describe FinalDiagnostic, type: :model do
     expect(df.available_nodes_health_cares_json.count).to eq(7) # 3 new nodes, one used and 5 auto created by algorithm (reference tables)
   end
 
-  it 'generates diagram properly' do
+  it 'generates diagram properly', do
     dd1 = Diagnostic.create!(version: @version, label: 'lower respiratory tract infection (LRTI)', node: @cc)
     dd1.final_diagnostics.create!(label_en: 'Df')
     t1 = HealthCares::Drug.create!(label_en: 'Treat', algorithm: @algorithm)
@@ -60,7 +60,7 @@ RSpec.describe FinalDiagnostic, type: :model do
 
     Condition.create!(referenceable: dd1_m1, first_conditionable: ps9.answers.first, operator: nil, second_conditionable: nil)
 
-    expect(dd1_df1.node.health_care_questions_json[0][0]['id']).to eq(dd1_ps9.id)
+    expect(dd1_df1.node.health_care_questions_json[0]['id']).to eq(dd1_ps9.id)
     expect(dd1_df1.node.health_cares_json[0]['id']).to eq(dd1_t1.id)
     expect(dd1_df1.node.health_cares_json[1]['id']).to eq(dd1_m1.id)
     expect(dd1_df1.node.health_cares_json[1]['conditions'][0]['first_conditionable_id']).to eq(ps9.answers.first.id)

@@ -26,9 +26,7 @@ RSpec.describe QuestionsSequence, type: :model do
     ps9_ps9 = Instance.create!(instanceable: ps9, node: ps9)
     Condition.create!(referenceable: ps9_ps9, first_conditionable: ps5.answers.first, operator: nil, second_conditionable: nil)
 
-    expect(ps9.generate_questions_order[0][0]['id']).to eq(ps9_ps5.id)
-    expect(ps9.generate_questions_order[1][0]['id']).to eq(ps9_ps9.id)
-    expect(ps9.questions_json[1][0]['conditions'][0]['first_conditionable_id']).to eq(ps5.answers.first.id)
+      expect(ps9.questions_json[1][0]['conditions'][0]['first_conditionable_id']).to eq(ps5.answers.first.id)
   end
 
   it 'returns correct list of available nodes' do
