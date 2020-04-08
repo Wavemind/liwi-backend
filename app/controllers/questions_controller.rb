@@ -51,7 +51,7 @@ class QuestionsController < ApplicationController
         end
 
       else
-        render json: question.errors.full_messages, status: 422
+        render json: @question.errors.full_messages, status: 422
         raise ActiveRecord::Rollback, ''
       end
     end
