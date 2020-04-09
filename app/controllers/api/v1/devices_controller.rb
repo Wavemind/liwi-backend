@@ -7,11 +7,7 @@ class Api::V1::DevicesController < ApplicationController
       device = Device.create(device_params)
     end
 
-    if device.save
-      render json: device
-    else
-      render json: { errors: t('.errors_on_save') }, status: :unprocessable_entity
-    end
+    render json: device
   end
 
   def show
