@@ -4,7 +4,7 @@ class Api::V1::DevicesController < ApplicationController
     device = Device.find_by_mac_address(device_params[:mac_address])
 
     if device.blank?
-      device = Device.new(device_params)
+      device = Device.create(device_params)
     end
 
     if device.save
