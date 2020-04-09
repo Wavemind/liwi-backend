@@ -122,6 +122,7 @@ en:
           no_version: "Your group has no version"
           device_not_exist: "Device doesn't exist"
           invalid_token: "Invalid token"
+          no_group: "Your tablet isn't associated with groups"
       activities:
         create:
           errors_device_not_present: "Device doesn't exist"
