@@ -6,7 +6,7 @@ class Api::V1::VersionsController < Api::V1::ApplicationController
 
     if device.present?
       if device.group.present?
-        if device.group.token == params[:token]
+        if device.group.token == request.headers['group_token']
           # Find the algorithm version available for this group
           version = device.group.versions.where('group_accesses.end_date IS NULL').first
 
