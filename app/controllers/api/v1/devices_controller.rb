@@ -1,5 +1,7 @@
 class Api::V1::DevicesController < ApplicationController
 
+  before_action :authenticate_user!, only: [:create]
+
   def create
     device = Device.find_by_mac_address(device_params[:mac_address])
 

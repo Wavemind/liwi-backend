@@ -64,12 +64,9 @@ RSpec.describe ManagementsController, type: :controller do
     expect(flash[:notice]).to eq I18n.t('flash_message.success_updated')
   end
 
-  it 'should work for [PATCH:update_from_diagram]' do
-    put :update_from_diagram, params: { algorithm_id: @algorithm.id, id: @management.id, health_cares_management: { algorithm: @algorithm, label_en: 'Severe LRTI' } }
-
-    node = JSON.parse(response.body)['node']
+  it 'should work for [PATCH:update]' do
+    patch :update, params: { from: 'react', algorithm_id: @algorithm.id, id: @management.id, health_cares_management: { algorithm: @algorithm, label_en: 'Severe LRTI' } }
     expect(response.status).to eq(200)
-    expect(node['label_translations']['en']).to eq('Severe LRTI')
   end
 
   it 'should work for [GET:new]' do
@@ -79,7 +76,7 @@ RSpec.describe ManagementsController, type: :controller do
 
   it 'should work for [POST:create]' do
     post :create, params: { from: 'rails', algorithm_id: @algorithm.id, diagnostic_id: @dd7.id, health_cares_management: { algorithm: @algorithm, label_en: 'Severe LRTI' } }
-    expect(response.status).to eq(302)
+    expect(response.status).to eq(200)
   end
 
   it 'should work for [GET:edit]' do
@@ -88,7 +85,7 @@ RSpec.describe ManagementsController, type: :controller do
   end
 
   it 'should work for [PATCH:update]' do
-    patch :update, params: { algorithm_id: @algorithm.id, id: @management.id, health_cares_management: { algorithm: @algorithm, label_en: 'Severe LRTI' } }
+    patch :update, params: { from: 'rails', algorithm_id: @algorithm.id, id: @management.id, health_cares_management: { algorithm: @algorithm, label_en: 'Severe LRTI' } }
     expect(response.status).to eq(200)
   end
 
