@@ -1,5 +1,6 @@
 class Api::V1::ActivitiesController < ApplicationController
 
+  # TODO: Encore utile ?
   def create
     device_params = activity_params[:device_attributes]
     device = Device.find_by_mac_address(device_params[:mac_address])
