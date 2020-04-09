@@ -1,7 +1,12 @@
 class Api::V1::DevicesController < ApplicationController
 
   def create
-    device = Device.new(device_params)
+    device = Device.find_by_mac_address(device_params[:mac_address])
+
+    if device.blank?
+      device = Device.new(device_params)
+    end
+
     if device.save
       render json: device
     else
