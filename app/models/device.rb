@@ -14,7 +14,7 @@ class Device < ApplicationRecord
   # @return [String] contact of multiple column
   # Return label of a device
   def label
-    "#{brand} #{model} - #{name}"
+    "#{brand} #{model} - #{mac_address}"
   end
 
   # @params nil
