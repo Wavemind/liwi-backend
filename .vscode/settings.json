@@ -1,0 +1,22 @@
+{
+    "sqltools.connections": [
+        {
+            "database": "liwi_main_data",
+            "dialect": "PostgreSQL",
+            "name": "localhost",
+            "password": "root",
+            "port": 5432,
+            "server": "localhost",
+            "username": "root"
+        },
+        {
+            "database": "ebail",
+            "dialect": "PostgreSQL",
+            "name": "Ebail",
+            "password": "laJoconde14",
+            "port": 5432,
+            "server": "159.100.243.159",
+            "username": "ebail"
+        }
+    ]
+}

@@ -1,6 +1,5 @@
 class Api::V1::ApplicationController < ActionController::Base
-  include DeviseTokenAuth::Concerns::SetUserByToken
-
+  
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   def is_available

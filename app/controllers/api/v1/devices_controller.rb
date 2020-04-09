@@ -1,4 +1,5 @@
 class Api::V1::DevicesController < ApplicationController
+  include DeviseTokenAuth::Concerns::SetUserByToken
 
   before_action :authenticate_user!, only: [:create]
 
