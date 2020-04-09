@@ -128,8 +128,7 @@ en:
           errors_on_save: "An error occurred when saving activities"
       devices:
         create:
-          errors_on_save: ""
-      groups:
+          errors_on_save: "An error occurred when saving devices"
         show:
           no_group: "Your tablet isn't associated with groups"
   archive: "Archive"
@@ -425,8 +424,11 @@ en:
       wrong_node_type: "This node is not a management or a drug."
   medical_staffs:
     roles:
-      registration_nurse: "Registration nurse"
+      registration_desk: "Registration desk"
       clinician: "Clinician"
+      triage_nurse: "Triage nurse"
+      lab: "Lab"
+      pharmacist: "Pharmacist"
   nodes:
     validation:
       reference_used: "This reference is already used"

@@ -3,7 +3,7 @@ class MedicalStaff < ApplicationRecord
 
   belongs_to :group
 
-  enum role: [:registration_nurse, :clinician]
+  enum role: [:registration_desk, :clinician, :triage_nurse, :lab, :pharmacist]
 
   validates_presence_of :first_name
   validates_presence_of :last_name

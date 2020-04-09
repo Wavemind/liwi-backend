@@ -8,7 +8,7 @@ class Device < ApplicationRecord
 
   belongs_to :group, optional: true
 
-  validates_presence_of :mac_address
+  validates :mac_address, uniqueness: true, presence: true
 
   # @params nil
   # @return [String] contact of multiple column

@@ -6,7 +6,7 @@
 <div class="row">
   <% @group.medical_staffs.each do |medical_staff| %>
     <div class="col-md-4">
-      <div class="card">
+      <div class="card pb-4">
         <div class="card-body">
           <h5 class="card-title"><%= medical_staff.full_name %></h5>
           <h6 class="card-subtitle mb-2 text-muted"><%= t("medical_staffs.roles.#{medical_staff.role}") %></h6>
