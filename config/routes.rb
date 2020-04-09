@@ -192,10 +192,10 @@ Rails.application.routes.draw do
   # API
   namespace :api do
     namespace :v1 do
-      mount_devise_token_auth_for 'User', at: 'auth'
-      resources :activities, only: [:create]
       resources :versions, only: [:index]
-      resources :devices, only: [:create, :show]
+      resources :devices, only: [:show]
+      mount_devise_token_auth_for 'User', at: 'auth'
+      resources :devices, only: [:create]
 
       get 'is_available', to: 'application#is_available'
       get 'categories', to: 'application#categories'

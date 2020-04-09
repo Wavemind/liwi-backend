@@ -10,7 +10,8 @@ class Api::V1::DevicesController < ApplicationController
   end
 
   def show
-    device = Device.find(params[:id])
+    # Mac address send instead of device id
+    device = Device.find_by_mac_address(device_params[:id])
     if device.group.present?
       render json: device.group.as_json(include: [:medical_staffs])
     else
