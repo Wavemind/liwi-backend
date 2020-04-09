@@ -43,7 +43,7 @@ RSpec.describe FinalDiagnostic, type: :model do
     expect(df.available_nodes_health_cares_json.count).to eq(7) # 3 new nodes, one used and 5 auto created by algorithm (reference tables)
   end
 
-  it 'generates diagram properly', do
+  it 'generates diagram properly' do
     dd1 = Diagnostic.create!(version: @version, label: 'lower respiratory tract infection (LRTI)', node: @cc)
     dd1.final_diagnostics.create!(label_en: 'Df')
     t1 = HealthCares::Drug.create!(label_en: 'Treat', algorithm: @algorithm)
