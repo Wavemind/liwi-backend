@@ -29,7 +29,7 @@ describe 'Whether access is ocurring properly', type: :request do
   context 'context: general authentication via API, ' do
     it 'doesn\'t give you anything if you don\'t log in' do
       get api_v1_versions_url()
-      expect(response.status).to eq(401)
+      expect(response.status).to eq(422)
     end
 
     it 'gives you an authentication code if you are an existing user and you satisfy the password' do
@@ -57,6 +57,7 @@ describe 'Whether access is ocurring properly', type: :request do
     it 'first get a token, then try to access with mac_address to a restricted page' do
       login
       auth_params = get_auth_params_from_login_response_headers(response)
+      auth_params['group-token'] = Device.find_by(mac_address: '64:DB:43:D5:31:5C').group.token
       get api_v1_versions_url, headers: auth_params, params: { mac_address: '64:DB:43:D5:31:5C' }
       expect(response).to have_http_status(:success)
     end

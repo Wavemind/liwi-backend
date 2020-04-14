@@ -41,12 +41,10 @@ RSpec.describe Diagnostic, type: :model do
     Condition.create!(referenceable: dd1_ps9, first_conditionable: ps5.answers.first, operator: nil, second_conditionable: nil)
     Condition.create!(referenceable: dd1_df1, first_conditionable: ps9.answers.first, operator: nil, second_conditionable: nil)
 
-    expect(dd1.generate_questions_order[0][0]['id']).to eq(dd1_ps5.id)
-    expect(dd1.generate_questions_order[1][0]['id']).to eq(dd1_ps9.id)
     expect(dd1.final_diagnostics_json[0]['id']).to eq(dd1_df1.id)
     expect(dd1.health_cares_json[0]['id']).to eq(dd1_t1.id)
     expect(dd1.health_cares_json[1]['id']).to eq(dd1_m1.id)
-    expect(dd1.questions_json[1][0]['conditions'][0]['first_conditionable_id']).to eq(ps5.answers.first.id)
+    expect(dd1.questions_json[0]['conditions'][0]['first_conditionable_id']).to eq(ps5.answers.first.id)
   end
 
   it 'returns correct list of available nodes' do

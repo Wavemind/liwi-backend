@@ -147,20 +147,20 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   it 'should work for [GET:edit]' do
-    @question = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', is_mandatory: true, stage: Question.stages[:triage], answer_type: @boolean)
+    @question = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', is_mandatory: true, stage: Question.stages[:triage], answer_type: @boolean)
 
     get :edit, params: { algorithm_id: @algorithm.id, id: @question.id }
     expect(response.status).to eq(200)
   end
 
   it 'should work for [POST:create]' do
-    post :create, params: { algorithm_id: @algorithm.id, question: {algorithm: @algorithm, label_en: 'Cough', reference: '2', is_mandatory: true, stage: 'triage', answer_type: @boolean} }
+    post :create, params: { algorithm_id: @algorithm.id, from: 'rails', question: {algorithm: @algorithm, label_en: 'Cough', is_mandatory: true, stage: 'triage', answer_type_id: @boolean.id} }
     expect(response.status).to eq(200)
   end
 
   it 'should work for [POST:update]' do
-    @question = Questions::AssessmentTest.create!(algorithm: @algorithm, label_en: 'Cough', reference: '2', is_mandatory: true, stage: Question.stages[:triage], answer_type: @boolean, unavailable: '1')
-    put :update, params: { algorithm_id: @algorithm.id, id: @question.id, question: {id: @question.id, algorithm: @algorithm, label_en: 'Cough', reference: '2', is_mandatory: true, stage: 'triage', answer_type: @boolean} }
+    @question = Questions::AssessmentTest.create!(algorithm: @algorithm, label_en: 'Cough', is_mandatory: true, stage: Question.stages[:triage], answer_type: @boolean, unavailable: '1')
+    put :update, params: { algorithm_id: @algorithm.id, id: @question.id, from: 'rails', question: {id: @question.id, algorithm: @algorithm, label_en: 'Cough', is_mandatory: true, stage: 'triage', answer_type_id: @boolean.id} }
     expect(response.status).to eq(200)
   end
 
@@ -170,7 +170,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   it 'should work for [POST:validate]' do
-    put :validate, params: { algorithm_id: @algorithm.id, question: {algorithm: @algorithm, label_en: 'Cough', reference: '2', is_mandatory: true, stage: 'triage', answer_type: @boolean} }, xhr: true
+    put :validate, params: { algorithm_id: @algorithm.id, question: {algorithm: @algorithm, label_en: 'Cough', is_mandatory: true, stage: 'triage', answer_type_id: @boolean.id} }, xhr: true
     expect(response.status).to eq(200)
   end
 

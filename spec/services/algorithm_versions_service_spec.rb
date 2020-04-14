@@ -9,8 +9,8 @@ RSpec.describe VersionsService, type: :service do
     nodes.each do |key, node|
       answers_count += node['answers'].count if node['answers'].present?
     end
-    expect(nodes.count).to eq(20)
-    expect(answers_count).to eq(25)
+    expect(nodes.count).to eq(22)
+    expect(answers_count).to eq(27)
   end
 
   it 'generates a json with correct amount of conditions' do
@@ -19,7 +19,7 @@ RSpec.describe VersionsService, type: :service do
     conditions = json['diagnostics'].values[0]['final_diagnostics'].values[0]['conditions']
 
     expect(top_conditions.count + conditions.count).to eq(3)
-    expect(top_conditions[1]['first_id']).to eq(25)
-    expect(top_conditions[1]['second_id']).to eq(26)
+    expect(top_conditions[1]['first_id']).to eq(30)
+    expect(top_conditions[1]['second_id']).to eq(31)
   end
 end

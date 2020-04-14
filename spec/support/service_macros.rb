@@ -69,10 +69,10 @@ module ServiceMacros
       dd7_p1 = Instance.create!(instanceable: dd7, node: p1)
       dd7_df7 = Instance.create!(instanceable: dd7, node: df7)
       dd7_ps6 = Instance.create!(instanceable: dd7, node: ps6)
-      dd7_t9 = Instance.create!(instanceable: dd7, node: t9, final_diagnostic_id: t9.id)
-      dd7_t1 = Instance.create!(instanceable: dd7, node: t1, final_diagnostic_id: t1.id)
-      dd7_t2 = Instance.create!(instanceable: dd7, node: t2, final_diagnostic_id: t2.id)
-      dd7_m2 = Instance.create!(instanceable: dd7, node: m2, final_diagnostic_id: m2.id)
+      dd7_t9 = Instance.create!(instanceable: dd7, node: t9, final_diagnostic_id: df7.id)
+      dd7_t1 = Instance.create!(instanceable: dd7, node: t1, final_diagnostic_id: df7.id)
+      dd7_t2 = Instance.create!(instanceable: dd7, node: t2, final_diagnostic_id: df7.id)
+      dd7_m2 = Instance.create!(instanceable: dd7, node: m2, final_diagnostic_id: df7.id)
 
       # PS6
       ps6_s4 = Instance.create!(instanceable: ps6, node: s4)

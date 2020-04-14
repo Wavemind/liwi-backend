@@ -95,9 +95,9 @@ RSpec.describe DiagnosticsController, type: :controller do
     expect(response.status).to eq(200)
   end
 
-  it 'should work for [GET:validate]' do
+  it 'should work for [GET:validate] but fails validation' do
     get :validate, params: { algorithm_id: @algorithm.id, version_id: @version.id, id: @dd7.id }
-    expect(response.status).to eq(200)
+    expect(response.status).to eq(422)
   end
 
 end
