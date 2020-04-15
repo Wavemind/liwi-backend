@@ -331,6 +331,7 @@ en:
     add_device:
       success_add_device: "Device was successfully added to group"
       error_add_device: "An error occurred when adding device to group"
+    current_algorithm: "Currently published algorithm <b>%{version_name}</b>"
     index:
       columns:
         name: "Name"

@@ -57,7 +57,7 @@
   <div class="col">
     <% if @current_group_access.present? %>
       <div class="alert alert-success" role="alert">
-        <%= "Current publish algorithm <b>#{@current_group_access.version.display_label}</b>".html_safe %>
+        <%= t('groups.current_algorithm', version_name: @current_group_access.version.display_label).html_safe %>
       </div>
     <% else %>
       <div class="alert alert-danger" role="alert">
@@ -70,7 +70,7 @@
       <%= f.input :group_id, as: :hidden, input_html: { value: params[:id] } %>
       <div class="row">
         <div class="col">
-          <%= f.association :version, collection: Version.includes(:algorithm).where.not(id: (@current_group_access.version_id if @current_group_access.present?)), label_method: :display_label, label: false, prompt: t('prompt') %>
+          <%= f.association :version, collection: Version.includes(:algorithm).where.not(id: (@current_group_access.version_id if @current_group_access.present?), archived: true), label_method: :display_label, label: false, prompt: t('prompt') %>
         </div>
         <div class="col">
           <%= f.submit t('add'), class: 'btn btn-primary' %>
