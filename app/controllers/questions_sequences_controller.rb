@@ -29,8 +29,11 @@ class QuestionsSequencesController < ApplicationController
       if params[:from] == 'rails'
         render json: { url: diagram_questions_sequence_url(@questions_sequence) }
       else
-        instanceable = Object.const_get(params[:instanceable_type].camelize.singularize).find(params[:instanceable_id])
-        instanceable.components.create!(node: @questions_sequence, final_diagnostic_id: params[:final_diagnostic_id])
+        type = params[:instanceable_type].camelize.singularize
+        if %w(Diagnostic QuestionsSequence).include? type
+          instanceable = Object.const_get(params[:instanceable_type].camelize.singularize).find(params[:instanceable_id])
+          instanceable.components.create!(node: @questions_sequence, final_diagnostic_id: params[:final_diagnostic_id])
+        end
         render json: @questions_sequence.get_instance_json(instanceable)
       end
     else
