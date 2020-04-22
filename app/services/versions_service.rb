@@ -318,7 +318,7 @@ class VersionsService
       hash[question.id]['value_format'] = question.answer_type.value
       format = question.answer_type.display
       format = 'Reference' if question.reference_table_x_id.present?
-      format = question.answer_type.value if question.answer_type.value == 'Date'
+      format = question.answer_type.value if %w(Date String).include?(question.answer_type.value)
       hash[question.id]['display_format'] = format
       hash[question.id]['qs'] = get_node_questions_sequences(question, [])
       hash[question.id]['dd'] = get_node_diagnostics(question, [])

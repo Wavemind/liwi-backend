@@ -38,11 +38,12 @@ ludovico = User.create!(first_name: 'Ludovico', last_name: 'Cabuccio', email: 'l
 olga = User.create!(first_name: 'Olga', last_name: 'De Santis', email: 'olga.desantis80@gmail.com', password: '123456', password_confirmation: '123456')
 
 # Answer types
-boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
+boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton', answer_required: false)
 dropdown_list = AnswerType.create!(value: 'Array', display: 'DropDownList')
 input_integer = AnswerType.create!(value: 'Integer', display: 'Input')
 input_float = AnswerType.create!(value: 'Float', display: 'Input')
 formula = AnswerType.create!(value: 'Float', display: 'Formula')
-date = AnswerType.create!(value: 'Date', display: 'Input')
-present_absent = AnswerType.create!(value: 'Present', display: 'DropDownList')
-positive_negative = AnswerType.create!(value: 'Positive', display: 'DropDownList')
+date = AnswerType.create!(value: 'Date', display: 'Input', answer_required: false)
+present_absent = AnswerType.create!(value: 'Present', display: 'DropDownList', answer_required: false)
+positive_negative = AnswerType.create!(value: 'Positive', display: 'DropDownList', answer_required: false)
+string = AnswerType.create!(value: 'String', display: 'Input', answer_required: false)
