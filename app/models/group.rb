@@ -13,7 +13,7 @@ class Group < ApplicationRecord
   validates_presence_of :pin_code
 
   after_validation :validate_code_pin
-  after_validation :validate_ips
+  # after_validation :validate_ips
 
   after_create :generate_token
 

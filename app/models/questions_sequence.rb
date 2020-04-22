@@ -57,10 +57,9 @@ class QuestionsSequence < Node
   # Return available nodes in the algorithm in json format
   def available_nodes_json
     ids = components.map(&:node_id)
-    (
-      algorithm.questions.no_triage.no_treatment_condition.diagrams_included.where.not(id: ids) +
-      algorithm.questions_sequences.not_scored.where.not(id: ids)
-    ).as_json(methods: [:category_name, :node_type, :get_answers, :type])
+    nodes = algorithm.questions.no_triage.no_treatment_condition.diagrams_included.where.not(id: ids)
+    nodes += self.is_a?(QuestionsSequences::Scored) ? algorithm.questions_sequences.not_scored.where.not(id: ids) : algorithm.questions_sequences.where.not(id: ids)
+    nodes.as_json(methods: [:category_name, :node_type, :get_answers, :type])
   end
 
   # Add errors to a predefined syndrome for its components
