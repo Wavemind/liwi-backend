@@ -36,11 +36,18 @@ export const CATEGORIES_DISPLAYING_SYSTEM = [
 export const NO_ANSWERS_ATTACHED_TYPE = [
   "Questions::VitalSignAnthropometric",
   "Questions::BasicMeasurement",
-  "Questions::Demographic"
+  "Questions::BasicDemographic"
+];
+
+export const CATEGORIES_DISPLAYING_FILTERABLE = [
+  "Questions::BasicDemographic",
+  "Questions::Demographic",
 ];
 
 export const NO_ANSWERS_ATTACHED_ANSWER_TYPE = [
   1,
+  6,
   7,
-  8
+  8,
+  9
 ];

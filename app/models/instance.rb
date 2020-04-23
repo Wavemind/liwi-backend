@@ -4,6 +4,7 @@ class Instance < ApplicationRecord
   belongs_to :node
   belongs_to :instanceable, polymorphic: true
   belongs_to :final_diagnostic, optional: true
+  belongs_to :version, optional: true
 
   has_many :children
   has_many :nodes, through: :children

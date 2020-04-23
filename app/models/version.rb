@@ -15,6 +15,10 @@ class Version < ApplicationRecord
 
   has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy
 
+  has_one :top_left_instance_id, class_name: 'Instance'
+  has_one :first_top_right_question_id, class_name: 'Instance'
+  has_one :second_top_right_question_id, class_name: 'Instance'
+
   validates_presence_of :name
   validates_presence_of :description
 

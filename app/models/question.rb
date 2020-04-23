@@ -29,7 +29,7 @@ class Question < Node
   # Return questions which has not triage stage
   scope :no_triage, ->() { where.not(stage: Question.stages[:triage]).or(where(stage: nil)) }
   scope :no_treatment_condition, ->() { where.not(type: 'Questions::TreatmentQuestion') }
-  scope :diagrams_included, ->() { where.not(type: %w(Questions::VitalSignAnthropometric Questions::BasicMeasurement Questions::Demographic Questions::ConsultationRelated)) }
+  scope :diagrams_included, ->() { where.not(type: %w(Questions::VitalSignAnthropometric Questions::BasicMeasurement Questions::BasicDemographic Questions::ConsultationRelated)) }
 
   accepts_nested_attributes_for :answers, allow_destroy: true
 
@@ -42,6 +42,7 @@ class Question < Node
       Questions::ChronicCondition,
       Questions::ConsultationRelated,
       Questions::ComplaintCategory,
+      Questions::BasicDemographic,
       Questions::Demographic,
       Questions::Exposure,
       Questions::ObservedPhysicalSign,
