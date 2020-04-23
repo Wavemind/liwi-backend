@@ -102,8 +102,11 @@ export class Diagram extends React.Component {
         let excludedFinalDiagnostic = _.find(diagramNodes, (node) => {
           return node.options.dbInstance.node_id === diagramNode.options.dbInstance.node.final_diagnostic_id;
         });
-        let link = linkFinalDiagnosticExclusion(diagramNode, excludedFinalDiagnostic);
-        model.addLink(link);
+        // TODO: Hot fixe
+        if (excludedFinalDiagnostic !== undefined) {
+          let link = linkFinalDiagnosticExclusion(diagramNode, excludedFinalDiagnostic);
+          model.addLink(link);
+        }
       }
     });
 
