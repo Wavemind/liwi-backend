@@ -12,13 +12,17 @@
  *
  */
 @import "bootstrap";
+@import "font-awesome";
 @import "datatables";
 @import "diagram";
+
 /*
     DEMO STYLEa
 */
+
 @import url(https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700);
 @import url(https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css);
+
 
 body {
   font-family: 'Poppins', sans-serif;

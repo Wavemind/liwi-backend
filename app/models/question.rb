@@ -5,9 +5,6 @@ class Question < Node
   after_create :create_positive, if: Proc.new { answer_type.value == 'Positive' }
   after_create :create_present, if: Proc.new { answer_type.value == 'Present' }
 
-  after_create :push_in_versions, if: Proc.new { stage == 'triage' }
-  before_destroy :remove_from_versions, if: Proc.new { stage == 'triage' }
-
   attr_accessor :unavailable
 
   enum stage: [:registration, :triage, :test, :consultation, :diagnosis_management]
@@ -112,42 +109,9 @@ class Question < Node
     self.save
   end
 
-  # When a question from triage stage is created, push it at the end of the versions order
-  def push_in_versions
-    algorithm.versions.each do |version|
-      version.components.create!(node: self)
-      version.update("#{version_field_to_set}": version.send("#{version_field_to_set}").push(id))
-    end
-  end
-
-  # Remove the triage question from the version triage orders
-  def remove_from_versions
-    field_to_set = version_field_to_set
-    algorithm.versions.each do |version|
-      version["#{field_to_set}"].delete(id) if version.send("#{field_to_set}").include?(id)
-      version.save
-    end
-  end
-
-  # Get the right field from the node type<
-  def version_field_to_set
-    case type
-    when 'Questions::UniqueTriageQuestion'
-      return 'triage_unique_triage_question_order'
-    when 'Questions::ComplaintCategory'
-      return 'triage_complaint_category_order'
-    when 'Questions::BasicMeasurement'
-      return 'triage_basic_measurement_order'
-    when 'Questions::ChronicCondition'
-      return 'triage_chronic_condition_order'
-    else
-      return 'triage_questions_order'
-    end
-  end
-
   # Ensure that the answers are coherent with each other, that every value the mobile user may enter match one and only one answers entered by the medal-C user
   def validate_overlap
-    return true unless %w(Input Formula).include?(answer_type.display)
+    return true unless %w(Float Integer).include?(answer_type.value)
 
     self.errors.add(:answers, I18n.t('answers.validation.overlap.one_more_or_equal')) if answers.filter(&:more_or_equal?).count != 1
     self.errors.add(:answers, I18n.t('answers.validation.overlap.one_less')) if answers.filter(&:less?).count != 1

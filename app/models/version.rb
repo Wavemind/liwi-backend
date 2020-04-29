@@ -15,14 +15,14 @@ class Version < ApplicationRecord
 
   has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy
 
-  has_one :top_left_instance_id, class_name: 'Instance'
-  has_one :first_top_right_question_id, class_name: 'Instance'
-  has_one :second_top_right_question_id, class_name: 'Instance'
+  belongs_to :top_left_question, class_name: 'Instance', optional: true
+  belongs_to :first_top_right_question, class_name: 'Instance', optional: true
+  belongs_to :second_top_right_question, class_name: 'Instance', optional: true
+
+  before_create :init_orders
 
   validates_presence_of :name
   validates_presence_of :description
-
-  after_create :instantiate_questions
 
   amoeba do
     enable
@@ -37,12 +37,27 @@ class Version < ApplicationRecord
     "#{algorithm.name} - #{name}"
   end
 
-  # Create an instance per question who has triage stage or vital sign category
-  def instantiate_questions
-    return if name.ends_with?(I18n.t('duplicated'))
-    algorithm.questions.triage.each do |question|
-      components.create!(node: question)
-      self.update("#{question.version_field_to_set}": self.send("#{question.version_field_to_set}").push(question.id))
+  # Return an array of all questions that can be instantiate in a version
+  def instanceable_questions
+    questions = algorithm.questions.where(stage: %w(registration triage)).or(algorithm.questions.where(type: 'VitalSignAnthropometric'))
+
+    questions_json = []
+    questions.map do |question|
+      questions_json.push({value: question.id, label: question.reference_label})
     end
+    questions_json
+  end
+
+  # Init orders for new version
+  def init_orders
+    self.questions_orders = {
+      basic_measurement: [],
+      consultation_related: [],
+      complaint_category: [],
+      basic_demographic: [],
+      demographic: [],
+      unique_triage_physical_sign: [],
+      unique_triage_question: []
+    }
   end
 end

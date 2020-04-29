@@ -4,7 +4,10 @@ class Instance < ApplicationRecord
   belongs_to :node
   belongs_to :instanceable, polymorphic: true
   belongs_to :final_diagnostic, optional: true
-  belongs_to :version, optional: true
+
+  has_one :top_left_question, foreign_key: 'top_left_question_id', class_name: 'Version', dependent: :nullify
+  has_one :first_top_right_question, foreign_key: 'first_top_right_question_id', class_name: 'Version', dependent: :nullify
+  has_one :second_top_right_question, foreign_key: 'second_top_right_question_id', class_name: 'Version', dependent: :nullify
 
   has_many :children
   has_many :nodes, through: :children
@@ -24,7 +27,10 @@ class Instance < ApplicationRecord
   scope :health_care_conditions, ->() { joins(:node).includes(:conditions).where.not(final_diagnostic: nil).or(joins(:node).includes(:conditions).where("nodes.type LIKE 'HealthCares::%'")) }
   scope :not_health_care_conditions, ->() { includes(:conditions).where(final_diagnostic_id: nil) }
 
+  after_create :push_in_version_order, if: Proc.new { self.instanceable.is_a?(Version) }
+  before_destroy :remove_from_versions, if: Proc.new { self.instanceable.is_a?(Version) }
   before_destroy :remove_condition_from_children
+
 
   validate :already_exist, on: :create
 
@@ -74,6 +80,31 @@ class Instance < ApplicationRecord
     else
       self.as_json(include: { node: { methods: [:node_type, :category_name, :type] } })
     end
+  end
+
+  # Return the label of the node for display purpose
+  def node_label
+    node.label_en
+  end
+
+  # When a question from triage stage is created, push it at the end of the version order
+  def push_in_version_order
+    category = Object.const_get(node.class.name).variable
+    orders = instanceable.questions_orders
+    if orders[category].nil?
+      orders[category] = [id]
+    else
+      orders[category].push(id)
+    end
+    instanceable.update(questions_orders: orders)
+  end
+
+  # Remove the triage question from the version triage orders
+  def remove_from_versions
+    category = Object.const_get(node.class.name).variable
+    orders = instanceable.questions_orders
+    orders[category].delete(id)
+    instanceable.update(questions_orders: orders)
   end
 
   private

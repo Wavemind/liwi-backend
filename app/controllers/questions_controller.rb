@@ -35,6 +35,9 @@ class QuestionsController < ApplicationController
           render json: instance.generate_json
         end
       else
+        puts '**'
+        puts question.errors.messages
+        puts '**'
         render json: question.errors.full_messages, status: 422
         raise ActiveRecord::Rollback, ''
       end
@@ -141,6 +144,7 @@ class QuestionsController < ApplicationController
       :snomed_label,
       :is_triage,
       :is_identifiable,
+      :is_filterable,
       complaint_category_ids: [],
       answers_attributes: [
         :id,

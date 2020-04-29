@@ -115,6 +115,9 @@ class VersionsService
     hash['description'] = @version.description
     hash['algorithm_id'] = @version.algorithm.id
     hash['algorithm_name'] = @version.algorithm.name
+    hash['left_top_question_id'] = @version.top_left_question.node_id
+    hash['first_top_right_question_id'] = @version.first_top_right_question.node_id
+    hash['second_top_right_question_id'] = @version.second_top_right_question.node_id
     hash['triage'] = extract_triage_metadata
     hash['author'] = @version.user.full_name
     hash['created_at'] = @version.created_at
@@ -263,6 +266,7 @@ class VersionsService
   def self.extract_health_cares(health_cares, diagnostic_id, final_diagnostic_id)
     hash = {}
     health_cares.each do |health_care|
+
       instance = health_care.instances.find_by(instanceable_id: diagnostic_id, final_diagnostic_id: final_diagnostic_id)
       hash[health_care.id] = extract_conditions(instance.conditions)
       hash[health_care.id]['id'] = health_care.id
