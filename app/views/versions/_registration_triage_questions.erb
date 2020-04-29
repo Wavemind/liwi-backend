@@ -1,2 +1,7 @@
 <p class="mx-0 my-0 metadata" data-version="<%= @version.id %>" data-algorithm="<%= @version.algorithm.id %>"></p>
-<%= react_component('form/components/VersionComponents', {selected: @version.components.map(&:node_id), questions: @version.instanceable_questions}) %>
+<%= react_component('form/components/VersionComponents',
+                    {
+                      selected: @version.components.map(&:node_id),
+                      questions: @version.instanceable_questions,
+                      disabled: @version.is_deployed?
+                    }) %>

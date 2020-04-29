@@ -9,18 +9,19 @@ import Http from "../../../diagram/engine/http";
 
 export default class VersionComponents extends React.Component {
 
-  state = {
-    http: new Http(),
-    selected: [],
-    questions: [],
-  };
+  constructor(props) {
+    super(props);
 
-  componentWillMount() {
-    this.setState({
-      selected: this.props.selected,
-      questions: this.props.questions
-    });
+    const { selected, questions, disabled } = props;
+
+    this.state = {
+      http: new Http(),
+      selected: selected,
+      questions: questions,
+      disabled: disabled
+    };
   }
+
 
   onChange = (nextSelected) => {
     const { http, selected } = this.state;
@@ -35,7 +36,7 @@ export default class VersionComponents extends React.Component {
 
 
   render() {
-    const { selected, questions } = this.state;
+    const { selected, questions, disabled } = this.state;
 
     return (
       <DualListBox
@@ -43,6 +44,7 @@ export default class VersionComponents extends React.Component {
         selected={selected}
         showHeaderLabels={true}
         onChange={this.onChange}
+        disabled={disabled}
         icons={{
           moveLeft: <span className="fa fa-chevron-left" />,
           moveAllLeft: [

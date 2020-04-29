@@ -156,6 +156,34 @@ class Question < Node
     dependencies.map(&:instanceable).present?
   end
 
+  # Check if question is used in a deployed version
+  def used_in_deployed_version
+    involved_versions_ids = []
+    instances.map do |instance|
+      if instance.instanceable.is_a? Version
+        involved_versions_ids.push(instance.instanceable_id) unless involved_versions_ids.include?(instance.instanceable_id)
+      elsif instance.instanceable.is_a? Diagnostic
+        involved_versions_ids.push(instance.instanceable.version_id) unless involved_versions_ids.include?(instance.instanceable.version_id)
+      else
+        involved_versions_ids = questions_sequence_instanceables(instance.instanceable, involved_versions_ids)
+      end
+    end
+
+    GroupAccess.where(end_date: nil, version_id: involved_versions_ids).any?
+  end
+
+  # Recursively check any questions sequence to get every involved instances
+  def questions_sequence_instanceables(qs, versions = [])
+    qs.instances.where.not(instanceable: qs).map do |instance|
+      if instance.instanceable.is_a? Diagnostic
+        versions.push(instance.instanceable.version_id) unless versions.include?(instance.instanceable.version_id)
+      else
+        questions_sequence_instanceables(instance.instanceable, versions)
+      end
+    end
+    versions
+  end
+
   private
 
   # Display the label for the current child

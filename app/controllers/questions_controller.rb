@@ -35,9 +35,6 @@ class QuestionsController < ApplicationController
           render json: instance.generate_json
         end
       else
-        puts '**'
-        puts question.errors.messages
-        puts '**'
         render json: question.errors.full_messages, status: 422
         raise ActiveRecord::Rollback, ''
       end

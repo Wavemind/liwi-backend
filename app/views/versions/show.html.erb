@@ -1,4 +1,9 @@
-<h1><%= t('.title', name: @version.algorithm.name, version: @version.name) %></h1>
+<h1>
+  <%= t('.title', name: @version.algorithm.name, version: @version.name) %>
+</h1>
+<h4 class="text-warning">
+  <%= t('.deployed_version') if @version.is_deployed? %>
+</h4>
 
 <p class="display-spaces"><%= @version.description %></p>
 

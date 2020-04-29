@@ -48,6 +48,10 @@ class Version < ApplicationRecord
     questions_json
   end
 
+  def is_deployed?
+    group_accesses.where(end_date: nil).any?
+  end
+
   # Init orders for new version
   def init_orders
     self.questions_orders = {
