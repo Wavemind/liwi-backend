@@ -10,14 +10,9 @@ class VersionsService
     hash = extract_version_metadata
     hash['diagnostics'] = {}
 
-    # Add every registration nodes before starting
-    @version.algorithm.questions.registration.each do |registration_question|
-      assign_node(registration_question)
-    end
-
-    # Add every triage nodes before starting
-    @version.algorithm.questions.triage.each do |triage_question|
-      assign_node(triage_question)
+    # Add every question instantiated in the version
+    @version.components.each do |instance|
+      assign_node(instance.node)
     end
 
     # Add every vital sign consultation
@@ -115,9 +110,19 @@ class VersionsService
     hash['description'] = @version.description
     hash['algorithm_id'] = @version.algorithm.id
     hash['algorithm_name'] = @version.algorithm.name
-    hash['left_top_question_id'] = @version.top_left_question.node_id
-    hash['first_top_right_question_id'] = @version.first_top_right_question.node_id
-    hash['second_top_right_question_id'] = @version.second_top_right_question.node_id
+    hash['left_top_question_id'] = @version.top_left_question.present? ? @version.top_left_question.node_id : nil
+    hash['first_top_right_question_id'] = @version.first_top_right_question.present? ? @version.first_top_right_question.node_id : nil
+    hash['second_top_right_question_id'] = @version.second_top_right_question.present? ? @version.second_top_right_question.node_id : nil
+
+    # Convert instance ids into node ids
+    orders = @version.questions_orders
+    orders.each do |key, value|
+      value.each_with_index do |instance_id, index|
+        orders[key][index] = Instance.find(instance_id).node_id
+      end
+    end
+    hash['orders'] = orders
+
     hash['triage'] = extract_triage_metadata
     hash['author'] = @version.user.full_name
     hash['created_at'] = @version.created_at
@@ -129,13 +134,6 @@ class VersionsService
   # Build a hash of metadata about the triage questions
   def self.extract_triage_metadata
     hash = {}
-
-    hash['orders'] = {}
-    hash['orders']['unique_triage_question'] = @version.triage_unique_triage_question_order
-    hash['orders']['complaint_category'] = @version.triage_complaint_category_order
-    hash['orders']['basic_measurement'] = @version.triage_basic_measurement_order
-    hash['orders']['chronic_condition'] = @version.triage_chronic_condition_order
-    hash['orders']['other'] = @version.triage_questions_order
 
     hash['conditions'] = {}
     @version.components.each do |instance|
