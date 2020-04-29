@@ -39,6 +39,7 @@ en:
         stage: "Stage"
         system: "System"
         unavailable: "Test can be unavailable"
+        is_filterable: "Question is filterable on patient search"
         is_triage: "Ask in triage if it is available"
         is_identifiable: "This question can identify a patient"
       questions_sequence:
@@ -86,6 +87,7 @@ en:
       - "Date"
       - "Present / Absent"
       - "Positive / Negative"
+      - "String"
   answers:
     predefined:
       absent: "Absent"
@@ -482,6 +484,9 @@ en:
       background_calculation:
         label: "Background calculation"
         reference_prefix: "BC"
+      basic_demographic:
+        label: "Demographics without answers"
+        reference_prefix: "BD"
       basic_measurement:
         label: "Basic measurement"
         reference_prefix: "BM"
@@ -643,11 +648,13 @@ en:
     edit:
       title: "Edit an algorithm version"
     show:
+      deployed_version: "This version is deployed, its data are not editable"
+      questions_sequences: "Questions Sequences"
       subtitle_diagnostics: "Diagnostics"
       subtitle_questions_order: "Triage questions order"
+      subtitle_registration_triage_questions: "Registration and triage questions"
       subtitle_triage_conditions: "Triage questions conditions"
       title: "Details of %{name} - version %{version}"
-      questions_sequences: "Questions Sequences"
   warning_dependency: "Warning ! Editing this node will affect :"
   close: "Close"
   back: "Back"

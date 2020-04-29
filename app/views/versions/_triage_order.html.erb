@@ -1,59 +1,13 @@
 <div class="row">
-  <div class="col">
-    <h3><%= t('questions.categories.unique_triage_question.label') %></h3>
-    <ul id="triage_unique_triage_question_order" class="triage-order">
-      <% @version.triage_unique_triage_question_order.each do |question_id| %>
-        <% question =  Node.find(question_id) %>
-        <li class="ui-state-default" value=<%= question_id %>><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><%= question.reference_label %></li>
-      <% end %>
-    </ul>
-  </div>
-
-  <div class="col">
-    <h3><%= t('questions.categories.complaint_category.label') %></h3>
-    <ul id="triage_complaint_category_order" class="triage-order">
-      <% @version.triage_complaint_category_order.each do |question_id| %>
-        <% question =  Node.find(question_id) %>
-        <li class="ui-state-default" value=<%= question_id %>><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><%= question.reference_label %></li>
-      <% end %>
-    </ul>
-  </div>
-</div>
-
-<hr />
-
-<div class="row">
-  <div class="col">
-    <h3><%= t('questions.categories.basic_measurement.label') %></h3>
-    <ul id="triage_basic_measurement_order" class="triage-order">
-      <% @version.triage_basic_measurement_order.each do |question_id| %>
-        <% question =  Node.find(question_id) %>
-        <li class="ui-state-default" value=<%= question_id %>><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><%= question.reference_label %></li>
-      <% end %>
-    </ul>
-  </div>
-
-  <div class="col">
-    <h3><%= t('questions.categories.chronic_condition.label') %></h3>
-    <ul id="triage_chronic_condition_order" class="triage-order">
-      <% @version.triage_chronic_condition_order.each do |question_id| %>
-        <% question =  Node.find(question_id) %>
-        <li class="ui-state-default" value=<%= question_id %>><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><%= question.reference_label %></li>
-      <% end %>
-    </ul>
-  </div>
-</div>
-
-<hr />
-
-<div class="row">
-  <div class="col">
-    <h3><%= t('.others') %></h3>
-    <ul id="triage_questions_order" class="triage-order">
-      <% @version.triage_questions_order.each do |question_id| %>
-        <% question =  Node.find(question_id) %>
-        <li class="ui-state-default" value=<%= question_id %>><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><%= question.reference_label %></li>
-      <% end %>
-    </ul>
-  </div>
+  <% @version.questions_orders.each do |key, value| %>
+    <div class="col-md-6">
+      <h3><%= t("questions.categories.#{key}.label") %></h3>
+      <ul id=<%= "#{key}" %> class="triage-order <%= @version.is_deployed? ? 'order-unavailable' : 'order-available' %>">
+        <% value.each do |instance_id| %>
+          <% instance = Instance.find(instance_id) %>
+          <li class="ui-state-default" value=<%= instance_id %>><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><%= instance.node_label %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
 </div>

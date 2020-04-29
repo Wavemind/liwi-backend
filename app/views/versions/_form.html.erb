@@ -1,6 +1,13 @@
 <%= simple_form_for [@algorithm, @version], html: { class: 'form-horizontal' } do |f| %>
 
   <%= f.input :name %>
+
+  <% if @version.id.present? %>
+    <%= f.input :top_left_question_id, collection: @version.components, label_method: :node_label, prompt: t('select')  %>
+    <%= f.input :first_top_right_question_id, collection: @version.components, label_method: :node_label, prompt: t('select')  %>
+    <%= f.input :second_top_right_question_id, collection: @version.components, label_method: :node_label, prompt: t('select')  %>
+  <% end %>
+
   <%= f.input :description, as: :text %>
 
   <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>

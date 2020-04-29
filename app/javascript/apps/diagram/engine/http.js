@@ -221,6 +221,21 @@ export default class Http {
   };
 
   /**
+   * Create components for the version
+   * @params [Array] nodes ids
+   * @return [Object] body of request
+   */
+  createVersionInstance = async(nodesIds) => {
+    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/components`;
+    const body = {
+      nodes_ids: nodesIds,
+      version_id: this.version
+    };
+    const header = await this.setHeaders("POST", body);
+    return await fetch(url, header).catch(error => console.log(error));
+  };
+
+  /**
    * Fetch drug medication forms
    * @return [Object] body of request
    */
@@ -344,6 +359,21 @@ export default class Http {
    */
   redirectToDiagnosticDiagram = async () => {
     window.location = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/diagram`;
+  };
+
+  /**
+   * Remove components from version
+   * @params [Array] nodes ids
+   * @return [Object] body of request
+   */
+  removeVersionInstances = async(nodesIds) => {
+    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/remove_components`;
+    const body = {
+      nodes_ids: nodesIds,
+      version_id: this.version
+    };
+    const header = await this.setHeaders("DELETE", body);
+    return await fetch(url, header).catch(error => console.log(error));
   };
 
   /**

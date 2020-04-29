@@ -2,7 +2,7 @@ class VersionsController < ApplicationController
   before_action :authenticate_user!, except: [:change_triage_order]
   before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :duplicate, :create_triage_condition, :remove_triage_condition]
   before_action :set_breadcrumb, only: [:show, :new, :edit]
-  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :duplicate, :change_triage_order, :create_triage_condition, :remove_triage_condition]
+  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :change_triage_order, :components, :create_triage_condition, :duplicate, :remove_components, :remove_triage_condition]
 
   def index
     respond_to do |format|
@@ -63,34 +63,33 @@ class VersionsController < ApplicationController
     end
   end
 
-  # @params [Version] version to duplicate
-  # Duplicate a version with every diagnostics and their logics (Instances with their Conditions and Children), the FinalDiagnostics and Conditions attached to it
-  def duplicate
-    @version.diagnostics.each { |diagnostic| diagnostic.update(duplicating: true) }
-    duplicated_version = @version.amoeba_dup
-
-    if duplicated_version.save
-      duplicated_version.diagnostics.each_with_index { |diagnostic, index| diagnostic.relink_instance }
-      @version.diagnostics.each { |diagnostic| diagnostic.update(duplicating: false) }
-      redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_deleted')
-    else
-      puts '***'
-      puts duplicated_version.errors.messages
-      puts '***'
-      redirect_to algorithm_url(@algorithm, panel: 'versions'), alert: t('flash_message.duplicate_fail')
-    end
-  end
-
   # PUT algorithms/:algorithm_id/version/:id/change_triage_order
   # @params version [Version] version of algorithm we change order of
   # Change the order of the triage questions for this version
   def change_triage_order
-    if @version.update("#{params[:key]}": params[:order])
+    order = @version.questions_orders
+    order[params[:key]] = params[:order].map(&:to_i)
+    if @version.update(questions_orders: order)
       render json: {result: 'success'}
     else
       render json: {result: 'error'}
     end
   end
+
+  def components
+    params[:nodes_ids].map do |node_id|
+      @version.components.create(node_id: node_id)
+    end
+  end
+
+
+  def remove_components
+    params[:nodes_ids].map do |node_id|
+      instance = @version.components.find_by(node_id: node_id)
+      instance.destroy if instance.present?
+    end
+  end
+
 
   # PUT algorithms/:algorithm_id/version/:id/create_triage_condition
   # @params version [Version] version of algorithm where we create a condition
@@ -113,6 +112,21 @@ class VersionsController < ApplicationController
       else
         redirect_to algorithm_version_url(@algorithm, @version, panel: 'triage_conditions'), alert: t('flash_message.create_fail')
       end
+    end
+  end
+
+  # @params [Version] version to duplicate
+  # Duplicate a version with every diagnostics and their logics (Instances with their Conditions and Children), the FinalDiagnostics and Conditions attached to it
+  def duplicate
+    @version.diagnostics.each { |diagnostic| diagnostic.update(duplicating: true) }
+    duplicated_version = @version.amoeba_dup
+
+    if duplicated_version.save
+      duplicated_version.diagnostics.each_with_index { |diagnostic, index| diagnostic.relink_instance }
+      @version.diagnostics.each { |diagnostic| diagnostic.update(duplicating: false) }
+      redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_deleted')
+    else
+      redirect_to algorithm_url(@algorithm, panel: 'versions'), alert: t('flash_message.duplicate_fail')
     end
   end
 
@@ -165,7 +179,11 @@ class VersionsController < ApplicationController
       :triage_chronic_condition_order,
       :triage_questions_order,
       :triage_id,
-      :cc_id
+      :cc_id,
+      :top_left_question_id,
+      :first_top_right_question_id,
+      :second_top_right_question_id,
+      :nodes_ids
     )
   end
 end

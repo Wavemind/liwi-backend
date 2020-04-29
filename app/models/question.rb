@@ -5,9 +5,6 @@ class Question < Node
   after_create :create_positive, if: Proc.new { answer_type.value == 'Positive' }
   after_create :create_present, if: Proc.new { answer_type.value == 'Present' }
 
-  after_create :push_in_versions, if: Proc.new { stage == 'triage' }
-  before_destroy :remove_from_versions, if: Proc.new { stage == 'triage' }
-
   attr_accessor :unavailable
 
   enum stage: [:registration, :triage, :test, :consultation, :diagnosis_management]
@@ -29,7 +26,7 @@ class Question < Node
   # Return questions which has not triage stage
   scope :no_triage, ->() { where.not(stage: Question.stages[:triage]).or(where(stage: nil)) }
   scope :no_treatment_condition, ->() { where.not(type: 'Questions::TreatmentQuestion') }
-  scope :diagrams_included, ->() { where.not(type: %w(Questions::VitalSignAnthropometric Questions::BasicMeasurement Questions::Demographic Questions::ConsultationRelated)) }
+  scope :diagrams_included, ->() { where.not(type: %w(Questions::VitalSignAnthropometric Questions::BasicMeasurement Questions::BasicDemographic Questions::ConsultationRelated)) }
 
   accepts_nested_attributes_for :answers, allow_destroy: true
 
@@ -42,6 +39,7 @@ class Question < Node
       Questions::ChronicCondition,
       Questions::ConsultationRelated,
       Questions::ComplaintCategory,
+      Questions::BasicDemographic,
       Questions::Demographic,
       Questions::Exposure,
       Questions::ObservedPhysicalSign,
@@ -111,42 +109,9 @@ class Question < Node
     self.save
   end
 
-  # When a question from triage stage is created, push it at the end of the versions order
-  def push_in_versions
-    algorithm.versions.each do |version|
-      version.components.create!(node: self)
-      version.update("#{version_field_to_set}": version.send("#{version_field_to_set}").push(id))
-    end
-  end
-
-  # Remove the triage question from the version triage orders
-  def remove_from_versions
-    field_to_set = version_field_to_set
-    algorithm.versions.each do |version|
-      version["#{field_to_set}"].delete(id) if version.send("#{field_to_set}").include?(id)
-      version.save
-    end
-  end
-
-  # Get the right field from the node type<
-  def version_field_to_set
-    case type
-    when 'Questions::UniqueTriageQuestion'
-      return 'triage_unique_triage_question_order'
-    when 'Questions::ComplaintCategory'
-      return 'triage_complaint_category_order'
-    when 'Questions::BasicMeasurement'
-      return 'triage_basic_measurement_order'
-    when 'Questions::ChronicCondition'
-      return 'triage_chronic_condition_order'
-    else
-      return 'triage_questions_order'
-    end
-  end
-
   # Ensure that the answers are coherent with each other, that every value the mobile user may enter match one and only one answers entered by the medal-C user
   def validate_overlap
-    return true unless %w(Input Formula).include?(answer_type.display)
+    return true unless %w(Float Integer).include?(answer_type.value)
 
     self.errors.add(:answers, I18n.t('answers.validation.overlap.one_more_or_equal')) if answers.filter(&:more_or_equal?).count != 1
     self.errors.add(:answers, I18n.t('answers.validation.overlap.one_less')) if answers.filter(&:less?).count != 1
@@ -189,6 +154,34 @@ class Question < Node
   # TODO: COMMENTAIRE
   def instance_dependencies?
     dependencies.map(&:instanceable).present?
+  end
+
+  # Check if question is used in a deployed version
+  def used_in_deployed_version
+    involved_versions_ids = []
+    instances.map do |instance|
+      if instance.instanceable.is_a? Version
+        involved_versions_ids.push(instance.instanceable_id) unless involved_versions_ids.include?(instance.instanceable_id)
+      elsif instance.instanceable.is_a? Diagnostic
+        involved_versions_ids.push(instance.instanceable.version_id) unless involved_versions_ids.include?(instance.instanceable.version_id)
+      else
+        involved_versions_ids = questions_sequence_instanceables(instance.instanceable, involved_versions_ids)
+      end
+    end
+
+    GroupAccess.where(end_date: nil, version_id: involved_versions_ids).any?
+  end
+
+  # Recursively check any questions sequence to get every involved instances
+  def questions_sequence_instanceables(qs, versions = [])
+    qs.instances.where.not(instanceable: qs).map do |instance|
+      if instance.instanceable.is_a? Diagnostic
+        versions.push(instance.instanceable.version_id) unless versions.include?(instance.instanceable.version_id)
+      else
+        questions_sequence_instanceables(instance.instanceable, versions)
+      end
+    end
+    versions
   end
 
   private
