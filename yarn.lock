@@ -6975,6 +6975,11 @@ react-dual-listbox@^2.0.0:
     nanoid "^2.0.0"
     prop-types "^15.5.8"
 
+react-duallist@^1.1.6:
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/react-duallist/-/react-duallist-1.1.6.tgz#29da3e0965b340cd107ed665f5a5c2383b1744f9"
+  integrity sha512-X5MUiYGqN79GEyCH6CtTnC37HSPnE7vOUUYK/zKK2T2Ql9O4RX66P/jfA4MfGTjkkrqwpBLZRUf43TTtnRqDxw==
+
 react-event-listener@^0.6.2:
   version "0.6.6"
   resolved "https://registry.yarnpkg.com/react-event-listener/-/react-event-listener-0.6.6.tgz#758f7b991cad9086dd39fd29fad72127e1d8962a"

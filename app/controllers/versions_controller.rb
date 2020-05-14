@@ -2,7 +2,7 @@ class VersionsController < ApplicationController
   before_action :authenticate_user!, except: [:change_triage_order]
   before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :duplicate, :create_triage_condition, :remove_triage_condition]
   before_action :set_breadcrumb, only: [:show, :new, :edit]
-  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :change_triage_order, :components, :create_triage_condition, :duplicate, :remove_components, :remove_triage_condition]
+  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :change_triage_order, :components, :create_triage_condition, :duplicate, :remove_components, :remove_triage_condition, :update_list]
 
   def index
     respond_to do |format|
@@ -67,9 +67,9 @@ class VersionsController < ApplicationController
   # @params version [Version] version of algorithm we change order of
   # Change the order of the triage questions for this version
   def change_triage_order
-    order = @version.questions_orders
-    order[params[:key]] = params[:order].map(&:to_i)
-    if @version.update(questions_orders: order)
+    config = @version.medal_r_config
+    config['questions_orders'][params[:key]] = params[:order].map(&:to_i)
+    if @version.update(medal_r_confg: config)
       render json: {result: 'success'}
     else
       render json: {result: 'error'}
@@ -154,6 +154,13 @@ class VersionsController < ApplicationController
     else
       redirect_to algorithm_url(@algorithm, panel: 'versions'), danger: t('flash_message.update_fail')
     end
+  end
+
+
+  def update_list
+    config = @version.medal_r_config
+    config["#{params[:list]}_list_order"] = params[:order]
+    @version.update(medal_r_config: config)
   end
 
   private

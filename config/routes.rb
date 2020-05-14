@@ -37,6 +37,7 @@ Rails.application.routes.draw do
         put 'change_triage_order'
         put 'create_triage_condition'
         put 'remove_triage_condition'
+        put 'update_list'
       end
 
       resources :diagnostics, only: [:index, :new, :create, :edit, :update, :show, :destroy, :duplicate, :update_translations] do

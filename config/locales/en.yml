@@ -651,6 +651,7 @@ en:
       deployed_version: "This version is deployed, its data are not editable"
       questions_sequences: "Questions Sequences"
       subtitle_diagnostics: "Diagnostics"
+      subtitle_medal_r_config: "Config Medal-R"
       subtitle_questions_order: "Triage questions order"
       subtitle_registration_triage_questions: "Registration and triage questions"
       subtitle_triage_conditions: "Triage questions conditions"

@@ -6,6 +6,7 @@ class VersionsService
   def self.generate_version_hash(id)
     init
     @version = Version.find(id)
+    @patient_questions = []
 
     hash = extract_version_metadata
     hash['diagnostics'] = {}
@@ -30,6 +31,8 @@ class VersionsService
     hash['nodes'] = generate_nodes
 
     hash['nodes'] = add_reference_links(hash['nodes'])
+
+    hash['patient_level_questions'] = @patient_questions
 
     hash
   end
@@ -115,7 +118,7 @@ class VersionsService
     hash['second_top_right_question_id'] = @version.second_top_right_question.present? ? @version.second_top_right_question.node_id : nil
 
     # Convert instance ids into node ids
-    orders = @version.questions_orders
+    orders = @version.medal_r_config['questions_orders']
     orders.each do |key, value|
       value.each_with_index do |instance_id, index|
         orders[key][index] = Instance.find(instance_id).node_id
@@ -352,6 +355,9 @@ class VersionsService
 
         hash[question.id]['answers'][answer.id] = answer_hash
       end
+
+      # Push the patient level questions in an array for medal R to read it easily
+      @patient_questions.push(question.id) if %w(Questions::BasicDemographic Questions::Demographic Questions::ChronicalCondition Questions::Vaccine).include?(question.type)
     end
     hash
   end
