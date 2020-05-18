@@ -19,7 +19,7 @@ class Version < ApplicationRecord
   belongs_to :first_top_right_question, class_name: 'Instance', optional: true
   belongs_to :second_top_right_question, class_name: 'Instance', optional: true
 
-  before_create :init_orders
+  before_create :init_config
 
   validates_presence_of :name
   validates_presence_of :description
@@ -48,20 +48,35 @@ class Version < ApplicationRecord
     questions_json
   end
 
+  # Return an array of all questions that has been instantiated
+  def instanciated_questions
+    questions = components.map(&:node)
+
+    questions_json = []
+    questions.map do |question|
+      questions_json.push({value: question.id, label: question.reference_label})
+    end
+    questions_json
+  end
+
   def is_deployed?
     group_accesses.where(end_date: nil).any?
   end
 
   # Init orders for new version
-  def init_orders
-    self.questions_orders = {
-      basic_measurement: [],
-      consultation_related: [],
-      complaint_category: [],
-      basic_demographic: [],
-      demographic: [],
-      unique_triage_physical_sign: [],
-      unique_triage_question: []
+  def init_config
+    self.medal_r_config = {
+      questions_orders: {
+        basic_measurement: [],
+        consultation_related: [],
+        complaint_category: [],
+        basic_demographic: [],
+        demographic: [],
+        unique_triage_physical_sign: [],
+        unique_triage_question: []
+      },
+      patient_list_order: [],
+      medical_case_list_order: [],
     }
   end
 end

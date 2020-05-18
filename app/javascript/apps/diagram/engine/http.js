@@ -532,6 +532,22 @@ export default class Http {
   };
 
   /**
+   *
+   * @param list
+   * @param order
+   * @returns {Promise<Response | void>}
+   */
+  updateVersionList = async (list, order) => {
+    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/update_list`;
+    const body = {
+      list,
+      order
+    };
+    const header = await this.setHeaders("PUT", body);
+    return await fetch(url, header).catch(error => console.log(error));
+  };
+
+  /**
    * Validate diagnostic
    * @return [Object] body of request
    */

@@ -90,21 +90,21 @@ class Instance < ApplicationRecord
   # When a question from triage stage is created, push it at the end of the version order
   def push_in_version_order
     category = Object.const_get(node.class.name).variable
-    orders = instanceable.questions_orders
-    if orders[category].nil?
-      orders[category] = [id]
+    config = instanceable.medal_r_config
+    if config['questions_orders'][category].nil?
+      config['questions_orders'][category] = [id]
     else
-      orders[category].push(id)
+      config['questions_orders'][category].push(id)
     end
-    instanceable.update(questions_orders: orders)
+    instanceable.update(medal_r_config: config)
   end
 
   # Remove the triage question from the version triage orders
   def remove_from_versions
     category = Object.const_get(node.class.name).variable
-    orders = instanceable.questions_orders
-    orders[category].delete(id)
-    instanceable.update(questions_orders: orders)
+    config = instanceable.medal_r_config
+    config['questions_orders'][category].delete(id)
+    instanceable.update(medal_r_config: config)
   end
 
   private

@@ -4,9 +4,6 @@ import 'react-dual-listbox/lib/react-dual-listbox.css';
 
 import Http from "../../../diagram/engine/http";
 
-
-
-
 export default class VersionComponents extends React.Component {
 
   constructor(props) {
@@ -56,8 +53,6 @@ export default class VersionComponents extends React.Component {
             <span key={0} className="fa fa-chevron-right" />,
             <span key={1} className="fa fa-chevron-right" />,
           ],
-          moveDown: <span className="fa fa-chevron-down" />,
-          moveUp: <span className="fa fa-chevron-up" />,
         }}
       />
     );
