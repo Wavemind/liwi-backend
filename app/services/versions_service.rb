@@ -113,6 +113,21 @@ class VersionsService
     hash['description'] = @version.description
     hash['algorithm_id'] = @version.algorithm.id
     hash['algorithm_name'] = @version.algorithm.name
+
+    hash['mobile_config'] = extract_config
+
+    hash['triage'] = extract_triage_metadata
+    hash['author'] = @version.user.full_name
+    hash['created_at'] = @version.created_at
+    hash['updated_at'] = @version.updated_at
+    hash
+  end
+
+  # @return hash
+  # Build a hash of medal-r config for the version
+  def self.extract_config
+    hash = {}
+
     hash['left_top_question_id'] = @version.top_left_question.present? ? @version.top_left_question.node_id : nil
     hash['first_top_right_question_id'] = @version.first_top_right_question.present? ? @version.first_top_right_question.node_id : nil
     hash['second_top_right_question_id'] = @version.second_top_right_question.present? ? @version.second_top_right_question.node_id : nil
@@ -124,12 +139,19 @@ class VersionsService
         orders[key][index] = Instance.find(instance_id).node_id
       end
     end
-    hash['orders'] = orders
+    hash['questions_orders'] = orders
 
-    hash['triage'] = extract_triage_metadata
-    hash['author'] = @version.user.full_name
-    hash['created_at'] = @version.created_at
-    hash['updated_at'] = @version.updated_at
+    medical_case_list = @version.medal_r_config['medical_case_list_order']
+    medical_case_list.each do |value|
+      medical_case_list.push(Instance.find(value).node_id)
+    end
+    hash['medical_case_list'] = medical_case_list
+
+    patient_list = @version.medal_r_config['patient_list_order']
+    patient_list.each do |value|
+      patient_list.push(Instance.find(value).node_id)
+    end
+    hash['patient_list'] = patient_list
     hash
   end
 
