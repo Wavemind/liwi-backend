@@ -140,18 +140,8 @@ class VersionsService
       end
     end
     hash['questions_orders'] = orders
-
-    medical_case_list = @version.medal_r_config['medical_case_list_order']
-    medical_case_list.each do |value|
-      medical_case_list.push(Instance.find(value).node_id)
-    end
-    hash['medical_case_list'] = medical_case_list
-
-    patient_list = @version.medal_r_config['patient_list_order']
-    patient_list.each do |value|
-      patient_list.push(Instance.find(value).node_id)
-    end
-    hash['patient_list'] = patient_list
+    hash['medical_case_list'] = @version.medal_r_config['medical_case_list_order']
+    hash['patient_list'] = @version.medal_r_config['patient_list_order']
     hash
   end
 
