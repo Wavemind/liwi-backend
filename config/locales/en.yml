@@ -14,9 +14,9 @@ en:
       formulation:
         administration_route_id: "Administration route"
         by_age: "Treatment conditioned by age"
-        minimal_dose_per_kg: "Minimal dose/kg"
-        maximal_dose_per_kg: "Maximal dose/kg"
-        maximal_dose: "Maximal dose"
+        minimal_dose_per_kg: "Minimal dose mg/kg/day"
+        maximal_dose_per_kg: "Maximal dose mg/kg/day"
+        maximal_dose: "Maximal dose (mg)"
         doses_per_day: "Number of doses per day"
         treatment_type: "Medication form"
         pill_size: "Pill minimal size (mg)"
