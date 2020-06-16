@@ -26,6 +26,8 @@
     "react": "^16.12.0",
     "react-bootstrap": "1.0.0-beta.14",
     "react-dom": "^16.8.6",
+    "react-dual-listbox": "^2.0.0",
+    "react-duallist": "^1.1.6",
     "react-fade-in": "^0.1.8",
     "react-hot-loader": "^4.11.1",
     "react-html-parser": "^2.0.2",

@@ -7,7 +7,7 @@ export default class FormulationFields extends React.Component {
   constructor(props) {
     super(props);
     const { index, arrayHelpers: { form: { values } } } = this.props;
-    const unity = ["suspension", "syrup"].includes(values.formulations_attributes[index].medication_form)
+    const unity = ["suspension", "syrup", "solution", "powder_for_injection"].includes(values.formulations_attributes[index].medication_form)
       ? "ml"
       : "mg";
 
@@ -154,7 +154,7 @@ export default class FormulationFields extends React.Component {
             </Form.Group>
             : null}
 
-          {(!["capsule", "tablet", "suspension", "syrup"].includes(formulation.medication_form) || formulation.by_age) ?
+          {(!["capsule", "tablet", "suspension", "syrup", "solution", "powder_for_injection"].includes(formulation.medication_form) || formulation.by_age) ?
             <Form.Group as={Col} controlId={`${index}-validationUniqueDose`}>
               <Form.Label>{I18n.t("activerecord.attributes.formulation.unique_dose")}</Form.Label>
               <Form.Control
@@ -170,7 +170,7 @@ export default class FormulationFields extends React.Component {
             </Form.Group>
             : null}
 
-          {(["suspension", "syrup"].includes(formulation.medication_form) && !formulation.by_age) ?
+          {(["suspension", "syrup", "solution", "powder_for_injection"].includes(formulation.medication_form) && !formulation.by_age) ?
             <Form.Group as={Col} controlId={`${index}-validationLiquidConcentration`}>
               <Form.Label>{I18n.t("activerecord.attributes.formulation.liquid_concentration")}</Form.Label>
               <Form.Control
@@ -187,7 +187,7 @@ export default class FormulationFields extends React.Component {
             : null}
         </Form.Row>
 
-        {(["capsule", "tablet", "suspension", "syrup"].includes(formulation.medication_form) && !formulation.by_age) ?
+        {(["capsule", "tablet", "suspension", "syrup", "solution", "powder_for_injection"].includes(formulation.medication_form) && !formulation.by_age) ?
           <>
             <Form.Row>
               <Form.Group as={Col} controlId={`${index}-validationDoseForm`}>

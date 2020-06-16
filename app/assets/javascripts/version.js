@@ -1,5 +1,5 @@
 jQuery(document).ready(function () {
-  $( ".triage-order" ).sortable({
+  $( ".order-available" ).sortable({
     stop: function( event, ui ) {
       let order = [];
 
@@ -22,7 +22,7 @@ jQuery(document).ready(function () {
       });
     }
   });
-  $( ".triage-order" ).disableSelection();
+  $( ".order-available" ).disableSelection();
 
 
   $("#versions-datatable").dataTable({

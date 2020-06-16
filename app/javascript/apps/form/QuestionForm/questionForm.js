@@ -13,6 +13,7 @@ import { questionSchema } from "../constants/schema";
 import {
   CATEGORIES_DISPLAYING_SYSTEM,
   CATEGORIES_DISABLING_ANSWER_TYPE,
+  CATEGORIES_DISPLAYING_FILTERABLE,
   NO_ANSWERS_ATTACHED_TYPE,
   NO_ANSWERS_ATTACHED_ANSWER_TYPE
 } from "../constants/constants";
@@ -114,6 +115,7 @@ export default class FinalDiagnosticForm extends React.Component {
 
     // Set stage
     switch (category) {
+      case "Questions::BasicDemographic":
       case "Questions::ConsultationRelated":
       case "Questions::Demographic":
         fieldsToSet.push(["stage", "registration"]);
@@ -423,6 +425,22 @@ export default class FinalDiagnosticForm extends React.Component {
                     />
                     <Form.Control.Feedback type="invalid">
                       {errors.formula}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                  : null}
+
+                {CATEGORIES_DISPLAYING_FILTERABLE.includes(values.type) ?
+                  <Form.Group controlId="validationFormula">
+                    <Form.Check
+                      name="is_filterable"
+                      label={I18n.t("activerecord.attributes.question.is_filterable")}
+                      value={values.is_filterable}
+                      checked={values.is_filterable}
+                      onChange={handleChange}
+                      isInvalid={touched.is_filterable && !!errors.is_filterable}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.is_filterable}
                     </Form.Control.Feedback>
                   </Form.Group>
                   : null}

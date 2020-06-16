@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_07_132933) do
+ActiveRecord::Schema.define(version: 2020_05_14_080354) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -56,6 +56,7 @@ ActiveRecord::Schema.define(version: 2020_04_07_132933) do
     t.string "display"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "answer_required", default: true
   end
 
   create_table "answers", force: :cascade do |t|
@@ -283,6 +284,7 @@ ActiveRecord::Schema.define(version: 2020_04_07_132933) do
     t.boolean "is_antibiotic", default: false
     t.boolean "is_triage", default: false
     t.boolean "is_identifiable", default: false
+    t.boolean "is_filterable", default: false
     t.index ["administration_route_id"], name: "index_nodes_on_administration_route_id"
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
@@ -363,13 +365,15 @@ ActiveRecord::Schema.define(version: 2020_04_07_132933) do
     t.bigint "algorithm_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "triage_questions_order", default: [], array: true
-    t.integer "triage_unique_triage_question_order", default: [], array: true
-    t.integer "triage_complaint_category_order", default: [], array: true
-    t.integer "triage_basic_measurement_order", default: [], array: true
-    t.integer "triage_chronic_condition_order", default: [], array: true
     t.text "description"
+    t.bigint "top_left_question_id"
+    t.bigint "first_top_right_question_id"
+    t.bigint "second_top_right_question_id"
+    t.json "medal_r_config", default: {}
     t.index ["algorithm_id"], name: "index_versions_on_algorithm_id"
+    t.index ["first_top_right_question_id"], name: "index_versions_on_first_top_right_question_id"
+    t.index ["second_top_right_question_id"], name: "index_versions_on_second_top_right_question_id"
+    t.index ["top_left_question_id"], name: "index_versions_on_top_left_question_id"
     t.index ["user_id"], name: "index_versions_on_user_id"
   end
 

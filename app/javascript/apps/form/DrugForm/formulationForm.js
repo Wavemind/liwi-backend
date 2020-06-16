@@ -42,13 +42,6 @@ export default class FormulationForm extends React.Component {
 
     if (httpRequest.status === 200) {
 
-      // Remove medication_forms already used by existing formulations
-      if (method === "update") {
-        result.medication_forms = _.filter(result.medication_forms, (medication_form) => {
-          return _.some(formData.formulations_attributes, (formulation) => formulation.medication_form !== medication_form);
-        });
-      }
-
       this.setState({
         breakables: result.breakables,
         administrationRoutes: result.administration_routes,
@@ -83,7 +76,6 @@ export default class FormulationForm extends React.Component {
   addFormulation = (arrayHelpers) => {
     const {
       selectedMedicationForm,
-      medicationForms
     } = this.state;
 
     arrayHelpers.push({
@@ -92,13 +84,7 @@ export default class FormulationForm extends React.Component {
       }
     );
 
-    let newMedicationFroms = [...medicationForms];
-    let index = newMedicationFroms.indexOf(selectedMedicationForm);
-
-    newMedicationFroms.splice(index, 1);
-
     this.setState({
-      medicationForms: newMedicationFroms,
       selectedMedicationForm: ""
     });
   };
@@ -109,14 +95,7 @@ export default class FormulationForm extends React.Component {
    * @params [Object] arrayHelpers
    */
   removeFormulation(key, arrayHelpers) {
-    const { medicationForms } = this.state;
-    let selectedMedicationForm = arrayHelpers.form.values.formulations_attributes[key].medication_form;
-    let newMedicationFroms = [...medicationForms];
-
     arrayHelpers.remove(key);
-
-    newMedicationFroms.push(selectedMedicationForm);
-    this.setState({ medicationForms: newMedicationFroms });
   }
 
   /**

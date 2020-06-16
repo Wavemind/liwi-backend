@@ -15,10 +15,14 @@ class Version < ApplicationRecord
 
   has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy
 
+  belongs_to :top_left_question, class_name: 'Instance', optional: true
+  belongs_to :first_top_right_question, class_name: 'Instance', optional: true
+  belongs_to :second_top_right_question, class_name: 'Instance', optional: true
+
+  before_create :init_config
+
   validates_presence_of :name
   validates_presence_of :description
-
-  after_create :instantiate_questions
 
   amoeba do
     enable
@@ -33,12 +37,46 @@ class Version < ApplicationRecord
     "#{algorithm.name} - #{name}"
   end
 
-  # Create an instance per question who has triage stage or vital sign category
-  def instantiate_questions
-    return if name.ends_with?(I18n.t('duplicated'))
-    algorithm.questions.triage.each do |question|
-      components.create!(node: question)
-      self.update("#{question.version_field_to_set}": self.send("#{question.version_field_to_set}").push(question.id))
+  # Return an array of all questions that can be instantiate in a version
+  def instanceable_questions
+    questions = algorithm.questions.where(stage: %w(registration triage)).or(algorithm.questions.where(type: 'VitalSignAnthropometric'))
+
+    questions_json = []
+    questions.map do |question|
+      questions_json.push({value: question.id, label: question.reference_label})
     end
+    questions_json
+  end
+
+  # Return an array of all questions that has been instantiated
+  def instanciated_questions
+    questions = components.map(&:node)
+
+    questions_json = []
+    questions.map do |question|
+      questions_json.push({value: question.id, label: question.reference_label})
+    end
+    questions_json
+  end
+
+  def is_deployed?
+    group_accesses.where(end_date: nil).any?
+  end
+
+  # Init orders for new version
+  def init_config
+    self.medal_r_config = {
+      questions_orders: {
+        basic_measurement: [],
+        consultation_related: [],
+        complaint_category: [],
+        basic_demographic: [],
+        demographic: [],
+        unique_triage_physical_sign: [],
+        unique_triage_question: []
+      },
+      patient_list_order: [],
+      medical_case_list_order: [],
+    }
   end
 end

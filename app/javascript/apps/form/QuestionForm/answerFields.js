@@ -66,7 +66,7 @@ export default class AnswerFields extends React.Component {
           </Form.Group>
 
           {/*Do not ask for value and operator if it is an array*/}
-          {values.answer_type_id !== "2" ? (
+          {parseInt(values.answer_type_id) !== 2 ? (
             <>
               <Form.Group as={Col} controlId="validationOperator">
                 <Form.Label>{I18n.t("activerecord.attributes.answer.operator")}</Form.Label>

@@ -2153,7 +2153,7 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
-classnames@^2.1.1, classnames@^2.2.6:
+classnames@^2.1.1, classnames@^2.2.5, classnames@^2.2.6:
   version "2.2.6"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
   integrity sha512-JR/iSQOSt+LQIWwrwEzJ9uk0xfN3mTVYMwt1Ir5mUcSN6pU+V4zQFFaJsclJbPuAUQH+yfWef6tm7l1quW3C8Q==
@@ -5348,6 +5348,11 @@ nan@^2.12.1, nan@^2.13.2:
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.14.0.tgz#7818f722027b2459a86f0295d434d1fc2336c52c"
   integrity sha512-INOFj37C7k3AfaNTtX8RhsTw7qRy7eLET14cROi9+5HAVbbHuIWUHEauBv5qT4Av2tWasiTY1Jw6puUNqRJXQg==
 
+nanoid@^2.0.0:
+  version "2.1.11"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-2.1.11.tgz#ec24b8a758d591561531b4176a01e3ab4f0f0280"
+  integrity sha512-s/snB+WGm6uwi0WjsZdaVcuf3KJXlfGl2LcxgwkEwJF0D/BWzVWAZW/XY4bFaiR7s0Jk3FPvlnepg1H1b1UwlA==
+
 nanomatch@^1.2.9:
   version "1.2.13"
   resolved "https://registry.yarnpkg.com/nanomatch/-/nanomatch-1.2.13.tgz#b87a8aa4fc0de8fe6be88895b38983ff265bd119"
@@ -6759,7 +6764,7 @@ prop-types-extra@^1.1.0:
     react-is "^16.3.2"
     warning "^4.0.0"
 
-prop-types@^15.5.10, prop-types@^15.5.6, prop-types@^15.5.7, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@^15.5.10, prop-types@^15.5.6, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -6959,6 +6964,21 @@ react-dom@^16.8.6:
     object-assign "^4.1.1"
     prop-types "^15.6.2"
     scheduler "^0.19.1"
+
+react-dual-listbox@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-dual-listbox/-/react-dual-listbox-2.0.0.tgz#e680b62af6b9148f67ed159cc91ec901de6b999a"
+  integrity sha512-GHczGX5BVBURILlfqAoBvx6Hn3EKvp2ubp5HvUljtBTXDNz3MCoG0Wf0Vd2UKtyo4I/yKhuVW+H4dixgwDObSQ==
+  dependencies:
+    classnames "^2.2.5"
+    lodash "^4.17.5"
+    nanoid "^2.0.0"
+    prop-types "^15.5.8"
+
+react-duallist@^1.1.6:
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/react-duallist/-/react-duallist-1.1.6.tgz#29da3e0965b340cd107ed665f5a5c2383b1744f9"
+  integrity sha512-X5MUiYGqN79GEyCH6CtTnC37HSPnE7vOUUYK/zKK2T2Ql9O4RX66P/jfA4MfGTjkkrqwpBLZRUf43TTtnRqDxw==
 
 react-event-listener@^0.6.2:
   version "0.6.6"

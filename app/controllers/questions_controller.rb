@@ -141,6 +141,7 @@ class QuestionsController < ApplicationController
       :snomed_label,
       :is_triage,
       :is_identifiable,
+      :is_filterable,
       complaint_category_ids: [],
       answers_attributes: [
         :id,
