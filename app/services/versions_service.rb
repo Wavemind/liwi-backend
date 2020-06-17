@@ -499,6 +499,7 @@ class VersionsService
     @questions_sequences.each do |key, questions_sequence|
       hash[questions_sequence.id] = extract_conditions(questions_sequence.instances.find_by(instanceable_id: questions_sequence.id).conditions)
       hash[questions_sequence.id]['id'] = questions_sequence.id
+      hash[questions_sequence.id]['label'] = questions_sequence.label
       hash[questions_sequence.id]['reference'] = questions_sequence.reference
       hash[questions_sequence.id]['min_score'] = questions_sequence.min_score
       hash[questions_sequence.id]['type'] = questions_sequence.node_type
