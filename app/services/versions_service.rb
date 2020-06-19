@@ -264,7 +264,7 @@ class VersionsService
 
     hash['operator'] = condition.operator
     hash['second_id'] = condition.second_conditionable_id
-    hash['second_type'] = condition.second_conditionable_type
+    hash['second_type'] = condition.second_condi    pe
 
     # Give the question's/predefined syndrome's id in order to retrieve it in front-end
     hash['second_node_id'] = condition.second_conditionable.is_a?(Answer) ? condition.second_conditionable.node.id : nil

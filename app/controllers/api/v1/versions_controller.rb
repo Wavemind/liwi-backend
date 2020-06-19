@@ -1,5 +1,7 @@
 class Api::V1::VersionsController < Api::V1::ApplicationController
 
+skip
+
   def index
     # Get the devise make the request
     device = Device.find_by(mac_address: params[:mac_address])
