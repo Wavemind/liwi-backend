@@ -1,5 +1,7 @@
 class Api::V1::VersionsController < Api::V1::ApplicationController
 
+skip
+
   def index
     # Get the devise make the request
     device = Device.find_by(mac_address: params[:mac_address])
@@ -13,16 +15,16 @@ class Api::V1::VersionsController < Api::V1::ApplicationController
           if version.present?
             render json: VersionsService.generate_version_hash(version.id)
           else
-            render json: { error: t('.no_version') }, status: :unprocessable_entity
+            render json: { errors: t('.no_version') }, status: :unprocessable_entity
           end
         else
-          render json:  { error: t('.invalid_token') }, status: :unprocessable_entity
+          render json:  { errors: t('.invalid_token') }, status: :unprocessable_entity
         end
       else
-        render json: { error: t('.no_group') }, status: :unprocessable_entity
+        render json: { errors: t('.no_group') }, status: :unprocessable_entity
       end
     else
-      render json: { error: t('.device_not_exist') }, status: :unprocessable_entity
+      render json: { errors: t('.device_not_exist') }, status: :unprocessable_entity
     end
   end
 end
