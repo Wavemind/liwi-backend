@@ -123,7 +123,7 @@ en:
         index:
           no_version: "Your group has no version"
           device_not_exist: "Device doesn't exist"
-          invalid_token: "Invalid token"
+          invalid_token: "Invalid group token"
           no_group: "Your tablet isn't associated with groups"
       activities:
         create:
