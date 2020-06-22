@@ -199,7 +199,7 @@ class Diagnostic < ApplicationRecord
       elsif instance.node.is_a?(HealthCares::Drug) && instance.node.formulations.map(&:by_age).include?(true)
         age_missing = true
         instance.conditions.each do |cond|
-          age_missing = false if cond.first_conditionable.is_a?(Answer) && cond.first_conditionable.node.formula.include?('D1')
+          age_missing = false if cond.first_conditionable.is_a?(Answer) && cond.first_conditionable.node.formula.present? && cond.first_conditionable.node.formula.include?('D1')
         end
         errors.add(:basic, I18n.t('flash_message.diagnostic.drug_conditioned_by_age_without_age', url: diagram_algorithm_version_diagnostic_final_diagnostic_url(version.algorithm.id, version.id, id, instance.final_diagnostic_id).to_s, df_reference: instance.final_diagnostic.full_reference)) if age_missing
       end
