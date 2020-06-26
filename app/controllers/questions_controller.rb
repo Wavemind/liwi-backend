@@ -89,10 +89,12 @@ class QuestionsController < ApplicationController
   # @return errors messages if question is not valid
   def validate
     question = @algorithm.questions.new(question_params)
+    question.validate_formula
+    question.validate_ranges
     if question.valid?
-      render json: {status: 'success', messages: ['valid']}
+      render json: {}, status: 200
     else
-      render json: {status: 'danger', errors: question.errors.messages, ok: false}
+      render json: question.errors.messages, status: 422
     end
   end
 
@@ -136,12 +138,19 @@ class QuestionsController < ApplicationController
       :answer_type,
       :unavailable,
       :formula,
-      :formula,
       :snomed_id,
       :snomed_label,
       :is_triage,
       :is_identifiable,
       :is_filterable,
+      :min_value_warning,
+      :max_value_warning,
+      :min_value_error,
+      :max_value_error,
+      :min_message_warning,
+      :max_message_warning,
+      :min_message_error,
+      :max_message_error,
       complaint_category_ids: [],
       answers_attributes: [
         :id,

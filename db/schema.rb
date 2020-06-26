@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_14_080354) do
+ActiveRecord::Schema.define(version: 2020_06_23_111225) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -285,6 +285,14 @@ ActiveRecord::Schema.define(version: 2020_05_14_080354) do
     t.boolean "is_triage", default: false
     t.boolean "is_identifiable", default: false
     t.boolean "is_filterable", default: false
+    t.float "min_value_warning"
+    t.float "max_value_warning"
+    t.float "min_value_error"
+    t.float "max_value_error"
+    t.string "min_message_warning"
+    t.string "max_message_warning"
+    t.string "min_message_error"
+    t.string "max_message_error"
     t.index ["administration_route_id"], name: "index_nodes_on_administration_route_id"
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"

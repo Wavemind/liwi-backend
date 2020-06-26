@@ -15,7 +15,8 @@ import {
   CATEGORIES_DISABLING_ANSWER_TYPE,
   CATEGORIES_DISPLAYING_FILTERABLE,
   NO_ANSWERS_ATTACHED_TYPE,
-  NO_ANSWERS_ATTACHED_ANSWER_TYPE
+  NO_ANSWERS_ATTACHED_ANSWER_TYPE,
+  NUMERIC_ANSWER_TYPES
 } from "../constants/constants";
 import Chip from "@material-ui/core/Chip";
 
@@ -43,12 +44,15 @@ export default class FinalDiagnosticForm extends React.Component {
    * @params [Object] actions
    */
   handleOnSubmit = async (values) => {
-    const { setFormData, save, nextStep } = this.props;
+    console.log('fesse')
+    const { setFormData, save, validate, nextStep } = this.props;
     setFormData(values);
     if (NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(values.answer_type_id) || NO_ANSWERS_ATTACHED_TYPE.includes(values.type)) {
       save();
     } else {
-      nextStep();
+      if (await validate()){
+        nextStep();
+      }
     }
   };
 
@@ -157,7 +161,7 @@ export default class FinalDiagnosticForm extends React.Component {
   };
 
   render() {
-    const { formData } = this.props;
+    const { formData, railsErrors } = this.props;
 
     const {
       answerTypes,
@@ -189,6 +193,8 @@ export default class FinalDiagnosticForm extends React.Component {
                 status
               }) => (
               <Form noValidate onSubmit={handleSubmit}>
+                {console.log(errors)}
+                {console.log(railsErrors)}
                 {status ? <DisplayErrors errors={status}/> : null}
                 {snomedError ? <DisplayErrors errors={snomedError}/> : null}
 
@@ -383,7 +389,7 @@ export default class FinalDiagnosticForm extends React.Component {
                       {errors.unavailable}
                     </Form.Control.Feedback>
                   </Form.Group>
-                  : null}
+                : null}
 
                 <Form.Group controlId="validationIsTriage">
                   <Form.Check
@@ -427,7 +433,7 @@ export default class FinalDiagnosticForm extends React.Component {
                       {errors.formula}
                     </Form.Control.Feedback>
                   </Form.Group>
-                  : null}
+                : null}
 
                 {CATEGORIES_DISPLAYING_FILTERABLE.includes(values.type) ?
                   <Form.Group controlId="validationFormula">
@@ -443,7 +449,123 @@ export default class FinalDiagnosticForm extends React.Component {
                       {errors.is_filterable}
                     </Form.Control.Feedback>
                   </Form.Group>
-                  : null}
+                : null}
+
+                {NUMERIC_ANSWER_TYPES.includes(values.answer_type_id) ?
+                  <>
+                    <Form.Group controlId="validationFormula">
+                      <Form.Label>{I18n.t("activerecord.attributes.question.min_value_warning")}</Form.Label>
+                      <Form.Control
+                        type="number"
+                        name="min_value_warning"
+                        value={values.min_value_warning}
+                        onChange={handleChange}
+                        isInvalid={touched.min_value_warning && !!errors.min_value_warning}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.min_value_warning}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+
+                    <Form.Group controlId="validationFormula">
+                      <Form.Label>{I18n.t("activerecord.attributes.question.max_value_warning")}</Form.Label>
+                      <Form.Control
+                        type="number"
+                        name="max_value_warning"
+                        value={values.max_value_warning}
+                        onChange={handleChange}
+                        isInvalid={touched.max_value_warning && !!errors.max_value_warning}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.max_value_warning}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+
+                    <Form.Group controlId="validationFormula">
+                      <Form.Label>{I18n.t("activerecord.attributes.question.min_value_error")}</Form.Label>
+                      <Form.Control
+                        type="number"
+                        name="min_value_error"
+                        value={values.min_value_error}
+                        onChange={handleChange}
+                        isInvalid={touched.min_value_error && !!errors.min_value_error}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.min_value_error}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+
+                    <Form.Group controlId="validationFormula">
+                      <Form.Label>{I18n.t("activerecord.attributes.question.max_value_error")}</Form.Label>
+                      <Form.Control
+                        type="number"
+                        name="max_value_error"
+                        value={values.max_value_error}
+                        onChange={handleChange}
+                        isInvalid={touched.max_value_error && !!errors.max_value_error}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.max_value_error}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+
+                    <Form.Group controlId="validationFormula">
+                      <Form.Label>{I18n.t("activerecord.attributes.question.min_message_warning")}</Form.Label>
+                      <Form.Control
+                        as="textarea"
+                        name="min_message_warning"
+                        value={values.min_message_warning}
+                        onChange={handleChange}
+                        isInvalid={touched.min_message_warning && !!errors.min_message_warning}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.min_message_warning}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+
+                    <Form.Group controlId="validationFormula">
+                      <Form.Label>{I18n.t("activerecord.attributes.question.max_message_warning")}</Form.Label>
+                      <Form.Control
+                        as="textarea"
+                        name="max_message_warning"
+                        value={values.max_message_warning}
+                        onChange={handleChange}
+                        isInvalid={touched.max_message_warning && !!errors.max_message_warning}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.max_message_warning}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+
+                    <Form.Group controlId="validationFormula">
+                      <Form.Label>{I18n.t("activerecord.attributes.question.min_message_error")}</Form.Label>
+                      <Form.Control
+                        as="textarea"
+                        name="min_message_error"
+                        value={values.min_message_error}
+                        onChange={handleChange}
+                        isInvalid={touched.min_message_error && !!errors.min_message_error}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.min_message_error}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+
+                    <Form.Group controlId="validationFormula">
+                      <Form.Label>{I18n.t("activerecord.attributes.question.max_message_error")}</Form.Label>
+                      <Form.Control
+                        as="textarea"
+                        name="max_message_error"
+                        value={values.max_message_error}
+                        onChange={handleChange}
+                        isInvalid={touched.max_message_error && !!errors.max_message_error}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.max_message_error}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                  </>
+                : null}
 
                 <Button className="float-right" type="submit" disabled={isSubmitting}>
                   {I18n.t("next")}

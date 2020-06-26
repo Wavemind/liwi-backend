@@ -51,3 +51,9 @@ export const NO_ANSWERS_ATTACHED_ANSWER_TYPE = [
   8,
   9
 ];
+
+export const NUMERIC_ANSWER_TYPES = [
+  3,
+  4,
+  5
+];

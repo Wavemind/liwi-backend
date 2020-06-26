@@ -42,6 +42,14 @@ en:
         is_filterable: "Question is filterable on patient search"
         is_triage: "Ask in triage if it is available"
         is_identifiable: "This question can identify a patient"
+        min_value_warning: "Lower limit before warning"
+        max_value_warning: "Higher limit before warning"
+        min_value_error: "Lower limit before error"
+        max_value_error: "Higher limit before error"
+        min_message_warning: "Message for lower warning"
+        max_message_warning: "Message for higher warning"
+        min_message_error: "Message for lower error"
+        max_message_error: "Message for higher error"
       questions_sequence:
         min_score: "Minimal score"
         type: "Category"
@@ -538,6 +546,7 @@ en:
       formula_reference_not_numeric: "The question '%{reference}' is not in numeric format."
       formula_reference_no_underscore: "The reference must contain an underscore (ex: A_1)"
       snomed_fetch_failed: "The server could not retrieve any data from snomed."
+      validation_range_incorrect: "The values you entered in the validation ranges seem incorrect. Please check the values again."
     new:
       title: "New question"
     priorities:
