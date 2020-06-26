@@ -192,7 +192,7 @@ class Question < Node
     values.push(min_value_warning) if min_value_warning.present?
     values.push(max_value_warning) if max_value_warning.present?
     values.push(max_value_error) if max_value_error.present?
-    errors.add(:min_value_error, I18n.t('questions.errors.formula_wrong_type')) if values != values.sort
+    errors.add(:min_value_error, I18n.t('questions.errors.validation_range_incorrect')) if values != values.sort
   end
 
   # Ensure that the formula is in a correct format

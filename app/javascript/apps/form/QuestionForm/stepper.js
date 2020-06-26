@@ -160,7 +160,10 @@ export default class StepperQuestionForm extends React.Component {
    */
   nextStep = () => {
     const { step } = this.state;
-    this.setState({ step: step + 1 });
+    this.setState({
+      step: step + 1,
+      errors: null
+    });
   };
 
   /**
@@ -174,7 +177,6 @@ export default class StepperQuestionForm extends React.Component {
   render() {
     const { errors, step, question } = this.state;
     const { method } = this.props;
-
     switch (step) {
       case 1:
         return (
@@ -186,7 +188,7 @@ export default class StepperQuestionForm extends React.Component {
             nextStep={this.nextStep}
             save={this.save}
             validate={this.validate}
-            railsErros={errors}
+            railsErrors={errors}
             method={method}
           />
           </>

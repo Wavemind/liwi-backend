@@ -32,7 +32,8 @@ export default class FinalDiagnosticForm extends React.Component {
     this.state = {
       snomedResults: [],
       snomedError: null,
-      isLoading: true
+      isLoading: true,
+      railsErrors: []
     };
 
     this.init();
@@ -44,7 +45,6 @@ export default class FinalDiagnosticForm extends React.Component {
    * @params [Object] actions
    */
   handleOnSubmit = async (values) => {
-    console.log('fesse')
     const { setFormData, save, validate, nextStep } = this.props;
     setFormData(values);
     if (NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(values.answer_type_id) || NO_ANSWERS_ATTACHED_TYPE.includes(values.type)) {
@@ -193,8 +193,7 @@ export default class FinalDiagnosticForm extends React.Component {
                 status
               }) => (
               <Form noValidate onSubmit={handleSubmit}>
-                {console.log(errors)}
-                {console.log(railsErrors)}
+                {railsErrors ? <DisplayErrors errors={railsErrors}/> : null}
                 {status ? <DisplayErrors errors={status}/> : null}
                 {snomedError ? <DisplayErrors errors={snomedError}/> : null}
 
