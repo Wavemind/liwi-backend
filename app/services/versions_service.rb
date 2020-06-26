@@ -349,6 +349,16 @@ class VersionsService
       hash[question.id]['reference_table_y_id'] = question.reference_table_y_id
       hash[question.id]['reference_table_male'] = question.reference_table_male
       hash[question.id]['reference_table_female'] = question.reference_table_female
+
+      hash[question.id]['min_value_warning'] = question.min_value_warning
+      hash[question.id]['max_value_warning'] = question.max_value_warning
+      hash[question.id]['min_value_error'] = question.min_value_error
+      hash[question.id]['max_value_error'] = question.max_value_error
+      hash[question.id]['min_message_warning'] = question.min_message_warning
+      hash[question.id]['max_message_warning'] = question.max_message_warning
+      hash[question.id]['min_message_error'] = question.min_message_error
+      hash[question.id]['max_message_error'] = question.max_message_error
+
       if question.is_a?(Questions::ComplaintCategory) && question.is_default
         hash[question.id]['cc_general'] = true
         hash[question.id]['answer'] = question.answers.first.id
