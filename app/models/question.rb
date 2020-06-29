@@ -19,6 +19,7 @@ class Question < Node
   has_many :complaint_categories, through: :node_complaint_categories
 
   before_validation :validate_formula, if: Proc.new { self.formula.present? }
+  before_validation :validate_ranges, if: Proc.new { [3, 4].include?(self.answer_type_id) }
   validates_presence_of :stage, unless: Proc.new { self.is_a? Questions::BackgroundCalculation }
   validates_presence_of :formula, if: Proc.new { self.answer_type.display == 'Formula' }
   validates_presence_of :type
@@ -184,11 +185,15 @@ class Question < Node
     versions
   end
 
-  private
-
-  # Display the label for the current child
-  def self.display_label
-    I18n.t("questions.categories.#{self.variable}.label")
+  # Validate correct order of validation ranges
+  def validate_ranges
+    values = []
+    # Create array adding every value in the order it should be
+    values.push(min_value_error) if min_value_error.present?
+    values.push(min_value_warning) if min_value_warning.present?
+    values.push(max_value_warning) if max_value_warning.present?
+    values.push(max_value_error) if max_value_error.present?
+    errors.add(:min_value_error, I18n.t('questions.errors.validation_range_incorrect')) if values != values.sort
   end
 
   # Ensure that the formula is in a correct format
@@ -226,5 +231,12 @@ class Question < Node
         errors.add(:formula, I18n.t('questions.errors.formula_wrong_type', reference: full_reference))
       end
     end
+  end
+
+  private
+
+  # Display the label for the current child
+  def self.display_label
+    I18n.t("questions.categories.#{self.variable}.label")
   end
 end

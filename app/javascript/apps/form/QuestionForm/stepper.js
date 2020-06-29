@@ -19,6 +19,7 @@ export default class StepperQuestionForm extends React.Component {
     const { question, method } = props;
 
     this.state = {
+      http: new Http(),
       errors: null,
       step: 1,
       question: this.questionBody(question, method)
@@ -46,6 +47,14 @@ export default class StepperQuestionForm extends React.Component {
       is_triage: question?.is_triage || false,
       is_identifiable: question?.is_identifiable || false,
       is_filterable: question?.is_filterable || false,
+      min_value_warning: question?.min_value_warning || "",
+      max_value_warning: question?.max_value_warning || "",
+      min_value_error: question?.min_value_error || "",
+      max_value_error: question?.max_value_error || "",
+      min_message_warning: question?.min_message_warning || "",
+      max_message_warning: question?.max_message_warning || "",
+      min_message_error: question?.min_message_error || "",
+      max_message_error: question?.max_message_error || "",
       complaint_categories_attributes: question?.complaint_categories || [],
       answers_attributes: question?.answers || []
     };
@@ -74,8 +83,7 @@ export default class StepperQuestionForm extends React.Component {
    */
   save = async () => {
     const { method, from, engine, diagramObject, addAvailableNode } = this.props;
-    const { question } = this.state;
-    let http = new Http();
+    const { question, http } = this.state;
     let httpRequest = {};
     let complaint_category_ids = [];
 
@@ -114,6 +122,23 @@ export default class StepperQuestionForm extends React.Component {
   };
 
   /**
+   * Validate question body before answers
+   */
+  validate = async () => {
+    const { question, http } = this.state;
+
+    let httpRequest = await http.validateQuestion(question);
+    let result = await httpRequest.json();
+
+    if (httpRequest.status !== 200) {
+      this.setState({ errors: result });
+      return false;
+    }
+
+    return true;
+  };
+
+  /**
    * Set value in context for answers
    * @param prop
    * @param value
@@ -135,7 +160,10 @@ export default class StepperQuestionForm extends React.Component {
    */
   nextStep = () => {
     const { step } = this.state;
-    this.setState({ step: step + 1 });
+    this.setState({
+      step: step + 1,
+      errors: null
+    });
   };
 
   /**
@@ -149,7 +177,6 @@ export default class StepperQuestionForm extends React.Component {
   render() {
     const { errors, step, question } = this.state;
     const { method } = this.props;
-
     switch (step) {
       case 1:
         return (
@@ -160,6 +187,8 @@ export default class StepperQuestionForm extends React.Component {
             setFormData={this.setMetaData}
             nextStep={this.nextStep}
             save={this.save}
+            validate={this.validate}
+            railsErrors={errors}
             method={method}
           />
           </>
