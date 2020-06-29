@@ -54,6 +54,5 @@ export const NO_ANSWERS_ATTACHED_ANSWER_TYPE = [
 
 export const NUMERIC_ANSWER_TYPES = [
   3,
-  4,
-  5
+  4
 ];

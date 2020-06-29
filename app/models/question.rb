@@ -19,7 +19,7 @@ class Question < Node
   has_many :complaint_categories, through: :node_complaint_categories
 
   before_validation :validate_formula, if: Proc.new { self.formula.present? }
-  before_validation :validate_ranges, if: Proc.new { [3, 4, 5].include?(self.answer_type_id) }
+  before_validation :validate_ranges, if: Proc.new { [3, 4].include?(self.answer_type_id) }
   validates_presence_of :stage, unless: Proc.new { self.is_a? Questions::BackgroundCalculation }
   validates_presence_of :formula, if: Proc.new { self.answer_type.display == 'Formula' }
   validates_presence_of :type
