@@ -188,6 +188,7 @@ class Question < Node
   # Validate correct order of validation ranges
   def validate_ranges
     values = []
+    # Create array adding every value in the order it should be
     values.push(min_value_error) if min_value_error.present?
     values.push(min_value_warning) if min_value_warning.present?
     values.push(max_value_warning) if max_value_warning.present?

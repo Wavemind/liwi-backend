@@ -25,7 +25,7 @@ const filterOptions = createFilterOptions({
   stringify: option => option.label_translations.en
 });
 
-export default class FinalDiagnosticForm extends React.Component {
+export default class QuestionForm extends React.Component {
   constructor() {
     super();
 
@@ -33,7 +33,6 @@ export default class FinalDiagnosticForm extends React.Component {
       snomedResults: [],
       snomedError: null,
       isLoading: true,
-      railsErrors: []
     };
 
     this.init();
@@ -50,7 +49,8 @@ export default class FinalDiagnosticForm extends React.Component {
     if (NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(values.answer_type_id) || NO_ANSWERS_ATTACHED_TYPE.includes(values.type)) {
       save();
     } else {
-      if (await validate()){
+      const validated = await validate();
+      if (validated){
         nextStep();
       }
     }
@@ -404,7 +404,7 @@ export default class FinalDiagnosticForm extends React.Component {
                   </Form.Control.Feedback>
                 </Form.Group>
 
-                <Form.Group controlId="validationIsIdnetifiable">
+                <Form.Group controlId="validationIsIdentifiable">
                   <Form.Check
                     name="is_identifiable"
                     label={I18n.t("activerecord.attributes.question.is_identifiable")}
@@ -435,7 +435,7 @@ export default class FinalDiagnosticForm extends React.Component {
                 : null}
 
                 {CATEGORIES_DISPLAYING_FILTERABLE.includes(values.type) ?
-                  <Form.Group controlId="validationFormula">
+                  <Form.Group controlId="validationIsFilterable">
                     <Form.Check
                       name="is_filterable"
                       label={I18n.t("activerecord.attributes.question.is_filterable")}
@@ -452,7 +452,7 @@ export default class FinalDiagnosticForm extends React.Component {
 
                 {NUMERIC_ANSWER_TYPES.includes(values.answer_type_id) ?
                   <>
-                    <Form.Group controlId="validationFormula">
+                    <Form.Group controlId="validationMinValueWarning">
                       <Form.Label>{I18n.t("activerecord.attributes.question.min_value_warning")}</Form.Label>
                       <Form.Control
                         type="number"
@@ -466,7 +466,7 @@ export default class FinalDiagnosticForm extends React.Component {
                       </Form.Control.Feedback>
                     </Form.Group>
 
-                    <Form.Group controlId="validationFormula">
+                    <Form.Group controlId="validationMaxValueWarning">
                       <Form.Label>{I18n.t("activerecord.attributes.question.max_value_warning")}</Form.Label>
                       <Form.Control
                         type="number"
@@ -480,7 +480,7 @@ export default class FinalDiagnosticForm extends React.Component {
                       </Form.Control.Feedback>
                     </Form.Group>
 
-                    <Form.Group controlId="validationFormula">
+                    <Form.Group controlId="validationMinValueError">
                       <Form.Label>{I18n.t("activerecord.attributes.question.min_value_error")}</Form.Label>
                       <Form.Control
                         type="number"
@@ -494,7 +494,7 @@ export default class FinalDiagnosticForm extends React.Component {
                       </Form.Control.Feedback>
                     </Form.Group>
 
-                    <Form.Group controlId="validationFormula">
+                    <Form.Group controlId="validationMaxValueError">
                       <Form.Label>{I18n.t("activerecord.attributes.question.max_value_error")}</Form.Label>
                       <Form.Control
                         type="number"
@@ -508,7 +508,7 @@ export default class FinalDiagnosticForm extends React.Component {
                       </Form.Control.Feedback>
                     </Form.Group>
 
-                    <Form.Group controlId="validationFormula">
+                    <Form.Group controlId="validationMinMessageWarning">
                       <Form.Label>{I18n.t("activerecord.attributes.question.min_message_warning")}</Form.Label>
                       <Form.Control
                         as="textarea"
@@ -522,7 +522,7 @@ export default class FinalDiagnosticForm extends React.Component {
                       </Form.Control.Feedback>
                     </Form.Group>
 
-                    <Form.Group controlId="validationFormula">
+                    <Form.Group controlId="validationMaxMessageError">
                       <Form.Label>{I18n.t("activerecord.attributes.question.max_message_warning")}</Form.Label>
                       <Form.Control
                         as="textarea"
@@ -536,7 +536,7 @@ export default class FinalDiagnosticForm extends React.Component {
                       </Form.Control.Feedback>
                     </Form.Group>
 
-                    <Form.Group controlId="validationFormula">
+                    <Form.Group controlId="validationMinMessageError">
                       <Form.Label>{I18n.t("activerecord.attributes.question.min_message_error")}</Form.Label>
                       <Form.Control
                         as="textarea"
@@ -550,7 +550,7 @@ export default class FinalDiagnosticForm extends React.Component {
                       </Form.Control.Feedback>
                     </Form.Group>
 
-                    <Form.Group controlId="validationFormula">
+                    <Form.Group controlId="validationMaxMessageError">
                       <Form.Label>{I18n.t("activerecord.attributes.question.max_message_error")}</Form.Label>
                       <Form.Control
                         as="textarea"
