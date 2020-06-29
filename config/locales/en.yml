@@ -1,6 +1,9 @@
 en:
   activerecord:
     attributes:
+      algorithm:
+        age_limit: "Age threshold in years for ineligibility (inclusion stops day before birthday)"
+        age_limit_message: "Message displayed in MedAL-R if patient above threshold"
       answer:
         operator: "Operator"
         value: "Value"

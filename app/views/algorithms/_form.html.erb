@@ -1,6 +1,8 @@
 <%= simple_form_for @algorithm, html: { class: 'form-horizontal' } do |f| %>
 
   <%= f.input :name %>
+  <%= f.input :age_limit, as: :numeric %>
+  <%= f.input :age_limit_message, as: :text, input_html: {value: f.object.age_limit_message || 'This patient is ineligible for the study (age). No clinical data will be collected'} %>
   <%= f.input :description, as: :text %>
 
   <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>

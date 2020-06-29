@@ -10,7 +10,7 @@ class Algorithm < ApplicationRecord
 
   belongs_to :user
 
-  validates_presence_of :name
+  validates_presence_of :name, :age_limit, :age_limit_message
   validates_uniqueness_of :name
 
   after_create :create_reference_table_questions
