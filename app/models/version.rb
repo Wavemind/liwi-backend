@@ -60,7 +60,9 @@ class Version < ApplicationRecord
   end
 
   def is_deployed?
-    group_accesses.where(end_date: nil).any?
+    # TODO : Test currently disabled so the version can be updated during development phase. To be removed !
+    # group_accesses.where(end_date: nil).any?
+    false
   end
 
   # Init orders for new version
