@@ -47,6 +47,7 @@ export default class StepperQuestionForm extends React.Component {
       is_triage: question?.is_triage || false,
       is_identifiable: question?.is_identifiable || false,
       is_filterable: question?.is_filterable || false,
+      estimable: question?.estimable || false,
       min_value_warning: question?.min_value_warning || "",
       max_value_warning: question?.max_value_warning || "",
       min_value_error: question?.min_value_error || "",

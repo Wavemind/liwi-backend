@@ -334,6 +334,7 @@ class VersionsService
       hash[question.id]['is_triage'] = question.is_triage
       hash[question.id]['is_identifiable'] = question.is_identifiable
       hash[question.id]['is_filterable'] = question.is_filterable
+      hash[question.id]['estimable'] = question.estimable
       # Send Reference instead of actual display format to help f-e interpret the question correctly
       hash[question.id]['value_format'] = question.answer_type.value
       format = question.answer_type.display
