@@ -65,6 +65,7 @@ en:
       - "Parental or injectable"
       - "Mucocutaneous"
   algorithms:
+    age_limit_message_default: "This patient is ineligible for the study (age). No clinical data will be collected"
     index:
       columns:
         name: "Name"
