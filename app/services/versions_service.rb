@@ -175,6 +175,7 @@ class VersionsService
     hash['id'] = diagnostic.id
     hash['reference'] = diagnostic.reference
     hash['label'] = diagnostic.label
+    hash['complaint_category'] = diagnostic.node_id
     hash['differential'] = extract_conditions(diagnostic.conditions)
     hash['instances'] = {}
     hash['final_diagnostics'] = {}
