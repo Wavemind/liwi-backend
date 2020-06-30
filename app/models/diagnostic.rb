@@ -22,7 +22,6 @@ class Diagnostic < ApplicationRecord
   amoeba do
     enable
     include_association :components
-    include_association :final_diagnostics
   end
 
   # @return [String]
@@ -60,26 +59,29 @@ class Diagnostic < ApplicationRecord
   def relink_instance
     components_ids = (components - components.final_diagnostics).map(&:id)
 
-    components.final_diagnostics.each_with_index do |df_instance, index|
-      new_df = final_diagnostics[index]
+    components.final_diagnostics.each do |df_instance|
+      new_df = df_instance.node.amoeba_dup
+      if new_df.save
+        # Relink children
+        Child.where(instance_id: components_ids, node: df_instance.node).each do |child|
+          child.update!(node: new_df)
+        end
 
-      # Relink children
-      Child.where(instance_id: components_ids, node: df_instance.node).each do |child|
-        child.update!(node: new_df)
+        # Relink final_diagnostic diagram
+        Instance.where(id: components_ids, final_diagnostic: df_instance.node).each do |instance|
+          instance.update!(final_diagnostic: new_df)
+        end
+
+        # Relink final diagnostic exclusion
+        FinalDiagnostic.where(final_diagnostic_id: df_instance.node_id, diagnostic: self).each do |fd|
+          fd.update!(final_diagnostic_id: new_df.id)
+        end
+
+        df_instance.node = new_df
+        df_instance.save
+      else
+        raise ActiveRecord::Rollback, ''
       end
-
-      # Relink final_diagnostic diagram
-      Instance.where(id: components_ids, final_diagnostic: df_instance.node).each do |instance|
-        instance.update!(final_diagnostic: new_df)
-      end
-
-      # Relink final diagnostic exclusion
-      FinalDiagnostic.where(final_diagnostic_id: df_instance.node_id, diagnostic: self).each do |fd|
-        fd.update!(final_diagnostic_id: new_df.id)
-      end
-
-      df_instance.node = new_df
-      df_instance.save
     end
   end
 
