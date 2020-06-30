@@ -558,6 +558,20 @@ export default class Http {
   };
 
   /**
+   * Validate question before next step
+   * @return [Object] body of request
+   */
+  validateQuestion = async (question) => {
+    const url = `${this.url}/algorithms/${this.algorithm}/questions/validate`;
+    const body = {
+      question
+    };
+
+    const header = await this.setHeaders("POST", body);
+    return await fetch(url, header).catch(error => console.log(error));
+  };
+
+  /**
    * Validate a question sequence
    * @return [Object] body of request
    */
