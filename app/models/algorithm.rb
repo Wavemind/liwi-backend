@@ -10,8 +10,9 @@ class Algorithm < ApplicationRecord
 
   belongs_to :user
 
-  validates_presence_of :name
+  validates_presence_of :name, :age_limit, :age_limit_message
   validates_uniqueness_of :name
+  validates :age_limit, numericality: { greater_than_or_equal_to: 1 }
 
   after_create :create_reference_table_questions
 

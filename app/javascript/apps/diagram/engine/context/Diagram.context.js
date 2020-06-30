@@ -72,7 +72,7 @@ export default class DiagramProvider extends React.Component {
         });
         break;
       case "HealthCare":
-        prefix = nodeCategory === "HealthCares::Management" ? "M" : "T";
+        prefix = nodeCategory === "HealthCares::Management" ? "M" : "DR";
         break;
       case "FinalDiagnostic":
         prefix = "DF";

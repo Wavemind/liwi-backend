@@ -1,6 +1,9 @@
 en:
   activerecord:
     attributes:
+      algorithm:
+        age_limit: "Age threshold in years for ineligibility (inclusion stops day before birthday)"
+        age_limit_message: "Message displayed in MedAL-R if patient above threshold"
       answer:
         operator: "Operator"
         value: "Value"
@@ -33,23 +36,24 @@ en:
         node: "Complaint category"
       question:
         answer_type: "Answer type"
+        estimable: "Value can be estimated"
         formula: "Formula"
+        is_filterable: "Question is filterable on patient search"
+        is_identifiable: "This question can identify a patient"
         is_mandatory: "Mandatory"
+        is_triage: "Ask in triage if it is available"
+        max_message_error: "Message for higher error"
+        max_message_warning: "Message for higher warning"
+        max_value_error: "Higher limit before error"
+        max_value_warning: "Higher limit before warning"
+        min_message_error: "Message for lower error"
+        min_message_warning: "Message for lower warning"
+        min_value_error: "Lower limit before error"
+        min_value_warning: "Lower limit before warning"
         snomed: "Snomed label"
         stage: "Stage"
         system: "System"
         unavailable: "Test can be unavailable"
-        is_filterable: "Question is filterable on patient search"
-        is_triage: "Ask in triage if it is available"
-        is_identifiable: "This question can identify a patient"
-        min_value_warning: "Lower limit before warning"
-        max_value_warning: "Higher limit before warning"
-        min_value_error: "Lower limit before error"
-        max_value_error: "Higher limit before error"
-        min_message_warning: "Message for lower warning"
-        max_message_warning: "Message for higher warning"
-        min_message_error: "Message for lower error"
-        max_message_error: "Message for higher error"
       questions_sequence:
         min_score: "Minimal score"
         type: "Category"
@@ -62,6 +66,7 @@ en:
       - "Parental or injectable"
       - "Mucocutaneous"
   algorithms:
+    age_limit_message_default: "This patient is ineligible for the study (age). No clinical data will be collected"
     index:
       columns:
         name: "Name"
