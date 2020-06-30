@@ -113,6 +113,8 @@ class VersionsService
     hash['description'] = @version.description
     hash['algorithm_id'] = @version.algorithm.id
     hash['algorithm_name'] = @version.algorithm.name
+    hash['age_limit'] = @version.algorithm.age_limit
+    hash['age_limit_message'] = @version.algorithm.age_limit_message
 
     hash['mobile_config'] = extract_config
 

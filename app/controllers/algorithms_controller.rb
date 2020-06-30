@@ -137,6 +137,8 @@ class AlgorithmsController < ApplicationController
       :id,
       :name,
       :description,
+      :age_limit,
+      :age_limit_message
     )
   end
 end
