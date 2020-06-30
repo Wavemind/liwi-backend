@@ -450,6 +450,22 @@ export default class QuestionForm extends React.Component {
                   </Form.Group>
                 : null}
 
+                {"Questions::BasicMeasurement" === values.type ?
+                  <Form.Group controlId="validationEstimable">
+                    <Form.Check
+                      name="estimable"
+                      label={I18n.t("activerecord.attributes.question.estimable")}
+                      value={values.estimable}
+                      checked={values.estimable}
+                      onChange={handleChange}
+                      isInvalid={touched.estimable && !!errors.estimable}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.estimable}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                : null}
+
                 {NUMERIC_ANSWER_TYPES.includes(values.answer_type_id) ?
                   <>
                     <Form.Group controlId="validationMinValueWarning">
