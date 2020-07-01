@@ -117,6 +117,7 @@ class VersionsService
     hash['age_limit_message'] = @version.algorithm.age_limit_message
 
     hash['mobile_config'] = extract_config
+    hash['config'] = @version.algorithm.medal_r_config
 
     hash['triage'] = extract_triage_metadata
     hash['author'] = @version.user.full_name
@@ -133,6 +134,8 @@ class VersionsService
     hash['left_top_question_id'] = @version.top_left_question.present? ? @version.top_left_question.node_id : nil
     hash['first_top_right_question_id'] = @version.first_top_right_question.present? ? @version.first_top_right_question.node_id : nil
     hash['second_top_right_question_id'] = @version.second_top_right_question.present? ? @version.second_top_right_question.node_id : nil
+
+
 
     # Convert instance ids into node ids
     orders = @version.medal_r_config['questions_orders']

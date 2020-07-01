@@ -20,12 +20,23 @@ class Algorithm < ApplicationRecord
   # Create all hardcoded questions related to reference tables and age.
   # Answer types ids : 3 is Integer, 4 is Decimal, 6 is Date
   def create_reference_table_questions
-    birth_date = questions.create!(label_en: 'Birth date', type: 'Questions::BasicDemographic', stage: Question.stages[:registration], is_mandatory: true, answer_type_id: 6, is_default: true)
+    birth_date = questions.create!(label_en: 'Birth date', type: 'Questions::BasicDemographic', stage: Question.stages[:registration], is_mandatory: true, is_identifiable: true, answer_type_id: 6, is_default: true)
     age_in_days = questions.create!(label_en: 'Age in days', type: 'Questions::BackgroundCalculation', is_mandatory: true, answer_type_id: 5, formula: '[ToDay(BD1)]', is_default: true)
-    weight = questions.create!(label_en: 'Weight (kg)', type: 'Questions::BasicMeasurement', stage: Question.stages[:triage], is_mandatory: true, answer_type_id: 4, is_default: true)
+    weight = questions.create!(label_en: 'Weight (kg)', type: 'Questions::BasicMeasurement', stage: Question.stages[:triage], is_mandatory: true, answer_type_id: 4, estimable: true, is_default: true)
     hr = questions.create!(label_en: 'Heart rate', type: 'Questions::VitalSignAnthropometric', stage: Question.stages[:consultation], answer_type_id: 4, is_default: true)
     rr = questions.create!(label_en: 'Respiratory rate', type: 'Questions::VitalSignAnthropometric', stage: Question.stages[:consultation], answer_type_id: 4, is_default: true)
     muac = questions.create!(label_en: 'MUAC', type: 'Questions::BasicMeasurement', description_en: 'Mid Upper Arm Circumference', stage: Question.stages[:triage], answer_type_id: 4, is_default: true)
+    first_name = questions.create!(label_en: 'First name', type: 'Questions::BasicDemographic', stage: Question.stages[:registration], answer_type_id: 9, is_mandatory: true, is_identifiable: true, is_default: true)
+    last_name = questions.create!(label_en: 'Last name', type: 'Questions::BasicDemographic', stage: Question.stages[:registration], answer_type_id: 9, is_mandatory: true, is_identifiable: true, is_default: true)
+    gender = questions.create!(label_en: 'Gender', type: 'Questions::Demographic', stage: Question.stages[:registration], answer_type_id: 2, is_mandatory: true, is_default: true)
+
+    self.update(medal_r_config: {
+      birth_date_question_id: birth_date.id,
+      first_name_question_id: first_name.id,
+      last_name_question_id: last_name.id,
+      gender_question_id: gender.id,
+      weight_question_id: weight.id,
+    })
 
     age = questions.create!(label_en: 'Age in months', type: 'Questions::BackgroundCalculation', is_mandatory: true, answer_type_id: 5, formula: '[ToMonth(BD1)]', is_default: true)
     age.answers.create([
