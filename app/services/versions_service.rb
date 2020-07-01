@@ -113,11 +113,11 @@ class VersionsService
     hash['description'] = @version.description
     hash['algorithm_id'] = @version.algorithm.id
     hash['algorithm_name'] = @version.algorithm.name
-    hash['age_limit'] = @version.algorithm.age_limit
-    hash['age_limit_message'] = @version.algorithm.age_limit_message
 
-    hash['mobile_config'] = extract_config
+    hash['mobile_config'] = extract_mobile_config
     hash['config'] = @version.algorithm.medal_r_config
+    hash['config']['age_limit'] = @version.algorithm.age_limit
+    hash['config']['age_limit_message'] = @version.algorithm.age_limit_message
 
     hash['triage'] = extract_triage_metadata
     hash['author'] = @version.user.full_name
@@ -128,7 +128,7 @@ class VersionsService
 
   # @return hash
   # Build a hash of medal-r config for the version
-  def self.extract_config
+  def self.extract_mobile_config
     hash = {}
 
     hash['left_top_question_id'] = @version.top_left_question.present? ? @version.top_left_question.node_id : nil
