@@ -135,8 +135,6 @@ class VersionsService
     hash['first_top_right_question_id'] = @version.first_top_right_question.present? ? @version.first_top_right_question.node_id : nil
     hash['second_top_right_question_id'] = @version.second_top_right_question.present? ? @version.second_top_right_question.node_id : nil
 
-
-
     # Convert instance ids into node ids
     orders = @version.medal_r_config['questions_orders']
     orders.each do |key, value|

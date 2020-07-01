@@ -30,6 +30,7 @@ class Algorithm < ApplicationRecord
     last_name = questions.create!(label_en: 'Last name', type: 'Questions::BasicDemographic', stage: Question.stages[:registration], answer_type_id: 9, is_mandatory: true, is_identifiable: true, is_default: true)
     gender = questions.create!(label_en: 'Gender', type: 'Questions::Demographic', stage: Question.stages[:registration], answer_type_id: 2, is_mandatory: true, is_default: true)
 
+    # Configure basic questions into the algorithm to be used in json generation
     self.update(medal_r_config: {
       birth_date_question_id: birth_date.id,
       first_name_question_id: first_name.id,
