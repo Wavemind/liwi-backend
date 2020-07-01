@@ -44,6 +44,6 @@ class AlgorithmDatatable < AjaxDatatablesRails::ActiveRecord
   end
 
   def get_raw_records
-    Algorithm.includes(:user).joins(:user).distinct
+    Algorithm.includes(:user).joins(:user)
   end
 end

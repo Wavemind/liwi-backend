@@ -117,6 +117,7 @@ class VersionsService
     hash['age_limit_message'] = @version.algorithm.age_limit_message
 
     hash['mobile_config'] = extract_config
+    hash['config'] = @version.algorithm.medal_r_config
 
     hash['triage'] = extract_triage_metadata
     hash['author'] = @version.user.full_name
