@@ -31,13 +31,13 @@ class Algorithm < ApplicationRecord
     gender = questions.create!(label_en: 'Gender', type: 'Questions::Demographic', stage: Question.stages[:registration], answer_type_id: 2, is_mandatory: true, is_default: true)
 
     # Configure basic questions into the algorithm to be used in json generation
-    self.update(medal_r_config: {
+    self.update(medal_r_config: {basic_questions: {
       birth_date_question_id: birth_date.id,
       first_name_question_id: first_name.id,
       last_name_question_id: last_name.id,
       gender_question_id: gender.id,
       weight_question_id: weight.id,
-    })
+    }})
 
     age = questions.create!(label_en: 'Age in months', type: 'Questions::BackgroundCalculation', is_mandatory: true, answer_type_id: 5, formula: '[ToMonth(BD1)]', is_default: true)
     age.answers.create([
