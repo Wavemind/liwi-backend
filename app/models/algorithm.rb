@@ -21,7 +21,7 @@ class Algorithm < ApplicationRecord
   # Answer types ids : 3 is Integer, 4 is Decimal, 6 is Date
   def create_reference_table_questions
     birth_date = questions.create!(label_en: 'Birth date', type: 'Questions::BasicDemographic', stage: Question.stages[:registration], is_mandatory: true, is_identifiable: true, answer_type_id: 6, is_default: true)
-    age_in_days = questions.create!(label_en: 'Age in days', type: 'Questions::BackgroundCalculation', is_mandatory: true, answer_type_id: 5, formula: '[ToDay(BD1)]', is_default: true)
+    age_in_days = questions.create!(label_en: 'Age in days', type: 'Questions::BasicDemographic', stage: Question.stages[:registration], is_mandatory: true, answer_type_id: 5, formula: '[ToDay(BD1)]', is_default: true)
     weight = questions.create!(label_en: 'Weight (kg)', type: 'Questions::BasicMeasurement', stage: Question.stages[:triage], is_mandatory: true, answer_type_id: 4, estimable: true, is_default: true)
     hr = questions.create!(label_en: 'Heart rate', type: 'Questions::VitalSignAnthropometric', stage: Question.stages[:consultation], answer_type_id: 4, is_default: true)
     rr = questions.create!(label_en: 'Respiratory rate', type: 'Questions::VitalSignAnthropometric', stage: Question.stages[:consultation], answer_type_id: 4, is_default: true)
@@ -29,6 +29,10 @@ class Algorithm < ApplicationRecord
     first_name = questions.create!(label_en: 'First name', type: 'Questions::BasicDemographic', stage: Question.stages[:registration], answer_type_id: 9, is_mandatory: true, is_identifiable: true, is_default: true)
     last_name = questions.create!(label_en: 'Last name', type: 'Questions::BasicDemographic', stage: Question.stages[:registration], answer_type_id: 9, is_mandatory: true, is_identifiable: true, is_default: true)
     gender = questions.create!(label_en: 'Gender', type: 'Questions::Demographic', stage: Question.stages[:registration], answer_type_id: 2, is_mandatory: true, is_default: true)
+    height = questions.create!(label_en: 'Height (cm)', type: 'Questions::BasicMeasurement', stage: Question.stages[:triage], answer_type_id: 4, is_default: true)
+    length = questions.create!(label_en: 'Length (cm)', type: 'Questions::BasicMeasurement', stage: Question.stages[:triage], answer_type_id: 4, is_default: true)
+    bmi = questions.create!(label_en: 'BMI', type: 'Questions::BasicDemographic', stage: Question.stages[:registration], answer_type_id: 5, formula: '[BM1] / (([BM3] / 100) * ([BM3] / 100))', is_default: true)
+    temperature = questions.create!(label_en: 'Axillary temperature', type: 'Questions::BasicMeasurement', stage: Question.stages[:triage], answer_type_id: 4, is_default: true)
 
     # Configure basic questions into the algorithm to be used in json generation
     self.update(medal_r_config: {basic_questions: {
@@ -38,6 +42,11 @@ class Algorithm < ApplicationRecord
       gender_question_id: gender.id,
       weight_question_id: weight.id,
     }})
+
+    gender.answers.create([
+      {label_en: 'Male', value: 'male'},
+      {label_en: 'Female', value: 'female'}
+    ])
 
     age = questions.create!(label_en: 'Age in months', type: 'Questions::BackgroundCalculation', is_mandatory: true, answer_type_id: 5, formula: '[ToMonth(BD1)]', is_default: true)
     age.answers.create([
@@ -50,27 +59,48 @@ class Algorithm < ApplicationRecord
       {label_en: 'more than 60 months', value: '60', operator: Answer.operators[:more_or_equal]},
      ])
 
-    z_score = questions.create!(label_en: 'Weight for age (z-score)', type: 'Questions::BackgroundCalculation', is_mandatory: true, answer_type_id: 3, reference_table_x_id: age_in_days.id, reference_table_y_id: weight.id, reference_table_male: "z_score_male_table", reference_table_female: "z_score_female_table", is_default: true)
+    z_score = questions.create!(label_en: 'Weight for age (z-score)', type: 'Questions::BackgroundCalculation', answer_type_id: 3, reference_table_x_id: age_in_days.id, reference_table_y_id: weight.id, reference_table_male: "z_score_male_table", reference_table_female: "z_score_female_table", is_default: true)
     z_score.answers.create([
        {label_en: 'less than -3 z-score', value: '-3', operator: Answer.operators[:less]},
        {label_en: '-2 z-score', value: '-3, -2', operator: Answer.operators[:between]},
        {label_en: 'more than -2 z-score', value: '-2', operator: Answer.operators[:more_or_equal]},
      ])
 
-    hr_th = questions.create!(label_en: 'Heart rate in percentile', type: 'Questions::BackgroundCalculation', is_mandatory: true, answer_type_id: 3, reference_table_x_id: age.id, reference_table_y_id: hr.id, reference_table_male: "heart_rate_table", reference_table_female: "heart_rate_table", is_default: true)
+    bmi_z_score = questions.create!(label_en: 'BMI (z-score)', type: 'Questions::BackgroundCalculation', answer_type_id: 3, reference_table_x_id: age_in_days.id, reference_table_y_id: bmi.id, reference_table_male: "bmi_for_age_male_table", reference_table_female: "bmi_for_age_female_table", is_default: true)
+    bmi_z_score.answers.create([
+       {label_en: 'less than -3 z-score', value: '-3', operator: Answer.operators[:less]},
+       {label_en: '-2 z-score', value: '-3, -2', operator: Answer.operators[:between]},
+       {label_en: 'more than -2 z-score', value: '-2', operator: Answer.operators[:more_or_equal]},
+     ])
+
+    weight_for_height = questions.create!(label_en: 'Weight for height', type: 'Questions::BackgroundCalculation', answer_type_id: 3, reference_table_x_id: height.id, reference_table_y_id: weight.id, reference_table_male: "weight_for_height_male_table", reference_table_female: "weight_for_height_female_table", is_default: true)
+    weight_for_height.answers.create([
+      {label_en: 'less than -3 z-score', value: '-3', operator: Answer.operators[:less]},
+      {label_en: '-2 z-score', value: '-3, -2', operator: Answer.operators[:between]},
+      {label_en: 'more than -2 z-score', value: '-2', operator: Answer.operators[:more_or_equal]},
+    ])
+
+    weight_for_length = questions.create!(label_en: 'Weight for length', type: 'Questions::BackgroundCalculation', answer_type_id: 3, reference_table_x_id: length.id, reference_table_y_id: weight.id, reference_table_male: "weight_for_length_male_table", reference_table_female: "weight_for_length_female_table", is_default: true)
+    weight_for_length.answers.create([
+       {label_en: 'less than -3 z-score', value: '-3', operator: Answer.operators[:less]},
+       {label_en: '-2 z-score', value: '-3, -2', operator: Answer.operators[:between]},
+       {label_en: 'more than -2 z-score', value: '-2', operator: Answer.operators[:more_or_equal]},
+     ])
+
+    hr_th = questions.create!(label_en: 'Heart rate in percentile', type: 'Questions::BackgroundCalculation', answer_type_id: 3, reference_table_x_id: age.id, reference_table_y_id: hr.id, reference_table_male: "heart_rate_table", reference_table_female: "heart_rate_table", is_default: true)
     hr_th.answers.create([
        {label_en: 'less than 90th', value: '90', operator: Answer.operators[:less]},
        {label_en: 'more than 90th', value: '90', operator: Answer.operators[:more_or_equal]},
      ])
 
-    rr_th = questions.create!(label_en: 'Respiratory rate in percentile', type: 'Questions::BackgroundCalculation', is_mandatory: true, answer_type_id: 3, reference_table_x_id: age.id, reference_table_y_id: rr.id, reference_table_male: "respiratory_rate_table", reference_table_female: "respiratory_rate_table", is_default: true)
+    rr_th = questions.create!(label_en: 'Respiratory rate in percentile', type: 'Questions::BackgroundCalculation', answer_type_id: 3, reference_table_x_id: age.id, reference_table_y_id: temperature.id, reference_table_z_id: rr.id, reference_table_male: "respiratory_rate_table", reference_table_female: "respiratory_rate_table", is_default: true)
     rr_th.answers.create([
        {label_en: 'less than 75th', value: '75', operator: Answer.operators[:less]},
        {label_en: 'between 75th and 97th', value: '75, 97', operator: Answer.operators[:between]},
        {label_en: 'more than 97th', value: '97', operator: Answer.operators[:more_or_equal]},
      ])
 
-    muac_z_score = questions.create!(label_en: 'MUAC for age (z-score)', type: 'Questions::BackgroundCalculation', is_mandatory: true, answer_type_id: 3, reference_table_x_id: age_in_days.id, reference_table_y_id: muac.id, reference_table_male: "muac_z_score_male_table", reference_table_female: "muac_z_score_female_table", is_default: true)
+    muac_z_score = questions.create!(label_en: 'MUAC for age (z-score)', type: 'Questions::BackgroundCalculation', answer_type_id: 3, reference_table_x_id: age_in_days.id, reference_table_y_id: muac.id, reference_table_male: "muac_z_score_male_table", reference_table_female: "muac_z_score_female_table", is_default: true)
     muac_z_score.answers.create([
        {label_en: 'less than -3 z-score', value: '-3', operator: Answer.operators[:less]},
        {label_en: '-2 z-score', value: '-3, -2', operator: Answer.operators[:between]},

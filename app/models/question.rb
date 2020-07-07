@@ -15,6 +15,7 @@ class Question < Node
 
   belongs_to :reference_table_x, class_name: 'Question', optional: true
   belongs_to :reference_table_y, class_name: 'Question', optional: true
+  belongs_to :reference_table_z, class_name: 'Question', optional: true
   has_many :node_complaint_categories, foreign_key: 'node_id' # Complaint category linked to the question
   has_many :complaint_categories, through: :node_complaint_categories
 

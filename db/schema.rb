@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_01_071737) do
+ActiveRecord::Schema.define(version: 2020_07_06_110919) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -297,6 +297,7 @@ ActiveRecord::Schema.define(version: 2020_07_01_071737) do
     t.string "min_message_error"
     t.string "max_message_error"
     t.boolean "estimable"
+    t.bigint "reference_table_z_id"
     t.index ["administration_route_id"], name: "index_nodes_on_administration_route_id"
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
@@ -304,6 +305,7 @@ ActiveRecord::Schema.define(version: 2020_07_01_071737) do
     t.index ["final_diagnostic_id"], name: "index_nodes_on_final_diagnostic_id"
     t.index ["reference_table_x_id"], name: "index_nodes_on_reference_table_x_id"
     t.index ["reference_table_y_id"], name: "index_nodes_on_reference_table_y_id"
+    t.index ["reference_table_z_id"], name: "index_nodes_on_reference_table_z_id"
   end
 
   create_table "patients", force: :cascade do |t|
@@ -400,6 +402,7 @@ ActiveRecord::Schema.define(version: 2020_07_01_071737) do
   add_foreign_key "nodes", "administration_routes"
   add_foreign_key "nodes", "algorithms"
   add_foreign_key "nodes", "answer_types"
+  add_foreign_key "nodes", "nodes", column: "reference_table_z_id"
   add_foreign_key "technical_files", "users"
   add_foreign_key "versions", "algorithms"
   add_foreign_key "versions", "users"

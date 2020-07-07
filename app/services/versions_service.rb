@@ -68,10 +68,15 @@ class VersionsService
 
       if node['reference_table_x_id'].present?
         nodes[node['reference_table_x_id']]['referenced_in'] = nodes[node['reference_table_x_id']]['referenced_in'].push(node['id']) unless nodes[node['reference_table_x_id']]['referenced_in'].include?(node['id'])
+        nodes[@version.algorithm.medal_r_config['basic_questions']['gender_question_id']]['referenced_in'] = nodes[@version.algorithm.medal_r_config['basic_questions']['gender_question_id']]['referenced_in'].push(node['id'])
       end
 
       if node['reference_table_y_id'].present?
         nodes[node['reference_table_y_id']]['referenced_in'] = nodes[node['reference_table_y_id']]['referenced_in'].push(node['id']) unless nodes[node['reference_table_y_id']]['referenced_in'].include?(node['id'])
+      end
+
+      if node['reference_table_z_id'].present?
+        nodes[node['reference_table_z_id']]['referenced_in'] = nodes[node['reference_table_z_id']]['referenced_in'].push(node['id']) unless nodes[node['reference_table_z_id']]['referenced_in'].include?(node['id'])
       end
     end
     nodes
@@ -352,6 +357,7 @@ class VersionsService
       hash[question.id]['value'] = nil
       hash[question.id]['reference_table_x_id'] = question.reference_table_x_id
       hash[question.id]['reference_table_y_id'] = question.reference_table_y_id
+      hash[question.id]['reference_table_z_id'] = question.reference_table_z_id
       hash[question.id]['reference_table_male'] = question.reference_table_male
       hash[question.id]['reference_table_female'] = question.reference_table_female
 
