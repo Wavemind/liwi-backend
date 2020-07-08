@@ -293,6 +293,7 @@ class VersionsService
       hash[health_care.id] = extract_conditions(instance.conditions)
       hash[health_care.id]['id'] = health_care.id
       hash[health_care.id]['duration'] = instance.duration
+      # Get instance description for drugs and node descriptions for management
       hash[health_care.id]['description'] = instance.node.is_a?(HealthCares::Drug) ? instance.description : instance.node.description_en
 
       # Append the health care in order to list them all at the end of the json.

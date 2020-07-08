@@ -58,6 +58,23 @@ export default class FormulationFields extends React.Component {
 
     let formulation = values.formulations_attributes[index];
 
+    let uniqueDoseTrad = "";
+    switch(formulation.medication_form) {
+      case "capsule":
+      case "tablet":
+      case "suppository":
+        uniqueDoseTrad = "unique_dose_solid";
+        break;
+      case "suspension":
+      case "syrup":
+      case "solution":
+      case "powder_for_injection":
+        uniqueDoseTrad = "unique_dose_liquid";
+        break;
+      default:
+        uniqueDoseTrad = "unique_dose_general";
+    }
+
     return (
       <FadeIn>
         <Form.Row>
@@ -156,7 +173,7 @@ export default class FormulationFields extends React.Component {
 
           {(!["capsule", "tablet", "suspension", "syrup", "solution", "powder_for_injection"].includes(formulation.medication_form) || formulation.by_age) ?
             <Form.Group as={Col} controlId={`${index}-validationUniqueDose`}>
-              <Form.Label>{["capsule", "tablet", "suppository"].includes(formulation.medication_form) ? I18n.t("activerecord.attributes.formulation.unique_dose_solid") : ["suspension", "syrup", "solution", "powder_for_injection"].includes(formulation.medication_form) ? I18n.t("activerecord.attributes.formulation.unique_dose_liquid") : I18n.t("activerecord.attributes.formulation.unique_dose_general")}</Form.Label>
+              <Form.Label>{I18n.t(`activerecord.attributes.formulation.${uniqueDoseTrad}`)}</Form.Label>
               <Form.Control
                 type="number"
                 name={`formulations_attributes.${index}.unique_dose`}
@@ -255,8 +272,7 @@ export default class FormulationFields extends React.Component {
           <Form.Group as={Col} controlId={`${index}-validationDescription`}>
             <Form.Label>{I18n.t("activerecord.attributes.formulation.description_translations")}</Form.Label>
             <Form.Control
-              type="textarea
-              "
+              type="textarea"
               name={`formulations_attributes.${index}.description_en`}
               value={formulation.description_en}
               onChange={handleChange}
