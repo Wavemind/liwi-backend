@@ -156,7 +156,7 @@ export default class FormulationFields extends React.Component {
 
           {(!["capsule", "tablet", "suspension", "syrup", "solution", "powder_for_injection"].includes(formulation.medication_form) || formulation.by_age) ?
             <Form.Group as={Col} controlId={`${index}-validationUniqueDose`}>
-              <Form.Label>{I18n.t("activerecord.attributes.formulation.unique_dose")}</Form.Label>
+              <Form.Label>{["capsule", "tablet", "suppository"].includes(formulation.medication_form) ? I18n.t("activerecord.attributes.formulation.unique_dose_solid") : ["suspension", "syrup", "solution", "powder_for_injection"].includes(formulation.medication_form) ? I18n.t("activerecord.attributes.formulation.unique_dose_liquid") : I18n.t("activerecord.attributes.formulation.unique_dose_general")}</Form.Label>
               <Form.Control
                 type="number"
                 name={`formulations_attributes.${index}.unique_dose`}
@@ -186,6 +186,7 @@ export default class FormulationFields extends React.Component {
             </Form.Group>
             : null}
         </Form.Row>
+
 
         {(["capsule", "tablet", "suspension", "syrup", "solution", "powder_for_injection"].includes(formulation.medication_form) && !formulation.by_age) ?
           <>
@@ -250,6 +251,22 @@ export default class FormulationFields extends React.Component {
             </Form.Row>
           </>
           : null}
+        <Form.Row>
+          <Form.Group as={Col} controlId={`${index}-validationDescription`}>
+            <Form.Label>{I18n.t("activerecord.attributes.formulation.description_translations")}</Form.Label>
+            <Form.Control
+              type="textarea
+              "
+              name={`formulations_attributes.${index}.description_en`}
+              value={formulation.description_en}
+              onChange={handleChange}
+              isInvalid={this.isInvalid("description_en")}
+            />
+            <Form.Control.Feedback type="invalid">
+              {this.displayErrors("description_en")}
+            </Form.Control.Feedback>
+          </Form.Group>
+        </Form.Row>
       </FadeIn>
     );
   }
