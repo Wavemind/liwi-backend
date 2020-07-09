@@ -9,7 +9,7 @@ class Node < ApplicationRecord
   has_many :medias, as: :fileable
   has_many :diagnostics
 
-  has_many :final_diagnostic_health_cares
+  has_many :final_diagnostic_health_cares, dependent: :destroy
   has_many :final_diagnostics, through: :final_diagnostic_health_cares
 
   has_many :medical_case_health_cares
