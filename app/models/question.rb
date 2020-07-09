@@ -145,7 +145,7 @@ class Question < Node
     errors.messages.blank?
   end
 
-  # TODO: COMMENTAIRE
+  # Return question category from its reference prefix
   def self.get_type_from_prefix(prefix)
     Question.descendants.each do |category|
       Question.reference_prefix_class(category.name)
@@ -153,26 +153,6 @@ class Question < Node
     end
   end
 
-  # TODO: COMMENTAIRE
-  def instance_dependencies?
-    dependencies.map(&:instanceable).present?
-  end
-
-  # Check if question is used in a deployed version
-  def used_in_deployed_version
-    involved_versions_ids = []
-    instances.map do |instance|
-      if instance.instanceable.is_a? Version
-        involved_versions_ids.push(instance.instanceable_id) unless involved_versions_ids.include?(instance.instanceable_id)
-      elsif instance.instanceable.is_a? Diagnostic
-        involved_versions_ids.push(instance.instanceable.version_id) unless involved_versions_ids.include?(instance.instanceable.version_id)
-      else
-        involved_versions_ids = questions_sequence_instanceables(instance.instanceable, involved_versions_ids)
-      end
-    end
-
-    GroupAccess.where(end_date: nil, version_id: involved_versions_ids).any?
-  end
 
   # Recursively check any questions sequence to get every involved instances
   def questions_sequence_instanceables(qs, versions = [])

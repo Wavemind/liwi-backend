@@ -44,9 +44,10 @@ export default class QuestionForm extends React.Component {
    * @params [Object] actions
    */
   handleOnSubmit = async (values) => {
-    const { setFormData, save, validate, nextStep } = this.props;
+    const { setFormData, save, validate, nextStep, method, is_used, is_deployed } = this.props;
     setFormData(values);
-    if (NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(values.answer_type_id) || NO_ANSWERS_ATTACHED_TYPE.includes(values.type)) {
+    // Skip answers form if the question type doesn't have any OR if the answers are automatically generated (boolean) or if it is edit mode and the question is already used
+    if (NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(values.answer_type_id) || NO_ANSWERS_ATTACHED_TYPE.includes(values.type) || (method === "update" && (is_used || is_deployed))) {
       save();
     } else {
       const validated = await validate();
@@ -161,7 +162,7 @@ export default class QuestionForm extends React.Component {
   };
 
   render() {
-    const { formData, railsErrors } = this.props;
+    const { formData, railsErrors, is_used, is_deployed, method } = this.props;
 
     const {
       answerTypes,
@@ -173,6 +174,11 @@ export default class QuestionForm extends React.Component {
       snomedError,
       complaintCategories
     } = this.state;
+
+    console.log(formData.is_default);
+    console.log(is_used);
+    console.log(is_deployed);
+    console.log(is_deployed);
 
     return (
       isLoading ? <Loader/> :
@@ -203,6 +209,7 @@ export default class QuestionForm extends React.Component {
                     as="select"
                     name="type"
                     value={values.type}
+                    disabled={method === "update"}
                     onChange={e => {
                       handleChange(e);
                       this.categoryChanges(e).forEach(element => setFieldValue(element[0], element[1]));
@@ -249,7 +256,7 @@ export default class QuestionForm extends React.Component {
                     onChange={e => {
                       setFieldValue("answer_type_id", e.target.value !== "" ? parseInt(e.target.value) : e.target.value);
                     }}
-                    disabled={CATEGORIES_DISABLING_ANSWER_TYPE.includes(values.type)}
+                    disabled={method === "update" || CATEGORIES_DISABLING_ANSWER_TYPE.includes(values.type)}
                     isInvalid={touched.answer_type_id && !!errors.answer_type_id}
                   >
                     <option value="">{I18n.t("select")}</option>
@@ -292,6 +299,7 @@ export default class QuestionForm extends React.Component {
                     value={values.is_mandatory}
                     checked={values.is_mandatory}
                     onChange={handleChange}
+                    disabled={method === "update" && is_deployed}
                     isInvalid={touched.is_mandatory && !!errors.is_mandatory}
                   />
                   <Form.Control.Feedback type="invalid">
@@ -343,6 +351,7 @@ export default class QuestionForm extends React.Component {
                       options={complaintCategories.map(option => option)}
                       defaultValue={formData?.complaint_categories_attributes}
                       filterOptions={filterOptions}
+                      disabled={method === "update" && is_deployed}
                       onChange={(_, value) => setFieldValue("complaint_categories_attributes", value)}
                       renderOption={(option) => option.label_translations.en}
                       renderTags={(value, getTagProps) => (
@@ -382,6 +391,7 @@ export default class QuestionForm extends React.Component {
                       value={values.unavailable}
                       checked={values.unavailable}
                       onChange={handleChange}
+                      disabled={method === "update"}
                       isInvalid={touched.unavailable && !!errors.unavailable}
                     />
                     <Form.Control.Feedback type="invalid">
@@ -395,6 +405,7 @@ export default class QuestionForm extends React.Component {
                     name="is_triage"
                     label={I18n.t("activerecord.attributes.question.is_triage")}
                     value={values.is_triage}
+                    disabled={method === "update" && is_deployed}
                     checked={values.is_triage}
                     onChange={handleChange}
                     isInvalid={touched.is_triage && !!errors.is_triage}
@@ -409,6 +420,7 @@ export default class QuestionForm extends React.Component {
                     name="is_identifiable"
                     label={I18n.t("activerecord.attributes.question.is_identifiable")}
                     value={values.is_identifiable}
+                    disabled={method === "update" && is_deployed}
                     checked={values.is_identifiable}
                     onChange={handleChange}
                     isInvalid={touched.is_identifiable && !!errors.is_identifiable}
@@ -424,6 +436,7 @@ export default class QuestionForm extends React.Component {
                     <Form.Control
                       name="formula"
                       as="textarea"
+                      disabled={method === "update" && is_deployed}
                       value={values.formula}
                       onChange={handleChange}
                       isInvalid={touched.formula && !!errors.formula}
@@ -434,28 +447,13 @@ export default class QuestionForm extends React.Component {
                   </Form.Group>
                 : null}
 
-                {CATEGORIES_DISPLAYING_FILTERABLE.includes(values.type) ?
-                  <Form.Group controlId="validationIsFilterable">
-                    <Form.Check
-                      name="is_filterable"
-                      label={I18n.t("activerecord.attributes.question.is_filterable")}
-                      value={values.is_filterable}
-                      checked={values.is_filterable}
-                      onChange={handleChange}
-                      isInvalid={touched.is_filterable && !!errors.is_filterable}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.is_filterable}
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                : null}
-
                 {"Questions::BasicMeasurement" === values.type ?
                   <Form.Group controlId="validationEstimable">
                     <Form.Check
                       name="estimable"
                       label={I18n.t("activerecord.attributes.question.estimable")}
                       value={values.estimable}
+                      disabled={method === "update" && is_deployed}
                       checked={values.estimable}
                       onChange={handleChange}
                       isInvalid={touched.estimable && !!errors.estimable}
@@ -473,6 +471,7 @@ export default class QuestionForm extends React.Component {
                       <Form.Control
                         type="number"
                         name="min_value_warning"
+                        disabled={method === "update" && is_deployed}
                         value={values.min_value_warning}
                         onChange={handleChange}
                         isInvalid={touched.min_value_warning && !!errors.min_value_warning}
@@ -487,6 +486,7 @@ export default class QuestionForm extends React.Component {
                       <Form.Control
                         type="number"
                         name="max_value_warning"
+                        disabled={method === "update" && is_deployed}
                         value={values.max_value_warning}
                         onChange={handleChange}
                         isInvalid={touched.max_value_warning && !!errors.max_value_warning}
@@ -501,6 +501,7 @@ export default class QuestionForm extends React.Component {
                       <Form.Control
                         type="number"
                         name="min_value_error"
+                        disabled={method === "update" && is_deployed}
                         value={values.min_value_error}
                         onChange={handleChange}
                         isInvalid={touched.min_value_error && !!errors.min_value_error}
@@ -515,6 +516,7 @@ export default class QuestionForm extends React.Component {
                       <Form.Control
                         type="number"
                         name="max_value_error"
+                        disabled={method === "update" && is_deployed}
                         value={values.max_value_error}
                         onChange={handleChange}
                         isInvalid={touched.max_value_error && !!errors.max_value_error}
@@ -529,6 +531,7 @@ export default class QuestionForm extends React.Component {
                       <Form.Control
                         as="textarea"
                         name="min_message_warning"
+                        disabled={method === "update" && is_deployed}
                         value={values.min_message_warning}
                         onChange={handleChange}
                         isInvalid={touched.min_message_warning && !!errors.min_message_warning}
@@ -543,6 +546,7 @@ export default class QuestionForm extends React.Component {
                       <Form.Control
                         as="textarea"
                         name="max_message_warning"
+                        disabled={method === "update" && is_deployed}
                         value={values.max_message_warning}
                         onChange={handleChange}
                         isInvalid={touched.max_message_warning && !!errors.max_message_warning}
@@ -557,6 +561,7 @@ export default class QuestionForm extends React.Component {
                       <Form.Control
                         as="textarea"
                         name="min_message_error"
+                        disabled={method === "update" && is_deployed}
                         value={values.min_message_error}
                         onChange={handleChange}
                         isInvalid={touched.min_message_error && !!errors.min_message_error}
@@ -571,6 +576,7 @@ export default class QuestionForm extends React.Component {
                       <Form.Control
                         as="textarea"
                         name="max_message_error"
+                        disabled={method === "update" && is_deployed}
                         value={values.max_message_error}
                         onChange={handleChange}
                         isInvalid={touched.max_message_error && !!errors.max_message_error}

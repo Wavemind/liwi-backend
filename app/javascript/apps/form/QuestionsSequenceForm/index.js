@@ -97,7 +97,7 @@ export default class QuestionsSequenceForm extends React.Component {
   };
 
   render() {
-    const { questionsSequence, method } = this.props;
+    const { questionsSequence, method, is_deployed } = this.props;
     const { categories, isLoading, complaintCategories } = this.state;
 
     return (
@@ -133,6 +133,7 @@ export default class QuestionsSequenceForm extends React.Component {
                     <Form.Control
                       as="select"
                       name="type"
+                      disabled={method === "update"}
                       value={values.type}
                       onChange={handleChange}
                       isInvalid={touched.type && !!errors.type}
@@ -173,6 +174,7 @@ export default class QuestionsSequenceForm extends React.Component {
                     defaultValue={questionsSequence?.complaint_categories}
                     filterOptions={filterOptions}
                     onChange={(_, value) => setFieldValue("complaint_categories_attributes", value)}
+                    disabled={method === "update" && is_deployed}
                     renderOption={(option) => option.label_translations.en}
                     renderTags={(value, getTagProps) => (
                       value.map((option, index) => (
@@ -195,6 +197,7 @@ export default class QuestionsSequenceForm extends React.Component {
                       name="min_score"
                       value={values.min_score}
                       onChange={handleChange}
+                      disabled={method === "update" && is_deployed}
                       isInvalid={touched.min_score && !!errors.min_score}
                     />
                     <Form.Control.Feedback type="invalid">

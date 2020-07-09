@@ -34,13 +34,29 @@ class Node < ApplicationRecord
   # @return [Boolean]
   # Verify if current node have instances dependencies
   def dependencies?
-    instances.where.not(instanceable: self).where.not(instanceable_type: 'Version').any?
+    instances.where.not(instanceable: self).any?
   end
 
   # @return [ActiveRecord::Association]
   # List of instances
   def dependencies
     instances.select{|i| i unless i.instanceable.is_a? Version}
+  end
+
+  # Check if question is used in a deployed version
+  def used_in_deployed_version
+    involved_versions_ids = []
+    instances.map do |instance|
+      if instance.instanceable.is_a? Version
+        involved_versions_ids.push(instance.instanceable_id) unless involved_versions_ids.include?(instance.instanceable_id)
+      elsif instance.instanceable.is_a? Diagnostic
+        involved_versions_ids.push(instance.instanceable.version_id) unless involved_versions_ids.include?(instance.instanceable.version_id)
+      else
+        involved_versions_ids = questions_sequence_instanceables(instance.instanceable, involved_versions_ids)
+      end
+    end
+
+    GroupAccess.where(end_date: nil, version_id: involved_versions_ids).any?
   end
 
   # Automatically create the answers, since they can't be changed
