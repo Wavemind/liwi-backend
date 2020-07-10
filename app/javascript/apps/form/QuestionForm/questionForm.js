@@ -30,9 +30,11 @@ export default class QuestionForm extends React.Component {
     super(props);
 
 
+    console.log(props);
+
     this.state = {
-      updateMode: props.updateMode,
-      deployedMode: props.updateMode && props.is_deployed,
+      updateMode: props.method === "update",
+      deployedMode: props.method === "update" && props.is_deployed,
       snomedResults: [],
       snomedError: null,
       isLoading: true,
