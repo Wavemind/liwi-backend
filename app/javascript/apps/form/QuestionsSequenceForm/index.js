@@ -23,10 +23,12 @@ const filterOptions = createFilterOptions({
 
 export default class QuestionsSequenceForm extends React.Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
+      updateMode: props.method === "update",
+      deployedMode: props.method === "update" && props.is_deployed,
       categories: [],
       complaintCategories: [],
       isLoading: true
@@ -97,11 +99,8 @@ export default class QuestionsSequenceForm extends React.Component {
   };
 
   render() {
-    const { questionsSequence, method, is_deployed } = this.props;
-    const { categories, isLoading, complaintCategories } = this.state;
-
-    console.log(method);
-    console.log(is_deployed);
+    const { questionsSequence } = this.props;
+    const { categories, isLoading, complaintCategories, updateMode, deployedMode } = this.state;
 
     return (
       isLoading ? <Loader/> :
@@ -135,7 +134,7 @@ export default class QuestionsSequenceForm extends React.Component {
                   <Form.Control
                     as="select"
                     name="type"
-                    disabled={method === "update"}
+                    disabled={updateMode}
                     value={values.type}
                     onChange={handleChange}
                     isInvalid={touched.type && !!errors.type}
@@ -175,7 +174,7 @@ export default class QuestionsSequenceForm extends React.Component {
                     defaultValue={questionsSequence?.complaint_categories}
                     filterOptions={filterOptions}
                     onChange={(_, value) => setFieldValue("complaint_categories_attributes", value)}
-                    disabled={method === "update" && is_deployed}
+                    disabled={deployedMode}
                     renderOption={(option) => option.label_translations.en}
                     renderTags={(value, getTagProps) => (
                       value.map((option, index) => (
@@ -198,7 +197,7 @@ export default class QuestionsSequenceForm extends React.Component {
                       name="min_score"
                       value={values.min_score}
                       onChange={handleChange}
-                      disabled={method === "update" && is_deployed}
+                      disabled={deployedMode}
                       isInvalid={touched.min_score && !!errors.min_score}
                     />
                     <Form.Control.Feedback type="invalid">

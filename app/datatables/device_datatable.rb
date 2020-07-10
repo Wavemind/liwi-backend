@@ -31,7 +31,8 @@ class DeviceDatatable < AjaxDatatablesRails::ActiveRecord
 
       # This table is used in 2 views, and actions are not the same
       if params[:from].present?
-        actions += link_to(I18n.t('.remove'), group_remove_device_url(params[:id], record), class: 'btn btn-outline-danger ml-2', method: :delete, data: { confirm: 'Are you sure?' })      end
+        actions += link_to(I18n.t('.remove'), group_remove_device_url(params[:id], record), class: 'btn btn-outline-danger ml-2', method: :delete, data: { confirm: I18n.t('confirmation') })
+      end
       {
         mac_address: record.mac_address,
         name: record.name,

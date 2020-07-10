@@ -12,9 +12,8 @@ export default class DrugForm extends React.Component {
   /**
    * Create drug or go throw next step (formulationForm)
    * @params [Object] values
-   * @params [Object] actions
    */
-  handleOnSubmit = async (values) => {
+  handleOnSubmit = (values) => {
     const { setFormData, save, nextStep, method, is_deployed } = this.props;
     setFormData(values);
 
