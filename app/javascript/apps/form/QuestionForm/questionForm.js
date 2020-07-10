@@ -175,11 +175,6 @@ export default class QuestionForm extends React.Component {
       complaintCategories
     } = this.state;
 
-    console.log(formData.is_default);
-    console.log(is_used);
-    console.log(is_deployed);
-    console.log(is_deployed);
-
     return (
       isLoading ? <Loader/> :
         <FadeIn>

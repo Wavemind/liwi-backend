@@ -153,19 +153,6 @@ class Question < Node
     end
   end
 
-
-  # Recursively check any questions sequence to get every involved instances
-  def questions_sequence_instanceables(qs, versions = [])
-    qs.instances.where.not(instanceable: qs).map do |instance|
-      if instance.instanceable.is_a? Diagnostic
-        versions.push(instance.instanceable.version_id) unless versions.include?(instance.instanceable.version_id)
-      else
-        questions_sequence_instanceables(instance.instanceable, versions)
-      end
-    end
-    versions
-  end
-
   # Validate correct order of validation ranges
   def validate_ranges
     values = []

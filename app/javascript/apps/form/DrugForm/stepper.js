@@ -116,7 +116,7 @@ export default class StepperDrugForm extends React.Component {
 
   render() {
     const { errors, step, drug, createdDrug } = this.state;
-    const { method, engine, diagramObject, addAvailableNode, from } = this.props;
+    const { method, engine, diagramObject, addAvailableNode, from, is_deployed } = this.props;
 
     switch (step) {
       case 1:
@@ -127,6 +127,9 @@ export default class StepperDrugForm extends React.Component {
               formData={drug}
               setFormData={this.setMetaData}
               nextStep={this.nextStep}
+              save={this.save}
+              method={method}
+              is_deployed={is_deployed}
             />
           </>
         );
