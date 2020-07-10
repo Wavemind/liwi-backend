@@ -31,8 +31,8 @@ export default class QuestionForm extends React.Component {
 
 
     this.state = {
-      updateMode: props.method === "update",
-      deployedMode: props.method === "update" && props.is_deployed,
+      updateMode: props.updateMode,
+      deployedMode: props.updateMode && props.is_deployed,
       snomedResults: [],
       snomedError: null,
       isLoading: true,
@@ -50,7 +50,7 @@ export default class QuestionForm extends React.Component {
     const { setFormData, save, validate, nextStep, method, is_used, is_deployed } = this.props;
     setFormData(values);
     // Skip answers form if the question type doesn't have any OR if the answers are automatically generated (boolean) or if it is edit mode and the question is already used
-    if (NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(values.answer_type_id) || NO_ANSWERS_ATTACHED_TYPE.includes(values.type) || (method === "update" && (is_used || is_deployed))) {
+    if (NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(values.answer_type_id) || NO_ANSWERS_ATTACHED_TYPE.includes(values.type) || (updateMode && (is_used || is_deployed))) {
       save();
     } else {
       const validated = await validate();
@@ -256,7 +256,7 @@ export default class QuestionForm extends React.Component {
                     onChange={e => {
                       setFieldValue("answer_type_id", e.target.value !== "" ? parseInt(e.target.value) : e.target.value);
                     }}
-                    disabled={method === "update" || CATEGORIES_DISABLING_ANSWER_TYPE.includes(values.type)}
+                    disabled={updateMode || CATEGORIES_DISABLING_ANSWER_TYPE.includes(values.type)}
                     isInvalid={touched.answer_type_id && !!errors.answer_type_id}
                   >
                     <option value="">{I18n.t("select")}</option>
