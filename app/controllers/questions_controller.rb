@@ -59,7 +59,7 @@ class QuestionsController < ApplicationController
 
   def destroy
     # If user remove 'disabled' css in button, we verify in controller
-    if @question.instance_dependencies?
+    if @question.dependencies?
       redirect_to algorithm_url(@algorithm, panel: 'questions'), alert: t('dependencies')
     else
       if @question.destroy
@@ -142,7 +142,6 @@ class QuestionsController < ApplicationController
       :snomed_label,
       :is_triage,
       :is_identifiable,
-      :is_filterable,
       :min_value_warning,
       :max_value_warning,
       :min_value_error,

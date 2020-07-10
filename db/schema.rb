@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_06_110919) do
+ActiveRecord::Schema.define(version: 2020_07_10_083744) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -147,6 +147,7 @@ ActiveRecord::Schema.define(version: 2020_07_06_110919) do
     t.boolean "by_age", default: false
     t.bigint "node_id"
     t.bigint "administration_route_id"
+    t.hstore "description_translations"
     t.index ["administration_route_id"], name: "index_formulations_on_administration_route_id"
     t.index ["node_id"], name: "index_formulations_on_node_id"
   end
@@ -282,12 +283,10 @@ ActiveRecord::Schema.define(version: 2020_07_06_110919) do
     t.string "snomed_label"
     t.integer "system"
     t.boolean "is_mandatory", default: false
-    t.bigint "administration_route_id"
     t.boolean "is_anti_malarial", default: false
     t.boolean "is_antibiotic", default: false
     t.boolean "is_triage", default: false
     t.boolean "is_identifiable", default: false
-    t.boolean "is_filterable", default: false
     t.float "min_value_warning"
     t.float "max_value_warning"
     t.float "min_value_error"
@@ -298,7 +297,6 @@ ActiveRecord::Schema.define(version: 2020_07_06_110919) do
     t.string "max_message_error"
     t.boolean "estimable"
     t.bigint "reference_table_z_id"
-    t.index ["administration_route_id"], name: "index_nodes_on_administration_route_id"
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
     t.index ["diagnostic_id"], name: "index_nodes_on_diagnostic_id"
@@ -399,7 +397,6 @@ ActiveRecord::Schema.define(version: 2020_07_06_110919) do
   add_foreign_key "diagnostics", "versions"
   add_foreign_key "group_accesses", "groups"
   add_foreign_key "group_accesses", "versions"
-  add_foreign_key "nodes", "administration_routes"
   add_foreign_key "nodes", "algorithms"
   add_foreign_key "nodes", "answer_types"
   add_foreign_key "nodes", "nodes", column: "reference_table_z_id"

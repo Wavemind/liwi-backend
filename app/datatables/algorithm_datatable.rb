@@ -32,7 +32,7 @@ class AlgorithmDatatable < AjaxDatatablesRails::ActiveRecord
   def data
     records.map do |record|
       actions = link_to(I18n.t('show'), algorithm_url(record), class: 'btn btn-outline-primary') + " " + link_to(I18n.t('edit'), edit_algorithm_url(record), class: 'btn btn-outline-info') + " "
-      actions += record.archived ? link_to(I18n.t('unarchive'), unarchive_algorithm_url(record), class: 'btn btn-outline-danger', method: :put, data: { confirm: 'Are you sure?' }) : link_to(I18n.t('archive'), archive_algorithm_url(record), class: 'btn btn-outline-danger', method: :put, data: { confirm: 'Are you sure?' })
+      actions += record.archived ? link_to(I18n.t('unarchive'), unarchive_algorithm_url(record), class: 'btn btn-outline-danger', method: :put, data: { confirm: I18n.t('confirmation') }) : link_to(I18n.t('archive'), archive_algorithm_url(record), class: 'btn btn-outline-danger', method: :put, data: { confirm: I18n.t('confirmation') })
       {
         name: record.name,
         description: record.description,

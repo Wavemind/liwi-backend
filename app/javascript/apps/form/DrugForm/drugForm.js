@@ -5,8 +5,26 @@ import { Form, Button } from "react-bootstrap";
 import { Formik } from "formik";
 
 import { drugSchema } from "../constants/schema";
+import {NO_ANSWERS_ATTACHED_ANSWER_TYPE, NO_ANSWERS_ATTACHED_TYPE} from "../constants/constants";
 
 export default class DrugForm extends React.Component {
+
+  /**
+   * Create drug or go throw next step (formulationForm)
+   * @params [Object] values
+   */
+  handleOnSubmit = (values) => {
+    const { setFormData, save, nextStep, method, is_deployed } = this.props;
+    setFormData(values);
+
+    // Skip formulations form if the drug is deployed
+    if (method === "update" && is_deployed) {
+      save();
+    } else {
+      nextStep();
+    }
+  };
+
   render() {
     const { formData, setFormData, nextStep } = this.props;
 
@@ -16,8 +34,7 @@ export default class DrugForm extends React.Component {
           validationSchema={drugSchema}
           initialValues={formData}
           onSubmit={values => {
-            setFormData(values);
-            nextStep();
+            this.handleOnSubmit(values);
           }}
         >
           {({
