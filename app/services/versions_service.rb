@@ -6,6 +6,8 @@ class VersionsService
   def self.generate_version_hash(id)
     init
     @version = Version.find(id)
+    @version.medal_r_json_version = @version.medal_r_json_version + 1
+
     @patient_questions = []
 
     hash = extract_version_metadata
@@ -34,7 +36,8 @@ class VersionsService
 
     hash['patient_level_questions'] = @patient_questions
 
-    hash
+    @version.medal_r_json = hash
+    @version.save
   end
 
   # @params [Diagnostic]
@@ -115,6 +118,7 @@ class VersionsService
     hash = {}
     hash['version_id'] = @version.id
     hash['version_name'] = @version.name
+    hash['json_version'] = @version.medal_r_json_version
     hash['description'] = @version.description
     hash['algorithm_id'] = @version.algorithm.id
     hash['algorithm_name'] = @version.algorithm.name

@@ -21,10 +21,13 @@ class GroupAccessesController < ApplicationController
 
     if invalid_diagnostics.any?
       redirect_to @group_access.group, alert: t('flash_message.version.invalids_diagnostics', diagnostics: invalid_diagnostics)
-    elsif @group_access.save
-      redirect_to @group_access.group, notice: t('flash_message.success_created')
     else
-      redirect_to @group_access.group
+
+      if @group_access.save && VersionsService.generate_version_hash(version.id)
+          redirect_to @group_access.group, notice: t('flash_message.success_created')
+      else
+        redirect_to @group_access.group
+      end
     end
   end
 

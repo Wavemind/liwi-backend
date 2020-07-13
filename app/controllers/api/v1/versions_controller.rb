@@ -11,7 +11,12 @@ class Api::V1::VersionsController < Api::V1::ApplicationController
           version = device.group.versions.where('group_accesses.end_date IS NULL').first
 
           if version.present?
-            render json: VersionsService.generate_version_hash(version.id)
+            medal_r_json_version = params[:json_version]
+            if medal_r_json_version == version.medal_r_json_version.to_s
+              render json: {}, status: 204
+            else
+              render json: version.medal_r_json
+            end
           else
             render json: { errors: t('.no_version') }, status: :unprocessable_entity
           end

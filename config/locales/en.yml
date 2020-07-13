@@ -303,6 +303,8 @@ en:
   flash_message:
     create_fail: "Error will creating the entry"
     delete_fail: "Error will deleting the entry"
+    json_success: "The json was correctly generated and stored"
+    json_error: "There were an error while generating the json or storing it"
     reserved_reference: "This reference is reserved."
     success_created: "Data was successfully created"
     success_deleted: "Data was successfully deleted"
@@ -368,6 +370,7 @@ en:
       success_remove_device: "Device was successfully removed from group"
       error_remove_device: "An error occurred when removing device from group"
     show:
+      generate_json: "Generate json"
       title: "Details of %{name}"
       second_title: "Accesses"
       columns:
