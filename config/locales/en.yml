@@ -303,6 +303,8 @@ en:
   flash_message:
     create_fail: "Error will creating the entry"
     delete_fail: "Error will deleting the entry"
+    json_success: "The json was correctly generated and stored"
+    json_error: "There were an error while generating the json or storing it"
     reserved_reference: "This reference is reserved."
     success_created: "Data was successfully created"
     success_deleted: "Data was successfully deleted"

@@ -2,7 +2,7 @@ class VersionsController < ApplicationController
   before_action :authenticate_user!, except: [:change_triage_order]
   before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :duplicate, :create_triage_condition, :remove_triage_condition]
   before_action :set_breadcrumb, only: [:show, :new, :edit]
-  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :change_triage_order, :components, :create_triage_condition, :duplicate, :remove_components, :remove_triage_condition, :update_list]
+  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :change_triage_order, :components, :create_triage_condition, :duplicate, :remove_components, :remove_triage_condition, :update_list, :regenerate_json]
 
   def index
     respond_to do |format|
@@ -130,6 +130,16 @@ class VersionsController < ApplicationController
         redirect_to algorithm_url(@algorithm, panel: 'versions'), alert: t('flash_message.duplicate_fail')
         raise ActiveRecord::Rollback, ''
       end
+    end
+  end
+
+  def regenerate_json
+    if VersionsService.generate_version_hash(@version.id)
+      flash[:notice] = t('flash_message.json_success')
+      redirect_back(fallback_location: root_path)
+    else
+      flash[:notice] = t('flash_message.json_error')
+      redirect_back(fallback_location: root_path)
     end
   end
 

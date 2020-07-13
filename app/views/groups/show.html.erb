@@ -57,7 +57,17 @@
   <div class="col">
     <% if @current_group_access.present? %>
       <div class="alert alert-success" role="alert">
-        <%= t('groups.current_algorithm', version_name: @current_group_access.version.display_label).html_safe %>
+        <div class="row">
+          <div class="col">
+            <%= t('groups.current_algorithm', version_name: @current_group_access.version.display_label).html_safe %>
+
+          </div>
+          <div class="col">
+            <%= simple_form_for @current_group_access.version, url: regenerate_json_algorithm_version_path(@current_group_access.version.algorithm, @current_group_access.version), method: :put do |f| %>
+              <%= f.submit 'Generate json', class: 'btn btn-primary' %>
+            <% end %>
+          </div>
+        </div>
       </div>
     <% else %>
       <div class="alert alert-danger" role="alert">

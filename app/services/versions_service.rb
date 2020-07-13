@@ -34,7 +34,9 @@ class VersionsService
 
     hash['patient_level_questions'] = @patient_questions
 
-    hash
+    @version.medal_r_json = hash
+    @version.medal_r_json_version = @version.medal_r_json_version + 1
+    @version.save
   end
 
   # @params [Diagnostic]
@@ -115,6 +117,7 @@ class VersionsService
     hash = {}
     hash['version_id'] = @version.id
     hash['version_name'] = @version.name
+    hash['json_version'] = @version.medal_r_json_version
     hash['description'] = @version.description
     hash['algorithm_id'] = @version.algorithm.id
     hash['algorithm_name'] = @version.algorithm.name
