@@ -11,7 +11,7 @@ class Api::V1::VersionsController < Api::V1::ApplicationController
           version = device.group.versions.where('group_accesses.end_date IS NULL').first
 
           if version.present?
-            medal_r_json_version = params[:medal_r_json_version]
+            medal_r_json_version = params[:json_version]
             if medal_r_json_version == version.medal_r_json_version
               render json: {}, status: 204
             else

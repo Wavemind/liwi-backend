@@ -133,6 +133,9 @@ class VersionsController < ApplicationController
     end
   end
 
+  # PUT algorithms/:algorithm_id/version/:id/regenerate_json
+  # @params version [Version] version
+  # Generate json for the version
   def regenerate_json
     if VersionsService.generate_version_hash(@version.id)
       flash[:notice] = t('flash_message.json_success')

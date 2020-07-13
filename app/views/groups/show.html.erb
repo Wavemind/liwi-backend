@@ -64,7 +64,7 @@
           </div>
           <div class="col">
             <%= simple_form_for @current_group_access.version, url: regenerate_json_algorithm_version_path(@current_group_access.version.algorithm, @current_group_access.version), method: :put do |f| %>
-              <%= f.submit 'Generate json', class: 'btn btn-primary' %>
+              <%= f.submit t('.generate_json'), class: 'btn btn-primary' %>
             <% end %>
           </div>
         </div>
