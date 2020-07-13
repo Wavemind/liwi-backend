@@ -6,6 +6,8 @@ class VersionsService
   def self.generate_version_hash(id)
     init
     @version = Version.find(id)
+    @version.medal_r_json_version = @version.medal_r_json_version + 1
+
     @patient_questions = []
 
     hash = extract_version_metadata
