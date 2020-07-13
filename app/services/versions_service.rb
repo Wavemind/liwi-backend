@@ -37,7 +37,6 @@ class VersionsService
     hash['patient_level_questions'] = @patient_questions
 
     @version.medal_r_json = hash
-    @version.medal_r_json_version = @version.medal_r_json_version + 1
     @version.save
   end
 
