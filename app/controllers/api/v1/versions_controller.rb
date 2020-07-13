@@ -12,7 +12,7 @@ class Api::V1::VersionsController < Api::V1::ApplicationController
 
           if version.present?
             medal_r_json_version = params[:json_version]
-            if medal_r_json_version == version.medal_r_json_version
+            if medal_r_json_version == version.medal_r_json_version.to_s
               render json: {}, status: 204
             else
               render json: version.medal_r_json
