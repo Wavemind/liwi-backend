@@ -366,6 +366,7 @@ class VersionsService
       hash[question.id]['max_message_warning'] = question.max_message_warning
       hash[question.id]['min_message_error'] = question.min_message_error
       hash[question.id]['max_message_error'] = question.max_message_error
+      hash[question.id]['complaint_category_diagnostics'] = get_complaint_category_diagnostics(question, []) if question.is_a?(Questions::ComplaintCategory)
 
       if question.is_a?(Questions::ComplaintCategory) && question.is_default
         hash[question.id]['cc_general'] = true
@@ -413,6 +414,17 @@ class VersionsService
       end
     end
     formula
+  end
+
+  # @params [Node, Array]
+  # @return [Array]
+  # Recursive method in order to retrieve every diagnostics the question appears in.
+  def self.get_complaint_category_diagnostics(node, diagnostics)
+    node.diagnostics.each do |diagnostic|
+      if @diagnostics_ids.include?(diagnostic.id) && !diagnostics.include?(diagnostic.id)
+        diagnostics << diagnostic.id
+      end
+    end
   end
 
   # @params [Node, Array]
