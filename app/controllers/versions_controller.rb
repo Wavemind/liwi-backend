@@ -69,7 +69,7 @@ class VersionsController < ApplicationController
   def change_triage_order
     config = @version.medal_r_config
     config['questions_orders'][params[:key]] = params[:order].map(&:to_i)
-    if @version.update(medal_r_confg: config)
+    if @version.update(medal_r_config: config)
       render json: {result: 'success'}
     else
       render json: {result: 'error'}

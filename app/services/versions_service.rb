@@ -144,14 +144,7 @@ class VersionsService
     hash['first_top_right_question_id'] = @version.first_top_right_question.present? ? @version.first_top_right_question.node_id : nil
     hash['second_top_right_question_id'] = @version.second_top_right_question.present? ? @version.second_top_right_question.node_id : nil
 
-    # Convert instance ids into node ids
-    orders = @version.medal_r_config['questions_orders']
-    orders.each do |key, value|
-      value.each_with_index do |instance_id, index|
-        orders[key][index] = Instance.find(instance_id).node_id
-      end
-    end
-    hash['questions_orders'] = orders
+    hash['questions_orders'] = @version.medal_r_config['questions_orders']
     hash['medical_case_list'] = @version.medal_r_config['medical_case_list_order']
     hash['patient_list'] = @version.medal_r_config['patient_list_order']
     hash
