@@ -29,9 +29,6 @@ export default class QuestionForm extends React.Component {
   constructor(props) {
     super(props);
 
-
-    console.log(props);
-
     this.state = {
       updateMode: props.method === "update",
       deployedMode: props.method === "update" && props.is_deployed,

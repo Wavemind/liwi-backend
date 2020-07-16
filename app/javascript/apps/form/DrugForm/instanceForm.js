@@ -19,7 +19,7 @@ export default class InstanceForm extends React.Component {
    * @params [Object] actions
    */
   handleOnSubmit = async (values, actions) => {
-    const { method, engine, diagramObject, addAvailableNode, drug, positions, removeAvailableNode, from } = this.props;
+    const { method, engine, diagramObject, addAvailableNode, drug, positions, removeAvailableNode, from, isFromAvailableNode } = this.props;
     let http = new Http();
     let httpRequest = {};
 
@@ -37,7 +37,7 @@ export default class InstanceForm extends React.Component {
         engine.getModel().addNode(diagramInstance);
 
         // If the instance is created from available nodes (and not from the drug creation form)
-        if (from !== "react") {
+        if (isFromAvailableNode) {
           removeAvailableNode(drug);
         }
       } else {

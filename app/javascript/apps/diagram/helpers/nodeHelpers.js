@@ -59,6 +59,7 @@ export const createNode = (instance, addAvailableNode, readOnly, diagramType, en
  */
 export const getCategoryNode = (node) => {
   let category = "";
+  console.log(node)
   if (node.node_type === "Question" || node.node_type === "QuestionsSequence" || node.node_type === "HealthCare") {
     category = _.camelCase(node.category_name);
   } else {

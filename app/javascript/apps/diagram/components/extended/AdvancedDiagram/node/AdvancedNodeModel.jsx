@@ -38,6 +38,7 @@ export default class AdvancedNodeModel extends NodeModel {
               this.setPositionInstance(event);
               break;
             case "entityRemoved":
+              console.log('coucou');
               if (!this.locked) {
                 this.removeInstance();
               }
