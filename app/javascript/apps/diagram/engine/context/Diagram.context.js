@@ -100,8 +100,6 @@ export default class DiagramProvider extends React.Component {
 
     let category = getCategoryNode(node);
 
-    console.log('fesse')
-    console.log(category)
     const newOrderedNodes = {
       ...orderedNodes,
       [category]: [

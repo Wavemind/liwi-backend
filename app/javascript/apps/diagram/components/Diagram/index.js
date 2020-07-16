@@ -155,7 +155,7 @@ export class Diagram extends React.Component {
         // Display node in diagram
         engine.getModel().addNode(diagramInstance);
         engine.repaintCanvas();
-
+  
         // Remove node from available nodes list
         removeAvailableNode(dbNode);
       } else {
