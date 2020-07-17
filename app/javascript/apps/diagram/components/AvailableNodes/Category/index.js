@@ -10,6 +10,8 @@ export default class Category extends React.Component {
 
   render() {
     const { nodes, index } = this.props;
+    // Sort nodes by label
+    nodes.sort((a,b) => (a.label_translations['en'] > b.label_translations['en']) ? 1 : ((b.label_translations['en'] > a.label_translations['en']) ? -1 : 0));
 
     return (
       <div className="card" key={index}>
