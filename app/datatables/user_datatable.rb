@@ -8,7 +8,7 @@ class UserDatatable < AjaxDatatablesRails::ActiveRecord
   def_delegator :@view, :user_url
   def_delegator :@view, :deactivated_users_url
   def_delegator :@view, :activated_users_url
-  def_delegator :@view, :group_remove_user_url
+  def_delegator :@view, :health_facility_remove_user_url
   def_delegator :@view, :datetime_format
 
   def initialize(params, opts = {})

@@ -1,10 +1,10 @@
-<h1><%= t('.title', name: @group.name) %> - <small><%= t("groups.architectures.#{@group.architecture}") %></small></h1>
+<h1><%= t('.title', name: @health_facility.name) %> - <small><%= t("health_facilities.architectures.#{@health_facility.architecture}") %></small></h1>
 
 <hr class="my-4"/>
 
 <h2><%= t('.medical_staff') %></h2>
 <div class="row">
-  <% @group.medical_staffs.each do |medical_staff| %>
+  <% @health_facility.medical_staffs.each do |medical_staff| %>
     <div class="col-md-4">
       <div class="card mb-4">
         <div class="card-body">
@@ -21,10 +21,10 @@
 <h2><%= t('.devices') %></h2>
 <div class="row">
   <div class="col">
-    <%= simple_form_for @device, url: group_add_device_url(@group), method: :post do |f| %>
+    <%= simple_form_for @device, url: health_facility_add_device_url(@health_facility), method: :post do |f| %>
       <div class="row">
         <div class="col">
-          <%= f.input :id, collection: Device.where(group_id: nil), label_method: :label, label: false, prompt: t('prompt') %>
+          <%= f.input :id, collection: Device.where(health_facility_id: nil), label_method: :label, label: false, prompt: t('prompt') %>
         </div>
         <div class="col">
           <%= f.submit t('add'), class: 'btn btn-primary' %>
@@ -35,7 +35,7 @@
 </div>
 
 
-<table class="table table-condensed table-hover" id="devices-datatable" data-source="<%= devices_url(format: :json, from: 'group', id: params[:id]) %>">
+<table class="table table-condensed table-hover" id="devices-datatable" data-source="<%= devices_url(format: :json, from: 'health_facility', id: params[:id]) %>">
   <thead>
   <tr>
     <th><%= t('.columns.mac_address') %></th>
@@ -55,15 +55,15 @@
 <h2><%= t('.second_title') %></h2>
 <div class="row">
   <div class="col">
-    <% if @current_group_access.present? %>
+    <% if @current_health_facility_access.present? %>
       <div class="alert alert-success" role="alert">
         <div class="row">
           <div class="col">
-            <%= t('groups.current_algorithm', version_name: @current_group_access.version.display_label).html_safe %>
+            <%= t('health_facilities.current_algorithm', version_name: @current_health_facility_access.version.display_label).html_safe %>
 
           </div>
           <div class="col">
-            <%= simple_form_for @current_group_access.version, url: regenerate_json_algorithm_version_path(@current_group_access.version.algorithm, @current_group_access.version), method: :put do |f| %>
+            <%= simple_form_for @current_health_facility_access.version, url: regenerate_json_algorithm_version_path(@current_health_facility_access.version.algorithm, @current_health_facility_access.version), method: :put do |f| %>
               <%= f.submit t('.generate_json'), class: 'btn btn-primary' %>
             <% end %>
           </div>
@@ -71,16 +71,16 @@
       </div>
     <% else %>
       <div class="alert alert-danger" role="alert">
-        There is not algorithm associated to this group
+        There is not algorithm associated to this health facility
       </div>
     <% end %>
   </div>
   <div class="col">
-    <%= simple_form_for @group_access do |f| %>
-      <%= f.input :group_id, as: :hidden, input_html: { value: params[:id] } %>
+    <%= simple_form_for @health_facility_access do |f| %>
+      <%= f.input :health_facility_id, as: :hidden, input_html: { value: params[:id] } %>
       <div class="row">
         <div class="col">
-          <%= f.association :version, collection: Version.includes(:algorithm).where.not(id: (@current_group_access.version_id if @current_group_access.present?), archived: true), label_method: :display_label, label: false, prompt: t('prompt') %>
+          <%= f.association :version, collection: Version.includes(:algorithm).where.not(id: (@current_health_facility_access.version_id if @current_health_facility_access.present?), archived: true), label_method: :display_label, label: false, prompt: t('prompt') %>
         </div>
         <div class="col">
           <%= f.submit t('add'), class: 'btn btn-primary' %>
@@ -91,7 +91,7 @@
 </div>
 
 <h3><%= t('.archived') %></h3>
-<table class="table table-condensed table-hover" id="group_accesses-datatable" data-source="<%= group_accesses_url(format: :json, id: params[:id]) %>">
+<table class="table table-condensed table-hover" id="health_facility_accesses-datatable" data-source="<%= health_facility_accesses_url(format: :json, id: params[:id]) %>">
   <thead>
   <tr>
     <th><%= t('.columns.created_at') %></th>

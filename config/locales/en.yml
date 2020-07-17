@@ -136,10 +136,10 @@ en:
     v1:
       versions:
         index:
-          no_version: "Your group has no version"
+          no_version: "Your health facility has no version associated"
           device_not_exist: "Device doesn't exist"
-          invalid_token: "Invalid group token"
-          no_group: "Your tablet isn't associated with groups"
+          invalid_token: "Invalid health facility token"
+          no_health_facility: "Your tablet isn't associated with any health facility"
       activities:
         create:
           errors_device_not_present: "Device doesn't exist"
@@ -148,12 +148,12 @@ en:
         create:
           errors_on_save: "An error occurred when saving devices"
         show:
-          no_group: "Your tablet isn't associated with groups"
+          no_health_facility: "Your tablet isn't associated with any health facility"
   archive: "Archive"
   breadcrumbs:
     algorithms: 'Algorithms'
     devices: 'Devices'
-    groups: 'Groups'
+    health_facilities: 'Health facilities'
     home: 'Home'
     roles: 'Roles'
     settings: 'Settings'
@@ -348,10 +348,10 @@ en:
       title: "New formulations"
     edit:
       title: "Edit formulations"
-  groups:
+  health_facilities:
     add_device:
-      success_add_device: "Device was successfully added to group"
-      error_add_device: "An error occurred when adding device to group"
+      success_add_device: "Device was successfully added to the health facility"
+      error_add_device: "An error occurred when adding device to the health facility"
     current_algorithm: "Currently published algorithm <b>%{version_name}</b>"
     index:
       columns:
@@ -360,15 +360,15 @@ en:
         actions: "Actions"
       title: "Groups"
     edit:
-      title: "Edit group"
+      title: "Edit health facility"
     errors:
       code_pin_unvalid: "The PIN code should be only 4 digits"
       ip_invalid: "The IP is not in the good format."
     new:
-      title: "Add group"
+      title: "Add health facility"
     remove_device:
-      success_remove_device: "Device was successfully removed from group"
-      error_remove_device: "An error occurred when removing device from group"
+      success_remove_device: "Device was successfully removed from the health facility"
+      error_remove_device: "An error occurred when removing device from the health facility"
     show:
       generate_json: "Generate json"
       title: "Details of %{name}"
@@ -383,7 +383,7 @@ en:
       medical_staff: "Medical staff"
     form:
       medical_staffs: "Medical staff"
-  group_accesses:
+  health_facility_accesses:
     new:
       title: "New release"
   health_cares:
