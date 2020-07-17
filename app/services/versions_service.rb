@@ -366,7 +366,7 @@ class VersionsService
       hash[question.id]['max_message_warning'] = question.max_message_warning
       hash[question.id]['min_message_error'] = question.min_message_error
       hash[question.id]['max_message_error'] = question.max_message_error
-      hash[question.id]['complaint_category_diagnostics'] = get_complaint_category_diagnostics(question, []) if question.is_a?(Questions::ComplaintCategory)
+      hash[question.id]['diagnostics_related_to_cc'] = get_complaint_category_diagnostics(question, []) if question.is_a?(Questions::ComplaintCategory)
 
       if question.is_a?(Questions::ComplaintCategory) && question.is_default
         hash[question.id]['cc_general'] = true
