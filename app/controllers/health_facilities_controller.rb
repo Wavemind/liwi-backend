@@ -101,6 +101,8 @@ class HealthFacilitiesController < ApplicationController
       :local_data_ip,
       :main_data_ip,
       :pin_code,
+      :longitude,
+      :latitude,
       device_ids: [],
       medical_staffs_attributes: [
         :id,
@@ -109,7 +111,6 @@ class HealthFacilitiesController < ApplicationController
         :role,
         :_destroy
       ]
-
     )
   end
 end
