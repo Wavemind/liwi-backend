@@ -425,6 +425,7 @@ class VersionsService
         diagnostics << diagnostic.id
       end
     end
+    diagnostics
   end
 
   # @params [Node, Array]
