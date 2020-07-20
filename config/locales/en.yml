@@ -151,22 +151,24 @@ en:
           no_health_facility: "Your tablet isn't associated with any health facility"
   archive: "Archive"
   breadcrumbs:
-    algorithms: 'Algorithms'
-    devices: 'Devices'
-    health_facilities: 'Health facilities'
-    home: 'Home'
-    roles: 'Roles'
-    settings: 'Settings'
-    users: 'Users'
-    new: "New"
-    edit: "Edit"
-    versions: "Versions"
+    algorithms: "Algorithms"
+    apk: "APK"
+    dashboard: "Dashboard"
+    devices: "Devices"
     diagnostics: "Diagnostics"
-    final_diagnostics: "Final diagnostics"
-    questions_sequences: "Questions sequences"
     drugs: "Drugs"
-    questions: "Questions"
+    edit: "Edit"
+    final_diagnostics: "Final diagnostics"
+    health_facilities: "Health facilities"
+    home: "Home"
     managements: "Managements"
+    questions: "Questions"
+    questions_sequences: "Questions sequences"
+    roles: "Roles"
+    settings: "Settings"
+    users: "Users"
+    new: "New"
+    versions: "Versions"
   children:
     errors:
       unknown_instanceable: "Unknown instanceable"
@@ -258,7 +260,7 @@ en:
       invalid: is invalid
       less_than: must be less than %{count}
       less_than_or_equal_to: must be less than or equal to %{count}
-      model_invalid: 'Validation failed: %{errors}'
+      model_invalid: "Validation failed: %{errors}"
       not_a_number: is not a number
       not_an_integer: must be an integer
       odd: must be odd
@@ -276,7 +278,7 @@ en:
         one: is the wrong length (should be 1 character)
         other: is the wrong length (should be %{count} characters)
     template:
-      body: 'There were problems with the following fields:'
+      body: "There were problems with the following fields:"
       header:
         one: 1 error prohibited this %{model} from being saved
         other: "%{count} errors prohibited this %{model} from being saved"
@@ -373,6 +375,7 @@ en:
       generate_json: "Generate json"
       title: "Details of %{name}"
       second_title: "Accesses"
+      no_algorithm: "There is not algorithm associated to this health facility"
       columns:
         algorithm: "Algorithm"
         version: "Version"
@@ -431,6 +434,7 @@ en:
     label: "label_"
     new:
       title: "New language"
+  logout: "Logout"
   managements:
     edit:
       title: "Edit the management"

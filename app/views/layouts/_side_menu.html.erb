@@ -5,28 +5,28 @@
 
   <ul class="list-unstyled components">
     <li class="<%= 'active' if controller_name == 'dashboard' %>">
-      <%= link_to 'Dashboard', root_url %>
+      <%= link_to t('breadcrumbs.dashboard'), root_url %>
     </li>
     <li class="<%= 'active' if controller_name == 'devices' %>">
-      <%= link_to 'Devices', devices_url %>
+      <%= link_to t('breadcrumbs.devices'), devices_url %>
     </li>
     <li class="<%= 'active' if controller_name == 'users' %>">
-      <%= link_to 'Users', users_url %>
+      <%= link_to t('breadcrumbs.users'), users_url %>
     </li>
     <li class="<%= 'active' if controller_name == 'health_facilities' %>">
-      <%= link_to 'Health Facilities', health_facilities_url %>
+      <%= link_to t('breadcrumbs.health_facilities'), health_facilities_url %>
     </li>
     <li class="<%= 'active' if controller_name == 'algorithms' %>">
-      <%= link_to 'Algorithms', algorithms_url %>
+      <%= link_to t('breadcrumbs.algorithms'), algorithms_url %>
     </li>
     <li class="<%= 'active' if controller_name == 'settings' %>">
-      <%= link_to 'Settings', settings_url %>
+      <%= link_to t('breadcrumbs.settings'), settings_url %>
     </li>
     <li class="<%= 'active' if controller_name == 'technical_files' %>">
-      <%= link_to 'APK', technical_files_url %>
+      <%= link_to t('breadcrumbs.apk'), technical_files_url %>
     </li>
     <li>
-      <%= link_to 'Logout', destroy_user_session_url, method: :delete %>
+      <%= link_to t('logout'), destroy_user_session_url, method: :delete %>
     </li>
   </ul>
 </nav>
