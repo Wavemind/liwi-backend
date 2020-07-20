@@ -9,7 +9,6 @@ import { Formik } from "formik";
 import DisplayErrors from "../components/DisplayErrors";
 import Http from "../../diagram/engine/http";
 import Loader from "../QuestionsSequenceForm";
-import FormulaPopup from "../../../components/utils/FormulaPopup";
 import { questionSchema } from "../constants/schema";
 import {
   CATEGORIES_DISPLAYING_SYSTEM,
@@ -20,8 +19,6 @@ import {
   NUMERIC_ANSWER_TYPES
 } from "../constants/constants";
 import Chip from "@material-ui/core/Chip";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Tooltip from "react-bootstrap/Tooltip";
 import Overlay from "react-bootstrap/Overlay";
 import Popover from "react-bootstrap/Popover";
 
