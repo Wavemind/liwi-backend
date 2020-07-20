@@ -9,6 +9,7 @@ import { Formik } from "formik";
 import DisplayErrors from "../components/DisplayErrors";
 import Http from "../../diagram/engine/http";
 import Loader from "../QuestionsSequenceForm";
+import FormulaPopup from "../../../components/utils/FormulaPopup";
 import { questionSchema } from "../constants/schema";
 import {
   CATEGORIES_DISPLAYING_SYSTEM,
@@ -19,6 +20,10 @@ import {
   NUMERIC_ANSWER_TYPES
 } from "../constants/constants";
 import Chip from "@material-ui/core/Chip";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
+import Overlay from "react-bootstrap/Overlay";
+import Popover from "react-bootstrap/Popover";
 
 const humanizeString = require("humanize-string");
 const filterOptions = createFilterOptions({
@@ -38,6 +43,8 @@ export default class QuestionForm extends React.Component {
       snomedResults: [],
       snomedError: null,
       isLoading: true,
+      formulaTooltipShow: false,
+      target: null
     };
 
     this.init();
@@ -166,6 +173,16 @@ export default class QuestionForm extends React.Component {
     return fieldsToSet;
   };
 
+  // Set status of formula tooltip
+  handleFormulaTooltip = (event) => {
+    const { formulaTooltipShow } = this.state;
+
+    this.setState({
+      formulaTooltipShow : !formulaTooltipShow,
+      target: event.target
+    });
+  };
+
   render() {
     const { formData, railsErrors, method } = this.props;
 
@@ -179,7 +196,9 @@ export default class QuestionForm extends React.Component {
       snomedError,
       complaintCategories,
       updateMode,
-      deployedMode
+      deployedMode,
+      formulaTooltipShow,
+      target
     } = this.state;
 
     return (
@@ -433,20 +452,50 @@ export default class QuestionForm extends React.Component {
                 </Form.Group>
 
                 {values.answer_type_id === 5 ?
-                  <Form.Group controlId="validationFormula">
-                    <Form.Label>{I18n.t("activerecord.attributes.question.formula")}</Form.Label>
-                    <Form.Control
-                      name="formula"
-                      as="textarea"
-                      disabled={deployedMode}
-                      value={values.formula}
-                      onChange={handleChange}
-                      isInvalid={touched.formula && !!errors.formula}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.formula}
-                    </Form.Control.Feedback>
-                  </Form.Group>
+                  <>
+                    <Form.Group controlId="validationFormula">
+                      <Form.Label>
+                        {I18n.t("activerecord.attributes.question.formula")}
+                        <button type="button" className="btn btn-sm btn-info help" onClick={this.handleFormulaTooltip}>
+                          <i className="material-icons">
+                            help_outline
+                          </i>
+                        </button>
+                      </Form.Label>
+                      <Form.Control
+                        name="formula"
+                        as="textarea"
+                        disabled={deployedMode}
+                        value={values.formula}
+                        onChange={handleChange}
+                        isInvalid={touched.formula && !!errors.formula}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.formula}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+
+                    <Overlay
+                      show={formulaTooltipShow}
+                      target={target}
+                      placement="right"
+                      containerPadding={50}
+                    >
+                      <Popover id="popover-contained">
+                        <Popover.Title as="h3">{I18n.t("helps.formula.formula-tooltip-title")}</Popover.Title>
+                        <Popover.Content>
+                          <h6>{I18n.t("helps.formula.formula-title")}</h6>
+                          <p dangerouslySetInnerHTML={{__html: I18n.t("helps.formula.formula-content")}} />
+
+                          <h6>{I18n.t("helps.formula.reference-title")}</h6>
+                          <p dangerouslySetInnerHTML={{__html: I18n.t("helps.formula.reference-content")}} />
+
+                          <h6>{I18n.t("helps.formula.date-title")}</h6>
+                          <p dangerouslySetInnerHTML={{__html: I18n.t("helps.formula.date-content")}} />
+                        </Popover.Content>
+                      </Popover>
+                    </Overlay>
+                  </>
                 : null}
 
                 {"Questions::BasicMeasurement" === values.type ?
