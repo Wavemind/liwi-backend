@@ -49,16 +49,14 @@ class QuestionNodeWidget extends React.Component {
             {getReferencePrefix(node.options.dbInstance.node.node_type, node.options.dbInstance.node.type) + node.options.dbInstance.node.reference}
           </div>
           <div className="col pl-0 pr-2 text-right">
-            {(node.options.dbInstance.node.is_default === false) ? (
-              <div className="dropdown">
-                <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                </button>
-                <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a className="dropdown-item" href="#" onClick={() => this.editQuestion()}>{I18n.t("edit")}</a>
-                </div>
+            <div className="dropdown">
+              <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              </button>
+              <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a className="dropdown-item" href="#" onClick={() => this.editQuestion()}>{I18n.t("edit")}</a>
               </div>
-            ) : null}
+            </div>
           </div>
         </div>
         <div>
