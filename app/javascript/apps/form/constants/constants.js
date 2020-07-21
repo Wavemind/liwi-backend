@@ -56,3 +56,9 @@ export const NUMERIC_ANSWER_TYPES = [
   3,
   4
 ];
+
+export const INJECTION_ADMINISTRATION_ROUTES = [
+  4,
+  5,
+  6
+];

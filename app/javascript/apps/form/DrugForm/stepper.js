@@ -40,6 +40,29 @@ export default class StepperDrugForm extends React.Component {
 
     if (method === "update") {
       body["id"] = drug.id;
+      body["formulations_attributes"] = [];
+
+      // Generate hash cause of label_translation
+      drug.formulations.map(formulation => {
+        body["formulations_attributes"].push({
+          id: formulation.id,
+          administration_route_id: formulation.administration_route_id,
+          minimal_dose_per_kg: formulation.minimal_dose_per_kg,
+          maximal_dose_per_kg: formulation.maximal_dose_per_kg,
+          maximal_dose: formulation.maximal_dose,
+          medication_form: formulation.medication_form,
+          dose_form: formulation.dose_form,
+          liquid_concentration: formulation.liquid_concentration,
+          doses_per_day: formulation.doses_per_day,
+          unique_dose: formulation.unique_dose,
+          by_age: formulation.by_age,
+          breakable: formulation.breakable,
+          description_en: formulation.description_translations?.en || "",
+          injection_instructions_en: formulation.injection_instructions_translations?.en || "",
+        });
+      });
+    } else {
+      body["answers_attributes"] = [];
     }
     return body;
   };
