@@ -409,6 +409,7 @@ en:
       excluded-diagnostic-content: "The green box on the left of the nodes is the outport for excluding final diagnostics. The blue box is the inport for excluding final diagnostics."
       score-content: "In order to add scores to your answers, you have to make a link between an answer and the questions sequence scored. This will display a pop up asking you the score to attribute to this relation."
     formula:
+      formula-tooltip-title: "Formula tooltip"
       formula-title: "What is a formula ?"
       formula-content: "A formula helps you use the value of a previous question, either by using its value directly, or by doing some operation on it."
       reference-title: "How to call a question's answer"
