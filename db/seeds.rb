@@ -3,9 +3,9 @@ Language.create!(name: 'French', code: 'fr')
 Language.create!(name: 'Swahili', code: 'sw')
 
 # Facilities
-group_wavemind = Facility.create!(name: 'Wavemind', architecture: Facility.architectures[:client_server], pin_code: '1234')
-standalone = Facility.create!(name: 'Standalone test', architecture: Facility.architectures[:standalone], pin_code: '1234')
-client_server = Facility.create!(name: 'Client server test', architecture: Facility.architectures[:client_server], pin_code: '1234')
+group_wavemind = HealthFacility.create!(name: 'Wavemind', architecture: HealthFacility.architectures[:client_server], pin_code: '1234')
+standalone = HealthFacility.create!(name: 'Standalone test', architecture: HealthFacility.architectures[:standalone], pin_code: '1234')
+client_server = HealthFacility.create!(name: 'Client server test', architecture: HealthFacility.architectures[:client_server], pin_code: '1234')
 
 # Role
 registration = Role.create!(name: 'Registration', stage: Role.stages[:registration])
