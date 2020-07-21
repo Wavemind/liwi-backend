@@ -7,7 +7,7 @@ class DeviceDatatable < AjaxDatatablesRails::ActiveRecord
   def_delegator :@view, :datetime_format
   def_delegator :@view, :device_url
   def_delegator :@view, :user_url
-  def_delegator :@view, :group_remove_device_url
+  def_delegator :@view, :health_facility_remove_device_url
 
   def initialize(params, opts = {})
     @view = opts[:view_context]
@@ -31,7 +31,7 @@ class DeviceDatatable < AjaxDatatablesRails::ActiveRecord
 
       # This table is used in 2 views, and actions are not the same
       if params[:from].present?
-        actions += link_to(I18n.t('.remove'), group_remove_device_url(params[:id], record), class: 'btn btn-outline-danger ml-2', method: :delete, data: { confirm: I18n.t('confirmation') })
+        actions += link_to(I18n.t('.remove'), health_facility_remove_device_url(params[:id], record), class: 'btn btn-outline-danger ml-2', method: :delete, data: { confirm: I18n.t('confirmation') })
       end
       {
         mac_address: record.mac_address,
@@ -48,8 +48,8 @@ class DeviceDatatable < AjaxDatatablesRails::ActiveRecord
   # Activerecord request
   def get_raw_records
     if params[:from].present?
-      # Users from a group
-      Device.where(group_id: params[:id])
+      # Users from a health facility
+      Device.where(health_facility_id: params[:id])
     else
       # Devices
       Device.all

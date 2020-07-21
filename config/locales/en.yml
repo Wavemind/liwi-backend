@@ -136,10 +136,10 @@ en:
     v1:
       versions:
         index:
-          no_version: "Your group has no version"
+          no_version: "Your health facility has no version associated"
           device_not_exist: "Device doesn't exist"
-          invalid_token: "Invalid group token"
-          no_group: "Your tablet isn't associated with groups"
+          invalid_token: "Invalid health facility token"
+          no_health_facility: "Your tablet isn't associated with any health facility"
       activities:
         create:
           errors_device_not_present: "Device doesn't exist"
@@ -148,25 +148,27 @@ en:
         create:
           errors_on_save: "An error occurred when saving devices"
         show:
-          no_group: "Your tablet isn't associated with groups"
+          no_health_facility: "Your tablet isn't associated with any health facility"
   archive: "Archive"
   breadcrumbs:
-    algorithms: 'Algorithms'
-    devices: 'Devices'
-    groups: 'Groups'
-    home: 'Home'
-    roles: 'Roles'
-    settings: 'Settings'
-    users: 'Users'
-    new: "New"
-    edit: "Edit"
-    versions: "Versions"
+    algorithms: "Algorithms"
+    apk: "APK"
+    dashboard: "Dashboard"
+    devices: "Devices"
     diagnostics: "Diagnostics"
-    final_diagnostics: "Final diagnostics"
-    questions_sequences: "Questions sequences"
     drugs: "Drugs"
-    questions: "Questions"
+    edit: "Edit"
+    final_diagnostics: "Final diagnostics"
+    health_facilities: "Health facilities"
+    home: "Home"
     managements: "Managements"
+    questions: "Questions"
+    questions_sequences: "Questions sequences"
+    roles: "Roles"
+    settings: "Settings"
+    users: "Users"
+    new: "New"
+    versions: "Versions"
   children:
     errors:
       unknown_instanceable: "Unknown instanceable"
@@ -258,7 +260,7 @@ en:
       invalid: is invalid
       less_than: must be less than %{count}
       less_than_or_equal_to: must be less than or equal to %{count}
-      model_invalid: 'Validation failed: %{errors}'
+      model_invalid: "Validation failed: %{errors}"
       not_a_number: is not a number
       not_an_integer: must be an integer
       odd: must be odd
@@ -276,7 +278,7 @@ en:
         one: is the wrong length (should be 1 character)
         other: is the wrong length (should be %{count} characters)
     template:
-      body: 'There were problems with the following fields:'
+      body: "There were problems with the following fields:"
       header:
         one: 1 error prohibited this %{model} from being saved
         other: "%{count} errors prohibited this %{model} from being saved"
@@ -348,31 +350,32 @@ en:
       title: "New formulations"
     edit:
       title: "Edit formulations"
-  groups:
+  health_facilities:
     add_device:
-      success_add_device: "Device was successfully added to group"
-      error_add_device: "An error occurred when adding device to group"
+      success_add_device: "Device was successfully added to the health facility"
+      error_add_device: "An error occurred when adding device to the health facility"
     current_algorithm: "Currently published algorithm <b>%{version_name}</b>"
     index:
       columns:
         name: "Name"
         nb_people: "Number of devices"
         actions: "Actions"
-      title: "Groups"
+      title: "Health facilities"
     edit:
-      title: "Edit group"
+      title: "Edit health facility"
     errors:
       code_pin_unvalid: "The PIN code should be only 4 digits"
       ip_invalid: "The IP is not in the good format."
     new:
-      title: "Add group"
+      title: "Add health facility"
     remove_device:
-      success_remove_device: "Device was successfully removed from group"
-      error_remove_device: "An error occurred when removing device from group"
+      success_remove_device: "Device was successfully removed from the health facility"
+      error_remove_device: "An error occurred when removing device from the health facility"
     show:
       generate_json: "Generate json"
       title: "Details of %{name}"
       second_title: "Accesses"
+      no_algorithm: "There is not algorithm associated to this health facility"
       columns:
         algorithm: "Algorithm"
         version: "Version"
@@ -383,7 +386,7 @@ en:
       medical_staff: "Medical staff"
     form:
       medical_staffs: "Medical staff"
-  group_accesses:
+  health_facility_accesses:
     new:
       title: "New release"
   health_cares:
@@ -432,6 +435,7 @@ en:
     label: "label_"
     new:
       title: "New language"
+  logout: "Logout"
   managements:
     edit:
       title: "Edit the management"

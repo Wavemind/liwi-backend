@@ -155,12 +155,12 @@ Rails.application.routes.draw do
 
   get 'instanceable/:type/:id', to: 'instances#index', as: 'instanceable'
 
-  resources :groups, only: [:index, :show, :new, :create, :edit, :update] do
-    delete 'devices/:device_id/remove_device', to: 'groups#remove_device', as: 'remove_device'
-    post 'add_device', to: 'groups#add_device', as: 'add_device'
+  resources :health_facilities, only: [:index, :show, :new, :create, :edit, :update] do
+    delete 'devices/:device_id/remove_device', to: 'health_facilities#remove_device', as: 'remove_device'
+    post 'add_device', to: 'health_facilities#add_device', as: 'add_device'
   end
 
-  resources :group_accesses, only: [:index, :create]
+  resources :health_facility_accesses, only: [:index, :create]
 
   resources :devices, only: [:index, :show, :new, :create] do
     collection do

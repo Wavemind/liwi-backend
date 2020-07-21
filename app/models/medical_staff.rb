@@ -1,7 +1,7 @@
 # Manage medical staffs
 class MedicalStaff < ApplicationRecord
 
-  belongs_to :group
+  belongs_to :health_facility
 
   enum role: [:registration_desk, :clinician, :triage_nurse, :lab, :pharmacist]
 
