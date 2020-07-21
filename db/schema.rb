@@ -297,7 +297,7 @@ ActiveRecord::Schema.define(version: 2020_07_17_071606) do
     t.string "max_message_warning"
     t.string "min_message_error"
     t.string "max_message_error"
-    t.boolean "estimable"
+    t.boolean "estimable", default: false
     t.bigint "reference_table_z_id"
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
@@ -383,7 +383,7 @@ ActiveRecord::Schema.define(version: 2020_07_17_071606) do
     t.bigint "top_left_question_id"
     t.bigint "first_top_right_question_id"
     t.bigint "second_top_right_question_id"
-    t.json "medal_r_config", default: {}
+    t.json "medal_r_config"
     t.json "medal_r_json"
     t.integer "medal_r_json_version", default: 0
     t.index ["algorithm_id"], name: "index_versions_on_algorithm_id"

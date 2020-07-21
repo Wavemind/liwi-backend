@@ -360,7 +360,7 @@ en:
         name: "Name"
         nb_people: "Number of devices"
         actions: "Actions"
-      title: "Groups"
+      title: "Health facilities"
     edit:
       title: "Edit health facility"
     errors:
