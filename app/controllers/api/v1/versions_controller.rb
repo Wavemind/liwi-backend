@@ -6,7 +6,7 @@ class Api::V1::VersionsController < Api::V1::ApplicationController
 
     if device.present?
       if device.health_facility.present?
-        if device.health_facility.token == request.headers['health_facility-token']
+        if device.health_facility.token == request.headers['health-facility-token']
           # Find the algorithm version available for this health facility
           version = device.health_facility.versions.where('health_facility_accesses.end_date IS NULL').first
 
