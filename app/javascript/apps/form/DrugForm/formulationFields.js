@@ -77,8 +77,6 @@ export default class FormulationFields extends React.Component {
         uniqueDoseTrad = "unique_dose_general";
     }
 
-    console.log(formulation);
-
     return (
       <FadeIn>
         <Form.Row>
