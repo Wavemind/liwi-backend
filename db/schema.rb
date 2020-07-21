@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_17_071606) do
+ActiveRecord::Schema.define(version: 2020_07_21_082802) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -148,6 +148,7 @@ ActiveRecord::Schema.define(version: 2020_07_17_071606) do
     t.bigint "node_id"
     t.bigint "administration_route_id"
     t.hstore "description_translations"
+    t.hstore "injection_instructions_translations"
     t.index ["administration_route_id"], name: "index_formulations_on_administration_route_id"
     t.index ["node_id"], name: "index_formulations_on_node_id"
   end

@@ -4,7 +4,7 @@ class Formulation < ApplicationRecord
   enum medication_form: [:tablet, :capsule, :syrup, :suspension, :suppository, :drops, :solution, :powder_for_injection, :patch, :cream, :ointment, :gel, :spray, :inhaler]
   enum breakable: [:one, :two, :four]
 
-  translates :description
+  translates :description, :injection_instructions
 
 
   belongs_to :node, class_name: 'HealthCares::Drug'

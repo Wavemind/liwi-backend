@@ -2,6 +2,8 @@ import * as React from "react";
 import I18n from "i18n-js";
 import FadeIn from "react-fade-in";
 import { Form, Col } from "react-bootstrap";
+import { INJECTION_ADMINISTRATION_ROUTES } from "../constants/constants";
+
 
 export default class FormulationFields extends React.Component {
   constructor(props) {
@@ -267,12 +269,30 @@ export default class FormulationFields extends React.Component {
               </Form.Group>
             </Form.Row>
           </>
-          : null}
+        : null}
+        {INJECTION_ADMINISTRATION_ROUTES.includes(parseInt(formulation.administration_route_id)) ?
+          <Form.Row>
+            <Form.Group as={Col} controlId={`${index}-validationInjectionInstructions`}>
+              <Form.Label>{I18n.t("activerecord.attributes.formulation.injection_instructions_translations")}</Form.Label>
+              <Form.Control
+                as="textarea"
+                name={`formulations_attributes.${index}.injection_instructions_en`}
+                value={formulation.injection_instructions_en}
+                onChange={handleChange}
+                isInvalid={this.isInvalid("injection_instructions_en")}
+              />
+              <Form.Control.Feedback type="invalid">
+                {this.displayErrors("injection_instructions_en")}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Form.Row>
+        : null}
+
         <Form.Row>
           <Form.Group as={Col} controlId={`${index}-validationDescription`}>
             <Form.Label>{I18n.t("activerecord.attributes.formulation.description_translations")}</Form.Label>
             <Form.Control
-              type="textarea"
+              as="textarea"
               name={`formulations_attributes.${index}.description_en`}
               value={formulation.description_en}
               onChange={handleChange}
