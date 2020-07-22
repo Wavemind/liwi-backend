@@ -618,6 +618,7 @@ en:
       select:  "Is the tablet breakable ?"
     edit:
       title: "Edit the drug"
+    edit_instance: "Edit the instance"
     new:
       title: "Create a drug"
     reference: "DR"

@@ -26,7 +26,8 @@ export default class InstanceForm extends React.Component {
     if (method === "create") {
       httpRequest = await http.createInstance(drug.id, positions.x, positions.y, values.duration, values.description);
     } else {
-      httpRequest = await http.updateInstance(drug.id, 100, 100, values.duration, values.description);
+      const drugInstance = diagramObject.options.dbInstance;
+      httpRequest = await http.updateInstance(drugInstance.id, drugInstance.position_x, drugInstance.position_y, values.duration, values.description);
     }
 
     let result = await httpRequest.json();

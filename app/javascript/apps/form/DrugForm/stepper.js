@@ -13,13 +13,13 @@ export default class StepperDrugForm extends React.Component {
 
   constructor(props) {
     super(props);
-    const { drug, method } = props;
+    const { drug, method, step } = props;
 
     this.state = {
       errors: null,
-      step: 1,
+      step: step || 1,
       drug: this.drugBody(drug, method),
-      createdDrug: {}
+      createdDrug: drug || {}
     };
   }
 
