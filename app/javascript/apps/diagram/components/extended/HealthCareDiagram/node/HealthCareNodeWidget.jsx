@@ -46,6 +46,7 @@ class HealthCareNodeWidget extends React.Component {
 
   editHealthCareInstance() {
     const { node } = this.props;
+    node.options.selected = false;
 
     let params = {
       diagramObject: node,
