@@ -64,8 +64,10 @@ export default class FormulationFields extends React.Component {
     switch(formulation.medication_form) {
       case "capsule":
       case "tablet":
-      case "suppository":
         uniqueDoseTrad = "unique_dose_solid";
+        break;
+      case "suppository":
+        uniqueDoseTrad = "unique_dose_suppository";
         break;
       case "suspension":
       case "syrup":

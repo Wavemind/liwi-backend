@@ -30,6 +30,7 @@ en:
         unique_dose_general: "Number of applications per administration"
         unique_dose_liquid: "Volume (mL) per administration"
         unique_dose_solid: "Number of (mg) per administration"
+        unique_dose_suppository: "Number of suppositories per administration"
       instance:
         duration: "Duration (days)"
         description: "Description"
