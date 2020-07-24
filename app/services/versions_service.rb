@@ -268,12 +268,12 @@ class VersionsService
     # Give the question's/predefined syndrome's id in order to retrieve it in front-end
     hash['first_node_id'] = condition.first_conditionable.is_a?(Answer) ? condition.first_conditionable.node.id : nil
 
-    # hash['operator'] = condition.operator
-    # hash['second_id'] = condition.second_conditionable_id
-    # hash['second_type'] = condition.second_conditionable_type
-    #
-    # # Give the question's/predefined syndrome's id in order to retrieve it in front-end
-    # hash['second_node_id'] = condition.second_conditionable.is_a?(Answer) ? condition.second_conditionable.node.id : nil
+    hash['operator'] = condition.operator
+    hash['second_id'] = condition.second_conditionable_id
+    hash['second_type'] = condition.second_conditionable_type
+
+    # Give the question's/predefined syndrome's id in order to retrieve it in front-end
+    hash['second_node_id'] = condition.second_conditionable.is_a?(Answer) ? condition.second_conditionable.node.id : nil
     hash['score'] = condition.score
     hash
   end
