@@ -51,7 +51,7 @@ class DevicesController < ApplicationController
   def device_params
     params.require(:device).permit(
       :mac_address,
-      :group_id
+      :health_facility_id
       )
   end
 end
