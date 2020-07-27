@@ -13,7 +13,7 @@ class HealthFacilityAccessesController < ApplicationController
 
     invalid_diagnostics = []
     # Validate every diagnostics of the version being published. Throw error if there is one or several diagnostics invalids with their reference.
-    version = Version.find(group_access_params[:version_id])
+    version = Version.find(health_facility_access_params[:version_id])
     version.diagnostics.each do |diagnostic|
       diagnostic.manual_validate
       invalid_diagnostics.push(diagnostic.full_reference) if diagnostic.errors.messages.any?
