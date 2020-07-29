@@ -137,12 +137,24 @@ class VersionsController < ApplicationController
   # @params version [Version] version
   # Generate json for the version
   def regenerate_json
-    if VersionsService.generate_version_hash(@version.id)
-      flash[:notice] = t('flash_message.json_success')
+    invalid_diagnostics = []
+
+    @version.diagnostics.each do |diagnostic|
+      diagnostic.manual_validate
+      invalid_diagnostics.push(diagnostic.full_reference) if diagnostic.errors.messages.any?
+    end
+
+    if invalid_diagnostics.any?
+      flash[:alert] = t('flash_message.version.invalids_diagnostics', diagnostics: invalid_diagnostics)
       redirect_back(fallback_location: root_path)
     else
-      flash[:notice] = t('flash_message.json_error')
-      redirect_back(fallback_location: root_path)
+      if VersionsService.generate_version_hash(@version.id)
+        flash[:notice] = t('flash_message.json_success')
+        redirect_back(fallback_location: root_path)
+      else
+        flash[:notice] = t('flash_message.json_error')
+        redirect_back(fallback_location: root_path)
+      end
     end
   end
 
