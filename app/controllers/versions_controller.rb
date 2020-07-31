@@ -76,14 +76,16 @@ class VersionsController < ApplicationController
     end
   end
 
-  #
+  # PUT algorithms/:algorithm_id/version/:id/components
+  # Instantiate nodes in the version
   def components
     params[:nodes_ids].map do |node_id|
       @version.components.create(node_id: node_id)
     end
   end
 
-  #
+  # PUT algorithms/:algorithm_id/version/:id/remove_components
+  # Remove instantiated nodes from the version
   def remove_components
     params[:nodes_ids].map do |node_id|
       instance = @version.components.find_by(node_id: node_id)
@@ -192,7 +194,11 @@ class VersionsController < ApplicationController
     end
   end
 
-
+  # PUT algorithms/:algorithm_id/version/:id/update_list
+  # @params version [Version]
+  # @params new order [Hash]
+  # @params list type [String]
+  # Update patient_list_order or medical_case_list_order
   def update_list
     config = @version.medal_r_config
     config["#{params[:list]}_list_order"] = params[:order]
