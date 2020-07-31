@@ -76,13 +76,14 @@ class VersionsController < ApplicationController
     end
   end
 
+  #
   def components
     params[:nodes_ids].map do |node_id|
       @version.components.create(node_id: node_id)
     end
   end
 
-
+  #
   def remove_components
     params[:nodes_ids].map do |node_id|
       instance = @version.components.find_by(node_id: node_id)
@@ -148,12 +149,19 @@ class VersionsController < ApplicationController
       flash[:alert] = t('flash_message.version.invalids_diagnostics', diagnostics: invalid_diagnostics)
       redirect_back(fallback_location: root_path)
     else
-      if VersionsService.generate_version_hash(@version.id)
-        flash[:notice] = t('flash_message.json_success')
+      missing_nodes = Node.where(id: @version.identify_missing_questions)
+
+      if missing_nodes.any?
+        flash[:alert] = t('flash_message.missing_nodes_error', missing_nodes: missing_nodes.map(&:reference_label))
         redirect_back(fallback_location: root_path)
       else
-        flash[:notice] = t('flash_message.json_error')
-        redirect_back(fallback_location: root_path)
+        if VersionsService.generate_version_hash(@version.id)
+          flash[:notice] = t('flash_message.json_success')
+          redirect_back(fallback_location: root_path)
+        else
+          flash[:alert] = t('flash_message.json_error')
+          redirect_back(fallback_location: root_path)
+        end
       end
     end
   end

@@ -157,6 +157,18 @@ class QuestionsSequence < Node
     }
   end
 
+  def extract_nodes(nodes)
+    components.each do |instance|
+      node = instance.node
+      if node.is_a? Question
+        nodes.push(node.id)
+      else
+        nodes = extract_nodes(nodes) unless node.id == instance.instanceable_id
+      end
+    end
+    nodes
+  end
+
   private
 
   # Display the label for the current child
