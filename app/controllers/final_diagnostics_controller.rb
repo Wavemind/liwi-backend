@@ -149,7 +149,6 @@ class FinalDiagnosticsController < ApplicationController
       :reference,
       :label_en,
       Language.label_params,
-      :final_diagnostic_id,
       :description_en,
       Language.description_params,
     )
