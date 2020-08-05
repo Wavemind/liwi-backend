@@ -307,6 +307,7 @@ en:
     delete_fail: "Error will deleting the entry"
     json_success: "The JSON file was correctly generated and stored"
     json_error: "There was an error while generating the JSON or storing it"
+    missing_nodes_error: "The following variables are needed for the algorithm to work but are not included in the version. Please check your version's <i>Registration and triage Variables</i> module.<br>%{missing_nodes}"
     reserved_reference: "This reference is reserved."
     success_created: "Data successfully created"
     success_deleted: "Data successfully deleted"
