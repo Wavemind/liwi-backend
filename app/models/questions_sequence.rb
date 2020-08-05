@@ -163,7 +163,7 @@ class QuestionsSequence < Node
       if node.is_a? Question
         nodes.push(node.id)
       else
-        nodes = extract_nodes(nodes) unless node.id == instance.instanceable_id
+        nodes = extract_nodes(nodes) unless id == instance.instanceable_id
       end
     end
     nodes

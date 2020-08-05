@@ -196,7 +196,7 @@ class Diagnostic < ApplicationRecord
 
         if instance.node.is_a? QuestionsSequence
           instance.node.manual_validate
-          errors.add(:basic, I18n.t('flash_message.diagnostic.error_in_questions_sequence', url: diagram_questions_sequence_url(instance.node), reference: instance.node.reference)) if instance.node.errors.messages.any?
+          errors.add(:basic, I18n.t('flash_message.diagnostic.error_in_questions_sequence', url: diagram_questions_sequence_url(instance.node), reference: instance.node.full_reference)) if instance.node.errors.messages.any?
         end
       elsif instance.node.is_a?(HealthCares::Drug) && instance.node.formulations.map(&:by_age).include?(true)
         age_missing = true
