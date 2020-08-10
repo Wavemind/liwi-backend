@@ -23,6 +23,16 @@ class FinalDiagnostic < Node
     include_association :final_diagnostic_health_cares
   end
 
+  # Get every final diagnoses excluded by this final diagnosis
+  def excluded_diagnoses_ids
+    FinalDiagnosisExclusion.where(excluding_diagnosis_id: id).map(&:excluded_diagnosis_id)
+  end
+
+  # Get every final diagnoses excluding this final diagnosis
+  def excluding_diagnoses_ids
+    FinalDiagnosisExclusion.where(excluded_diagnosis_id: id).map(&:excluding_diagnosis_id)
+  end
+
   # @return [Json]
   # Return drugs and managements in json format
   def health_cares_json
@@ -132,7 +142,7 @@ class FinalDiagnostic < Node
       instances.where(instanceable: diagnostic).includes(:node).as_json(
       include: [
         node: {
-          methods: [:node_type]
+          methods: [:node_type, :excluded_diagnoses_ids, :excluding_diagnoses_ids]
         },
         conditions: {
           include: [
