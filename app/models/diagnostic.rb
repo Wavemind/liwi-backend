@@ -127,7 +127,7 @@ class Diagnostic < ApplicationRecord
     components.final_diagnostics.includes(:node).as_json(
       include: [
         node: {
-          methods: [:node_type]
+          methods: [:node_type, :excluded_diagnoses_ids, :excluding_diagnoses_ids]
         },
         conditions: {
           include: [

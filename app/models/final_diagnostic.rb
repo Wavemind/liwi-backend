@@ -139,6 +139,11 @@ class FinalDiagnostic < Node
 
   # Get instance of final_diagnostic in a diagnostic
   def get_instance_json
+    puts '**'
+    puts excluded_diagnoses_ids
+    puts '**'
+    puts excluding_diagnoses_ids
+    puts '**'
       instances.where(instanceable: diagnostic).includes(:node).as_json(
       include: [
         node: {

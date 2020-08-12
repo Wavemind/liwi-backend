@@ -281,15 +281,15 @@ export default class Http {
    * @params [Integer] nodeId
    * @return [Object] body of request
    */
-  excludeDiagnostic = async (excludingId, excludedId) => {
-    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/add_excluded_diagnostic`;
+  excludeDiagnostic = async (excludingDfId, excludedDfId) => {
+    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/add_exclusion`;
     const body = {
-      final_diagnostic: {
-        id: excludingId,
-        final_diagnostic_id: excludedId
+      final_diagnosis_exclusion: {
+        excluding_diagnosis_id: excludingDfId,
+        excluded_diagnosis_id: excludedDfId
       }
     };
-    const header = await this.setHeaders("PUT", body);
+    const header = await this.setHeaders("POST", body);
     return await fetch(url, header).catch(error => console.log(error));
   };
 
@@ -298,9 +298,15 @@ export default class Http {
    * @params [Integer] dfId
    * @return [Object] body of request
    */
-  removeExcluding = async (dfId) => {
-    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/${dfId}/remove_excluded_diagnostic`;
-    const header = await this.setHeaders("PUT");
+  removeExcluding = async (excludingDfId, excludedDfId) => {
+    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/remove_exclusion`;
+    const body = {
+      final_diagnosis_exclusion: {
+        excluding_diagnosis_id: excludingDfId,
+        excluded_diagnosis_id: excludedDfId
+      }
+    };
+    const header = await this.setHeaders("DELETE", body);
     return await fetch(url, header).catch(error => console.log(error));
   };
 

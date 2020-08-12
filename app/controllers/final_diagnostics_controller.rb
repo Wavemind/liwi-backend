@@ -1,9 +1,9 @@
 class FinalDiagnosticsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic]
-  before_action :set_diagnostic, only: [:new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic, :diagram]
-  before_action :set_final_diagnostic, only: [:edit, :update, :destroy, :remove_excluded_diagnostic, :update_translations, :diagram]
-  before_action :set_version, only: [:new, :create, :edit, :update, :destroy, :add_excluded_diagnostic, :remove_excluded_diagnostic]
+  before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy]
+  before_action :set_diagnostic, only: [:new, :create, :edit, :update, :destroy, :diagram]
+  before_action :set_final_diagnostic, only: [:edit, :update, :destroy, :diagram]
+  before_action :set_version, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_breadcrumb, only: [:new, :edit]
   layout 'diagram', only: [:diagram]
 
@@ -71,17 +71,17 @@ class FinalDiagnosticsController < ApplicationController
   # POST /algorithms/:algorithm_id/versions/:version_id/diagnostics/:diagnostic_id/final_diagnostics/:id/add_excluded_diagnostic
   # @return
   # Add excluded diagnostic to final diagnostic
-  def add_excluded_diagnostic
-    @final_diagnostic = FinalDiagnostic.find(final_diagnostic_params[:id])
-    if @final_diagnostic.update(final_diagnostic_params)
+  def add_exclusion
+    @final_diagnosis_exclusion = FinalDiagnosisExclusion.new(final_diagnosis_exclusion_params)
+    if @final_diagnosis_exclusion.save
       respond_to do |format|
-        format.html { redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'excluding_diagnostics'), notice: t('flash_message.success_updated') }
-        format.json { render json: @final_diagnostic }
+        # format.html { redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'excluding_diagnostics'), notice: t('flash_message.success_updated') }
+        format.json { render json: @final_diagnosis_exclusion.excluding_diagnosis }
       end
     else
       respond_to do |format|
-        format.html { redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'excluding_diagnostics'), alert: @final_diagnostic.errors.full_messages }
-        format.json { render json: @final_diagnostic.errors.full_messages, status: 422 }
+        # format.html { redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'excluding_diagnostics'), alert: @final_diagnosis_exclusion.errors.full_messages }
+        format.json { render json: @final_diagnosis_exclusion.errors.full_messages, status: 422 }
       end
     end
   end
@@ -98,17 +98,17 @@ class FinalDiagnosticsController < ApplicationController
   # DELETE /algorithms/:algorithm_id/versions/:version_id/diagnostics/:diagnostic_id/final_diagnostics/:id/remove_excluded_diagnostic
   # @return
   # Remove excluded diagnostic to final diagnostic
-  def remove_excluded_diagnostic
-    @final_diagnostic.excluded_diagnostic = nil
-    if @final_diagnostic.save
+  def remove_exclusion
+    @final_diagnosis_exclusion = FinalDiagnosisExclusion.find_by(final_diagnosis_exclusion_params)
+    if @final_diagnosis_exclusion.destroy
       respond_to do |format|
-        format.html { redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'excluding_diagnostics'), notice: t('flash_message.success_updated') }
-        format.json { render json: @final_diagnostic }
+        # format.html { redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'excluding_diagnostics'), notice: t('flash_message.success_updated') }
+        format.json { render json: @final_diagnosis_exclusion.excluding_diagnosis }
       end
     else
       respond_to do |format|
-        format.html { redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'excluding_diagnostics'), alert: t('error') }
-        format.json { render json: @final_diagnostic.errors.full_messages, status: 422 }
+        # format.html { redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'excluding_diagnostics'), alert: t('error') }
+        format.json { render json: @final_diagnosis_exclusion.errors.full_messages, status: 422 }
       end
     end
   end
@@ -151,6 +151,13 @@ class FinalDiagnosticsController < ApplicationController
       Language.label_params,
       :description_en,
       Language.description_params,
+    )
+  end
+
+  def final_diagnosis_exclusion_params
+    params.require(:final_diagnosis_exclusion).permit(
+      :excluding_diagnosis_id,
+      :excluded_diagnosis_id
     )
   end
 end

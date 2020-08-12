@@ -97,16 +97,18 @@ export class Diagram extends React.Component {
         model.addLink(link);
       });
 
-      //  Exclusion link
-      if (diagramNode.options.dbInstance.node.final_diagnostic_id !== null) {
-        let excludedFinalDiagnostic = _.find(diagramNodes, (node) => {
-          return node.options.dbInstance.node_id === diagramNode.options.dbInstance.node.final_diagnostic_id;
+      console.log(diagramNode.options.dbInstance.node);
+      //  Exclusion links
+      if (diagramNode.options.dbInstance.node.excluded_diagnoses_ids !== undefined) {
+        diagramNode.options.dbInstance.node.excluded_diagnoses_ids.map(excludedDiagnosisId => {
+          let excludedFinalDiagnostic = _.find(diagramNodes, (node) => {
+            return node.options.dbInstance.node_id === excludedDiagnosisId;
+          });
+          if (excludedFinalDiagnostic !== undefined) {
+            let link = linkFinalDiagnosticExclusion(diagramNode, excludedFinalDiagnostic);
+            model.addLink(link);
+          }
         });
-        // TODO: Hot fixe
-        if (excludedFinalDiagnostic !== undefined) {
-          let link = linkFinalDiagnosticExclusion(diagramNode, excludedFinalDiagnostic);
-          model.addLink(link);
-        }
       }
     });
 
