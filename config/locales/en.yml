@@ -245,6 +245,7 @@ en:
   error: "An error occured"
   errors:
     fetch_failed: "An error occurred while loading values"
+    final_diagnosis_exclusion_unique: "This exclusion is already set."
     format: "%{attribute} %{message}"
     messages:
       accepted: must be accepted

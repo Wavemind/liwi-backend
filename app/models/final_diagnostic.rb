@@ -13,7 +13,6 @@ class FinalDiagnostic < Node
 
   has_many :components, class_name: 'Instance', dependent: :destroy
 
-  before_validation :prevent_loop
   before_create :link_algorithm
 
   # Enable recursive duplicating
@@ -111,20 +110,6 @@ class FinalDiagnostic < Node
       diagnostic.version.algorithm.questions_sequences.where.not(id: ids) +
       diagnostic.version.algorithm.health_cares.where.not(id: ids)
     ).as_json(methods: [:category_name, :node_type, :get_answers, :type])
-  end
-
-  # Recursive loop to make sure it is not excluding a grand child of excluded diagnostic
-  def is_excluded(excluded_diagnostic)
-    return true if self.id == excluded_diagnostic.id || (excluded_diagnostic.excluded_diagnostic.present? && is_excluded(excluded_diagnostic.excluded_diagnostic))
-    false
-  end
-
-  # Ensure that the user is not trying to loop with excluding diagnostics.
-  def prevent_loop
-    if excluded_diagnostic.present? && is_excluded(excluded_diagnostic)
-      self.errors.add(:base, I18n.t('final_diagnostics.validation.loop'))
-      raise ActiveRecord::Rollback, I18n.t('final_diagnostics.validation.loop')
-    end
   end
 
   # Get the reference prefix according to the type
