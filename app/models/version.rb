@@ -65,6 +65,59 @@ class Version < ApplicationRecord
     false
   end
 
+  # Return needed nodes for the algorithm version to work but that are not included in it, in order to prevent crash.
+  def identify_missing_questions
+    # Add nodes that are called by the json service
+    nodes = []
+
+    components.each do |instance|
+      nodes.push(instance.node_id)
+    end
+
+    diagnostics.each do |diag|
+      diag.components.questions.each do |instance|
+        nodes.push(instance.node_id)
+      end
+
+      diag.components.questions_sequences.each do |instance|
+        nodes = instance.node.extract_nodes(nodes)
+      end
+    end
+    nodes = nodes.uniq
+
+    # Check if questions that are needed are instantiated in diagrams
+    nodes_to_add = []
+
+    # Ensure basic questions are included
+    algorithm.medal_r_config['basic_questions'].each do |key, id|
+      nodes_to_add.push(id) unless nodes.include?(id)
+    end
+
+    # Ensure nodes in formula are included
+    Node.where(id: nodes).where.not(formula: nil).each do |node|
+      node.formula.scan(/\[.*?\]/).each do |reference|
+        full_reference = reference.gsub(/[\[\]]/, '')
+        type, reference = full_reference.match(/([A-Z]*)([0-9]*)/i).captures
+        type = Question.get_type_from_prefix(type)
+
+        question = algorithm.questions.find_by(type: type.to_s, reference: reference.to_i)
+
+        nodes_to_add.push(question.id) unless question.nil? || nodes.include?(question.id)
+      end
+    end
+
+    # Ensure nodes used for reference tables are included
+    Node.where(id: nodes).where.not(reference_table_x_id: nil).each do |node|
+      nodes_to_add.push(node.reference_table_x_id) unless node.reference_table_x_id.nil? || nodes.include?(node.reference_table_x_id)
+      nodes_to_add.push(node.reference_table_y_id) unless node.reference_table_y_id.nil? || nodes.include?(node.reference_table_y_id)
+      nodes_to_add.push(node.reference_table_z_id) unless node.reference_table_z_id.nil? || nodes.include?(node.reference_table_z_id)
+    end
+
+    nodes_to_add.uniq
+  end
+
+
+
   # Init orders for new version
   def init_config
     self.medal_r_config = {

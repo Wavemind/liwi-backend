@@ -21,6 +21,6 @@ class TechnicalFileUploader < CarrierWave::Uploader::Base
   end
 
   def fog_authenticated_url_expiration
-    1.minutes # in seconds from now,  (default is 10.minutes)
+    15.minutes # in seconds from now,  (default is 10.minutes)
   end
 end

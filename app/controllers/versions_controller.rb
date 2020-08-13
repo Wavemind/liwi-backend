@@ -76,13 +76,16 @@ class VersionsController < ApplicationController
     end
   end
 
+  # PUT algorithms/:algorithm_id/version/:id/components
+  # Instantiate nodes in the version
   def components
     params[:nodes_ids].map do |node_id|
       @version.components.create(node_id: node_id)
     end
   end
 
-
+  # PUT algorithms/:algorithm_id/version/:id/remove_components
+  # Remove instantiated nodes from the version
   def remove_components
     params[:nodes_ids].map do |node_id|
       instance = @version.components.find_by(node_id: node_id)
@@ -137,12 +140,31 @@ class VersionsController < ApplicationController
   # @params version [Version] version
   # Generate json for the version
   def regenerate_json
-    if VersionsService.generate_version_hash(@version.id)
-      flash[:notice] = t('flash_message.json_success')
+    invalid_diagnostics = []
+
+    @version.diagnostics.each do |diagnostic|
+      diagnostic.manual_validate
+      invalid_diagnostics.push(diagnostic.full_reference) if diagnostic.errors.messages.any?
+    end
+
+    if invalid_diagnostics.any?
+      flash[:alert] = t('flash_message.version.invalids_diagnostics', diagnostics: invalid_diagnostics)
       redirect_back(fallback_location: root_path)
     else
-      flash[:notice] = t('flash_message.json_error')
-      redirect_back(fallback_location: root_path)
+      missing_nodes = Node.where(id: @version.identify_missing_questions)
+
+      if missing_nodes.any?
+        flash[:alert] = t('flash_message.missing_nodes_error', missing_nodes: missing_nodes.map(&:reference_label))
+        redirect_back(fallback_location: root_path)
+      else
+        if VersionsService.generate_version_hash(@version.id)
+          flash[:notice] = t('flash_message.json_success')
+          redirect_back(fallback_location: root_path)
+        else
+          flash[:alert] = t('flash_message.json_error')
+          redirect_back(fallback_location: root_path)
+        end
+      end
     end
   end
 
@@ -172,7 +194,11 @@ class VersionsController < ApplicationController
     end
   end
 
-
+  # PUT algorithms/:algorithm_id/version/:id/update_list
+  # @params version [Version]
+  # @params new order [Hash]
+  # @params list type [String]
+  # Update patient_list_order or medical_case_list_order
   def update_list
     config = @version.medal_r_config
     config["#{params[:list]}_list_order"] = params[:order]
