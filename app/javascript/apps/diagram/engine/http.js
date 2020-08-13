@@ -282,7 +282,7 @@ export default class Http {
    * @return [Object] body of request
    */
   excludeDiagnostic = async (excludingDfId, excludedDfId) => {
-    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/add_exclusion`;
+    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/final_diagnostics/add_exclusion`;
     const body = {
       final_diagnosis_exclusion: {
         excluding_diagnosis_id: excludingDfId,
@@ -299,7 +299,7 @@ export default class Http {
    * @return [Object] body of request
    */
   removeExcluding = async (excludingDfId, excludedDfId) => {
-    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/remove_exclusion`;
+    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/final_diagnostics/remove_exclusion`;
     const body = {
       final_diagnosis_exclusion: {
         excluding_diagnosis_id: excludingDfId,

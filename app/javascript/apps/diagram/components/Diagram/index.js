@@ -97,7 +97,6 @@ export class Diagram extends React.Component {
         model.addLink(link);
       });
 
-      console.log(diagramNode.options.dbInstance.node);
       //  Exclusion links
       if (diagramNode.options.dbInstance.node.excluded_diagnoses_ids !== undefined) {
         diagramNode.options.dbInstance.node.excluded_diagnoses_ids.map(excludedDiagnosisId => {

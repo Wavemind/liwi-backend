@@ -221,7 +221,7 @@ class VersionsService
     hash['type'] = final_diagnostic.node_type
     hash['drugs'] = extract_health_cares(final_diagnostic.health_cares.drugs, instance.instanceable.id, final_diagnostic.id)
     hash['managements'] = extract_health_cares(final_diagnostic.health_cares.managements, instance.instanceable.id, final_diagnostic.id)
-    hash['excluding_final_diagnostics'] = final_diagnostic.final_diagnostic_id
+    hash['excluding_final_diagnostics'] = final_diagnostic.excluded_diagnoses_ids
     hash['cc'] = final_diagnostic.diagnostic.node_id
     hash
   end
