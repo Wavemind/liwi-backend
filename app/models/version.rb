@@ -39,7 +39,7 @@ class Version < ApplicationRecord
 
   # Return an array of all questions that can be instantiate in a version
   def instanceable_questions
-    questions = algorithm.questions.where(stage: %w(registration triage)).or(algorithm.questions.where(type: 'VitalSignAnthropometric'))
+    questions = algorithm.questions.where(stage: %w(registration triage)).or(algorithm.questions.where(type: 'Questions::VitalSignAnthropometric'))
 
     questions_json = []
     questions.map do |question|
@@ -91,6 +91,11 @@ class Version < ApplicationRecord
     # Ensure basic questions are included
     algorithm.medal_r_config['basic_questions'].each do |key, id|
       nodes_to_add.push(id) unless nodes.include?(id)
+    end
+
+    # Ensure CC linked to the Diagnostics are included
+    diagnostics.map(&:node_id).uniq.map do |cc_id|
+      nodes_to_add.push(cc_id) unless nodes.include?(cc_id)
     end
 
     # Ensure nodes in formula are included
