@@ -151,18 +151,29 @@ class VersionsController < ApplicationController
       flash[:alert] = t('flash_message.version.invalids_diagnostics', diagnostics: invalid_diagnostics)
       redirect_back(fallback_location: root_path)
     else
-      missing_nodes = Node.where(id: @version.identify_missing_questions)
+      components_count = @version.components.count
+      questions_orders = []
+      @version.medal_r_config['questions_orders'].map do |key, value|
+        questions_orders += value
+      end
 
-      if missing_nodes.any?
-        flash[:alert] = t('flash_message.missing_nodes_error', missing_nodes: missing_nodes.map(&:reference_label))
+      if components_count != questions_orders.count
+        flash[:alert] = t('flash_message.version_components_data_error')
         redirect_back(fallback_location: root_path)
       else
-        if VersionsService.generate_version_hash(@version.id)
-          flash[:notice] = t('flash_message.json_success')
+        missing_nodes = Node.where(id: @version.identify_missing_questions)
+
+        if missing_nodes.any?
+          flash[:alert] = t('flash_message.missing_nodes_error', missing_nodes: missing_nodes.map(&:reference_label))
           redirect_back(fallback_location: root_path)
         else
-          flash[:alert] = t('flash_message.json_error')
-          redirect_back(fallback_location: root_path)
+          if VersionsService.generate_version_hash(@version.id)
+            flash[:notice] = t('flash_message.json_success')
+            redirect_back(fallback_location: root_path)
+          else
+            flash[:alert] = t('flash_message.json_error')
+            redirect_back(fallback_location: root_path)
+          end
         end
       end
     end
