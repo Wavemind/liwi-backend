@@ -183,12 +183,21 @@ class VersionsService
     hash['instances'] = {}
     hash['final_diagnostics'] = {}
 
+    # Loop in each final diagnostics for set conditional acceptance and health cares related to it
+    diagnostic.components.final_diagnostics.each do |final_diagnostic_instance|
+      final_diagnostic_hash = extract_final_diagnostic(final_diagnostic_instance)
+      @final_diagnostics[final_diagnostic_instance.node.id] = final_diagnostic_hash
+      hash['final_diagnostics'][final_diagnostic_instance.node.id] = final_diagnostic_hash
+      hash['final_diagnostics'][final_diagnostic_instance.node.id]['instances'] = {}
+    end
+
     # Loop in each question used in current diagnostic
     diagnostic.components.questions.includes([:children, :nodes, node:[:answers, :answer_type]]).each do |question_instance|
       # Append the questions in order to list them all at the end of the json.
       assign_node(question_instance.node)
 
       hash['instances'][question_instance.node.id] = extract_instances(question_instance)
+      hash['final_diagnostics'][question_instance.final_diagnostic_id]['instances'][question_instance.node.id] = hash['instances'][question_instance.node.id] unless question_instance.final_diagnostic_id.nil?
     end
 
     # Loop in each predefined syndromes used in current diagnostic
@@ -197,13 +206,7 @@ class VersionsService
       assign_node(questions_sequence_instance.node)
 
       hash['instances'][questions_sequence_instance.node.id] = extract_instances(questions_sequence_instance)
-    end
-
-    # Loop in each final diagnostics for set conditional acceptance and health cares related to it
-    diagnostic.components.final_diagnostics.each do |final_diagnostic_instance|
-      final_diagnostic_hash = extract_final_diagnostic(final_diagnostic_instance)
-      @final_diagnostics[final_diagnostic_instance.node.id] = final_diagnostic_hash
-      hash['final_diagnostics'][final_diagnostic_instance.node.id] = final_diagnostic_hash
+      hash['final_diagnostics'][questions_sequence_instance.final_diagnostic_id]['instances'][questions_sequence_instance.node.id] = hash['instances'][questions_sequence_instance.node.id] unless questions_sequence_instance.final_diagnostic_id.nil?
     end
 
     hash
