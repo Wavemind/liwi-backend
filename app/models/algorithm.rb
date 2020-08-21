@@ -33,6 +33,7 @@ class Algorithm < ApplicationRecord
     length = questions.create!(label_en: 'Length (cm)', type: 'Questions::BasicMeasurement', stage: Question.stages[:triage], answer_type_id: 4, is_default: true)
     bmi = questions.create!(label_en: 'BMI', type: 'Questions::BasicMeasurement', stage: Question.stages[:registration], answer_type_id: 5, formula: '[BM1] / (([BM3] / 100) * ([BM3] / 100))', is_default: true)
     temperature = questions.create!(label_en: 'Axillary temperature', type: 'Questions::BasicMeasurement', stage: Question.stages[:triage], answer_type_id: 4, is_default: true)
+    cc_general = questions.create!(label_en: 'General', type: 'Questions::ComplaintCategory', stage: Question.stages[:triage], is_mandatory: true, answer_type_id: 1, is_default: true)
 
     # Configure basic questions into the algorithm to be used in json generation
     self.update(medal_r_config: {basic_questions: {
@@ -41,6 +42,7 @@ class Algorithm < ApplicationRecord
       last_name_question_id: last_name.id,
       gender_question_id: gender.id,
       weight_question_id: weight.id,
+      general_cc_id: cc_general.id
     }})
 
     gender.answers.create([
@@ -107,7 +109,5 @@ class Algorithm < ApplicationRecord
        {label_en: '-2 z-score', value: '-3, -2', operator: Answer.operators[:between]},
        {label_en: 'more than -2 z-score', value: '-2', operator: Answer.operators[:more_or_equal]},
      ])
-
-    cc_general = questions.create!(label_en: 'General', type: 'Questions::ComplaintCategory', stage: Question.stages[:triage], is_mandatory: true, answer_type_id: 1, is_default: true)
   end
 end
