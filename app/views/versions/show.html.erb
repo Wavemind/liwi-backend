@@ -12,6 +12,9 @@
     <a class="nav-link <%= 'active' if params[:panel].blank? || params[:panel] == 'diagnostics' %>" id="diagnostics-tab" data-toggle="tab" href="#diagnostics" role="tab" aria-controls="diagnostics" aria-selected="false"><%= t('.subtitle_diagnostics') %></a>
   </li>
   <li class="nav-item">
+    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'final_diagnoses_exclusions' %>" id="registration_triage_questions-tab" data-toggle="tab" href="#final_diagnoses_exclusions" role="tab" aria-controls="final_diagnoses_exclusions" aria-selected="false"><%= t('.subtitle_final_diagnoses_exclusions') %> </a>
+  </li>
+  <li class="nav-item">
     <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'registration_triage_questions' %>" id="registration_triage_questions-tab" data-toggle="tab" href="#registration_triage_questions" role="tab" aria-controls="registration_triage_questions" aria-selected="false"><%= t('.subtitle_registration_triage_questions') %> </a>
   </li>
   <li class="nav-item">
@@ -33,6 +36,30 @@
     <% end %>
 
     <%= render 'diagnostics/table' %>
+  </div>
+
+  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'final_diagnoses_exclusions' %>" id="final_diagnoses_exclusions" role="tabpanel" aria-labelledby="final_diagnoses_exclusions-tab">
+
+    <h2><%= t('.subtitle_final_diagnoses_exclusions') %></h2>
+
+    <%= simple_form_for FinalDiagnosisExclusion.new, url: add_exclusion_algorithm_version_final_diagnostics_url(@version.algorithm, @version, format: :html), method: :post do |f| %>
+      <div class="row">
+        <div class="col">
+          <%= f.input :excluding_diagnosis_id, collection: @version.diagnostics.map(&:final_diagnostics).flatten, value_method: :id, label_method: :reference_label, label: false, prompt: t('prompt') %>
+        </div>
+        <div class="col text-center">
+          <%= t('.excludes') %>
+        </div>
+        <div class="col">
+          <%= f.input :excluded_diagnosis_id, collection: @version.diagnostics.map(&:final_diagnostics).flatten, value_method: :id, label_method: :reference_label, label: false, prompt: t('prompt') %>
+        </div>
+        <div class="col text-right">
+          <%= f.submit t('add'), class: 'btn btn-primary' %>
+        </div>
+      </div>
+    <% end %>
+
+    <%= render 'final_diagnosis_exclusion/table' %>
   </div>
 
   <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'registration_triage_questions' %>" id="registration_triage_questions" data-url=<%= change_triage_order_algorithm_version_url(@algorithm, @version) %> role="tabpanel" aria-labelledby="registration_triage_questions-tab">

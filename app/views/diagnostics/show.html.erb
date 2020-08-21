@@ -13,12 +13,6 @@
 <div class="tab-content mt-4 ml-4" id="diagnostic-table">
     <div class="tab-pane fade <%= 'show active' if params[:panel].blank? || params[:panel] == 'final_diagnostics'%>" id="final_diagnostics" role="tabpanel" aria-labelledby="final_diagnostics-tab">
 
-    <h3><%= t('.excluding_diagnostics') %></h3>
-
-    <%= render 'excluding' %>
-
-    <hr class="mt-5"/>
-
     <h3 class="mt-5"><%= t('.subtitle_final_diagnostics') %></h3>
     <%= link_to new_algorithm_version_diagnostic_final_diagnostic_url(@algorithm, @version, @diagnostic) do %>
       <button type="button" class="btn btn-outline-secondary"><%= t('add') %></button>

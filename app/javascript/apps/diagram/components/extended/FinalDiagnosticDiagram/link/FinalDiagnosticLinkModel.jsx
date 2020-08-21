@@ -31,7 +31,7 @@ export default class FinalDiagnosticLinkModel extends AdvancedLinkModel {
    * Remove link in database
    */
   removeLink = async () => {
-    let httpRequest = await this.http.removeExcluding(this.sourcePort.options.nodeId);
+    let httpRequest = await this.http.removeExcluding(this.sourcePort.options.nodeId, this.targetPort.options.nodeId);
     let result = await httpRequest.json();
 
     if (httpRequest.status !== 200) {

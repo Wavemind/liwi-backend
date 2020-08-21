@@ -245,6 +245,7 @@ en:
   error: "An error occured"
   errors:
     fetch_failed: "An error occurred while loading values"
+    final_diagnosis_exclusion_unique: "This exclusion is already set."
     format: "%{attribute} %{message}"
     messages:
       accepted: must be accepted
@@ -680,6 +681,7 @@ en:
       deployed_version: "This version is deployed in the field, it cannot be edited. You can either duplicate this version or create a new one."
       questions_sequences: "Question Sequences"
       subtitle_diagnostics: "Diagnoses"
+      subtitle_final_diagnoses_exclusions: "Final diagnoses exclusions"
       subtitle_medal_r_config: "Config Medal-R"
       subtitle_questions_order: "Triage variables order"
       subtitle_registration_triage_questions: "Registration and triage variables"
