@@ -335,6 +335,7 @@ class VersionsService
       hash[question.id]['label'] = question.label
       hash[question.id]['description'] = question.description
       hash[question.id]['is_mandatory'] = question.is_mandatory
+      hash[question.id]['is_neonat'] = question.is_neonat
       hash[question.id]['stage'] = question.stage
       hash[question.id]['system'] = question.system
       hash[question.id]['formula'] = format_formula(question.formula)

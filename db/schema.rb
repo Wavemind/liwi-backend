@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_31_140428) do
+ActiveRecord::Schema.define(version: 2020_08_21_074233) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -306,6 +306,7 @@ ActiveRecord::Schema.define(version: 2020_07_31_140428) do
     t.string "max_message_error"
     t.boolean "estimable"
     t.bigint "reference_table_z_id"
+    t.boolean "is_neonat", default: false
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
     t.index ["diagnostic_id"], name: "index_nodes_on_diagnostic_id"

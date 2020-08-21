@@ -39,6 +39,7 @@ export default class StepperQuestionForm extends React.Component {
       answer_type_id: question?.answer_type_id || "",
       stage: question?.stage || "",
       is_mandatory: question?.is_mandatory || false,
+      is_neonat: question?.is_neonat || false,
       label_en: question?.label_translations?.en || "",
       snomed: question?.snomed_label || "",
       description_en: question?.description_translations?.en || "",
