@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_23_111225) do
+ActiveRecord::Schema.define(version: 2020_07_21_082802) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -48,6 +48,9 @@ ActiveRecord::Schema.define(version: 2020_06_23_111225) do
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "age_limit"
+    t.string "age_limit_message"
+    t.json "medal_r_config"
     t.index ["user_id"], name: "index_algorithms_on_user_id"
   end
 
@@ -107,8 +110,8 @@ ActiveRecord::Schema.define(version: 2020_06_23_111225) do
     t.integer "status", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "group_id"
-    t.index ["group_id"], name: "index_devices_on_group_id"
+    t.bigint "health_facility_id"
+    t.index ["health_facility_id"], name: "index_devices_on_health_facility_id"
   end
 
   create_table "diagnostics", force: :cascade do |t|
@@ -144,22 +147,13 @@ ActiveRecord::Schema.define(version: 2020_06_23_111225) do
     t.boolean "by_age", default: false
     t.bigint "node_id"
     t.bigint "administration_route_id"
+    t.hstore "description_translations"
+    t.hstore "injection_instructions_translations"
     t.index ["administration_route_id"], name: "index_formulations_on_administration_route_id"
     t.index ["node_id"], name: "index_formulations_on_node_id"
   end
 
-  create_table "group_accesses", force: :cascade do |t|
-    t.boolean "access", default: true
-    t.datetime "end_date"
-    t.bigint "version_id"
-    t.bigint "group_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["group_id"], name: "index_group_accesses_on_group_id"
-    t.index ["version_id"], name: "index_group_accesses_on_version_id"
-  end
-
-  create_table "groups", force: :cascade do |t|
+  create_table "health_facilities", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -168,6 +162,19 @@ ActiveRecord::Schema.define(version: 2020_06_23_111225) do
     t.integer "architecture"
     t.string "pin_code"
     t.string "token"
+    t.decimal "latitude"
+    t.decimal "longitude"
+  end
+
+  create_table "health_facility_accesses", force: :cascade do |t|
+    t.boolean "access", default: true
+    t.datetime "end_date"
+    t.bigint "version_id"
+    t.bigint "health_facility_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["health_facility_id"], name: "index_health_facility_accesses_on_health_facility_id"
+    t.index ["version_id"], name: "index_health_facility_accesses_on_version_id"
   end
 
   create_table "instances", force: :cascade do |t|
@@ -243,10 +250,10 @@ ActiveRecord::Schema.define(version: 2020_06_23_111225) do
     t.string "first_name"
     t.string "last_name"
     t.integer "role"
-    t.bigint "group_id"
+    t.bigint "health_facility_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["group_id"], name: "index_medical_staffs_on_group_id"
+    t.index ["health_facility_id"], name: "index_medical_staffs_on_health_facility_id"
   end
 
   create_table "node_complaint_categories", force: :cascade do |t|
@@ -279,12 +286,10 @@ ActiveRecord::Schema.define(version: 2020_06_23_111225) do
     t.string "snomed_label"
     t.integer "system"
     t.boolean "is_mandatory", default: false
-    t.bigint "administration_route_id"
     t.boolean "is_anti_malarial", default: false
     t.boolean "is_antibiotic", default: false
     t.boolean "is_triage", default: false
     t.boolean "is_identifiable", default: false
-    t.boolean "is_filterable", default: false
     t.float "min_value_warning"
     t.float "max_value_warning"
     t.float "min_value_error"
@@ -293,13 +298,15 @@ ActiveRecord::Schema.define(version: 2020_06_23_111225) do
     t.string "max_message_warning"
     t.string "min_message_error"
     t.string "max_message_error"
-    t.index ["administration_route_id"], name: "index_nodes_on_administration_route_id"
+    t.boolean "estimable", default: false
+    t.bigint "reference_table_z_id"
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
     t.index ["diagnostic_id"], name: "index_nodes_on_diagnostic_id"
     t.index ["final_diagnostic_id"], name: "index_nodes_on_final_diagnostic_id"
     t.index ["reference_table_x_id"], name: "index_nodes_on_reference_table_x_id"
     t.index ["reference_table_y_id"], name: "index_nodes_on_reference_table_y_id"
+    t.index ["reference_table_z_id"], name: "index_nodes_on_reference_table_z_id"
   end
 
   create_table "patients", force: :cascade do |t|
@@ -377,7 +384,9 @@ ActiveRecord::Schema.define(version: 2020_06_23_111225) do
     t.bigint "top_left_question_id"
     t.bigint "first_top_right_question_id"
     t.bigint "second_top_right_question_id"
-    t.json "medal_r_config", default: {}
+    t.json "medal_r_config"
+    t.json "medal_r_json"
+    t.integer "medal_r_json_version", default: 0
     t.index ["algorithm_id"], name: "index_versions_on_algorithm_id"
     t.index ["first_top_right_question_id"], name: "index_versions_on_first_top_right_question_id"
     t.index ["second_top_right_question_id"], name: "index_versions_on_second_top_right_question_id"
@@ -388,14 +397,14 @@ ActiveRecord::Schema.define(version: 2020_06_23_111225) do
   add_foreign_key "activities", "devices"
   add_foreign_key "activities", "users"
   add_foreign_key "algorithms", "users"
-  add_foreign_key "devices", "groups"
+  add_foreign_key "devices", "health_facilities"
   add_foreign_key "diagnostics", "nodes"
   add_foreign_key "diagnostics", "versions"
-  add_foreign_key "group_accesses", "groups"
-  add_foreign_key "group_accesses", "versions"
-  add_foreign_key "nodes", "administration_routes"
+  add_foreign_key "health_facility_accesses", "health_facilities"
+  add_foreign_key "health_facility_accesses", "versions"
   add_foreign_key "nodes", "algorithms"
   add_foreign_key "nodes", "answer_types"
+  add_foreign_key "nodes", "nodes", column: "reference_table_z_id"
   add_foreign_key "technical_files", "users"
   add_foreign_key "versions", "algorithms"
   add_foreign_key "versions", "users"

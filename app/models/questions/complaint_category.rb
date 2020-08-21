@@ -12,6 +12,6 @@ class Questions::ComplaintCategory < Question
   # @return [Boolean]
   # Verify if current node have instances dependencies
   def instance_dependencies?
-    dependencies.map(&:instanceable).present? || diagnostics.any?
+    instances.any? || diagnostics.any?
   end
 end

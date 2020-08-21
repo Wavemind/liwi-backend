@@ -126,6 +126,8 @@ class DrugsController < ApplicationController
         :unique_dose,
         :by_age,
         :breakable,
+        :description_en,
+        :injection_instructions_en,
         :_destroy
       ]
     )

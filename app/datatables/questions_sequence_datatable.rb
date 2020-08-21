@@ -26,7 +26,7 @@ class QuestionsSequenceDatatable < AjaxDatatablesRails::ActiveRecord
   # Value display
   def data
     records.map do |record|
-      actions = link_to(I18n.t('show'), diagram_questions_sequence_url(record), class: 'btn btn-outline-primary') + " " + link_to(I18n.t('edit'), edit_algorithm_questions_sequence_url(record.algorithm, record), class: 'btn btn-outline-info') + " " + link_to(I18n.t('delete'), algorithm_questions_sequence_url(record.algorithm, record), class: "btn btn-outline-danger #{record.dependencies? ? 'disabled' : ''}", method: :delete, data: { confirm: 'Are you sure?' })
+      actions = link_to(I18n.t('show'), diagram_questions_sequence_url(record), class: 'btn btn-outline-primary') + " " + link_to(I18n.t('edit'), edit_algorithm_questions_sequence_url(record.algorithm, record), class: 'btn btn-outline-info') + " " + link_to(I18n.t('delete'), algorithm_questions_sequence_url(record.algorithm, record), class: "btn btn-outline-danger #{record.dependencies? ? 'disabled' : ''}", method: :delete, data: { confirm: I18n.t('confirmation') })
       {
         id: record.id,
         reference: record.full_reference,

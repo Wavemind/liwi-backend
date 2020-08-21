@@ -1,9 +1,9 @@
 # Manage groups
-class Group < ApplicationRecord
+class HealthFacility < ApplicationRecord
 
   has_many :devices
-  has_many :group_accesses
-  has_many :versions, through: :group_accesses
+  has_many :health_facility_accesses
+  has_many :versions, through: :health_facility_accesses
   has_many :medical_staffs
 
   enum architecture: [:standalone, :client_server]

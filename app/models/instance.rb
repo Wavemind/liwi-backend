@@ -92,9 +92,9 @@ class Instance < ApplicationRecord
     category = Object.const_get(node.class.name).variable
     config = instanceable.medal_r_config
     if config['questions_orders'][category].nil?
-      config['questions_orders'][category] = [id]
+      config['questions_orders'][category] = [node_id]
     else
-      config['questions_orders'][category].push(id)
+      config['questions_orders'][category].push(node_id)
     end
     instanceable.update(medal_r_config: config)
   end
@@ -103,7 +103,7 @@ class Instance < ApplicationRecord
   def remove_from_versions
     category = Object.const_get(node.class.name).variable
     config = instanceable.medal_r_config
-    config['questions_orders'][category].delete(id)
+    config['questions_orders'][category].delete(node_id)
     instanceable.update(medal_r_config: config)
   end
 

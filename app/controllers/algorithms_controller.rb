@@ -32,7 +32,6 @@ class AlgorithmsController < ApplicationController
   def create
     @algorithm = Algorithm.new(algorithm_params)
     @algorithm.user = current_user
-
     if @algorithm.save
       redirect_to algorithms_url, notice: t('flash_message.success_created')
     else
@@ -137,6 +136,8 @@ class AlgorithmsController < ApplicationController
       :id,
       :name,
       :description,
+      :age_limit,
+      :age_limit_message
     )
   end
 end

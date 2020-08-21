@@ -44,6 +44,26 @@ class HealthCareNodeWidget extends React.Component {
     }
   }
 
+  editHealthCareInstance() {
+    const { node } = this.props;
+    node.options.selected = false;
+
+    let params = {
+      diagramObject: node,
+      engine: node.options.engine,
+      method: "update",
+      from: "react"
+    };
+
+    store.dispatch(
+      openModal(I18n.t("drugs.edit.title"), "DrugForm", {
+        drug: node.options.dbInstance.node,
+        step: 3,
+        ...params
+      })
+    );
+  }
+
   render() {
     const { getReferencePrefix, node, engine } = this.props;
 
@@ -66,6 +86,7 @@ class HealthCareNodeWidget extends React.Component {
                 </button>
                 <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                   <a className="dropdown-item" href="#" onClick={() => this.editHealthCare()}>{I18n.t("edit")}</a>
+                  <a className="dropdown-item" href="#" onClick={() => this.editHealthCareInstance()}>{I18n.t("drugs.edit_instance")}</a>
                 </div>
               </div>
             ) : null}

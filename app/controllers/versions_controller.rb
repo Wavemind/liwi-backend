@@ -2,7 +2,7 @@ class VersionsController < ApplicationController
   before_action :authenticate_user!, except: [:change_triage_order]
   before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :duplicate, :create_triage_condition, :remove_triage_condition]
   before_action :set_breadcrumb, only: [:show, :new, :edit]
-  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :change_triage_order, :components, :create_triage_condition, :duplicate, :remove_components, :remove_triage_condition, :update_list]
+  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :change_triage_order, :components, :create_triage_condition, :duplicate, :remove_components, :remove_triage_condition, :update_list, :regenerate_json]
 
   def index
     respond_to do |format|
@@ -69,20 +69,23 @@ class VersionsController < ApplicationController
   def change_triage_order
     config = @version.medal_r_config
     config['questions_orders'][params[:key]] = params[:order].map(&:to_i)
-    if @version.update(medal_r_confg: config)
+    if @version.update(medal_r_config: config)
       render json: {result: 'success'}
     else
       render json: {result: 'error'}
     end
   end
 
+  # PUT algorithms/:algorithm_id/version/:id/components
+  # Instantiate nodes in the version
   def components
     params[:nodes_ids].map do |node_id|
       @version.components.create(node_id: node_id)
     end
   end
 
-
+  # PUT algorithms/:algorithm_id/version/:id/remove_components
+  # Remove instantiated nodes from the version
   def remove_components
     params[:nodes_ids].map do |node_id|
       instance = @version.components.find_by(node_id: node_id)
@@ -133,6 +136,49 @@ class VersionsController < ApplicationController
     end
   end
 
+  # PUT algorithms/:algorithm_id/version/:id/regenerate_json
+  # @params version [Version] version
+  # Generate json for the version
+  def regenerate_json
+    invalid_diagnostics = []
+
+    @version.diagnostics.each do |diagnostic|
+      diagnostic.manual_validate
+      invalid_diagnostics.push(diagnostic.full_reference) if diagnostic.errors.messages.any?
+    end
+
+    if invalid_diagnostics.any?
+      flash[:alert] = t('flash_message.version.invalids_diagnostics', diagnostics: invalid_diagnostics)
+      redirect_back(fallback_location: root_path)
+    else
+      components_count = @version.components.count
+      questions_orders = []
+      @version.medal_r_config['questions_orders'].map do |key, value|
+        questions_orders += value
+      end
+
+      if components_count != questions_orders.count
+        flash[:alert] = t('flash_message.version_components_data_error')
+        redirect_back(fallback_location: root_path)
+      else
+        missing_nodes = Node.where(id: @version.identify_missing_questions)
+
+        if missing_nodes.any?
+          flash[:alert] = t('flash_message.missing_nodes_error', missing_nodes: missing_nodes.map(&:reference_label))
+          redirect_back(fallback_location: root_path)
+        else
+          if VersionsService.generate_version_hash(@version.id)
+            flash[:notice] = t('flash_message.json_success')
+            redirect_back(fallback_location: root_path)
+          else
+            flash[:alert] = t('flash_message.json_error')
+            redirect_back(fallback_location: root_path)
+          end
+        end
+      end
+    end
+  end
+
   # Remove a condition between a triage question and a complaint category
   def remove_triage_condition
 
@@ -159,7 +205,11 @@ class VersionsController < ApplicationController
     end
   end
 
-
+  # PUT algorithms/:algorithm_id/version/:id/update_list
+  # @params version [Version]
+  # @params new order [Hash]
+  # @params list type [String]
+  # Update patient_list_order or medical_case_list_order
   def update_list
     config = @version.medal_r_config
     config["#{params[:list]}_list_order"] = params[:order]

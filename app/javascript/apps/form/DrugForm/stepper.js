@@ -13,13 +13,13 @@ export default class StepperDrugForm extends React.Component {
 
   constructor(props) {
     super(props);
-    const { drug, method } = props;
+    const { drug, method, step } = props;
 
     this.state = {
       errors: null,
-      step: 1,
+      step: step || 1,
       drug: this.drugBody(drug, method),
-      createdDrug: {}
+      createdDrug: drug || {}
     };
   }
 
@@ -40,6 +40,29 @@ export default class StepperDrugForm extends React.Component {
 
     if (method === "update") {
       body["id"] = drug.id;
+      body["formulations_attributes"] = [];
+
+      // Generate hash cause of label_translation
+      drug.formulations.map(formulation => {
+        body["formulations_attributes"].push({
+          id: formulation.id,
+          administration_route_id: formulation.administration_route_id,
+          minimal_dose_per_kg: formulation.minimal_dose_per_kg,
+          maximal_dose_per_kg: formulation.maximal_dose_per_kg,
+          maximal_dose: formulation.maximal_dose,
+          medication_form: formulation.medication_form,
+          dose_form: formulation.dose_form,
+          liquid_concentration: formulation.liquid_concentration,
+          doses_per_day: formulation.doses_per_day,
+          unique_dose: formulation.unique_dose,
+          by_age: formulation.by_age,
+          breakable: formulation.breakable,
+          description_en: formulation.description_translations?.en || "",
+          injection_instructions_en: formulation.injection_instructions_translations?.en || "",
+        });
+      });
+    } else {
+      body["answers_attributes"] = [];
     }
     return body;
   };
@@ -116,7 +139,7 @@ export default class StepperDrugForm extends React.Component {
 
   render() {
     const { errors, step, drug, createdDrug } = this.state;
-    const { method, engine, diagramObject, addAvailableNode, from } = this.props;
+    const { method, engine, diagramObject, addAvailableNode, from, is_deployed } = this.props;
 
     switch (step) {
       case 1:
@@ -127,6 +150,9 @@ export default class StepperDrugForm extends React.Component {
               formData={drug}
               setFormData={this.setMetaData}
               nextStep={this.nextStep}
+              save={this.save}
+              method={method}
+              is_deployed={is_deployed}
             />
           </>
         );

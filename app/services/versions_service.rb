@@ -6,6 +6,8 @@ class VersionsService
   def self.generate_version_hash(id)
     init
     @version = Version.find(id)
+    @version.medal_r_json_version = @version.medal_r_json_version + 1
+
     @patient_questions = []
 
     hash = extract_version_metadata
@@ -34,7 +36,8 @@ class VersionsService
 
     hash['patient_level_questions'] = @patient_questions
 
-    hash
+    @version.medal_r_json = hash
+    @version.save
   end
 
   # @params [Diagnostic]
@@ -68,10 +71,15 @@ class VersionsService
 
       if node['reference_table_x_id'].present?
         nodes[node['reference_table_x_id']]['referenced_in'] = nodes[node['reference_table_x_id']]['referenced_in'].push(node['id']) unless nodes[node['reference_table_x_id']]['referenced_in'].include?(node['id'])
+        nodes[@version.algorithm.medal_r_config['basic_questions']['gender_question_id']]['referenced_in'] = nodes[@version.algorithm.medal_r_config['basic_questions']['gender_question_id']]['referenced_in'].push(node['id'])
       end
 
       if node['reference_table_y_id'].present?
         nodes[node['reference_table_y_id']]['referenced_in'] = nodes[node['reference_table_y_id']]['referenced_in'].push(node['id']) unless nodes[node['reference_table_y_id']]['referenced_in'].include?(node['id'])
+      end
+
+      if node['reference_table_z_id'].present?
+        nodes[node['reference_table_z_id']]['referenced_in'] = nodes[node['reference_table_z_id']]['referenced_in'].push(node['id']) unless nodes[node['reference_table_z_id']]['referenced_in'].include?(node['id'])
       end
     end
     nodes
@@ -110,11 +118,15 @@ class VersionsService
     hash = {}
     hash['version_id'] = @version.id
     hash['version_name'] = @version.name
+    hash['json_version'] = @version.medal_r_json_version
     hash['description'] = @version.description
     hash['algorithm_id'] = @version.algorithm.id
     hash['algorithm_name'] = @version.algorithm.name
 
-    hash['mobile_config'] = extract_config
+    hash['mobile_config'] = extract_mobile_config
+    hash['config'] = @version.algorithm.medal_r_config
+    hash['config']['age_limit'] = @version.algorithm.age_limit
+    hash['config']['age_limit_message'] = @version.algorithm.age_limit_message
 
     hash['triage'] = extract_triage_metadata
     hash['author'] = @version.user.full_name
@@ -125,21 +137,14 @@ class VersionsService
 
   # @return hash
   # Build a hash of medal-r config for the version
-  def self.extract_config
+  def self.extract_mobile_config
     hash = {}
 
     hash['left_top_question_id'] = @version.top_left_question.present? ? @version.top_left_question.node_id : nil
     hash['first_top_right_question_id'] = @version.first_top_right_question.present? ? @version.first_top_right_question.node_id : nil
     hash['second_top_right_question_id'] = @version.second_top_right_question.present? ? @version.second_top_right_question.node_id : nil
 
-    # Convert instance ids into node ids
-    orders = @version.medal_r_config['questions_orders']
-    orders.each do |key, value|
-      value.each_with_index do |instance_id, index|
-        orders[key][index] = Instance.find(instance_id).node_id
-      end
-    end
-    hash['questions_orders'] = orders
+    hash['questions_orders'] = @version.medal_r_config['questions_orders']
     hash['medical_case_list'] = @version.medal_r_config['medical_case_list_order']
     hash['patient_list'] = @version.medal_r_config['patient_list_order']
     hash
@@ -285,7 +290,8 @@ class VersionsService
       hash[health_care.id] = extract_conditions(instance.conditions)
       hash[health_care.id]['id'] = health_care.id
       hash[health_care.id]['duration'] = instance.duration
-      hash[health_care.id]['description'] = instance.description
+      # Get instance description for drugs and node descriptions for management
+      hash[health_care.id]['description'] = instance.node.is_a?(HealthCares::Drug) ? instance.description : instance.node.description_en
 
       # Append the health care in order to list them all at the end of the json.
       assign_node(health_care)
@@ -332,7 +338,7 @@ class VersionsService
       hash[question.id]['category'] = question.category_name
       hash[question.id]['is_triage'] = question.is_triage
       hash[question.id]['is_identifiable'] = question.is_identifiable
-      hash[question.id]['is_filterable'] = question.is_filterable
+      hash[question.id]['estimable'] = question.estimable
       # Send Reference instead of actual display format to help f-e interpret the question correctly
       hash[question.id]['value_format'] = question.answer_type.value
       format = question.answer_type.display
@@ -348,6 +354,7 @@ class VersionsService
       hash[question.id]['value'] = nil
       hash[question.id]['reference_table_x_id'] = question.reference_table_x_id
       hash[question.id]['reference_table_y_id'] = question.reference_table_y_id
+      hash[question.id]['reference_table_z_id'] = question.reference_table_z_id
       hash[question.id]['reference_table_male'] = question.reference_table_male
       hash[question.id]['reference_table_female'] = question.reference_table_female
 
@@ -359,6 +366,7 @@ class VersionsService
       hash[question.id]['max_message_warning'] = question.max_message_warning
       hash[question.id]['min_message_error'] = question.min_message_error
       hash[question.id]['max_message_error'] = question.max_message_error
+      hash[question.id]['diagnostics_related_to_cc'] = get_complaint_category_diagnostics(question, []) if question.is_a?(Questions::ComplaintCategory)
 
       if question.is_a?(Questions::ComplaintCategory) && question.is_default
         hash[question.id]['cc_general'] = true
@@ -406,6 +414,18 @@ class VersionsService
       end
     end
     formula
+  end
+
+  # @params [Node, Array]
+  # @return [Array]
+  # Recursive method in order to retrieve every diagnostics the question appears in.
+  def self.get_complaint_category_diagnostics(node, diagnostics)
+    node.diagnostics.each do |diagnostic|
+      if @diagnostics_ids.include?(diagnostic.id) && !diagnostics.include?(diagnostic.id)
+        diagnostics << diagnostic.id
+      end
+    end
+    diagnostics
   end
 
   # @params [Node, Array]
@@ -478,8 +498,6 @@ class VersionsService
       hash[health_care.id]['description'] = health_care.description
       # Fields specific to drugs
       if health_care.is_a?(HealthCares::Drug)
-        hash[health_care.id]['weight_question_id'] = @version.algorithm.questions.find_by(type: 'Questions::BasicMeasurement', reference: '1').id
-
         hash[health_care.id]['formulations'] = []
         health_care.formulations.map do |formulation|
           formulation_hash = {}
@@ -496,6 +514,8 @@ class VersionsService
           formulation_hash['maximal_dose_per_kg'] = formulation.maximal_dose_per_kg
           formulation_hash['maximal_dose'] = formulation.maximal_dose
           formulation_hash['doses_per_day'] = formulation.doses_per_day
+          formulation_hash['description'] = formulation.description_en
+          formulation_hash['injection_instructions'] = formulation.injection_instructions_en
           hash[health_care.id]['formulations'].push(formulation_hash)
         end
       end

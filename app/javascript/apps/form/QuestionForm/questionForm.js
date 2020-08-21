@@ -19,6 +19,8 @@ import {
   NUMERIC_ANSWER_TYPES
 } from "../constants/constants";
 import Chip from "@material-ui/core/Chip";
+import Overlay from "react-bootstrap/Overlay";
+import Popover from "react-bootstrap/Popover";
 
 const humanizeString = require("humanize-string");
 const filterOptions = createFilterOptions({
@@ -26,13 +28,17 @@ const filterOptions = createFilterOptions({
 });
 
 export default class QuestionForm extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
+      updateMode: props.method === "update",
+      deployedMode: props.method === "update" && props.is_deployed,
       snomedResults: [],
       snomedError: null,
       isLoading: true,
+      formulaTooltipShow: false,
+      target: null
     };
 
     this.init();
@@ -44,9 +50,11 @@ export default class QuestionForm extends React.Component {
    * @params [Object] actions
    */
   handleOnSubmit = async (values) => {
-    const { setFormData, save, validate, nextStep } = this.props;
+    const { setFormData, save, validate, nextStep, method, is_used, is_deployed } = this.props;
+    const { updateMode } = this.state;
     setFormData(values);
-    if (NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(values.answer_type_id) || NO_ANSWERS_ATTACHED_TYPE.includes(values.type)) {
+    // Skip answers form if the question type doesn't have any OR if the answers are automatically generated (boolean) or if it is edit mode and the question is already used
+    if (NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(values.answer_type_id) || NO_ANSWERS_ATTACHED_TYPE.includes(values.type) || (updateMode && (is_used || is_deployed))) {
       save();
     } else {
       const validated = await validate();
@@ -160,8 +168,18 @@ export default class QuestionForm extends React.Component {
     return fieldsToSet;
   };
 
+  // Set status of formula tooltip
+  handleFormulaTooltip = (event) => {
+    const { formulaTooltipShow } = this.state;
+
+    this.setState({
+      formulaTooltipShow : !formulaTooltipShow,
+      target: event.target
+    });
+  };
+
   render() {
-    const { formData, railsErrors } = this.props;
+    const { formData, railsErrors, method } = this.props;
 
     const {
       answerTypes,
@@ -171,7 +189,11 @@ export default class QuestionForm extends React.Component {
       snomedResults,
       isLoading,
       snomedError,
-      complaintCategories
+      complaintCategories,
+      updateMode,
+      deployedMode,
+      formulaTooltipShow,
+      target
     } = this.state;
 
     return (
@@ -203,6 +225,7 @@ export default class QuestionForm extends React.Component {
                     as="select"
                     name="type"
                     value={values.type}
+                    disabled={updateMode}
                     onChange={e => {
                       handleChange(e);
                       this.categoryChanges(e).forEach(element => setFieldValue(element[0], element[1]));
@@ -249,7 +272,7 @@ export default class QuestionForm extends React.Component {
                     onChange={e => {
                       setFieldValue("answer_type_id", e.target.value !== "" ? parseInt(e.target.value) : e.target.value);
                     }}
-                    disabled={CATEGORIES_DISABLING_ANSWER_TYPE.includes(values.type)}
+                    disabled={updateMode || CATEGORIES_DISABLING_ANSWER_TYPE.includes(values.type)}
                     isInvalid={touched.answer_type_id && !!errors.answer_type_id}
                   >
                     <option value="">{I18n.t("select")}</option>
@@ -292,6 +315,7 @@ export default class QuestionForm extends React.Component {
                     value={values.is_mandatory}
                     checked={values.is_mandatory}
                     onChange={handleChange}
+                    disabled={deployedMode}
                     isInvalid={touched.is_mandatory && !!errors.is_mandatory}
                   />
                   <Form.Control.Feedback type="invalid">
@@ -343,6 +367,7 @@ export default class QuestionForm extends React.Component {
                       options={complaintCategories.map(option => option)}
                       defaultValue={formData?.complaint_categories_attributes}
                       filterOptions={filterOptions}
+                      disabled={deployedMode}
                       onChange={(_, value) => setFieldValue("complaint_categories_attributes", value)}
                       renderOption={(option) => option.label_translations.en}
                       renderTags={(value, getTagProps) => (
@@ -382,6 +407,7 @@ export default class QuestionForm extends React.Component {
                       value={values.unavailable}
                       checked={values.unavailable}
                       onChange={handleChange}
+                      disabled={updateMode}
                       isInvalid={touched.unavailable && !!errors.unavailable}
                     />
                     <Form.Control.Feedback type="invalid">
@@ -395,6 +421,7 @@ export default class QuestionForm extends React.Component {
                     name="is_triage"
                     label={I18n.t("activerecord.attributes.question.is_triage")}
                     value={values.is_triage}
+                    disabled={deployedMode}
                     checked={values.is_triage}
                     onChange={handleChange}
                     isInvalid={touched.is_triage && !!errors.is_triage}
@@ -409,6 +436,7 @@ export default class QuestionForm extends React.Component {
                     name="is_identifiable"
                     label={I18n.t("activerecord.attributes.question.is_identifiable")}
                     value={values.is_identifiable}
+                    disabled={deployedMode}
                     checked={values.is_identifiable}
                     onChange={handleChange}
                     isInvalid={touched.is_identifiable && !!errors.is_identifiable}
@@ -419,33 +447,65 @@ export default class QuestionForm extends React.Component {
                 </Form.Group>
 
                 {values.answer_type_id === 5 ?
-                  <Form.Group controlId="validationFormula">
-                    <Form.Label>{I18n.t("activerecord.attributes.question.formula")}</Form.Label>
-                    <Form.Control
-                      name="formula"
-                      as="textarea"
-                      value={values.formula}
-                      onChange={handleChange}
-                      isInvalid={touched.formula && !!errors.formula}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.formula}
-                    </Form.Control.Feedback>
-                  </Form.Group>
+                  <>
+                    <Form.Group controlId="validationFormula">
+                      <Form.Label>
+                        {I18n.t("activerecord.attributes.question.formula")}
+                        <button type="button" className="btn btn-sm btn-info help" onClick={this.handleFormulaTooltip}>
+                          <i className="material-icons">
+                            help_outline
+                          </i>
+                        </button>
+                      </Form.Label>
+                      <Form.Control
+                        name="formula"
+                        as="textarea"
+                        disabled={deployedMode}
+                        value={values.formula}
+                        onChange={handleChange}
+                        isInvalid={touched.formula && !!errors.formula}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.formula}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+
+                    <Overlay
+                      show={formulaTooltipShow}
+                      target={target}
+                      placement="right"
+                      containerPadding={50}
+                    >
+                      <Popover id="popover-contained">
+                        <Popover.Title as="h3">{I18n.t("helps.formula.formula-tooltip-title")}</Popover.Title>
+                        <Popover.Content>
+                          <h6>{I18n.t("helps.formula.formula-title")}</h6>
+                          <p dangerouslySetInnerHTML={{__html: I18n.t("helps.formula.formula-content")}} />
+
+                          <h6>{I18n.t("helps.formula.reference-title")}</h6>
+                          <p dangerouslySetInnerHTML={{__html: I18n.t("helps.formula.reference-content")}} />
+
+                          <h6>{I18n.t("helps.formula.date-title")}</h6>
+                          <p dangerouslySetInnerHTML={{__html: I18n.t("helps.formula.date-content")}} />
+                        </Popover.Content>
+                      </Popover>
+                    </Overlay>
+                  </>
                 : null}
 
-                {CATEGORIES_DISPLAYING_FILTERABLE.includes(values.type) ?
-                  <Form.Group controlId="validationIsFilterable">
+                {"Questions::BasicMeasurement" === values.type ?
+                  <Form.Group controlId="validationEstimable">
                     <Form.Check
-                      name="is_filterable"
-                      label={I18n.t("activerecord.attributes.question.is_filterable")}
-                      value={values.is_filterable}
-                      checked={values.is_filterable}
+                      name="estimable"
+                      label={I18n.t("activerecord.attributes.question.estimable")}
+                      value={values.estimable}
+                      disabled={deployedMode}
+                      checked={values.estimable}
                       onChange={handleChange}
-                      isInvalid={touched.is_filterable && !!errors.is_filterable}
+                      isInvalid={touched.estimable && !!errors.estimable}
                     />
                     <Form.Control.Feedback type="invalid">
-                      {errors.is_filterable}
+                      {errors.estimable}
                     </Form.Control.Feedback>
                   </Form.Group>
                 : null}
@@ -457,6 +517,7 @@ export default class QuestionForm extends React.Component {
                       <Form.Control
                         type="number"
                         name="min_value_warning"
+                        disabled={deployedMode}
                         value={values.min_value_warning}
                         onChange={handleChange}
                         isInvalid={touched.min_value_warning && !!errors.min_value_warning}
@@ -471,6 +532,7 @@ export default class QuestionForm extends React.Component {
                       <Form.Control
                         type="number"
                         name="max_value_warning"
+                        disabled={deployedMode}
                         value={values.max_value_warning}
                         onChange={handleChange}
                         isInvalid={touched.max_value_warning && !!errors.max_value_warning}
@@ -485,6 +547,7 @@ export default class QuestionForm extends React.Component {
                       <Form.Control
                         type="number"
                         name="min_value_error"
+                        disabled={deployedMode}
                         value={values.min_value_error}
                         onChange={handleChange}
                         isInvalid={touched.min_value_error && !!errors.min_value_error}
@@ -499,6 +562,7 @@ export default class QuestionForm extends React.Component {
                       <Form.Control
                         type="number"
                         name="max_value_error"
+                        disabled={deployedMode}
                         value={values.max_value_error}
                         onChange={handleChange}
                         isInvalid={touched.max_value_error && !!errors.max_value_error}
@@ -513,6 +577,7 @@ export default class QuestionForm extends React.Component {
                       <Form.Control
                         as="textarea"
                         name="min_message_warning"
+                        disabled={deployedMode}
                         value={values.min_message_warning}
                         onChange={handleChange}
                         isInvalid={touched.min_message_warning && !!errors.min_message_warning}
@@ -527,6 +592,7 @@ export default class QuestionForm extends React.Component {
                       <Form.Control
                         as="textarea"
                         name="max_message_warning"
+                        disabled={deployedMode}
                         value={values.max_message_warning}
                         onChange={handleChange}
                         isInvalid={touched.max_message_warning && !!errors.max_message_warning}
@@ -541,6 +607,7 @@ export default class QuestionForm extends React.Component {
                       <Form.Control
                         as="textarea"
                         name="min_message_error"
+                        disabled={deployedMode}
                         value={values.min_message_error}
                         onChange={handleChange}
                         isInvalid={touched.min_message_error && !!errors.min_message_error}
@@ -555,6 +622,7 @@ export default class QuestionForm extends React.Component {
                       <Form.Control
                         as="textarea"
                         name="max_message_error"
+                        disabled={deployedMode}
                         value={values.max_message_error}
                         onChange={handleChange}
                         isInvalid={touched.max_message_error && !!errors.max_message_error}

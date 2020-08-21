@@ -2,10 +2,10 @@
 Language.create!(name: 'French', code: 'fr')
 Language.create!(name: 'Swahili', code: 'sw')
 
-# Group
-group_wavemind = Group.create!(name: 'Wavemind', architecture: Group.architectures[:client_server], pin_code: '1234')
-standalone = Group.create!(name: 'Standalone test', architecture: Group.architectures[:standalone], pin_code: '1234')
-client_server = Group.create!(name: 'Client server test', architecture: Group.architectures[:client_server], pin_code: '1234')
+# Facilities
+group_wavemind = HealthFacility.create!(name: 'Wavemind', architecture: HealthFacility.architectures[:client_server], pin_code: '1234')
+standalone = HealthFacility.create!(name: 'Standalone test', architecture: HealthFacility.architectures[:standalone], pin_code: '1234')
+client_server = HealthFacility.create!(name: 'Client server test', architecture: HealthFacility.architectures[:client_server], pin_code: '1234')
 
 # Role
 registration = Role.create!(name: 'Registration', stage: Role.stages[:registration])

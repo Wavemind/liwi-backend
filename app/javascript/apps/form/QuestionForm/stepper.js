@@ -47,6 +47,8 @@ export default class StepperQuestionForm extends React.Component {
       is_triage: question?.is_triage || false,
       is_identifiable: question?.is_identifiable || false,
       is_filterable: question?.is_filterable || false,
+      estimable: question?.estimable || false,
+      is_default: question?.is_default || false,
       min_value_warning: question?.min_value_warning || "",
       max_value_warning: question?.max_value_warning || "",
       min_value_error: question?.min_value_error || "",
@@ -176,7 +178,7 @@ export default class StepperQuestionForm extends React.Component {
 
   render() {
     const { errors, step, question } = this.state;
-    const { method } = this.props;
+    const { method, is_used, is_deployed } = this.props;
     switch (step) {
       case 1:
         return (
@@ -190,6 +192,8 @@ export default class StepperQuestionForm extends React.Component {
             validate={this.validate}
             railsErrors={errors}
             method={method}
+            is_used={is_used}
+            is_deployed={is_deployed}
           />
           </>
         );

@@ -1,10 +1,10 @@
 jQuery(document).ready(function () {
-  $("#groups-datatable").dataTable({
+  $("#health_facilities-datatable").dataTable({
     "processing": true,
     "info": false,
     "bLengthChange": false,
     "serverSide": true,
-    "ajax": $("#groups-datatable").data("source"),
+    "ajax": $("#health_facilities-datatable").data("source"),
     "pagingType": "full_numbers",
     "columns": [
       { "data": "name" },

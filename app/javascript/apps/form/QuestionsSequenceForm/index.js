@@ -23,10 +23,12 @@ const filterOptions = createFilterOptions({
 
 export default class QuestionsSequenceForm extends React.Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
+      updateMode: props.method === "update",
+      deployedMode: props.method === "update" && props.is_deployed,
       categories: [],
       complaintCategories: [],
       isLoading: true
@@ -97,8 +99,8 @@ export default class QuestionsSequenceForm extends React.Component {
   };
 
   render() {
-    const { questionsSequence, method } = this.props;
-    const { categories, isLoading, complaintCategories } = this.state;
+    const { questionsSequence } = this.props;
+    const { categories, isLoading, complaintCategories, updateMode, deployedMode } = this.state;
 
     return (
       isLoading ? <Loader/> :
@@ -127,26 +129,25 @@ export default class QuestionsSequenceForm extends React.Component {
               }) => (
               <Form noValidate onSubmit={handleSubmit}>
                 {status ? <DisplayErrors errors={status}/> : null}
-                {method === "create" ?
-                  <Form.Group controlId="validationType">
-                    <Form.Label>{I18n.t("activerecord.attributes.node.type")}</Form.Label>
-                    <Form.Control
-                      as="select"
-                      name="type"
-                      value={values.type}
-                      onChange={handleChange}
-                      isInvalid={touched.type && !!errors.type}
-                    >
-                      <option value="">{I18n.t("select")}</option>
-                      {categories.map(category => (
-                        <option key={category.reference_prefix} value={category.name}>{category.label}</option>
-                      ))}
-                    </Form.Control>
-                    <Form.Control.Feedback type="invalid">
-                      {errors.type}
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                  : null}
+                <Form.Group controlId="validationType">
+                  <Form.Label>{I18n.t("activerecord.attributes.node.type")}</Form.Label>
+                  <Form.Control
+                    as="select"
+                    name="type"
+                    disabled={updateMode}
+                    value={values.type}
+                    onChange={handleChange}
+                    isInvalid={touched.type && !!errors.type}
+                  >
+                    <option value="">{I18n.t("select")}</option>
+                    {categories.map(category => (
+                      <option key={category.reference_prefix} value={category.name}>{category.label}</option>
+                    ))}
+                  </Form.Control>
+                  <Form.Control.Feedback type="invalid">
+                    {errors.type}
+                  </Form.Control.Feedback>
+                </Form.Group>
 
                 <Form.Group controlId="validationLabel">
                   <Form.Label>{I18n.t("activerecord.attributes.node.label_translations")}</Form.Label>
@@ -173,6 +174,7 @@ export default class QuestionsSequenceForm extends React.Component {
                     defaultValue={questionsSequence?.complaint_categories}
                     filterOptions={filterOptions}
                     onChange={(_, value) => setFieldValue("complaint_categories_attributes", value)}
+                    disabled={deployedMode}
                     renderOption={(option) => option.label_translations.en}
                     renderTags={(value, getTagProps) => (
                       value.map((option, index) => (
@@ -195,6 +197,7 @@ export default class QuestionsSequenceForm extends React.Component {
                       name="min_score"
                       value={values.min_score}
                       onChange={handleChange}
+                      disabled={deployedMode}
                       isInvalid={touched.min_score && !!errors.min_score}
                     />
                     <Form.Control.Feedback type="invalid">

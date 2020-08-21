@@ -33,6 +33,7 @@ module.exports = function(api) {
         {
           forceAllTransforms: true,
           useBuiltIns: "entry",
+          corejs: '3.0.0',
           modules: false,
           exclude: ["transform-typeof-symbol"]
         }
@@ -41,7 +42,8 @@ module.exports = function(api) {
         "@babel/preset-react",
         {
           development: isDevelopmentEnv || isTestEnv,
-          useBuiltIns: true
+          useBuiltIns: true,
+          corejs: '3.0.0',
         }
       ]
     ].filter(Boolean),
@@ -59,7 +61,8 @@ module.exports = function(api) {
       [
         "@babel/plugin-proposal-object-rest-spread",
         {
-          useBuiltIns: true
+          useBuiltIns: true,
+          corejs: '3.0.0',
         }
       ],
       [

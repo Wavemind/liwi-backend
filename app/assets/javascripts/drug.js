@@ -5,6 +5,7 @@ jQuery(document).ready(function () {
     "info": false,
     "bLengthChange": false,
     "serverSide": true,
+    "pageLength": 50,
     "ajax": $("#drugs-datatable").data("source"),
     "pagingType": "full_numbers",
     "columns": [

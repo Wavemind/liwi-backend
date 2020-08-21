@@ -6,7 +6,7 @@ class Device < ApplicationRecord
   has_many :activities
   has_many :users, through: :activities
 
-  belongs_to :group, optional: true
+  belongs_to :health_facility, optional: true
 
   validates :mac_address, uniqueness: true, presence: true
 

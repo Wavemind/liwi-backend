@@ -1,5 +1,5 @@
-# Configuration for group access datatable display
-class GroupAccessDatatable < AjaxDatatablesRails::ActiveRecord
+# Configuration for health_facility access datatable display
+class HealthFacilityAccessDatatable < AjaxDatatablesRails::ActiveRecord
   extend Forwardable
 
   # Helpers
@@ -14,10 +14,10 @@ class GroupAccessDatatable < AjaxDatatablesRails::ActiveRecord
   # Column configuration
   def view_columns
     @view_columns ||= {
-      created_at: { source: 'GroupAccess.created_at' },
-      algorithm: { source: 'GroupAccess.version.algorithm.name' },
-      version: { source: 'GroupAccess.version.name' },
-      end_date: { source: 'GroupAccess.end_date' },
+      created_at: { source: 'HealthFacilityAccess.created_at' },
+      algorithm: { source: 'HealthFacilityAccess.version.algorithm.name' },
+      version: { source: 'HealthFacilityAccess.version.name' },
+      end_date: { source: 'HealthFacilityAccess.end_date' },
     }
   end
 
@@ -35,7 +35,7 @@ class GroupAccessDatatable < AjaxDatatablesRails::ActiveRecord
 
   # Activerecord request
   def get_raw_records
-    GroupAccess.where(group_id: params[:id]).where.not(end_date: nil).includes([version: [:algorithm]])
+    HealthFacilityAccess.where(health_facility_id: params[:id]).where.not(end_date: nil).includes([version: [:algorithm]])
   end
 
 end
