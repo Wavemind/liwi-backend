@@ -225,6 +225,7 @@ class VersionsService
     hash['drugs'] = extract_health_cares(final_diagnostic.health_cares.drugs, instance.instanceable.id, final_diagnostic.id)
     hash['managements'] = extract_health_cares(final_diagnostic.health_cares.managements, instance.instanceable.id, final_diagnostic.id)
     hash['excluding_final_diagnostics'] = final_diagnostic.excluded_diagnoses_ids
+    hash['excluded_final_diagnostics'] = final_diagnostic.excluding_diagnoses_ids
     hash['cc'] = final_diagnostic.diagnostic.node_id
     hash
   end
@@ -356,6 +357,8 @@ class VersionsService
       hash[question.id]['referenced_in'] = []
       hash[question.id]['counter'] = 0
       hash[question.id]['value'] = nil
+      hash[question.id]['answer'] = nil
+      hash[question.id]['answers'] = {}
       hash[question.id]['reference_table_x_id'] = question.reference_table_x_id
       hash[question.id]['reference_table_y_id'] = question.reference_table_y_id
       hash[question.id]['reference_table_z_id'] = question.reference_table_z_id
@@ -371,15 +374,6 @@ class VersionsService
       hash[question.id]['min_message_error'] = question.min_message_error
       hash[question.id]['max_message_error'] = question.max_message_error
       hash[question.id]['diagnostics_related_to_cc'] = get_complaint_category_diagnostics(question, []) if question.is_a?(Questions::ComplaintCategory)
-
-      if question.is_a?(Questions::ComplaintCategory) && question.is_default
-        hash[question.id]['cc_general'] = true
-        hash[question.id]['answer'] = question.answers.first.id
-      else
-        hash[question.id]['cc_general'] = true
-        hash[question.id]['answer'] = nil
-      end
-      hash[question.id]['answers'] = {}
 
       question.answers.each do |answer|
         answer_hash = {}

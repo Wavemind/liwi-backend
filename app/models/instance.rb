@@ -30,6 +30,7 @@ class Instance < ApplicationRecord
   after_create :push_in_version_order, if: Proc.new { self.instanceable.is_a?(Version) }
   before_destroy :remove_from_versions, if: Proc.new { self.instanceable.is_a?(Version) }
   before_destroy :remove_condition_from_children
+  after_destroy :remove_exclusion, if: Proc.new { self.node.is_a?(FinalDiagnostic) }
 
 
   validate :already_exist, on: :create
@@ -105,6 +106,11 @@ class Instance < ApplicationRecord
     config = instanceable.medal_r_config
     config['questions_orders'][category].delete(node_id)
     instanceable.update(medal_r_config: config)
+  end
+
+  # Remove exclusion from a final diagnosis instance that has been destroyed
+  def remove_exclusion
+    FinalDiagnosisExclusion.where(excluding_diagnosis_id: node_id).or(FinalDiagnosisExclusion.where(excluded_diagnosis_id: node_id)).map(&:destroy)
   end
 
   private
