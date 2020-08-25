@@ -196,7 +196,7 @@ class VersionsService
       # Append the questions in order to list them all at the end of the json.
       assign_node(question_instance.node)
 
-      hash['instances'][question_instance.node.id] = extract_instances(question_instance) if hash['instances'][question_instance.node.id] || question_instance.final_diagnostic_id.nil?
+      hash['instances'][question_instance.node.id] = extract_instances(question_instance) if hash['instances'][question_instance.node.id].nil? || question_instance.final_diagnostic_id.nil?
       hash['final_diagnostics'][question_instance.final_diagnostic_id]['instances'][question_instance.node.id] = hash['instances'][question_instance.node.id] unless question_instance.final_diagnostic_id.nil?
     end
 
@@ -205,7 +205,7 @@ class VersionsService
       # Append the predefined syndromes in order to list them all at the end of the json.
       assign_node(questions_sequence_instance.node)
 
-      hash['instances'][questions_sequence_instance.node.id] = extract_instances(questions_sequence_instance) if hash['instances'][questions_sequence_instance.node.id] || questions_sequence_instance.final_diagnostic_id.nil?
+      hash['instances'][questions_sequence_instance.node.id] = extract_instances(questions_sequence_instance) if hash['instances'][questions_sequence_instance.node.id].nil? || questions_sequence_instance.final_diagnostic_id.nil?
       hash['final_diagnostics'][questions_sequence_instance.final_diagnostic_id]['instances'][questions_sequence_instance.node.id] = hash['instances'][questions_sequence_instance.node.id] unless questions_sequence_instance.final_diagnostic_id.nil?
     end
 
