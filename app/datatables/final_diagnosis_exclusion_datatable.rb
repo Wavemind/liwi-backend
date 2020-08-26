@@ -11,7 +11,7 @@ class FinalDiagnosisExclusionDatatable < AjaxDatatablesRails::ActiveRecord
   def view_columns
     @view_columns ||= {
       excluding_diagnosis_id: { source: 'FinalDiagnosisExclusion.excluding_diagnosis_id' },
-      excluded_diagnosis_id: { source: 'FinalDiagnosisExclusion.excluding_diagnosis_id' },
+      excluded_diagnosis_id: { source: 'FinalDiagnosisExclusion.excluded_diagnosis_id' },
     }
   end
 
