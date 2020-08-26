@@ -19,8 +19,8 @@ class FinalDiagnosisExclusionDatatable < AjaxDatatablesRails::ActiveRecord
     records.map do |record|
       actions = link_to(I18n.t('delete'), remove_exclusion_algorithm_version_final_diagnostics_url(params[:algorithm_id], params[:id], final_diagnosis_exclusion: {excluding_diagnosis_id: record.excluding_diagnosis_id, excluded_diagnosis_id: record.excluded_diagnosis_id}, format: :html), class: "btn btn-outline-danger", method: :delete, data: { confirm: I18n.t('confirmation') })
       {
-        excluding_diagnosis_id: record.excluding_diagnosis.full_reference,
-        excluded_diagnosis_id: record.excluded_diagnosis.full_reference,
+        excluding_diagnosis_id: record.excluding_diagnosis.reference_label,
+        excluded_diagnosis_id: record.excluded_diagnosis.reference_label,
         actions: actions
       }
     end
