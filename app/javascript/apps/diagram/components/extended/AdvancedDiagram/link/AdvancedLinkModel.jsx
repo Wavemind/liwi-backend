@@ -34,8 +34,8 @@ export default class AdvancedLinkModel extends DefaultLinkModel {
               }
               break;
             case "entityRemoved":
-              // Trigger only on user action
-              if (event.entity.options.selected && this.options.triggerEvent && this.options.targetPort !== undefined) {
+              if (event.entity.options.selected && this.options.triggerEvent && this.targetPort !== null) {
+                // Trigger only on user action
                 this.removeLink();
               }
               break;
