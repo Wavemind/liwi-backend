@@ -352,6 +352,7 @@ class VersionsService
       hash[question.id]['display_format'] = format
       hash[question.id]['qs'] = get_node_questions_sequences(question, [])
       hash[question.id]['dd'] = get_node_diagnostics(question, [])
+      hash[question.id]['df'] = get_node_final_diagnostics(question)
       hash[question.id]['cc'] = get_node_complaint_categories(question, [])
       hash[question.id]['conditioned_by_cc'] = question.complaint_categories.map(&:id)
       hash[question.id]['referenced_in'] = []
@@ -448,6 +449,18 @@ class VersionsService
 
   # @params [Node, Array]
   # @return [Array]
+  # Recursive method in order to retrieve every final_diagnostics the question appears in.
+  def self.get_node_final_diagnostics(node)
+    final_diagnostics = []
+    node.instances.each do |instance|
+      df = instance.final_diagnostic_id
+      final_diagnostics.push(instance.final_diagnostic_id) if df.present? && @final_diagnostics[df].present?
+    end
+    final_diagnostics.uniq
+  end
+
+  # @params [Node, Array]
+  # @return [Array]
   # Recursive method in order to retrieve every complaint categories the question appears in.
   def self.get_node_complaint_categories(node, complaint_categories)
     node.instances.map(&:instanceable).each do |instanceable|
@@ -537,6 +550,7 @@ class VersionsService
       hash[questions_sequence.id]['answers'] = push_questions_sequence_answers(questions_sequence)
       hash[questions_sequence.id]['qs'] = get_node_questions_sequences(questions_sequence, [])
       hash[questions_sequence.id]['dd'] = get_node_diagnostics(questions_sequence, [])
+      hash[questions_sequence.id]['df'] = get_node_final_diagnostics(questions_sequence)
       hash[questions_sequence.id]['conditioned_by_cc'] = questions_sequence.complaint_categories.map(&:id)
       hash[questions_sequence.id]['answer'] = nil
 
