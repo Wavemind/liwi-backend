@@ -374,7 +374,9 @@ export default class QuestionForm extends React.Component {
 
                 {values.type !== "Questions::ComplaintCategory" ?
                   <Form.Group controlId="validationComplaintCategories">
-                    <Form.Label>{I18n.t("activerecord.attributes.node.node")}</Form.Label>
+                    <Form.Label>
+                      <p dangerouslySetInnerHTML={{__html: I18n.t("activerecord.attributes.node.node")}} />
+                    </Form.Label>
                     <Autocomplete
                       autoComplete
                       multiple

@@ -38,7 +38,7 @@ en:
         type: "Category"
         description_translations: "Description"
         label_translations: "Label"
-        node: "Complaint category"
+        node: "<font color=\"red\">Complaint categories (use with extreme caution: the question will only be displayed if all CCs selected in the reader!)</font>"
       question:
         answer_type: "Answer type"
         estimable: "Value can be estimated"
