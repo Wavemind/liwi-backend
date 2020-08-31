@@ -72,7 +72,8 @@ export default class StepperQuestionForm extends React.Component {
           id: answer.id,
           label_en: answer.label_translations.en,
           operator: answer.operator,
-          value: answer.value
+          value: answer.value,
+          _destroy: false
         });
       });
     } else {
