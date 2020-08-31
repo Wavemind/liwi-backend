@@ -85,11 +85,17 @@ export default class StepperQuestionForm extends React.Component {
   /**
    * Send value to server
    */
-  save = async () => {
+  save = async (toDeleteAnswers) => {
     const { method, from, engine, diagramObject, addAvailableNode } = this.props;
-    const { question, http } = this.state;
+    let { question, http } = this.state;
     let httpRequest = {};
     let complaint_category_ids = [];
+    toDeleteAnswers.map(answer_id => {
+      let answer = question.answers_attributes[0];
+      answer.id = answer_id;
+      answer._destroy = true;
+      question.answers_attributes.push(answer);
+    });
 
     question.complaint_categories_attributes.map(cc => (complaint_category_ids.push(cc.id)));
     _.set(question, "complaint_category_ids", complaint_category_ids);
