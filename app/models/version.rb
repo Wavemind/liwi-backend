@@ -65,25 +65,29 @@ class Version < ApplicationRecord
     false
   end
 
-  # Return needed nodes for the algorithm version to work but that are not included in it, in order to prevent crash.
-  def identify_missing_questions
-    # Add nodes that are called by the json service
+  # Add nodes that are called by the json service
+  def extract_nodes_from_version
     nodes = []
 
     components.each do |instance|
-      nodes.push(instance.node_id)
+      nodes.push(instance.node)
     end
 
     diagnostics.each do |diag|
       diag.components.questions.each do |instance|
-        nodes.push(instance.node_id)
+        nodes.push(instance.node)
       end
 
       diag.components.questions_sequences.each do |instance|
         nodes = instance.node.extract_nodes(nodes)
       end
     end
-    nodes = nodes.uniq
+    nodes.uniq
+  end
+
+  # Return needed nodes for the algorithm version to work but that are not included in it, in order to prevent crash.
+  def identify_missing_questions
+    nodes = extract_nodes_from_version.map(&:id)
 
     # Check if questions that are needed are instantiated in diagrams
     nodes_to_add = []

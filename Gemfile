@@ -41,6 +41,9 @@ gem 'rqrcode'
 gem 'barby'
 gem 'i18n-js'
 gem "font-awesome-rails"
+gem 'rubyzip', '= 2.2.0'
+gem 'axlsx', git: 'https://github.com/randym/axlsx.git', ref: 'c8ac844'
+gem 'axlsx_rails'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

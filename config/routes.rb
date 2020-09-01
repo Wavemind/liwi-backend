@@ -30,6 +30,7 @@ Rails.application.routes.draw do
     resources :versions, only: [:index, :show, :new, :create, :edit, :update] do
       member do
         get 'final_diagnoses_exclusions', to: 'versions#final_diagnoses_exclusions', as: 'final_diagnoses_exclusions'
+        get 'generate_variables'
         put 'archive', to: 'versions#archive', as: 'archive'
         put 'unarchive', to: 'versions#unarchive', as: 'unarchive'
         post 'duplicate'

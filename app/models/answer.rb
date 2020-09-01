@@ -40,6 +40,10 @@ class Answer < ApplicationRecord
     node.as_json(include: [:answers], methods: [:type])
   end
 
+  def full_reference
+    "#{node.full_reference}_#{reference}"
+  end
+
   private
 
   # Remove conditions linked to the answer when it is deleted
@@ -73,10 +77,6 @@ class Answer < ApplicationRecord
     elsif node.answer_type.value == 'Float'
       Float(val) rescue errors.add(:value, I18n.t('answers.validation.wrong_value_type', type: node.answer_type.value))
     end
-  end
-
-  def full_reference
-    "#{node.full_reference}_#{reference}"
   end
 
   def generate_reference
