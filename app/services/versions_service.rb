@@ -183,12 +183,21 @@ class VersionsService
     hash['instances'] = {}
     hash['final_diagnostics'] = {}
 
+    # Loop in each final diagnostics for set conditional acceptance and health cares related to it
+    diagnostic.components.final_diagnostics.each do |final_diagnostic_instance|
+      final_diagnostic_hash = extract_final_diagnostic(final_diagnostic_instance)
+      @final_diagnostics[final_diagnostic_instance.node.id] = final_diagnostic_hash
+      hash['final_diagnostics'][final_diagnostic_instance.node.id] = final_diagnostic_hash
+      hash['final_diagnostics'][final_diagnostic_instance.node.id]['instances'] = {}
+    end
+
     # Loop in each question used in current diagnostic
     diagnostic.components.questions.includes([:children, :nodes, node:[:answers, :answer_type]]).each do |question_instance|
       # Append the questions in order to list them all at the end of the json.
       assign_node(question_instance.node)
 
-      hash['instances'][question_instance.node.id] = extract_instances(question_instance)
+      hash['instances'][question_instance.node.id] = extract_instances(question_instance) if hash['instances'][question_instance.node.id].nil? || question_instance.final_diagnostic_id.nil?
+      hash['final_diagnostics'][question_instance.final_diagnostic_id]['instances'][question_instance.node.id] = hash['instances'][question_instance.node.id] unless question_instance.final_diagnostic_id.nil?
     end
 
     # Loop in each predefined syndromes used in current diagnostic
@@ -196,14 +205,8 @@ class VersionsService
       # Append the predefined syndromes in order to list them all at the end of the json.
       assign_node(questions_sequence_instance.node)
 
-      hash['instances'][questions_sequence_instance.node.id] = extract_instances(questions_sequence_instance)
-    end
-
-    # Loop in each final diagnostics for set conditional acceptance and health cares related to it
-    diagnostic.components.final_diagnostics.each do |final_diagnostic_instance|
-      final_diagnostic_hash = extract_final_diagnostic(final_diagnostic_instance)
-      @final_diagnostics[final_diagnostic_instance.node.id] = final_diagnostic_hash
-      hash['final_diagnostics'][final_diagnostic_instance.node.id] = final_diagnostic_hash
+      hash['instances'][questions_sequence_instance.node.id] = extract_instances(questions_sequence_instance) if hash['instances'][questions_sequence_instance.node.id].nil? || questions_sequence_instance.final_diagnostic_id.nil?
+      hash['final_diagnostics'][questions_sequence_instance.final_diagnostic_id]['instances'][questions_sequence_instance.node.id] = hash['instances'][questions_sequence_instance.node.id] unless questions_sequence_instance.final_diagnostic_id.nil?
     end
 
     hash
@@ -221,7 +224,8 @@ class VersionsService
     hash['type'] = final_diagnostic.node_type
     hash['drugs'] = extract_health_cares(final_diagnostic.health_cares.drugs, instance.instanceable.id, final_diagnostic.id)
     hash['managements'] = extract_health_cares(final_diagnostic.health_cares.managements, instance.instanceable.id, final_diagnostic.id)
-    hash['excluding_final_diagnostics'] = final_diagnostic.final_diagnostic_id
+    hash['excluding_final_diagnostics'] = final_diagnostic.excluded_diagnoses_ids
+    hash['excluded_final_diagnostics'] = final_diagnostic.excluding_diagnoses_ids
     hash['cc'] = final_diagnostic.diagnostic.node_id
     hash
   end
@@ -332,6 +336,7 @@ class VersionsService
       hash[question.id]['label'] = question.label
       hash[question.id]['description'] = question.description
       hash[question.id]['is_mandatory'] = question.is_mandatory
+      hash[question.id]['is_neonat'] = question.is_neonat
       hash[question.id]['stage'] = question.stage
       hash[question.id]['system'] = question.system
       hash[question.id]['formula'] = format_formula(question.formula)
@@ -347,11 +352,14 @@ class VersionsService
       hash[question.id]['display_format'] = format
       hash[question.id]['qs'] = get_node_questions_sequences(question, [])
       hash[question.id]['dd'] = get_node_diagnostics(question, [])
+      hash[question.id]['df'] = get_node_final_diagnostics(question)
       hash[question.id]['cc'] = get_node_complaint_categories(question, [])
       hash[question.id]['conditioned_by_cc'] = question.complaint_categories.map(&:id)
       hash[question.id]['referenced_in'] = []
       hash[question.id]['counter'] = 0
       hash[question.id]['value'] = nil
+      hash[question.id]['answer'] = nil
+      hash[question.id]['answers'] = {}
       hash[question.id]['reference_table_x_id'] = question.reference_table_x_id
       hash[question.id]['reference_table_y_id'] = question.reference_table_y_id
       hash[question.id]['reference_table_z_id'] = question.reference_table_z_id
@@ -367,15 +375,6 @@ class VersionsService
       hash[question.id]['min_message_error'] = question.min_message_error
       hash[question.id]['max_message_error'] = question.max_message_error
       hash[question.id]['diagnostics_related_to_cc'] = get_complaint_category_diagnostics(question, []) if question.is_a?(Questions::ComplaintCategory)
-
-      if question.is_a?(Questions::ComplaintCategory) && question.is_default
-        hash[question.id]['cc_general'] = true
-        hash[question.id]['answer'] = question.answers.first.id
-      else
-        hash[question.id]['cc_general'] = true
-        hash[question.id]['answer'] = nil
-      end
-      hash[question.id]['answers'] = {}
 
       question.answers.each do |answer|
         answer_hash = {}
@@ -446,6 +445,18 @@ class VersionsService
       end
     end
     diagnostics
+  end
+
+  # @params [Node, Array]
+  # @return [Array]
+  # Recursive method in order to retrieve every final_diagnostics the question appears in.
+  def self.get_node_final_diagnostics(node)
+    final_diagnostics = []
+    node.instances.each do |instance|
+      df = instance.final_diagnostic_id
+      final_diagnostics.push(instance.final_diagnostic_id) if df.present? && @final_diagnostics[df].present?
+    end
+    final_diagnostics.uniq
   end
 
   # @params [Node, Array]
@@ -539,6 +550,7 @@ class VersionsService
       hash[questions_sequence.id]['answers'] = push_questions_sequence_answers(questions_sequence)
       hash[questions_sequence.id]['qs'] = get_node_questions_sequences(questions_sequence, [])
       hash[questions_sequence.id]['dd'] = get_node_diagnostics(questions_sequence, [])
+      hash[questions_sequence.id]['df'] = get_node_final_diagnostics(questions_sequence)
       hash[questions_sequence.id]['conditioned_by_cc'] = questions_sequence.complaint_categories.map(&:id)
       hash[questions_sequence.id]['answer'] = nil
 

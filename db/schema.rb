@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_21_082802) do
+ActiveRecord::Schema.define(version: 2020_08_31_115343) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -125,6 +125,13 @@ ActiveRecord::Schema.define(version: 2020_07_21_082802) do
     t.index ["version_id"], name: "index_diagnostics_on_version_id"
   end
 
+  create_table "final_diagnosis_exclusions", force: :cascade do |t|
+    t.bigint "excluding_diagnosis_id"
+    t.bigint "excluded_diagnosis_id"
+    t.index ["excluded_diagnosis_id"], name: "index_final_diagnosis_exclusions_on_excluded_diagnosis_id"
+    t.index ["excluding_diagnosis_id"], name: "index_final_diagnosis_exclusions_on_excluding_diagnosis_id"
+  end
+
   create_table "final_diagnostic_health_cares", force: :cascade do |t|
     t.bigint "node_id"
     t.bigint "final_diagnostic_id"
@@ -184,7 +191,7 @@ ActiveRecord::Schema.define(version: 2020_07_21_082802) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "final_diagnostic_id"
-    t.integer "duration"
+    t.string "duration"
     t.string "description"
     t.integer "position_x", default: 100
     t.integer "position_y", default: 100
@@ -274,7 +281,6 @@ ActiveRecord::Schema.define(version: 2020_07_21_082802) do
     t.bigint "algorithm_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "final_diagnostic_id"
     t.bigint "answer_type_id"
     t.string "formula"
     t.string "reference_table_male"
@@ -298,12 +304,12 @@ ActiveRecord::Schema.define(version: 2020_07_21_082802) do
     t.string "max_message_warning"
     t.string "min_message_error"
     t.string "max_message_error"
-    t.boolean "estimable", default: false
+    t.boolean "estimable"
     t.bigint "reference_table_z_id"
+    t.boolean "is_neonat", default: false
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
     t.index ["diagnostic_id"], name: "index_nodes_on_diagnostic_id"
-    t.index ["final_diagnostic_id"], name: "index_nodes_on_final_diagnostic_id"
     t.index ["reference_table_x_id"], name: "index_nodes_on_reference_table_x_id"
     t.index ["reference_table_y_id"], name: "index_nodes_on_reference_table_y_id"
     t.index ["reference_table_z_id"], name: "index_nodes_on_reference_table_z_id"
@@ -384,7 +390,7 @@ ActiveRecord::Schema.define(version: 2020_07_21_082802) do
     t.bigint "top_left_question_id"
     t.bigint "first_top_right_question_id"
     t.bigint "second_top_right_question_id"
-    t.json "medal_r_config"
+    t.json "medal_r_config", default: {}
     t.json "medal_r_json"
     t.integer "medal_r_json_version", default: 0
     t.index ["algorithm_id"], name: "index_versions_on_algorithm_id"
@@ -400,6 +406,8 @@ ActiveRecord::Schema.define(version: 2020_07_21_082802) do
   add_foreign_key "devices", "health_facilities"
   add_foreign_key "diagnostics", "nodes"
   add_foreign_key "diagnostics", "versions"
+  add_foreign_key "final_diagnosis_exclusions", "nodes", column: "excluded_diagnosis_id"
+  add_foreign_key "final_diagnosis_exclusions", "nodes", column: "excluding_diagnosis_id"
   add_foreign_key "health_facility_accesses", "health_facilities"
   add_foreign_key "health_facility_accesses", "versions"
   add_foreign_key "nodes", "algorithms"

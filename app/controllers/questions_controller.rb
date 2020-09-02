@@ -151,6 +151,7 @@ class QuestionsController < ApplicationController
       :min_message_error,
       :max_message_error,
       :estimable,
+      :is_neonat,
       complaint_category_ids: [],
       answers_attributes: [
         :id,

@@ -13,7 +13,6 @@ class FinalDiagnostic < Node
 
   has_many :components, class_name: 'Instance', dependent: :destroy
 
-  before_validation :prevent_loop
   before_create :link_algorithm
 
   # Enable recursive duplicating
@@ -21,6 +20,16 @@ class FinalDiagnostic < Node
   amoeba do
     enable
     include_association :final_diagnostic_health_cares
+  end
+
+  # Get every final diagnoses excluded by this final diagnosis
+  def excluded_diagnoses_ids
+    FinalDiagnosisExclusion.where(excluding_diagnosis_id: id).map(&:excluded_diagnosis_id)
+  end
+
+  # Get every final diagnoses excluding this final diagnosis
+  def excluding_diagnoses_ids
+    FinalDiagnosisExclusion.where(excluded_diagnosis_id: id).map(&:excluding_diagnosis_id)
   end
 
   # @return [Json]
@@ -103,20 +112,6 @@ class FinalDiagnostic < Node
     ).as_json(methods: [:category_name, :node_type, :get_answers, :type])
   end
 
-  # Recursive loop to make sure it is not excluding a grand child of excluded diagnostic
-  def is_excluded(excluded_diagnostic)
-    return true if self.id == excluded_diagnostic.id || (excluded_diagnostic.excluded_diagnostic.present? && is_excluded(excluded_diagnostic.excluded_diagnostic))
-    false
-  end
-
-  # Ensure that the user is not trying to loop with excluding diagnostics.
-  def prevent_loop
-    if excluded_diagnostic.present? && is_excluded(excluded_diagnostic)
-      self.errors.add(:base, I18n.t('final_diagnostics.validation.loop'))
-      raise ActiveRecord::Rollback, I18n.t('final_diagnostics.validation.loop')
-    end
-  end
-
   # Get the reference prefix according to the type
   def reference_prefix
     I18n.t("final_diagnostics.reference")
@@ -132,7 +127,7 @@ class FinalDiagnostic < Node
       instances.where(instanceable: diagnostic).includes(:node).as_json(
       include: [
         node: {
-          methods: [:node_type]
+          methods: [:node_type, :excluded_diagnoses_ids, :excluding_diagnoses_ids]
         },
         conditions: {
           include: [

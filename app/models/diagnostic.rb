@@ -127,7 +127,7 @@ class Diagnostic < ApplicationRecord
     components.final_diagnostics.includes(:node).as_json(
       include: [
         node: {
-          methods: [:node_type]
+          methods: [:node_type, :excluded_diagnoses_ids, :excluding_diagnoses_ids]
         },
         conditions: {
           include: [
@@ -180,6 +180,11 @@ class Diagnostic < ApplicationRecord
     false
   end
 
+  # Add a warning level to rails validation
+  def warnings
+    @warnings ||= ActiveModel::Errors.new(self)
+  end
+
   # Add errors to a diagnostic for its components
   def manual_validate
     components.includes(:node, :children, :conditions).each do |instance|
@@ -188,9 +193,9 @@ class Diagnostic < ApplicationRecord
       elsif instance.node.is_a?(Question) || instance.node.is_a?(QuestionsSequence)
         unless instance.children.any?
           if instance.final_diagnostic.nil?
-            errors.add(:basic, I18n.t('flash_message.diagnostic.question_no_children', type: instance.node.node_type, reference: instance.node.full_reference))
+            warnings.add(:basic, I18n.t('flash_message.diagnostic.question_no_children', type: instance.node.node_type, reference: instance.node.full_reference))
           else
-            errors.add(:basic, I18n.t('flash_message.diagnostic.hc_question_no_children', type: instance.node.node_type, reference: instance.node.full_reference, url: diagram_algorithm_version_diagnostic_final_diagnostic_url(version.algorithm.id, version.id, id, instance.final_diagnostic_id).to_s, df_reference: instance.final_diagnostic.full_reference))
+            warnings.add(:basic, I18n.t('flash_message.diagnostic.hc_question_no_children', type: instance.node.node_type, reference: instance.node.full_reference, url: diagram_algorithm_version_diagnostic_final_diagnostic_url(version.algorithm.id, version.id, id, instance.final_diagnostic_id).to_s, df_reference: instance.final_diagnostic.full_reference))
           end
         end
 
