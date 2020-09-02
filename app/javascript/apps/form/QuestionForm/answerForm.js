@@ -17,6 +17,7 @@ export default class AnswerForm extends React.Component {
 
     this.state = {
       operators: [],
+      toDeleteAnswers: [],
       isLoading: true
     };
 
@@ -47,8 +48,9 @@ export default class AnswerForm extends React.Component {
    */
   handleOnSubmit = async (values) => {
     const { setFormData, save } = this.props;
+    const { toDeleteAnswers } = this.state;
     await setFormData("answers_attributes", values.answers_attributes);
-    save();
+    save(toDeleteAnswers);
   };
 
   /**
@@ -57,6 +59,16 @@ export default class AnswerForm extends React.Component {
    */
   addAnswer = (arrayHelpers) => {
     arrayHelpers.push(JSON.parse(DEFAULT_ANSWER_VALUE));
+  };
+
+  removeAnswer = (key, arrayHelpers, values) => {
+    // Workaround to delete properly answers in rails TODO : Find a better solution to do it
+    let { toDeleteAnswers } = this.state;
+    if (values.answers_attributes[key].id !== undefined) {
+      toDeleteAnswers.push(values.answers_attributes[key].id);
+    }
+    this.setState({toDeleteAnswers});
+    arrayHelpers.remove(key);
   };
 
   render() {
@@ -95,11 +107,12 @@ export default class AnswerForm extends React.Component {
                           <Button
                             className="float-right"
                             variant="danger"
-                            onClick={() => arrayHelpers.remove(key)}
+                            onClick={(() => this.removeAnswer(key, arrayHelpers, values))}
                           >
                             {I18n.t("remove")}
                           </Button>
-                        </Col>
+
+                      </Col>
                       </Form.Row>
                     ))}
                     <Form.Row className="mt-5">

@@ -59,6 +59,7 @@ export default class StepperDrugForm extends React.Component {
           breakable: formulation.breakable,
           description_en: formulation.description_translations?.en || "",
           injection_instructions_en: formulation.injection_instructions_translations?.en || "",
+          _destroy: false
         });
       });
     } else {
@@ -70,9 +71,15 @@ export default class StepperDrugForm extends React.Component {
   /**
    * Send value to server
    */
-  save = async () => {
+  save = async (toDeleteFormulations) => {
     const { method, from, diagramObject, engine } = this.props;
-    const { drug } = this.state;
+    let { drug } = this.state;
+    toDeleteFormulations.map(formulation_id => {
+      let formulation = drug.formulations_attributes[0];
+      formulation.id = formulation_id;
+      formulation._destroy = true;
+      drug.formulations_attributes.push(formulation);
+    });
     let http = new Http();
     let httpRequest = {};
 
