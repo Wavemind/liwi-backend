@@ -97,7 +97,7 @@ export default class FormulationForm extends React.Component {
    * @params [Object] arrayHelpers
    */
   removeFormulation(key, arrayHelpers, values) {
-    // Workaround to delete properly formulations in rails
+    // Workaround to delete properly formulations in rails TODO : Find a better solution to do it
     let { toDeleteFormulations } = this.state;
     if (values.formulations_attributes[key].id !== undefined) {
       toDeleteFormulations.push(values.formulations_attributes[key].id);

@@ -62,7 +62,7 @@ export default class AnswerForm extends React.Component {
   };
 
   removeAnswer = (key, arrayHelpers, values) => {
-    // Workaround to delete properly answers in rails
+    // Workaround to delete properly answers in rails TODO : Find a better solution to do it
     let { toDeleteAnswers } = this.state;
     if (values.answers_attributes[key].id !== undefined) {
       toDeleteAnswers.push(values.answers_attributes[key].id);
