@@ -1,0 +1,18 @@
+wb = xlsx_package.workbook
+wrap = xlsx_package.workbook.styles.add_style alignment: {wrap_text: true}
+
+nodes = @version.extract_nodes_from_version
+
+wb.add_worksheet(name: "Variables") do |sheet|
+  sheet.add_row ["ID", "Category", "Reference", "Label", "Answers (ID | full label)"]
+
+  nodes.map do |node|
+  answers = ""
+    node.answers.each_with_index do |answer, index|
+      answers += "\r" unless index == 0
+      answers += "#{answer.id} | #{answer.reference_label}"
+    end
+
+    sheet.add_row [node.id, I18n.t("questions.categories.#{node.class.variable}.label"), node.full_reference, node.label_en, answers], style: wrap
+  end
+end

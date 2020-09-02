@@ -161,7 +161,7 @@ class QuestionsSequence < Node
     components.each do |instance|
       node = instance.node
       if node.is_a? Question
-        nodes.push(node.id)
+        nodes.push(node)
       else
         nodes = extract_nodes(nodes) unless id == instance.instanceable_id
       end
