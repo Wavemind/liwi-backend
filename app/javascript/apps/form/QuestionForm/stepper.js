@@ -76,6 +76,16 @@ export default class StepperQuestionForm extends React.Component {
           _destroy: false
         });
       });
+
+      // Generate hash cause of label_translation
+      question.medias.map(media => {
+        body["medias_attributes"].push({
+          id: media.id,
+          url: media.url,
+          label_en: media.label_translations.en,
+          _destroy: false
+        });
+      });
     } else {
       body["answers_attributes"] = [];
     }
