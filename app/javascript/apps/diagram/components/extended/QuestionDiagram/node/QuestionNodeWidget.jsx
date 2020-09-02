@@ -27,6 +27,7 @@ class QuestionNodeWidget extends React.Component {
         diagramObject: node,
         engine: node.options.engine,
         method: "update",
+        is_used: true,
         from: "react"
       })
     );
