@@ -145,6 +145,9 @@ class VersionsController < ApplicationController
     end
   end
 
+  # GET algorithms/:algorithm_id/version/:id/generate_variables
+  # @params version [Version] version
+  # Get an excel export of nodes used by the version
   def generate_variables
     respond_to do |format|
       format.xlsx

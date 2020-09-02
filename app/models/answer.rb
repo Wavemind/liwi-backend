@@ -40,6 +40,7 @@ class Answer < ApplicationRecord
     node.as_json(include: [:answers], methods: [:type])
   end
 
+  # Return reference with its prefix
   def full_reference
     "#{node.full_reference}_#{reference}"
   end
