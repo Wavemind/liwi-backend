@@ -19,7 +19,7 @@ export default class DrugForm extends React.Component {
 
     // Skip formulations form if the drug is deployed
     if (method === "update" && is_deployed) {
-      save();
+      save([]);
     } else {
       nextStep();
     }

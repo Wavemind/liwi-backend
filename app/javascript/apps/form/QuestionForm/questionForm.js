@@ -55,7 +55,7 @@ export default class QuestionForm extends React.Component {
     setFormData(values);
     // Skip answers form if the question type doesn't have any OR if the answers are automatically generated (boolean) or if it is edit mode and the question is already used
     if (NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(values.answer_type_id) || NO_ANSWERS_ATTACHED_TYPE.includes(values.type) || (updateMode && (is_used || is_deployed))) {
-      save();
+      save([]);
     } else {
       const validated = await validate();
       if (validated){
