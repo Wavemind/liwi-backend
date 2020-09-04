@@ -19,6 +19,12 @@ export const DEFAULT_ANSWER_VALUE = JSON.stringify({
   value: "",
 });
 
+export const DEFAULT_MEDIA_VALUE = JSON.stringify({
+  id: "",
+  label_en: "",
+  url: "",
+});
+
 export const CATEGORIES_DISABLING_ANSWER_TYPE = [
   "Questions::ComplaintCategory",
   "Questions::BackgroundCalculation",

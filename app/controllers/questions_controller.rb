@@ -91,6 +91,7 @@ class QuestionsController < ApplicationController
     question = @algorithm.questions.new(question_params)
     question.validate_formula
     question.validate_ranges
+
     if question.valid?
       render json: {}, status: 200
     else
@@ -123,7 +124,7 @@ class QuestionsController < ApplicationController
   end
 
   def question_params
-    params.require(:question).permit(
+    question_param = params.require(:question).permit(
       :id,
       :label_en,
       Language.label_params,
@@ -164,10 +165,50 @@ class QuestionsController < ApplicationController
       medias_attributes: [
         :id,
         :label_en,
+        :filename,
         :url,
         :fileable,
         :_destroy
       ]
     )
+    question_param.merge(convert_data_uri_to_upload(question_param))
+    question_param
+  end
+
+  # Convert file from react to put in Carrierwave compliant format
+  def convert_data_uri_to_upload(obj_hash)
+    obj_hash["medias_attributes"].each do |media|
+      if media[:url].try(:match, %r{^data:(.*?);(.*?),(.*)$})
+        image_data = split_base64(media[:url])
+        image_data_string = image_data[:data]
+        image_data_binary = Base64.decode64(image_data_string)
+        temp_img_file = Tempfile.new(media["filename"])
+        temp_img_file.binmode
+        temp_img_file << image_data_binary
+        temp_img_file.rewind
+
+        img_params = {filename: media["filename"], headers: [], type: image_data[:type], tempfile: temp_img_file}
+        uploaded_file = ActionDispatch::Http::UploadedFile.new(img_params)
+
+        media.delete(:url)
+        media.delete(:filename)
+        media[:url] = uploaded_file
+      end
+    end
+
+    obj_hash
+  end
+
+  def split_base64(uri_str)
+    if uri_str.match(%r{^data:(.*?);(.*?),(.*)$})
+      uri = Hash.new
+      uri[:type] = $1 # "image/gif"
+      uri[:encoder] = $2 # "base64"
+      uri[:data] = $3 # data string
+      uri[:extension] = $1.split('/')[1] # "gif"
+      uri
+    else
+      nil
+    end
   end
 end
