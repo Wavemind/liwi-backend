@@ -338,7 +338,22 @@ export default class QuestionForm extends React.Component {
                       {errors.is_neonat}
                     </Form.Control.Feedback>
                   </Form.Group>
-                  : null}
+                : null}
+
+                <Form.Group controlId="validationIsDangerSign">
+                  <Form.Check
+                    name="is_danger_sign"
+                    label={I18n.t("activerecord.attributes.question.is_danger_sign")}
+                    value={values.is_danger_sign}
+                    checked={values.is_danger_sign}
+                    onChange={handleChange}
+                    disabled={deployedMode}
+                    isInvalid={touched.is_danger_sign && !!errors.is_danger_sign}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.is_danger_sign}
+                  </Form.Control.Feedback>
+                </Form.Group>
 
                 <Form.Group controlId="validationLabel">
                   <Form.Label>{I18n.t("activerecord.attributes.node.label_translations")}</Form.Label>
