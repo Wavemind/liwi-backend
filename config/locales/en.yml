@@ -295,6 +295,14 @@ en:
         label: "Label"
         description: "Description"
         actions: "Actions"
+    table_for_version:
+      columns:
+        id: "ID"
+        reference: "Reference"
+        label: "Label"
+        diagnostic: "Diagnostic"
+        cc: "Complaint category"
+        description: "Description"
     edit:
       title: "Edit final diagnosis"
     show:
@@ -683,6 +691,7 @@ en:
       questions_sequences: "Question Sequences"
       generate_variables: "Generate variables excel"
       subtitle_diagnostics: "Diagnoses"
+      subtitle_final_diagnoses: "Final diagnoses"
       subtitle_final_diagnoses_exclusions: "Final diagnoses exclusions"
       subtitle_medal_r_config: "Config Medal-R"
       subtitle_questions_order: "Triage variables order"

@@ -27,7 +27,7 @@ class Diagnostic < ApplicationRecord
   # @return [String]
   # Return the label with the reference for the view
   def reference_label
-    "#{reference} - #{label}"
+    "#{full_reference} - #{label}"
   end
 
   # @return [ActiveRecord::Relation] of questions
