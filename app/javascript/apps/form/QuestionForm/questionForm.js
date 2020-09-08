@@ -667,7 +667,7 @@ export default class QuestionForm extends React.Component {
                   </Form.Control.Feedback>
                 </Form.Group>
 
-                <Form.Group as={Col}>
+                <Form.Group>
                   <MediaForm values={values} setFieldValue={setFieldValue} setDeletedMedia={this.setDeletedMedia}/>
                 </Form.Group>
 

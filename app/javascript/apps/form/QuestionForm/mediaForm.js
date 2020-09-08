@@ -3,9 +3,7 @@ import I18n from "i18n-js";
 import { FieldArray } from "formik";
 import { Form, Button, Col } from "react-bootstrap";
 
-import AnswerFields from "./answerFields";
 import { DEFAULT_MEDIA_VALUE } from "../constants/constants";
-import Http from "../../diagram/engine/http";
 import MediaFields from "./mediaFields";
 
 

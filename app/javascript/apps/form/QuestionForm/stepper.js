@@ -17,7 +17,6 @@ export default class StepperQuestionForm extends React.Component {
     super(props);
 
     const { question, method } = props;
-
     this.state = {
       http: new Http(),
       errors: null,
@@ -60,9 +59,12 @@ export default class StepperQuestionForm extends React.Component {
       max_message_error: question?.max_message_error || "",
       complaint_categories_attributes: question?.complaint_categories || [],
       answers_attributes: question?.answers || [],
-      medias_attributes: question?.medias || []
+      // Don't touch this shit. Due to carrierwave give us to much info and json parsing create 2 element instead of one
+      medias_attributes: _.filter(question?.medias, (media) => {
+        // return media.fileable_id !== undefined
+      }) || []
     };
-
+console.log(question?.medias)
     if (method === "update") {
       body["id"] = question.id;
       body["answers_attributes"] = [];
@@ -118,7 +120,6 @@ export default class StepperQuestionForm extends React.Component {
 
     question.complaint_categories_attributes.map(cc => (complaint_category_ids.push(cc.id)));
     _.set(question, "complaint_category_ids", complaint_category_ids);
-    _.unset(question, "complaint_categories_attributes");
 
     if (method === "create") {
       httpRequest = await http.createQuestion(question, from);

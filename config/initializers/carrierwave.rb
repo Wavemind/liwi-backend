@@ -7,5 +7,4 @@ CarrierWave.configure do |config|
     region:                'eu-central-1',
     endpoint:              'https://s3.eu-central-1.amazonaws.com/'
   }
-  config.fog_directory  = 'liwi'
 end

@@ -189,7 +189,6 @@ class QuestionsController < ApplicationController
 
         img_params = {filename: media["filename"], headers: [], type: image_data[:type], tempfile: temp_img_file}
         uploaded_file = ActionDispatch::Http::UploadedFile.new(img_params)
-
         media.delete(:url)
         media.delete(:filename)
         media[:url] = uploaded_file
