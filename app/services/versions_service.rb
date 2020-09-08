@@ -17,12 +17,7 @@ class VersionsService
     @version.components.each do |instance|
       assign_node(instance.node)
     end
-
-    # Add every vital sign consultation
-    @version.algorithm.questions.where(type: 'Questions::VitalSignAnthropometric').each do |vital_sign|
-      assign_node(vital_sign)
-    end
-
+    
     # Loop in each diagnostics defined in current algorithm version
     @version.diagnostics.includes(:conditions).each do |diagnostic|
       @diagnostics_ids << diagnostic.id
