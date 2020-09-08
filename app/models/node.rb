@@ -6,7 +6,7 @@ class Node < ApplicationRecord
 
   has_many :children
   has_many :instances, dependent: :destroy
-  has_many :medias, as: :fileable
+  has_many :medias, as: :fileable, dependent: :destroy
   has_many :diagnostics
 
   has_many :final_diagnostic_health_cares, dependent: :destroy

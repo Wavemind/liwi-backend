@@ -22,7 +22,7 @@ export default class MediaForm extends React.Component {
   };
 
   removeMedia = (key, arrayHelpers, values) => {
-    // Workaround to delete properly answers in rails TODO : Find a better solution to do it
+    // Workaround to delete properly medias in rails TODO : Find a better solution to do it
     let { setDeletedMedia } = this.props;
     if (values.medias_attributes[key].id !== undefined) {
       setDeletedMedia(values.medias_attributes[key].id);
