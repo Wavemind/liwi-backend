@@ -48,11 +48,13 @@ class MediaUploader < CarrierWave::Uploader::Base
   def initialize(*)
     super
     self.fog_credentials = {
-      :provider               => 'AWS',              # required
-      :aws_access_key_id      => 'AKIARGDHLEABIW5PPSNA',     # required
-      :aws_secret_access_key  => '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',    # required
+      provider:              'AWS',
+      aws_access_key_id:     'AKIARGDHLEABIW5PPSNA',
+      aws_secret_access_key: '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',
+      region:                'eu-central-1',
+      endpoint:              'https://s3.eu-central-1.amazonaws.com/'
     }
-    self.fog_directory = "liwi-medias"
+    self.fog_directory = 'liwi-medias'
   end
 
   # Override the filename of the uploaded files:
