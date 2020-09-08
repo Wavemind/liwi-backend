@@ -589,6 +589,13 @@ en:
       urinary_reproductive: "Urinary and Reproductive system"
       nervous: "Nervous system"
       muscular_skeletal: "Muscular and Skeletal system"
+      exposures: "Exposures"
+      chronic_conditions: "Chronic conditions"
+      comorbidities: "Comorbidities"
+      prevention: "Prevention"
+      prophylaxis: "Prophylaxis"
+      complementary_medical_history: "Complementary Medical History Questions"
+      vital_sign: "Vital Signs"
     table:
       columns:
         label: "Label"

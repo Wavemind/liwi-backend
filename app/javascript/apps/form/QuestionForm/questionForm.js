@@ -13,10 +13,16 @@ import { questionSchema } from "../constants/schema";
 import {
   CATEGORIES_DISPLAYING_SYSTEM,
   CATEGORIES_DISABLING_ANSWER_TYPE,
-  CATEGORIES_DISPLAYING_FILTERABLE,
   NO_ANSWERS_ATTACHED_TYPE,
   NO_ANSWERS_ATTACHED_ANSWER_TYPE,
-  NUMERIC_ANSWER_TYPES
+  NUMERIC_ANSWER_TYPES,
+  SYMPTOM_SYSTEMS,
+  OBSERVED_PHYSICAL_SIGN_SYSTEMS,
+  CHRONIC_CONDITION_SYSTEMS,
+  EXPOSURE_SYSTEMS,
+  VACCINE_SYSTEMS,
+  VITAL_SIGN_SYSTEMS,
+  PHYSICAL_EXAM_SYSTEMS,
 } from "../constants/constants";
 import Chip from "@material-ui/core/Chip";
 import Overlay from "react-bootstrap/Overlay";
@@ -38,7 +44,8 @@ export default class QuestionForm extends React.Component {
       snomedError: null,
       isLoading: true,
       formulaTooltipShow: false,
-      target: null
+      target: null,
+      systems: SYMPTOM_SYSTEMS
     };
 
     this.init();
@@ -79,7 +86,6 @@ export default class QuestionForm extends React.Component {
         answerTypes: result.answer_types,
         categories: result.categories,
         stages: result.stages,
-        systems: result.systems,
         complaintCategories: result.complaint_categories,
         isLoading: false
       });
@@ -124,6 +130,35 @@ export default class QuestionForm extends React.Component {
   categoryChanges = (event) => {
     let fieldsToSet = [];
     const category = event.target.value;
+
+    // Set systems list depending on the category
+    let systems = {};
+    switch (category) {
+      case "Questions::ChronicCondition":
+        systems = CHRONIC_CONDITION_SYSTEMS;
+        break;
+      case "Questions::Exposure":
+        systems = EXPOSURE_SYSTEMS;
+        break;
+      case "Questions::ObservedPhysicalSign":
+        systems = OBSERVED_PHYSICAL_SIGN_SYSTEMS;
+        break;
+      case "Questions::PhysicalExam":
+        systems = PHYSICAL_EXAM_SYSTEMS;
+        break;
+      case "Questions::Symptom":
+        systems = SYMPTOM_SYSTEMS;
+        break;
+      case "Questions::Vaccine":
+        systems = VACCINE_SYSTEMS;
+        break;
+      case "Questions::VitalSignAnthropometric":
+        systems = VITAL_SIGN_SYSTEMS;
+        break;
+      default:
+        break;
+    }
+    this.setState({systems});
 
     // Set stage
     switch (category) {
@@ -254,7 +289,7 @@ export default class QuestionForm extends React.Component {
                     >
                       <option value="">{I18n.t("select")}</option>
                       {systems.map(system => (
-                        <option key={`system-${system[1]}`} value={system[1]}>{system[0]}</option>
+                        <option key={`system-${system}`} value={system}>{I18n.t(`questions.systems.${system}`)}</option>
                       ))}
                     </Form.Control>
                     <Form.Control.Feedback type="invalid">
