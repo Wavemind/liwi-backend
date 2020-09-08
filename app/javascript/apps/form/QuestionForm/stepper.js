@@ -59,7 +59,8 @@ export default class StepperQuestionForm extends React.Component {
       min_message_error: question?.min_message_error || "",
       max_message_error: question?.max_message_error || "",
       complaint_categories_attributes: question?.complaint_categories || [],
-      answers_attributes: question?.answers || []
+      answers_attributes: question?.answers || [],
+      medias_attributes: question?.medias || []
     };
 
     if (method === "update") {
@@ -76,6 +77,16 @@ export default class StepperQuestionForm extends React.Component {
           _destroy: false
         });
       });
+
+      // Generate hash cause of label_translation
+      question.medias.map(media => {
+        body["medias_attributes"].push({
+          id: media.id,
+          url: media.url,
+          label_en: media.label_translations.en,
+          _destroy: false
+        });
+      });
     } else {
       body["answers_attributes"] = [];
     }
@@ -85,16 +96,24 @@ export default class StepperQuestionForm extends React.Component {
   /**
    * Send value to server
    */
-  save = async (toDeleteAnswers) => {
+  save = async (toDeleteAnswers, toDeleteMedias) => {
     const { method, from, engine, diagramObject, addAvailableNode } = this.props;
     let { question, http } = this.state;
     let httpRequest = {};
     let complaint_category_ids = [];
+
     toDeleteAnswers.map(answer_id => {
       let answer = question.answers_attributes[0];
       answer.id = answer_id;
       answer._destroy = true;
       question.answers_attributes.push(answer);
+    });
+
+    toDeleteMedias.map(media_id => {
+      let media = question.medias_attributes[0];
+      media.id = media_id;
+      media._destroy = true;
+      question.medias_attributes.push(media);
     });
 
     question.complaint_categories_attributes.map(cc => (complaint_category_ids.push(cc.id)));
