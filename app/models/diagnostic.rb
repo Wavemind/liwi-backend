@@ -111,7 +111,7 @@ class Diagnostic < ApplicationRecord
           ]
         },
         node: {
-          include: [:answers, :complaint_categories],
+          include: [:answers, :complaint_categories, :medias],
           methods: [
             :node_type,
             :category_name,
