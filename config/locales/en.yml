@@ -44,6 +44,7 @@ en:
         node: "<font color=\"red\">Complaint categories (use with extreme caution: the question will only be displayed if all CCs selected in the reader!)</font>"
       question:
         answer_type: "Answer type"
+        is_danger_sign: "Will result in referral"
         estimable: "Value can be estimated"
         formula: "Formula"
         is_filterable: "Question is filterable on patient search"
