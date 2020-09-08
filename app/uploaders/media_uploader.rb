@@ -4,8 +4,8 @@ class MediaUploader < CarrierWave::Uploader::Base
   # include CarrierWave::MiniMagick
 
   # Choose what kind of storage to use for this uploader:
-  storage :file
-  # storage :fog
+  # storage :file
+  storage :fog
 
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
@@ -36,7 +36,25 @@ class MediaUploader < CarrierWave::Uploader::Base
   # Add a white list of extensions which are allowed to be uploaded.
   # For images you might use something like this:
   def extension_whitelist
-    %w(jpg jpeg gif png)
+    %w(jpg jpeg gif png mp3 mp4 wav mov avi ogg tiff)
+  end
+
+  def fog_public
+    false
+  end
+
+  # define some uploader specific configurations in the initializer
+  # to override the global configuration
+  def initialize(*)
+    super
+    self.fog_credentials = {
+      provider:              'AWS',
+      aws_access_key_id:     'AKIARGDHLEABIW5PPSNA',
+      aws_secret_access_key: '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',
+      region:                'eu-central-1',
+      endpoint:              'https://s3.eu-central-1.amazonaws.com/'
+    }
+    self.fog_directory = 'liwi-medias'
   end
 
   # Override the filename of the uploaded files:
