@@ -90,11 +90,6 @@ export default class MediaFields extends React.Component {
               onChange={(e) => this.handleFile(e.target)}
               isInvalid={this.isInvalid("url")}>
             </Form.Control>
-            {media.url !== undefined ? (
-              <Form.Text className="text-muted">
-              <a href={media.url.url}>...{media.url.url.substr(media.url.url.length -50, media.url.url.length)}</a>
-            </Form.Text>
-            ) : null}
             <Form.Control.Feedback type="invalid">
               {this.displayErrors("url")}
             </Form.Control.Feedback>
