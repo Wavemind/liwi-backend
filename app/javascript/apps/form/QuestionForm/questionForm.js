@@ -61,7 +61,7 @@ export default class QuestionForm extends React.Component {
       save([], toDeleteMedias);
     } else {
       const validated = await validate();
-      if (validated){
+      if (validated) {
         nextStep();
       }
     }
@@ -89,8 +89,13 @@ export default class QuestionForm extends React.Component {
     }
   };
 
+  /**
+   * Suppress entry in media
+   * @param id
+   * @returns {Promise<void>}
+   */
   setDeletedMedia = async (id) => {
-    let { toDeleteMedias } = this.state;
+    const { toDeleteMedias } = this.state;
     toDeleteMedias.push(id);
     this.setState({toDeleteMedias})
   };
@@ -188,7 +193,7 @@ export default class QuestionForm extends React.Component {
   };
 
   render() {
-    const { formData, railsErrors, method } = this.props;
+    const { formData, railsErrors } = this.props;
 
     const {
       answerTypes,
@@ -223,7 +228,6 @@ export default class QuestionForm extends React.Component {
                 errors,
                 status
               }) => {
-                console.log(values);
               return (<Form noValidate onSubmit={handleSubmit}>
                 {railsErrors ? <DisplayErrors errors={railsErrors}/> : null}
                 {status ? <DisplayErrors errors={status}/> : null}

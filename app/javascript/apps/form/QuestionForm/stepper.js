@@ -102,8 +102,6 @@ export default class StepperQuestionForm extends React.Component {
     let httpRequest = {};
     let complaint_category_ids = [];
 
-    console.log(question)
-
     toDeleteAnswers.map(answer_id => {
       let answer = question.answers_attributes[0];
       answer.id = answer_id;

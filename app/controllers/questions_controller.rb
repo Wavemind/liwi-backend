@@ -199,6 +199,7 @@ class QuestionsController < ApplicationController
     obj_hash
   end
 
+  # Extract base64 data
   def split_base64(uri_str)
     if uri_str.match(%r{^data:(.*?);(.*?),(.*)$})
       uri = Hash.new
