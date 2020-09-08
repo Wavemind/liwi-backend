@@ -132,7 +132,7 @@ export default class QuestionForm extends React.Component {
     const category = event.target.value;
 
     // Set systems list depending on the category
-    let systems = {};
+    let systems = [];
     switch (category) {
       case "Questions::ChronicCondition":
         systems = CHRONIC_CONDITION_SYSTEMS;
