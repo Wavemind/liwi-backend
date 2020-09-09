@@ -581,6 +581,8 @@ en:
       formula_reference_no_underscore: "The reference must contain an underscore (eg: A_1)"
       snomed_fetch_failed: "The server could not retrieve any data from SNOMED."
       validation_range_incorrect: "The values you entered in the validation ranges seem incorrect. Please check the values again."
+    medias:
+      current_file: "Selected file"
     new:
       title: "New variable"
     priorities:

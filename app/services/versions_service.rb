@@ -372,7 +372,7 @@ class VersionsService
       hash[question.id]['max_message_error'] = question.max_message_error
       hash[question.id]['diagnostics_related_to_cc'] = get_complaint_category_diagnostics(question, []) if question.is_a?(Questions::ComplaintCategory)
 
-      hash[question.id]['urls'] = question.medias.map(&:url).map(&:url)
+      hash[question.id]['medias'] = extract_medias(questions)
 
       question.answers.each do |answer|
         answer_hash = {}
@@ -389,6 +389,21 @@ class VersionsService
       @patient_questions.push(question.id) if %w(Questions::BasicDemographic Questions::Demographic Questions::ChronicalCondition Questions::Vaccine).include?(question.type)
     end
     hash
+  end
+
+  # @params [Node]
+  # @return [Array]
+  # Get all medias for a node and put it in a hash
+  def self.extract_medias(node)
+    medias = []
+    node.medias.map do |media|
+      hash = {}
+      hash['label'] = media.label_en
+      hash['url'] = media.url.url
+      hash['extension'] = media.url.file.extension.downcase
+      media.push(hash)
+    end
+    medias
   end
 
   # @params [String]
