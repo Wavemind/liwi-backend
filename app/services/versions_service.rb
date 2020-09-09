@@ -401,7 +401,7 @@ class VersionsService
       hash['label'] = media.label_en
       hash['url'] = media.url.url
       hash['extension'] = media.url.file.extension.downcase
-      media.push(hash)
+      medias.push(hash)
     end
     medias
   end
