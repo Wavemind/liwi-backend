@@ -372,7 +372,7 @@ class VersionsService
       hash[question.id]['max_message_error'] = question.max_message_error
       hash[question.id]['diagnostics_related_to_cc'] = get_complaint_category_diagnostics(question, []) if question.is_a?(Questions::ComplaintCategory)
 
-      hash[question.id]['medias'] = extract_medias(questions)
+      hash[question.id]['medias'] = extract_medias(question)
 
       question.answers.each do |answer|
         answer_hash = {}
