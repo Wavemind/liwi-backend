@@ -39,6 +39,8 @@ export default class QuestionForm extends React.Component {
   constructor(props) {
     super(props);
 
+    const { formData } = this.props;
+
     this.state = {
       updateMode: props.method === "update",
       deployedMode: props.method === "update" && props.is_deployed,
@@ -48,7 +50,7 @@ export default class QuestionForm extends React.Component {
       formulaTooltipShow: false,
       target: null,
       toDeleteMedias: [],
-      systems: []
+      systems: this.generateSystemList(formData.type)
     };
 
     this.init();
@@ -138,13 +140,7 @@ export default class QuestionForm extends React.Component {
     });
   };
 
-  /**
-   * Set value of answer type and stage depending on what category was chosen
-   */
-  categoryChanges = (event) => {
-    let fieldsToSet = [];
-    const category = event.target.value;
-
+  generateSystemList = (category) => {
     // Set systems list depending on the category
     let systems = [];
     switch (category) {
@@ -172,7 +168,18 @@ export default class QuestionForm extends React.Component {
       default:
         break;
     }
-    this.setState({systems});
+    return systems;
+  };
+
+  /**
+   * Set value of answer type and stage depending on what category was chosen
+   */
+  categoryChanges = (event) => {
+    let fieldsToSet = [];
+    const category = event.target.value;
+
+    // Set systems list depending on category
+    this.setState({systems: this.generateSystemList(category)});
 
     // Set stage
     switch (category) {
