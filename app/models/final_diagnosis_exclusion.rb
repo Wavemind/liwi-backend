@@ -25,4 +25,12 @@ class FinalDiagnosisExclusion < ApplicationRecord
     end
   end
 
+  # Recreate exclusions from final diagnoses pointing to old version to final diagnoses pointing to duplicated version
+  def self.recreate_exclusions_after_duplicate(matching_final_diagnoses)
+    matching_final_diagnoses.each do |key, value|
+      FinalDiagnosisExclusion.where(excluding_diagnosis_id: key).map do |exclusion|
+        FinalDiagnosisExclusion.create(excluding_diagnosis_id: value, excluded_diagnosis_id: matching_final_diagnoses[exclusion.excluded_diagnosis_id])
+      end
+    end
+  end
 end
