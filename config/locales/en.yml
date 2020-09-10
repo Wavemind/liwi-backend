@@ -725,3 +725,4 @@ en:
   technical_files:
     index:
       title: "Upload/Download APK"
+  access_denied: "You are not authorized to perform this action"
