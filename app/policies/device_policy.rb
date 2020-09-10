@@ -4,12 +4,4 @@ class DevicePolicy < ApplicationPolicy
       scope.all
     end
   end
-
-  def index?
-    user.admin?
-  end
-
-  def show?
-    user.admin?
-  end
 end

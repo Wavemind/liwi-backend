@@ -7,11 +7,9 @@
     <li class="<%= 'active' if controller_name == 'dashboard' %>">
       <%= link_to t('breadcrumbs.dashboard'), root_url %>
     </li>
-    <% if policy(Device).index? %>
-      <li class="<%= 'active' if controller_name == 'devices' %>">
-        <%= link_to t('breadcrumbs.devices'), devices_url %>
-      </li>
-    <% end %>
+    <li class="<%= 'active' if controller_name == 'devices' %>">
+      <%= link_to t('breadcrumbs.devices'), devices_url %>
+    </li>
     <li class="<%= 'active' if controller_name == 'users' %>">
       <%= link_to t('breadcrumbs.users'), users_url %>
     </li>

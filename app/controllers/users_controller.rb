@@ -4,6 +4,8 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :activated, :deactivated]
 
   def index
+    @device = policy_scope(User)
+    authorize User
     respond_to do |format|
       format.html
       format.json { render json: UserDatatable.new(params, view_context: view_context) }
