@@ -1,9 +1,11 @@
 class DevicesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_device, only: [:show]
-  before_action :set_breadcrumb, only: [:show, :new]
+  before_action :set_breadcrumb, only: [:show]
 
   def index
+    @device = policy_scope(Device)
+    authorize Device
     add_breadcrumb t('breadcrumbs.devices')
 
     respond_to do |format|
@@ -13,27 +15,13 @@ class DevicesController < ApplicationController
   end
 
   def show
+    authorize @device
     add_breadcrumb @device.label
-  end
-
-  def new
-    add_breadcrumb t('breadcrumbs.new')
-    @device = Device.new
-  end
-
-  def create
-    @device = Device.create(device_params)
-
-    if @device.save
-      redirect_to devices_url, notice: t('flash_message.success_created')
-    else
-      render :new
-    end
   end
 
   # GET devices/map
   # @return [JSON] last connection of a devise with user's info
-  # Used for the map on the dashboard for displaying where is the tablette
+  # Used for the map on the dashboard for displaying where is the device
   def map
     render json: Device.all.to_json(methods: [:last_activity])
   end
