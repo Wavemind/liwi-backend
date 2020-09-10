@@ -3,7 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.6.0'
 
-gem 'rails', '~> 5.2.1'
+gem 'rails', '~> 5.2.4.1'
 gem 'pg'
 gem 'puma'
 gem 'sass-rails'
@@ -44,6 +44,7 @@ gem "font-awesome-rails"
 gem 'rubyzip', '= 2.2.0'
 gem 'axlsx', git: 'https://github.com/randym/axlsx.git', ref: 'c8ac844'
 gem 'axlsx_rails'
+gem 'pundit'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
