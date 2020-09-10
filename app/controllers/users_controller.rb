@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :activated, :deactivated]
 
   def index
-    @device = policy_scope(User)
+    @user = policy_scope(User)
     authorize User
     respond_to do |format|
       format.html
@@ -13,16 +13,19 @@ class UsersController < ApplicationController
   end
 
   def show
+    authorize @user
     add_breadcrumb @user.full_name
   end
 
   def new
+    authorize @user
     add_breadcrumb t('breadcrumbs.new')
 
     @user = User.new
   end
 
   def create
+    authorize @user
     @user = User.new(user_params)
 
     if @user.valid?
@@ -36,11 +39,13 @@ class UsersController < ApplicationController
   end
 
   def edit
+    authorize @user
     add_breadcrumb @user.full_name, user_url(@user)
     add_breadcrumb t('breadcrumbs.edit')
   end
 
   def update
+    authorize @user
     if @user.update(user_params)
       redirect_to users_url, notice: t('flash_message.success_updated')
     else
@@ -55,6 +60,7 @@ class UsersController < ApplicationController
   # @return redirect to users#index with flash message
   # Activate user account
   def activated
+    authorize @user
     @user.deactivated = false
 
     if @user.save
@@ -69,6 +75,7 @@ class UsersController < ApplicationController
   # @return redirect to users#index with flash message
   # Deactivate user account
   def deactivated
+    authorize @user
     @user.deactivated = true
 
     if @user.save

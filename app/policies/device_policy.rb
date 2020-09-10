@@ -4,4 +4,12 @@ class DevicePolicy < ApplicationPolicy
       scope.all
     end
   end
+
+  def index?
+    user.admin? || user.clinician?
+  end
+
+  def show?
+    user.admin? || user.clinician?
+  end
 end
