@@ -24,6 +24,7 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
+    authorize @user
 
     if @user.valid?
       User.invite!(user_params)
@@ -94,6 +95,7 @@ class UsersController < ApplicationController
       :last_name,
       :email,
       :deactivated,
+      :role,
       role_ids: []
     )
   end

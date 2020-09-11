@@ -35,6 +35,7 @@ class HealthFacilitiesController < ApplicationController
 
   def create
     @health_facility = HealthFacility.new(health_facility_params)
+    authorize @health_facility
 
     if @health_facility.save
       redirect_to health_facilities_url, notice: t('flash_message.success_created')

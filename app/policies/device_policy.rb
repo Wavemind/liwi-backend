@@ -10,6 +10,6 @@ class DevicePolicy < ApplicationPolicy
   end
 
   def show?
-    user.admin? || user.clinician? || user.deployment_manager?
+    index?
   end
 end

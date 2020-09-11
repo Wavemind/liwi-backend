@@ -2,6 +2,7 @@ class HealthFacilityAccessesController < ApplicationController
   before_action :authenticate_user!
 
   def index
+    authorize policy_scope(HealthFacility)
     respond_to do |format|
       format.html
       format.json { render json: HealthFacilityAccessDatatable.new(params, view_context: view_context) }
@@ -12,6 +13,7 @@ class HealthFacilityAccessesController < ApplicationController
     ActiveRecord::Base.transaction(requires_new: true) do
       begin
         @health_facility_access = HealthFacilityAccess.new(health_facility_access_params)
+        authorize @health_facility_access
 
         invalid_diagnostics = []
         # Validate every diagnostics of the version being published. Throw error if there is one or several diagnostics invalids with their reference.
