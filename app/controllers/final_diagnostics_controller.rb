@@ -8,6 +8,7 @@ class FinalDiagnosticsController < ApplicationController
   layout 'diagram', only: [:diagram]
 
   def index
+    authorize policy_scope(FinalDiagnostic)
     respond_to do |format|
       format.html
       format.json { render json: FinalDiagnosticDatatable.new(params, view_context: view_context) }
@@ -19,6 +20,7 @@ class FinalDiagnosticsController < ApplicationController
     add_breadcrumb t('breadcrumbs.new')
 
     @final_diagnostic = FinalDiagnostic.new
+    authorize @final_diagnostic
   end
 
   def edit
@@ -30,6 +32,7 @@ class FinalDiagnosticsController < ApplicationController
 
   def create
     @final_diagnostic = @diagnostic.final_diagnostics.new(final_diagnostic_params)
+    authorize @final_diagnostic
 
     if @final_diagnostic.save
       @diagnostic.components.create!(node: @final_diagnostic)
@@ -72,6 +75,7 @@ class FinalDiagnosticsController < ApplicationController
   # @return
   # Add excluded diagnostic to final diagnostic
   def add_exclusion
+    authorize policy_scope(FinalDiagnostic)
     @final_diagnosis_exclusion = FinalDiagnosisExclusion.new(final_diagnosis_exclusion_params)
     if @final_diagnosis_exclusion.save
       respond_to do |format|
@@ -88,6 +92,7 @@ class FinalDiagnosticsController < ApplicationController
 
   # Generate react diagram
   def diagram
+    authorize policy_scope(FinalDiagnostic)
     add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
     add_breadcrumb @final_diagnostic.diagnostic.version.algorithm.name, algorithm_url(@final_diagnostic.diagnostic.version.algorithm)
     add_breadcrumb "#{t('breadcrumbs.versions')} : #{@final_diagnostic.diagnostic.version.name}", algorithm_version_url(@final_diagnostic.diagnostic.version.algorithm, @final_diagnostic.diagnostic.version)
@@ -99,6 +104,7 @@ class FinalDiagnosticsController < ApplicationController
   # @return
   # Remove excluded diagnostic to final diagnostic
   def remove_exclusion
+    authorize policy_scope(FinalDiagnostic)
     @final_diagnosis_exclusion = FinalDiagnosisExclusion.find_by(final_diagnosis_exclusion_params)
     if @final_diagnosis_exclusion.destroy
       respond_to do |format|
@@ -141,6 +147,7 @@ class FinalDiagnosticsController < ApplicationController
 
   def set_final_diagnostic
     @final_diagnostic = Node.find(params[:id])
+    authorize @final_diagnostic
   end
 
   def final_diagnostic_params
