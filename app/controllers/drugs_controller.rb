@@ -8,6 +8,7 @@ class DrugsController < ApplicationController
     add_breadcrumb t('breadcrumbs.new')
 
     @drug = HealthCares::Drug.new
+    authorize @drug
   end
 
   def edit
@@ -16,6 +17,7 @@ class DrugsController < ApplicationController
   end
 
   def create
+    authorize policy_scope(HealthCares::Drug)
     drug = HealthCares::Drug.new(drug_params)
     drug.algorithm = @algorithm
     drug.formulations.map { |f| f.node = drug }
@@ -60,6 +62,7 @@ class DrugsController < ApplicationController
   # @return Hash
   # Return attributes of drug and formulation that are listed
   def lists
+    authorize policy_scope(HealthCares::Drug)
     render json: HealthCares::Drug.list_attributes
   end
 
@@ -79,6 +82,7 @@ class DrugsController < ApplicationController
   # @params Drug
   # @return errors messages if drug is not valid
   def validate
+    authorize policy_scope(HealthCares::Drug)
     drug = HealthCares::Drug.new(drug_params).becomes(HealthCares::Drug)
     drug.algorithm = @algorithm
 
@@ -99,6 +103,7 @@ class DrugsController < ApplicationController
 
   def set_drug
     @drug = Node.find(params[:id])
+    authorize @drug
   end
 
   def drug_params
