@@ -6,11 +6,11 @@ class UserPolicy < ApplicationPolicy
   end
 
   def index?
-    user.admin? || user.clinician? || user.deployment_manager
+    user.admin? || user.clinician? || user.deployment_manager?
   end
 
   def show?
-    user.admin? || user.clinician? || user.deployment_manager
+    user.admin? || user.clinician? || user.deployment_manager?
   end
 
   def activated?

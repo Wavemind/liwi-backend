@@ -19,6 +19,7 @@ class UsersController < ApplicationController
     add_breadcrumb t('breadcrumbs.new')
 
     @user = User.new
+    authorize @user
   end
 
   def create
