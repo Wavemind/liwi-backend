@@ -12,7 +12,7 @@ languages_codes = Language.all.map(&:code)
 
 wb.add_worksheet(name: "Diagnoses") do |sheet|
   sheet.sheet_protection.password = 'P@ssw0rd'
-  rows = ["ID", "Reference", "Label (en)"]
+  rows = ["ID", "Model", "Reference", "Label (en)"]
   unlocked_rows_indexes = []
   languages_codes.map do |l|
     unlocked_rows_indexes.push(rows.count)
@@ -34,7 +34,7 @@ wb.add_worksheet(name: "Diagnoses") do |sheet|
       end
     end
 
-    rows = [diag.id, diag.full_reference, diag.label_en]
+    rows = [diag.id, 'Diagnostic', diag.full_reference, diag.label_en]
     languages_codes.map do |l|
       rows.push(diag.send("label_#{l}"))
     end
@@ -47,7 +47,7 @@ end
 
 wb.add_worksheet(name: "Final Diagnoses") do |sheet|
   sheet.sheet_protection.password = 'P@ssw0rd'
-  rows = ["ID", "Reference", "Label (en)"]
+  rows = ["ID", "Model", "Reference", "Label (en)"]
   unlocked_rows_indexes = []
   languages_codes.map do |l|
     unlocked_rows_indexes.push(rows.count)
@@ -61,7 +61,7 @@ wb.add_worksheet(name: "Final Diagnoses") do |sheet|
   sheet.add_row rows, style: wrap
 
   final_diagnoses.map do |node|
-    rows = [node.id, node.full_reference, node.label_en]
+    rows = [node.id, "FinalDiagnostic", node.full_reference, node.label_en]
     languages_codes.map do |l|
       rows.push(node.send("label_#{l}"))
     end
@@ -177,7 +177,7 @@ end
 wb.add_worksheet(name: "Managements") do |sheet|
   sheet.sheet_protection.password = 'P@ssw0rd'
 
-  rows = ["ID", "Reference", "Label (en)"]
+  rows = ["ID", "Model", "Reference", "Label (en)"]
   unlocked_rows_indexes = []
   languages_codes.map do |l|
     unlocked_rows_indexes.push(rows.count)
@@ -191,7 +191,7 @@ wb.add_worksheet(name: "Managements") do |sheet|
   sheet.add_row rows, style: wrap
 
   managements.map do |node|
-    rows = [node.id, node.full_reference, node.label_en]
+    rows = [node.id, "HealthCares::Management", node.full_reference, node.label_en]
     languages_codes.map do |l|
       rows.push(node.send("label_#{l}"))
     end

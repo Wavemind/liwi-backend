@@ -43,6 +43,7 @@ Rails.application.routes.draw do
         put 'remove_triage_condition'
         put 'regenerate_json'
         put 'update_list'
+        put 'import_translations'
       end
 
       resources :final_diagnostics do

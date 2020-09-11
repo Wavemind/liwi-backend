@@ -115,4 +115,20 @@ class Node < ApplicationRecord
     end
     self.save
   end
+
+  def self.get_translatable_params(data)
+    fields_to_update = {}
+
+    data.row(1).each_with_index do |head, index|
+      if head.include?('Label')
+        code = head[/\((.*?)\)/m, 1]
+        fields_to_update["label_#{code}"] = index unless code == 'en'
+      elsif head.include?('Description')
+        code = head[/\((.*?)\)/m, 1]
+        fields_to_update["description_#{code}"] = index unless code == 'en'
+      end
+    end
+
+    fields_to_update
+  end
 end

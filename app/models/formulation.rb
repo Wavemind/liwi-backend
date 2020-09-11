@@ -27,4 +27,19 @@ class Formulation < ApplicationRecord
     errors.add(:maximal_dose_per_kg, I18n.t('formulations.errors.maximum_per_kg_higher_than_maximum')) if maximal_dose_per_kg.present? && maximal_dose_per_kg > maximal_dose
   end
 
+  def self.get_translatable_params(data)
+    fields_to_update = {}
+
+    data.row(1).each_with_index do |head, index|
+      if head.include?('Injection instructions')
+        code = head[/\((.*?)\)/m, 1]
+        fields_to_update["injection_instructions_#{code}"] = index unless code == 'en'
+      elsif head.include?('Description')
+        code = head[/\((.*?)\)/m, 1]
+        fields_to_update["description_#{code}"] = index unless code == 'en'
+      end
+    end
+
+    fields_to_update
+  end
 end

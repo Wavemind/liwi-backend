@@ -265,4 +265,17 @@ class Diagnostic < ApplicationRecord
       chief_complaint_label: node.reference_label
     }
   end
+
+  def self.get_translatable_params(data)
+    fields_to_update = {}
+
+    data.row(1).each_with_index do |head, index|
+      if head.include?('Label')
+        code = head[/\((.*?)\)/m, 1]
+        fields_to_update["label_#{code}"] = index unless code == 'en'
+      end
+    end
+
+    fields_to_update
+  end
 end

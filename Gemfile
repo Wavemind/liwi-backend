@@ -42,8 +42,9 @@ gem 'barby'
 gem 'i18n-js'
 gem "font-awesome-rails"
 gem 'rubyzip', '= 2.2.0'
-gem 'axlsx', git: 'https://github.com/randym/axlsx.git', ref: 'c8ac844'
-gem 'axlsx_rails'
+gem 'caxlsx'
+gem 'caxlsx_rails'
+gem 'roo', '~> 2.8'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
@@ -77,3 +78,5 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'mini_racer', platforms: :ruby
+
+gem "roo", "~> 2.8"

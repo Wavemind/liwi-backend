@@ -8,10 +8,6 @@
   <%= simple_form_for @version, url: generate_variables_algorithm_version_path(@version.algorithm, @version, format: :xlsx), method: :get do |f| %>
     <%= f.submit t('.generate_variables'), class: 'btn btn-primary' %>
   <% end %>
-
-  <%= simple_form_for @version, url: generate_translations_algorithm_version_path(@version.algorithm, @version, format: :xlsx), method: :get do |f| %>
-    <%= f.submit t('.generate_translations'), class: 'btn btn-primary' %>
-  <% end %>
 </div>
 
 <p class="display-spaces"><%= @version.description %></p>
@@ -37,6 +33,9 @@
   </li>
   <li class="nav-item">
     <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'triage_conditions' %>" id="triage_conditions-tab" data-toggle="tab" href="#triage_conditions" role="tab" aria-controls="triage_conditions" aria-selected="false"><%= t('.subtitle_triage_conditions') %> </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'translations' %>" id="translations-tab" data-toggle="tab" href="#translations" role="tab" aria-controls="translations" aria-selected="false"><%= t('.subtitle_translations') %> </a>
   </li>
 </ul>
 
@@ -94,5 +93,9 @@
 
   <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'triage_conditions' %>" id="triage_conditions" role="tabpanel" aria-labelledby="triage_conditions-tab">
     <%= render 'triage_conditions' %>
+  </div>
+
+  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'translations' %>" id="translations" role="tabpanel" aria-labelledby="translations-tab">
+    <%= render 'translations' %>
   </div>
 </div>
