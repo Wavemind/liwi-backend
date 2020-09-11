@@ -1,7 +1,7 @@
 class DrugsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy, :validate]
   before_action :set_drug, only: [:edit, :update, :update_translations, :destroy]
+  before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy, :validate]
   before_action :set_breadcrumb, only: [:new, :edit]
 
   def new

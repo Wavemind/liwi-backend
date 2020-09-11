@@ -8,6 +8,7 @@ class ManagementsController < ApplicationController
     add_breadcrumb t('breadcrumbs.new')
 
     @management = HealthCares::Management.new
+    authorize @management
   end
 
   def edit
@@ -17,6 +18,7 @@ class ManagementsController < ApplicationController
 
   def create
     @management = @algorithm.health_cares.managements.new(management_params).becomes(HealthCares::Management)
+    authorize @management
     @management.type = HealthCares::Management
 
     if @management.save
@@ -81,6 +83,7 @@ class ManagementsController < ApplicationController
 
   def set_management
     @management = Node.find(params[:id])
+    authorize @management
   end
 
   def management_params
