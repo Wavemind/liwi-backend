@@ -8,5 +8,4 @@ class TechnicalFilePolicy < ApplicationPolicy
   def index?
     user.admin? || user.clinician? || user.deployment_manager? || user.medal_r_user?
   end
-
 end

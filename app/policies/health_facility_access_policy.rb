@@ -12,5 +12,4 @@ class UserPolicy < ApplicationPolicy
   def create?
     index?
   end
-
 end

@@ -36,5 +36,4 @@ class HealthFacilityPolicy < ApplicationPolicy
   def remove_device?
     new?
   end
-
 end
