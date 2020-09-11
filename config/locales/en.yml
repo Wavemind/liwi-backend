@@ -703,6 +703,7 @@ en:
     show:
       deployed_version: "This version is deployed in the field, it cannot be edited. You can either duplicate this version or create a new one."
       questions_sequences: "Question Sequences"
+      generate_translations: "Generate translations excel"
       generate_variables: "Generate variables excel"
       subtitle_diagnostics: "Diagnoses"
       subtitle_final_diagnoses: "Final diagnoses"
