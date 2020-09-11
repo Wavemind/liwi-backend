@@ -4,8 +4,7 @@ class DevicesController < ApplicationController
   before_action :set_breadcrumb, only: [:show]
 
   def index
-    @device = policy_scope(Device)
-    authorize Device
+    authorize policy_scope(Device)
     add_breadcrumb t('breadcrumbs.devices')
 
     respond_to do |format|

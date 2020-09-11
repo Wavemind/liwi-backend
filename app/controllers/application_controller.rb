@@ -9,9 +9,11 @@ class ApplicationController < ActionController::Base
   after_action :verify_policy_scoped, only: :index, unless: :skip_pundit?
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+
+  # Callback if user is not authorized to a specific resources
   def user_not_authorized
     flash[:alert] = t('access_denied')
-    redirect_to(root_path)
+    redirect_back fallback_location: root_url
   end
 
   private

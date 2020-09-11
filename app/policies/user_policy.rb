@@ -4,14 +4,13 @@ class UserPolicy < ApplicationPolicy
       scope.all
     end
   end
-  # TODO: Rajouter le clinician pour index et show
 
   def index?
-    user.admin? || user.clinician?
+    user.admin? || user.clinician? || user.deployment_manager
   end
 
   def show?
-    user.admin? || user.clinician?
+    user.admin? || user.clinician? || user.deployment_manager
   end
 
   def activated?
