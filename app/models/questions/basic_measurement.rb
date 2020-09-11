@@ -2,6 +2,10 @@
 # Reference prefix : BM
 class Questions::BasicMeasurement < Question
 
+  def self.policy_class
+    QuestionPolicy
+  end
+
   def self.variable
     'basic_measurement'
   end

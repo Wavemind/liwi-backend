@@ -8,6 +8,7 @@ class QuestionsController < ApplicationController
     add_breadcrumb t('breadcrumbs.new')
 
     @question = Question.new
+    authorize @question
     @question.type = nil # To resolve issue that prevents to display the prompt in the form
   end
 
@@ -17,9 +18,9 @@ class QuestionsController < ApplicationController
   end
 
   def create
+    authorize policy_scope(Question)
     ActiveRecord::Base.transaction(requires_new: true) do
       question = @algorithm.questions.new(question_params)
-
       question.becomes(Object.const_get(question_params[:type])) if question_params[:type].present?
       question.unavailable = question_params[:unavailable] if question.is_a? Questions::AssessmentTest # Manually done it because the form could not handle it
 
@@ -74,6 +75,7 @@ class QuestionsController < ApplicationController
   # @return Hash
   # Return attributes of question that are listed
   def lists
+    authorize policy_scope(Question)
     render json: Question.list_attributes(params[:diagram_type], @algorithm)
   end
 
@@ -81,6 +83,7 @@ class QuestionsController < ApplicationController
   # @params Question child
   # @return json with the reference prefix of the child
   def reference_prefix
+    authorize policy_scope(Question)
     render json: Question.reference_prefix_class(params[:type])
   end
 
@@ -88,6 +91,7 @@ class QuestionsController < ApplicationController
   # @params Question
   # @return errors messages if question is not valid
   def validate
+    authorize policy_scope(Question)
     question = @algorithm.questions.new(question_params)
     question.validate_formula
     question.validate_ranges
@@ -121,6 +125,7 @@ class QuestionsController < ApplicationController
 
   def set_question
     @question = Node.find(params[:id])
+    authorize @question
   end
 
   def question_params

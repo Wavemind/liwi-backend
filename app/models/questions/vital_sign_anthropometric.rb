@@ -2,6 +2,10 @@
 # Reference prefix : VS
 class Questions::VitalSignAnthropometric < Question
 
+  def self.policy_class
+    QuestionPolicy
+  end
+
   def self.variable
     'vital_sign_anthropometric'
   end

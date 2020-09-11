@@ -2,6 +2,10 @@
 # Reference prefix : BD
 class Questions::BasicDemographic < Question
 
+  def self.policy_class
+    QuestionPolicy
+  end
+
   def self.variable
     'basic_demographic'
   end

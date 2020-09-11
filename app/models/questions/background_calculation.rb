@@ -2,6 +2,10 @@
 # Reference prefix : BC
 class Questions::BackgroundCalculation < Question
 
+  def self.policy_class
+    QuestionPolicy
+  end
+
   def self.variable
     'background_calculation'
   end
