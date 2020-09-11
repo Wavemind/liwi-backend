@@ -3,12 +3,13 @@ class LanguagesController < ApplicationController
   before_action :set_language, only: [:show, :update, :destroy]
 
   def new
+    authorize policy_scope(Language)
     @language = Language.new
   end
 
   def create
     @language = Language.new(language_params)
-
+    authorize @language
     if @language.save
       redirect_to settings_url, notice: t('flash_message.success_created')
     else
@@ -36,6 +37,7 @@ class LanguagesController < ApplicationController
 
   def set_language
     @language = Language.find(params[:id])
+    authorize @language
   end
 
   def language_params
