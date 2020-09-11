@@ -3,6 +3,7 @@ class AnswersController < ApplicationController
   before_action :set_answer, only: [:update_translations]
 
   def operators
+    authorize policy_scope(Answer)
     render json: Answer.operators.map { |k, v| [I18n.t("answers.operators.#{k}"), k] }
   end
 
@@ -22,6 +23,7 @@ class AnswersController < ApplicationController
 
   def set_answer
     @answer = Answer.find(params[:id])
+    authorize @answer
   end
 
   def answer_params
