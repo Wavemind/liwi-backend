@@ -89,6 +89,7 @@ class Answer < ApplicationRecord
     self.save
   end
 
+  # Get translatable attributes to translate with excel import
   def self.get_translatable_params(data)
     fields_to_update = {}
 

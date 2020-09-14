@@ -27,6 +27,7 @@ class Formulation < ApplicationRecord
     errors.add(:maximal_dose_per_kg, I18n.t('formulations.errors.maximum_per_kg_higher_than_maximum')) if maximal_dose_per_kg.present? && maximal_dose_per_kg > maximal_dose
   end
 
+  # Get translatable attributes to translate with excel import
   def self.get_translatable_params(data)
     fields_to_update = {}
 
