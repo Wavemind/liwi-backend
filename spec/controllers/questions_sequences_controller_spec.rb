@@ -10,35 +10,6 @@ RSpec.describe QuestionsSequencesController, type: :controller do
     @predefined_syndrome = @algorithm.questions_sequences.create!(label_en: 'Label en', type: QuestionsSequences::PredefinedSyndrome)
   end
 
-  it 'adds translations without rendering the view' do
-    put :update_translations, params: {
-      algorithm_id: @algorithm.id,
-      id: @predefined_syndrome.id,
-      questions_sequence: {
-        label_fr: 'Label fr',
-      }
-    }
-
-    expect(response).to render_template('diagnostics/update_translations')
-    expect(response).to have_attributes(status: 200)
-
-    @predefined_syndrome.reload
-    expect(@predefined_syndrome.label_fr).to eq('Label fr')
-  end
-
-  it 'returns error when sending attributes with clearing a mandatory field' do
-    put :update_translations, params: {
-      algorithm_id: @algorithm.id,
-      id: @predefined_syndrome.id,
-      questions_sequence: {
-        label_en: '',
-      }
-    }
-
-    expect(response).to render_template('diagnostics/update_translations')
-    expect(response).to have_attributes(status: 422)
-  end
-
   it 'returns error message when trying to remove a predefined syndrome who has an instance' do
     Instance.create!(instanceable: @dd7, node: @predefined_syndrome)
 
