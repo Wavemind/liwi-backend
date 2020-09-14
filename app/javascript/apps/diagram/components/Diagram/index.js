@@ -156,7 +156,7 @@ export class Diagram extends React.Component {
         // Display node in diagram
         engine.getModel().addNode(diagramInstance);
         engine.repaintCanvas();
-  
+
         // Remove node from available nodes list
         removeAvailableNode(dbNode);
       } else {
@@ -175,11 +175,11 @@ export class Diagram extends React.Component {
     return (
       <div className="content">
         <div className="row">
-          {!readOnly ? ([
-            <Toolbar engine={engine} />,
-            <AvailableNodes />,
+          {/*{!readOnly ? ([*/}
+            <Toolbar engine={engine} />
+            <AvailableNodes />
             <NotificationContainer />
-          ]) : null}
+          {/*]) : null}*/}
           <div className={diagramStyle}
             onDrop={event => this.onDropAction(event)}
             onDragOver={event => {
@@ -189,6 +189,7 @@ export class Diagram extends React.Component {
               className={canvasStyle}
               engine={engine}
               allowCanvasZoom={true}
+              readOnly={readOnly}
             />
           </div>
         </div>

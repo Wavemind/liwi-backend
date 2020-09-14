@@ -38,7 +38,7 @@ export default class AdvancedCanvasWidget extends React.Component {
   }
 
   componentDidMount() {
-    const { engine } = this.props;
+    const { engine, readOnly } = this.props;
     this.canvasListener = engine.registerListener({
       repaintCanvas: () => {
         this.forceUpdate();
@@ -55,8 +55,11 @@ export default class AdvancedCanvasWidget extends React.Component {
       engine.getActionEventBus().fireAction({ event });
     };
 
-    document.addEventListener("keyup", this.keyUp);
-    document.addEventListener("keydown", this.keyDown);
+    if (!readOnly) {
+      document.addEventListener("keyup", this.keyUp);
+      document.addEventListener("keydown", this.keyDown);
+    }
+
     this.registerCanvas();
   }
 

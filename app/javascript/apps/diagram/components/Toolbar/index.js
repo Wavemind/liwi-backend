@@ -94,7 +94,7 @@ class Toolbar extends React.Component {
   };
 
   render() {
-    const { instanceable } = this.props;
+    const { instanceable, readOnly } = this.props;
     const { isLoading } = this.state;
 
     return (
@@ -103,7 +103,7 @@ class Toolbar extends React.Component {
           <div className="col">
             <div className="btn-group">
               <button key="new" type="button" className="btn btn-transparent" data-toggle="dropdown"
-                      aria-haspopup="true" aria-expanded="false">
+                      aria-haspopup="true" aria-expanded="false" disabled={readOnly}>
                 {I18n.t("toolbar.new")}
               </button>
               <div className="dropdown-menu">
@@ -129,18 +129,18 @@ class Toolbar extends React.Component {
 
           <div className="col text-right">
             {instanceable.type === "Diagnostic" || instanceable.type === "QuestionsSequence" ? (
-              <button key="validate" type="button" className="btn btn-transparent" disabled={isLoading}
+              <button key="validate" type="button" className="btn btn-transparent" disabled={isLoading || readOnly}
                       onClick={() => this.validate()}>
                 <span>{isLoading ? "Loading" : I18n.t("toolbar.validate")}</span>
               </button>
             ) : null}
             {instanceable.type === "FinalDiagnostic" ? (
               <button key="diagnosticDiagram" type="button" className="btn btn-transparent"
-                      onClick={() => this.redirectToDiagnosticDiagram()}>
+                      onClick={() => this.redirectToDiagnosticDiagram()} disabled={readOnly}>
                 {I18n.t("toolbar.diagnostic_diagram")}
               </button>
             ) : (
-              <button key="save" type="button" className="btn btn-transparent" onClick={() => this.save()}>
+              <button key="save" type="button" className="btn btn-transparent" onClick={() => this.save()} disabled={readOnly}>
                 {I18n.t("toolbar.save")}
               </button>
             )}

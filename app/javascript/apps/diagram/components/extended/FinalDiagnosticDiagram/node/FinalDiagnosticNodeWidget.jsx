@@ -40,7 +40,7 @@ class FinalDiagnosticNodeWidget extends React.Component {
   }
 
   render() {
-    const { getReferencePrefix, node, engine } = this.props;
+    const { getReferencePrefix, node, engine, readOnly } = this.props;
 
     return (
       <div className="node">
@@ -60,7 +60,7 @@ class FinalDiagnosticNodeWidget extends React.Component {
               </button>
               <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a className="dropdown-item" href="#" onClick={() => this.openDiagram()}>{I18n.t("open_treatments")}</a>
-                <a className="dropdown-item" href="#" onClick={() => this.editFinalDiagnostic()}>{I18n.t("edit")}</a>
+                <a className={`dropdown-item ${readOnly ? 'disabled' : null}`} href="#" onClick={() => this.editFinalDiagnostic()}>{I18n.t("edit")}</a>
               </div>
             </div>
           </div>
