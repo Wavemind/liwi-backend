@@ -175,11 +175,9 @@ export class Diagram extends React.Component {
     return (
       <div className="content">
         <div className="row">
-          {/*{!readOnly ? ([*/}
-            <Toolbar engine={engine} />
-            <AvailableNodes />
-            <NotificationContainer />
-          {/*]) : null}*/}
+          <Toolbar engine={engine} />
+          <AvailableNodes />
+          <NotificationContainer />
           <div className={diagramStyle}
             onDrop={event => this.onDropAction(event)}
             onDragOver={event => {
