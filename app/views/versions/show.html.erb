@@ -22,15 +22,17 @@
   <li class="nav-item">
     <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'final_diagnoses_exclusions' %>" id="registration_triage_questions-tab" data-toggle="tab" href="#final_diagnoses_exclusions" role="tab" aria-controls="final_diagnoses_exclusions" aria-selected="false"><%= t('.subtitle_final_diagnoses_exclusions') %> </a>
   </li>
-  <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'registration_triage_questions' %>" id="registration_triage_questions-tab" data-toggle="tab" href="#registration_triage_questions" role="tab" aria-controls="registration_triage_questions" aria-selected="false"><%= t('.subtitle_registration_triage_questions') %> </a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'questions_order' %>" id="questions_order-tab" data-toggle="tab" href="#questions_order" role="tab" aria-controls="questions_order" aria-selected="false"><%= t('.subtitle_questions_order') %> </a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'medal_r_config' %>" id="medal_r_config-tab" data-toggle="tab" href="#medal_r_config" role="tab" aria-controls="medal_r_config" aria-selected="false"><%= t('.subtitle_medal_r_config') %> </a>
-  </li>
+  <% if policy(@version).new? %>
+    <li class="nav-item">
+      <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'registration_triage_questions' %>" id="registration_triage_questions-tab" data-toggle="tab" href="#registration_triage_questions" role="tab" aria-controls="registration_triage_questions" aria-selected="false"><%= t('.subtitle_registration_triage_questions') %> </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'questions_order' %>" id="questions_order-tab" data-toggle="tab" href="#questions_order" role="tab" aria-controls="questions_order" aria-selected="false"><%= t('.subtitle_questions_order') %> </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'medal_r_config' %>" id="medal_r_config-tab" data-toggle="tab" href="#medal_r_config" role="tab" aria-controls="medal_r_config" aria-selected="false"><%= t('.subtitle_medal_r_config') %> </a>
+    </li>
+  <% end %>
   <li class="nav-item">
     <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'triage_conditions' %>" id="triage_conditions-tab" data-toggle="tab" href="#triage_conditions" role="tab" aria-controls="triage_conditions" aria-selected="false"><%= t('.subtitle_triage_conditions') %> </a>
   </li>
@@ -46,7 +48,7 @@
     <%= render 'diagnostics/table' %>
   </div>
 
-  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'final_diagnostics'%>" id="final_diagnostics" role="tabpanel" aria-labelledby="questions-tab">
+  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'final_diagnostics' %>" id="final_diagnostics" role="tabpanel" aria-labelledby="questions-tab">
     <h3><%= t('.subtitle_final_diagnoses') %></h3>
 
     <%= render 'final_diagnostics/table_for_version' %>
@@ -76,17 +78,19 @@
     <%= render 'final_diagnosis_exclusion/table' %>
   </div>
 
-  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'registration_triage_questions' %>" id="registration_triage_questions" data-url=<%= change_triage_order_algorithm_version_url(@algorithm, @version) %> role="tabpanel" aria-labelledby="registration_triage_questions-tab">
-    <%= render 'registration_triage_questions' %>
-  </div>
+  <% if policy(@version).new? %>
+    <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'registration_triage_questions' %>" id="registration_triage_questions" data-url=<%= change_triage_order_algorithm_version_url(@algorithm, @version) %> role="tabpanel" aria-labelledby="registration_triage_questions-tab">
+      <%= render 'registration_triage_questions' %>
+    </div>
 
-  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'questions_order' %>" id="questions_order" data-url=<%= change_triage_order_algorithm_version_url(@algorithm, @version) %> role="tabpanel" aria-labelledby="questions_order-tab">
-    <%= render 'triage_order' %>
-  </div>
+    <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'questions_order' %>" id="questions_order" data-url=<%= change_triage_order_algorithm_version_url(@algorithm, @version) %> role="tabpanel" aria-labelledby="questions_order-tab">
+      <%= render 'triage_order' %>
+    </div>
 
-  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'medal_r_config' %>" id="medal_r_config" data-url=<%= change_triage_order_algorithm_version_url(@algorithm, @version) %> role="tabpanel" aria-labelledby="medal_r_config-tab">
-    <%= render 'medal_r_config' %>
-  </div>
+    <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'medal_r_config' %>" id="medal_r_config" data-url=<%= change_triage_order_algorithm_version_url(@algorithm, @version) %> role="tabpanel" aria-labelledby="medal_r_config-tab">
+      <%= render 'medal_r_config' %>
+    </div>
+  <% end %>
 
   <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'triage_conditions' %>" id="triage_conditions" role="tabpanel" aria-labelledby="triage_conditions-tab">
     <%= render 'triage_conditions' %>
