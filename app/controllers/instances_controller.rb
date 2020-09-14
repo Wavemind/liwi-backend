@@ -5,6 +5,7 @@ class InstancesController < ApplicationController
   before_action :set_instance, only: [:show, :destroy, :update, :create_link, :remove_link]
 
   def index
+    authorize policy_scope(Instance)
     respond_to do |format|
       format.html
       format.json { render json: InstanceDatatable.new(params, view_context: view_context) }
@@ -35,6 +36,7 @@ class InstancesController < ApplicationController
   end
 
   def create
+    authorize policy_scope(Instance)
     instance = @instanceable.components.new(instance_params)
 
     if instance.node.is_a?(HealthCare)
@@ -63,6 +65,7 @@ class InstancesController < ApplicationController
   # @params [String] reference
   # Find an instance by its node reference
   def by_reference
+    authorize policy_scope(Instance)
     if params[:diagnostic_id].present?
       @node = @instanceable.version.algorithm.nodes.find_by(reference: params[:reference]);
     else
@@ -105,6 +108,7 @@ class InstancesController < ApplicationController
   # @params [Diagnostic] Current diagnostic, [Answer] Answer from parent of the link, [Node] child of the link
   # Update the score of a condition in a PSS
   def update_score
+    authorize policy_scope(Instance)
     condition = Condition.find(instance_params[:condition_id])
 
     if condition.update(score: instance_params[:score])
@@ -123,6 +127,7 @@ class InstancesController < ApplicationController
 
   def set_instance
     @instance = Instance.find(params[:id])
+    authorize @instance
   end
 
   def set_instanceable
