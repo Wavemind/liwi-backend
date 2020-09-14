@@ -7,6 +7,7 @@ class FinalDiagnosticHealthCaresController < ApplicationController
   before_action :set_final_diagnostic_health_care, only: [:destroy]
 
   def create
+    authorize policy_scope(FinalDiagnosticHealthCare)
     final_diagnostic_health_care = FinalDiagnosticHealthCare.create(final_diagnostic_health_care_params)
     final_diagnostic_health_care.final_diagnostic_id = params[:final_diagnostic_id]
 
@@ -37,6 +38,7 @@ class FinalDiagnosticHealthCaresController < ApplicationController
 
   def set_final_diagnostic_health_care
     @final_diagnostic_health_care = FinalDiagnosticHealthCare.find(params[:id])
+    authorize @final_diagnostic_health_care
   end
 
   def final_diagnostic_health_care_params
