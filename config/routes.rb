@@ -29,6 +29,7 @@ Rails.application.routes.draw do
 
     resources :versions, only: [:index, :show, :new, :create, :edit, :update] do
       member do
+        get 'final_diagnoses_exclusions', to: 'versions#final_diagnoses_exclusions', as: 'final_diagnoses_exclusions'
         put 'archive', to: 'versions#archive', as: 'archive'
         put 'unarchive', to: 'versions#unarchive', as: 'unarchive'
         post 'duplicate'
@@ -41,6 +42,13 @@ Rails.application.routes.draw do
         put 'update_list'
       end
 
+      resources :final_diagnostics do
+        collection do
+          post 'add_exclusion'
+          delete 'remove_exclusion'
+        end
+      end
+
       resources :diagnostics, only: [:index, :new, :create, :edit, :update, :show, :destroy, :duplicate, :update_translations] do
         member do
           put 'update_translations'
@@ -50,11 +58,7 @@ Rails.application.routes.draw do
         end
 
         resources :final_diagnostics, only: [:index, :new, :create, :edit, :update, :delete, :destroy, :update_translations] do
-          collection do
-            put 'add_excluded_diagnostic'
-          end
           member do
-            put 'remove_excluded_diagnostic'
             put 'update_translations'
             get 'diagram'
           end

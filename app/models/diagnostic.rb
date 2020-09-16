@@ -59,8 +59,14 @@ class Diagnostic < ApplicationRecord
   def relink_instance
     components_ids = (components - components.final_diagnostics).map(&:id)
 
+    old_diagnostic = nil
+
+    matching_final_diagnoses = {}
+
     components.final_diagnostics.each do |df_instance|
+      old_diagnostic = df_instance.node.diagnostic
       new_df = df_instance.node.amoeba_dup
+      new_df.diagnostic_id = id
       if new_df.save
         # Relink children
         Child.where(instance_id: components_ids, node: df_instance.node).each do |child|
@@ -72,10 +78,8 @@ class Diagnostic < ApplicationRecord
           instance.update!(final_diagnostic: new_df)
         end
 
-        # Relink final diagnostic exclusion
-        FinalDiagnostic.where(final_diagnostic_id: df_instance.node_id, diagnostic: self).each do |fd|
-          fd.update!(final_diagnostic_id: new_df.id)
-        end
+        # Push in matching hash so we can reconstruct the exclusions
+        matching_final_diagnoses[df_instance.node_id] = new_df.id
 
         df_instance.node = new_df
         df_instance.save
@@ -83,6 +87,18 @@ class Diagnostic < ApplicationRecord
         raise ActiveRecord::Rollback, ''
       end
     end
+
+    # Copy final diagnoses that were not instantiated
+    old_diagnostic.final_diagnostics.map do |old_fd|
+      unless old_fd.instances.any?
+        new_fd = final_diagnostics.create(label_translations: old_fd.label_translations, description_translations: old_fd.description_translations)
+
+        # Push in matching hash so we can reconstruct the exclusions
+        matching_final_diagnoses[old_fd.id] = new_fd.id
+      end
+    end unless old_diagnostic.nil?
+
+    FinalDiagnosisExclusion.recreate_exclusions_after_duplicate(matching_final_diagnoses)
   end
 
   # @params [Array][Array][Instances] instances before delete, [Instance] instance to delete
@@ -127,7 +143,7 @@ class Diagnostic < ApplicationRecord
     components.final_diagnostics.includes(:node).as_json(
       include: [
         node: {
-          methods: [:node_type]
+          methods: [:node_type, :excluded_diagnoses_ids, :excluding_diagnoses_ids]
         },
         conditions: {
           include: [
@@ -180,6 +196,11 @@ class Diagnostic < ApplicationRecord
     false
   end
 
+  # Add a warning level to rails validation
+  def warnings
+    @warnings ||= ActiveModel::Errors.new(self)
+  end
+
   # Add errors to a diagnostic for its components
   def manual_validate
     components.includes(:node, :children, :conditions).each do |instance|
@@ -188,9 +209,9 @@ class Diagnostic < ApplicationRecord
       elsif instance.node.is_a?(Question) || instance.node.is_a?(QuestionsSequence)
         unless instance.children.any?
           if instance.final_diagnostic.nil?
-            errors.add(:basic, I18n.t('flash_message.diagnostic.question_no_children', type: instance.node.node_type, reference: instance.node.full_reference))
+            warnings.add(:basic, I18n.t('flash_message.diagnostic.question_no_children', type: instance.node.node_type, reference: instance.node.full_reference))
           else
-            errors.add(:basic, I18n.t('flash_message.diagnostic.hc_question_no_children', type: instance.node.node_type, reference: instance.node.full_reference, url: diagram_algorithm_version_diagnostic_final_diagnostic_url(version.algorithm.id, version.id, id, instance.final_diagnostic_id).to_s, df_reference: instance.final_diagnostic.full_reference))
+            warnings.add(:basic, I18n.t('flash_message.diagnostic.hc_question_no_children', type: instance.node.node_type, reference: instance.node.full_reference, url: diagram_algorithm_version_diagnostic_final_diagnostic_url(version.algorithm.id, version.id, id, instance.final_diagnostic_id).to_s, df_reference: instance.final_diagnostic.full_reference))
           end
         end
 

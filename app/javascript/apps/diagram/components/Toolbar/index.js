@@ -5,6 +5,7 @@ import { withDiagram } from "../../engine/context/Diagram.context";
 import { openModal } from "../../engine/reducers/creators.actions";
 import { NotificationManager } from "react-notifications";
 import ReactHtmlParser from "react-html-parser";
+import * as _ from "lodash";
 
 
 class Toolbar extends React.Component {
@@ -24,6 +25,12 @@ class Toolbar extends React.Component {
    */
   createNode(title, content) {
     const { engine, addAvailableNode } = this.props;
+
+    // Remove focus from entities before opening the modal so the text editing (backspace and delete buttons) would not remove them
+    _.forEach(engine.getModel().getSelectedEntities(), entity => {
+      entity.options.selected = false;
+    });
+
     store.dispatch(
       openModal(title, content, {
         engine,
@@ -73,6 +80,10 @@ class Toolbar extends React.Component {
 
     if (httpRequest.status === 200) {
       NotificationManager.info(result);
+    } else if (httpRequest.status === 202) {
+      result.map(error => (
+        NotificationManager.warning(ReactHtmlParser(error), "", 10000)
+      ));
     } else {
       result.map(error => (
         NotificationManager.error(ReactHtmlParser(error), "", 10000)
