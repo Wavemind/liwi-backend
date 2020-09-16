@@ -17,7 +17,6 @@ export default class StepperQuestionForm extends React.Component {
     super(props);
 
     const { question, method } = props;
-
     this.state = {
       http: new Http(),
       errors: null,
@@ -48,6 +47,7 @@ export default class StepperQuestionForm extends React.Component {
       is_triage: question?.is_triage || false,
       is_identifiable: question?.is_identifiable || false,
       is_filterable: question?.is_filterable || false,
+      is_danger_sign: question?.is_danger_sign || false,
       estimable: question?.estimable || false,
       is_default: question?.is_default || false,
       min_value_warning: question?.min_value_warning || "",
@@ -59,9 +59,13 @@ export default class StepperQuestionForm extends React.Component {
       min_message_error: question?.min_message_error || "",
       max_message_error: question?.max_message_error || "",
       complaint_categories_attributes: question?.complaint_categories || [],
-      answers_attributes: question?.answers || []
+      answers_attributes: question?.answers || [],
+      // Don't touch this shit. Due to carrierwave give us to much info and json parsing create 2 element instead of one
+      // OK I won't.
+      medias_attributes: _.filter(question?.medias, (media) => {
+        // return media.fileable_id !== undefined
+      }) || []
     };
-
     if (method === "update") {
       body["id"] = question.id;
       body["answers_attributes"] = [];
@@ -72,7 +76,18 @@ export default class StepperQuestionForm extends React.Component {
           id: answer.id,
           label_en: answer.label_translations.en,
           operator: answer.operator,
-          value: answer.value
+          value: answer.value,
+          _destroy: false
+        });
+      });
+
+      // Generate hash cause of label_translation
+      question.medias.map(media => {
+        body["medias_attributes"].push({
+          id: media.id,
+          url: media.url,
+          label_en: media.label_translations.en,
+          _destroy: false
         });
       });
     } else {
@@ -84,15 +99,22 @@ export default class StepperQuestionForm extends React.Component {
   /**
    * Send value to server
    */
-  save = async () => {
+  save = async (toDeleteAnswers, toDeleteMedias) => {
     const { method, from, engine, diagramObject, addAvailableNode } = this.props;
-    const { question, http } = this.state;
+    let { question, http } = this.state;
     let httpRequest = {};
     let complaint_category_ids = [];
 
+    toDeleteAnswers.map(answer_id => {
+      question.answers_attributes.push({id: answer_id, _destroy: true});
+    });
+
+    toDeleteMedias.map(media_id => {
+      question.medias_attributes.push({id: media_id, _destroy: true});
+    });
+
     question.complaint_categories_attributes.map(cc => (complaint_category_ids.push(cc.id)));
     _.set(question, "complaint_category_ids", complaint_category_ids);
-    _.unset(question, "complaint_categories_attributes");
 
     if (method === "create") {
       httpRequest = await http.createQuestion(question, from);

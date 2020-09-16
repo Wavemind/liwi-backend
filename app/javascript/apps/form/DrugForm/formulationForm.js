@@ -23,6 +23,7 @@ export default class FormulationForm extends React.Component {
       administrationRoutes: [],
       medicationForms: [],
       selectedMedicationForm: "",
+      toDeleteFormulations: [],
       isLoading: true
     };
 
@@ -56,9 +57,10 @@ export default class FormulationForm extends React.Component {
    * @params [Object] values
    */
   handleOnSubmit = async (values) => {
+    const { toDeleteFormulations } = this.state;
     const { setFormData, save } = this.props;
     await setFormData("formulations_attributes", values.formulations_attributes);
-    save();
+    save(toDeleteFormulations);
   };
 
   /**
@@ -94,7 +96,13 @@ export default class FormulationForm extends React.Component {
    * @params [Integer] key
    * @params [Object] arrayHelpers
    */
-  removeFormulation(key, arrayHelpers) {
+  removeFormulation(key, arrayHelpers, values) {
+    // Workaround to delete properly formulations in rails TODO : Find a better solution to do it
+    let { toDeleteFormulations } = this.state;
+    if (values.formulations_attributes[key].id !== undefined) {
+      toDeleteFormulations.push(values.formulations_attributes[key].id);
+    }
+    this.setState({toDeleteFormulations});
     arrayHelpers.remove(key);
   }
 
@@ -166,7 +174,7 @@ export default class FormulationForm extends React.Component {
                                       className="float-right"
                                       type="button"
                                       variant="danger"
-                                      onClick={() => this.removeFormulation(key, arrayHelpers)}>{I18n.t("remove")}</Button>
+                                      onClick={() => this.removeFormulation(key, arrayHelpers, values)}>{I18n.t("remove")}</Button>
                                   </Col>
                                 </Form.Row>
                               </button>
@@ -195,6 +203,7 @@ export default class FormulationForm extends React.Component {
                                 <Form.Control
                                   as="select"
                                   name="medicationForm"
+                                  value={selectedMedicationForm}
                                   onChange={this.handleMedicationFormChange}
                                 >
                                   <option value="">{I18n.t("drugs.medication_forms.select")}</option>

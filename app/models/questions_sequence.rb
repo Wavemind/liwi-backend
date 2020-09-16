@@ -43,7 +43,7 @@ class QuestionsSequence < Node
           ]
         },
         node: {
-          include: [:answers, :complaint_categories],
+          include: [:answers, :complaint_categories, :medias],
           methods: [
             :node_type,
             :category_name,
@@ -92,7 +92,7 @@ class QuestionsSequence < Node
     end
   end
 
-  # Get instance of final_diagnostic in a diagnostic
+  # Get instance of the questions_sequence in its own diagram
   def get_instance_json(instanceable)
     instances.where(instanceable: instanceable).includes(:node).as_json(
       include: [
@@ -161,7 +161,7 @@ class QuestionsSequence < Node
     components.each do |instance|
       node = instance.node
       if node.is_a? Question
-        nodes.push(node.id)
+        nodes.push(node)
       else
         nodes = extract_nodes(nodes) unless id == instance.instanceable_id
       end

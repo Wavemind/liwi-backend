@@ -16,6 +16,20 @@ class TechnicalFileUploader < CarrierWave::Uploader::Base
     %w(apk)
   end
 
+  # define some uploader specific configurations in the initializer
+  # to override the global configuration
+  def initialize(*)
+    super
+    self.fog_credentials = {
+      provider:              'AWS',
+      aws_access_key_id:     'AKIARGDHLEABIW5PPSNA',
+      aws_secret_access_key: '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',
+      region:                'eu-central-1',
+      endpoint:              'https://s3.eu-central-1.amazonaws.com/'
+    }
+    self.fog_directory = 'liwi'
+  end
+
   def fog_public
     false
   end

@@ -3,8 +3,8 @@ import I18n from "i18n-js";
 import FadeIn from "react-fade-in";
 import Autocomplete, { createFilterOptions } from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
-import { Form, Button } from "react-bootstrap";
-import { Formik } from "formik";
+import {Form, Button, Col} from "react-bootstrap";
+import {FieldArray, Formik} from "formik";
 
 import DisplayErrors from "../components/DisplayErrors";
 import Http from "../../diagram/engine/http";
@@ -13,14 +13,22 @@ import { questionSchema } from "../constants/schema";
 import {
   CATEGORIES_DISPLAYING_SYSTEM,
   CATEGORIES_DISABLING_ANSWER_TYPE,
-  CATEGORIES_DISPLAYING_FILTERABLE,
   NO_ANSWERS_ATTACHED_TYPE,
   NO_ANSWERS_ATTACHED_ANSWER_TYPE,
-  NUMERIC_ANSWER_TYPES
+  NUMERIC_ANSWER_TYPES,
+  SYMPTOM_SYSTEMS,
+  OBSERVED_PHYSICAL_SIGN_SYSTEMS,
+  CHRONIC_CONDITION_SYSTEMS,
+  EXPOSURE_SYSTEMS,
+  VACCINE_SYSTEMS,
+  VITAL_SIGN_SYSTEMS,
+  PHYSICAL_EXAM_SYSTEMS,
 } from "../constants/constants";
 import Chip from "@material-ui/core/Chip";
 import Overlay from "react-bootstrap/Overlay";
 import Popover from "react-bootstrap/Popover";
+import AnswerFields from "./answerForm";
+import MediaForm from "./mediaForm";
 
 const humanizeString = require("humanize-string");
 const filterOptions = createFilterOptions({
@@ -31,6 +39,8 @@ export default class QuestionForm extends React.Component {
   constructor(props) {
     super(props);
 
+    const { formData } = this.props;
+
     this.state = {
       updateMode: props.method === "update",
       deployedMode: props.method === "update" && props.is_deployed,
@@ -38,7 +48,9 @@ export default class QuestionForm extends React.Component {
       snomedError: null,
       isLoading: true,
       formulaTooltipShow: false,
-      target: null
+      target: null,
+      toDeleteMedias: [],
+      systems: this.generateSystemList(formData.type)
     };
 
     this.init();
@@ -51,14 +63,14 @@ export default class QuestionForm extends React.Component {
    */
   handleOnSubmit = async (values) => {
     const { setFormData, save, validate, nextStep, method, is_used, is_deployed } = this.props;
-    const { updateMode } = this.state;
+    const { updateMode, toDeleteMedias } = this.state;
     setFormData(values);
     // Skip answers form if the question type doesn't have any OR if the answers are automatically generated (boolean) or if it is edit mode and the question is already used
     if (NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(values.answer_type_id) || NO_ANSWERS_ATTACHED_TYPE.includes(values.type) || (updateMode && (is_used || is_deployed))) {
-      save();
+      save([], toDeleteMedias);
     } else {
       const validated = await validate();
-      if (validated){
+      if (validated) {
         nextStep();
       }
     }
@@ -79,11 +91,21 @@ export default class QuestionForm extends React.Component {
         answerTypes: result.answer_types,
         categories: result.categories,
         stages: result.stages,
-        systems: result.systems,
         complaintCategories: result.complaint_categories,
         isLoading: false
       });
     }
+  };
+
+  /**
+   * Suppress entry in media
+   * @param id
+   * @returns {Promise<void>}
+   */
+  setDeletedMedia = async (id) => {
+    const { toDeleteMedias } = this.state;
+    toDeleteMedias.push(id);
+    this.setState({toDeleteMedias})
   };
 
   /**
@@ -118,12 +140,46 @@ export default class QuestionForm extends React.Component {
     });
   };
 
+  generateSystemList = (category) => {
+    // Set systems list depending on the category
+    let systems = [];
+    switch (category) {
+      case "Questions::ChronicCondition":
+        systems = CHRONIC_CONDITION_SYSTEMS;
+        break;
+      case "Questions::Exposure":
+        systems = EXPOSURE_SYSTEMS;
+        break;
+      case "Questions::ObservedPhysicalSign":
+        systems = OBSERVED_PHYSICAL_SIGN_SYSTEMS;
+        break;
+      case "Questions::PhysicalExam":
+        systems = PHYSICAL_EXAM_SYSTEMS;
+        break;
+      case "Questions::Symptom":
+        systems = SYMPTOM_SYSTEMS;
+        break;
+      case "Questions::Vaccine":
+        systems = VACCINE_SYSTEMS;
+        break;
+      case "Questions::VitalSignAnthropometric":
+        systems = VITAL_SIGN_SYSTEMS;
+        break;
+      default:
+        break;
+    }
+    return systems;
+  };
+
   /**
    * Set value of answer type and stage depending on what category was chosen
    */
   categoryChanges = (event) => {
     let fieldsToSet = [];
     const category = event.target.value;
+
+    // Set systems list depending on category
+    this.setState({systems: this.generateSystemList(category)});
 
     // Set stage
     switch (category) {
@@ -179,7 +235,7 @@ export default class QuestionForm extends React.Component {
   };
 
   render() {
-    const { formData, railsErrors, method } = this.props;
+    const { formData, railsErrors } = this.props;
 
     const {
       answerTypes,
@@ -213,8 +269,8 @@ export default class QuestionForm extends React.Component {
                 values,
                 errors,
                 status
-              }) => (
-              <Form noValidate onSubmit={handleSubmit}>
+              }) => {
+              return (<Form noValidate onSubmit={handleSubmit}>
                 {railsErrors ? <DisplayErrors errors={railsErrors}/> : null}
                 {status ? <DisplayErrors errors={status}/> : null}
                 {snomedError ? <DisplayErrors errors={snomedError}/> : null}
@@ -254,7 +310,7 @@ export default class QuestionForm extends React.Component {
                     >
                       <option value="">{I18n.t("select")}</option>
                       {systems.map(system => (
-                        <option key={`system-${system[1]}`} value={system[1]}>{system[0]}</option>
+                        <option key={`system-${system}`} value={system}>{I18n.t(`questions.systems.${system}`)}</option>
                       ))}
                     </Form.Control>
                     <Form.Control.Feedback type="invalid">
@@ -338,83 +394,7 @@ export default class QuestionForm extends React.Component {
                       {errors.is_neonat}
                     </Form.Control.Feedback>
                   </Form.Group>
-                  : null}
-
-                <Form.Group controlId="validationLabel">
-                  <Form.Label>{I18n.t("activerecord.attributes.node.label_translations")}</Form.Label>
-                  <Form.Control
-                    name="label_en"
-                    value={values.label_en}
-                    onChange={handleChange}
-                    isInvalid={touched.label_en && !!errors.label_en}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.label_en}
-                  </Form.Control.Feedback>
-                </Form.Group>
-
-                <Form.Group controlId="validationSnomed">
-                  <Form.Label>{I18n.t("activerecord.attributes.question.snomed")}</Form.Label>
-                  <Autocomplete
-                    name="snomed"
-                    options={snomedResults}
-                    getOptionLabel={option => option.fsn.term}
-                    autoComplete
-                    includeInputInList
-                    freeSolo
-                    onChange={this.snomedChange}
-                    renderInput={params => (
-                      <TextField
-                        {...params}
-                        variant="outlined"
-                        onChange={this.searchSnomed} fullWidth/>
-                    )}
-                  />
-                </Form.Group>
-
-                {values.type !== "Questions::ComplaintCategory" ?
-                  <Form.Group controlId="validationComplaintCategories">
-                    <Form.Label>{I18n.t("activerecord.attributes.node.node")}</Form.Label>
-                    <Autocomplete
-                      autoComplete
-                      multiple
-                      freeSolo
-                      filterSelectedOptions
-                      name="complaint_categories_attributes"
-                      options={complaintCategories.map(option => option)}
-                      defaultValue={formData?.complaint_categories_attributes}
-                      filterOptions={filterOptions}
-                      disabled={deployedMode}
-                      onChange={(_, value) => setFieldValue("complaint_categories_attributes", value)}
-                      renderOption={(option) => option.label_translations.en}
-                      renderTags={(value, getTagProps) => (
-                        value.map((option, index) => (
-                          <Chip variant="outlined" label={option.label_translations.en} {...getTagProps({ index })} />
-                        ))
-                      )}
-                      renderInput={params => (
-                        <TextField
-                          {...params}
-                          variant="outlined"
-                          fullWidth/>
-                      )}
-                    />
-                  </Form.Group>
-                  : null}
-
-                <Form.Group controlId="validationDescription">
-                  <Form.Label>{I18n.t("activerecord.attributes.node.description_translations")}</Form.Label>
-                  <Form.Control
-                    name="description_en"
-                    as="textarea"
-                    value={values.description_en}
-                    onChange={handleChange}
-                    isInvalid={touched.description_en && !!errors.description_en}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.description_en}
-                  </Form.Control.Feedback>
-                </Form.Group>
+                : null}
 
                 {values.type === "Questions::AssessmentTest" ?
                   <Form.Group controlId="validationUnavailable">
@@ -463,6 +443,102 @@ export default class QuestionForm extends React.Component {
                   </Form.Control.Feedback>
                 </Form.Group>
 
+                {"Questions::BasicMeasurement" === values.type ?
+                  <Form.Group controlId="validationEstimable">
+                    <Form.Check
+                      name="estimable"
+                      label={I18n.t("activerecord.attributes.question.estimable")}
+                      value={values.estimable}
+                      disabled={deployedMode}
+                      checked={values.estimable}
+                      onChange={handleChange}
+                      isInvalid={touched.estimable && !!errors.estimable}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.estimable}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                : null}
+
+                  <Form.Group controlId="validationIsDangerSign">
+                    <Form.Check
+                      name="is_danger_sign"
+                      label={I18n.t("activerecord.attributes.question.is_danger_sign")}
+                      value={values.is_danger_sign}
+                      checked={values.is_danger_sign}
+                      onChange={handleChange}
+                      disabled={deployedMode}
+                      isInvalid={touched.is_danger_sign && !!errors.is_danger_sign}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.is_danger_sign}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+
+                <Form.Group controlId="validationLabel">
+                  <Form.Label>{I18n.t("activerecord.attributes.node.label_translations")}</Form.Label>
+                  <Form.Control
+                    name="label_en"
+                    value={values.label_en}
+                    onChange={handleChange}
+                    isInvalid={touched.label_en && !!errors.label_en}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.label_en}
+                  </Form.Control.Feedback>
+                </Form.Group>
+
+                <Form.Group controlId="validationSnomed">
+                  <Form.Label>{I18n.t("activerecord.attributes.question.snomed")}</Form.Label>
+                  <Autocomplete
+                    name="snomed"
+                    options={snomedResults}
+                    getOptionLabel={option => option.fsn.term}
+                    autoComplete
+                    includeInputInList
+                    freeSolo
+                    onChange={this.snomedChange}
+                    renderInput={params => (
+                      <TextField
+                        {...params}
+                        variant="outlined"
+                        onChange={this.searchSnomed} fullWidth/>
+                    )}
+                  />
+                </Form.Group>
+
+                {values.type !== "Questions::ComplaintCategory" ?
+                  <Form.Group controlId="validationComplaintCategories">
+                    <Form.Label>
+                      <p dangerouslySetInnerHTML={{__html: I18n.t("activerecord.attributes.node.node")}}/>
+                    </Form.Label>
+                    <Autocomplete
+                      autoComplete
+                      multiple
+                      freeSolo
+                      filterSelectedOptions
+                      name="complaint_categories_attributes"
+                      options={complaintCategories.map(option => option)}
+                      defaultValue={formData?.complaint_categories_attributes}
+                      filterOptions={filterOptions}
+                      disabled={deployedMode}
+                      onChange={(_, value) => setFieldValue("complaint_categories_attributes", value)}
+                      renderOption={(option) => option.label_translations.en}
+                      renderTags={(value, getTagProps) => (
+                        value.map((option, index) => (
+                          <Chip variant="outlined" label={option.label_translations.en} {...getTagProps({index})} />
+                        ))
+                      )}
+                      renderInput={params => (
+                        <TextField
+                          {...params}
+                          variant="outlined"
+                          fullWidth/>
+                      )}
+                    />
+                  </Form.Group>
+                  : null}
+
                 {values.answer_type_id === 5 ?
                   <>
                     <Form.Group controlId="validationFormula">
@@ -497,35 +573,18 @@ export default class QuestionForm extends React.Component {
                         <Popover.Title as="h3">{I18n.t("helps.formula.formula-tooltip-title")}</Popover.Title>
                         <Popover.Content>
                           <h6>{I18n.t("helps.formula.formula-title")}</h6>
-                          <p dangerouslySetInnerHTML={{__html: I18n.t("helps.formula.formula-content")}} />
+                          <p dangerouslySetInnerHTML={{__html: I18n.t("helps.formula.formula-content")}}/>
 
                           <h6>{I18n.t("helps.formula.reference-title")}</h6>
-                          <p dangerouslySetInnerHTML={{__html: I18n.t("helps.formula.reference-content")}} />
+                          <p dangerouslySetInnerHTML={{__html: I18n.t("helps.formula.reference-content")}}/>
 
                           <h6>{I18n.t("helps.formula.date-title")}</h6>
-                          <p dangerouslySetInnerHTML={{__html: I18n.t("helps.formula.date-content")}} />
+                          <p dangerouslySetInnerHTML={{__html: I18n.t("helps.formula.date-content")}}/>
                         </Popover.Content>
                       </Popover>
                     </Overlay>
                   </>
-                : null}
-
-                {"Questions::BasicMeasurement" === values.type ?
-                  <Form.Group controlId="validationEstimable">
-                    <Form.Check
-                      name="estimable"
-                      label={I18n.t("activerecord.attributes.question.estimable")}
-                      value={values.estimable}
-                      disabled={deployedMode}
-                      checked={values.estimable}
-                      onChange={handleChange}
-                      isInvalid={touched.estimable && !!errors.estimable}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.estimable}
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                : null}
+                  : null}
 
                 {NUMERIC_ANSWER_TYPES.includes(values.answer_type_id) ?
                   <>
@@ -651,11 +710,29 @@ export default class QuestionForm extends React.Component {
                   </>
                 : null}
 
+                <Form.Group controlId="validationDescription">
+                  <Form.Label>{I18n.t("activerecord.attributes.node.description_translations")}</Form.Label>
+                  <Form.Control
+                    name="description_en"
+                    as="textarea"
+                    value={values.description_en}
+                    onChange={handleChange}
+                    isInvalid={touched.description_en && !!errors.description_en}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.description_en}
+                  </Form.Control.Feedback>
+                </Form.Group>
+
+                <Form.Group>
+                  <MediaForm values={values} setFieldValue={setFieldValue} setDeletedMedia={this.setDeletedMedia}/>
+                </Form.Group>
+
                 <Button className="float-right" type="submit" disabled={isSubmitting}>
                   {I18n.t("next")}
                 </Button>
-              </Form>
-            )}
+              </Form>);
+            }}
           </Formik>
         </FadeIn>
     );

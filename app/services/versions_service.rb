@@ -18,11 +18,6 @@ class VersionsService
       assign_node(instance.node)
     end
 
-    # Add every vital sign consultation
-    @version.algorithm.questions.where(type: 'Questions::VitalSignAnthropometric').each do |vital_sign|
-      assign_node(vital_sign)
-    end
-
     # Loop in each diagnostics defined in current algorithm version
     @version.diagnostics.includes(:conditions).each do |diagnostic|
       @diagnostics_ids << diagnostic.id
@@ -343,6 +338,7 @@ class VersionsService
       hash[question.id]['category'] = question.category_name
       hash[question.id]['is_triage'] = question.is_triage
       hash[question.id]['is_identifiable'] = question.is_identifiable
+      hash[question.id]['is_danger_sign'] = question.is_danger_sign
       hash[question.id]['estimable'] = question.estimable
       # Send Reference instead of actual display format to help f-e interpret the question correctly
       hash[question.id]['value_format'] = question.answer_type.value
@@ -376,6 +372,8 @@ class VersionsService
       hash[question.id]['max_message_error'] = question.max_message_error
       hash[question.id]['diagnostics_related_to_cc'] = get_complaint_category_diagnostics(question, []) if question.is_a?(Questions::ComplaintCategory)
 
+      hash[question.id]['medias'] = extract_medias(question)
+
       question.answers.each do |answer|
         answer_hash = {}
         answer_hash['id'] = answer.id
@@ -391,6 +389,21 @@ class VersionsService
       @patient_questions.push(question.id) if %w(Questions::BasicDemographic Questions::Demographic Questions::ChronicalCondition Questions::Vaccine).include?(question.type)
     end
     hash
+  end
+
+  # @params [Node]
+  # @return [Array]
+  # Get all medias for a node and put it in a hash
+  def self.extract_medias(node)
+    medias = []
+    node.medias.map do |media|
+      hash = {}
+      hash['label'] = media.label_en
+      hash['url'] = media.url.url
+      hash['extension'] = media.url.file.extension.downcase
+      medias.push(hash)
+    end
+    medias
   end
 
   # @params [String]
@@ -454,7 +467,12 @@ class VersionsService
     final_diagnostics = []
     node.instances.each do |instance|
       df = instance.final_diagnostic_id
-      final_diagnostics.push(instance.final_diagnostic_id) if df.present? && @final_diagnostics[df].present?
+      if df.present? && @final_diagnostics[df].present?
+        hash = {}
+        hash['id'] = df
+        hash['conditionValue'] = nil
+        final_diagnostics.push(hash)
+      end
     end
     final_diagnostics.uniq
   end

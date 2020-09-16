@@ -8,7 +8,24 @@ class Question < Node
   attr_accessor :unavailable
 
   enum stage: [:registration, :triage, :test, :consultation, :diagnosis_management]
-  enum system: [:general, :respiratory_circulation, :ear_nose_mouth_throat, :visual, :integumentary, :digestive, :urinary_reproductive, :nervous, :muscular_skeletal]
+  enum system: [
+    :general,
+    :respiratory_circulation,
+    :ear_nose_mouth_throat,
+    :visual,
+    :integumentary,
+    :digestive,
+    :urinary_reproductive,
+    :nervous,
+    :muscular_skeletal,
+    :exposures,
+    :chronic_conditions,
+    :comorbidities,
+    :prevention,
+    :prophylaxis,
+    :complementary_medical_history,
+    :vital_sign
+  ]
 
   has_many :answers, foreign_key: 'node_id', dependent: :destroy
   belongs_to :answer_type

@@ -18,4 +18,27 @@ jQuery(document).ready(function () {
       'orderable': false,
     }]
   });
+
+  $("#version_final_diagnostics-datatable").dataTable({
+    "processing": true,
+    "info": false,
+    "bLengthChange": false,
+    "serverSide": true,
+    "pageLength": 50,
+    "ajax": $("#version_final_diagnostics-datatable").data("source"),
+    "pagingType": "full_numbers",
+    "columns": [
+      { "data": "id" },
+      { "data": "reference" },
+      { "data": "label" },
+      { "data": "diagnostic" },
+      { "data": "cc" },
+      { "data": "description" },
+    ],
+    'columnDefs': [ {
+      'targets': [],
+      'orderable': false,
+    }]
+  });
 });
+

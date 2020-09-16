@@ -1,8 +1,8 @@
 class VersionsController < ApplicationController
   before_action :authenticate_user!, except: [:change_triage_order]
-  before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :duplicate, :create_triage_condition, :remove_triage_condition, :final_diagnoses_exclusions]
+  before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :duplicate, :create_triage_condition, :remove_triage_condition, :final_diagnoses_exclusions, :generate_variables, :final_diagnostics]
   before_action :set_breadcrumb, only: [:show, :new, :edit]
-  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :change_triage_order, :components, :create_triage_condition, :duplicate, :remove_components, :remove_triage_condition, :update_list, :regenerate_json, :final_diagnoses_exclusions]
+  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :change_triage_order, :components, :create_triage_condition, :duplicate, :remove_components, :remove_triage_condition, :update_list, :regenerate_json, :final_diagnoses_exclusions, :generate_variables, :final_diagnostics]
 
   def index
     respond_to do |format|
@@ -135,6 +135,16 @@ class VersionsController < ApplicationController
     end
   end
 
+  # GET algorithms/:algorithm_id/version/:id/final_diagnosics
+  # @params version [Version] version
+  # Get every final diagnoses for a version
+  def final_diagnostics
+    respond_to do |format|
+      format.html
+      format.json { render json: VersionFinalDiagnosticDatatable.new(params, view_context: view_context) }
+    end
+  end
+
   # GET algorithms/:algorithm_id/version/:id/final_diagnoses_exclusions
   # @params version [Version] version
   # Get every final diagnoses exclusions for a version
@@ -142,6 +152,15 @@ class VersionsController < ApplicationController
     respond_to do |format|
       format.html
       format.json { render json: FinalDiagnosisExclusionDatatable.new(params, view_context: view_context) }
+    end
+  end
+
+  # GET algorithms/:algorithm_id/version/:id/generate_variables
+  # @params version [Version] version
+  # Get an excel export of nodes used by the version
+  def generate_variables
+    respond_to do |format|
+      format.xlsx
     end
   end
 

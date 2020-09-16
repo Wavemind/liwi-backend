@@ -34,13 +34,17 @@ en:
       instance:
         duration: "Duration (days)"
         description: "Description"
+      media:
+        label_translations: "Label"
+        url: "File"
       node:
         type: "Category"
         description_translations: "Description"
         label_translations: "Label"
-        node: "Complaint category"
+        node: "<font color=\"red\">Complaint categories (use with extreme caution: the question will only be displayed if all CCs selected in the reader!)</font>"
       question:
         answer_type: "Answer type"
+        is_danger_sign: "Will result in referral"
         estimable: "Value can be estimated"
         formula: "Formula"
         is_filterable: "Question is filterable on patient search"
@@ -65,6 +69,7 @@ en:
         type: "Category"
   activated: "Activate"
   add: "Add"
+  add_file: "Attach new file in description"
   administration_routes:
     labels:
       - ~
@@ -295,6 +300,14 @@ en:
         label: "Label"
         description: "Description"
         actions: "Actions"
+    table_for_version:
+      columns:
+        id: "ID"
+        reference: "Reference"
+        label: "Label"
+        diagnostic: "Diagnostic"
+        cc: "Complaint category"
+        description: "Description"
     edit:
       title: "Edit final diagnosis"
     show:
@@ -568,6 +581,8 @@ en:
       formula_reference_no_underscore: "The reference must contain an underscore (eg: A_1)"
       snomed_fetch_failed: "The server could not retrieve any data from SNOMED."
       validation_range_incorrect: "The values you entered in the validation ranges seem incorrect. Please check the values again."
+    medias:
+      current_file: "Selected file"
     new:
       title: "New variable"
     priorities:
@@ -584,11 +599,18 @@ en:
       respiratory_circulation: "Respiratory and Circulatory system"
       ear_nose_mouth_throat: "Ear, Nose, Mouth and Throat system"
       visual: "Visual system"
-      integumentary: "Integumentary system"
+      integumentary: "Skin/Hair/Mucosae system"
       digestive: "Digestive system"
       urinary_reproductive: "Urinary and Reproductive system"
       nervous: "Nervous system"
       muscular_skeletal: "Muscular and Skeletal system"
+      exposures: "Exposures"
+      chronic_conditions: "Chronic conditions"
+      comorbidities: "Comorbidities"
+      prevention: "Prevention"
+      prophylaxis: "Prophylaxis"
+      complementary_medical_history: "Complementary Medical History Questions"
+      vital_sign: "Vital Signs"
     table:
       columns:
         label: "Label"
@@ -681,7 +703,9 @@ en:
     show:
       deployed_version: "This version is deployed in the field, it cannot be edited. You can either duplicate this version or create a new one."
       questions_sequences: "Question Sequences"
+      generate_variables: "Generate variables excel"
       subtitle_diagnostics: "Diagnoses"
+      subtitle_final_diagnoses: "Final diagnoses"
       subtitle_final_diagnoses_exclusions: "Final diagnoses exclusions"
       subtitle_medal_r_config: "Config Medal-R"
       subtitle_questions_order: "Triage variables order"
