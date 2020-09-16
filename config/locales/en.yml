@@ -44,6 +44,7 @@ en:
         node: "<font color=\"red\">Complaint categories (use with extreme caution: the question will only be displayed if all CCs selected in the reader!)</font>"
       question:
         answer_type: "Answer type"
+        is_danger_sign: "Will result in referral"
         estimable: "Value can be estimated"
         formula: "Formula"
         is_filterable: "Question is filterable on patient search"
@@ -580,6 +581,8 @@ en:
       formula_reference_no_underscore: "The reference must contain an underscore (eg: A_1)"
       snomed_fetch_failed: "The server could not retrieve any data from SNOMED."
       validation_range_incorrect: "The values you entered in the validation ranges seem incorrect. Please check the values again."
+    medias:
+      current_file: "Selected file"
     new:
       title: "New variable"
     priorities:
@@ -601,6 +604,13 @@ en:
       urinary_reproductive: "Urinary and Reproductive system"
       nervous: "Nervous system"
       muscular_skeletal: "Muscular and Skeletal system"
+      exposures: "Exposures"
+      chronic_conditions: "Chronic conditions"
+      comorbidities: "Comorbidities"
+      prevention: "Prevention"
+      prophylaxis: "Prophylaxis"
+      complementary_medical_history: "Complementary Medical History Questions"
+      vital_sign: "Vital Signs"
     table:
       columns:
         label: "Label"

@@ -41,6 +41,8 @@ export const questionSchema = yup.object().shape({
   is_mandatory: yup.boolean(),
   is_triage: yup.boolean(),
   is_identifiable: yup.boolean(),
+  is_neonat: yup.boolean(),
+  is_danger_sign: yup.boolean(),
   min_value_warning: yup.number(),
   max_value_warning: yup.number(),
   min_value_error: yup.number(),

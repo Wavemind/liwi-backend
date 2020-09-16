@@ -13,10 +13,16 @@ import { questionSchema } from "../constants/schema";
 import {
   CATEGORIES_DISPLAYING_SYSTEM,
   CATEGORIES_DISABLING_ANSWER_TYPE,
-  CATEGORIES_DISPLAYING_FILTERABLE,
   NO_ANSWERS_ATTACHED_TYPE,
   NO_ANSWERS_ATTACHED_ANSWER_TYPE,
-  NUMERIC_ANSWER_TYPES
+  NUMERIC_ANSWER_TYPES,
+  SYMPTOM_SYSTEMS,
+  OBSERVED_PHYSICAL_SIGN_SYSTEMS,
+  CHRONIC_CONDITION_SYSTEMS,
+  EXPOSURE_SYSTEMS,
+  VACCINE_SYSTEMS,
+  VITAL_SIGN_SYSTEMS,
+  PHYSICAL_EXAM_SYSTEMS,
 } from "../constants/constants";
 import Chip from "@material-ui/core/Chip";
 import Overlay from "react-bootstrap/Overlay";
@@ -33,6 +39,8 @@ export default class QuestionForm extends React.Component {
   constructor(props) {
     super(props);
 
+    const { formData } = this.props;
+
     this.state = {
       updateMode: props.method === "update",
       deployedMode: props.method === "update" && props.is_deployed,
@@ -41,7 +49,8 @@ export default class QuestionForm extends React.Component {
       isLoading: true,
       formulaTooltipShow: false,
       target: null,
-      toDeleteMedias: []
+      toDeleteMedias: [],
+      systems: this.generateSystemList(formData.type)
     };
 
     this.init();
@@ -82,7 +91,6 @@ export default class QuestionForm extends React.Component {
         answerTypes: result.answer_types,
         categories: result.categories,
         stages: result.stages,
-        systems: result.systems,
         complaintCategories: result.complaint_categories,
         isLoading: false
       });
@@ -132,12 +140,46 @@ export default class QuestionForm extends React.Component {
     });
   };
 
+  generateSystemList = (category) => {
+    // Set systems list depending on the category
+    let systems = [];
+    switch (category) {
+      case "Questions::ChronicCondition":
+        systems = CHRONIC_CONDITION_SYSTEMS;
+        break;
+      case "Questions::Exposure":
+        systems = EXPOSURE_SYSTEMS;
+        break;
+      case "Questions::ObservedPhysicalSign":
+        systems = OBSERVED_PHYSICAL_SIGN_SYSTEMS;
+        break;
+      case "Questions::PhysicalExam":
+        systems = PHYSICAL_EXAM_SYSTEMS;
+        break;
+      case "Questions::Symptom":
+        systems = SYMPTOM_SYSTEMS;
+        break;
+      case "Questions::Vaccine":
+        systems = VACCINE_SYSTEMS;
+        break;
+      case "Questions::VitalSignAnthropometric":
+        systems = VITAL_SIGN_SYSTEMS;
+        break;
+      default:
+        break;
+    }
+    return systems;
+  };
+
   /**
    * Set value of answer type and stage depending on what category was chosen
    */
   categoryChanges = (event) => {
     let fieldsToSet = [];
     const category = event.target.value;
+
+    // Set systems list depending on category
+    this.setState({systems: this.generateSystemList(category)});
 
     // Set stage
     switch (category) {
@@ -268,7 +310,7 @@ export default class QuestionForm extends React.Component {
                     >
                       <option value="">{I18n.t("select")}</option>
                       {systems.map(system => (
-                        <option key={`system-${system[1]}`} value={system[1]}>{system[0]}</option>
+                        <option key={`system-${system}`} value={system}>{I18n.t(`questions.systems.${system}`)}</option>
                       ))}
                     </Form.Control>
                     <Form.Control.Feedback type="invalid">
@@ -417,6 +459,21 @@ export default class QuestionForm extends React.Component {
                     </Form.Control.Feedback>
                   </Form.Group>
                 : null}
+
+                  <Form.Group controlId="validationIsDangerSign">
+                    <Form.Check
+                      name="is_danger_sign"
+                      label={I18n.t("activerecord.attributes.question.is_danger_sign")}
+                      value={values.is_danger_sign}
+                      checked={values.is_danger_sign}
+                      onChange={handleChange}
+                      disabled={deployedMode}
+                      isInvalid={touched.is_danger_sign && !!errors.is_danger_sign}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.is_danger_sign}
+                    </Form.Control.Feedback>
+                  </Form.Group>
 
                 <Form.Group controlId="validationLabel">
                   <Form.Label>{I18n.t("activerecord.attributes.node.label_translations")}</Form.Label>
@@ -667,7 +724,7 @@ export default class QuestionForm extends React.Component {
                   </Form.Control.Feedback>
                 </Form.Group>
 
-                <Form.Group as={Col}>
+                <Form.Group>
                   <MediaForm values={values} setFieldValue={setFieldValue} setDeletedMedia={this.setDeletedMedia}/>
                 </Form.Group>
 

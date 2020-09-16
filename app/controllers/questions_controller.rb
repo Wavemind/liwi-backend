@@ -153,6 +153,7 @@ class QuestionsController < ApplicationController
       :max_message_error,
       :estimable,
       :is_neonat,
+      :is_danger_sign,
       complaint_category_ids: [],
       answers_attributes: [
         :id,
@@ -189,7 +190,6 @@ class QuestionsController < ApplicationController
 
         img_params = {filename: media["filename"], headers: [], type: image_data[:type], tempfile: temp_img_file}
         uploaded_file = ActionDispatch::Http::UploadedFile.new(img_params)
-
         media.delete(:url)
         media.delete(:filename)
         media[:url] = uploaded_file

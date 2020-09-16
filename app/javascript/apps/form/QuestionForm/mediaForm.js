@@ -3,9 +3,7 @@ import I18n from "i18n-js";
 import { FieldArray } from "formik";
 import { Form, Button, Col } from "react-bootstrap";
 
-import AnswerFields from "./answerFields";
 import { DEFAULT_MEDIA_VALUE } from "../constants/constants";
-import Http from "../../diagram/engine/http";
 import MediaFields from "./mediaFields";
 
 
@@ -24,7 +22,7 @@ export default class MediaForm extends React.Component {
   };
 
   removeMedia = (key, arrayHelpers, values) => {
-    // Workaround to delete properly answers in rails TODO : Find a better solution to do it
+    // Workaround to delete properly medias in rails TODO : Find a better solution to do it
     let { setDeletedMedia } = this.props;
     if (values.medias_attributes[key].id !== undefined) {
       setDeletedMedia(values.medias_attributes[key].id);

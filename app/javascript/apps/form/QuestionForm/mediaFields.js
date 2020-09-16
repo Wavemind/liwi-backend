@@ -35,6 +35,24 @@ export default class MediaFields extends React.Component {
     return errors?.medias_attributes !== undefined && !!errors?.medias_attributes[index]?.[input];
   }
 
+  /**
+   * Save file in global form
+   * @param fileEvent
+   */
+  handleFile = (fileEvent) => {
+    const {setFieldValue, index} = this.props;
+    let reader = new FileReader();
+    let file = fileEvent.files[0];
+
+    if (file) {
+      reader.readAsDataURL(file);
+      reader.onload = (e) => {
+        setFieldValue(`medias_attributes.${index}.url`, e.target.result);
+        setFieldValue(`medias_attributes.${index}.filename`, file.name);
+      };
+    }
+  }
+
   render() {
     const {
       arrayHelpers: {
@@ -44,7 +62,6 @@ export default class MediaFields extends React.Component {
         }
       },
       index,
-      setFieldValue
     } = this.props;
 
     let media = values.medias_attributes[index];
@@ -70,20 +87,14 @@ export default class MediaFields extends React.Component {
             <Form.Control
               type="file"
               name={`medias_attributes.${index}.url`}
-              onChange={e => {
-
-                let reader = new FileReader();
-                let file = e.target.files[0];
-                reader.readAsDataURL(file);
-                if (file) {
-                  reader.onload = (e) => {
-                    this.props.setFieldValue(`medias_attributes.${index}.url`, e.target.result);
-                    this.props.setFieldValue(`medias_attributes.${index}.filename`, file.name);
-                  };
-                }
-              }}
+              onChange={(e) => this.handleFile(e.target)}
               isInvalid={this.isInvalid("url")}>
             </Form.Control>
+            <Form.Text className="text-muted">
+              {media.url.url !== undefined ? (
+                <a href={media.url.url}>{I18n.t("questions.medias.current_file")}</a>
+              ) : null }
+            </Form.Text>
             <Form.Control.Feedback type="invalid">
               {this.displayErrors("url")}
             </Form.Control.Feedback>
