@@ -285,8 +285,8 @@ export default class Http {
     const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/final_diagnostics/add_exclusion`;
     const body = {
       final_diagnosis_exclusion: {
-        excluding_diagnosis_id: excludingDfId,
-        excluded_diagnosis_id: excludedDfId
+        excluding_node_id: excludingDfId,
+        excluded_node_id: excludedDfId
       }
     };
     const header = await this.setHeaders("POST", body);
@@ -302,8 +302,8 @@ export default class Http {
     const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/final_diagnostics/remove_exclusion`;
     const body = {
       final_diagnosis_exclusion: {
-        excluding_diagnosis_id: excludingDfId,
-        excluded_diagnosis_id: excludedDfId
+        excluding_node_id: excludingDfId,
+        excluded_node_id: excludedDfId
       }
     };
     const header = await this.setHeaders("DELETE", body);

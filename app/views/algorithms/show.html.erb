@@ -78,4 +78,52 @@
     <%= render 'questions_sequences/scored_table' %>
 
   </div>
+
+  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'drugs_exclusions' %>" id="drugs_exclusions" role="tabpanel" aria-labelledby="drugs_exclusions-tab">
+
+    <h2><%= t('.subtitle_drugs_exclusions') %></h2>
+
+    <%= simple_form_for NodeExclusion.new, url: add_exclusion_algorithm_version_final_diagnostics_url(@version.algorithm, @version, format: :html), method: :post do |f| %>
+      <div class="row">
+        <div class="col">
+          <%= f.input :excluding_node_id, collection: @algorithm.health_cares.drugs, value_method: :id, label_method: :reference_label, label: false, prompt: t('prompt') %>
+        </div>
+        <div class="col text-center">
+          <%= t('.excludes') %>
+        </div>
+        <div class="col">
+          <%= f.input :excluded_node_id, collection: @algorithm.health_cares.drugs, value_method: :id, label_method: :reference_label, label: false, prompt: t('prompt') %>
+        </div>
+        <div class="col text-right">
+          <%= f.submit t('add'), class: 'btn btn-primary' %>
+        </div>
+      </div>
+    <% end %>
+
+    <%= render 'final_diagnosis_exclusion/table' %>
+  </div>
+
+  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'final_diagnoses_exclusions' %>" id="final_diagnoses_exclusions" role="tabpanel" aria-labelledby="final_diagnoses_exclusions-tab">
+
+    <h2><%= t('.subtitle_final_diagnoses_exclusions') %></h2>
+
+    <%= simple_form_for NodeExclusion.new, url: add_exclusion_algorithm_version_final_diagnostics_url(@version.algorithm, @version, format: :html), method: :post do |f| %>
+      <div class="row">
+        <div class="col">
+          <%= f.input :excluding_node_id, collection: @version.diagnostics.map(&:final_diagnostics).flatten, value_method: :id, label_method: :reference_label, label: false, prompt: t('prompt') %>
+        </div>
+        <div class="col text-center">
+          <%= t('.excludes') %>
+        </div>
+        <div class="col">
+          <%= f.input :excluded_node_id, collection: @version.diagnostics.map(&:final_diagnostics).flatten, value_method: :id, label_method: :reference_label, label: false, prompt: t('prompt') %>
+        </div>
+        <div class="col text-right">
+          <%= f.submit t('add'), class: 'btn btn-primary' %>
+        </div>
+      </div>
+    <% end %>
+
+    <%= render 'final_diagnosis_exclusion/table' %>
+  </div>
 </div>

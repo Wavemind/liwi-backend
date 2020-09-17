@@ -24,12 +24,12 @@ class FinalDiagnostic < Node
 
   # Get every final diagnoses excluded by this final diagnosis
   def excluded_diagnoses_ids
-    FinalDiagnosisExclusion.where(excluding_diagnosis_id: id).map(&:excluded_diagnosis_id)
+    NodeExclusion.where(excluding_node_id: id).map(&:excluded_node_id)
   end
 
   # Get every final diagnoses excluding this final diagnosis
   def excluding_diagnoses_ids
-    FinalDiagnosisExclusion.where(excluded_diagnosis_id: id).map(&:excluding_diagnosis_id)
+    NodeExclusion.where(excluded_node_id: id).map(&:excluding_node_id)
   end
 
   # @return [Json]
