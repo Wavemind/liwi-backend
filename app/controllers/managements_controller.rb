@@ -60,7 +60,7 @@ class ManagementsController < ApplicationController
     end
   end
 
-  # POST algorithm/:algorithm_id/managements/validate
+  # POST algorithm/:algorithm_id/managements/create_exclusion
   # @params [Integer] excluding_node_id
   # @params [Integer] excluded_node_id
   # Create an exclusion between two managements
@@ -74,7 +74,7 @@ class ManagementsController < ApplicationController
     end
   end
 
-  # DELETE algorithm/:algorithm_id/managements/validate
+  # DELETE algorithm/:algorithm_id/managements/remove_exclusion
   # @params [Integer] excluding_node_id
   # @params [Integer] excluded_node_id
   # Remove an exclusion between two managements

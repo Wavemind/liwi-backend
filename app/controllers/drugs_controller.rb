@@ -62,17 +62,10 @@ class DrugsController < ApplicationController
   # Create an exclusion between two drugs
   def create_exclusion
     @drug_exclusion = NodeExclusion.new(drug_exclusion_params)
-
     @drug_exclusion.node_type = :drug
-    puts '***'
-    puts @drug_exclusion.inspect
-    puts '***'
     if @drug_exclusion.save
       redirect_to algorithm_url(@algorithm, panel: 'drugs_exclusions'), notice: t('flash_message.success_updated')
     else
-      puts '***'
-      puts @drug_exclusion.errors.messages
-      puts '***'
       redirect_to algorithm_url(@algorithm, panel: 'drugs_exclusions'), alert: @drug_exclusion.errors.full_messages
     end
   end

@@ -113,7 +113,7 @@ class AlgorithmsController < ApplicationController
 
   # @params algorithm [Algorithm] current algorithm
   # @return json of drugs
-  # All drugs available for current algorithm
+  # All drugs exclusions
   def drug_exclusions
     respond_to do |format|
       format.html
@@ -123,7 +123,7 @@ class AlgorithmsController < ApplicationController
 
   # @params algorithm [Algorithm] current algorithm
   # @return json of drugs
-  # All drugs available for current algorithm
+  # All managements exclusions
   def management_exclusions
     respond_to do |format|
       format.html
