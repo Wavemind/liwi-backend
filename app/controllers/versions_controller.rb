@@ -173,9 +173,9 @@ class VersionsController < ApplicationController
     end
   end
 
-  # PUT algorithms/:algorithm_id/version/:id/generate_variables
+  # PUT algorithms/:algorithm_id/version/:id/import_translations
   # @params version [Version] version
-  # Get an excel export of variables and final diagnoses used by the version
+  # Import an excel file to parse all nodes and update their labels/descriptions translations
   def import_translations
     file = params[:version][:file]
     if file.present? && File.extname(file.original_filename).include?('xls')
@@ -285,6 +285,7 @@ class VersionsController < ApplicationController
 
   private
 
+  # Generic method to update translations for a given model with a given ID from excel sheet
   def update_translations(model, params, data)
     data.each_with_index do |row, index|
       if index != 0 && row[1] == model.to_s
