@@ -17,7 +17,7 @@ class VersionsService
     @version.components.each do |instance|
       assign_node(instance.node)
     end
-    
+
     # Loop in each diagnostics defined in current algorithm version
     @version.diagnostics.includes(:conditions).each do |diagnostic|
       @diagnostics_ids << diagnostic.id
@@ -216,6 +216,7 @@ class VersionsService
     hash['diagnostic_id'] = final_diagnostic.diagnostic.id
     hash['id'] = final_diagnostic.id
     hash['label'] = final_diagnostic.label
+    hash['description'] = final_diagnostic.description
     hash['type'] = final_diagnostic.node_type
     hash['drugs'] = extract_health_cares(final_diagnostic.health_cares.drugs, instance.instanceable.id, final_diagnostic.id)
     hash['managements'] = extract_health_cares(final_diagnostic.health_cares.managements, instance.instanceable.id, final_diagnostic.id)
@@ -467,7 +468,12 @@ class VersionsService
     final_diagnostics = []
     node.instances.each do |instance|
       df = instance.final_diagnostic_id
-      final_diagnostics.push(instance.final_diagnostic_id) if df.present? && @final_diagnostics[df].present?
+      if df.present? && @final_diagnostics[df].present?
+        hash = {}
+        hash['id'] = df
+        hash['conditionValue'] = nil
+        final_diagnostics.push(hash)
+      end
     end
     final_diagnostics.uniq
   end
