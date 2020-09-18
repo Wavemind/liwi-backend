@@ -68,7 +68,7 @@ class FinalDiagnosticsController < ApplicationController
     end
   end
 
-  # POST /algorithms/:algorithm_id/versions/:version_id/diagnostics/:diagnostic_id/final_diagnostics/:id/add_excluded_diagnostic
+  # POST /algorithms/:algorithm_id/versions/:version_id/final_diagnostics/:id/add_excluded_diagnostic
   # @return
   # Add excluded diagnostic to final diagnostic
   def add_exclusion

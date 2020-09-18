@@ -22,6 +22,8 @@ Rails.application.routes.draw do
       put 'unarchive', to: 'algorithms#unarchive', as: 'unarchive'
       get 'questions', to: 'algorithms#questions', as: 'question'
       get 'drugs', to: 'algorithms#drugs', as: 'drug'
+      get 'drug_exclusions', to: 'algorithms#drug_exclusions', as: 'drug_exclusions'
+      get 'management_exclusions', to: 'algorithms#management_exclusions', as: 'management_exclusions'
       get 'managements', to: 'algorithms#managements', as: 'management'
       get 'questions_sequences', to: 'algorithms#questions_sequences', as: 'questions_sequence'
       get 'questions_sequences_scored', to: 'algorithms#questions_sequences_scored', as: 'questions_sequence_scored'

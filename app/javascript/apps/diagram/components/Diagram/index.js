@@ -98,8 +98,8 @@ export class Diagram extends React.Component {
       });
 
       //  Exclusion links
-      if (diagramNode.options.dbInstance.node.excluded_diagnoses_ids !== undefined) {
-        diagramNode.options.dbInstance.node.excluded_diagnoses_ids.map(excludedDiagnosisId => {
+      if (diagramNode.options.dbInstance.node.excluded_nodes_ids !== undefined) {
+        diagramNode.options.dbInstance.node.excluded_nodes_ids.map(excludedDiagnosisId => {
           let excludedFinalDiagnostic = _.find(diagramNodes, (node) => {
             return node.options.dbInstance.node_id === excludedDiagnosisId;
           });

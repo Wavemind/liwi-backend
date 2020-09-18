@@ -318,7 +318,7 @@ en:
       excluded_diagnostic: "Excluded diagnosis"
       no_excluded_diagnostic: "There is no excluded diagnosis"
     validation:
-      loop: "Loop alert: a diagnosis cannot exclude itself!"
+      loop: "Loop alert: a node cannot exclude itself!"
   flash_message:
     create_fail: "Error will creating the entry"
     delete_fail: "Error will deleting the entry"

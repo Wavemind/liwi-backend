@@ -3,8 +3,8 @@ class NodeExclusion < ApplicationRecord
 
   enum node_type: [:drug, :final_diagnostic, :management]
 
-  belongs_to :excluding_node, class_name: 'FinalDiagnostic'
-  belongs_to :excluded_node, class_name: 'FinalDiagnostic'
+  belongs_to :excluding_node, class_name: 'Node'
+  belongs_to :excluded_node, class_name: 'Node'
 
   validates_presence_of :excluded_node_id, :excluding_node_id
   validates :excluded_node_id, uniqueness: { scope: :excluding_node_id, message: I18n.t('errors.final_diagnosis_exclusion_unique') }

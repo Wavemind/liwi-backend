@@ -2,6 +2,7 @@ class FinalDiagnosisExclusionDatatable < AjaxDatatablesRails::ActiveRecord
   extend Forwardable
 
   def_delegator :@view, :link_to
+  def_delegator :@view, :remove_exclusion_algorithm_version_final_diagnostics_url
 
   def initialize(params, opts = {})
     @view = opts[:view_context]
