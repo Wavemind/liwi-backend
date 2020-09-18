@@ -80,11 +80,17 @@ Rails.application.routes.draw do
     end
 
     resources :managements, only: [:new, :create, :edit, :update, :destroy] do
+      collection do
+        post 'create_exclusion'
+        delete 'remove_exclusion'
+      end
     end
 
     resources :drugs, only: [:new, :create, :edit, :update, :destroy] do
       collection do
         post 'validate'
+        post 'create_exclusion'
+        delete 'remove_exclusion'
       end
     end
 
