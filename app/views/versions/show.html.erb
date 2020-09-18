@@ -34,6 +34,9 @@
   <li class="nav-item">
     <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'triage_conditions' %>" id="triage_conditions-tab" data-toggle="tab" href="#triage_conditions" role="tab" aria-controls="triage_conditions" aria-selected="false"><%= t('.subtitle_triage_conditions') %> </a>
   </li>
+  <li class="nav-item">
+    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'translations' %>" id="translations-tab" data-toggle="tab" href="#translations" role="tab" aria-controls="translations" aria-selected="false"><%= t('.subtitle_translations') %> </a>
+  </li>
 </ul>
 
 <div class="tab-content mt-4 ml-4" id="version-table">
@@ -90,5 +93,9 @@
 
   <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'triage_conditions' %>" id="triage_conditions" role="tabpanel" aria-labelledby="triage_conditions-tab">
     <%= render 'triage_conditions' %>
+  </div>
+
+  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'translations' %>" id="translations" role="tabpanel" aria-labelledby="translations-tab">
+    <%= render 'translations' %>
   </div>
 </div>

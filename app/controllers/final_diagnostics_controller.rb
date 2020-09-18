@@ -113,18 +113,6 @@ class FinalDiagnosticsController < ApplicationController
     end
   end
 
-  # @params FinalDiagnostic with the translations
-  # Update the object with its translation without rendering a new page
-  def update_translations
-    if @final_diagnostic.update(final_diagnostic_params)
-      @json = { status: 'success', message: t('flash_message.success_updated') }
-      render 'diagnostics/update_translations', formats: :js, status: :ok
-    else
-      @json = { status: 'alert', message: t('flash_message.update_fail') }
-      render 'diagnostics/update_translations', formats: :js, status: :unprocessable_entity
-    end
-  end
-
   private
 
   def set_breadcrumb

@@ -1,8 +1,8 @@
 class VersionsController < ApplicationController
   before_action :authenticate_user!, except: [:change_triage_order]
-  before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :duplicate, :create_triage_condition, :remove_triage_condition, :final_diagnoses_exclusions, :generate_variables, :final_diagnostics]
+  before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :duplicate, :create_triage_condition, :remove_triage_condition, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnostics, :import_translations]
   before_action :set_breadcrumb, only: [:show, :new, :edit]
-  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :change_triage_order, :components, :create_triage_condition, :duplicate, :remove_components, :remove_triage_condition, :update_list, :regenerate_json, :final_diagnoses_exclusions, :generate_variables, :final_diagnostics]
+  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :change_triage_order, :components, :create_triage_condition, :duplicate, :remove_components, :remove_triage_condition, :update_list, :regenerate_json, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnostics, :import_translations]
 
   def index
     respond_to do |format|
@@ -155,13 +155,52 @@ class VersionsController < ApplicationController
     end
   end
 
+  # GET algorithms/:algorithm_id/version/:id/generate_translations
+  # @params version [Version] version
+  # Get an excel export of all translatable labels used by the version
+  def generate_translations
+    respond_to do |format|
+      format.xlsx
+    end
+  end
+
   # GET algorithms/:algorithm_id/version/:id/generate_variables
   # @params version [Version] version
-  # Get an excel export of nodes used by the version
+  # Get an excel export of variables and final diagnoses used by the version
   def generate_variables
     respond_to do |format|
       format.xlsx
     end
+  end
+
+  # PUT algorithms/:algorithm_id/version/:id/import_translations
+  # @params version [Version] version
+  # Import an excel file to parse all nodes and update their labels/descriptions translations
+  def import_translations
+    file = params[:version][:file]
+    if file.present? && File.extname(file.original_filename).include?('xls')
+      xl_file = Roo::Spreadsheet.open(file.path, extension: :xlsx)
+
+      ActiveRecord::Base.transaction(requires_new: true) do
+        begin
+          update_translations(Diagnostic, Diagnostic.get_translatable_params(xl_file.sheet(0)), xl_file.sheet(0))
+          update_translations(FinalDiagnostic, Node.get_translatable_params(xl_file.sheet(1)), xl_file.sheet(1))
+          update_translations(Question, Node.get_translatable_params(xl_file.sheet(2)), xl_file.sheet(2))
+          update_translations(Answer, Answer.get_translatable_params(xl_file.sheet(2)), xl_file.sheet(2))
+          update_translations(HealthCares::Drug, Node.get_translatable_params(xl_file.sheet(3)), xl_file.sheet(3))
+          update_translations(Formulation, Formulation.get_translatable_params(xl_file.sheet(3)), xl_file.sheet(3))
+          update_translations(HealthCares::Management, Node.get_translatable_params(xl_file.sheet(4)), xl_file.sheet(4))
+
+          redirect_to algorithm_version_url(@algorithm, @version, panel: 'translations'), notice: t('flash_message.import_successful')
+        rescue
+          redirect_to algorithm_version_url(@algorithm, @version, panel: 'translations'), alert: t('flash_message.import_xl_error')
+          raise ActiveRecord::Rollback, ''
+        end
+      end
+    else
+      redirect_to algorithm_version_url(@algorithm, @version, panel: 'translations'), alert: t('flash_message.import_xl_wrong_file')
+    end
+
   end
 
   # PUT algorithms/:algorithm_id/version/:id/regenerate_json
@@ -245,6 +284,23 @@ class VersionsController < ApplicationController
   end
 
   private
+
+  # Generic method to update translations for a given model with a given ID from excel sheet
+  def update_translations(model, params, data)
+    data.each_with_index do |row, index|
+      if index != 0 && row[1] == model.to_s
+        diagnostic = model.find(row[0])
+        unless diagnostic.nil?
+          diagnostic_params = {}
+          params.map do |field, col|
+            diagnostic_params[field] = row[col]
+          end
+
+          diagnostic.update(diagnostic_params)
+        end
+      end
+    end
+  end
 
   def set_breadcrumb
     add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url

@@ -1,7 +1,7 @@
 class DrugsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy, :validate]
-  before_action :set_drug, only: [:edit, :update, :update_translations, :destroy]
+  before_action :set_drug, only: [:edit, :update, :destroy]
   before_action :set_breadcrumb, only: [:new, :edit]
 
   def new
@@ -61,18 +61,6 @@ class DrugsController < ApplicationController
   # Return attributes of drug and formulation that are listed
   def lists
     render json: HealthCares::Drug.list_attributes
-  end
-
-  # @params Drug with the translations
-  # Update the object with its translation without rendering a new page
-  def update_translations
-    if @drug.update(drug_params)
-      @json = { status: 'success', message: t('flash_message.success_updated') }
-      render 'diagnostics/update_translations', formats: :js, status: :ok
-    else
-      @json = { status: 'alert', message: t('flash_message.update_fail') }
-      render 'diagnostics/update_translations', formats: :js, status: :unprocessable_entity
-    end
   end
 
   # POST algorithm/:algorithm_id/drugs/validate

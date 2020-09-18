@@ -30,6 +30,7 @@ Rails.application.routes.draw do
     resources :versions, only: [:index, :show, :new, :create, :edit, :update] do
       member do
         get 'final_diagnoses_exclusions', to: 'versions#final_diagnoses_exclusions', as: 'final_diagnoses_exclusions'
+        get 'generate_translations'
         get 'generate_variables'
         get 'final_diagnostics', to: 'versions#final_diagnostics', as: 'final_diagnostic'
         put 'archive', to: 'versions#archive', as: 'archive'
@@ -42,6 +43,7 @@ Rails.application.routes.draw do
         put 'remove_triage_condition'
         put 'regenerate_json'
         put 'update_list'
+        put 'import_translations'
       end
 
       resources :final_diagnostics do
@@ -51,17 +53,15 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :diagnostics, only: [:index, :new, :create, :edit, :update, :show, :destroy, :duplicate, :update_translations] do
+      resources :diagnostics, only: [:index, :new, :create, :edit, :update, :show, :destroy, :duplicate] do
         member do
-          put 'update_translations'
           post 'duplicate'
           get 'diagram'
           get 'validate'
         end
 
-        resources :final_diagnostics, only: [:index, :new, :create, :edit, :update, :delete, :destroy, :update_translations] do
+        resources :final_diagnostics, only: [:index, :new, :create, :edit, :update, :delete, :destroy] do
           member do
-            put 'update_translations'
             get 'diagram'
           end
           resources :final_diagnostic_health_cares, only: [:create, :destroy]
@@ -74,38 +74,23 @@ Rails.application.routes.draw do
         post 'validate'
         get 'lists'
       end
-      member do
-        put 'update_translations'
-      end
 
       resources :answers, only: [] do
-        member do
-          put 'update_translations'
-        end
       end
     end
 
     resources :managements, only: [:new, :create, :edit, :update, :destroy] do
-      member do
-        put 'update_translations'
-      end
     end
 
     resources :drugs, only: [:new, :create, :edit, :update, :destroy] do
       collection do
         post 'validate'
       end
-      member do
-        put 'update_translations'
-      end
     end
 
     resources :questions_sequences, only: [:index, :new, :create, :edit, :update, :destroy] do
       collection do
         get 'lists'
-      end
-      member do
-        put 'update_translations'
       end
     end
   end

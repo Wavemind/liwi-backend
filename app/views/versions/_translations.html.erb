@@ -1,0 +1,9 @@
+<%= simple_form_for @version, url: generate_translations_algorithm_version_path(@version.algorithm, @version, format: :xlsx), method: :get do |f| %>
+  <%= f.submit t('.generate_translations'), class: 'btn btn-primary' %>
+<% end %>
+
+<%= simple_form_for @version, url: import_translations_algorithm_version_path(@version.algorithm, @version), html: {class: 'form-horizontal'}, method: :put do |f| %>
+  <div class="col align-self-center"><%= f.input :file, as: :file %></div>
+
+  <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
+<% end %>

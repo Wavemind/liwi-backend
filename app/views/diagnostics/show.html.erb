@@ -4,9 +4,6 @@
   <li class="nav-item">
     <a class="nav-link <%= 'active' if params[:panel].blank? || params[:panel] == 'final_diagnostics'%>" id="final_diagnostics-tab" data-toggle="tab" href="#final_diagnostics" role="tab" aria-controls="final_diagnostics" aria-selected="false"><%= t('.subtitle_final_diagnostics')  %> </a>
   </li>
-  <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'translations'%>" id="translations-tab" data-toggle="tab" href="#translations" role="tab" aria-controls="translations" aria-selected="false"><%= t('.translations') %></a>
-  </li>
 </ul>
 
 
@@ -19,10 +16,6 @@
     <% end %>
 
     <%= render 'final_diagnostics/table' %>
-  </div>
-
-  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'translations'%>" id="translations" role="tabpanel" aria-labelledby="translations-tab">
-    <%= render 'translations' %>
   </div>
 </div>
 

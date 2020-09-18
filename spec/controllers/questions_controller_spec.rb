@@ -78,39 +78,6 @@ RSpec.describe QuestionsController, type: :controller do
     }.to change(Answer, :count).by(0)
   end
 
-  it 'adds translations without rendering the view' do
-    @question = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', stage: Question.stages[:triage], answer_type: @input_integer)
-
-    put :update_translations, params: {
-      algorithm_id: @algorithm.id,
-      id: @question.id,
-      question: {
-        label_fr: 'Label en français',
-      }
-    }
-
-    expect(response).to render_template('diagnostics/update_translations')
-    expect(response).to have_attributes(status: 200)
-
-    @question.reload
-    expect(@question.label_fr).to eq('Label en français')
-  end
-
-  it 'returns error when sending attributes with clearing a mandatory field' do
-    @question = Questions::Symptom.create!(algorithm: @algorithm, label_en: 'Cough', stage: Question.stages[:triage], answer_type: @input_integer)
-
-    put :update_translations, params: {
-      algorithm_id: @algorithm.id,
-      id: @question.id,
-      question: {
-        label_en: '',
-      }
-    }
-
-    expect(response).to render_template('diagnostics/update_translations')
-    expect(response).to have_attributes(status: 422)
-  end
-
   it 'returns error message when trying to remove a question who has an instance' do
     Instance.create!(instanceable: @dd7, node: @question)
 
