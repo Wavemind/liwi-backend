@@ -3,7 +3,7 @@ wrap = xlsx_package.workbook.styles.add_style alignment: {wrap_text: true}
 unlocked = wb.styles.add_style locked: false
 
 diagnostics = @version.diagnostics # generate diagnostics list
-variables = @version.extract_nodes_from_version generate nodes list
+variables = @version.extract_nodes_from_version # generate nodes list
 questions_sequences = []
 final_diagnoses = []
 drugs = []
