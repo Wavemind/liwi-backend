@@ -1,6 +1,6 @@
 class DrugsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy, :validate]
+  before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy, :validate, :create_exclusion, :remove_exclusion]
   before_action :set_drug, only: [:edit, :update, :destroy]
   before_action :set_breadcrumb, only: [:new, :edit]
 
@@ -53,6 +53,33 @@ class DrugsController < ApplicationController
       else
         redirect_to algorithm_url(@algorithm, panel: 'drugs'), alert: t('error')
       end
+    end
+  end
+
+  # POST algorithm/:algorithm_id/drugs/validate
+  # @params [Integer] excluding_node_id
+  # @params [Integer] excluded_node_id
+  # Create an exclusion between two drugs
+  def create_exclusion
+    @drug_exclusion = NodeExclusion.new(drug_exclusion_params)
+    @drug_exclusion.node_type = :drug
+    if @drug_exclusion.save
+      redirect_to algorithm_url(@algorithm, panel: 'drugs_exclusions'), notice: t('flash_message.success_updated')
+    else
+      redirect_to algorithm_url(@algorithm, panel: 'drugs_exclusions'), alert: @drug_exclusion.errors.full_messages
+    end
+  end
+
+  # DELETE algorithm/:algorithm_id/drugs/validate
+  # @params [Integer] excluding_node_id
+  # @params [Integer] excluded_node_id
+  # Remove an exclusion between two drugs
+  def remove_exclusion
+    @drug_exclusion = NodeExclusion.drug.find_by(drug_exclusion_params)
+    if @drug_exclusion.destroy
+      redirect_to algorithm_url(@algorithm, panel: 'drugs_exclusions'), notice: t('flash_message.success_updated')
+    else
+      redirect_to algorithm_url(@algorithm, panel: 'drugs_exclusions'), alert: t('error')
     end
   end
 
@@ -118,6 +145,13 @@ class DrugsController < ApplicationController
         :injection_instructions_en,
         :_destroy
       ]
+    )
+  end
+
+  def drug_exclusion_params
+    params.require(:node_exclusion).permit(
+      :excluding_node_id,
+      :excluded_node_id
     )
   end
 end

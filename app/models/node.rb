@@ -25,6 +25,16 @@ class Node < ApplicationRecord
   # Puts nil instead of empty string when formula is not set in the view.
   nilify_blanks only: [:formula]
 
+  # Get every nodes (final_diagnostic, drug or management) excluded by it
+  def excluded_nodes_ids
+    NodeExclusion.where(excluding_node_id: id).map(&:excluded_node_id)
+  end
+
+  # Get every nodes (final_diagnostic, drug or management) excluding it
+  def excluding_nodes_ids
+    NodeExclusion.where(excluded_node_id: id).map(&:excluding_node_id)
+  end
+
   # @return [String]
   # Return the label with the reference for the view
   def reference_label

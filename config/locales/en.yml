@@ -92,11 +92,13 @@ en:
     edit:
       title: "Edit this algorithm"
     show:
+      subtitle_drugs: "Drugs"
+      subtitle_drugs_exclusions: "Drugs exclusions"
       subtitle_managements: "Managements"
+      subtitle_managements_exclusions: "Managements exclusions"
+      subtitle_questions: "Variables"
       subtitle_questions_sequences: "Questions sequences"
       subtitle_questions_sequences_scored: "Question sequences scored"
-      subtitle_questions: "Variables"
-      subtitle_drugs: "Drugs"
       subtitle_versions: "Versions list"
       title: "Details of %{name}"
   already_exist: "This instance already exists"
@@ -316,7 +318,7 @@ en:
       excluded_diagnostic: "Excluded diagnosis"
       no_excluded_diagnostic: "There is no excluded diagnosis"
     validation:
-      loop: "Loop alert: a diagnosis cannot exclude itself!"
+      loop: "Loop alert: a node cannot exclude itself!"
   flash_message:
     create_fail: "Error will creating the entry"
     delete_fail: "Error will deleting the entry"

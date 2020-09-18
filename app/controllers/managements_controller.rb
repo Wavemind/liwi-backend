@@ -1,7 +1,7 @@
 class ManagementsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_management, only: [:edit, :update, :destroy]
-  before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy]
+  before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy, :create_exclusion, :remove_exclusion]
   before_action :set_breadcrumb, only: [:new, :edit]
 
   def new
@@ -60,6 +60,33 @@ class ManagementsController < ApplicationController
     end
   end
 
+  # POST algorithm/:algorithm_id/managements/create_exclusion
+  # @params [Integer] excluding_node_id
+  # @params [Integer] excluded_node_id
+  # Create an exclusion between two managements
+  def create_exclusion
+    @management_exclusion = NodeExclusion.new(management_exclusion_params)
+    @management_exclusion.node_type = :management
+    if @management_exclusion.save
+      redirect_to algorithm_url(@algorithm, panel: 'managements_exclusions'), notice: t('flash_message.success_updated')
+    else
+      redirect_to algorithm_url(@algorithm, panel: 'managements_exclusions'), alert: @management_exclusion.errors.full_messages
+    end
+  end
+
+  # DELETE algorithm/:algorithm_id/managements/remove_exclusion
+  # @params [Integer] excluding_node_id
+  # @params [Integer] excluded_node_id
+  # Remove an exclusion between two managements
+  def remove_exclusion
+    @management_exclusion = NodeExclusion.management.find_by(management_exclusion_params)
+    if @management_exclusion.destroy
+      redirect_to algorithm_url(@algorithm, panel: 'managements_exclusions'), notice: t('flash_message.success_updated')
+    else
+      redirect_to algorithm_url(@algorithm, panel: 'managements_exclusions'), alert: t('error')
+    end
+  end
+
   private
   def set_breadcrumb
     add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
@@ -81,6 +108,13 @@ class ManagementsController < ApplicationController
       :description_en,
       Language.description_params,
       :algorithm_id
+    )
+  end
+
+  def management_exclusion_params
+    params.require(:node_exclusion).permit(
+      :excluding_node_id,
+      :excluded_node_id
     )
   end
 end
