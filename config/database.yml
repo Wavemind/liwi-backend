@@ -42,3 +42,4 @@ production:
   pool: 5
   username: <%= ENV['PROD_DB_USERNAME'] %>
   password: <%= ENV['PROD_DB_PASSWORD'] %>
+  url: <%= ENV['DATABASE_URL'] %>
