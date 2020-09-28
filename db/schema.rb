@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_14_125106) do
+ActiveRecord::Schema.define(version: 2020_09_23_085545) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -139,7 +139,7 @@ ActiveRecord::Schema.define(version: 2020_09_14_125106) do
     t.float "maximal_dose_per_kg"
     t.float "maximal_dose"
     t.integer "medication_form"
-    t.integer "dose_form"
+    t.decimal "dose_form"
     t.integer "liquid_concentration"
     t.integer "doses_per_day"
     t.integer "unique_dose"
