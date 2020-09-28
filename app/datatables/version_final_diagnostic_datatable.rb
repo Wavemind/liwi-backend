@@ -13,6 +13,8 @@ class VersionFinalDiagnosticDatatable < AjaxDatatablesRails::ActiveRecord
       id: { source: 'FinalDiagnostic.id' },
       reference: { source: 'FinalDiagnostic.reference' },
       label: { source: 'FinalDiagnostic.label_translations' },
+      cc: { source: 'Diagnostic.node_id' },
+      diagnostic: { source: 'FinalDiagnostic.diagnostic_id' },
       description: { source: 'FinalDiagnostic.description_translations' },
     }
   end
@@ -31,6 +33,6 @@ class VersionFinalDiagnosticDatatable < AjaxDatatablesRails::ActiveRecord
   end
 
   def get_raw_records
-    FinalDiagnostic.joins(diagnostic: [:node]).where(diagnostic_id: Version.find(params[:id]).diagnostics.map(&:id))
+    FinalDiagnostic.includes(diagnostic: [:node]).joins(diagnostic: [:node]).where(diagnostic_id: Version.find(params[:id]).diagnostics.map(&:id))
   end
 end

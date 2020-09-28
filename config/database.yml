@@ -20,7 +20,7 @@ development:
   username: postgres
   password: root
 #  url: postgres://gzdgczdsprokui:7a9b999e8958720750838984f959da46d7ed91f0b50a62cb84f83e939e3d65dd@ec2-54-228-207-163.eu-west-1.compute.amazonaws.com:5432/d395difi02l27b # allow to test with staging database
-  url: postgres://postgres:6bd19ad669caed3849d24265c03a16c0@liwi-test.wavelab.top:22983/liwi_test # allow to test with ctlq database
+#  url: postgres://postgres:6bd19ad669caed3849d24265c03a16c0@liwi-test.wavelab.top:22983/liwi_test # allow to test with ctlq database
 #  url: postgres://postgres:e6ad100af582bb53b3e23ea0c98b056a@medalc.unisante.ch:32462/medalc # allow to test with prod database
 
 # Warning: The database defined as "test" will be erased and
