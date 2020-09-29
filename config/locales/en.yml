@@ -475,10 +475,11 @@ en:
       wrong_node_type: "This node is not a management or a drug."
   medical_staffs:
     roles:
-      registration_desk: "Registration Desk"
-      clinician: "Clinician"
-      triage_nurse: "Triage Nurse"
-      lab: "Lab Assistant"
+      medical_doctor: "Medical Doctor (MD)"
+      assistant_medical_officer: "Assistant Medical Officer (AMO)"
+      clinical_officer: "Assistant Medical Officer (AMO)"
+      nurse: "Nurse"
+      midwife: "Midwife"
       pharmacist: "Pharmacist"
   nodes:
     validation:
