@@ -59,6 +59,7 @@ class HealthFacilitiesController < ApplicationController
   # Add device to health_facility
   def add_device
     @health_facility = HealthFacility.find(params[:health_facility_id])
+    authorize @health_facility
     device = Device.find(params[:device][:id])
 
     device.health_facility_id = @health_facility.id
@@ -77,6 +78,7 @@ class HealthFacilitiesController < ApplicationController
   # Remove device from health_facility
   def remove_device
     @health_facility = HealthFacility.find(params[:health_facility_id])
+    authorize @health_facility
     device = Device.find(params[:device_id])
 
     device.health_facility_id = nil
