@@ -98,7 +98,7 @@ class Diagnostic < ApplicationRecord
       end
     end unless old_diagnostic.nil?
 
-    FinalDiagnosisExclusion.recreate_exclusions_after_duplicate(matching_final_diagnoses)
+    NodeExclusion.recreate_exclusions_after_duplicate(matching_final_diagnoses)
   end
 
   # @params [Array][Array][Instances] instances before delete, [Instance] instance to delete
@@ -143,7 +143,7 @@ class Diagnostic < ApplicationRecord
     components.final_diagnostics.includes(:node).as_json(
       include: [
         node: {
-          methods: [:node_type, :excluded_diagnoses_ids, :excluding_diagnoses_ids]
+          methods: [:node_type, :excluded_nodes_ids, :excluding_nodes_ids]
         },
         conditions: {
           include: [
@@ -264,5 +264,19 @@ class Diagnostic < ApplicationRecord
       version_id: version_id,
       chief_complaint_label: node.reference_label
     }
+  end
+
+  # Get translatable attributes to translate with excel import
+  def self.get_translatable_params(data)
+    fields_to_update = {}
+
+    data.row(1).each_with_index do |head, index|
+      if head.include?('Label')
+        code = head[/\((.*?)\)/m, 1]
+        fields_to_update["label_#{code}"] = index unless code == 'en'
+      end
+    end
+
+    fields_to_update
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_10_133451) do
+ActiveRecord::Schema.define(version: 2020_09_23_085545) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -125,13 +125,6 @@ ActiveRecord::Schema.define(version: 2020_09_10_133451) do
     t.index ["version_id"], name: "index_diagnostics_on_version_id"
   end
 
-  create_table "final_diagnosis_exclusions", force: :cascade do |t|
-    t.bigint "excluding_diagnosis_id"
-    t.bigint "excluded_diagnosis_id"
-    t.index ["excluded_diagnosis_id"], name: "index_final_diagnosis_exclusions_on_excluded_diagnosis_id"
-    t.index ["excluding_diagnosis_id"], name: "index_final_diagnosis_exclusions_on_excluding_diagnosis_id"
-  end
-
   create_table "final_diagnostic_health_cares", force: :cascade do |t|
     t.bigint "node_id"
     t.bigint "final_diagnostic_id"
@@ -146,7 +139,7 @@ ActiveRecord::Schema.define(version: 2020_09_10_133451) do
     t.float "maximal_dose_per_kg"
     t.float "maximal_dose"
     t.integer "medication_form"
-    t.integer "dose_form"
+    t.decimal "dose_form"
     t.integer "liquid_concentration"
     t.integer "doses_per_day"
     t.integer "unique_dose"
@@ -270,6 +263,14 @@ ActiveRecord::Schema.define(version: 2020_09_10_133451) do
     t.index ["node_id"], name: "index_node_complaint_categories_on_node_id"
   end
 
+  create_table "node_exclusions", force: :cascade do |t|
+    t.bigint "excluding_node_id"
+    t.bigint "excluded_node_id"
+    t.integer "node_type"
+    t.index ["excluded_node_id"], name: "index_node_exclusions_on_excluded_node_id"
+    t.index ["excluding_node_id"], name: "index_node_exclusions_on_excluding_node_id"
+  end
+
   create_table "nodes", force: :cascade do |t|
     t.hstore "label_translations"
     t.integer "reference"
@@ -304,7 +305,7 @@ ActiveRecord::Schema.define(version: 2020_09_10_133451) do
     t.string "max_message_warning"
     t.string "min_message_error"
     t.string "max_message_error"
-    t.boolean "estimable", default: false
+    t.boolean "estimable"
     t.bigint "reference_table_z_id"
     t.boolean "is_neonat", default: false
     t.boolean "is_danger_sign", default: false
@@ -392,7 +393,7 @@ ActiveRecord::Schema.define(version: 2020_09_10_133451) do
     t.bigint "top_left_question_id"
     t.bigint "first_top_right_question_id"
     t.bigint "second_top_right_question_id"
-    t.json "medal_r_config"
+    t.json "medal_r_config", default: {}
     t.json "medal_r_json"
     t.integer "medal_r_json_version", default: 0
     t.index ["algorithm_id"], name: "index_versions_on_algorithm_id"
@@ -408,10 +409,10 @@ ActiveRecord::Schema.define(version: 2020_09_10_133451) do
   add_foreign_key "devices", "health_facilities"
   add_foreign_key "diagnostics", "nodes"
   add_foreign_key "diagnostics", "versions"
-  add_foreign_key "final_diagnosis_exclusions", "nodes", column: "excluded_diagnosis_id"
-  add_foreign_key "final_diagnosis_exclusions", "nodes", column: "excluding_diagnosis_id"
   add_foreign_key "health_facility_accesses", "health_facilities"
   add_foreign_key "health_facility_accesses", "versions"
+  add_foreign_key "node_exclusions", "nodes", column: "excluded_node_id"
+  add_foreign_key "node_exclusions", "nodes", column: "excluding_node_id"
   add_foreign_key "nodes", "algorithms"
   add_foreign_key "nodes", "answer_types"
   add_foreign_key "nodes", "nodes", column: "reference_table_z_id"

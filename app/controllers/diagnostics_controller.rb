@@ -2,7 +2,7 @@ class DiagnosticsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_algorithm, only: [:show, :new, :create, :edit, :update, :destroy, :duplicate]
   before_action :set_version, only: [:show, :new, :create, :edit, :update, :destroy, :duplicate]
-  before_action :set_diagnostic, only: [:show, :edit, :update, :diagram, :health_cares_diagram, :update_translations, :validate]
+  before_action :set_diagnostic, only: [:show, :edit, :update, :diagram, :health_cares_diagram, :validate]
   before_action :set_breadcrumb, only: [:show, :new, :edit]
   layout 'diagram', only: [:diagram]
 
@@ -94,18 +94,6 @@ class DiagnosticsController < ApplicationController
       redirect_to algorithm_version_url(@algorithm, @version), notice: t('flash_message.success_deleted')
     else
       redirect_to algorithm_version_url(@algorithm, @version), alert: t('flash_message.duplicate_fail')
-    end
-  end
-
-  # @params [Diagnostic] with the translations
-  # Update the object with its translation without rendering a new page
-  def update_translations
-    if @diagnostic.update(diagnostic_params)
-      @json = {status: 'success', messages: t('flash_message.success_updated')}
-      render 'update_translations', formats: :js, status: :ok
-    else
-      @json = {status: 'alert', messages: t('flash_message.update_fail')}
-      render 'update_translations', formats: :js, status: :unprocessable_entity
     end
   end
 

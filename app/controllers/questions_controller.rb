@@ -2,7 +2,7 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy, :validate, :lists]
   before_action :set_breadcrumb, only: [:new, :edit]
-  before_action :set_question, only: [:edit, :update, :category_reference, :update_translations, :destroy]
+  before_action :set_question, only: [:edit, :update, :category_reference, :destroy]
 
   def new
     add_breadcrumb t('breadcrumbs.new')
@@ -100,18 +100,6 @@ class QuestionsController < ApplicationController
       render json: {}, status: 200
     else
       render json: question.errors.messages, status: 422
-    end
-  end
-
-  # @params Question with the translations
-  # Update the object with its translation without rendering a new page
-  def update_translations
-    if @question.update(question_params)
-      @json = { status: 'success', message: t('flash_message.success_updated') }
-      render 'diagnostics/update_translations', formats: :js, status: :ok
-    else
-      @json = { status: 'alert', message: t('flash_message.update_fail') }
-      render 'diagnostics/update_translations', formats: :js, status: :unprocessable_entity
     end
   end
 

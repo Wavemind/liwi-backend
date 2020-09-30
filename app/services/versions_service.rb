@@ -17,7 +17,7 @@ class VersionsService
     @version.components.each do |instance|
       assign_node(instance.node)
     end
-    
+
     # Loop in each diagnostics defined in current algorithm version
     @version.diagnostics.includes(:conditions).each do |diagnostic|
       @diagnostics_ids << diagnostic.id
@@ -171,10 +171,8 @@ class VersionsService
   def self.extract_diagnostic(diagnostic)
     hash = {}
     hash['id'] = diagnostic.id
-    hash['reference'] = diagnostic.reference
     hash['label'] = diagnostic.label
     hash['complaint_category'] = diagnostic.node_id
-    hash['differential'] = extract_conditions(diagnostic.conditions)
     hash['instances'] = {}
     hash['final_diagnostics'] = {}
 
@@ -192,7 +190,7 @@ class VersionsService
       assign_node(question_instance.node)
 
       hash['instances'][question_instance.node.id] = extract_instances(question_instance) if hash['instances'][question_instance.node.id].nil? || question_instance.final_diagnostic_id.nil?
-      hash['final_diagnostics'][question_instance.final_diagnostic_id]['instances'][question_instance.node.id] = hash['instances'][question_instance.node.id] unless question_instance.final_diagnostic_id.nil?
+      hash['final_diagnostics'][question_instance.final_diagnostic_id]['instances'][question_instance.node.id] = extract_instances(question_instance) unless question_instance.final_diagnostic_id.nil?
     end
 
     # Loop in each predefined syndromes used in current diagnostic
@@ -201,7 +199,7 @@ class VersionsService
       assign_node(questions_sequence_instance.node)
 
       hash['instances'][questions_sequence_instance.node.id] = extract_instances(questions_sequence_instance) if hash['instances'][questions_sequence_instance.node.id].nil? || questions_sequence_instance.final_diagnostic_id.nil?
-      hash['final_diagnostics'][questions_sequence_instance.final_diagnostic_id]['instances'][questions_sequence_instance.node.id] = hash['instances'][questions_sequence_instance.node.id] unless questions_sequence_instance.final_diagnostic_id.nil?
+      hash['final_diagnostics'][questions_sequence_instance.final_diagnostic_id]['instances'][questions_sequence_instance.node.id] = extract_instances(questions_sequence_instance) unless questions_sequence_instance.final_diagnostic_id.nil?
     end
 
     hash
@@ -216,11 +214,12 @@ class VersionsService
     hash['diagnostic_id'] = final_diagnostic.diagnostic.id
     hash['id'] = final_diagnostic.id
     hash['label'] = final_diagnostic.label
+    hash['description'] = final_diagnostic.description
     hash['type'] = final_diagnostic.node_type
     hash['drugs'] = extract_health_cares(final_diagnostic.health_cares.drugs, instance.instanceable.id, final_diagnostic.id)
     hash['managements'] = extract_health_cares(final_diagnostic.health_cares.managements, instance.instanceable.id, final_diagnostic.id)
-    hash['excluding_final_diagnostics'] = final_diagnostic.excluded_diagnoses_ids
-    hash['excluded_final_diagnostics'] = final_diagnostic.excluding_diagnoses_ids
+    hash['excluding_final_diagnostics'] = final_diagnostic.excluding_nodes_ids
+    hash['excluded_final_diagnostics'] = final_diagnostic.excluded_nodes_ids
     hash['cc'] = final_diagnostic.diagnostic.node_id
     hash
   end
@@ -327,7 +326,6 @@ class VersionsService
       hash[question.id] = {}
       hash[question.id]['id'] = question.id
       hash[question.id]['type'] = question.node_type
-      hash[question.id]['reference'] = question.reference
       hash[question.id]['label'] = question.label
       hash[question.id]['description'] = question.description
       hash[question.id]['is_mandatory'] = question.is_mandatory
@@ -377,7 +375,6 @@ class VersionsService
       question.answers.each do |answer|
         answer_hash = {}
         answer_hash['id'] = answer.id
-        answer_hash['reference'] = answer.reference
         answer_hash['label'] = answer.label
         answer_hash['value'] = answer.value
         answer_hash['operator'] = answer.operator
@@ -467,7 +464,12 @@ class VersionsService
     final_diagnostics = []
     node.instances.each do |instance|
       df = instance.final_diagnostic_id
-      final_diagnostics.push(instance.final_diagnostic_id) if df.present? && @final_diagnostics[df].present?
+      if df.present? && @final_diagnostics[df].present?
+        hash = {}
+        hash['id'] = df
+        hash['conditionValue'] = nil
+        final_diagnostics.push(hash)
+      end
     end
     final_diagnostics.uniq
   end
@@ -517,9 +519,10 @@ class VersionsService
       hash[health_care.id]['id'] = health_care.id
       hash[health_care.id]['type'] = health_care.node_type
       hash[health_care.id]['category'] = health_care.category_name
-      hash[health_care.id]['reference'] = health_care.reference
       hash[health_care.id]['label'] = health_care.label
       hash[health_care.id]['description'] = health_care.description
+      hash[health_care.id]['excluding_nodes_ids'] = health_care.excluding_nodes_ids
+      hash[health_care.id]['excluded_nodes_ids'] = health_care.excluded_nodes_ids
       # Fields specific to drugs
       if health_care.is_a?(HealthCares::Drug)
         hash[health_care.id]['formulations'] = []
@@ -555,7 +558,6 @@ class VersionsService
       hash[questions_sequence.id] = extract_conditions(questions_sequence.instances.find_by(instanceable_id: questions_sequence.id).conditions)
       hash[questions_sequence.id]['id'] = questions_sequence.id
       hash[questions_sequence.id]['label'] = questions_sequence.label
-      hash[questions_sequence.id]['reference'] = questions_sequence.reference
       hash[questions_sequence.id]['min_score'] = questions_sequence.min_score
       hash[questions_sequence.id]['type'] = questions_sequence.node_type
       hash[questions_sequence.id]['category'] = questions_sequence.category_name
@@ -586,7 +588,6 @@ class VersionsService
     questions_sequence.answers.each do |answer|
       answer_hash = {}
       answer_hash['id'] = answer.id
-      answer_hash['reference'] = answer.reference
       answer_hash['label'] = answer.label
 
       hash[answer.id] = answer_hash

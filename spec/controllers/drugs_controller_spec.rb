@@ -11,35 +11,6 @@ RSpec.describe DrugsController, type: :controller do
     @drug = @algorithm.health_cares.drugs.create!(type: 'HealthCares::Drug', label_en: 'Label en')
   end
 
-  it 'adds translations without rendering the view' do
-    put :update_translations, params: {
-      algorithm_id: @algorithm.id,
-      id: @drug.id,
-      health_cares_drug: {
-        label_fr: 'Label fr',
-      }
-    }
-
-    expect(response).to render_template('diagnostics/update_translations')
-    expect(response).to have_attributes(status: 200)
-
-    @drug.reload
-    expect(@drug.label_fr).to eq('Label fr')
-  end
-
-  it 'returns error when sending attributes with clearing a mandatory field' do
-    put :update_translations, params: {
-      algorithm_id: @algorithm.id,
-      id: @drug.id,
-      health_cares_drug: {
-        label_en: '',
-      }
-    }
-
-    expect(response).to render_template('diagnostics/update_translations')
-    expect(response).to have_attributes(status: 422)
-  end
-
   it 'returns error message when trying to remove a drug who has an instance' do
     Instance.create!(instanceable: @dd7, node: @drug)
 

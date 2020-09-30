@@ -34,6 +34,9 @@ class Algorithm < ApplicationRecord
     bmi = questions.create!(label_en: 'BMI', type: 'Questions::BasicMeasurement', stage: Question.stages[:registration], answer_type_id: 5, formula: '[BM1] / (([BM3] / 100) * ([BM3] / 100))', is_default: true)
     temperature = questions.create!(label_en: 'Axillary temperature', type: 'Questions::BasicMeasurement', stage: Question.stages[:triage], answer_type_id: 4, is_default: true)
     cc_general = questions.create!(label_en: 'General', type: 'Questions::ComplaintCategory', stage: Question.stages[:triage], is_mandatory: true, answer_type_id: 1, is_default: true)
+    birth_date_day = questions.create!(label_en: 'Day', type: 'Questions::Demographic', stage: Question.stages[:registration], is_mandatory: false, answer_type_id: 2, is_default: true)
+    birth_date_month = questions.create!(label_en: 'Month', type: 'Questions::Demographic', stage: Question.stages[:registration], is_mandatory: false, answer_type_id: 2, is_default: true)
+    birth_date_year = questions.create!(label_en: 'Year', type: 'Questions::BasicDemographic', stage: Question.stages[:registration], is_mandatory: true, answer_type_id: 3, is_default: true)
 
     # Configure basic questions into the algorithm to be used in json generation
     self.update(medal_r_config: {basic_questions: {
@@ -42,8 +45,21 @@ class Algorithm < ApplicationRecord
       last_name_question_id: last_name.id,
       gender_question_id: gender.id,
       weight_question_id: weight.id,
-      general_cc_id: cc_general.id
+      general_cc_id: cc_general.id,
+      birth_date_day_id: birth_date_day.id,
+      birth_date_month_id: birth_date_month.id,
+      birth_date_year_id: birth_date_year.id
     }})
+
+    # Generate answers for days
+    for day in 1..31
+      birth_date_day.answers.create({label_en: day.to_s, value: day.to_s})
+    end
+
+    # Generate answers for months (numeric format)
+    for month in 1..12
+      birth_date_month.answers.create({label_en: month.to_s, value: month.to_s})
+    end
 
     gender.answers.create([
       {label_en: 'Male', value: 'male'},

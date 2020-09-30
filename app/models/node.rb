@@ -25,6 +25,16 @@ class Node < ApplicationRecord
   # Puts nil instead of empty string when formula is not set in the view.
   nilify_blanks only: [:formula]
 
+  # Get every nodes (final_diagnostic, drug or management) excluded by it
+  def excluded_nodes_ids
+    NodeExclusion.where(excluding_node_id: id).map(&:excluded_node_id)
+  end
+
+  # Get every nodes (final_diagnostic, drug or management) excluding it
+  def excluding_nodes_ids
+    NodeExclusion.where(excluded_node_id: id).map(&:excluding_node_id)
+  end
+
   # @return [String]
   # Return the label with the reference for the view
   def reference_label
@@ -114,5 +124,22 @@ class Node < ApplicationRecord
       self.reference = 1
     end
     self.save
+  end
+
+  # Get translatable attributes to translate with excel import
+  def self.get_translatable_params(data)
+    fields_to_update = {}
+
+    data.row(1).each_with_index do |head, index|
+      if head.include?('Label')
+        code = head[/\((.*?)\)/m, 1]
+        fields_to_update["label_#{code}"] = index unless code == 'en'
+      elsif head.include?('Description')
+        code = head[/\((.*?)\)/m, 1]
+        fields_to_update["description_#{code}"] = index unless code == 'en'
+      end
+    end
+
+    fields_to_update
   end
 end

@@ -2,22 +2,28 @@
 
 <ul class="nav nav-tabs" id="myTab" role="tablist">
   <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:panel].blank? || params[:panel] == 'versions'%>" id="home-tab" data-toggle="tab" href="#versions" role="tab" aria-controls="home" aria-selected="true"><%= t('.subtitle_versions') %></a>
+    <a class="nav-link <%= 'active' if params[:panel].blank? || params[:panel] == 'versions'%>" id="versions-tab" data-toggle="tab" href="#versions" role="tab" aria-controls="versions" aria-selected="true"><%= t('.subtitle_versions') %></a>
   </li>
   <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'questions'%>" id="profile-tab" data-toggle="tab" href="#questions" role="tab" aria-controls="profile" aria-selected="false"><%= t('.subtitle_questions')  %> </a>
+    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'questions'%>" id="questions-tab" data-toggle="tab" href="#questions" role="tab" aria-controls="questions" aria-selected="false"><%= t('.subtitle_questions')  %> </a>
   </li>
   <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'drugs'%>" id="contact-tab" data-toggle="tab" href="#drugs" role="tab" aria-controls="contact" aria-selected="false"><%= t('.subtitle_drugs') %></a>
+    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'drugs'%>" id="drugs-tab" data-toggle="tab" href="#drugs" role="tab" aria-controls="drugs" aria-selected="false"><%= t('.subtitle_drugs') %></a>
   </li>
   <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'managements'%>" id="contact-tab" data-toggle="tab" href="#managements" role="tab" aria-controls="contact" aria-selected="false"><%= t('.subtitle_managements') %></a>
+    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'managements'%>" id="managements-tab" data-toggle="tab" href="#managements" role="tab" aria-controls="managements" aria-selected="false"><%= t('.subtitle_managements') %></a>
   </li>
   <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'questions_sequences'%>" id="contact-tab" data-toggle="tab" href="#questions_sequences" role="tab" aria-controls="contact" aria-selected="false"><%= t('.subtitle_questions_sequences') %></a>
+    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'questions_sequences'%>" id="questions_sequences-tab" data-toggle="tab" href="#questions_sequences" role="tab" aria-controls="questions_sequences" aria-selected="false"><%= t('.subtitle_questions_sequences') %></a>
   </li>
   <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'questions_sequences_scored'%>" id="contact-tab" data-toggle="tab" href="#questions_sequences_scored" role="tab" aria-controls="contact" aria-selected="false"><%= t('.subtitle_questions_sequences_scored') %></a>
+    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'questions_sequences_scored'%>" id="questions_sequences_scored-tab" data-toggle="tab" href="#questions_sequences_scored" role="tab" aria-controls="questions_sequences_scored" aria-selected="false"><%= t('.subtitle_questions_sequences_scored') %></a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'drugs_exclusions'%>" id="drugs_exclusions-tab" data-toggle="tab" href="#drugs_exclusions" role="tab" aria-controls="drugs_exclusions" aria-selected="false"><%= t('.subtitle_drugs_exclusions') %></a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'managements_exclusions'%>" id="managements_exclusions-tab" data-toggle="tab" href="#managements_exclusions" role="tab" aria-controls="managements_exclusions" aria-selected="false"><%= t('.subtitle_managements_exclusions') %></a>
   </li>
 </ul>
 
@@ -77,5 +83,53 @@
 
     <%= render 'questions_sequences/scored_table' %>
 
+  </div>
+
+  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'drugs_exclusions' %>" id="drugs_exclusions" role="tabpanel" aria-labelledby="drugs_exclusions-tab">
+
+    <h2><%= t('.subtitle_drugs_exclusions') %></h2>
+
+    <%= simple_form_for NodeExclusion.new, url: create_exclusion_algorithm_drugs_url(@algorithm, format: :html), method: :post do |f| %>
+      <div class="row">
+        <div class="col">
+          <%= f.input :excluding_node_id, collection: @algorithm.health_cares.drugs, value_method: :id, label_method: :reference_label, label: false, prompt: t('prompt') %>
+        </div>
+        <div class="col text-center">
+          <%= t('.excludes') %>
+        </div>
+        <div class="col">
+          <%= f.input :excluded_node_id, collection: @algorithm.health_cares.drugs, value_method: :id, label_method: :reference_label, label: false, prompt: t('prompt') %>
+        </div>
+        <div class="col text-right">
+          <%= f.submit t('add'), class: 'btn btn-primary' %>
+        </div>
+      </div>
+    <% end %>
+
+    <%= render 'drugs/exclusion_table' %>
+  </div>
+
+  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'managements_exclusions' %>" id="managements_exclusions" role="tabpanel" aria-labelledby="managements_exclusions-tab">
+
+    <h2><%= t('.subtitle_managements_exclusions') %></h2>
+
+    <%= simple_form_for NodeExclusion.new, url: create_exclusion_algorithm_managements_url(@algorithm, format: :html), method: :post do |f| %>
+      <div class="row">
+        <div class="col">
+          <%= f.input :excluding_node_id, collection: @algorithm.health_cares.managements, value_method: :id, label_method: :reference_label, label: false, prompt: t('prompt') %>
+        </div>
+        <div class="col text-center">
+          <%= t('.excludes') %>
+        </div>
+        <div class="col">
+          <%= f.input :excluded_node_id, collection: @algorithm.health_cares.managements, value_method: :id, label_method: :reference_label, label: false, prompt: t('prompt') %>
+        </div>
+        <div class="col text-right">
+          <%= f.submit t('add'), class: 'btn btn-primary' %>
+        </div>
+      </div>
+    <% end %>
+
+    <%= render 'managements/exclusion_table' %>
   </div>
 </div>

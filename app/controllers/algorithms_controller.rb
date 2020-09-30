@@ -119,6 +119,26 @@ class AlgorithmsController < ApplicationController
     end
   end
 
+  # @params algorithm [Algorithm] current algorithm
+  # @return json of drugs
+  # All drugs exclusions
+  def drug_exclusions
+    respond_to do |format|
+      format.html
+      format.json { render json: DrugExclusionDatatable.new(params, view_context: view_context) }
+    end
+  end
+
+  # @params algorithm [Algorithm] current algorithm
+  # @return json of drugs
+  # All managements exclusions
+  def management_exclusions
+    respond_to do |format|
+      format.html
+      format.json { render json: ManagementExclusionDatatable.new(params, view_context: view_context) }
+    end
+  end
+
   # PUT algorithms/:id/unarchive
   # @params algorithm [Algorithm] algorithm to archive
   # @return redirect to algorithms#index with flash message

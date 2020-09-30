@@ -1,7 +1,7 @@
 class QuestionsSequencesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy, :lists]
-  before_action :set_questions_sequence, only: [:edit, :update, :destroy, :update_translations, :diagram, :validate]
+  before_action :set_questions_sequence, only: [:edit, :update, :destroy, :diagram, :validate]
   before_action :set_breadcrumb, only: [:edit, :diagram]
 
   layout 'diagram', only: [:diagram]
@@ -88,18 +88,6 @@ class QuestionsSequencesController < ApplicationController
   def reference_prefix
     authorize policy_scope(QuestionsSequence)
     render json: QuestionsSequence.reference_prefix_class(params[:type])
-  end
-
-  # @params QuestionsSequence with the translations
-  # Update the object with its translation without rendering a new page
-  def update_translations
-    if @questions_sequence.update(questions_sequence_params)
-      @json = { status: 'success', message: t('flash_message.success_updated') }
-      render 'diagnostics/update_translations', formats: :js, status: :ok
-    else
-      @json = { status: 'alert', message: t('flash_message.update_fail') }
-      render 'diagnostics/update_translations', formats: :js, status: :unprocessable_entity
-    end
   end
 
   # @params [QuestionsSequence]

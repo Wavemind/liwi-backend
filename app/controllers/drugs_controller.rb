@@ -1,7 +1,7 @@
 class DrugsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_drug, only: [:edit, :update, :update_translations, :destroy]
-  before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy, :validate]
+  before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy, :validate, :create_exclusion, :remove_exclusion]
+  before_action :set_drug, only: [:edit, :update, :destroy]
   before_action :set_breadcrumb, only: [:new, :edit]
 
   def new
@@ -58,24 +58,39 @@ class DrugsController < ApplicationController
     end
   end
 
+  # POST algorithm/:algorithm_id/drugs/validate
+  # @params [Integer] excluding_node_id
+  # @params [Integer] excluded_node_id
+  # Create an exclusion between two drugs
+  def create_exclusion
+    @drug_exclusion = NodeExclusion.new(drug_exclusion_params)
+    @drug_exclusion.node_type = :drug
+    if @drug_exclusion.save
+      redirect_to algorithm_url(@algorithm, panel: 'drugs_exclusions'), notice: t('flash_message.success_updated')
+    else
+      redirect_to algorithm_url(@algorithm, panel: 'drugs_exclusions'), alert: @drug_exclusion.errors.full_messages
+    end
+  end
+
+  # DELETE algorithm/:algorithm_id/drugs/validate
+  # @params [Integer] excluding_node_id
+  # @params [Integer] excluded_node_id
+  # Remove an exclusion between two drugs
+  def remove_exclusion
+    @drug_exclusion = NodeExclusion.drug.find_by(drug_exclusion_params)
+    if @drug_exclusion.destroy
+      redirect_to algorithm_url(@algorithm, panel: 'drugs_exclusions'), notice: t('flash_message.success_updated')
+    else
+      redirect_to algorithm_url(@algorithm, panel: 'drugs_exclusions'), alert: t('error')
+    end
+  end
+
   # GET
   # @return Hash
   # Return attributes of drug and formulation that are listed
   def lists
     authorize policy_scope(HealthCares::Drug)
     render json: HealthCares::Drug.list_attributes
-  end
-
-  # @params Drug with the translations
-  # Update the object with its translation without rendering a new page
-  def update_translations
-    if @drug.update(drug_params)
-      @json = { status: 'success', message: t('flash_message.success_updated') }
-      render 'diagnostics/update_translations', formats: :js, status: :ok
-    else
-      @json = { status: 'alert', message: t('flash_message.update_fail') }
-      render 'diagnostics/update_translations', formats: :js, status: :unprocessable_entity
-    end
   end
 
   # POST algorithm/:algorithm_id/drugs/validate
@@ -135,6 +150,13 @@ class DrugsController < ApplicationController
         :injection_instructions_en,
         :_destroy
       ]
+    )
+  end
+
+  def drug_exclusion_params
+    params.require(:node_exclusion).permit(
+      :excluding_node_id,
+      :excluded_node_id
     )
   end
 end

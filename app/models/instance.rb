@@ -110,7 +110,7 @@ class Instance < ApplicationRecord
 
   # Remove exclusion from a final diagnosis instance that has been destroyed
   def remove_exclusion
-    FinalDiagnosisExclusion.where(excluding_diagnosis_id: node_id).or(FinalDiagnosisExclusion.where(excluded_diagnosis_id: node_id)).map(&:destroy)
+    NodeExclusion.final_diagnostic.where(excluding_node_id: node_id).or(NodeExclusion.final_diagnostic.where(excluded_node_id: node_id)).map(&:destroy)
   end
 
   private
