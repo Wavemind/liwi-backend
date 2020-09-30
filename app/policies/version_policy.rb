@@ -65,7 +65,15 @@ class VersionPolicy < ApplicationPolicy
     index?
   end
 
+  def generate_translations?
+    new?
+  end
+
   def generate_variables?
+    new?
+  end
+
+  def import_translations?
     new?
   end
 

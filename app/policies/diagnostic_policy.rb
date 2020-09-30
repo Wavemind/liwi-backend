@@ -41,10 +41,6 @@ class DiagnosticPolicy < ApplicationPolicy
     new?
   end
 
-  def update_translations?
-    new?
-  end
-
   def validate?
     new?
   end

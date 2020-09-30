@@ -8,8 +8,4 @@ class AnswerPolicy < ApplicationPolicy
   def operators?
     user.admin? || user.clinician?
   end
-
-  def update_translations?
-    operators?
-  end
 end

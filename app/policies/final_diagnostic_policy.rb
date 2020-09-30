@@ -40,9 +40,4 @@ class FinalDiagnosticPolicy < ApplicationPolicy
   def remove_exclusion?
     new?
   end
-
-  def update_translations?
-    new?
-  end
-
 end

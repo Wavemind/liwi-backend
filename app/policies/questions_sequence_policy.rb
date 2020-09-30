@@ -37,10 +37,6 @@ class QuestionsSequencePolicy < ApplicationPolicy
     diagram?
   end
 
-  def update_translations?
-    new?
-  end
-
   def validate?
     new?
   end

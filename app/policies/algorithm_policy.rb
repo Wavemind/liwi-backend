@@ -56,4 +56,12 @@ class AlgorithmPolicy < ApplicationPolicy
   def questions_sequences_scored?
     index?
   end
+
+  def drug_exclusions?
+    index?
+  end
+
+  def management_exclusions?
+    index?
+  end
 end

@@ -25,12 +25,16 @@ class DrugPolicy < ApplicationPolicy
     new?
   end
 
-  def lists?
-    user.admin? || user.clinician? || user.deployment_manager?
+  def create_exclusion?
+    new?
   end
 
-  def update_translations?
+  def remove_exclusion?
     new?
+  end
+
+  def lists?
+    user.admin? || user.clinician? || user.deployment_manager?
   end
 
   def validate?

@@ -32,8 +32,4 @@ class QuestionPolicy < ApplicationPolicy
   def validate?
     new?
   end
-
-  def update_translations?
-    new?
-  end
 end

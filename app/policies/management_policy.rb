@@ -25,11 +25,15 @@ class ManagementPolicy < ApplicationPolicy
     new?
   end
 
-  def update_translations?
+  def validate?
     new?
   end
 
-  def validate?
+  def create_exclusion?
+    new?
+  end
+
+  def remove_exclusion?
     new?
   end
 end

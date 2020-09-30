@@ -183,6 +183,7 @@ class VersionsController < ApplicationController
   # @params version [Version] version
   # Import an excel file to parse all nodes and update their labels/descriptions translations
   def import_translations
+    authorize policy_scope(Version)
     file = params[:version][:file]
     if file.present? && File.extname(file.original_filename).include?('xls')
       xl_file = Roo::Spreadsheet.open(file.path, extension: :xlsx)
@@ -254,7 +255,6 @@ class VersionsController < ApplicationController
 
   # Remove a condition between a triage question and a complaint category
   def remove_triage_condition
-
     condition = Condition.find(params[:condition_id])
 
     if condition.destroy

@@ -123,6 +123,7 @@ class AlgorithmsController < ApplicationController
   # @return json of drugs
   # All drugs exclusions
   def drug_exclusions
+    authorize policy_scope(Algorithm)
     respond_to do |format|
       format.html
       format.json { render json: DrugExclusionDatatable.new(params, view_context: view_context) }
@@ -133,6 +134,7 @@ class AlgorithmsController < ApplicationController
   # @return json of drugs
   # All managements exclusions
   def management_exclusions
+    authorize policy_scope(Algorithm)
     respond_to do |format|
       format.html
       format.json { render json: ManagementExclusionDatatable.new(params, view_context: view_context) }
