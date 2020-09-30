@@ -2,6 +2,10 @@
 # Reference prefix : QSS
 class QuestionsSequences::Scored < QuestionsSequence
 
+  def self.policy_class
+    QuestionsSequencePolicy
+  end
+
   def self.variable
     'scored'
   end

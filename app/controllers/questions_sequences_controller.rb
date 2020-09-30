@@ -13,6 +13,7 @@ class QuestionsSequencesController < ApplicationController
     add_breadcrumb t('breadcrumbs.new')
 
     @questions_sequence = QuestionsSequence.new
+    authorize @questions_sequence
     @questions_sequence.type = params[:type]
   end
 
@@ -23,7 +24,7 @@ class QuestionsSequencesController < ApplicationController
 
   def create
     @questions_sequence = @algorithm.questions_sequences.new(questions_sequence_params)
-
+    authorize policy_scope(QuestionsSequence)
     if @questions_sequence.save
       @questions_sequence.components.create!(node: @questions_sequence)
       if params[:from] == 'rails'
@@ -68,11 +69,13 @@ class QuestionsSequencesController < ApplicationController
 
   # React Diagram
   def diagram
+    authorize policy_scope(QuestionsSequence)
   end
 
   # GET
   # @return give sub categories of questions sequence
   def lists
+    authorize policy_scope(QuestionsSequence)
     render json: {
       categories: QuestionsSequence.categories,
       complaint_categories: @algorithm.questions.where(type: 'Questions::ComplaintCategory')
@@ -83,6 +86,7 @@ class QuestionsSequencesController < ApplicationController
   # @params QuestionsSequence child
   # @return json with the reference prefix of the child
   def reference_prefix
+    authorize policy_scope(QuestionsSequence)
     render json: QuestionsSequence.reference_prefix_class(params[:type])
   end
 
@@ -108,6 +112,7 @@ class QuestionsSequencesController < ApplicationController
 
   def set_questions_sequence
     @questions_sequence = Node.find(params[:id])
+    authorize @questions_sequence
   end
 
   def questions_sequence_params

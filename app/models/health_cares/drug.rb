@@ -6,6 +6,9 @@ class HealthCares::Drug < HealthCare
 
   accepts_nested_attributes_for :formulations, allow_destroy: true
 
+  def self.policy_class
+    DrugPolicy
+  end
 
   def self.variable
     'drug'

@@ -8,6 +8,7 @@ class ManagementsController < ApplicationController
     add_breadcrumb t('breadcrumbs.new')
 
     @management = HealthCares::Management.new
+    authorize @management
   end
 
   def edit
@@ -17,6 +18,7 @@ class ManagementsController < ApplicationController
 
   def create
     @management = @algorithm.health_cares.managements.new(management_params).becomes(HealthCares::Management)
+    authorize @management
     @management.type = HealthCares::Management
 
     if @management.save
@@ -65,6 +67,9 @@ class ManagementsController < ApplicationController
   # @params [Integer] excluded_node_id
   # Create an exclusion between two managements
   def create_exclusion
+    @management = HealthCares::Management.new
+    authorize @management
+
     @management_exclusion = NodeExclusion.new(management_exclusion_params)
     @management_exclusion.node_type = :management
     if @management_exclusion.save
@@ -79,6 +84,9 @@ class ManagementsController < ApplicationController
   # @params [Integer] excluded_node_id
   # Remove an exclusion between two managements
   def remove_exclusion
+    @management = HealthCares::Management.new
+    authorize @management
+
     @management_exclusion = NodeExclusion.management.find_by(management_exclusion_params)
     if @management_exclusion.destroy
       redirect_to algorithm_url(@algorithm, panel: 'managements_exclusions'), notice: t('flash_message.success_updated')
@@ -96,6 +104,7 @@ class ManagementsController < ApplicationController
 
   def set_management
     @management = Node.find(params[:id])
+    authorize @management
   end
 
   def management_params

@@ -5,6 +5,7 @@ class VersionsController < ApplicationController
   before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :change_triage_order, :components, :create_triage_condition, :duplicate, :remove_components, :remove_triage_condition, :update_list, :regenerate_json, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnostics, :import_translations]
 
   def index
+    authorize policy_scope(Version)
     respond_to do |format|
       format.html
       format.json { render json: VersionDatatable.new(params, view_context: view_context) }
@@ -19,6 +20,7 @@ class VersionsController < ApplicationController
     add_breadcrumb t('breadcrumbs.new')
 
     @version = Version.new
+    authorize @version
   end
 
   def edit
@@ -29,6 +31,7 @@ class VersionsController < ApplicationController
   def create
     @version = @algorithm.versions.new(version_params)
     @version.user = current_user
+    authorize @version
 
     if @version.save
       redirect_to algorithm_url(@algorithm, panel: 'versions'), notice: t('flash_message.success_created')
@@ -139,6 +142,7 @@ class VersionsController < ApplicationController
   # @params version [Version] version
   # Get every final diagnoses for a version
   def final_diagnostics
+    authorize policy_scope(Version)
     respond_to do |format|
       format.html
       format.json { render json: VersionFinalDiagnosticDatatable.new(params, view_context: view_context) }
@@ -149,6 +153,7 @@ class VersionsController < ApplicationController
   # @params version [Version] version
   # Get every final diagnoses exclusions for a version
   def final_diagnoses_exclusions
+    authorize policy_scope(Version)
     respond_to do |format|
       format.html
       format.json { render json: FinalDiagnosisExclusionDatatable.new(params, view_context: view_context) }
@@ -168,6 +173,7 @@ class VersionsController < ApplicationController
   # @params version [Version] version
   # Get an excel export of variables and final diagnoses used by the version
   def generate_variables
+    authorize policy_scope(Version)
     respond_to do |format|
       format.xlsx
     end
@@ -177,6 +183,7 @@ class VersionsController < ApplicationController
   # @params version [Version] version
   # Import an excel file to parse all nodes and update their labels/descriptions translations
   def import_translations
+    authorize policy_scope(Version)
     file = params[:version][:file]
     if file.present? && File.extname(file.original_filename).include?('xls')
       xl_file = Roo::Spreadsheet.open(file.path, extension: :xlsx)
@@ -248,7 +255,6 @@ class VersionsController < ApplicationController
 
   # Remove a condition between a triage question and a complaint category
   def remove_triage_condition
-
     condition = Condition.find(params[:condition_id])
 
     if condition.destroy
@@ -310,6 +316,7 @@ class VersionsController < ApplicationController
 
   def set_version
     @version = Version.find(params[:id])
+    authorize @version
   end
 
   def version_params

@@ -4,6 +4,8 @@ class User < ApplicationRecord
   devise :invitable, :database_authenticatable, :recoverable, :rememberable, :lockable, :trackable
   include DeviseTokenAuth::Concerns::User
 
+  enum role: [:admin, :clinician, :deployment_manager, :medal_r_user]
+
   has_many :activities
   has_many :devices, through: :activities
   has_many :accesses
@@ -12,6 +14,7 @@ class User < ApplicationRecord
   validates_presence_of :first_name
   validates_presence_of :last_name
   validates_presence_of :email
+  validates_presence_of :role
 
   validates :email, format: { with: /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i }
 

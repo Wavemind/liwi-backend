@@ -7,6 +7,7 @@ class DiagnosticsController < ApplicationController
   layout 'diagram', only: [:diagram]
 
   def index
+    authorize policy_scope(Diagnostic)
     respond_to do |format|
       format.html
       format.json {render json: DiagnosticDatatable.new(params, view_context: view_context)}
@@ -28,6 +29,7 @@ class DiagnosticsController < ApplicationController
     add_breadcrumb t('breadcrumbs.new')
 
     @diagnostic = Diagnostic.new
+    authorize @diagnostic
   end
 
   def edit
@@ -37,6 +39,7 @@ class DiagnosticsController < ApplicationController
 
   def create
     @diagnostic = @version.diagnostics.new(diagnostic_params)
+    authorize @diagnostic
 
     if @diagnostic.save
       redirect_to algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic), notice: t('flash_message.success_created')
@@ -58,6 +61,7 @@ class DiagnosticsController < ApplicationController
   end
 
   def destroy
+    authorize policy_scope(Diagnostic)
     diagnostic = Diagnostic.includes(components: [:node, :conditions, children: [:node]]).find(params[:id])
     if diagnostic.controlled_destroy
       redirect_to algorithm_version_url(@algorithm, @version), notice: t('flash_message.success_deleted')
@@ -68,6 +72,7 @@ class DiagnosticsController < ApplicationController
 
   # Generate react diagram
   def diagram
+    authorize policy_scope(Diagnostic)
     add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
     add_breadcrumb @diagnostic.version.algorithm.name, algorithm_url(@diagnostic.version.algorithm)
     add_breadcrumb t('breadcrumbs.versions')
@@ -78,6 +83,7 @@ class DiagnosticsController < ApplicationController
   # @params [Diagnostic] diagnostic to duplicate
   # Duplicate a diagnostic with the whole logic (Instances with their Conditions and Children), the FinalDiagnostics and Conditions attached to it
   def duplicate
+    authorize policy_scope(Diagnostic)
     diagnostic = Diagnostic.includes(components: [:conditions, :children]).find(params[:id])
     diagnostic.update(duplicating: true)
     duplicated_diagnostic = diagnostic.amoeba_dup
@@ -116,6 +122,7 @@ class DiagnosticsController < ApplicationController
 
   def set_diagnostic
     @diagnostic = Diagnostic.find(params[:id])
+    authorize @diagnostic
   end
 
   def diagnostic_params

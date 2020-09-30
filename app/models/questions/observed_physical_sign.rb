@@ -2,6 +2,10 @@
 # Reference prefix : OS
 class Questions::ObservedPhysicalSign < Question
 
+  def self.policy_class
+    QuestionPolicy
+  end
+
   def self.variable
     'observed_physical_sign'
   end

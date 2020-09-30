@@ -5,6 +5,8 @@
   <%= f.input :email %>
   <%= f.input :deactivated, as: :boolean %>
 
+  <%= f.input :role, collection: User.roles.map { |k, v| [t("user.role.#{k}"), k] }, prompt: t('select') %>
+
   <%= f.association :roles, collection: Role.all, label_method: :name, as: :check_boxes %>
 
   <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>

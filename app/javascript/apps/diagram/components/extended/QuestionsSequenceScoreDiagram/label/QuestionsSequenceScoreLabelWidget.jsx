@@ -2,8 +2,9 @@ import * as React from "react";
 import store from "../../../../engine/reducers/store";
 import { openModal } from "../../../../engine/reducers/creators.actions";
 import I18n from "i18n-js";
+import { withDiagram } from "../../../../engine/context/Diagram.context";
 
-export default class QuestionsSequenceScoreLabelWidget extends React.Component {
+class QuestionsSequenceScoreLabelWidget extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -32,15 +33,17 @@ export default class QuestionsSequenceScoreLabelWidget extends React.Component {
   };
 
   render() {
-    const { model } = this.props;
+    const { model, readOnly } = this.props;
 
     let score = model.getOptions().label;
 
     return (
-      <div className="diagram-label" onClick={() => this.editScore(score)}>
+      <div className={`diagram-label ${readOnly ? 'disabled' : null}`} onClick={() => this.editScore(score)}>
         {score}
       </div>
     );
   }
 }
+
+export default withDiagram(QuestionsSequenceScoreLabelWidget);
 

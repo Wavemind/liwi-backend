@@ -2,6 +2,10 @@
 # Reference prefix : V
 class Questions::Vaccine < Question
 
+  def self.policy_class
+    QuestionPolicy
+  end
+
   def self.variable
     'vaccine'
   end

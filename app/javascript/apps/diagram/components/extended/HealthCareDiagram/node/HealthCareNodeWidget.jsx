@@ -65,7 +65,7 @@ class HealthCareNodeWidget extends React.Component {
   }
 
   render() {
-    const { getReferencePrefix, node, engine } = this.props;
+    const { getReferencePrefix, node, engine, readOnly } = this.props;
 
     return (
       <div className="node">
@@ -85,8 +85,8 @@ class HealthCareNodeWidget extends React.Component {
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 </button>
                 <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a className="dropdown-item" href="#" onClick={() => this.editHealthCare()}>{I18n.t("edit")}</a>
-                  <a className="dropdown-item" href="#" onClick={() => this.editHealthCareInstance()}>{I18n.t("drugs.edit_instance")}</a>
+                  <a className={`dropdown-item ${readOnly ? 'disabled' : null}`} href="#" onClick={() => this.editHealthCare()}>{I18n.t("edit")}</a>
+                  <a className={`dropdown-item ${readOnly ? 'disabled' : null}`} href="#" onClick={() => this.editHealthCareInstance()}>{I18n.t("drugs.edit_instance")}</a>
                 </div>
               </div>
             ) : null}

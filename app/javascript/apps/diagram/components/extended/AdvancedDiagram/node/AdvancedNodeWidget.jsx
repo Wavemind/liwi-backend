@@ -25,19 +25,6 @@ class AdvancedNodeWidget extends React.Component {
           <div className="col pl-2 pr-0 text-left">
             {getReferencePrefix(node.options.dbInstance.node.node_type, node.options.dbInstance.node.type) + node.options.dbInstance.node.reference}
           </div>
-          <div className="col pl-0 pr-2 text-right">
-            {/*{(node.dbInstance.node.is_default === false) ? (*/}
-            {/*  <div className="dropdown">*/}
-            {/*    <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"*/}
-            {/*            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">*/}
-            {/*    </button>*/}
-            {/*    <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">*/}
-            {/*      {(node.dbInstance.node.node_type === "QuestionsSequence") ? (<a className="dropdown-item" href="#" onClick={() => this.openDiagram(node.dbInstance.node.id)}>Open diagram</a>) : null}*/}
-            {/*      <a className="dropdown-item" href="#" onClick={() => this.editNode(node)}>Edit</a>*/}
-            {/*    </div>*/}
-            {/*  </div>*/}
-            {/*) : null}*/}
-          </div>
         </div>
         <div>
           <div className="py-2 node-label">

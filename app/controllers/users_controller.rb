@@ -4,6 +4,7 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :activated, :deactivated]
 
   def index
+    authorize policy_scope(User)
     respond_to do |format|
       format.html
       format.json { render json: UserDatatable.new(params, view_context: view_context) }
@@ -18,10 +19,12 @@ class UsersController < ApplicationController
     add_breadcrumb t('breadcrumbs.new')
 
     @user = User.new
+    authorize @user
   end
 
   def create
     @user = User.new(user_params)
+    authorize @user
 
     if @user.valid?
       User.invite!(user_params)
@@ -83,6 +86,7 @@ class UsersController < ApplicationController
 
   def set_user
     @user = User.find(params[:id])
+    authorize @user
   end
 
   def user_params
@@ -91,6 +95,7 @@ class UsersController < ApplicationController
       :last_name,
       :email,
       :deactivated,
+      :role,
       role_ids: []
     )
   end

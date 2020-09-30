@@ -4,11 +4,11 @@ import { withDiagram } from "../../../engine/context/Diagram.context";
 class Item extends React.Component {
 
   render() {
-    const { node, getReferencePrefix } = this.props;
+    const { node, getReferencePrefix, readOnly } = this.props;
 
     return (
       <div className="p-2"
-           draggable={true}
+           draggable={!readOnly}
            id={`node-${node.id}`}
            onDragStart={event => {
              event.dataTransfer.setData("node", JSON.stringify(node));

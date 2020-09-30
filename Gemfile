@@ -3,7 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.6.0'
 
-gem 'rails', '~> 5.2.1'
+gem 'rails', '~> 5.2.4.1'
 gem 'pg'
 gem 'puma'
 gem 'sass-rails'
@@ -40,11 +40,12 @@ gem 'webpacker', '~> 4.x'
 gem 'rqrcode'
 gem 'barby'
 gem 'i18n-js'
-gem "font-awesome-rails"
+gem 'font-awesome-rails'
 gem 'rubyzip', '= 2.2.0'
 gem 'caxlsx'
 gem 'caxlsx_rails'
 gem 'roo', '~> 2.8'
+gem 'pundit'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
@@ -78,5 +79,3 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'mini_racer', platforms: :ruby
-
-gem "roo", "~> 2.8"

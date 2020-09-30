@@ -4,6 +4,7 @@ class HealthFacilitiesController < ApplicationController
   before_action :set_breadcrumb, only: [:show, :new, :edit]
 
   def index
+    authorize policy_scope(HealthFacility)
     add_breadcrumb t('breadcrumbs.health_facilities')
 
     respond_to do |format|
@@ -22,7 +23,9 @@ class HealthFacilitiesController < ApplicationController
 
   def new
     add_breadcrumb t('breadcrumbs.new')
+
     @health_facility = HealthFacility.new
+    authorize @health_facility
   end
 
   def edit
@@ -32,6 +35,7 @@ class HealthFacilitiesController < ApplicationController
 
   def create
     @health_facility = HealthFacility.new(health_facility_params)
+    authorize @health_facility
 
     if @health_facility.save
       redirect_to health_facilities_url, notice: t('flash_message.success_created')
@@ -92,6 +96,7 @@ class HealthFacilitiesController < ApplicationController
 
   def set_health_facility
     @health_facility = HealthFacility.find(params[:id])
+    authorize @health_facility
   end
 
   def health_facility_params

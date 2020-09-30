@@ -2,6 +2,10 @@
 # Reference prefix : D
 class Questions::Demographic < Question
 
+  def self.policy_class
+    QuestionPolicy
+  end
+
   def self.variable
     'demographic'
   end

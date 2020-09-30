@@ -3,6 +3,7 @@ class AlgorithmsController < ApplicationController
   before_action :set_algorithm, only: [:show, :edit, :update, :archive, :unarchive, :questions]
 
   def index
+    authorize policy_scope(Algorithm)
     add_breadcrumb t('breadcrumbs.algorithms')
 
     respond_to do |format|
@@ -20,6 +21,7 @@ class AlgorithmsController < ApplicationController
     add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
     add_breadcrumb t('breadcrumbs.new')
     @algorithm = Algorithm.new
+    authorize @algorithm
   end
 
   def edit
@@ -32,6 +34,7 @@ class AlgorithmsController < ApplicationController
   def create
     @algorithm = Algorithm.new(algorithm_params)
     @algorithm.user = current_user
+    authorize @algorithm
     if @algorithm.save
       redirect_to algorithms_url, notice: t('flash_message.success_created')
     else
@@ -65,6 +68,7 @@ class AlgorithmsController < ApplicationController
   # @return json of managements
   # All managements available for current algorithm
   def managements
+    authorize policy_scope(Algorithm)
     respond_to do |format|
       format.html
       format.json { render json: ManagementDatatable.new(params, view_context: view_context) }
@@ -75,6 +79,7 @@ class AlgorithmsController < ApplicationController
   # @return json of question
   # All questions available for current algorithm
   def questions
+    authorize policy_scope(Algorithm)
     respond_to do |format|
       format.html
       format.json { render json: QuestionDatatable.new(params, view_context: view_context) }
@@ -85,6 +90,7 @@ class AlgorithmsController < ApplicationController
   # @return json of questions_sequences
   # All questions sequences available for current algorithm
   def questions_sequences
+    authorize policy_scope(Algorithm)
     respond_to do |format|
       format.html
       format.json { render json: QuestionsSequenceDatatable.new(params, view_context: view_context) }
@@ -95,6 +101,7 @@ class AlgorithmsController < ApplicationController
   # @return json of questions_sequences_scored
   # All questions sequences scored available for current algorithm
   def questions_sequences_scored
+    authorize policy_scope(Algorithm)
     respond_to do |format|
       format.html
       format.json { render json: QuestionsSequenceScoredDatatable.new(params, view_context: view_context) }
@@ -105,6 +112,7 @@ class AlgorithmsController < ApplicationController
   # @return json of drugs
   # All drugs available for current algorithm
   def drugs
+    authorize policy_scope(Algorithm)
     respond_to do |format|
       format.html
       format.json { render json: DrugDatatable.new(params, view_context: view_context) }
@@ -115,6 +123,7 @@ class AlgorithmsController < ApplicationController
   # @return json of drugs
   # All drugs exclusions
   def drug_exclusions
+    authorize policy_scope(Algorithm)
     respond_to do |format|
       format.html
       format.json { render json: DrugExclusionDatatable.new(params, view_context: view_context) }
@@ -125,6 +134,7 @@ class AlgorithmsController < ApplicationController
   # @return json of drugs
   # All managements exclusions
   def management_exclusions
+    authorize policy_scope(Algorithm)
     respond_to do |format|
       format.html
       format.json { render json: ManagementExclusionDatatable.new(params, view_context: view_context) }
@@ -149,6 +159,7 @@ class AlgorithmsController < ApplicationController
 
   def set_algorithm
     @algorithm = Algorithm.find(params[:id])
+    authorize @algorithm
   end
 
   def algorithm_params
