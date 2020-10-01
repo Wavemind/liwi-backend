@@ -33,7 +33,7 @@ class Api::V1::VersionsController < Api::V1::ApplicationController
 
   def json_test
     if params[:secret] == 'jest'
-      version = Version.find(params[:id])
+      version = Version.find(params[:version_id])
       render json: version.medal_r_json
     else
       render json: { errors: t('api.v1.versions.index.invalid_token') }, status: :unprocessable_entity
