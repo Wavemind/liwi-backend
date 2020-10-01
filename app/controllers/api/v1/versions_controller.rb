@@ -30,4 +30,11 @@ class Api::V1::VersionsController < Api::V1::ApplicationController
       render json: { errors: t('.device_not_exist') }, status: :unprocessable_entity
     end
   end
+
+  def json_test
+    if params[:secret] == 'jest'
+      version = Version.first
+      render json: version.medal_r_json
+    end
+  end
 end

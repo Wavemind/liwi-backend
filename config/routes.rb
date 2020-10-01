@@ -195,7 +195,9 @@ Rails.application.routes.draw do
   # API
   namespace :api do
     namespace :v1 do
-      resources :versions, only: [:index]
+      resources :versions, only: [:index] do
+        get 'json_test', to: 'versions#json_test'
+      end
       resources :devices, only: [:show]
       mount_devise_token_auth_for 'User', at: 'auth'
       resources :devices, only: [:create]
