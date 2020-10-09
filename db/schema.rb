@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_23_085545) do
+ActiveRecord::Schema.define(version: 2020_10_09_093457) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -142,7 +142,7 @@ ActiveRecord::Schema.define(version: 2020_09_23_085545) do
     t.decimal "dose_form"
     t.integer "liquid_concentration"
     t.integer "doses_per_day"
-    t.integer "unique_dose"
+    t.decimal "unique_dose"
     t.integer "breakable"
     t.boolean "by_age", default: false
     t.bigint "node_id"
