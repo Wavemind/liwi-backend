@@ -50,7 +50,7 @@ export default class AnswerForm extends React.Component {
     const { setFormData, save } = this.props;
     const { toDeleteAnswers } = this.state;
     await setFormData("answers_attributes", values.answers_attributes);
-    save(toDeleteAnswers);
+    save(toDeleteAnswers, []);
   };
 
   /**
