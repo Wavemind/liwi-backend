@@ -17,6 +17,10 @@ class QuestionPolicy < ApplicationPolicy
     new?
   end
 
+  def update?
+    new?
+  end
+
   def destroy?
     new?
   end
