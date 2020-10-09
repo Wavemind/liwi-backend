@@ -169,6 +169,7 @@ class Diagnostic < ApplicationRecord
 
   # @return [Json]
   # Return available nodes in the algorithm in json format
+  # TODO: ADD MEDIA
   def available_nodes_json
     # Exclude triage questions if they have a condition on a CC which is not defined in this diagnostic
     excluded_ids = version.components.select { |i| i.conditions.any? && i.conditions.map(&:first_conditionable).map(&:node).flatten.exclude?(node) }.map(&:node_id)

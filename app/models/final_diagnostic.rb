@@ -93,6 +93,7 @@ class FinalDiagnostic < Node
 
   # @return [Json]
   # Return available nodes for health cares diagram in the algorithm in json format
+  # TODO: ADD MEDIA
   def available_nodes_health_cares_json
     ids = components.select(:node_id)
     (

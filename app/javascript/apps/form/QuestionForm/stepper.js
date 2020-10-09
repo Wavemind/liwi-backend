@@ -82,7 +82,7 @@ export default class StepperQuestionForm extends React.Component {
       });
 
       // Generate hash cause of label_translation
-      question.medias.map(media => {
+      question?.medias?.map(media => {
         body["medias_attributes"].push({
           id: media.id,
           url: media.url,
