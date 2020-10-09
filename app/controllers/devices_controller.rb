@@ -22,6 +22,7 @@ class DevicesController < ApplicationController
   # @return [JSON] last connection of a devise with user's info
   # Used for the map on the dashboard for displaying where is the device
   def map
+    authorize policy_scope(Device)
     render json: Device.all.to_json(methods: [:last_activity])
   end
 

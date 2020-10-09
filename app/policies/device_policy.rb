@@ -12,4 +12,8 @@ class DevicePolicy < ApplicationPolicy
   def show?
     index?
   end
+
+  def map?
+    index?
+  end
 end
