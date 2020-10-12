@@ -41,7 +41,7 @@ export class Diagram extends React.Component {
 
   constructor(props) {
     super(props);
-    Appsignal.demo()
+
     const engine = createEngine({ registerDefaultDeleteItemsAction: false });
     const model = new DiagramModel();
 
