@@ -3,7 +3,10 @@ import * as React from "react";
 import * as _ from "lodash";
 import createEngine, { DiagramModel } from "@projectstorm/react-diagrams";
 import { NotificationContainer, NotificationManager } from "react-notifications";
+import Appsignal from "@appsignal/javascript"
 import 'react-notifications/lib/notifications.css';
+
+
 
 // Internal import
 import { withDiagram } from "../../engine/context/Diagram.context";
@@ -38,7 +41,7 @@ export class Diagram extends React.Component {
 
   constructor(props) {
     super(props);
-
+    Appsignal.demo()
     const engine = createEngine({ registerDefaultDeleteItemsAction: false });
     const model = new DiagramModel();
 
