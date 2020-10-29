@@ -216,6 +216,11 @@ class VersionsController < ApplicationController
   def regenerate_json
     invalid_diagnostics = []
 
+    unless @version.algorithm.village_json.present?
+      flash[:alert] = t('flash_message.version.missing_villages')
+      redirect_back(fallback_location: root_path)
+    end
+
     @version.diagnostics.each do |diagnostic|
       diagnostic.manual_validate
       invalid_diagnostics.push(diagnostic.full_reference) if diagnostic.errors.messages.any?

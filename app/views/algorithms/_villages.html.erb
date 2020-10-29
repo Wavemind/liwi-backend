@@ -1,0 +1,5 @@
+<%= simple_form_for @algorithm, url: import_villages_algorithm_path(@algorithm), html: {class: 'form-horizontal'}, method: :put do |f| %>
+  <div class="col align-self-center"><%= f.input :file, as: :file %></div>
+
+  <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
+<% end %>
