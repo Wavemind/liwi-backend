@@ -195,7 +195,7 @@ Rails.application.routes.draw do
   # API
   namespace :api do
     namespace :v1 do
-      resources :versions, only: [:index] do
+      resources :versions, only: [:index, :show] do
         get 'json_test', to: 'versions#json_test'
       end
       resources :devices, only: [:show]
