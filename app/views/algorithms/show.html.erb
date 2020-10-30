@@ -25,6 +25,9 @@
   <li class="nav-item">
     <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'managements_exclusions'%>" id="managements_exclusions-tab" data-toggle="tab" href="#managements_exclusions" role="tab" aria-controls="managements_exclusions" aria-selected="false"><%= t('.subtitle_managements_exclusions') %></a>
   </li>
+  <li class="nav-item">
+    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'villages'%>" id="villages-tab" data-toggle="tab" href="#villages" role="tab" aria-controls="villages" aria-selected="false"><%= t('.subtitle_villages') %></a>
+  </li>
 </ul>
 
 <div class="tab-content mt-4 ml-4" id="algorithm-table">
@@ -131,5 +134,12 @@
     <% end %>
 
     <%= render 'managements/exclusion_table' %>
+  </div>
+
+  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'villages'%>" id="villages" role="tabpanel" aria-labelledby="villages-tab">
+    <h3><%= t('.subtitle_villages') %></h3>
+
+    <%= render 'villages' %>
+
   </div>
 </div>

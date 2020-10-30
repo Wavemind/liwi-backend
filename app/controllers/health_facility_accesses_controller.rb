@@ -18,6 +18,11 @@ class HealthFacilityAccessesController < ApplicationController
         invalid_diagnostics = []
         # Validate every diagnostics of the version being published. Throw error if there is one or several diagnostics invalids with their reference.
         version = Version.find(health_facility_access_params[:version_id])
+
+        unless version.algorithm.village_json.present?
+          redirect_to @health_facility_access.health_facility, alert: t('flash_message.version.missing_villages')
+        end
+
         version.diagnostics.each do |diagnostic|
           diagnostic.manual_validate
           invalid_diagnostics.push(diagnostic.full_reference) if diagnostic.errors.messages.any?
