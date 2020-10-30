@@ -1,7 +1,7 @@
 class GenerateJsonJob < ApplicationJob
   queue_as :default
 
-  after_perfrom do |job|
+  after_perform  do |job|
     Version.find(job.arguments.first).update(generating:false)
   end
 
