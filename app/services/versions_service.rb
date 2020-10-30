@@ -117,6 +117,7 @@ class VersionsService
     hash['description'] = @version.description
     hash['algorithm_id'] = @version.algorithm.id
     hash['algorithm_name'] = @version.algorithm.name
+    hash['village_json'] = @version.algorithm.village_json
 
     hash['mobile_config'] = extract_mobile_config
     hash['config'] = @version.algorithm.medal_r_config
