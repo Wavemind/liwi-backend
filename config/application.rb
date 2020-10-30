@@ -12,6 +12,7 @@ module LiwiBackend
     config.load_defaults 5.2
     config.time_zone = 'Bern'
     config.i18n.default_locale = :en
+    config.active_job.queue_adapter = :sidekiq
 
     # Setup cross-origin
     config.middleware.insert_before 0, Rack::Cors do
