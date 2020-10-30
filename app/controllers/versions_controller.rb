@@ -246,13 +246,10 @@ class VersionsController < ApplicationController
           flash[:alert] = t('flash_message.missing_nodes_error', missing_nodes: missing_nodes.map(&:reference_label))
           redirect_back(fallback_location: root_path)
         else
-          if VersionsService.generate_version_hash(@version.id)
-            flash[:notice] = t('flash_message.json_success')
-            redirect_back(fallback_location: root_path)
-          else
-            flash[:alert] = t('flash_message.json_error')
-            redirect_back(fallback_location: root_path)
-          end
+          GenerateJsonJob.perform_later(@version.id)
+          @version.update(generating: true)
+          flash[:notice] = t('.show.json_generating')
+          redirect_back(fallback_location: root_path)
         end
       end
     end
