@@ -305,7 +305,7 @@ ActiveRecord::Schema.define(version: 2020_10_09_093457) do
     t.string "max_message_warning"
     t.string "min_message_error"
     t.string "max_message_error"
-    t.boolean "estimable", default: false
+    t.boolean "estimable"
     t.bigint "reference_table_z_id"
     t.boolean "is_neonat", default: false
     t.boolean "is_danger_sign", default: false
@@ -393,7 +393,7 @@ ActiveRecord::Schema.define(version: 2020_10_09_093457) do
     t.bigint "top_left_question_id"
     t.bigint "first_top_right_question_id"
     t.bigint "second_top_right_question_id"
-    t.json "medal_r_config"
+    t.json "medal_r_config", default: {}
     t.json "medal_r_json"
     t.integer "medal_r_json_version", default: 0
     t.index ["algorithm_id"], name: "index_versions_on_algorithm_id"

@@ -284,7 +284,7 @@ export default class Http {
   excludeDiagnostic = async (excludingDfId, excludedDfId) => {
     const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/final_diagnostics/add_exclusion`;
     const body = {
-      final_diagnosis_exclusion: {
+      node_exclusion: {
         excluding_node_id: excludingDfId,
         excluded_node_id: excludedDfId
       }
@@ -301,7 +301,7 @@ export default class Http {
   removeExcluding = async (excludingDfId, excludedDfId) => {
     const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/final_diagnostics/remove_exclusion`;
     const body = {
-      final_diagnosis_exclusion: {
+      node_exclusion: {
         excluding_node_id: excludingDfId,
         excluded_node_id: excludedDfId
       }

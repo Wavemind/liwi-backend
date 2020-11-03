@@ -34,9 +34,6 @@ class Algorithm < ApplicationRecord
     bmi = questions.create!(label_en: 'BMI', type: 'Questions::BasicMeasurement', stage: Question.stages[:registration], answer_type_id: 5, formula: '[BM1] / (([BM3] / 100) * ([BM3] / 100))', is_default: true)
     temperature = questions.create!(label_en: 'Axillary temperature', type: 'Questions::BasicMeasurement', stage: Question.stages[:triage], answer_type_id: 4, is_default: true)
     cc_general = questions.create!(label_en: 'General', type: 'Questions::ComplaintCategory', stage: Question.stages[:triage], is_mandatory: true, answer_type_id: 1, is_default: true)
-    birth_date_day = questions.create!(label_en: 'Day', type: 'Questions::Demographic', stage: Question.stages[:registration], is_mandatory: false, answer_type_id: 2, is_default: true)
-    birth_date_month = questions.create!(label_en: 'Month', type: 'Questions::Demographic', stage: Question.stages[:registration], is_mandatory: false, answer_type_id: 2, is_default: true)
-    birth_date_year = questions.create!(label_en: 'Year', type: 'Questions::BasicDemographic', stage: Question.stages[:registration], is_mandatory: true, answer_type_id: 3, is_default: true)
 
     # Configure basic questions into the algorithm to be used in json generation
     self.update(medal_r_config: {basic_questions: {
@@ -46,20 +43,7 @@ class Algorithm < ApplicationRecord
       gender_question_id: gender.id,
       weight_question_id: weight.id,
       general_cc_id: cc_general.id,
-      birth_date_day_id: birth_date_day.id,
-      birth_date_month_id: birth_date_month.id,
-      birth_date_year_id: birth_date_year.id
     }})
-
-    # Generate answers for days
-    for day in 1..31
-      birth_date_day.answers.create({label_en: day.to_s, value: day.to_s})
-    end
-
-    # Generate answers for months (numeric format)
-    for month in 1..12
-      birth_date_month.answers.create({label_en: month.to_s, value: month.to_s})
-    end
 
     gender.answers.create([
       {label_en: 'Male', value: 'male'},
@@ -84,7 +68,6 @@ class Algorithm < ApplicationRecord
        {label_en: 'more than -2 z-score', value: '-2', operator: Answer.operators[:more_or_equal]},
      ])
 
-    # TODO : Confirm answer ranges
     bmi_z_score = questions.create!(label_en: 'BMI (z-score)', type: 'Questions::BackgroundCalculation', answer_type_id: 3, reference_table_x_id: age_in_days.id, reference_table_y_id: bmi.id, reference_table_male: "bmi_for_age_male_table", reference_table_female: "bmi_for_age_female_table", is_default: true)
     bmi_z_score.answers.create([
        {label_en: 'less than -3 z-score', value: '-3', operator: Answer.operators[:less]},

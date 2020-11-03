@@ -35,6 +35,9 @@ class HealthFacilityAccessDatatable < AjaxDatatablesRails::ActiveRecord
 
   # Activerecord request
   def get_raw_records
+    puts '**'
+    puts params.inspect
+    puts '**'
     HealthFacilityAccess.where(health_facility_id: params[:id]).where.not(end_date: nil).includes([version: [:algorithm]])
   end
 
