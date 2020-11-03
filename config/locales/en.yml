@@ -532,6 +532,8 @@ en:
         description: "Description"
         label: "Label"
         reference: "Reference"
+    validation:
+      loop: "You are doing a loop using this Questions sequence in this diagram."
   prompt: "Select"
   questions:
     categories:
