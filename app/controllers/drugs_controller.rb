@@ -63,6 +63,7 @@ class DrugsController < ApplicationController
   # @params [Integer] excluded_node_id
   # Create an exclusion between two drugs
   def create_exclusion
+    authorize policy_scope(HealthCares::Drug)
     @drug_exclusion = NodeExclusion.new(drug_exclusion_params)
     @drug_exclusion.node_type = :drug
     if @drug_exclusion.save
@@ -77,6 +78,7 @@ class DrugsController < ApplicationController
   # @params [Integer] excluded_node_id
   # Remove an exclusion between two drugs
   def remove_exclusion
+    authorize policy_scope(HealthCares::Drug)
     @drug_exclusion = NodeExclusion.drug.find_by(drug_exclusion_params)
     if @drug_exclusion.destroy
       redirect_to algorithm_url(@algorithm, panel: 'drugs_exclusions'), notice: t('flash_message.success_updated')
