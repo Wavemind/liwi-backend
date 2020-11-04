@@ -412,6 +412,7 @@ en:
       title: "Details of %{name}"
       second_title: "Accesses"
       no_algorithm: "There is not algorithm associated to this Health Facility"
+      generating: "The algorithm is currently being generated, be a bit patient"
       columns:
         algorithm: "Algorithm"
         version: "Version"
@@ -734,6 +735,7 @@ en:
       subtitle_translations: "Translations"
       subtitle_triage_conditions: "Triage variables conditions"
       title: "Details of %{name} - version %{version}"
+      json_generating: "Json is being generated it will be available in a few minutes"
     translations:
       generate_translations: "Generate translations excel"
   warning_dependency: "Warning! Editing this node will affect: "

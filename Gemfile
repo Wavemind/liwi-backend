@@ -15,6 +15,8 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'amoeba'
 
 # Added
+gem 'sidekiq'
+gem 'sidekiq-failures', '~> 1.0'
 gem 'devise'
 gem 'devise_invitable', '~> 1.7.0'
 gem 'simple_form'

@@ -193,6 +193,10 @@ Rails.application.routes.draw do
     end
   end
 
+
+  require "sidekiq/web"
+  mount Sidekiq::Web => '/sidekiq'
+
   # API
   namespace :api do
     namespace :v1 do
