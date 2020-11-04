@@ -2,9 +2,6 @@ class HealthFacilityAccessesController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    puts '***'
-    puts 'TTTTTTTTTTTTTTTTTTTTTTT'
-    puts '***'
     authorize policy_scope(HealthFacility)
     respond_to do |format|
       format.html
