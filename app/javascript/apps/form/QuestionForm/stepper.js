@@ -66,6 +66,7 @@ export default class StepperQuestionForm extends React.Component {
         // return media.fileable_id !== undefined
       }) || []
     };
+
     if (method === "update") {
       body["id"] = question.id;
       body["answers_attributes"] = [];
@@ -82,7 +83,7 @@ export default class StepperQuestionForm extends React.Component {
       });
 
       // Generate hash cause of label_translation
-      question?.medias?.map(media => {
+      question.medias.map(media => {
         body["medias_attributes"].push({
           id: media.id,
           url: media.url,

@@ -10,7 +10,6 @@ class Condition < ApplicationRecord
   belongs_to :first_conditionable, polymorphic: true
   belongs_to :second_conditionable, polymorphic: true, optional: true
 
-  before_create :alert_wrong_link
   before_destroy :remove_children, unless: Proc.new { self.referenceable.is_a?(Diagnostic) }
   before_validation :prevent_loop, unless: Proc.new { self.referenceable.is_a?(Diagnostic) || (self.referenceable.is_a?(Instance) && self.referenceable.instanceable.is_a?(Diagnostic) && self.referenceable.instanceable.duplicating) }
 
@@ -74,17 +73,6 @@ class Condition < ApplicationRecord
       return true if child_instance == referenceable || (child_instance.children.any? && is_child(child_instance))
     end
     false
-  end
-
-  # Raise app signal error if there might be a false link created.
-  def alert_wrong_link
-    begin
-      if referenceable_id == first_conditionable_id
-        raise
-      end
-    rescue => e
-      Appsignal.send_error(e, {algorithm_id: referenceable.instanceable_id, algorithm_label: referenceable.instanceable.label_en})
-    end
   end
 
   private

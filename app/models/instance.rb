@@ -74,7 +74,9 @@ class Instance < ApplicationRecord
 
   # Return json formated of the instance depending on the node type
   def generate_json
-    if node.is_a?(Question) || node.is_a?(QuestionsSequence)
+    if node.is_a?(Question)
+      self.as_json(include: { node: { include: [:answers, :complaint_categories, :medias], methods: [:node_type, :category_name, :type] } })
+    elsif node.is_a?(QuestionsSequence)
       self.as_json(include: { node: { include: [:answers, :complaint_categories], methods: [:node_type, :category_name, :type] } })
     elsif node.is_a?(HealthCares::Drug)
       self.as_json(include: { node: { include: [:formulations], methods: [:node_type, :category_name, :type] } })

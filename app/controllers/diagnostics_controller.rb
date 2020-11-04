@@ -91,7 +91,7 @@ class DiagnosticsController < ApplicationController
     if duplicated_diagnostic.save
       duplicated_diagnostic.relink_instance
       diagnostic.update(duplicating: false)
-      redirect_to algorithm_version_url(@algorithm, @version), notice: t('flash_message.success_deleted')
+      redirect_to algorithm_version_url(@algorithm, @version), notice: t('flash_message.success_duplicated')
     else
       redirect_to algorithm_version_url(@algorithm, @version), alert: t('flash_message.duplicate_fail')
     end

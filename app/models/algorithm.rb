@@ -70,7 +70,6 @@ class Algorithm < ApplicationRecord
        {label_en: 'more than -2 z-score', value: '-2', operator: Answer.operators[:more_or_equal]},
      ])
 
-    # TODO : Confirm answer ranges
     bmi_z_score = questions.create!(label_en: 'BMI (z-score)', type: 'Questions::BackgroundCalculation', answer_type_id: 3, reference_table_x_id: age_in_days.id, reference_table_y_id: bmi.id, reference_table_male: "bmi_for_age_male_table", reference_table_female: "bmi_for_age_female_table", is_default: true)
     bmi_z_score.answers.create([
        {label_en: 'less than -3 z-score', value: '-3', operator: Answer.operators[:less]},

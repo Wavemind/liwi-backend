@@ -159,6 +159,9 @@ export default class Http {
    * @return [Object] body of request
    */
   createLink = async (instanceId, answerId, score = null) => {
+    // TODO : Figure a better solution out
+    instanceId = instanceId.substring(instanceId.indexOf("_") + 1, instanceId.length)
+    answerId = answerId.substring(answerId.indexOf("_") + 1, answerId.length)
     const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/${instanceId}/create_link`;
     const body = {
       instance: {
@@ -284,7 +287,7 @@ export default class Http {
   excludeDiagnostic = async (excludingDfId, excludedDfId) => {
     const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/final_diagnostics/add_exclusion`;
     const body = {
-      final_diagnosis_exclusion: {
+      node_exclusion: {
         excluding_node_id: excludingDfId,
         excluded_node_id: excludedDfId
       }
@@ -301,7 +304,7 @@ export default class Http {
   removeExcluding = async (excludingDfId, excludedDfId) => {
     const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/final_diagnostics/remove_exclusion`;
     const body = {
-      final_diagnosis_exclusion: {
+      node_exclusion: {
         excluding_node_id: excludingDfId,
         excluded_node_id: excludedDfId
       }
