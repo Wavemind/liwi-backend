@@ -21,7 +21,7 @@ export default class AdvancedNodeModel extends NodeModel {
           locked: true,
           in: true,
           name: "in",
-          id: this.options.dbInstance.id
+          id: `instance_${this.options.dbInstance.id}`
         })
       );
     }

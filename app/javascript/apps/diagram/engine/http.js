@@ -159,6 +159,9 @@ export default class Http {
    * @return [Object] body of request
    */
   createLink = async (instanceId, answerId, score = null) => {
+    // TODO : Figure a better solution out
+    instanceId = instanceId.substring(instanceId.indexOf("_") + 1, instanceId.length)
+    answerId = answerId.substring(answerId.indexOf("_") + 1, answerId.length)
     const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/${instanceId}/create_link`;
     const body = {
       instance: {

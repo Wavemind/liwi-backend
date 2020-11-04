@@ -13,7 +13,7 @@ export default class QuestionNodeModel extends AdvancedNodeModel {
       this.addPort(new AdvancedPortModel({
         in: false,
         name: getLabel(answer),
-        id: answer.id
+        id: `answer_${answer.id}`
       }));
     });
 

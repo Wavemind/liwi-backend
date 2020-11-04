@@ -15,7 +15,7 @@ export default class QuestionsSequenceNodeModel extends AdvancedNodeModel {
         this.addPort(new AdvancedPortModel({
           in: false,
           name: getLabel(answer),
-          id: answer.id
+          id: `answer_${answer.id}`
         }));
       });
     }

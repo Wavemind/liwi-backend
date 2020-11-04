@@ -117,7 +117,7 @@ export const getConditionPort = (diagramNodes, answerId) => {
   diagramNodes.map(node => {
     let ports = node.getOutPorts();
     Object.keys(ports).map(index => {
-      if (ports[index].options.id === answerId) {
+      if (ports[index].constructor.name === "AdvancedPortModel" && ports[index].options.id === `answer_${answerId}`) {
         port = ports[index];
       }
     });
