@@ -164,15 +164,17 @@ class AlgorithmsController < ApplicationController
       xl_file = Roo::Spreadsheet.open(file.path, extension: :xlsx)
       xl_file.default_sheet = xl_file.sheets.first
       test_array = []
-      villages_hash = {}
+      villages = []
       2.upto(xl_file.last_row).each do |line|
         full_string = xl_file.row(line).reverse.join(', ')
         unless test_array.include?(full_string)
+          current_village = {}
           test_array << full_string
-          villages_hash[xl_file.row(line).last] = full_string
+          current_village[xl_file.row(line).last] = full_string
+          villages << current_village
         end
       end
-      if @algorithm.update!(village_json: villages_hash)
+      if @algorithm.update!(village_json: villages)
         redirect_to algorithm_url(@algorithm, panel: 'villages'), notice: t('flash_message.import_successful_villages')
       else
         redirect_to algorithm_url(@algorithm, panel: 'villages'), alert: t('flash_message.import_xl_error_villages')
