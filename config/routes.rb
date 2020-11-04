@@ -27,6 +27,7 @@ Rails.application.routes.draw do
       get 'managements', to: 'algorithms#managements', as: 'management'
       get 'questions_sequences', to: 'algorithms#questions_sequences', as: 'questions_sequence'
       get 'questions_sequences_scored', to: 'algorithms#questions_sequences_scored', as: 'questions_sequence_scored'
+      put 'import_villages'
     end
 
     resources :versions, only: [:index, :show, :new, :create, :edit, :update] do
@@ -191,6 +192,10 @@ Rails.application.routes.draw do
       get 'operators'
     end
   end
+
+
+  require "sidekiq/web"
+  mount Sidekiq::Web => '/sidekiq'
 
   # API
   namespace :api do

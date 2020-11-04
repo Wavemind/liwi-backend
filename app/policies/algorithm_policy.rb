@@ -64,4 +64,8 @@ class AlgorithmPolicy < ApplicationPolicy
   def management_exclusions?
     index?
   end
+
+  def import_villages?
+    new?
+  end
 end

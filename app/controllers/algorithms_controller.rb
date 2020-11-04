@@ -1,6 +1,6 @@
 class AlgorithmsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:show, :edit, :update, :archive, :unarchive, :questions]
+  before_action :set_algorithm, only: [:show, :edit, :update, :archive, :unarchive, :questions, :generate_villages, :import_villages]
 
   def index
     authorize policy_scope(Algorithm)
@@ -152,6 +152,35 @@ class AlgorithmsController < ApplicationController
       redirect_to algorithms_url, notice: t('flash_message.success_created')
     else
       redirect_to algorithms_url, danger: t('flash_message.update_fail')
+    end
+  end
+
+  # PUT algorithms/:algorithm_id/import_villages
+  # Import an excel file to input the villages
+  def import_villages
+    authorize policy_scope(Algorithm)
+    file = params[:algorithm][:file]
+    if file.present? && File.extname(file.original_filename).include?('xls')
+      xl_file = Roo::Spreadsheet.open(file.path, extension: :xlsx)
+      xl_file.default_sheet = xl_file.sheets.first
+      test_array = []
+      villages = []
+      2.upto(xl_file.last_row).each do |line|
+        full_string = xl_file.row(line).reverse.join(', ')
+        unless test_array.include?(full_string)
+          current_village = {}
+          test_array << full_string
+          current_village[xl_file.row(line).last] = full_string
+          villages << current_village
+        end
+      end
+      if @algorithm.update!(village_json: villages)
+        redirect_to algorithm_url(@algorithm, panel: 'villages'), notice: t('flash_message.import_successful_villages')
+      else
+        redirect_to algorithm_url(@algorithm, panel: 'villages'), alert: t('flash_message.import_xl_error_villages')
+      end
+    else
+      redirect_to algorithm_url(@algorithm, panel: 'villages'), alert: t('flash_message.import_xl_wrong_file_villages')
     end
   end
 
