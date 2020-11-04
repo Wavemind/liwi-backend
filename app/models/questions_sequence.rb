@@ -169,6 +169,23 @@ class QuestionsSequence < Node
     nodes
   end
 
+  # Check if the user is doing a loop between multiple QS
+  def self.is_loop(qs_diagram, qs_node)
+    parents = QuestionsSequence.get_qs_parents(qs_diagram, [])
+    parents.include? qs_node.id
+  end
+
+  # Check recursively the QS parents 
+  def self.get_qs_parents(qs, parents)
+    qs.instances.map do |instance|
+      if instance.instanceable_type == 'Node' && instance.instanceable_id != instance.node_id
+        parents.push(instance.instanceable_id)
+        parents = QuestionsSequence.get_qs_parents(instance.instanceable, parents)
+      end
+    end
+    parents
+  end
+
   private
 
   # Display the label for the current child

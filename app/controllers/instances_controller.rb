@@ -39,11 +39,12 @@ class InstancesController < ApplicationController
     authorize policy_scope(Instance)
     instance = @instanceable.components.new(instance_params)
 
-    if instance.node.is_a?(HealthCare)
-      FinalDiagnosticHealthCare.create!(final_diagnostic: FinalDiagnostic.find(instance_params[:final_diagnostic_id]), health_care: instance.node)
-    end
+    if instance.node.is_a?(QuestionsSequence) && QuestionsSequence.is_loop(@instanceable, instance.node)
+      instance.errors.add(:base, t('questions_sequences.validation.loop'))
+      render json: instance.errors.full_messages, status: 422
+    elsif instance.save
+      FinalDiagnosticHealthCare.create!(final_diagnostic: FinalDiagnostic.find(instance_params[:final_diagnostic_id]), health_care: instance.node) if instance.node.is_a?(HealthCare)
 
-    if instance.save
       render json: instance.generate_json
     else
       render json: instance.errors.full_messages, status: 422
