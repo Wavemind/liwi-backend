@@ -159,6 +159,8 @@ en:
           device_not_exist: "The tablet is not registered in MedAL-C"
           invalid_token: "Invalid health facility token"
           no_health_facility: "Your tablet has not been associated with any Health Facility in MedAL-C"
+        show:
+          invalid_version: "Invalid version id"
       activities:
         create:
           errors_device_not_present: "The tablet does not exist in MedAL-C"
