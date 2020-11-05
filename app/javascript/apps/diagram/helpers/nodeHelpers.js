@@ -77,6 +77,8 @@ export const getCategoryNode = (node) => {
 export const linkNode = (answerPort, diagramNode, condition) => {
   // Fetch value
   let inPort = diagramNode.getInPort();
+  console.log(inPort)
+  console.log(answerPort)
   let link = answerPort.link(inPort);
 
   // Add label to display score
@@ -117,7 +119,7 @@ export const getConditionPort = (diagramNodes, answerId) => {
   diagramNodes.map(node => {
     let ports = node.getOutPorts();
     Object.keys(ports).map(index => {
-      if (ports[index].constructor.name === "AdvancedPortModel" && ports[index].options.id === `answer_${answerId}`) {
+      if (ports[index].options.id === `answer_${answerId}`) {
         port = ports[index];
       }
     });
