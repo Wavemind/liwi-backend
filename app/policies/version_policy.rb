@@ -38,7 +38,7 @@ class VersionPolicy < ApplicationPolicy
   end
 
   def change_triage_order?
-    new?
+    true
   end
 
   def components?
