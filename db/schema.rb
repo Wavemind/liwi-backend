@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_29_103540) do
+ActiveRecord::Schema.define(version: 2020_10_30_130335) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -397,6 +397,7 @@ ActiveRecord::Schema.define(version: 2020_10_29_103540) do
     t.json "medal_r_config", default: {}
     t.json "medal_r_json"
     t.integer "medal_r_json_version", default: 0
+    t.boolean "generating"
     t.index ["algorithm_id"], name: "index_versions_on_algorithm_id"
     t.index ["first_top_right_question_id"], name: "index_versions_on_first_top_right_question_id"
     t.index ["second_top_right_question_id"], name: "index_versions_on_second_top_right_question_id"

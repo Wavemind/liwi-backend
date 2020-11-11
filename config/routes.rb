@@ -202,6 +202,9 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :versions, only: [:index, :show] do
         get 'json_test', to: 'versions#json_test'
+        collection do
+          get 'json_from_facility', to: 'versions#json_from_facility'
+        end
       end
       resources :devices, only: [:show]
       mount_devise_token_auth_for 'User', at: 'auth'

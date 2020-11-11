@@ -48,4 +48,18 @@ class Api::V1::VersionsController < Api::V1::ApplicationController
       render json: { errors: t('api.v1.versions.index.invalid_token') }, status: :unprocessable_entity
     end
   end
+
+  def json_from_facility
+    if params[:health_facility_id].present?
+      facility = HealthFacility.find_by(id: params[:health_facility_id])
+      if facility.present?
+        facility_version = facility.health_facility_accesses.where(end_date: nil).first.version
+        render json: facility_version.medal_r_json
+      else
+        render json: { errors: t('api.v1.versions.index.invalid_health_facility') }, status: :unprocessable_entity
+      end
+    else
+      render json: { errors: t('api.v1.versions.index.no_health_facility_id') }, status: :unprocessable_entity
+    end
+  end
 end

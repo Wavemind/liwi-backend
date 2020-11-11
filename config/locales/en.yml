@@ -158,6 +158,8 @@ en:
           no_version: "No version of the algorithm is associated with this Health Facility"
           device_not_exist: "The tablet is not registered in MedAL-C"
           invalid_token: "Invalid health facility token"
+          invalid_health_facility: "Invalid health facility id"
+          no_health_facility_id: "No health facility id specified."
           no_health_facility: "Your tablet has not been associated with any Health Facility in MedAL-C"
         show:
           invalid_version: "Invalid version id"
