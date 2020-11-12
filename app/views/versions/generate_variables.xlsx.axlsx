@@ -2,6 +2,7 @@ wb = xlsx_package.workbook
 wrap = xlsx_package.workbook.styles.add_style alignment: {wrap_text: true}
 
 nodes = @version.extract_nodes_from_version
+drugs = []
 
 wb.add_worksheet(name: "Variables") do |sheet|
   sheet.add_row ["ID", "Category", "Reference", "Label", "Mandatory", "Description", "Answers (ID | full label)"]
@@ -20,9 +21,27 @@ end
 wb.add_worksheet(name: "Final diagnoses") do |sheet|
   sheet.add_row ["ID", "Reference", "Label", "Description"]
   @version.diagnostics.map do |diag|
-    diag.components.final_diagnostics.map do |df|
-      df = df.node
-      sheet.add_row [df.id, df.full_reference, df.label_en, df.description_en], style: wrap
+    diag.components.map do |instance|
+      if instance.node.is_a? FinalDiagnostic
+        df = instance.node
+        sheet.add_row [df.id, df.full_reference, df.label_en, df.description_en], style: wrap
+      elsif instance.node.is_a? HealthCares::Drug
+        drugs.push(instance.node)
+      end
     end
+  end
+end
+
+wb.add_worksheet(name: "Drugs") do |sheet|
+  sheet.add_row ["ID", "Reference", "Label", "Description", "Formulations (ID | medication form)"]
+
+  drugs.map do |node|
+    formulations = ""
+    node.formulations.each_with_index do |formulation, index|
+      formulations += "\r" unless index == 0
+      formulations += "#{formulation.id} | #{formulation.medication_form}"
+    end
+
+    sheet.add_row [node.id, node.full_reference, node.label_en, node.description_en, formulations], style: wrap
   end
 end
