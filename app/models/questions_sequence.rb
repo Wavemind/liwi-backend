@@ -171,6 +171,7 @@ class QuestionsSequence < Node
 
   # Check if the user is doing a loop between multiple QS
   def self.is_loop(qs_diagram, qs_node)
+    return false if qs_diagram.is_a? Diagnostic
     parents = QuestionsSequence.get_qs_parents(qs_diagram, [])
     parents.include? qs_node.id
   end

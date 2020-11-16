@@ -77,8 +77,6 @@ export const getCategoryNode = (node) => {
 export const linkNode = (answerPort, diagramNode, condition) => {
   // Fetch value
   let inPort = diagramNode.getInPort();
-  console.log(inPort)
-  console.log(answerPort)
   let link = answerPort.link(inPort);
 
   // Add label to display score
