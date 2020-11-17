@@ -531,6 +531,7 @@ class VersionsService
         health_care.formulations.map do |formulation|
           formulation_hash = {}
           formulation_hash['']
+          formulation_hash['id'] = formulation.id
           formulation_hash['medication_form'] = formulation.medication_form
           formulation_hash['administration_route_category'] = formulation.administration_route.category
           formulation_hash['administration_route_name'] = formulation.administration_route.name
