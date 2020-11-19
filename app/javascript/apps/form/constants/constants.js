@@ -49,6 +49,17 @@ export const NO_ANSWERS_ATTACHED_TYPE = [
   "Questions::BasicDemographic"
 ];
 
+export const CATEGORIES_DISPLAYING_UNAVAILABLE_OPTION = [
+  "Questions::VitalSignAnthropometric",
+  "Questions::BasicMeasurement",
+  "Questions::AssessmentTest"
+];
+
+export const MEASUREMENT_CATEGORIES = [
+  "Questions::VitalSignAnthropometric",
+  "Questions::BasicMeasurement",
+];
+
 export const CATEGORIES_DISPLAYING_FILTERABLE = [
   "Questions::BasicDemographic",
   "Questions::Demographic",
