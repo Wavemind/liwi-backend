@@ -1,7 +1,7 @@
 import * as React from "react";
 import I18n from "i18n-js";
 import FadeIn from "react-fade-in";
-import { Form, Col } from "react-bootstrap";
+import {Form, Col, Button} from "react-bootstrap";
 
 export default class MediaFields extends React.Component {
 
@@ -48,7 +48,6 @@ export default class MediaFields extends React.Component {
       reader.readAsDataURL(file);
       reader.onload = (e) => {
         setFieldValue(`medias_attributes.${index}.url`, e.target.result);
-        // TODO check whether we need the filename field for any reason. IF yes uncomment. IF no delete
         setFieldValue(`medias_attributes.${index}.filename`, file.name);
       };
     }
@@ -91,11 +90,7 @@ export default class MediaFields extends React.Component {
               onChange={(e) => this.handleFile(e.target)}
               isInvalid={this.isInvalid("url")}>
             </Form.Control>
-            <Form.Text className="text-muted">
-              {media.url.url !== undefined ? (
-                <a href={media.url.url}>{I18n.t("questions.medias.current_file")}</a>
-              ) : null }
-            </Form.Text>
+
             <Form.Control.Feedback type="invalid">
               {this.displayErrors("url")}
             </Form.Control.Feedback>

@@ -38,12 +38,18 @@ export default class ManagementForm extends React.Component {
    */
   handleOnSubmit = async (values, actions) => {
     const { method, from, engine, diagramObject, addAvailableNode } = this.props;
+    const { toDeleteMedias } = this.state
     let http = new Http();
     let httpRequest = {};
 
     if (method === "create") {
       httpRequest = await http.createManagement(values.label_translations, values.description_translations, values.medias_attributes, from);
     } else {
+      if (toDeleteMedias.length > 0) {
+        toDeleteMedias.map(media_id => {
+          values.medias_attributes.push({id: media_id, _destroy: true});
+        });
+      }
       httpRequest = await http.updateManagement(values.id, values.label_translations, values.description_translations, values.medias_attributes, from);
     }
 
@@ -82,9 +88,11 @@ export default class ManagementForm extends React.Component {
             id: management?.id || "",
             label_translations: management?.label_translations?.en || "",
             description_translations: management?.description_translations?.en || "",
-            medias_attributes: _.filter(management?.medias, (media) => {
-              // return media.fileable_id !== undefined
-            }) || []
+            medias_attributes: management?.medias?.map((media) => ({
+              id: media.id || "",
+              url: media.url || "",
+              label_en: media.label_translations?.en || "",
+            })) || []
           }}
           onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
         >

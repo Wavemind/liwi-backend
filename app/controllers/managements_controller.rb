@@ -14,13 +14,13 @@ class ManagementsController < ApplicationController
   def edit
     add_breadcrumb @management.label
     add_breadcrumb t('breadcrumbs.edit')
-    raise
   end
 
   def create
-    @management = @algorithm.health_cares.managements.new(management_params).becomes(HealthCares::Management)
-    authorize @management
+    @management = HealthCares::Management.new(management_params)
+    @management.algorithm = @algorithm
     @management.type = HealthCares::Management
+    authorize @management
 
     if @management.save
       if params[:from] == 'rails'
