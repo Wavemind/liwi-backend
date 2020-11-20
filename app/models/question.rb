@@ -26,6 +26,7 @@ class Question < Node
     :complementary_medical_history,
     :vital_sign
   ]
+  enum emergency_status: [:standard, :referral, :emergency]
 
   has_many :answers, foreign_key: 'node_id', dependent: :destroy
   belongs_to :answer_type
@@ -108,6 +109,7 @@ class Question < Node
       answer_types: AnswerType.all.as_json(methods: :display_name),
       systems: Question.systems.map { |k, v| [I18n.t("questions.systems.#{k}"), k] },
       stages: Question.stages,
+      emergency_statuses: Question.emergency_statuses,
       complaint_categories: algorithm.questions.where(type: 'Questions::ComplaintCategory')
     }
   end

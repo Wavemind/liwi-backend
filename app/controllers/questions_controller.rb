@@ -147,7 +147,7 @@ class QuestionsController < ApplicationController
       :estimable,
       :is_neonat,
       :is_danger_sign,
-      :is_emergency,
+      :emergency_status,
       complaint_category_ids: [],
       answers_attributes: [
         :id,

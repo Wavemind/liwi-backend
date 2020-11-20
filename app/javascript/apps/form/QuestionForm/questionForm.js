@@ -91,6 +91,7 @@ export default class QuestionForm extends React.Component {
         answerTypes: result.answer_types,
         categories: result.categories,
         stages: result.stages,
+        emergency_statuses: result.emergency_statuses,
         complaintCategories: result.complaint_categories,
         isLoading: false
       });
@@ -242,6 +243,7 @@ export default class QuestionForm extends React.Component {
       categories,
       stages,
       systems,
+      emergency_statuses,
       snomedResults,
       isLoading,
       snomedError,
@@ -251,6 +253,10 @@ export default class QuestionForm extends React.Component {
       formulaTooltipShow,
       target
     } = this.state;
+
+    const formattedFormData = {
+      ...formData,
+    }
 
     return (
       isLoading ? <Loader/> :
@@ -364,6 +370,26 @@ export default class QuestionForm extends React.Component {
                   </Form.Group>
                   : null}
 
+                <Form.Group controlId="validationEmergencyStatus">
+                  <Form.Label>{I18n.t("activerecord.attributes.question.emergency_status")}</Form.Label>
+                  <Form.Control
+                    as="select"
+                    name="emergency_status"
+                    value={values.emergency_status}
+                    onChange={handleChange}
+                    disabled={deployedMode}
+                    isInvalid={touched.emergency_status && !!errors.emergency_status}
+                  >
+                    <option value="">{I18n.t("select")}</option>
+                    {Object.keys(emergency_statuses).map(key => (
+                      <option key={`stages-${emergency_statuses[key]}`} value={key}>{humanizeString(key)}</option>
+                    ))}
+                  </Form.Control>
+                  <Form.Control.Feedback type="invalid">
+                    {errors.emergency_status}
+                  </Form.Control.Feedback>
+                </Form.Group>
+
                 <Form.Group controlId="validationIsMandatory">
                   <Form.Check
                     name="is_mandatory"
@@ -376,21 +402,6 @@ export default class QuestionForm extends React.Component {
                   />
                   <Form.Control.Feedback type="invalid">
                     {errors.is_mandatory}
-                  </Form.Control.Feedback>
-                </Form.Group>
-
-                <Form.Group controlId="validationIsEmergency">
-                  <Form.Check
-                    name="is_emergency"
-                    label={I18n.t("activerecord.attributes.question.is_emergency")}
-                    value={values.is_emergency}
-                    checked={values.is_emergency}
-                    onChange={handleChange}
-                    disabled={deployedMode}
-                    isInvalid={touched.is_emergency && !!errors.is_emergency}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.is_emergency}
                   </Form.Control.Feedback>
                 </Form.Group>
 
