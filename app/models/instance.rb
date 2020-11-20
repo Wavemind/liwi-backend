@@ -80,6 +80,8 @@ class Instance < ApplicationRecord
       self.as_json(include: { node: { include: [:answers, :complaint_categories], methods: [:node_type, :category_name, :type] } })
     elsif node.is_a?(HealthCares::Drug)
       self.as_json(include: { node: { include: [:formulations], methods: [:node_type, :category_name, :type] } })
+    elsif node.is_a?(HealthCares::Management)
+      self.as_json(include: { node: { methods: [:node_type, :category_name, :type], include: :medias } })
     else
       self.as_json(include: { node: { methods: [:node_type, :category_name, :type] } })
     end

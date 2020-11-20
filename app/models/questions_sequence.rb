@@ -176,7 +176,7 @@ class QuestionsSequence < Node
     parents.include? qs_node.id
   end
 
-  # Check recursively the QS parents 
+  # Check recursively the QS parents
   def self.get_qs_parents(qs, parents)
     qs.instances.map do |instance|
       if instance.instanceable_type == 'Node' && instance.instanceable_id != instance.node_id

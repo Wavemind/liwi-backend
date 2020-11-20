@@ -43,7 +43,7 @@ class ManagementsController < ApplicationController
       if params[:from] == 'rails'
         render json: { url: algorithm_url(@algorithm, panel: 'managements'), management: @management }
       else
-        render json: @management.as_json(methods: [:node_type, :type, :category_name])
+        render json: @management.as_json(methods: [:node_type, :type, :category_name], include: :medias)
       end
     else
       render json: @management.errors.full_messages, status: 422

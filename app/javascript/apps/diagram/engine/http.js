@@ -91,6 +91,7 @@ export default class Http {
    * Update a management
    * @params [String] label_en
    * @params [String] description_en
+   * @params [array] medias_attributes
    * @params [String] from
    * @return [Object] body of request
    */
