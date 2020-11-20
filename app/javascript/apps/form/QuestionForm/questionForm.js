@@ -254,10 +254,6 @@ export default class QuestionForm extends React.Component {
       target
     } = this.state;
 
-    const formattedFormData = {
-      ...formData,
-    }
-
     return (
       isLoading ? <Loader/> :
         <FadeIn>
