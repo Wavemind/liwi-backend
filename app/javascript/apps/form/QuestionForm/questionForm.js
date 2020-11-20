@@ -379,6 +379,21 @@ export default class QuestionForm extends React.Component {
                   </Form.Control.Feedback>
                 </Form.Group>
 
+                <Form.Group controlId="validationIsEmergency">
+                  <Form.Check
+                    name="is_emergency"
+                    label={I18n.t("activerecord.attributes.question.is_emergency")}
+                    value={values.is_emergency}
+                    checked={values.is_emergency}
+                    onChange={handleChange}
+                    disabled={deployedMode}
+                    isInvalid={touched.is_emergency && !!errors.is_emergency}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.is_emergency}
+                  </Form.Control.Feedback>
+                </Form.Group>
+
                 {values.type === "Questions::ComplaintCategory" ?
                   <Form.Group controlId="validationIsNeonat">
                     <Form.Check
