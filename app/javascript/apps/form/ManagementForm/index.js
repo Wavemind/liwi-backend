@@ -10,7 +10,7 @@ import store from "../../diagram/engine/reducers/store";
 import { managementSchema } from "../constants/schema";
 import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
-import MediaForm from "./mediaForm";
+import MediaForm from "../MediaForm/mediaForm";
 import * as _ from "lodash";
 
 

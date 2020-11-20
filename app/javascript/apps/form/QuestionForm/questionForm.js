@@ -3,8 +3,8 @@ import I18n from "i18n-js";
 import FadeIn from "react-fade-in";
 import Autocomplete, { createFilterOptions } from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
-import {Form, Button, Col} from "react-bootstrap";
-import {FieldArray, Formik} from "formik";
+import {Form, Button} from "react-bootstrap";
+import {Formik} from "formik";
 
 import DisplayErrors from "../components/DisplayErrors";
 import Http from "../../diagram/engine/http";
@@ -28,7 +28,7 @@ import Chip from "@material-ui/core/Chip";
 import Overlay from "react-bootstrap/Overlay";
 import Popover from "react-bootstrap/Popover";
 import AnswerFields from "./answerForm";
-import MediaForm from "./mediaForm";
+import MediaForm from "../MediaForm/mediaForm";
 
 const humanizeString = require("humanize-string");
 const filterOptions = createFilterOptions({
