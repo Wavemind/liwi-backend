@@ -5,10 +5,10 @@
         <%= t('warning_dependency') %>
         <ul>
           <% node.dependencies.each do |dependence| %>
-            <li><b><%= dependence.instanceable.full_reference %></b></li>
+            <li><b><%= "#{dependence.instanceable.full_reference} - #{dependence.instanceable.label}" %></b></li>
           <% end %>
           <% node.diagnostics.each do |diagnostic| %>
-            <li><b><%= diagnostic.full_reference %></b></li>
+            <li><b><%= "#{diagnostic.full_reference} - #{diagnostic.label}" %></b></li>
           <% end %>
         </ul>
       </div>
