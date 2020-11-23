@@ -571,7 +571,7 @@ class VersionsService
       hash[questions_sequence.id]['df'] = get_node_final_diagnostics(questions_sequence)
       hash[questions_sequence.id]['conditioned_by_cc'] = questions_sequence.complaint_categories.map(&:id)
       hash[questions_sequence.id]['answer'] = nil
-      hash[questions_sequence.id]['value_format'] = "Boolean"
+      hash[questions_sequence.id]['value_format'] = 'Boolean'
 
       # Loop in each instance for defined condition
       questions_sequence.components.questions.includes(:conditions, :children, :nodes, node:[:answer_type, :answers]).each do |instance|
