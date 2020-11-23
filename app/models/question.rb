@@ -5,8 +5,6 @@ class Question < Node
   after_create :create_positive, if: Proc.new { answer_type.value == 'Positive' }
   after_create :create_present, if: Proc.new { answer_type.value == 'Present' }
 
-  attr_accessor :unavailable
-
   enum stage: [:registration, :triage, :test, :consultation, :diagnosis_management]
   enum system: [
     :general,

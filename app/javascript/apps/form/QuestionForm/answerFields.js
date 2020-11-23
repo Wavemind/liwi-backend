@@ -1,7 +1,8 @@
 import * as React from "react";
 import I18n from "i18n-js";
 import FadeIn from "react-fade-in";
-import { Form, Col } from "react-bootstrap";
+import {Form, Col} from "react-bootstrap";
+import {MEASUREMENT_CATEGORIES} from "../constants/constants";
 
 export default class AnswerFields extends React.Component {
 
@@ -16,7 +17,7 @@ export default class AnswerFields extends React.Component {
    */
   displayErrors(input) {
     const {
-      index, arrayHelpers: { form: { errors } }
+      index, arrayHelpers: {form: {errors}}
     } = this.props;
 
     return errors?.answers_attributes !== undefined && errors?.answers_attributes[index]?.[input];
@@ -29,7 +30,7 @@ export default class AnswerFields extends React.Component {
    */
   isInvalid(input) {
     const {
-      index, arrayHelpers: { form: { errors } }
+      index, arrayHelpers: {form: {errors}}
     } = this.props;
 
     return errors?.answers_attributes !== undefined && !!errors?.answers_attributes[index]?.[input];
@@ -68,23 +69,25 @@ export default class AnswerFields extends React.Component {
           {/*Do not ask for value and operator if it is an array*/}
           {parseInt(values.answer_type_id) !== 2 ? (
             <>
-              <Form.Group as={Col} controlId="validationOperator">
-                <Form.Label>{I18n.t("activerecord.attributes.answer.operator")}</Form.Label>
-                <Form.Control
-                  as="select"
-                  name={`answers_attributes.${index}.operator`}
-                  onChange={handleChange}
-                  value={answer.operator}
-                  isInvalid={this.isInvalid("operator")}>
-                  <option value="">{I18n.t("select")}</option>
-                  {operators.map(operator => (
-                    <option key={`operator-${operator[1]}`} value={operator[1]}>{operator[0]}</option>
-                  ))}
-                </Form.Control>
-                <Form.Control.Feedback type="invalid">
-                  {this.displayErrors("operator")}
-                </Form.Control.Feedback>
-              </Form.Group>
+              {!MEASUREMENT_CATEGORIES.includes(values.type) ?
+                <Form.Group as={Col} controlId="validationOperator">
+                  <Form.Label>{I18n.t("activerecord.attributes.answer.operator")}</Form.Label>
+                  <Form.Control
+                    as="select"
+                    name={`answers_attributes.${index}.operator`}
+                    onChange={handleChange}
+                    value={answer.operator}
+                    isInvalid={this.isInvalid("operator")}>
+                    <option value="">{I18n.t("select")}</option>
+                    {operators.map(operator => (
+                      <option key={`operator-${operator[1]}`} value={operator[1]}>{operator[0]}</option>
+                    ))}
+                  </Form.Control>
+                  <Form.Control.Feedback type="invalid">
+                    {this.displayErrors("operator")}
+                  </Form.Control.Feedback>
+                </Form.Group>
+              : null}
 
               <Form.Group as={Col} controlId="validationValue">
                 <Form.Label>{I18n.t("activerecord.attributes.answer.value")}</Form.Label>
