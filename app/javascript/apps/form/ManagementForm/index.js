@@ -10,9 +10,26 @@ import store from "../../diagram/engine/reducers/store";
 import { managementSchema } from "../constants/schema";
 import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
+import MediaForm from "../MediaForm/mediaForm";
+import * as _ from "lodash";
 
 
 export default class ManagementForm extends React.Component {
+
+  state = {
+    toDeleteMedias: [],
+  };
+
+  /**
+   * Suppress entry in media
+   * @param id
+   * @returns {Promise<void>}
+   */
+  setDeletedMedia = async (id) => {
+    const { toDeleteMedias } = this.state;
+    toDeleteMedias.push(id);
+    this.setState({toDeleteMedias})
+  };
 
   /**
    * Create or update value in database + update diagram if we're editting from diagram
@@ -21,13 +38,19 @@ export default class ManagementForm extends React.Component {
    */
   handleOnSubmit = async (values, actions) => {
     const { method, from, engine, diagramObject, addAvailableNode } = this.props;
+    const { toDeleteMedias } = this.state
     let http = new Http();
     let httpRequest = {};
 
     if (method === "create") {
-      httpRequest = await http.createManagement(values.label_translations, values.description_translations, from);
+      httpRequest = await http.createManagement(values.label_translations, values.description_translations, values.medias_attributes, from);
     } else {
-      httpRequest = await http.updateManagement(values.id, values.label_translations, values.description_translations, from);
+      if (toDeleteMedias.length > 0) {
+        toDeleteMedias.map(media_id => {
+          values.medias_attributes.push({id: media_id, _destroy: true});
+        });
+      }
+      httpRequest = await http.updateManagement(values.id, values.label_translations, values.description_translations, values.medias_attributes, from);
     }
 
     let result = await httpRequest.json();
@@ -64,7 +87,12 @@ export default class ManagementForm extends React.Component {
           initialValues={{
             id: management?.id || "",
             label_translations: management?.label_translations?.en || "",
-            description_translations: management?.description_translations?.en || ""
+            description_translations: management?.description_translations?.en || "",
+            medias_attributes: management?.medias?.map((media) => ({
+              id: media.id || "",
+              url: media.url || "",
+              label_en: media.label_translations?.en || "",
+            })) || []
           }}
           onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
         >
@@ -72,6 +100,7 @@ export default class ManagementForm extends React.Component {
               handleSubmit,
               handleChange,
               isSubmitting,
+              setFieldValue,
               touched,
               values,
               errors,
@@ -104,6 +133,10 @@ export default class ManagementForm extends React.Component {
                 <Form.Control.Feedback type="invalid">
                   {errors.description_translations}
                 </Form.Control.Feedback>
+              </Form.Group>
+
+              <Form.Group>
+                <MediaForm values={values} setFieldValue={setFieldValue} setDeletedMedia={this.setDeletedMedia}/>
               </Form.Group>
 
               <Button type="submit" disabled={isSubmitting}>

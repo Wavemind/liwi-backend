@@ -42,6 +42,7 @@ class FinalDiagnostic < Node
     ) + diagnostic.components.managements.where(node_id: health_cares.map(&:id), final_diagnostic_id: id).as_json(
       include: [
         node: {
+          include: [:medias],
           methods: [:node_type, :type]
         },
         conditions: {
@@ -100,7 +101,7 @@ class FinalDiagnostic < Node
       diagnostic.version.algorithm.questions.no_triage.diagrams_included.where.not(id: ids) +
       diagnostic.version.algorithm.questions_sequences.where.not(id: ids) +
       diagnostic.version.algorithm.health_cares.where.not(id: ids)
-    ).as_json(methods: [:category_name, :node_type, :get_answers, :type])
+    ).as_json(methods: [:category_name, :node_type, :get_answers, :type], include: :medias)
   end
 
   # Get the reference prefix according to the type
