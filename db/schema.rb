@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_30_130335) do
+ActiveRecord::Schema.define(version: 2020_11_20_152911) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -306,10 +306,11 @@ ActiveRecord::Schema.define(version: 2020_10_30_130335) do
     t.string "max_message_warning"
     t.string "min_message_error"
     t.string "max_message_error"
-    t.boolean "estimable"
+    t.boolean "estimable", default: false
     t.bigint "reference_table_z_id"
     t.boolean "is_neonat", default: false
     t.boolean "is_danger_sign", default: false
+    t.integer "emergency_status"
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
     t.index ["diagnostic_id"], name: "index_nodes_on_diagnostic_id"
@@ -394,7 +395,7 @@ ActiveRecord::Schema.define(version: 2020_10_30_130335) do
     t.bigint "top_left_question_id"
     t.bigint "first_top_right_question_id"
     t.bigint "second_top_right_question_id"
-    t.json "medal_r_config", default: {}
+    t.json "medal_r_config"
     t.json "medal_r_json"
     t.integer "medal_r_json_version", default: 0
     t.boolean "generating"
