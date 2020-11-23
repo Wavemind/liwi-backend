@@ -13,6 +13,8 @@ import { questionSchema } from "../constants/schema";
 import {
   CATEGORIES_DISPLAYING_SYSTEM,
   CATEGORIES_DISABLING_ANSWER_TYPE,
+  CATEGORIES_DISPLAYING_UNAVAILABLE_OPTION,
+  MEASUREMENT_CATEGORIES,
   NO_ANSWERS_ATTACHED_TYPE,
   NO_ANSWERS_ATTACHED_ANSWER_TYPE,
   NUMERIC_ANSWER_TYPES,
@@ -65,8 +67,9 @@ export default class QuestionForm extends React.Component {
     const { setFormData, save, validate, nextStep, method, is_used, is_deployed } = this.props;
     const { updateMode, toDeleteMedias } = this.state;
     setFormData(values);
+
     // Skip answers form if the question type doesn't have any OR if the answers are automatically generated (boolean) or if it is edit mode and the question is already used
-    if (NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(values.answer_type_id) || NO_ANSWERS_ATTACHED_TYPE.includes(values.type) || (updateMode && (is_used || is_deployed))) {
+    if (NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(values.answer_type_id) || (NO_ANSWERS_ATTACHED_TYPE.includes(values.type) && values.unavailable !== true) || (updateMode && (is_used || is_deployed))) {
       save([], toDeleteMedias);
     } else {
       const validated = await validate();
@@ -418,11 +421,11 @@ export default class QuestionForm extends React.Component {
                   </Form.Group>
                 : null}
 
-                {values.type === "Questions::AssessmentTest" ?
+                {CATEGORIES_DISPLAYING_UNAVAILABLE_OPTION.includes(values.type) ?
                   <Form.Group controlId="validationUnavailable">
                     <Form.Check
                       name="unavailable"
-                      label={I18n.t("activerecord.attributes.question.unavailable")}
+                      label={MEASUREMENT_CATEGORIES.includes(values.type) ? I18n.t("activerecord.attributes.question.measurement_unavailable") : I18n.t("activerecord.attributes.question.unavailable")}
                       value={values.unavailable}
                       checked={values.unavailable}
                       onChange={handleChange}

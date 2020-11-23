@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_20_152911) do
+ActiveRecord::Schema.define(version: 2020_11_23_102530) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -71,6 +71,7 @@ ActiveRecord::Schema.define(version: 2020_11_20_152911) do
     t.bigint "node_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "unavailable", default: false
     t.index ["node_id"], name: "index_answers_on_node_id"
   end
 
@@ -310,6 +311,7 @@ ActiveRecord::Schema.define(version: 2020_11_20_152911) do
     t.bigint "reference_table_z_id"
     t.boolean "is_neonat", default: false
     t.boolean "is_danger_sign", default: false
+    t.boolean "unavailable", default: false
     t.integer "emergency_status", default: 0
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
