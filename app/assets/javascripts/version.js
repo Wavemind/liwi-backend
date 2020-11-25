@@ -16,9 +16,6 @@ jQuery(document).ready(function () {
           key: event.target.id,
           order: order
         },
-        complete: function(response) {
-
-        }
       });
     }
   });
@@ -40,9 +37,6 @@ jQuery(document).ready(function () {
           key: event.target.id,
           order: order
         },
-        complete: function(response) {
-
-        }
       });
     }
   });
