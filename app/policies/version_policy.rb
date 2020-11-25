@@ -41,6 +41,10 @@ class VersionPolicy < ApplicationPolicy
     true
   end
 
+  def change_systems_order?
+    true
+  end
+
   def components?
     new?
   end

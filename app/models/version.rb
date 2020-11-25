@@ -125,8 +125,6 @@ class Version < ApplicationRecord
     nodes_to_add.uniq
   end
 
-
-
   # Init orders for new version
   def init_config
     self.medal_r_config = {
@@ -139,6 +137,7 @@ class Version < ApplicationRecord
         unique_triage_physical_sign: [],
         unique_triage_question: []
       },
+      systems_order: Question.systems.to_a.map(&:first),
       patient_list_order: [],
       medical_case_list_order: [],
     }

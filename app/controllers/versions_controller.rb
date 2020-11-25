@@ -1,8 +1,8 @@
 class VersionsController < ApplicationController
-  before_action :authenticate_user!, except: [:change_triage_order]
+  before_action :authenticate_user!, except: [:change_triage_order, :change_systems_order]
   before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :duplicate, :create_triage_condition, :remove_triage_condition, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnostics, :import_translations]
   before_action :set_breadcrumb, only: [:show, :new, :edit]
-  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :change_triage_order, :components, :create_triage_condition, :duplicate, :remove_components, :remove_triage_condition, :update_list, :regenerate_json, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnostics, :import_translations]
+  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :change_triage_order, :change_systems_order, :components, :create_triage_condition, :duplicate, :remove_components, :remove_triage_condition, :update_list, :regenerate_json, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnostics, :import_translations]
 
   def index
     authorize policy_scope(Version)
@@ -72,6 +72,19 @@ class VersionsController < ApplicationController
   def change_triage_order
     config = @version.medal_r_config
     config['questions_orders'][params[:key]] = params[:order].map(&:to_i)
+    if @version.update(medal_r_config: config)
+      render json: {result: 'success'}
+    else
+      render json: {result: 'error'}
+    end
+  end
+
+  # PUT algorithms/:algorithm_id/version/:id/change_triage_order
+  # @params version [Version] version of algorithm we change order of
+  # Change the order of the triage questions for this version
+  def change_systems_order
+    config = @version.medal_r_config
+    config['systems_orders'] = params[:order]
     if @version.update(medal_r_config: config)
       render json: {result: 'success'}
     else

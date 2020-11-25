@@ -738,6 +738,7 @@ en:
       subtitle_medal_r_config: "Config Medal-R"
       subtitle_questions_order: "Triage variables order"
       subtitle_registration_triage_questions: "Registration and triage variables"
+      subtitle_systems_order: "Systems order"
       subtitle_translations: "Translations"
       subtitle_triage_conditions: "Triage variables conditions"
       title: "Details of %{name} - version %{version}"

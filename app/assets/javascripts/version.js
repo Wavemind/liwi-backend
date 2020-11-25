@@ -7,7 +7,7 @@ jQuery(document).ready(function () {
         order.push(question.value);
       });
 
-      let url = $("#questions_order").data("url");
+      let url = $(this).closest(".ordering-tab").data("url");
 
       $.ajax({
         url: url,
@@ -22,6 +22,32 @@ jQuery(document).ready(function () {
       });
     }
   });
+
+  $( "#systems-order" ).sortable({
+    stop: function( event, ui ) {
+      let order = [];
+
+      $("#systems-order li").each(function() {
+        order.push($(this).attr("value"));
+      });
+
+      let url = $(this).closest(".ordering-tab").data("url");
+
+      $.ajax({
+        url: url,
+        method: 'PUT',
+        data: {
+          key: event.target.id,
+          order: order
+        },
+        complete: function(response) {
+
+        }
+      });
+    }
+  });
+
+
   $( ".order-available" ).disableSelection();
 
 

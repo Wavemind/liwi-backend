@@ -42,6 +42,7 @@ Rails.application.routes.draw do
         post 'components'
         delete 'remove_components'
         put 'change_triage_order'
+        put 'change_systems_order'
         put 'create_triage_condition'
         put 'remove_triage_condition'
         put 'regenerate_json'
