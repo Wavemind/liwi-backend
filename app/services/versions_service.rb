@@ -222,6 +222,7 @@ class VersionsService
     hash['managements'] = extract_health_cares(final_diagnostic.health_cares.managements, instance.instanceable.id, final_diagnostic.id)
     hash['excluding_final_diagnostics'] = final_diagnostic.excluding_nodes_ids
     hash['excluded_final_diagnostics'] = final_diagnostic.excluded_nodes_ids
+    hash['medias'] = extract_medias(final_diagnostic)
     hash['cc'] = final_diagnostic.diagnostic.node_id
     hash
   end
