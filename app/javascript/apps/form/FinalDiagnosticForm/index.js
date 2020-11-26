@@ -3,7 +3,6 @@ import I18n from "i18n-js";
 import FadeIn from "react-fade-in";
 import { Form, Button } from "react-bootstrap";
 import { Formik } from "formik";
-import Slider from "@material-ui/core/Slider";
 
 import DisplayErrors from "../components/DisplayErrors";
 import Http from "../../diagram/engine/http";
