@@ -49,12 +49,13 @@ export default class Http {
    * @params [String] from
    * @return [Object] body of request
    */
-  createFinalDiagnostic = async (label_en, description_en, medias_attributes, from) => {
+  createFinalDiagnostic = async (label_en, description_en, level_of_urgency, medias_attributes, from) => {
     const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics`;
     const body = {
       final_diagnostic: {
         label_en,
         description_en,
+        level_of_urgency,
         diagnostic_id: this.instanceableId,
         medias_attributes,
       },
@@ -463,13 +464,14 @@ export default class Http {
    * @params [Integer] from
    * @return [Object] body of request
    */
-  updateFinalDiagnostic = async (id, label_en, description_en, medias_attributes, from) => {
+  updateFinalDiagnostic = async (id, label_en, description_en, level_of_urgency, medias_attributes, from) => {
     const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/${id}`;
     const body = {
       final_diagnostic: {
         id,
         label_en,
         description_en,
+        level_of_urgency,
         medias_attributes,
       },
       from

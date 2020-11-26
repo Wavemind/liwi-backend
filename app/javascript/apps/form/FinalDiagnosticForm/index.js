@@ -3,7 +3,6 @@ import I18n from "i18n-js";
 import FadeIn from "react-fade-in";
 import { Form, Button } from "react-bootstrap";
 import { Formik } from "formik";
-import Typography from "@material-ui/core/Typography";
 import Slider from "@material-ui/core/Slider";
 
 import DisplayErrors from "../components/DisplayErrors";
@@ -13,6 +12,7 @@ import { finalDiagnosticSchema } from "../constants/schema";
 import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
 import MediaForm from "../MediaForm/mediaForm";
+import SliderComponent from "../components/Slider";
 
 
 export default class FinalDiagnosticForm extends React.Component {
@@ -44,14 +44,14 @@ export default class FinalDiagnosticForm extends React.Component {
     let httpRequest = {};
 
     if (method === "create") {
-      httpRequest = await http.createFinalDiagnostic(values.label_translations, values.description_translations, values.medias_attributes, from);
+      httpRequest = await http.createFinalDiagnostic(values.label_translations, values.description_translations, values.level_of_urgency, values.medias_attributes, from);
     } else {
       if (toDeleteMedias.length > 0) {
         toDeleteMedias.map(media_id => {
           values.medias_attributes.push({id: media_id, _destroy: true});
         });
       }
-      httpRequest = await http.updateFinalDiagnostic(values.id, values.label_translations, values.description_translations, values.medias_attributes, from);
+      httpRequest = await http.updateFinalDiagnostic(values.id, values.label_translations, values.description_translations, values.level_of_urgency, values.medias_attributes, from);
     }
 
     let result = await httpRequest.json();
@@ -89,11 +89,12 @@ export default class FinalDiagnosticForm extends React.Component {
             id: finalDiagnostic?.id || "",
             label_translations: finalDiagnostic?.label_translations?.en || "",
             description_translations: finalDiagnostic?.description_translations?.en || "",
+            level_of_urgency: finalDiagnostic?.level_of_urgency || 5,
             medias_attributes: finalDiagnostic?.medias?.map((media) => ({
               id: media.id || "",
               url: media.url || "",
               label_en: media.label_translations?.en || "",
-            })) || []
+            })) || [],
           }}
           onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
         >
@@ -136,39 +137,22 @@ export default class FinalDiagnosticForm extends React.Component {
                 </Form.Control.Feedback>
               </Form.Group>
 
-              <Form.Group>
-                <MediaForm values={values} setFieldValue={setFieldValue} setDeletedMedia={this.setDeletedMedia}/>
-              </Form.Group>
-
-              <Form.Group controlId="validationDescription">
-                <Form.Label>{I18n.t("activerecord.attributes.node.description_translations")}</Form.Label>
+              <Form.Group controlId="validationLevelOfUrgency">
+                <Form.Label>{I18n.t("activerecord.attributes.node.level_of_urgency")}</Form.Label>
                 <Form.Control
-                  name="description_translations"
-                  as="textarea"
-                  value={values.description_translations}
+                  name="level_of_urgency"
+                  as={SliderComponent}
+                  value={values.level_of_urgency}
                   onChange={handleChange}
-                  isInvalid={touched.description_translations && !!errors.description_translations}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {errors.description_translations}
+                  {errors.level_of_urgency}
                 </Form.Control.Feedback>
               </Form.Group>
 
-              <div style={{width: 300}}>
-                <Typography id="discrete-slider" gutterBottom>
-                  Temperature
-                </Typography>
-                <Slider
-                  defaultValue={5}
-                  min={1}
-                  max={10}
-                  step={1}
-                  getAriaValueText={this.valuetext}
-                  aria-labelledby="discrete-slider"
-                  valueLabelDisplay="auto"
-                  marks
-                />
-              </div>
+              <Form.Group>
+                <MediaForm values={values} setFieldValue={setFieldValue} setDeletedMedia={this.setDeletedMedia}/>
+              </Form.Group>
 
               <Button type="submit" disabled={isSubmitting}>
                 {I18n.t("save")}

@@ -1,39 +1,30 @@
-import * as React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Slider from '@material-ui/core/Slider';
+import * as React from "react";
+import { useField } from 'formik'
+import { CustomSlider } from './style'
 
-export default class Slider extends React.Component {
+const SliderComponent = ({...props}) => {
 
-  const useStyles = makeStyles({
-    root: {
-      width: 300,
-    },
-  });
+  const [field, meta, helpers] = useField(props);
+  const {name, value} = props;
 
-  valuetext = (value) => {
-    return `${value}°C`;
+  const marks = [];
+  for (let i = 1; i<=10; i++) {
+    marks.push({value: i, label: i});
   }
 
-  classes = useStyles();
+  return(
+    <CustomSlider
+      min={1}
+      max={10}
+      step={1}
+      marks={marks}
+      name={name}
+      value={value}
+      {...field}
+      onChange={(event, value) => helpers.setValue(value)}
+      track={false}
+    />
+  );
+};
 
-  render() {
-    return (
-      <div className={this.classes.root}>
-        <Typography id="discrete-slider" gutterBottom>
-          Temperature
-        </Typography>
-        <Slider
-          defaultValue={30}
-          getAriaValueText={this.valuetext}
-          aria-labelledby="discrete-slider"
-          valueLabelDisplay="auto"
-          step={10}
-          marks
-          min={10}
-          max={110}
-        />
-      </div>
-    );
-  }
-}
+export default SliderComponent;
