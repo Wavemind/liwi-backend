@@ -14,6 +14,7 @@ const SliderComponent = ({...props}) => {
 
   return(
     <LiwiSlider
+      {...field}
       min={1}
       max={10}
       step={1}
@@ -22,7 +23,6 @@ const SliderComponent = ({...props}) => {
       value={value}
       onChange={(event, value) => helpers.setValue(value)}
       track={false}
-      {...field}
     />
   );
 };

@@ -11,8 +11,7 @@ import { managementSchema } from "../constants/schema";
 import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
 import MediaForm from "../MediaForm/mediaForm";
-import * as _ from "lodash";
-
+import SliderComponent from "../components/Slider";
 
 export default class ManagementForm extends React.Component {
 
@@ -43,14 +42,14 @@ export default class ManagementForm extends React.Component {
     let httpRequest = {};
 
     if (method === "create") {
-      httpRequest = await http.createManagement(values.label_translations, values.description_translations, values.medias_attributes, from);
+      httpRequest = await http.createManagement(values.label_translations, values.description_translations, values.level_of_urgency, values.medias_attributes, from);
     } else {
       if (toDeleteMedias.length > 0) {
         toDeleteMedias.map(media_id => {
           values.medias_attributes.push({id: media_id, _destroy: true});
         });
       }
-      httpRequest = await http.updateManagement(values.id, values.label_translations, values.description_translations, values.medias_attributes, from);
+      httpRequest = await http.updateManagement(values.id, values.label_translations, values.description_translations, values.level_of_urgency, values.medias_attributes, from);
     }
 
     let result = await httpRequest.json();
@@ -88,6 +87,7 @@ export default class ManagementForm extends React.Component {
             id: management?.id || "",
             label_translations: management?.label_translations?.en || "",
             description_translations: management?.description_translations?.en || "",
+            level_of_urgency: management?.level_of_urgency || 5,
             medias_attributes: management?.medias?.map((media) => ({
               id: media.id || "",
               url: media.url || "",
@@ -132,6 +132,19 @@ export default class ManagementForm extends React.Component {
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.description_translations}
+                </Form.Control.Feedback>
+              </Form.Group>
+
+              <Form.Group controlId="validationLevelOfUrgency">
+                <Form.Label>{I18n.t("activerecord.attributes.node.level_of_urgency")}</Form.Label>
+                <Form.Control
+                  name="level_of_urgency"
+                  as={SliderComponent}
+                  value={values.level_of_urgency}
+                  onChange={handleChange}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.level_of_urgency}
                 </Form.Control.Feedback>
               </Form.Group>
 

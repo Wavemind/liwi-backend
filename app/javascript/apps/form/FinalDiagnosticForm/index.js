@@ -13,7 +13,6 @@ import { createNode } from "../../diagram/helpers/nodeHelpers";
 import MediaForm from "../MediaForm/mediaForm";
 import SliderComponent from "../components/Slider";
 
-
 export default class FinalDiagnosticForm extends React.Component {
 
   state = {

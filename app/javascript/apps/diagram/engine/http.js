@@ -73,12 +73,13 @@ export default class Http {
    * @params [String] from
    * @return [Object] body of request
    */
-  createManagement = async (label_en, description_en, medias_attributes, from) => {
+  createManagement = async (label_en, description_en, level_of_urgency, medias_attributes, from) => {
     const url = `${this.url}/algorithms/${this.algorithm}/managements`;
     const body = {
       health_cares_management: {
         label_en,
         description_en,
+        level_of_urgency,
         medias_attributes,
       },
       diagnostic_id: this.instanceableId,
@@ -97,13 +98,14 @@ export default class Http {
    * @params [String] from
    * @return [Object] body of request
    */
-  updateManagement = async (id, label_en, description_en, medias_attributes, from) => {
+  updateManagement = async (id, label_en, description_en, level_of_urgency, medias_attributes, from) => {
     const url = `${this.url}/algorithms/${this.algorithm}/managements/${id}`;
     const body = {
       health_cares_management: {
         id,
         label_en,
         description_en,
+        level_of_urgency,
         medias_attributes,
       },
       diagnostic_id: this.instanceableId,
