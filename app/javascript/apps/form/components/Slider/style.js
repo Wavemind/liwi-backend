@@ -1,7 +1,7 @@
 import {withStyles} from "@material-ui/core/styles";
 import Slider from "@material-ui/core/Slider";
 
-export const CustomSlider = withStyles({
+export const LiwiSlider = withStyles({
   rail: {
     backgroundImage: "linear-gradient(90deg, rgba(5,217,40,1) 0%, rgba(224,224,4,1) 50%, rgba(215,0,0,1) 100%)",
     height: 8,

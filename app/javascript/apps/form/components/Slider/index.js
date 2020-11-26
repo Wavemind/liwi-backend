@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useField } from 'formik'
-import { CustomSlider } from './style'
+import { LiwiSlider } from './style'
 
 const SliderComponent = ({...props}) => {
 
@@ -13,16 +13,16 @@ const SliderComponent = ({...props}) => {
   }
 
   return(
-    <CustomSlider
+    <LiwiSlider
       min={1}
       max={10}
       step={1}
       marks={marks}
       name={name}
       value={value}
-      {...field}
       onChange={(event, value) => helpers.setValue(value)}
       track={false}
+      {...field}
     />
   );
 };
