@@ -144,6 +144,7 @@ class FinalDiagnosticsController < ApplicationController
       :id,
       :reference,
       :label_en,
+      :level_of_urgency,
       Language.label_params,
       :description_en,
       Language.description_params,

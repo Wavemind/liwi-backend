@@ -3,6 +3,8 @@ import I18n from "i18n-js";
 import FadeIn from "react-fade-in";
 import { Form, Button } from "react-bootstrap";
 import { Formik } from "formik";
+import Typography from "@material-ui/core/Typography";
+import Slider from "@material-ui/core/Slider";
 
 import DisplayErrors from "../components/DisplayErrors";
 import Http from "../../diagram/engine/http";
@@ -105,6 +107,36 @@ export default class FinalDiagnosticForm extends React.Component {
                   {errors.description_translations}
                 </Form.Control.Feedback>
               </Form.Group>
+
+              <Form.Group controlId="validationDescription">
+                <Form.Label>{I18n.t("activerecord.attributes.node.description_translations")}</Form.Label>
+                <Form.Control
+                  name="description_translations"
+                  as="textarea"
+                  value={values.description_translations}
+                  onChange={handleChange}
+                  isInvalid={touched.description_translations && !!errors.description_translations}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.description_translations}
+                </Form.Control.Feedback>
+              </Form.Group>
+
+              <div style={{width: 300}}>
+                <Typography id="discrete-slider" gutterBottom>
+                  Temperature
+                </Typography>
+                <Slider
+                  defaultValue={5}
+                  min={1}
+                  max={10}
+                  step={1}
+                  getAriaValueText={this.valuetext}
+                  aria-labelledby="discrete-slider"
+                  valueLabelDisplay="auto"
+                  marks
+                />
+              </div>
 
               <Button type="submit" disabled={isSubmitting}>
                 {I18n.t("save")}
