@@ -150,6 +150,7 @@ class DrugsController < ApplicationController
         :breakable,
         :description_en,
         :injection_instructions_en,
+        :dispensing_description_en,
         :_destroy
       ]
     )

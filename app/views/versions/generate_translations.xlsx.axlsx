@@ -149,6 +149,11 @@ wb.add_worksheet(name: "Drugs") do |sheet|
     unlocked_rows_indexes.push(rows.count)
     rows.push("Injection instructions (#{l})")
   end
+  rows.push("Dispensing description (en)")
+  languages_codes.map do |l|
+    unlocked_rows_indexes.push(rows.count)
+    rows.push("Dispensing description (#{l})")
+  end
   sheet.add_row rows, style: wrap
 
   drugs.map do |node|
@@ -175,6 +180,10 @@ wb.add_worksheet(name: "Drugs") do |sheet|
       rows.push(formulation.injection_instructions_en)
       languages_codes.map do |l|
         rows.push(formulation.send("injection_instructions_#{l}"))
+      end
+      rows.push(formulation.dispensing_description_en)
+      languages_codes.map do |l|
+        rows.push(formulation.send("dispensing_description_#{l}"))
       end
       sheet.add_row rows, style: wrap
     end

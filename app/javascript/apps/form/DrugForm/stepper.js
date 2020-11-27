@@ -59,6 +59,7 @@ export default class StepperDrugForm extends React.Component {
           breakable: formulation.breakable,
           description_en: formulation.description_translations?.en || "",
           injection_instructions_en: formulation.injection_instructions_translations?.en || "",
+          dispensing_description_en: formulation.dispensing_description_translations?.en || "",
           _destroy: false
         });
       });

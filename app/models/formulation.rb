@@ -4,7 +4,7 @@ class Formulation < ApplicationRecord
   enum medication_form: [:tablet, :capsule, :syrup, :suspension, :suppository, :drops, :solution, :powder_for_injection, :patch, :cream, :ointment, :gel, :spray, :inhaler]
   enum breakable: [:one, :two, :four]
 
-  translates :description, :injection_instructions
+  translates :description, :injection_instructions, :dispensing_description
 
 
   belongs_to :node, class_name: 'HealthCares::Drug'
@@ -35,6 +35,9 @@ class Formulation < ApplicationRecord
       if head.include?('Injection instructions')
         code = head[/\((.*?)\)/m, 1]
         fields_to_update["injection_instructions_#{code}"] = index unless code == 'en'
+      elsif head.include?('Dispensing description')
+        code = head[/\((.*?)\)/m, 1]
+        fields_to_update["dispensing_description_#{code}"] = index unless code == 'en'
       elsif head.include?('Description')
         code = head[/\((.*?)\)/m, 1]
         fields_to_update["description_#{code}"] = index unless code == 'en'

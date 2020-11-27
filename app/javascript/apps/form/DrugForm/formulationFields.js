@@ -294,7 +294,6 @@ export default class FormulationFields extends React.Component {
           <Form.Group as={Col} controlId={`${index}-validationDescription`}>
             <Form.Label>{I18n.t("activerecord.attributes.formulation.description_translations")}</Form.Label>
             <Form.Control
-              as="textarea"
               name={`formulations_attributes.${index}.description_en`}
               value={formulation.description_en}
               onChange={handleChange}
@@ -302,6 +301,22 @@ export default class FormulationFields extends React.Component {
             />
             <Form.Control.Feedback type="invalid">
               {this.displayErrors("description_en")}
+            </Form.Control.Feedback>
+          </Form.Group>
+        </Form.Row>
+
+        <Form.Row>
+          <Form.Group as={Col} controlId={`${index}-validationDispensingDescription`}>
+            <Form.Label>{I18n.t("activerecord.attributes.formulation.dispensing_description_translations")}</Form.Label>
+            <Form.Control
+              as="textarea"
+              name={`formulations_attributes.${index}.dispensing_description_en`}
+              value={formulation.dispensing_description_en}
+              onChange={handleChange}
+              isInvalid={this.isInvalid("dispensing_description_en")}
+            />
+            <Form.Control.Feedback type="invalid">
+              {this.displayErrors("dispensing_description_en")}
             </Form.Control.Feedback>
           </Form.Group>
         </Form.Row>

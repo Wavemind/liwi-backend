@@ -18,6 +18,7 @@ en:
         administration_route_id: "Administration route"
         by_age: "Fixed-dose administrations"
         description_translations: "Description"
+        dispensing_description_translations: "Dispensing description"
         dose_form: "Total drug formulation volume (%{unity})"
         doses_per_day: "Number of administrations per day"
         injection_instructions_translations: "Injection dilution instructions"
@@ -28,8 +29,8 @@ en:
         pill_size: "Pill minimal size (mg)"
         treatment_type: "Medication form"
         unique_dose_general: "Number of applications per administration"
-        unique_dose_liquid: "Volume (mL) per administration"
-        unique_dose_solid: "Number of (mg) per administration"
+        unique_dose_liquid: "Number of ml per administration"
+        unique_dose_solid: "Number of pills per administration"
         unique_dose_suppository: "Number of suppositories per administration"
       instance:
         duration: "Duration (days)"

@@ -549,6 +549,7 @@ class VersionsService
           formulation_hash['doses_per_day'] = formulation.doses_per_day
           formulation_hash['description'] = formulation.description_en
           formulation_hash['injection_instructions'] = formulation.injection_instructions_en
+          formulation_hash['dispensing_description'] = formulation.dispensing_description_en
           hash[health_care.id]['formulations'].push(formulation_hash)
         end
       end
