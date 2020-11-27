@@ -37,7 +37,7 @@ export default class FinalDiagnosticForm extends React.Component {
    */
   handleOnSubmit = async (values, actions) => {
     const { method, from, engine, diagramObject, addAvailableNode } = this.props;
-    const { toDeleteMedias } = this.state
+    const { toDeleteMedias } = this.state;
     let http = new Http();
     let httpRequest = {};
 
