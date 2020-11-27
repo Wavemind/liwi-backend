@@ -84,7 +84,7 @@ class VersionsController < ApplicationController
   # Change the order of the triage questions for this version
   def change_systems_order
     config = @version.medal_r_config
-    config['systems_orders'] = params[:order]
+    config['systems_order'] = params[:order]
     if @version.update(medal_r_config: config)
       render json: {result: 'success'}
     else
