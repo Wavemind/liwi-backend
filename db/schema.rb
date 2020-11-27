@@ -314,6 +314,7 @@ ActiveRecord::Schema.define(version: 2020_11_27_064532) do
     t.boolean "is_danger_sign", default: false
     t.integer "emergency_status", default: 0
     t.boolean "unavailable", default: false
+    t.integer "level_of_urgency", default: 5
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
     t.index ["diagnostic_id"], name: "index_nodes_on_diagnostic_id"

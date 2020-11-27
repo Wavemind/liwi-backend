@@ -217,6 +217,8 @@ class VersionsService
     hash['id'] = final_diagnostic.id
     hash['label'] = final_diagnostic.label
     hash['description'] = final_diagnostic.description
+    hash['level_of_urgency'] = final_diagnostic.level_of_urgency
+    hash['medias'] = extract_medias(final_diagnostic)
     hash['type'] = final_diagnostic.node_type
     hash['drugs'] = extract_health_cares(final_diagnostic.health_cares.drugs, instance.instanceable.id, final_diagnostic.id)
     hash['managements'] = extract_health_cares(final_diagnostic.health_cares.managements, instance.instanceable.id, final_diagnostic.id)
@@ -552,6 +554,9 @@ class VersionsService
           formulation_hash['dispensing_description'] = formulation.dispensing_description_en
           hash[health_care.id]['formulations'].push(formulation_hash)
         end
+      else
+        hash[health_care.id]['level_of_urgency'] = health_care.level_of_urgency
+        hash[health_care.id]['medias'] = extract_medias(health_care)
       end
     end
     hash

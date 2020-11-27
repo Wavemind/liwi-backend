@@ -10,24 +10,46 @@ import store from "../../diagram/engine/reducers/store";
 import { finalDiagnosticSchema } from "../constants/schema";
 import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
-
+import MediaForm from "../MediaForm/mediaForm";
+import SliderComponent from "../components/Slider";
 
 export default class FinalDiagnosticForm extends React.Component {
 
+  state = {
+    toDeleteMedias: [],
+  };
+
   /**
-   * Create or update value in database + update diagram if we're editting from diagram
+   * Suppress entry in media
+   * @param id
+   * @returns {Promise<void>}
+   */
+  setDeletedMedia = async (id) => {
+    const { toDeleteMedias } = this.state;
+    toDeleteMedias.push(id);
+    this.setState({toDeleteMedias})
+  };
+
+  /**
+   * Create or update value in database + update diagram if we're editing from diagram
    * @params [Object] values
    * @params [Object] actions
    */
   handleOnSubmit = async (values, actions) => {
     const { method, from, engine, diagramObject, addAvailableNode } = this.props;
+    const { toDeleteMedias } = this.state;
     let http = new Http();
     let httpRequest = {};
 
     if (method === "create") {
-      httpRequest = await http.createFinalDiagnostic(values.label_translations, values.description_translations, from);
+      httpRequest = await http.createFinalDiagnostic(values.label_translations, values.description_translations, values.level_of_urgency, values.medias_attributes, from);
     } else {
-      httpRequest = await http.updateFinalDiagnostic(values.id, values.label_translations, values.description_translations, from);
+      if (toDeleteMedias.length > 0) {
+        toDeleteMedias.map(media_id => {
+          values.medias_attributes.push({id: media_id, _destroy: true});
+        });
+      }
+      httpRequest = await http.updateFinalDiagnostic(values.id, values.label_translations, values.description_translations, values.level_of_urgency, values.medias_attributes, from);
     }
 
     let result = await httpRequest.json();
@@ -64,7 +86,13 @@ export default class FinalDiagnosticForm extends React.Component {
           initialValues={{
             id: finalDiagnostic?.id || "",
             label_translations: finalDiagnostic?.label_translations?.en || "",
-            description_translations: finalDiagnostic?.description_translations?.en || ""
+            description_translations: finalDiagnostic?.description_translations?.en || "",
+            level_of_urgency: finalDiagnostic?.level_of_urgency || 5,
+            medias_attributes: finalDiagnostic?.medias?.map((media) => ({
+              id: media.id || "",
+              url: media.url || "",
+              label_en: media.label_translations?.en || "",
+            })) || [],
           }}
           onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
         >
@@ -72,6 +100,7 @@ export default class FinalDiagnosticForm extends React.Component {
               handleSubmit,
               handleChange,
               isSubmitting,
+              setFieldValue,
               touched,
               values,
               errors,
@@ -104,6 +133,23 @@ export default class FinalDiagnosticForm extends React.Component {
                 <Form.Control.Feedback type="invalid">
                   {errors.description_translations}
                 </Form.Control.Feedback>
+              </Form.Group>
+
+              <Form.Group controlId="validationLevelOfUrgency">
+                <Form.Label>{I18n.t("activerecord.attributes.node.level_of_urgency")}</Form.Label>
+                <Form.Control
+                  name="level_of_urgency"
+                  as={SliderComponent}
+                  value={values.level_of_urgency}
+                  onChange={handleChange}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.level_of_urgency}
+                </Form.Control.Feedback>
+              </Form.Group>
+
+              <Form.Group>
+                <MediaForm values={values} setFieldValue={setFieldValue} setDeletedMedia={this.setDeletedMedia}/>
               </Form.Group>
 
               <Button type="submit" disabled={isSubmitting}>
