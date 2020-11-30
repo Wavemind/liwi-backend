@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_23_102530) do
+ActiveRecord::Schema.define(version: 2020_11_30_092413) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -151,6 +151,7 @@ ActiveRecord::Schema.define(version: 2020_11_23_102530) do
     t.bigint "administration_route_id"
     t.hstore "description_translations"
     t.hstore "injection_instructions_translations"
+    t.hstore "dispensing_description_translations"
     t.index ["administration_route_id"], name: "index_formulations_on_administration_route_id"
     t.index ["node_id"], name: "index_formulations_on_node_id"
   end
@@ -307,12 +308,12 @@ ActiveRecord::Schema.define(version: 2020_11_23_102530) do
     t.string "max_message_warning"
     t.string "min_message_error"
     t.string "max_message_error"
-    t.boolean "estimable"
+    t.boolean "estimable", default: false
     t.bigint "reference_table_z_id"
     t.boolean "is_neonat", default: false
     t.boolean "is_danger_sign", default: false
-    t.boolean "unavailable", default: false
     t.integer "emergency_status", default: 0
+    t.boolean "unavailable", default: false
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
     t.index ["diagnostic_id"], name: "index_nodes_on_diagnostic_id"
@@ -397,10 +398,11 @@ ActiveRecord::Schema.define(version: 2020_11_23_102530) do
     t.bigint "top_left_question_id"
     t.bigint "first_top_right_question_id"
     t.bigint "second_top_right_question_id"
-    t.json "medal_r_config", default: {}
+    t.json "medal_r_config"
     t.json "medal_r_json"
     t.integer "medal_r_json_version", default: 0
     t.boolean "generating"
+    t.boolean "is_arm_control", default: false
     t.index ["algorithm_id"], name: "index_versions_on_algorithm_id"
     t.index ["first_top_right_question_id"], name: "index_versions_on_first_top_right_question_id"
     t.index ["second_top_right_question_id"], name: "index_versions_on_second_top_right_question_id"

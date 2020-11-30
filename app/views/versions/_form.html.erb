@@ -8,6 +8,8 @@
     <%= f.input :second_top_right_question_id, collection: @version.components, label_method: :node_label, prompt: t('select')  %>
   <% end %>
 
+  <%= f.input :is_arm_control, as: :boolean %>
+
   <%= f.input :description, as: :text %>
 
   <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
