@@ -349,6 +349,7 @@ class VersionsController < ApplicationController
       :top_left_question_id,
       :first_top_right_question_id,
       :second_top_right_question_id,
+      :is_arm_control,
       :nodes_ids
     )
   end

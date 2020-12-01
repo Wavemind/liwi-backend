@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_27_064532) do
+ActiveRecord::Schema.define(version: 2020_11_30_092413) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -151,7 +151,6 @@ ActiveRecord::Schema.define(version: 2020_11_27_064532) do
     t.bigint "administration_route_id"
     t.hstore "description_translations"
     t.hstore "injection_instructions_translations"
-    t.hstore "dispensing_description_translations"
     t.index ["administration_route_id"], name: "index_formulations_on_administration_route_id"
     t.index ["node_id"], name: "index_formulations_on_node_id"
   end
@@ -403,6 +402,7 @@ ActiveRecord::Schema.define(version: 2020_11_27_064532) do
     t.json "medal_r_json"
     t.integer "medal_r_json_version", default: 0
     t.boolean "generating"
+    t.boolean "is_arm_control", default: false
     t.index ["algorithm_id"], name: "index_versions_on_algorithm_id"
     t.index ["first_top_right_question_id"], name: "index_versions_on_first_top_right_question_id"
     t.index ["second_top_right_question_id"], name: "index_versions_on_second_top_right_question_id"
