@@ -648,6 +648,7 @@ en:
         answers: "Answers"
         answer_type: "Answer type"
         actions: "Actions"
+        is_neonat: "Is NeoNat"
     edit:
       title: "Edit variable"
   remove: "Remove"

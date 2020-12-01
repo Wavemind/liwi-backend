@@ -37,7 +37,8 @@ class QuestionDatatable < AjaxDatatablesRails::ActiveRecord
         category: Object.const_get(record.type).display_label,
         answers: record.answers.map(&:label).join(' / '),
         answer_type: record.answer_type.display_name,
-        actions: actions
+        actions: actions,
+        is_neonat: record.is_neonat, # is a hidden column in the datatable in question.js
       }
     end
   end
