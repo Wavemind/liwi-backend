@@ -1,7 +1,7 @@
 # Define the different forms for a drug
 class Formulation < ApplicationRecord
 
-  enum medication_form: [:tablet, :capsule, :syrup, :suspension, :suppository, :drops, :solution, :powder_for_injection, :patch, :cream, :ointment, :gel, :spray, :inhaler]
+  enum medication_form: [:tablet, :capsule, :syrup, :suspension, :suppository, :drops, :solution, :powder_for_injection, :patch, :cream, :ointment, :gel, :spray, :inhaler, :pessary]
   enum breakable: [:one, :two, :four]
 
   translates :description, :injection_instructions
