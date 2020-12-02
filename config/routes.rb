@@ -205,6 +205,7 @@ Rails.application.routes.draw do
         get 'json_test', to: 'versions#json_test'
         collection do
           get 'json_from_facility', to: 'versions#json_from_facility'
+          get 'facility_attributes', to: 'versions#facility_attributes'
         end
       end
       resources :devices, only: [:show]
