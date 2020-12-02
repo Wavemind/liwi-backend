@@ -3,6 +3,7 @@ wrap = xlsx_package.workbook.styles.add_style alignment: {wrap_text: true}
 
 nodes = @version.extract_nodes_from_version
 drugs = []
+managements = []
 
 wb.add_worksheet(name: "Variables") do |sheet|
   sheet.add_row ["ID", "Category", "Reference", "Label", "Mandatory", "Description", "Answers (ID | full label)"]
@@ -27,6 +28,8 @@ wb.add_worksheet(name: "Final diagnoses") do |sheet|
         sheet.add_row [df.id, df.full_reference, df.label_en, df.description_en], style: wrap
       elsif instance.node.is_a? HealthCares::Drug
         drugs.push(instance.node)
+      elsif instance.node.is_a? HealthCares::Management
+        managements.push(instance.node)
       end
     end
   end
@@ -43,5 +46,13 @@ wb.add_worksheet(name: "Drugs") do |sheet|
     end
 
     sheet.add_row [node.id, node.full_reference, node.label_en, node.description_en, formulations], style: wrap
+  end
+end
+
+wb.add_worksheet(name: "Managements") do |sheet|
+  sheet.add_row %w(ID Reference Label Description)
+
+  managements.map do |node|
+    sheet.add_row [node.id, node.full_reference, node.label_en, node.description_en], style: wrap
   end
 end
