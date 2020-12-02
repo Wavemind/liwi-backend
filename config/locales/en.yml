@@ -3,7 +3,7 @@ en:
     attributes:
       algorithm:
         age_limit: "Age threshold in years for ineligibility (inclusion stops day before birthday)"
-        age_limit_message: "Message displayed in MedAL-R if patient above threshold"
+        age_limit_message_html: "Message displayed in medAL-<i>reader</i> if patient above threshold"
       answer:
         operator: "Operator"
         value: "Value"
@@ -76,8 +76,8 @@ en:
         last_name: "Last name"
         email: "Email"
         deactivated: "Deactivated"
-        role: "Medal-C access"
-        roles: "Medal-R accesses"
+        role_html: "medAL-<i>creator</i> access"
+        roles_html: "medAL-<i>reader</i> accesses"
   activated: "Activate"
   add: "Add"
   add_file: "Attach new file in description"
@@ -160,22 +160,22 @@ en:
       versions:
         index:
           no_version: "No version of the algorithm is associated with this Health Facility"
-          device_not_exist: "The tablet is not registered in MedAL-C"
+          device_not_exist_html: "The tablet is not registered in medAL-<i>creator</i>"
           invalid_token: "Invalid health facility token"
           invalid_health_facility: "Invalid health facility id"
           no_health_facility_id: "No health facility id specified."
-          no_health_facility: "Your tablet has not been associated with any Health Facility in MedAL-C"
+          no_health_facility_html: "Your tablet has not been associated with any Health Facility in medAL-<i>creator</i>"
         show:
           invalid_version: "Invalid version id"
       activities:
         create:
-          errors_device_not_present: "The tablet does not exist in MedAL-C"
+          errors_device_not_present_html: "The tablet does not exist in medAL-<i>creator</i>"
           errors_on_save: "An error occurred when saving activities"
       devices:
         create:
           errors_on_save: "An error occurred when saving devices"
         show:
-          no_health_facility: "Your tablet has not been associated with any Health Facility in MedAL-C"
+          no_health_facility_html: "Your tablet has not been associated with any Health Facility in medAL-<i>creator</i>"
   archive: "Archive"
   breadcrumbs:
     algorithms: "Algorithms"
@@ -410,6 +410,8 @@ en:
       ip_invalid: "IP address format invalid."
     new:
       title: "Add Health Facility"
+      main_data_ip_html: "medAL-<i>data</i> ip"
+      local_data_ip_html: "medAL-<i>hub</i> ip"
     remove_device:
       success_remove_device: "Device successfully removed from the Health Facility"
       error_remove_device: "An error occurred when removing the device from the Health Facility"
@@ -738,7 +740,7 @@ en:
       subtitle_diagnostics: "Diagnoses"
       subtitle_final_diagnoses: "Final diagnoses"
       subtitle_final_diagnoses_exclusions: "Final diagnoses exclusions"
-      subtitle_medal_r_config: "Config Medal-R"
+      subtitle_medal_r_config_html: "Config medAL-<i>reader</i>"
       subtitle_questions_order: "Triage variables order"
       subtitle_registration_triage_questions: "Registration and triage variables"
       subtitle_systems_order: "Systems order"
