@@ -404,22 +404,20 @@ export default class QuestionForm extends React.Component {
                   </Form.Control.Feedback>
                 </Form.Group>
 
-                {values.type === "Questions::ComplaintCategory" ?
-                  <Form.Group controlId="validationIsNeonat">
-                    <Form.Check
-                      name="is_neonat"
-                      label={I18n.t("activerecord.attributes.question.is_neonat")}
-                      value={values.is_neonat}
-                      checked={values.is_neonat}
-                      onChange={handleChange}
-                      disabled={deployedMode}
-                      isInvalid={touched.is_neonat && !!errors.is_neonat}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.is_neonat}
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                : null}
+                <Form.Group controlId="validationIsNeonat">
+                  <Form.Check
+                    name="is_neonat"
+                    label={I18n.t("activerecord.attributes.question.is_neonat")}
+                    value={values.is_neonat}
+                    checked={values.is_neonat}
+                    onChange={handleChange}
+                    disabled={deployedMode}
+                    isInvalid={touched.is_neonat && !!errors.is_neonat}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.is_neonat}
+                  </Form.Control.Feedback>
+                </Form.Group>
 
                 {CATEGORIES_DISPLAYING_UNAVAILABLE_OPTION.includes(values.type) ?
                   <Form.Group controlId="validationUnavailable">

@@ -16,11 +16,22 @@ jQuery(document).ready(function() {
       { "data": "category" },
       { "data": "answers" },
       { "data": "answer_type" },
-      { "data": "actions", "className": "text-right" }
+      { "data": "actions", "className": "text-right" },
+      { "data": "is_neonat" },
     ],
-    'columnDefs': [ {
-      'targets': [6,7,8],
+    'columnDefs': [
+      {
+      'targets': [6,7,8,9],
       'orderable': false,
-    }]
+    },
+    {
+      'targets': [9],
+      'visible': false,
+    }],
+    "createdRow": function( row, data, dataIndex){
+      if (data.is_neonat === "true") {
+        $(row).addClass('is_neonat');
+      }
+    }
   });
 });
