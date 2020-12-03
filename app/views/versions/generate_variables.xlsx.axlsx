@@ -15,7 +15,7 @@ wb.add_worksheet(name: "Variables") do |sheet|
       answers += "#{answer.id} | #{answer.reference_label}"
     end
 
-    sheet.add_row [node.id, I18n.t("questions.categories.#{node.class.variable}.label"), node.full_reference, node.label_en, node.is_mandatory.to_s, node.description_en, answers], style: wrap
+    sheet.add_row [node.id, I18n.t("questions.categories.#{node.class.variable}.label"), node.full_reference, "#{node.is_neonat ? 'YI - ' : ''}#{node.label_en}", node.is_mandatory.to_s, node.description_en, answers], style: wrap
   end
 end
 
