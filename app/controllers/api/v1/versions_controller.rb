@@ -10,6 +10,8 @@ class Api::V1::VersionsController < Api::V1::ApplicationController
           # Find the algorithm version available for this health facility
           version = device.health_facility.versions.where('health_facility_accesses.end_date IS NULL').first
 
+          Activity.create(version: version, device: device, timezone: params[:timezone], latitude: params[:latitude], longitude: params[:longitude])
+
           if version.present?
             medal_r_json_version = params[:json_version]
             if medal_r_json_version == version.medal_r_json_version.to_s
