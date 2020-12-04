@@ -28,6 +28,8 @@ class FinalDiagnosticsController < ApplicationController
     add_breadcrumb t('breadcrumbs.final_diagnostics')
     add_breadcrumb @final_diagnostic.label
     add_breadcrumb t('breadcrumbs.edit')
+
+    @source = params[:source]
   end
 
   def create
@@ -49,7 +51,11 @@ class FinalDiagnosticsController < ApplicationController
   def update
     if @final_diagnostic.update(final_diagnostic_params)
       if params[:from] == 'rails'
-        render json: { url: algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'final_diagnostics'), finalDiagnostic: @final_diagnostic }
+        if params[:source] === 'version'
+          render json: { url: algorithm_version_url(@algorithm, @version, panel: 'final_diagnostics'), finalDiagnostic: @final_diagnostic }
+        else
+          render json: { url: algorithm_version_diagnostic_url(@algorithm, @version, @diagnostic, panel: 'final_diagnostics'), finalDiagnostic: @final_diagnostic }
+        end
       else
         render json: @final_diagnostic.as_json(methods: [:node_type], include: :medias)
       end

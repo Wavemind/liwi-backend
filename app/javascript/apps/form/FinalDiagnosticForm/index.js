@@ -36,7 +36,7 @@ export default class FinalDiagnosticForm extends React.Component {
    * @params [Object] actions
    */
   handleOnSubmit = async (values, actions) => {
-    const { method, from, engine, diagramObject, addAvailableNode } = this.props;
+    const { method, from, engine, diagramObject, addAvailableNode, source } = this.props;
     const { toDeleteMedias } = this.state;
     let http = new Http();
     let httpRequest = {};
@@ -49,7 +49,7 @@ export default class FinalDiagnosticForm extends React.Component {
           values.medias_attributes.push({id: media_id, _destroy: true});
         });
       }
-      httpRequest = await http.updateFinalDiagnostic(values.id, values.label_translations, values.description_translations, values.level_of_urgency, values.medias_attributes, from);
+      httpRequest = await http.updateFinalDiagnostic(values.id, values.label_translations, values.description_translations, values.level_of_urgency, values.medias_attributes, from, source);
     }
 
     let result = await httpRequest.json();

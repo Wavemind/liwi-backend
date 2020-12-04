@@ -33,7 +33,7 @@ jQuery(document).ready(function () {
   url = window.location.origin + "/devices/map";
 
   $.get(url, function (data) {
-
+    console.log(data);
     for (var i = 0; i < data.length; i++) {
       if (data[i].last_activity != null) {
         var latLng = new google.maps.LatLng(data[i].last_activity.latitude, data[i].last_activity.longitude);
