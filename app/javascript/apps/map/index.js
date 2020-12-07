@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import GoogleMapReact from 'google-map-react';
 
+import { mapStyles } from './styles'
+
 class MapComponent extends Component {
   constructor(props) {
     super(props);
@@ -119,7 +121,7 @@ class MapComponent extends Component {
 
   render() {
     return (
-      <div style={{ height: '800px', width: '100%' }}>
+      <div style={mapStyles.containerStyle}>
         <GoogleMapReact
           bootstrapURLKeys={{
             key: "AIzaSyAXhfotzXI-gG3cQkWUVL9rIt2dLpMnnDo",
