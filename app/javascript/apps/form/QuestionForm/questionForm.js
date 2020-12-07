@@ -210,6 +210,7 @@ export default class QuestionForm extends React.Component {
       case "Questions::VitalSignAnthropometric":
         fieldsToSet.push(["stage", "consultation"]);
         break;
+      case "Questions::Referral":
       case "Questions::TreatmentQuestion":
         fieldsToSet.push(["stage", "diagnosis_management"]);
         break;

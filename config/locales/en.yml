@@ -582,6 +582,9 @@ en:
       physical_exam:
         label: "Physical Exam"
         reference_prefix: "PE"
+      referral:
+        label: "Referral status question"
+        reference_prefix: "R"
       symptom:
         label: "Symptom"
         reference_prefix: "S"
