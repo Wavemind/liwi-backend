@@ -11,6 +11,13 @@ class MapComponent extends Component {
     };
   }
 
+  /**
+   * Fits the bounds of the map to the devices
+   * @param map
+   * @param maps
+   * @param devices
+   * @returns {maps.LatLngBounds}
+   */
   getMapBounds = (map, maps, devices) => {
     const bounds = new maps.LatLngBounds();
 
@@ -22,6 +29,12 @@ class MapComponent extends Component {
     return bounds;
   };
 
+  /**
+   * Adds a listener to the map to handle the resize
+   * @param map
+   * @param maps
+   * @param bounds
+   */
   bindResizeListener = (map, maps, bounds) => {
     maps.event.addDomListenerOnce(map, 'idle', () => {
       maps.event.addDomListener(window, 'resize', () => {
@@ -30,13 +43,26 @@ class MapComponent extends Component {
     });
   };
 
+  /**
+   * HTML to define the infowindow
+   * @param device
+   * @returns {string}
+   */
   getInfoWindowString = (device) => `
     <div>
       <div style="font-size: 16px;">
-        ${device.mac_address}
+        User : ${device.last_activity.user ? device.last_activity.user.full_name : 'Unknown'}<br>
+        MAC : ${device.mac_address}<br>
+        Lat: ${device.last_activity.latitude}<br>
+        Long: ${device.last_activity.longitude}
       </div>
     </div>`;
 
+  /**
+   * Creates markers from devices list and adds infowindows for onClick event
+   * @param map
+   * @param maps
+   */
   renderMarkers = (map, maps) => {
     const {devices} = this.state;
 
@@ -44,6 +70,7 @@ class MapComponent extends Component {
     const infowindows = [];
 
     devices.forEach((device) => {
+      console.log(device)
       markers.push(new maps.Marker({
         position: {
           lat: +device.last_activity.latitude,
@@ -60,10 +87,26 @@ class MapComponent extends Component {
     markers.forEach((marker, i) => {
       marker.addListener('click', () => {
         infowindows[i].open(map, marker);
-      });
+        markers.forEach((_otherMarker, j) => {
+          if (j !== i) {
+            infowindows[j].close();
+          }
+        })
+      })
+    });
+
+    maps.event.addListener(map, 'click', () => {
+      infowindows.forEach((infowindow) => {
+        infowindow.close();
+      })
     });
   };
 
+  /**
+   * Manages everything once the GoogleMaps API is loaded
+   * @param map
+   * @param maps
+   */
   apiIsLoaded = (map, maps) => {
     const {devices} = this.state;
 

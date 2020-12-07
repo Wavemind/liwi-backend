@@ -163,11 +163,7 @@ Rails.application.routes.draw do
 
   resources :health_facility_accesses, only: [:index, :create]
 
-  resources :devices, only: [:index, :show, :new, :create] do
-    collection do
-      get 'map'
-    end
-  end
+  resources :devices, only: [:index, :show, :new, :create]
 
   resources :users, only: [:index, :show, :new, :create, :edit, :update] do
     collection do
