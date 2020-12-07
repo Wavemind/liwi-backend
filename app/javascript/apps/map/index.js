@@ -51,7 +51,6 @@ class MapComponent extends Component {
   getInfoWindowString = (device) => `
     <div>
       <div style="font-size: 16px;">
-        User : ${device.last_activity.user ? device.last_activity.user.full_name : 'Unknown'}<br>
         MAC : ${device.mac_address}<br>
         Lat: ${device.last_activity.latitude}<br>
         Long: ${device.last_activity.longitude}
