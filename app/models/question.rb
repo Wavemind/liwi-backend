@@ -20,9 +20,11 @@ class Question < Node
     :chronic_conditions,
     :comorbidities,
     :prevention,
-    :prophylaxis,
+    :follow_up_questions,
     :complementary_medical_history,
-    :vital_sign
+    :vital_sign,
+    :priority_sign,
+    :feeding,
   ]
   enum emergency_status: [:standard, :referral, :emergency]
 
