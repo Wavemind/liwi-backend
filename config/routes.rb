@@ -199,8 +199,8 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :versions, only: [:show] do
         get 'json_test', to: 'versions#json_test'
-        post 'retrieve_algorithm_version', to: 'versions#retrieve_algorithm_version'
         collection do
+          post 'retrieve_algorithm_version', to: 'versions#retrieve_algorithm_version'
           get 'json_from_facility', to: 'versions#json_from_facility'
           get 'facility_attributes', to: 'versions#facility_attributes'
         end
