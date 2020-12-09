@@ -27,8 +27,8 @@
     CONSTANTS
  */
 
-$base-color: #223b69;
-$base-color-light: #42629E
+$base-color: #1c3053;
+$base-color-light: #41557B;
 
 /*
     RULES
@@ -109,7 +109,7 @@ a:focus {
 
 #sidebar .sidebar-header {
   padding: 20px;
-  background: $base-color-light;
+  background: $base-color;
 }
 
 #sidebar ul.components {
@@ -192,6 +192,8 @@ a.article:hover {
 
 .breadcrumb {
   border-radius: 0;
+  background-color: $base-color-light;
+  color: white;
 }
 
 /* ---------------------------------------------------
