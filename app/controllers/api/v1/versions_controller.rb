@@ -24,10 +24,10 @@ class Api::V1::VersionsController < Api::V1::ApplicationController
           render json:  { errors: t('.invalid_token') }, status: :unprocessable_entity
         end
       else
-        render json: { errors: t('.no_health_facility') }, status: :unprocessable_entity
+        render json: { errors: t('.no_health_facility_html') }, status: :unprocessable_entity
       end
     else
-      render json: { errors: t('.device_not_exist') }, status: :unprocessable_entity
+      render json: { errors: t('.device_not_exist_html') }, status: :unprocessable_entity
     end
   end
 

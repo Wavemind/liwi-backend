@@ -131,7 +131,7 @@ class Question < Node
     self.save
   end
 
-  # Ensure that the answers are coherent with each other, that every value the mobile user may enter match one and only one answers entered by the medal-C user
+  # Ensure that the answers are coherent with each other, that every value the mobile user may enter match one and only one answers entered by the medAL-creator user
   def validate_overlap
     return true if !(%w(Float Integer).include?(answer_type.value)) || %w(Questions::BasicMeasurement Questions::BasicDemographic Questions::VitalSignAnthropometric).include?(type)
 

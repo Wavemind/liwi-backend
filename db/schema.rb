@@ -151,6 +151,7 @@ ActiveRecord::Schema.define(version: 2020_11_30_092413) do
     t.bigint "administration_route_id"
     t.hstore "description_translations"
     t.hstore "injection_instructions_translations"
+    t.hstore "dispensing_description_translations"
     t.index ["administration_route_id"], name: "index_formulations_on_administration_route_id"
     t.index ["node_id"], name: "index_formulations_on_node_id"
   end

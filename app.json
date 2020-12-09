@@ -1,6 +1,6 @@
 {
   "name": "liwi",
-  "description": "Projet LIWI medal-c",
+  "description": "Projet LIWI medAL-creator",
   "scripts": {
     "dokku": {
       "postdeploy": "bundle exec rails db:migrate"
