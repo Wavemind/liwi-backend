@@ -1,6 +1,9 @@
 class Api::V1::VersionsController < Api::V1::ApplicationController
   include DeviseTokenAuth::Concerns::SetUserByToken
 
+  # THIS MIGHT BE SOME VERY DUMB SHIT BUT CAN'T BE ARESED TO FIX IT WITCH LOVE YOUR BOSS <3
+  skip_before_action :verify_authenticity_token, only: [:retrieve_algorithm_version]
+
   before_action :authenticate_user!, only: [:create]
 
   def show
