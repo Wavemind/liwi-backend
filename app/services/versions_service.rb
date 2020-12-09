@@ -133,7 +133,7 @@ class VersionsService
   end
 
   # @return hash
-  # Build a hash of medal-r config for the version
+  # Build a hash of medAL-reader config for the version
   def self.extract_mobile_config
     hash = {}
 
@@ -142,7 +142,11 @@ class VersionsService
     hash['second_top_right_question_id'] = @version.second_top_right_question.present? ? @version.second_top_right_question.node_id : nil
 
     hash['questions_orders'] = @version.medal_r_config['questions_orders']
-    hash['systems_order'] = @version.medal_r_config['systems_order']
+    translated_systems_order = {}
+    @version.medal_r_config['systems_order'].map do |system|
+      translated_systems_order[system] = I18n.t("questions.systems.#{system}")
+    end
+    hash['systems_order'] = translated_systems_order
     hash['medical_case_list'] = @version.medal_r_config['medical_case_list_order']
     hash['patient_list'] = @version.medal_r_config['patient_list_order']
     hash
@@ -390,7 +394,7 @@ class VersionsService
         hash[question.id]['answers'][answer.id] = answer_hash
       end
 
-      # Push the patient level questions in an array for medal R to read it easily
+      # Push the patient level questions in an array for medAL-reader to read it easily
       @patient_questions.push(question.id) if %w(Questions::BasicDemographic Questions::Demographic Questions::ChronicalCondition Questions::Vaccine).include?(question.type)
     end
     hash

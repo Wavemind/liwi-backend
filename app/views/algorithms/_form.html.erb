@@ -2,7 +2,7 @@
 
   <%= f.input :name %>
   <%= f.input :age_limit, as: :numeric %>
-  <%= f.input :age_limit_message, as: :text, input_html: {value: f.object.age_limit_message || t('algorithms.age_limit_message_default')} %>
+  <%= f.input :age_limit_message, as: :text, label: t("activerecord.attributes.algorithm.age_limit_message_html"), input_html: {value: f.object.age_limit_message || t('algorithms.age_limit_message_default')} %>
   <%= f.input :description, as: :text %>
 
   <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>

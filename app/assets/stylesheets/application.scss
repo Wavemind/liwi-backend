@@ -11,10 +11,16 @@
  * It is generally better to create a new file per style scope.
  *
  */
+
+/*
+    CONSTANTS
+ */
+@import "variables";
 @import "bootstrap";
 @import "font-awesome";
 @import "datatables";
 @import "diagram";
+@import "login";
 
 /*
     DEMO STYLEa
@@ -22,7 +28,9 @@
 
 @import url(https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700);
 @import url(https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css);
-
+/*
+    RULES
+ */
 
 body {
   font-family: 'Poppins', sans-serif;
@@ -81,11 +89,14 @@ a:focus {
   align-items: stretch;
 }
 
+.flex {
+  display: flex;
+}
 
 #sidebar {
   min-width: 250px;
   max-width: 250px;
-  background: #7386D5;
+  background: $base-color;
   color: #fff;
   transition: all 0.3s;
 }
@@ -96,12 +107,11 @@ a:focus {
 
 #sidebar .sidebar-header {
   padding: 20px;
-  background: #6d7fcc;
+  background: $base-color;
 }
 
 #sidebar ul.components {
   padding: 20px 0;
-  border-bottom: 1px solid #47748b;
 }
 
 #sidebar ul p {
@@ -116,14 +126,14 @@ a:focus {
 }
 
 #sidebar ul li a:hover {
-  color: #7386D5;
+  color: $base-color;
   background: #fff;
 }
 
 #sidebar ul li.active > a,
 a[aria-expanded="true"] {
   color: #fff;
-  background: #6d7fcc;
+  background: $base-color-light;
 }
 
 a[data-toggle="collapse"] {
@@ -141,7 +151,7 @@ a[data-toggle="collapse"] {
 ul ul a {
   font-size: 0.9em !important;
   padding-left: 30px !important;
-  background: #6d7fcc;
+  background: $base-color-light;
 }
 
 ul.CTAs {
@@ -158,12 +168,12 @@ ul.CTAs a {
 
 a.download {
   background: #fff;
-  color: #7386D5;
+  color: $base-color;
 }
 
 a.article,
 a.article:hover {
-  background: #6d7fcc !important;
+  background: $base-color-light !important;
   color: #fff !important;
 }
 
@@ -179,8 +189,17 @@ a.article:hover {
 
 .breadcrumb {
   border-radius: 0;
+  background-color: $base-color-light;
+  color: white;
 }
 
+.btn-primary-light{
+  background-color: $base-color-light;
+  border-color: darken($base-color, 5%);
+  border-width: 2px;
+  margin: 20px 0px;
+  color: white;
+}
 /* ---------------------------------------------------
     MEDIAQUERIES
 ----------------------------------------------------- */
@@ -299,7 +318,7 @@ td {
 }
 
 .ui-menu .ui-menu-item a:hover {
-  background-color: #7386D5;
+  background-color: $base-color;
   color: #fff;
 }
 

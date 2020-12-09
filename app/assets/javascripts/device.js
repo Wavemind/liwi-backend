@@ -13,58 +13,15 @@ jQuery(document).ready(function () {
       { "data": "model" },
       { "data": "last_activity" },
       { "data": "last_user" },
+      { "data": "health_facility" },
       { "data": "actions", "className": "text-right"  },
     ],
     'columnDefs': [ {
-      'targets': [6],
+      'targets': [7],
       'orderable': false,
+    }, {
+      'targets': [6],
+      'visible': $("#devices-datatable").data('from') !== 'health_facility'
     }]
-  });
-
-
-  var map;
-  map = new google.maps.Map(document.getElementById("map"), {
-    zoom: 4,
-    center: new google.maps.LatLng(-4, 20.25),
-    mapTypeId: "terrain",
-  });
-
-  var url;
-  url = window.location.origin + "/devices/map";
-
-  $.get(url, function (data) {
-
-    for (var i = 0; i < data.length; i++) {
-      if (data[i].last_activity != null) {
-        var latLng = new google.maps.LatLng(data[i].last_activity.latitude, data[i].last_activity.longitude);
-
-        var infowindow = new google.maps.InfoWindow();
-
-        var marker = new google.maps.Marker({
-          position: latLng,
-          map,
-        });
-
-        google.maps.event.addListener(marker, "click", (function (marker, i) {
-          return function () {
-            // close all the other infowindows that opened on load
-            google.maps.event.trigger(map, "click");
-
-            var contentString = "";
-
-            if (data[i].last_activity.user != null) {
-              contentString = moment(data[i].created_at).format("LLL") + "<br/>" + data[i].brand + " " + data[i].model + "<br/> <u>" + data[i].last_activity.user.first_name + " " + data[i].last_activity.user.last_name + "</u>";
-            } else {
-              contentString = moment(data[i].created_at).format("LLL") + "<br/>" + data[i].brand + " " + data[i].model + "<br/> <u>Tablette connexion</u>";
-            }
-
-
-            infowindow.setContent(contentString);
-            infowindow.open(map, marker);
-          };
-        })(marker, i));
-
-      }
-    }
   });
 });

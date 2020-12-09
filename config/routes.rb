@@ -163,11 +163,7 @@ Rails.application.routes.draw do
 
   resources :health_facility_accesses, only: [:index, :create]
 
-  resources :devices, only: [:index, :show, :new, :create] do
-    collection do
-      get 'map'
-    end
-  end
+  resources :devices, only: [:index, :show, :new, :create]
 
   resources :users, only: [:index, :show, :new, :create, :edit, :update] do
     collection do
@@ -201,8 +197,9 @@ Rails.application.routes.draw do
   # API
   namespace :api do
     namespace :v1 do
-      resources :versions, only: [:index, :show] do
+      resources :versions, only: [:show] do
         get 'json_test', to: 'versions#json_test'
+        post 'retrieve_algorithm_version', to: 'versions#retrieve_algorithm_version'
         collection do
           get 'json_from_facility', to: 'versions#json_from_facility'
           get 'facility_attributes', to: 'versions#facility_attributes'

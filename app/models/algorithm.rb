@@ -34,6 +34,7 @@ class Algorithm < ApplicationRecord
     bmi = questions.create!(label_en: 'BMI', type: 'Questions::BasicMeasurement', stage: Question.stages[:registration], answer_type_id: 5, formula: '[BM1] / (([BM3] / 100) * ([BM3] / 100))', is_default: true)
     temperature = questions.create!(label_en: 'Axillary temperature', type: 'Questions::BasicMeasurement', stage: Question.stages[:triage], answer_type_id: 4, is_default: true)
     cc_general = questions.create!(label_en: 'General', type: 'Questions::ComplaintCategory', stage: Question.stages[:triage], is_mandatory: true, answer_type_id: 1, is_default: true)
+    yi_cc_general = questions.create!(label_en: 'General / Universal Assessment', type: 'Questions::ComplaintCategory', stage: Question.stages[:triage], is_mandatory: true, answer_type_id: 1, is_default: true, is_neonat: true)
     village = questions.create!(label_en: 'Village', type: 'Questions::BasicDemographic', stage: Question.stages[:registration], answer_type_id: 9, is_mandatory: true, is_identifiable: true, is_default: true)
 
     # Configure basic questions into the algorithm to be used in json generation
@@ -44,6 +45,7 @@ class Algorithm < ApplicationRecord
       gender_question_id: gender.id,
       weight_question_id: weight.id,
       general_cc_id: cc_general.id,
+      yi_general_cc_id: yi_cc_general.id,
       village_question_id: village.id
     }})
 

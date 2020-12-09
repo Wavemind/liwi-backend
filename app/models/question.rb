@@ -20,9 +20,11 @@ class Question < Node
     :chronic_conditions,
     :comorbidities,
     :prevention,
-    :prophylaxis,
+    :follow_up_questions,
     :complementary_medical_history,
-    :vital_sign
+    :vital_sign,
+    :priority_sign,
+    :feeding,
   ]
   enum emergency_status: [:standard, :referral, :emergency]
 
@@ -44,7 +46,7 @@ class Question < Node
   # Return questions which has not triage stage
   scope :no_triage, ->() { where.not(stage: Question.stages[:triage]).or(where(stage: nil)) }
   scope :no_treatment_condition, ->() { where.not(type: 'Questions::TreatmentQuestion') }
-  scope :diagrams_included, ->() { where.not(type: %w(Questions::VitalSignAnthropometric Questions::BasicMeasurement Questions::BasicDemographic Questions::ConsultationRelated)) }
+  scope :diagrams_included, ->() { where.not(type: %w(Questions::VitalSignAnthropometric Questions::BasicMeasurement Questions::BasicDemographic Questions::ConsultationRelated Questions::Referral)) }
 
   accepts_nested_attributes_for :answers, allow_destroy: true
 
@@ -62,6 +64,7 @@ class Question < Node
       Questions::Exposure,
       Questions::ObservedPhysicalSign,
       Questions::PhysicalExam,
+      Questions::Referral,
       Questions::Symptom,
       Questions::TreatmentQuestion,
       Questions::UniqueTriagePhysicalSign,
@@ -86,7 +89,7 @@ class Question < Node
   # Return a hash with all question categories with their name, label and prefix
   def self.categories(diagram_class_name)
     categories = []
-    excluded_categories = diagram_class_name == 'Question' ? [] : [Questions::ComplaintCategory, Questions::BasicMeasurement, Questions::VitalSignAnthropometric, Questions::UniqueTriageQuestion, Questions::UniqueTriagePhysicalSign]
+    excluded_categories = diagram_class_name == 'Question' ? [] : [Questions::ComplaintCategory, Questions::BasicMeasurement, Questions::VitalSignAnthropometric, Questions::Referral, Questions::UniqueTriageQuestion, Questions::UniqueTriagePhysicalSign]
     excluded_categories.push(Questions::TreatmentQuestion) unless %w(FinalDiagnostic Question).include?(diagram_class_name)
     self.descendants.each do |category|
       unless excluded_categories.include?(category)
@@ -128,7 +131,7 @@ class Question < Node
     self.save
   end
 
-  # Ensure that the answers are coherent with each other, that every value the mobile user may enter match one and only one answers entered by the medal-C user
+  # Ensure that the answers are coherent with each other, that every value the mobile user may enter match one and only one answers entered by the medAL-creator user
   def validate_overlap
     return true if !(%w(Float Integer).include?(answer_type.value)) || %w(Questions::BasicMeasurement Questions::BasicDemographic Questions::VitalSignAnthropometric).include?(type)
 

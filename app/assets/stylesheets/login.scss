@@ -1,0 +1,13 @@
+@import "variables";
+
+.login-background{
+  background-color: $base-color;
+  color: white;
+}
+
+.devise-links{
+  font-style: italic;
+  a {
+    font-size: 85%;
+  }
+}

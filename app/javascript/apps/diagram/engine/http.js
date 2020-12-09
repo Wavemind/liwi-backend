@@ -466,7 +466,7 @@ export default class Http {
    * @params [Integer] from
    * @return [Object] body of request
    */
-  updateFinalDiagnostic = async (id, label_en, description_en, level_of_urgency, medias_attributes, from) => {
+  updateFinalDiagnostic = async (id, label_en, description_en, level_of_urgency, medias_attributes, from, source) => {
     const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/${id}`;
     const body = {
       final_diagnostic: {
@@ -476,7 +476,8 @@ export default class Http {
         level_of_urgency,
         medias_attributes,
       },
-      from
+      from,
+      source
     };
     const header = await this.setHeaders("PUT", body);
     return await fetch(url, header).catch(error => console.log(error));

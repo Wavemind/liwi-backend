@@ -1,13 +1,9 @@
-<div class="row h-100 w-100">
-  <div class="col-3 mx-auto my-auto">
+<div class="row h-100 w-100 login-background">
+  <div class="col-3 mx-auto my-auto login-content">
 
-    <div class="row">
-      <%= image_tag('logo.png', class: 'mx-auto', height: '75') %>
+    <div class="row my-5">
+      <%= image_tag('logo_medal_creator.png', class: 'mx-auto', height: '150') %>
     </div>
-
-    <h2 class="text-center mt-1">Log in</h2>
-
-    <hr class="my-5"/>
 
     <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
       <div class="form-inputs">
@@ -18,15 +14,19 @@
         <%= f.input :password,
                     required: false,
                     input_html: { autocomplete: 'current-password' } %>
-        <%= f.input :remember_me, as: :boolean if devise_mapping.rememberable? %>
+
       </div>
 
       <div class="form-actions">
-        <%= f.button :submit, 'Log in', class: 'btn btn-succes btn-block' %>
+        <%= f.button :submit, 'Log in', class: 'btn btn-succes btn-block btn-primary-light' %>
+        <%= f.input :remember_me, as: :boolean if devise_mapping.rememberable? %>
       </div>
     <% end %>
 
-    <%= render 'devise/shared/links' %>
+
+    <div class="devise-links">
+      <%= render 'devise/shared/links' %>
+    </div>
 
   </div>
 </div>
