@@ -216,6 +216,7 @@ en:
         model: "Model"
         last_activity: "Last activity"
         last_user: "Last user"
+        health_facility: "Health Facility"
         actions: "Actions"
       title: "Devices"
     show:

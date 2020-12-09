@@ -14,7 +14,7 @@ export default class Loader extends React.Component {
         <div className="row justify-content-center mt-5 mb-5">
           <BarLoader
             width={500}
-            color="#7386D5"
+            color="#223b69"
           />
         </div>
       </FadeIn>

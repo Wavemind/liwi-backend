@@ -13,11 +13,15 @@ jQuery(document).ready(function () {
       { "data": "model" },
       { "data": "last_activity" },
       { "data": "last_user" },
+      { "data": "health_facility" },
       { "data": "actions", "className": "text-right"  },
     ],
     'columnDefs': [ {
-      'targets': [6],
+      'targets': [7],
       'orderable': false,
+    }, {
+      'targets': [6],
+      'visible': $("#devices-datatable").data('from') !== 'health_facility'
     }]
   });
 });
