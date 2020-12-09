@@ -196,6 +196,10 @@ a.article:hover {
   color: white;
 }
 
+.btn-primary{
+  background-color: $base-color;
+  border-color: darken($base-color,10%);
+}
 /* ---------------------------------------------------
     MEDIAQUERIES
 ----------------------------------------------------- */
