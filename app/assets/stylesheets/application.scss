@@ -15,10 +15,7 @@
 /*
     CONSTANTS
  */
-
-$base-color: #1F3643;
-$base-color-light: lighten($base-color, 20%);
-
+@import "variables";
 @import "bootstrap";
 @import "font-awesome";
 @import "datatables";
