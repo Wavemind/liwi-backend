@@ -142,7 +142,11 @@ class VersionsService
     hash['second_top_right_question_id'] = @version.second_top_right_question.present? ? @version.second_top_right_question.node_id : nil
 
     hash['questions_orders'] = @version.medal_r_config['questions_orders']
-    hash['systems_order'] = @version.medal_r_config['systems_order']
+    translated_systems_order = {}
+    @version.medal_r_config['systems_order'].map do |system|
+      translated_systems_order[system] = I18n.t("questions.systems.#{system}")
+    end
+    hash['systems_order'] = translated_systems_order
     hash['medical_case_list'] = @version.medal_r_config['medical_case_list_order']
     hash['patient_list'] = @version.medal_r_config['patient_list_order']
     hash
