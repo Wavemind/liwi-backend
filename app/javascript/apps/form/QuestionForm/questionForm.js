@@ -18,12 +18,7 @@ import {
   NO_ANSWERS_ATTACHED_TYPE,
   NO_ANSWERS_ATTACHED_ANSWER_TYPE,
   NUMERIC_ANSWER_TYPES,
-  SYMPTOM_SYSTEMS,
-  OBSERVED_PHYSICAL_SIGN_SYSTEMS,
-  CHRONIC_CONDITION_SYSTEMS,
-  EXPOSURE_SYSTEMS,
-  VACCINE_SYSTEMS,
-  VITAL_SIGN_SYSTEMS,
+  MEDICAL_HISTORY_SYSTEMS,
   PHYSICAL_EXAM_SYSTEMS,
 } from "../constants/constants";
 import Chip from "@material-ui/core/Chip";
@@ -149,25 +144,15 @@ export default class QuestionForm extends React.Component {
     let systems = [];
     switch (category) {
       case "Questions::ChronicCondition":
-        systems = CHRONIC_CONDITION_SYSTEMS;
-        break;
       case "Questions::Exposure":
-        systems = EXPOSURE_SYSTEMS;
-        break;
       case "Questions::ObservedPhysicalSign":
-        systems = OBSERVED_PHYSICAL_SIGN_SYSTEMS;
+      case "Questions::Symptom":
+      case "Questions::Vaccine":
+      case "Questions::VitalSignAnthropometric":
+        systems = MEDICAL_HISTORY_SYSTEMS;
         break;
       case "Questions::PhysicalExam":
         systems = PHYSICAL_EXAM_SYSTEMS;
-        break;
-      case "Questions::Symptom":
-        systems = SYMPTOM_SYSTEMS;
-        break;
-      case "Questions::Vaccine":
-        systems = VACCINE_SYSTEMS;
-        break;
-      case "Questions::VitalSignAnthropometric":
-        systems = VITAL_SIGN_SYSTEMS;
         break;
       default:
         break;
@@ -210,6 +195,7 @@ export default class QuestionForm extends React.Component {
       case "Questions::VitalSignAnthropometric":
         fieldsToSet.push(["stage", "consultation"]);
         break;
+      case "Questions::Referral":
       case "Questions::TreatmentQuestion":
         fieldsToSet.push(["stage", "diagnosis_management"]);
         break;

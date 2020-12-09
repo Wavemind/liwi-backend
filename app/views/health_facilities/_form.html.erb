@@ -6,8 +6,8 @@
   <%= f.input :longitude, as: :numeric %>
   <%= f.input :latitude, as: :numeric %>
 
-  <%= f.input :local_data_ip %>
-  <%= f.input :main_data_ip %>
+  <%= f.input :local_data_ip, label: t("health_facilities.new.local_data_ip_html") %>
+  <%= f.input :main_data_ip, label: t("health_facilities.new.main_data_ip_html") %>
   <%= f.input :pin_code %>
 
   <hr/>

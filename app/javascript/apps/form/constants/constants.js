@@ -84,57 +84,35 @@ export const INJECTION_ADMINISTRATION_ROUTES = [
   6
 ];
 
-export const SYMPTOM_SYSTEMS = [
+export const MEDICAL_HISTORY_SYSTEMS = [
+  'priority_sign',
   'general',
   'respiratory_circulation',
   'ear_nose_mouth_throat',
-  'visual',
-  'integumentary',
   'digestive',
+  'feeding',
   'urinary_reproductive',
   'nervous',
-  'muscular_skeletal',
-];
-
-export const OBSERVED_PHYSICAL_SIGN_SYSTEMS = [
-  'general',
-  'respiratory_circulation',
-  'ear_nose_mouth_throat',
   'visual',
-  'integumentary',
-  'digestive',
-  'urinary_reproductive',
-  'nervous',
   'muscular_skeletal',
-];
-
-export const EXPOSURE_SYSTEMS = [
-  'exposures'
-];
-
-export const CHRONIC_CONDITION_SYSTEMS = [
-  'chronic_conditions',
-  'comorbidities'
-];
-
-export const VACCINE_SYSTEMS = [
+  'integumentary',
+  'exposures',
+  'complementary_medical_history',
   'prevention',
-  'prophylaxis'
-];
+  'follow_up_questions'
 
-export const VITAL_SIGN_SYSTEMS = [
-  'vital_sign'
 ];
 
 export const PHYSICAL_EXAM_SYSTEMS = [
+  'vital_sign',
   'general',
   'respiratory_circulation',
   'ear_nose_mouth_throat',
-  'visual',
-  'integumentary',
   'digestive',
   'urinary_reproductive',
   'nervous',
+  'visual',
   'muscular_skeletal',
+  'integumentary',
   'complementary_medical_history'
 ];

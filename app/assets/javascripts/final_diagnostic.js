@@ -34,6 +34,7 @@ jQuery(document).ready(function () {
       { "data": "diagnostic" },
       { "data": "cc" },
       { "data": "description" },
+      { "data": "actions", "className": "text-right"},
     ],
     'columnDefs': [ {
       'targets': [],
