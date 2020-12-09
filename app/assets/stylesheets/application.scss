@@ -11,10 +11,19 @@
  * It is generally better to create a new file per style scope.
  *
  */
+
+/*
+    CONSTANTS
+ */
+
+$base-color: #1F3643;
+$base-color-light: lighten($base-color, 20%);
+
 @import "bootstrap";
 @import "font-awesome";
 @import "datatables";
 @import "diagram";
+@import "login";
 
 /*
     DEMO STYLEa
@@ -22,14 +31,6 @@
 
 @import url(https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700);
 @import url(https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css);
-
-/*
-    CONSTANTS
- */
-
-$base-color: #1c3053;
-$base-color-light: #41557B;
-
 /*
     RULES
  */
@@ -114,7 +115,6 @@ a:focus {
 
 #sidebar ul.components {
   padding: 20px 0;
-  border-bottom: 1px solid #47748b;
 }
 
 #sidebar ul p {
@@ -196,9 +196,12 @@ a.article:hover {
   color: white;
 }
 
-.btn-primary{
-  background-color: $base-color;
-  border-color: darken($base-color,10%);
+.btn-primary-light{
+  background-color: $base-color-light;
+  border-color: darken($base-color, 5%);
+  border-width: 2px;
+  margin: 20px 0px;
+  color: white;
 }
 /* ---------------------------------------------------
     MEDIAQUERIES
