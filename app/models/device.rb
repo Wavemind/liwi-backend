@@ -21,7 +21,7 @@ class Device < ApplicationRecord
   # @return [JSON] last activity of a user
   # Return last entry of current device with user attached
   def last_activity
-    activities.last.as_json(include: [:user])
+    activities.last.as_json(include: {user: {methods: :full_name}})
   end
 
 end

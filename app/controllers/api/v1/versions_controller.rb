@@ -1,6 +1,18 @@
 class Api::V1::VersionsController < Api::V1::ApplicationController
+  include DeviseTokenAuth::Concerns::SetUserByToken
 
-  def index
+  before_action :authenticate_user!, only: [:create]
+
+  def show
+    version = Version.find_by_id(params[:id])
+    if version
+      render json: version.medal_r_json
+    else
+      render json: { errors: t('api.v1.versions.show.invalid_version') }, status: :unprocessable_entity
+    end
+  end
+
+  def retrieve_algorithm_version
     # Get the devise make the request
     device = Device.find_by(mac_address: params[:mac_address])
 
@@ -9,6 +21,15 @@ class Api::V1::VersionsController < Api::V1::ApplicationController
         if device.health_facility.token == request.headers['health-facility-token']
           # Find the algorithm version available for this health facility
           version = device.health_facility.versions.where('health_facility_accesses.end_date IS NULL').first
+
+          Activity.create(
+              version: version,
+              device: device,
+              user: current_user,
+              timezone: params[:timezone],
+              latitude: params[:latitude],
+              longitude: params[:longitude],
+          )
 
           if version.present?
             medal_r_json_version = params[:json_version]
@@ -28,15 +49,6 @@ class Api::V1::VersionsController < Api::V1::ApplicationController
       end
     else
       render json: { errors: t('.device_not_exist_html') }, status: :unprocessable_entity
-    end
-  end
-
-  def show
-    version = Version.find_by_id(params[:id])
-    if version
-      render json: version.medal_r_json
-    else
-      render json: { errors: t('api.v1.versions.show.invalid_version') }, status: :unprocessable_entity
     end
   end
 
