@@ -24,9 +24,11 @@ class MapComponent extends Component {
     const bounds = new maps.LatLngBounds();
 
     devices.forEach((device) => {
-      bounds.extend(
-        new maps.LatLng(+device.last_activity.latitude, +device.last_activity.longitude),
-      );
+      if(device.last_activity) {
+        bounds.extend(
+          new maps.LatLng(+device.last_activity.latitude, +device.last_activity.longitude),
+        );
+      }
     });
     return bounds;
   };
@@ -71,18 +73,19 @@ class MapComponent extends Component {
     const infowindows = [];
 
     devices.forEach((device) => {
-      console.log(device)
-      markers.push(new maps.Marker({
-        position: {
-          lat: +device.last_activity.latitude,
-          lng: +device.last_activity.longitude,
-        },
-        map,
-      }));
+      if(device.last_activity) {
+        markers.push(new maps.Marker({
+          position: {
+            lat: +device.last_activity.latitude,
+            lng: +device.last_activity.longitude,
+          },
+          map,
+        }));
 
-      infowindows.push(new maps.InfoWindow({
-        content: this.getInfoWindowString(device),
-      }));
+        infowindows.push(new maps.InfoWindow({
+          content: this.getInfoWindowString(device),
+        }));
+      }
     });
 
     markers.forEach((marker, i) => {
