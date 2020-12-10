@@ -122,6 +122,11 @@ class VersionsService
 
     hash['mobile_config'] = extract_mobile_config
     hash['config'] = @version.algorithm.medal_r_config
+    translated_systems_order = {}
+    @version.medal_r_config['systems_order'].map do |system|
+      translated_systems_order[system] = I18n.t("questions.systems.#{system}")
+    end
+    hash['config']['systems_translations'] = translated_systems_order
     hash['config']['age_limit'] = @version.algorithm.age_limit
     hash['config']['age_limit_message'] = @version.algorithm.age_limit_message
 
@@ -142,11 +147,7 @@ class VersionsService
     hash['second_top_right_question_id'] = @version.second_top_right_question.present? ? @version.second_top_right_question.node_id : nil
 
     hash['questions_orders'] = @version.medal_r_config['questions_orders']
-    translated_systems_order = {}
-    @version.medal_r_config['systems_order'].map do |system|
-      translated_systems_order[system] = I18n.t("questions.systems.#{system}")
-    end
-    hash['systems_order'] = translated_systems_order
+    hash['systems_order'] = @version.medal_r_config['systems_order']
     hash['medical_case_list'] = @version.medal_r_config['medical_case_list_order']
     hash['patient_list'] = @version.medal_r_config['patient_list_order']
     hash
