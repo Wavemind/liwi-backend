@@ -160,11 +160,11 @@ en:
       versions:
         index:
           no_version: "No version of the algorithm is associated with this Health Facility"
-          device_not_exist_html: "The tablet is not registered in medAL-<i>creator</i>"
+          device_not_exist: "The tablet is not registered in medAL-creator"
           invalid_token: "Invalid health facility token"
           invalid_health_facility: "Invalid health facility id"
           no_health_facility_id: "No health facility id specified."
-          no_health_facility_html: "Your tablet has not been associated with any Health Facility in medAL-<i>creator</i>"
+          no_health_facility: "Your tablet has not been associated with any Health Facility in medAL-creator"
         show:
           invalid_version: "Invalid version id"
       activities:
@@ -175,7 +175,7 @@ en:
         create:
           errors_on_save: "An error occurred when saving devices"
         show:
-          no_health_facility_html: "Your tablet has not been associated with any Health Facility in medAL-<i>creator</i>"
+          no_health_facility: "Your tablet has not been associated with any Health Facility in medAL-creator"
   archive: "Archive"
   breadcrumbs:
     algorithms: "Algorithms"
