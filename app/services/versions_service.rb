@@ -432,9 +432,10 @@ class VersionsService
   # Format a formula in order to replace references by ids
   def self.format_formula(hash, question)
     hash['vital_signs'] = []
-    return hash if formula.nil?
-    vital_signs = []
     formula = question.formula
+    return hash if formula.nil?
+    
+    vital_signs = []
     formula.scan(/\[.*?\]/).each do |reference|
       reference = reference.tr('[]', '')
 
