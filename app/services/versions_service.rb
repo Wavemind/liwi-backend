@@ -409,7 +409,7 @@ class VersionsService
   def self.extract_vital_signs_array(hash, question)
     vital_signs = hash['vital_signs']
     vital_signs.push(question.reference_table_x_id, question.reference_table_y_id, question.reference_table_z_id)
-    vital_signs
+    vital_signs.compact
   end
 
   # @params [Node]
