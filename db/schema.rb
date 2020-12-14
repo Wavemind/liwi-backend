@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_30_092413) do
+ActiveRecord::Schema.define(version: 2020_12_14_101112) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -52,6 +52,7 @@ ActiveRecord::Schema.define(version: 2020_11_30_092413) do
     t.string "age_limit_message"
     t.json "medal_r_config"
     t.json "village_json"
+    t.integer "minimum_age"
     t.index ["user_id"], name: "index_algorithms_on_user_id"
   end
 
