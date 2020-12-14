@@ -343,7 +343,8 @@ class VersionsService
       hash[question.id]['is_neonat'] = question.is_neonat
       hash[question.id]['stage'] = question.stage
       hash[question.id]['system'] = question.system
-      hash[question.id]['formula'] = format_formula(question.formula)
+      hash[question.id] = format_formula(hash[question.id], question)
+
       hash[question.id]['category'] = question.category_name
       hash[question.id]['is_triage'] = question.is_triage
       hash[question.id]['is_identifiable'] = question.is_identifiable
@@ -363,6 +364,7 @@ class VersionsService
       hash[question.id]['cc'] = get_node_complaint_categories(question, [])
       hash[question.id]['conditioned_by_cc'] = question.complaint_categories.map(&:id)
       hash[question.id]['referenced_in'] = []
+      hash[question.id]['vital_signs'] = extract_vital_signs_array(hash[question.id], question)
       hash[question.id]['counter'] = 0
       hash[question.id]['value'] = nil
       hash[question.id]['answer'] = nil
@@ -403,6 +405,15 @@ class VersionsService
 
   # @params [Node]
   # @return [Array]
+  # Get all Vital Signs that the question need to be calculated
+  def self.extract_vital_signs_array(hash, question)
+    vital_signs = hash['vital_signs']
+    vital_signs.push(question.reference_table_x_id, question.reference_table_y_id, question.reference_table_z_id)
+    vital_signs
+  end
+
+  # @params [Node]
+  # @return [Array]
   # Get all medias for a node and put it in a hash
   def self.extract_medias(node)
     medias = []
@@ -419,8 +430,11 @@ class VersionsService
   # @params [String]
   # @return [String]
   # Format a formula in order to replace references by ids
-  def self.format_formula(formula)
-    return nil if formula.nil?
+  def self.format_formula(hash, question)
+    hash['vital_signs'] = []
+    return hash if formula.nil?
+    vital_signs = []
+    formula = question.formula
     formula.scan(/\[.*?\]/).each do |reference|
       reference = reference.tr('[]', '')
 
@@ -432,10 +446,13 @@ class VersionsService
       type = Question.get_type_from_prefix(prefix_type)
       if type.present?
         question = @version.algorithm.questions.find_by(type: type, reference: db_reference)
+        vital_signs.push(question.id)
         formula.sub!(reference, question.id.to_s)
       end
     end
-    formula
+    hash['formula'] = formula
+    hash['vital_signs'] = vital_signs
+    hash
   end
 
   # @params [Node, Array]
