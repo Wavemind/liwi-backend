@@ -129,6 +129,7 @@ class VersionsService
     hash['config']['systems_translations'] = translated_systems_order
     hash['config']['age_limit'] = @version.algorithm.age_limit
     hash['config']['age_limit_message'] = @version.algorithm.age_limit_message
+    hash['config']['minimum_age'] = @version.algorithm.minimum_age
 
     hash['triage'] = extract_triage_metadata
     hash['author'] = @version.user.full_name

@@ -197,7 +197,8 @@ class AlgorithmsController < ApplicationController
       :name,
       :description,
       :age_limit,
-      :age_limit_message
+      :age_limit_message,
+      :minimum_age
     )
   end
 end
