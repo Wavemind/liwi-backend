@@ -409,8 +409,10 @@ class VersionsService
   # Get all Vital Signs that the question need to be calculated
   def self.extract_vital_signs_array(hash, question)
     vital_signs = hash['vital_signs']
-    vital_signs.push(question.reference_table_x_id, question.reference_table_y_id, question.reference_table_z_id)
-    vital_signs.compact
+    vital_signs.push(question.reference_table_x_id) if question.reference_table_x.present? && question.reference_table_x.is_a?(Questions::VitalSignAnthropometric)
+    vital_signs.push(question.reference_table_y_id) if question.reference_table_y.present? && question.reference_table_y.is_a?(Questions::VitalSignAnthropometric)
+    vital_signs.push(question.reference_table_z_id) if question.reference_table_z.present? && question.reference_table_z.is_a?(Questions::VitalSignAnthropometric)
+    vital_signs
   end
 
   # @params [Node]
@@ -448,7 +450,7 @@ class VersionsService
       type = Question.get_type_from_prefix(prefix_type)
       if type.present?
         question = @version.algorithm.questions.find_by(type: type, reference: db_reference)
-        vital_signs.push(question.id)
+        vital_signs.push(question.id) if question.is_a? Questions::VitalSignAnthropometric
         formula.sub!(reference, question.id.to_s)
       end
     end
