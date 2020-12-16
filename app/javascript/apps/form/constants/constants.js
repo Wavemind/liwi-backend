@@ -97,6 +97,7 @@ export const MEDICAL_HISTORY_SYSTEMS = [
   'muscular_skeletal',
   'integumentary',
   'exposures',
+  'comorbidities',
   'complementary_medical_history',
   'prevention',
   'follow_up_questions'
