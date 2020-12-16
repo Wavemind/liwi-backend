@@ -5,7 +5,6 @@ class Item extends React.Component {
 
   render() {
     const { node, getReferencePrefix, readOnly } = this.props;
-
     return (
       <div className="p-2"
            draggable={!readOnly}
@@ -14,7 +13,7 @@ class Item extends React.Component {
              event.dataTransfer.setData("node", JSON.stringify(node));
            }}
       >
-        <div className="mx-1 node">
+        <div className={`mx-1 node ${node.is_neonat ? 'is_neonat' : null}`}>
           <div className="port py-2 node-category">
             <div className="col pl-2 pr-0 text-left">
               {getReferencePrefix(node.node_type, node.type) + node.reference}
@@ -35,5 +34,3 @@ class Item extends React.Component {
 }
 
 export default withDiagram(Item);
-
-

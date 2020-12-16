@@ -35,9 +35,8 @@ class QuestionNodeWidget extends React.Component {
 
   render() {
     const { getReferencePrefix, node, engine, readOnly } = this.props;
-
     return (
-      <div className="node">
+      <div className={`node ${node.options.dbInstance.node.is_neonat ? 'is_neonat' : null}`}>
         <div className="port py-2 node-category">
           {node.getInPort() ?
             <div className="port srd-port in-port">
