@@ -190,6 +190,8 @@ class Diagnostic < ApplicationRecord
       Child.where(instance_id: instances_ids).map(&:delete)
       Condition.where(referenceable_type: 'Instance', referenceable_id: instances_ids).map(&:delete)
       components.map(&:delete)
+      fd_ids = final_diagnostics.map(&:id)
+      NodeExclusion.where(excluding_node_id: fd_ids).or(NodeExclusion.where(excluded_node_id: fd_ids)).map(&:delete)
       final_diagnostics.map(&:delete)
       self.delete
       return true
