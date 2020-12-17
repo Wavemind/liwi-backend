@@ -739,6 +739,7 @@ en:
       title: "Add an algorithm version"
     edit:
       title: "Edit an algorithm version"
+      is_arm_control_label: "For control arm facilities"
     show:
       deployed_version: "This version is deployed in the field, it cannot be edited. You can either duplicate this version or create a new one."
       questions_sequences: "Question Sequences"
