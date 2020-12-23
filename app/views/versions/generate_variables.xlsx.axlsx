@@ -4,6 +4,7 @@ wrap = xlsx_package.workbook.styles.add_style alignment: {wrap_text: true}
 nodes = @version.extract_nodes_from_version
 drugs = []
 managements = []
+final_diagnoses = []
 
 wb.add_worksheet(name: "Variables") do |sheet|
   sheet.add_row ["ID", "Category", "Reference", "Label", "Mandatory", "Description", "Answers (ID | full label)"]
@@ -19,13 +20,14 @@ wb.add_worksheet(name: "Variables") do |sheet|
   end
 end
 
-wb.add_worksheet(name: "Final diagnoses") do |sheet|
-  sheet.add_row ["ID", "Reference", "Label", "Description"]
+wb.add_worksheet(name: "Diagnoses") do |sheet|
+  sheet.add_row ["ID", "Reference", "Label", "CC"]
   @version.diagnostics.map do |diag|
+    sheet.add_row [diag.id, diag.full_reference, diag.label_en, diag.node.full_reference]
+
     diag.components.map do |instance|
       if instance.node.is_a? FinalDiagnostic
-        df = instance.node
-        sheet.add_row [df.id, df.full_reference, df.label_en, df.description_en], style: wrap
+        final_diagnoses.push(instance.node)
       elsif instance.node.is_a? HealthCares::Drug
         drugs.push(instance.node)
       elsif instance.node.is_a? HealthCares::Management
@@ -34,6 +36,15 @@ wb.add_worksheet(name: "Final diagnoses") do |sheet|
     end
   end
 end
+
+wb.add_worksheet(name: "Final diagnoses") do |sheet|
+  sheet.add_row ["ID", "Reference", "Label", "Description"]
+
+  final_diagnoses.map do |node|
+    sheet.add_row [node.id, node.full_reference, node.label_en, node.description_en], style: wrap
+  end
+end
+
 
 wb.add_worksheet(name: "Drugs") do |sheet|
   sheet.add_row ["ID", "Reference", "Label", "Description", "Formulations (ID | medication form)"]
