@@ -48,6 +48,7 @@ gem 'caxlsx'
 gem 'caxlsx_rails'
 gem 'roo', '~> 2.8'
 gem 'pundit'
+gem 'prawn'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

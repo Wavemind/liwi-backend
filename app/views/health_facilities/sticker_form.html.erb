@@ -1,0 +1,13 @@
+<h2>Generate Stickers</h2>
+<div class="row">
+  <div class="col">
+    <%= simple_form_for @health_facility, url: health_facility_generate_stickers_url(@health_facility, format: :pdf), method: :post, format: :pdf do |f| %>
+      <%= f.input :id, label: "Group ID" %>
+      <%= f.simple_fields_for :sticker_generator do |n| %>
+        <%= n.input :study_id, collection: @study_ids, prompt: t('prompt') %>
+        <%= n.input :number_of_stickers, as: :integer, input_html: { min: '0', step: '1', value: '5' } %>
+      <% end %>
+      <%= f.submit "Generate", class: 'btn btn-primary' %>
+    <% end %>
+  </div>
+</div>

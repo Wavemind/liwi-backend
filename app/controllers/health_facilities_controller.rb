@@ -1,4 +1,7 @@
 class HealthFacilitiesController < ApplicationController
+
+  require 'prawn'
+
   before_action :authenticate_user!
   before_action :set_health_facility, only: [:show, :edit, :update]
   before_action :set_breadcrumb, only: [:show, :new, :edit]
@@ -87,6 +90,26 @@ class HealthFacilitiesController < ApplicationController
       redirect_to @health_facility, notice: t('.success_remove_device')
     else
       redirect_to @health_facility, danger: t('.error_remove_device')
+    end
+  end
+
+  def sticker_form
+    @health_facility = HealthFacility.find(params[:health_facility_id])
+    authorize @health_facility
+    # TODO get this dynamically when LIWI-1040 is done
+    @study_ids = [' Dynamic Tanzania', 'Dynamic Rwanda', 'Timci Tanzania']
+  end
+
+  def generate_stickers
+    @health_facility = HealthFacility.find(params[:health_facility_id])
+    @study_id = params[:health_facility][:sticker_generator][:study_id]
+    @number_of_stickers = params[:health_facility][:sticker_generator][:number_of_stickers]
+    authorize @health_facility
+    respond_to do |format|
+      format.pdf do
+        pdf = StickerPdf.new(@health_facility, @study_id, @number_of_stickers)
+        pdf.render_file 'assignment.pdf'
+      end
     end
   end
 
