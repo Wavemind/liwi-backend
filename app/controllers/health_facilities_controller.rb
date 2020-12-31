@@ -1,6 +1,6 @@
-class HealthFacilitiesController < ApplicationController
+require 'prawn'
 
-  require 'prawn'
+class HealthFacilitiesController < ApplicationController
 
   before_action :authenticate_user!
   before_action :set_health_facility, only: [:show, :edit, :update]
@@ -97,7 +97,7 @@ class HealthFacilitiesController < ApplicationController
     @health_facility = HealthFacility.find(params[:health_facility_id])
     authorize @health_facility
     # TODO get this dynamically when LIWI-1040 is done
-    @study_ids = [' Dynamic Tanzania', 'Dynamic Rwanda', 'Timci Tanzania']
+    @study_ids = [' DynamicTZ', 'DynamicRW', 'TimciTZ']
   end
 
   def generate_stickers
