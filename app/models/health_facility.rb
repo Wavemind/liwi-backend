@@ -11,6 +11,8 @@ class HealthFacility < ApplicationRecord
   validates_presence_of :name
   validates_presence_of :architecture
   validates_presence_of :pin_code
+  validates_presence_of :country
+  validates_presence_of :area
 
   after_validation :validate_code_pin
   # after_validation :validate_ips
