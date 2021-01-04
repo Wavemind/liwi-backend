@@ -50,6 +50,7 @@ gem 'roo', '~> 2.8'
 gem 'pundit'
 gem 'prawn'
 gem 'prawn-qrcode'
+gem 'city-state'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

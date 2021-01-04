@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   resources :technical_files, only: [:index, :create]
   resources :settings, only: [:index]
   resources :languages, only: [:new, :create, :update, :destroy]
+  resources :studies, only: [:new, :create, :update, :destroy]
 
   resources :algorithms, only: [:index, :show, :new, :create, :edit, :update] do
     member do
@@ -213,6 +214,8 @@ Rails.application.routes.draw do
 
       get 'is_available', to: 'application#is_available'
       get 'categories', to: 'application#categories'
+
+      resources :health_facilities, only: [:show]
     end
   end
 end

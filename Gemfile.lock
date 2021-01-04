@@ -107,6 +107,8 @@ GEM
       archive-zip (~> 0.10)
       nokogiri (~> 1.8)
     chunky_png (1.3.11)
+    city-state (0.1.0)
+      rubyzip (>= 1.1)
     cocoon (1.2.14)
     codacy-coverage (2.2.1)
       simplecov
@@ -425,6 +427,7 @@ DEPENDENCIES
   caxlsx
   caxlsx_rails
   chromedriver-helper
+  city-state
   cocoon
   codacy-coverage
   coffee-rails (~> 4.2)

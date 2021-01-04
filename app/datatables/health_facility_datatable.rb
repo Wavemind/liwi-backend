@@ -25,6 +25,8 @@ class HealthFacilityDatatable < AjaxDatatablesRails::ActiveRecord
       actions = link_to(I18n.t('show'), health_facility_url(record), class: 'btn btn-outline-primary') + " " + link_to(I18n.t('edit'), edit_health_facility_url(record), class: 'btn btn-outline-info')
       {
         name: record.name,
+        country: record.country,
+        area: record.area,
         nb_people: record.devices.count,
         actions: actions
       }

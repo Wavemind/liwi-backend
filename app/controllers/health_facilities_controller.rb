@@ -5,6 +5,7 @@ class HealthFacilitiesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_health_facility, only: [:show, :edit, :update]
   before_action :set_breadcrumb, only: [:show, :new, :edit]
+  before_action :set_countries, only: [:new, :edit]
 
   def index
     authorize policy_scope(HealthFacility)
@@ -125,6 +126,10 @@ class HealthFacilitiesController < ApplicationController
     authorize @health_facility
   end
 
+  def set_countries
+    @countries = CS.countries.values.sort.select{ |country| country != 'country_name'}
+  end
+
   def health_facility_params
     params.require(:health_facility).permit(
       :name,
@@ -132,6 +137,8 @@ class HealthFacilitiesController < ApplicationController
       :local_data_ip,
       :main_data_ip,
       :pin_code,
+      :country,
+      :area,
       :longitude,
       :latitude,
       device_ids: [],
