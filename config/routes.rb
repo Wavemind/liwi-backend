@@ -211,6 +211,8 @@ Rails.application.routes.draw do
 
       get 'is_available', to: 'application#is_available'
       get 'categories', to: 'application#categories'
+
+      resources :health_facilities, only: [:show]
     end
   end
 end
