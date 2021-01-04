@@ -168,6 +168,8 @@ ActiveRecord::Schema.define(version: 2021_01_04_121609) do
     t.string "token"
     t.decimal "latitude"
     t.decimal "longitude"
+    t.string "country"
+    t.string "area"
   end
 
   create_table "health_facility_accesses", force: :cascade do |t|

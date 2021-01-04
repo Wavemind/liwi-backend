@@ -402,6 +402,8 @@ en:
     index:
       columns:
         name: "Name"
+        country: "Country"
+        area: "Area"
         nb_people: "Number of devices"
         actions: "Actions"
       title: "Health Facilities"

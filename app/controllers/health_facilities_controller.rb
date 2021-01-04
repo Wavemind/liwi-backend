@@ -108,6 +108,8 @@ class HealthFacilitiesController < ApplicationController
       :local_data_ip,
       :main_data_ip,
       :pin_code,
+      :country,
+      :area,
       :longitude,
       :latitude,
       device_ids: [],
