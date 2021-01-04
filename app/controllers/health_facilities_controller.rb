@@ -3,7 +3,7 @@ require 'prawn'
 class HealthFacilitiesController < ApplicationController
 
   before_action :authenticate_user!
-  before_action :set_health_facility, only: [:show, :edit, :update]
+  before_action :set_health_facility, only: [:show, :edit, :update, :add_device, :remove_device, :sticker_form, :generate_stickers]
   before_action :set_breadcrumb, only: [:show, :new, :edit]
   before_action :set_countries, only: [:new, :edit]
 
@@ -62,7 +62,6 @@ class HealthFacilitiesController < ApplicationController
   # @return redirect to health_facility#show with flash message
   # Add device to health_facility
   def add_device
-    @health_facility = HealthFacility.find(params[:health_facility_id])
     authorize @health_facility
     device = Device.find(params[:device][:id])
 
@@ -81,7 +80,6 @@ class HealthFacilitiesController < ApplicationController
   # @return redirect to health_facility#show with flash message
   # Remove device from health_facility
   def remove_device
-    @health_facility = HealthFacility.find(params[:health_facility_id])
     authorize @health_facility
     device = Device.find(params[:device_id])
 
@@ -95,13 +93,11 @@ class HealthFacilitiesController < ApplicationController
   end
 
   def sticker_form
-    @health_facility = HealthFacility.find(params[:health_facility_id])
     authorize @health_facility
     @study_ids = Study.all
   end
 
   def generate_stickers
-    @health_facility = HealthFacility.find(params[:health_facility_id])
     @study_id = Study.find(params[:health_facility][:sticker_generator][:study_id])
     @number_of_stickers = params[:health_facility][:sticker_generator][:number_of_stickers]
     authorize @health_facility
@@ -121,7 +117,7 @@ class HealthFacilitiesController < ApplicationController
   end
 
   def set_health_facility
-    @health_facility = HealthFacility.find(params[:id])
+    @health_facility = params[:id] ? HealthFacility.find(params[:id]) : HealthFacility.find(params[:health_facility_id])
     authorize @health_facility
   end
 
