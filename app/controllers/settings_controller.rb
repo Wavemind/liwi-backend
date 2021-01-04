@@ -3,6 +3,8 @@ class SettingsController < ApplicationController
 
   def index
     add_breadcrumb t('breadcrumbs.settings')
+    @languages = Language.all
+    @studies = Study.all
   end
 
 end

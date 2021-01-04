@@ -482,6 +482,11 @@ en:
     label: "label_"
     new:
       title: "New language"
+  studies:
+    edit:
+      title: "Edit study"
+    new:
+      title: "New study"
   logout: "Logout"
   managements:
     edit:
@@ -675,6 +680,7 @@ en:
   settings:
     index:
       languages: "Languages"
+      studies: "Studies"
   show: "Show"
   drugs:
     breakable:
