@@ -12,7 +12,7 @@ class StickerPdf < Prawn::Document
       margin: [0, 0.42.cm, 0, 0.2.cm],
     )
     @group_id = health_facility.id.to_s
-    @study_id = study_id.to_s
+    @study_id = study_id.label
     @uuid = SecureRandom.uuid
     @number_of_stickers = number_of_stickers.to_i
 
@@ -26,14 +26,14 @@ class StickerPdf < Prawn::Document
         render_qr_code(qrcode, align: :left, extent: 2.1.cm)
       end
       grid([0, 2], [0, 4]).bounding_box do
-        font_size 8
-        indent(0.05.cm) do
+        font_size 7
+        indent(0.1.cm) do
           move_down 0.4.cm
-          text "study_id: #{@study_id}"
-          move_down 0.4.cm
-          text "group_id: #{@group_id}"
-          move_down 0.4.cm
-          text "uid: #{@uuid}"
+          text "<b>study_id:</b> #{@study_id}", inline_format: true
+          move_down 0.5.cm
+          text "<b>group_id:</b> #{@group_id}", inline_format: true
+          move_down 0.5.cm
+          text "<b>uid:</b> #{@uuid}", inline_format: true
         end
       end
       start_new_page unless sticker == @number_of_stickers

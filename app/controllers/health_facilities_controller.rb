@@ -98,12 +98,12 @@ class HealthFacilitiesController < ApplicationController
     @health_facility = HealthFacility.find(params[:health_facility_id])
     authorize @health_facility
     # TODO get this dynamically when LIWI-1040 is done
-    @study_ids = [' DynamicTZ', 'DynamicRW', 'TimciTZ']
+    @study_ids = Study.all
   end
 
   def generate_stickers
     @health_facility = HealthFacility.find(params[:health_facility_id])
-    @study_id = params[:health_facility][:sticker_generator][:study_id]
+    @study_id = Study.find(params[:health_facility][:sticker_generator][:study_id])
     @number_of_stickers = params[:health_facility][:sticker_generator][:number_of_stickers]
     authorize @health_facility
     respond_to do |format|
