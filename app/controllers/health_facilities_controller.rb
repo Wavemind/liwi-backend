@@ -97,7 +97,6 @@ class HealthFacilitiesController < ApplicationController
   def sticker_form
     @health_facility = HealthFacility.find(params[:health_facility_id])
     authorize @health_facility
-    # TODO get this dynamically when LIWI-1040 is done
     @study_ids = Study.all
   end
 
