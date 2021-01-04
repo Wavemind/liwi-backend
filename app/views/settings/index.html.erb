@@ -5,3 +5,12 @@
 <% end %>
 
 <%= render 'languages/table' %>
+
+<h2 class="mt-2"><%= t('.studies') %></h2>
+
+<%= link_to new_study_url do %>
+  <button type="button" class="btn btn-outline-secondary mb-4"><%= t('add') %></button>
+<% end %>
+
+<%= render 'studies/table' %>
+

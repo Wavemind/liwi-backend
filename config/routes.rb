@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   resources :technical_files, only: [:index, :create]
   resources :settings, only: [:index]
   resources :languages, only: [:new, :create, :update, :destroy]
+  resources :studies, only: [:new, :create, :update, :destroy]
 
   resources :algorithms, only: [:index, :show, :new, :create, :edit, :update] do
     member do

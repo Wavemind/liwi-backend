@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_04_104737) do
+ActiveRecord::Schema.define(version: 2021_01_04_121609) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -340,6 +340,14 @@ ActiveRecord::Schema.define(version: 2021_01_04_104737) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "stage"
+  end
+
+  create_table "studies", force: :cascade do |t|
+    t.string "label"
+    t.bigint "algorithm_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["algorithm_id"], name: "index_studies_on_algorithm_id"
   end
 
   create_table "technical_files", force: :cascade do |t|
