@@ -8,6 +8,8 @@ jQuery(document).ready(function () {
     "pagingType": "full_numbers",
     "columns": [
       { "data": "name" },
+      { "data": "country" },
+      { "data": "area" },
       { "data": "nb_people" },
       { "data": "actions", "className": "text-right" },
     ],
