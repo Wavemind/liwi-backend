@@ -105,6 +105,7 @@ class HealthFacilitiesController < ApplicationController
       format.pdf do
         pdf = StickerPdf.new(@health_facility, @study_id, @number_of_stickers)
         # TODO save this file somewhere with a specific name ?
+        # TODO maybe open it in another tab ?
         pdf.render_file 'assignment.pdf'
       end
     end
