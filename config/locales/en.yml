@@ -158,6 +158,9 @@ en:
     unavailable: "Test/Assessment is unavailable"
   api:
     v1:
+      health_facilities:
+        show:
+          no_health_facility: "Please provide a valid Health Facility ID"
       versions:
         index:
           no_version: "No version of the algorithm is associated with this Health Facility"
