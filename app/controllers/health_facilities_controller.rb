@@ -90,11 +90,18 @@ class HealthFacilitiesController < ApplicationController
     end
   end
 
+  # GET  health_facilities/health_facility_id/devices/:device_id/sticker_form
+  # @params health_facility_id [Integer] id of health_facility
+  # Renders the sticker_form for the given health_facility
   def sticker_form
     authorize @health_facility
     @study_ids = Study.all
   end
 
+  # POST  health_facilities/health_facility_id/devices/:device_id/generate_stickers
+  # @params health_facility_id [Integer] id of health_facility
+  # @params health_facility [Hash] contains the data filled in the form
+  # Generates the PDF containing the stickers and sends the file to the browser
   def generate_stickers
     @study_id = Study.find(params[:health_facility][:sticker_generator][:study_id])
     @number_of_stickers = params[:health_facility][:sticker_generator][:number_of_stickers]

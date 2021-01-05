@@ -87,6 +87,6 @@ Rails.application.configure do
     Bullet.add_whitelist type: :n_plus_one_query, class_name: 'Condition', association: :second_conditionable
   end
 
-  config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect'
+  # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect'
 end
 Rails.application.routes.default_url_options[:host] = 'localhost:3000'
