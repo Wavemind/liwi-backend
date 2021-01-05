@@ -1,5 +1,3 @@
-require 'prawn'
-
 class HealthFacilitiesController < ApplicationController
 
   before_action :authenticate_user!
@@ -103,10 +101,13 @@ class HealthFacilitiesController < ApplicationController
     authorize @health_facility
     respond_to do |format|
       format.pdf do
+        tempfile = Tempfile.new(["tempPDF", ".pdf"], Rails.root.join("tmp"))
         pdf = StickerPdf.new(@health_facility, @study_id, @number_of_stickers)
-        # TODO save this file somewhere with a specific name ?
-        # TODO maybe open it in another tab ?
-        pdf.render_file 'assignment.pdf'
+        tempfile.write pdf.render_file tempfile.path
+        File.open(tempfile, 'r') do |f|
+          send_data(f.read, filename: "uuid_stickers_#{Time.now.strftime('%Y%m%d_%H%M%S')}.pdf", type: "application/pdf")
+        end
+        tempfile.close(true)
       end
     end
   end
