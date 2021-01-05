@@ -1,6 +1,7 @@
 class HealthFacilitiesController < ApplicationController
+
   before_action :authenticate_user!
-  before_action :set_health_facility, only: [:show, :edit, :update]
+  before_action :set_health_facility, only: [:show, :edit, :update, :add_device, :remove_device, :sticker_form, :generate_stickers]
   before_action :set_breadcrumb, only: [:show, :new, :edit]
   before_action :set_countries, only: [:new, :edit]
 
@@ -59,7 +60,6 @@ class HealthFacilitiesController < ApplicationController
   # @return redirect to health_facility#show with flash message
   # Add device to health_facility
   def add_device
-    @health_facility = HealthFacility.find(params[:health_facility_id])
     authorize @health_facility
     device = Device.find(params[:device][:id])
 
@@ -78,7 +78,6 @@ class HealthFacilitiesController < ApplicationController
   # @return redirect to health_facility#show with flash message
   # Remove device from health_facility
   def remove_device
-    @health_facility = HealthFacility.find(params[:health_facility_id])
     authorize @health_facility
     device = Device.find(params[:device_id])
 
@@ -91,6 +90,35 @@ class HealthFacilitiesController < ApplicationController
     end
   end
 
+  # GET  health_facilities/health_facility_id/devices/:device_id/sticker_form
+  # @params health_facility_id [Integer] id of health_facility
+  # Renders the sticker_form for the given health_facility
+  def sticker_form
+    authorize @health_facility
+    @study_ids = Study.all
+  end
+
+  # POST  health_facilities/health_facility_id/devices/:device_id/generate_stickers
+  # @params health_facility_id [Integer] id of health_facility
+  # @params health_facility [Hash] contains the data filled in the form
+  # Generates the PDF containing the stickers and sends the file to the browser
+  def generate_stickers
+    @study_id = Study.find(params[:health_facility][:sticker_generator][:study_id])
+    @number_of_stickers = params[:health_facility][:sticker_generator][:number_of_stickers]
+    authorize @health_facility
+    respond_to do |format|
+      format.pdf do
+        tempfile = Tempfile.new(["tempPDF", ".pdf"], Rails.root.join("tmp"))
+        pdf = StickerPdf.new(@health_facility, @study_id, @number_of_stickers)
+        tempfile.write pdf.render_file tempfile.path
+        File.open(tempfile, 'r') do |f|
+          send_data(f.read, filename: "uuid_stickers_#{Time.now.strftime('%Y%m%d_%H%M%S')}.pdf", type: "application/pdf")
+        end
+        tempfile.close(true)
+      end
+    end
+  end
+
   private
 
   def set_breadcrumb
@@ -98,7 +126,7 @@ class HealthFacilitiesController < ApplicationController
   end
 
   def set_health_facility
-    @health_facility = HealthFacility.find(params[:id])
+    @health_facility = params[:id] ? HealthFacility.find(params[:id]) : HealthFacility.find(params[:health_facility_id])
     authorize @health_facility
   end
 

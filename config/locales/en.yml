@@ -191,6 +191,7 @@ en:
     edit: "Edit"
     final_diagnostics: "Final diagnoses"
     health_facilities: "Health facilities"
+    generate_stickers: "Generate stickers"
     home: "Home"
     managements: "Managements"
     questions: "Variables"
@@ -438,6 +439,8 @@ en:
       medical_staff: "Medical Staff"
     form:
       medical_staffs: "Medical Staff"
+    sticker_generator:
+      group_id: "Group ID"
   health_facility_accesses:
     new:
       title: "New release"
