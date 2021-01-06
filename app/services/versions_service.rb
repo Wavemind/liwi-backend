@@ -119,6 +119,10 @@ class VersionsService
     hash['algorithm_name'] = @version.algorithm.name
     hash['is_arm_control'] = @version.is_arm_control
     hash['village_json'] = @version.algorithm.village_json
+    hash['study'] = {
+      id: @version.algorithm.study.present? ? @version.algorithm.study.id : nil,
+      label: @version.algorithm.study.present? ? @version.algorithm.study.label: nil
+    }
 
     hash['mobile_config'] = extract_mobile_config
     hash['config'] = @version.algorithm.medal_r_config
@@ -437,7 +441,7 @@ class VersionsService
     hash['vital_signs'] = []
     formula = question.formula
     return hash if formula.nil?
-    
+
     vital_signs = []
     formula.scan(/\[.*?\]/).each do |reference|
       reference = reference.tr('[]', '')
