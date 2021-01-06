@@ -3,7 +3,7 @@ class HealthFacilitiesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_health_facility, only: [:show, :edit, :update, :add_device, :remove_device, :sticker_form, :generate_stickers]
   before_action :set_breadcrumb, only: [:show, :new, :edit]
-  before_action :set_countries, only: [:new, :edit]
+  before_action :set_countries, only: [:new, :edit, :create, :update]
 
   def index
     authorize policy_scope(HealthFacility)
