@@ -425,6 +425,7 @@ en:
       error_remove_device: "An error occurred when removing the device from the Health Facility"
     show:
       generate_json: "Generate JSON file"
+      generate_stickers: "Generate Stickers"
       title: "Details of %{name}"
       second_title: "Accesses"
       no_algorithm: "There is not algorithm associated to this Health Facility"
@@ -441,6 +442,7 @@ en:
       medical_staffs: "Medical Staff"
     sticker_generator:
       group_id: "Group ID"
+      generate: "Generate"
   health_facility_accesses:
     new:
       title: "New release"
