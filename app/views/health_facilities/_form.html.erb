@@ -3,7 +3,7 @@
   <%= f.input :name %>
   <%= f.input :architecture, collection: HealthFacility.architectures.map { |k, v| [t("health_facility.architectures.#{k}"), k] }, prompt: t('select') %>
 
-  <%= f.input :country, collection: CS.countries.values.sort.select{ |country| country != 'country_name'} %>
+  <%= f.input :country, collection: @countries %>
   <%= f.input :area %>
   <%= f.input :longitude, as: :numeric %>
   <%= f.input :latitude, as: :numeric %>

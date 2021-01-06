@@ -1,4 +1,11 @@
+<div class="row">
   <h1><%= t('.title', name: @health_facility.name) %> - <small><%= t("health_facilities.architectures.#{@health_facility.architecture}") %></small></h1>
+  <% if ["deployment_manager", "admin"].include?(current_user.role) %>
+    <div class="col d-flex align-items-center justify-content-end">
+      <%= link_to "Generate Stickers", health_facility_sticker_form_url(@health_facility), class:'btn btn-info' %>
+    </div>
+  <% end %>
+</div>
 
 <hr class="my-4"/>
 

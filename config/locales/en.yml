@@ -158,6 +158,9 @@ en:
     unavailable: "Test/Assessment is unavailable"
   api:
     v1:
+      health_facilities:
+        show:
+          no_health_facility: "Please provide a valid Health Facility ID"
       versions:
         index:
           no_version: "No version of the algorithm is associated with this Health Facility"
@@ -188,6 +191,7 @@ en:
     edit: "Edit"
     final_diagnostics: "Final diagnoses"
     health_facilities: "Health facilities"
+    generate_stickers: "Generate stickers"
     home: "Home"
     managements: "Managements"
     questions: "Variables"
@@ -435,6 +439,8 @@ en:
       medical_staff: "Medical Staff"
     form:
       medical_staffs: "Medical Staff"
+    sticker_generator:
+      group_id: "Group ID"
   health_facility_accesses:
     new:
       title: "New release"
