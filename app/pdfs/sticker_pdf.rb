@@ -13,14 +13,13 @@ class StickerPdf < Prawn::Document
     )
     @group_id = health_facility.id.to_s
     @study_id = study_id.label
-    @uuid = SecureRandom.uuid
     @number_of_stickers = number_of_stickers.to_i
 
-    qr_content = {study_id: @study_id, group_id: @group_id, uid: @uuid}.to_json
-
     (1..@number_of_stickers).each do |sticker|
+      @uuid = SecureRandom.uuid
+      qr_content = {study_id: @study_id, group_id: @group_id, uid: @uuid}.to_json
       define_grid(columns: 5, rows: 1, gutter: 0)
-        grid([0, 0], [0, 1]).bounding_box do
+      grid([0, 0], [0, 1]).bounding_box do
         move_down 0.4.cm
         qrcode = RQRCode::QRCode.new(qr_content, level: :h)
         render_qr_code(qrcode, align: :left, extent: 2.1.cm)
