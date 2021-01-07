@@ -36,7 +36,12 @@ jQuery(document).ready(function () {
  * Hides the MedalHubIP field if architecture is standalone
  */
 const toggleMedalHubIpField = () => {
-  const input = $('.health_facility_local_data_ip');
-  $("#health_facility_architecture").val() === 'standalone' ? input.hide() : input.show();
+  const inputDiv = $('.health_facility_local_data_ip');
+  if ($("#health_facility_architecture").val() === 'standalone') {
+    $('.health_facility_local_data_ip > input').val("");
+    inputDiv.hide()
+  } else {
+    inputDiv.show();
+  }
 };
 
