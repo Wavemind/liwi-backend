@@ -1,4 +1,3 @@
-
 jQuery(document).ready(function () {
   $("#health_facilities-datatable").dataTable({
     "processing": true,
