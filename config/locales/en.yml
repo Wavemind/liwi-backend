@@ -33,6 +33,9 @@ en:
         unique_dose_liquid: "Number of ml per administration"
         unique_dose_solid: "Number of pills per administration"
         unique_dose_suppository: "Number of suppositories per administration"
+      health_facility:
+        main_data_ip: "medAL-data ip"
+        local_data_ip: "medAL-hub ip"
       instance:
         duration: "Duration (days)"
         description: "Description"
@@ -414,7 +417,7 @@ en:
     edit:
       title: "Edit Health Facility"
     errors:
-      code_pin_unvalid: "The PIN code must contain 4 digits"
+      code_pin_invalid: "The PIN code must contain 4 digits"
       ip_invalid: "IP address format invalid."
     new:
       title: "Add Health Facility"
