@@ -92,4 +92,8 @@ class VersionPolicy < ApplicationPolicy
   def update_list?
     new?
   end
+
+  def job_status?
+    new?
+  end
 end

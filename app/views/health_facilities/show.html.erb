@@ -73,7 +73,7 @@
           </div>
           <div class="col">
             <%= simple_form_for @current_health_facility_access.version, url: regenerate_json_algorithm_version_path(@current_health_facility_access.version.algorithm, @current_health_facility_access.version), method: :put do |f| %>
-              <%= f.submit t('.generate_json'), class: 'btn btn-primary' %>
+              <%= f.submit t('.generate_json'), class: 'btn btn-primary', id: 'generate-json-file' %>
             <% end %>
           </div>
         </div>

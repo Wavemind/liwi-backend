@@ -37,6 +37,7 @@ Rails.application.routes.draw do
         get 'generate_translations'
         get 'generate_variables'
         get 'final_diagnostics', to: 'versions#final_diagnostics', as: 'final_diagnostic'
+        get 'job_status'
         put 'archive', to: 'versions#archive', as: 'archive'
         put 'unarchive', to: 'versions#unarchive', as: 'unarchive'
         post 'duplicate'
@@ -196,6 +197,7 @@ Rails.application.routes.draw do
 
   require "sidekiq/web"
   mount Sidekiq::Web => '/sidekiq'
+  require 'sidekiq-status/web'
 
   # API
   namespace :api do
