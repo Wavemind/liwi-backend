@@ -228,11 +228,11 @@ class VersionsController < ApplicationController
   # Generate json for the version
   def regenerate_json
     invalid_diagnostics = []
-    @version.update(generating: true)
 
     unless @version.algorithm.village_json.present?
-      flash[:alert] = t('flash_message.version.missing_villages')
-      redirect_back(fallback_location: root_path)
+      respond_to do |format|
+        format.json { render json: { success: false, message: t('flash_message.version.missing_villages') } }
+      end
     end
 
     @version.diagnostics.each do |diagnostic|
@@ -241,8 +241,9 @@ class VersionsController < ApplicationController
     end
 
     if invalid_diagnostics.any?
-      flash[:alert] = t('flash_message.version.invalids_diagnostics', diagnostics: invalid_diagnostics)
-      redirect_back(fallback_location: root_path)
+      respond_to do |format|
+        format.json { render json: { success: false, message: t('flash_message.version.invalids_diagnostics', diagnostics: invalid_diagnostics) } }
+      end
     else
       components_count = @version.components.count
       questions_orders = []
@@ -251,23 +252,20 @@ class VersionsController < ApplicationController
       end
 
       if components_count != questions_orders.count
-        flash[:alert] = t('flash_message.version_components_data_error')
-        redirect_back(fallback_location: root_path)
+        respond_to do |format|
+          format.json { render json: { success: false, message: t('flash_message.version_components_data_error') } }
+        end
       else
         missing_nodes = Node.where(id: @version.identify_missing_questions)
-
         if missing_nodes.any?
-          flash[:alert] = t('flash_message.missing_nodes_error', missing_nodes: missing_nodes.map(&:reference_label))
-          redirect_back(fallback_location: root_path)
+          render json: { success: false, message: t('flash_message.missing_nodes_error', missing_nodes: missing_nodes.map(&:reference_label)) }
         else
           job_id = GenerateJsonJob.perform_later(@version.id)
-          @version.update(job_id: job_id.provider_job_id)
-          flash[:notice] = t('.show.json_generating')
-          redirect_back(fallback_location: root_path) and return
+          @version.update(job_id: job_id.provider_job_id, generating: true)
+          render json: { success: true, message: t('.show.json_generating'), version: @version.reload }
         end
       end
     end
-    @version.update(generating: false)
   end
 
   # Remove a condition between a triage question and a complaint category
@@ -308,17 +306,10 @@ class VersionsController < ApplicationController
 
   def job_status
     status = Sidekiq::Status::status(@version.job_id)
-    case status
-    when :failed
-      puts "failed"
-    when :complete
-      puts "complete"
-    else
-      puts "else"
+    if [:complete, :failed, :interrupted].include?(status)
+      @version.update(job_id: "")
     end
-    respond_to do |format|
-      format.js { render json: {success: true, job_id: @version.job_id, job_status: status} }
-    end
+    render json: { job_status: status, message: status == :failed ? "You fucked up" : "" }
   end
 
   private

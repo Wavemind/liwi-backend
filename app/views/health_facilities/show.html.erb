@@ -61,48 +61,7 @@
 <hr class="my-4"/>
 
 <h2><%= t('.second_title') %></h2>
-<div class="row">
-  <div class="col">
-    <% if @current_health_facility_access.present?%>
-      <% if !@current_health_facility_access.version.generating  %>
-      <div class="alert alert-success" role="alert">
-        <div class="row">
-          <div class="col">
-            <%= t('health_facilities.current_algorithm', version_name: @current_health_facility_access.version.display_label).html_safe %>
-
-          </div>
-          <div class="col">
-            <%= simple_form_for @current_health_facility_access.version, url: regenerate_json_algorithm_version_path(@current_health_facility_access.version.algorithm, @current_health_facility_access.version), method: :put do |f| %>
-              <%= f.submit t('.generate_json'), class: 'btn btn-primary', id: 'generate-json-file' %>
-            <% end %>
-          </div>
-        </div>
-      </div>
-      <% else %>
-        <div class="alert alert-danger" role="alert">
-          <%= t('.generating') %>
-        </div>
-      <% end %>
-    <% else %>
-      <div class="alert alert-danger" role="alert">
-        <%= t('.no_algorithm') %>
-      </div>
-    <% end %>
-  </div>
-  <div class="col">
-    <%= simple_form_for @health_facility_access do |f| %>
-      <%= f.input :health_facility_id, as: :hidden, input_html: { value: params[:id] } %>
-      <div class="row">
-        <div class="col">
-          <%= f.association :version, collection: Version.includes(:algorithm).where.not(id: (@current_health_facility_access.version_id if @current_health_facility_access.present?), archived: true), label_method: :display_label, label: false, prompt: t('prompt') %>
-        </div>
-        <div class="col">
-          <%= f.submit t('add'), class: 'btn btn-primary' %>
-        </div>
-      </div>
-    <% end %>
-  </div>
-</div>
+<%= react_component('accesses/index', { versions: @versions, current_health_facility_access: @current_health_facility_access }) %>
 
 <h3><%= t('.archived') %></h3>
 <table class="table table-condensed table-hover" id="health_facility_accesses-datatable" data-source="<%= health_facility_accesses_url(format: :json, id: params[:id]) %>">

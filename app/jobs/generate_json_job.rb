@@ -8,7 +8,7 @@ class GenerateJsonJob < ApplicationJob
   # If you're wondering where the fuck "arguments" comes from, it would appear that it is an array of the arguments passed to the perform action below.
   # You won't find it in the docs
   rescue_from(StandardError) do |exception|
-    version_id = arguments[0]
+    version_id = arguments.first
     Version.find(version_id).update(generating: false)
   end
 

@@ -433,6 +433,7 @@ en:
       title: "Details of %{name}"
       second_title: "Accesses"
       no_algorithm: "There is not algorithm associated to this Health Facility"
+      validating: "Validating the algorithm... Don't go anywhere"
       generating: "The algorithm is currently being generated, be a bit patient"
       columns:
         algorithm: "Algorithm"
