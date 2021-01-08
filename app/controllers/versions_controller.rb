@@ -230,9 +230,7 @@ class VersionsController < ApplicationController
     invalid_diagnostics = []
 
     unless @version.algorithm.village_json.present?
-      respond_to do |format|
-        format.json { render json: { success: false, message: t('flash_message.version.missing_villages') } }
-      end
+      render json: { success: false, message: t('flash_message.version.missing_villages') }
     end
 
     @version.diagnostics.each do |diagnostic|
@@ -241,9 +239,7 @@ class VersionsController < ApplicationController
     end
 
     if invalid_diagnostics.any?
-      respond_to do |format|
-        format.json { render json: { success: false, message: t('flash_message.version.invalids_diagnostics', diagnostics: invalid_diagnostics) } }
-      end
+      render json: { success: false, message: t('flash_message.version.invalids_diagnostics', diagnostics: invalid_diagnostics) }
     else
       components_count = @version.components.count
       questions_orders = []
@@ -252,9 +248,7 @@ class VersionsController < ApplicationController
       end
 
       if components_count != questions_orders.count
-        respond_to do |format|
-          format.json { render json: { success: false, message: t('flash_message.version_components_data_error') } }
-        end
+        render json: { success: false, message: t('flash_message.version_components_data_error') }
       else
         missing_nodes = Node.where(id: @version.identify_missing_questions)
         if missing_nodes.any?
