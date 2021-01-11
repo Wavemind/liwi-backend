@@ -19,6 +19,11 @@ class AccessesComponent extends Component {
       selectedVersion: "",
       message: "",
     };
+
+    /**
+     * When the user arrives on the page, checks whether an algorithm is generating.
+     * If so, pings the status every 10 seconds
+     */
     if (isGenerating) {
       this.timer = setInterval(() => this.checkStatus(), 10000);
     }
@@ -36,14 +41,17 @@ class AccessesComponent extends Component {
    * @returns {Promise<void>}
    */
   checkStatus = async () => {
+
     const { current_health_facility_access: {
       version
     }} = this.state;
+
     const response = await fetch(`${window.location.origin}/algorithms/${version.algorithm.id}/versions/${version.id}/job_status`, {method: "GET"})
       .catch((error) => {
         console.error(error);
       });
     const data = await response.json();
+
     if (['complete', 'failed', 'interrupted'].includes(data.job_status)) {
       clearInterval(this.timer);
       this.setState({
@@ -76,6 +84,7 @@ class AccessesComponent extends Component {
    * @returns {Promise<void>}
    */
   handleGenerate = async () => {
+
     const { current_health_facility_access: {
       version
     }} = this.state;
@@ -84,10 +93,12 @@ class AccessesComponent extends Component {
       validating: true,
       message: "",
     })
+
     const url = `${window.location.origin}/algorithms/${version.algorithm.id}/versions/${version.id}/regenerate_json`;
     const header = this.setHeader();
     const response = await fetch(url, header).catch(error => console.log(error));
     const data = await response.json();
+
     if (data.success) {
       this.setState({
         validating: false,
@@ -108,12 +119,14 @@ class AccessesComponent extends Component {
    * @returns {Promise<void>}
    */
   handleAdd = async () => {
+
     const { health_facility } = this.props;
 
     this.setState({
       validating: true,
       message: "",
     })
+
     const url = `${window.location.origin}/health_facility_accesses`;
     const body = {
       health_facility_access: {
@@ -124,6 +137,7 @@ class AccessesComponent extends Component {
     const header = this.setHeader(body, 'POST');
     const response = await fetch(url, header).catch(error => console.log(error));
     const data = await response.json();
+
     if (data.success) {
       this.setState({
         current_health_facility_access: data.current_health_facility_access,
@@ -182,15 +196,18 @@ class AccessesComponent extends Component {
    * @returns {JSX.Element}
    */
   renderAlert = () => {
+
+    const { generating, validating, current_health_facility_access } = this.state;
+
     let message = ""
     let alertType = ""
-    if (this.state.generating) {
+    if (generating) {
       message = I18n.t('health_facilities.show.generating')
       alertType = "warning"
-    } else if (this.state.validating) {
+    } else if (validating) {
       message = I18n.t('health_facilities.show.validating')
       alertType = "warning"
-    } else if (this.state.current_health_facility_access === null) {
+    } else if (current_health_facility_access === null) {
       message = I18n.t('health_facilities.show.no_algorithm')
       alertType = "danger"
     }else {
@@ -200,6 +217,9 @@ class AccessesComponent extends Component {
   }
 
   render() {
+
+    const { generating, validating, versions, selectedVersion, message } = this.state;
+
     return (
       <div>
         <div className="row">
@@ -214,11 +234,11 @@ class AccessesComponent extends Component {
                     <Form.Control
                       as="select"
                       onChange={(event) => this.setState({selectedVersion: event.target.value})}
-                      value={this.state.selectedVersion}
-                      disabled={this.state.generating || this.state.validating}
+                      value={selectedVersion}
+                      disabled={generating || validating}
                     >
                       <option value="">{I18n.t("prompt")}</option>
-                      {this.state.versions.map((version) => (
+                      {versions.map((version) => (
                         <option key={`version-${version.name}`} value={version.id}>{version.name}</option>
                       ))}
                     </Form.Control>
@@ -229,7 +249,7 @@ class AccessesComponent extends Component {
                     variant="primary"
                     type="submit"
                     className="btn btn-primary"
-                    disabled={this.state.generating || this.state.validating}
+                    disabled={generating || validating}
                     onClick={this.handleAdd}
                   >
                     {I18n.t('add')}
@@ -241,9 +261,9 @@ class AccessesComponent extends Component {
         </div>
         <div className="row">
           <div className="col-md-6">
-            {this.state.message !== "" &&
+            {message !== "" &&
               <div className={`alert alert-danger`} role="alert">
-                {parse(this.state.message)}
+                {parse(message)}
               </div>
             }
           </div>

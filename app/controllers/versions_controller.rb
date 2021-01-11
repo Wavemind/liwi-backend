@@ -229,7 +229,7 @@ class VersionsController < ApplicationController
   def regenerate_json
     invalid_diagnostics = []
 
-    unless @version.algorithm.village_json.present?
+    if @version.algorithm.village_json.nil?
       render json: { success: false, message: t('flash_message.version.missing_villages') } and return
     end
 
@@ -298,6 +298,8 @@ class VersionsController < ApplicationController
     @version.update(medal_r_config: config)
   end
 
+  # GET algorithms/:algorithm_id/version/:id/job_status
+  # Checks the status of the ongoing background job and returns the correct status and message
   def job_status
     status = Sidekiq::Status::status(@version.job_id)
     message = ""

@@ -300,6 +300,7 @@ ActiveRecord::Schema.define(version: 2021_01_11_133428) do
     t.string "snomed_label"
     t.integer "system"
     t.boolean "is_mandatory", default: false
+    t.bigint "node_id"
     t.boolean "is_anti_malarial", default: false
     t.boolean "is_antibiotic", default: false
     t.boolean "is_triage", default: false
@@ -316,12 +317,13 @@ ActiveRecord::Schema.define(version: 2021_01_11_133428) do
     t.bigint "reference_table_z_id"
     t.boolean "is_neonat", default: false
     t.boolean "is_danger_sign", default: false
-    t.integer "emergency_status", default: 0
     t.boolean "unavailable", default: false
+    t.integer "emergency_status", default: 0
     t.integer "level_of_urgency", default: 5
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
     t.index ["diagnostic_id"], name: "index_nodes_on_diagnostic_id"
+    t.index ["node_id"], name: "index_nodes_on_node_id"
     t.index ["reference_table_x_id"], name: "index_nodes_on_reference_table_x_id"
     t.index ["reference_table_y_id"], name: "index_nodes_on_reference_table_y_id"
     t.index ["reference_table_z_id"], name: "index_nodes_on_reference_table_z_id"
@@ -435,6 +437,7 @@ ActiveRecord::Schema.define(version: 2021_01_11_133428) do
   add_foreign_key "node_exclusions", "nodes", column: "excluding_node_id"
   add_foreign_key "nodes", "algorithms"
   add_foreign_key "nodes", "answer_types"
+  add_foreign_key "nodes", "nodes"
   add_foreign_key "nodes", "nodes", column: "reference_table_z_id"
   add_foreign_key "technical_files", "users"
   add_foreign_key "versions", "algorithms"
