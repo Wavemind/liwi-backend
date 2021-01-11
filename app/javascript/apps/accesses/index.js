@@ -164,7 +164,7 @@ class AccessesComponent extends Component {
     }} = this.state;
 
     return (
-      <div className="alert alert-info" role="alert">
+      <div className="alert alert-success" role="alert">
         <div className="row">
           <div className="col">
             {parse(I18n.t('health_facilities.current_algorithm', {version_name: version.display_label}))}
