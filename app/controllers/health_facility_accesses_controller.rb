@@ -20,7 +20,7 @@ class HealthFacilityAccessesController < ApplicationController
         version = Version.find(health_facility_access_params[:version_id])
 
         unless version.algorithm.village_json.present?
-          redirect_to @health_facility_access.health_facility, alert: t('flash_message.version.missing_villages')
+          render json: { success: false, message: t('flash_message.version.missing_villages') } and return
         end
 
         version.diagnostics.each do |diagnostic|
@@ -29,17 +29,20 @@ class HealthFacilityAccessesController < ApplicationController
         end
 
         if invalid_diagnostics.any?
-          redirect_to @health_facility_access.health_facility, alert: t('flash_message.version.invalids_diagnostics', diagnostics: invalid_diagnostics)
+          render json: { success: false, message: t('flash_message.version.invalids_diagnostics', diagnostics: invalid_diagnostics) }
         else
           missing_nodes = Node.where(id: version.identify_missing_questions)
 
           if missing_nodes.any?
-            redirect_to @health_facility_access.health_facility, alert: t('flash_message.missing_nodes_error', missing_nodes: missing_nodes.map(&:reference_label))
+            render json: { success: false, message: t('flash_message.missing_nodes_error', missing_nodes: missing_nodes.map(&:reference_label)) }
           else
-            if @health_facility_access.save && VersionsService.generate_version_hash(version.id)
-              redirect_to @health_facility_access.health_facility, notice: t('flash_message.success_created')
+            if @health_facility_access.save
+              job_id = GenerateJsonJob.perform_later(version.id)
+              version.update(job_id: job_id.provider_job_id)
+              @current_health_facility_access = @health_facility_access.as_json(include: { version: { include: { algorithm: {only: [:id, :name]} }, only: [:id, :name, :job_id], methods: :display_label}})
+              render json: { success: true, version: version.reload, current_health_facility_access: @current_health_facility_access }
             else
-              redirect_to @health_facility_access.health_facility, alert: t('flash_message.json_error')
+              render json: { success: false, message: t('flash_message.json_error') }
             end
           end
         end

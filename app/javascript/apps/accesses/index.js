@@ -8,10 +8,11 @@ class AccessesComponent extends Component {
     super(props);
 
     const { versions, current_health_facility_access } = props;
-    const isGenerating = current_health_facility_access.version.job_id !== ""
+    const isGenerating = current_health_facility_access ? current_health_facility_access.version.job_id !== "" : false
 
     this.timer = null;
     this.state = {
+      current_health_facility_access: current_health_facility_access,
       versions: versions,
       generating: isGenerating,
       validating: false,
@@ -37,7 +38,7 @@ class AccessesComponent extends Component {
   checkStatus = async () => {
     const { current_health_facility_access: {
       version
-    }} = this.props;
+    }} = this.state;
     const response = await fetch(`${window.location.origin}/algorithms/${version.algorithm.id}/versions/${version.id}/job_status`, {method: "GET"})
       .catch((error) => {
         console.error(error);
@@ -53,27 +54,38 @@ class AccessesComponent extends Component {
   }
 
   /**
-   * Launches the validation and generation of the JSON
+   * Defines the headers to be sent to the server with the requests
+   * @param body
+   * @param method
+   * @returns {{headers: {Accept: string, "X-CSRF-Token": *, "Content-Type": string}, method: string, body: string}}
+   */
+  setHeader = (body = {}, method = 'PUT') => {
+    return {
+      method: method,
+      headers: {
+        "Accept": "application/json, text/plain",
+        "Content-Type": "application/json",
+        "X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content,
+      },
+      body: JSON.stringify(body),
+    };
+  }
+
+  /**
+   * Launches the validation and regeneration of the JSON
    * @returns {Promise<void>}
    */
   handleGenerate = async () => {
     const { current_health_facility_access: {
       version
-    }} = this.props;
+    }} = this.state;
 
     this.setState({
       validating: true,
       message: "",
     })
     const url = `${window.location.origin}/algorithms/${version.algorithm.id}/versions/${version.id}/regenerate_json`;
-    let header = {
-      method: 'PUT',
-      headers: {
-        "Accept": "application/json, text/plain",
-        "Content-Type": "application/json",
-        "X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content
-      }
-    };
+    const header = this.setHeader();
     const response = await fetch(url, header).catch(error => console.log(error));
     const data = await response.json();
     if (data.success) {
@@ -92,14 +104,40 @@ class AccessesComponent extends Component {
   }
 
   /**
-   * TODO WE STILL NEED TO HANDLE WHATEVER THIS DOES
-   * Handles the select change event
-   * @param event
+   * Launches the validation and generation of the new JSON
+   * @returns {Promise<void>}
    */
-  handleChange = (event) => {
+  handleAdd = async () => {
+    const { health_facility } = this.props;
+
     this.setState({
-      selectedVersion: event.target.value,
+      validating: true,
+      message: "",
     })
+    const url = `${window.location.origin}/health_facility_accesses`;
+    const body = {
+      health_facility_access: {
+        health_facility_id: health_facility.id,
+        version_id: this.state.selectedVersion
+      }
+    }
+    const header = this.setHeader(body, 'POST');
+    const response = await fetch(url, header).catch(error => console.log(error));
+    const data = await response.json();
+    if (data.success) {
+      this.setState({
+        current_health_facility_access: data.current_health_facility_access,
+        validating: false,
+        generating: true,
+      })
+      this.timer = setInterval(() => this.checkStatus(), 10000);
+    } else {
+      this.setState({
+        validating: false,
+        generating: false,
+        message: data.message,
+      })
+    }
   }
 
   /**
@@ -123,7 +161,7 @@ class AccessesComponent extends Component {
   renderGenerateButton = () => {
     const { current_health_facility_access: {
       version
-    }} = this.props;
+    }} = this.state;
 
     return (
       <div className="alert alert-info" role="alert">
@@ -146,16 +184,16 @@ class AccessesComponent extends Component {
   renderAlert = () => {
     let message = ""
     let alertType = ""
-    if (this.props.current_health_facility_access === null) {
-      message = I18n.t('health_facilities.show.no_algorithm')
-      alertType = "danger"
-    } else if (this.state.generating) {
+    if (this.state.generating) {
       message = I18n.t('health_facilities.show.generating')
-      alertType = "success"
+      alertType = "warning"
     } else if (this.state.validating) {
       message = I18n.t('health_facilities.show.validating')
       alertType = "warning"
-    } else {
+    } else if (this.state.current_health_facility_access === null) {
+      message = I18n.t('health_facilities.show.no_algorithm')
+      alertType = "danger"
+    }else {
       return this.renderGenerateButton();
     }
     return this.renderMessage(message, alertType)
@@ -175,9 +213,9 @@ class AccessesComponent extends Component {
                   <Form.Group controlId="versionSelect">
                     <Form.Control
                       as="select"
-                      onChange={(event) => this.handleChange(event)}
+                      onChange={(event) => this.setState({selectedVersion: event.target.value})}
                       value={this.state.selectedVersion}
-                      disabled={this.state.generating || this.state.validating || this.props.current_health_facility_access === null}
+                      disabled={this.state.generating || this.state.validating}
                     >
                       <option value="">{I18n.t("prompt")}</option>
                       {this.state.versions.map((version) => (
@@ -191,7 +229,8 @@ class AccessesComponent extends Component {
                     variant="primary"
                     type="submit"
                     className="btn btn-primary"
-                    disabled={this.state.generating || this.state.validating || this.props.current_health_facility_access === null}
+                    disabled={this.state.generating || this.state.validating}
+                    onClick={this.handleAdd}
                   >
                     {I18n.t('add')}
                   </Button>
@@ -201,7 +240,13 @@ class AccessesComponent extends Component {
           </div>
         </div>
         <div className="row">
-          {this.state.message !== "" && this.state.message}
+          <div className="col-md-6">
+            {this.state.message !== "" &&
+              <div className={`alert alert-danger`} role="alert">
+                {parse(this.state.message)}
+              </div>
+            }
+          </div>
         </div>
       </div>
     );

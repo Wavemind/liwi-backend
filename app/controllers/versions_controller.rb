@@ -230,7 +230,7 @@ class VersionsController < ApplicationController
     invalid_diagnostics = []
 
     unless @version.algorithm.village_json.present?
-      render json: { success: false, message: t('flash_message.version.missing_villages') }
+      render json: { success: false, message: t('flash_message.version.missing_villages') } and return
     end
 
     @version.diagnostics.each do |diagnostic|
@@ -255,8 +255,8 @@ class VersionsController < ApplicationController
           render json: { success: false, message: t('flash_message.missing_nodes_error', missing_nodes: missing_nodes.map(&:reference_label)) }
         else
           job_id = GenerateJsonJob.perform_later(@version.id)
-          @version.update(job_id: job_id.provider_job_id, generating: true)
-          render json: { success: true, message: t('.show.json_generating'), version: @version.reload }
+          @version.update(job_id: job_id.provider_job_id)
+          render json: { success: true, version: @version.reload }
         end
       end
     end
@@ -300,10 +300,16 @@ class VersionsController < ApplicationController
 
   def job_status
     status = Sidekiq::Status::status(@version.job_id)
+    message = ""
     if [:complete, :failed, :interrupted].include?(status)
       @version.update(job_id: "")
+      if status == :failed
+        message = t("versions.job_status.json_generation_failed")
+      elsif status == :interrupted
+        message = t("versions.job_status.json_generation_interrupted")
+      end
     end
-    render json: { job_status: status, message: status == :failed ? "You fucked up" : "" }
+    render json: { job_status: status, message: message }
   end
 
   private

@@ -61,7 +61,7 @@
 <hr class="my-4"/>
 
 <h2><%= t('.second_title') %></h2>
-<%= react_component('accesses/index', { versions: @versions, current_health_facility_access: @current_health_facility_access }) %>
+<%= react_component('accesses/index', { versions: @versions, current_health_facility_access: @current_health_facility_access, health_facility: @health_facility }) %>
 
 <h3><%= t('.archived') %></h3>
 <table class="table table-condensed table-hover" id="health_facility_accesses-datatable" data-source="<%= health_facility_accesses_url(format: :json, id: params[:id]) %>">
