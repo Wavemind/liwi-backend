@@ -1,5 +1,5 @@
 <ul class="list-group">
-  <% Language.all.each do |language| %>
+  <% @languages.each do |language| %>
     <li class="list-group-item">
       <div class="row">
         <div class="col"><%= "#{language.name} (#{language.code})" %></div>

@@ -1,0 +1,10 @@
+<ul class="list-group">
+  <% @studies.each do |study| %>
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col"><%= study.label %> <%= "(used by #{study.algorithm.name})" if study.algorithm.present? %></div>
+        <div class="col text-right"><%= link_to(I18n.t('destroy'), study_url(study), method: :delete, class: 'btn btn-outline-danger', data: {confirm: 'Are you sure?'}) %></div>
+      </div>
+    </li>
+  <% end %>
+</ul>

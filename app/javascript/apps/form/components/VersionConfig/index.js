@@ -48,7 +48,7 @@ export default class VersionConfig extends React.Component {
           showOrderButtons={true}
           lang={{
             availableHeader: 'Available questions',
-            selectedHeader: 'Medical case list questions order'
+            selectedHeader: 'Fields to show in the list of consultations'
           }}
           icons={{
             moveLeft: <span className="fa fa-chevron-left" />,
@@ -76,7 +76,7 @@ export default class VersionConfig extends React.Component {
           showOrderButtons={true}
           lang={{
             availableHeader: 'Available questions',
-            selectedHeader: 'Patient list questions order'
+            selectedHeader: 'Fields to show in the list of patients'
           }}
           icons={{
             moveLeft: <span className="fa fa-chevron-left" />,

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_14_101112) do
+ActiveRecord::Schema.define(version: 2021_01_07_084027) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -53,6 +53,7 @@ ActiveRecord::Schema.define(version: 2020_12_14_101112) do
     t.json "medal_r_config"
     t.json "village_json"
     t.integer "minimum_age"
+    t.boolean "consent_management", default: true
     t.index ["user_id"], name: "index_algorithms_on_user_id"
   end
 
@@ -168,6 +169,8 @@ ActiveRecord::Schema.define(version: 2020_12_14_101112) do
     t.string "token"
     t.decimal "latitude"
     t.decimal "longitude"
+    t.string "country"
+    t.string "area"
   end
 
   create_table "health_facility_accesses", force: :cascade do |t|
@@ -338,6 +341,14 @@ ActiveRecord::Schema.define(version: 2020_12_14_101112) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "stage"
+  end
+
+  create_table "studies", force: :cascade do |t|
+    t.string "label"
+    t.bigint "algorithm_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["algorithm_id"], name: "index_studies_on_algorithm_id"
   end
 
   create_table "technical_files", force: :cascade do |t|

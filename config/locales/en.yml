@@ -5,6 +5,7 @@ en:
         age_limit: "Age threshold in years for ineligibility (inclusion stops day before birthday)"
         age_limit_message_html: "Message displayed in medAL-<i>reader</i> if patient above threshold"
         minimum_age: "Minimum age for consultation (in days)"
+        consent_management: "Consent management is mandatory ?"
       answer:
         operator: "Operator"
         value: "Value"
@@ -33,6 +34,9 @@ en:
         unique_dose_liquid: "Number of ml per administration"
         unique_dose_solid: "Number of pills per administration"
         unique_dose_suppository: "Number of suppositories per administration"
+      health_facility:
+        main_data_ip: "medAL-data ip"
+        local_data_ip: "medAL-hub ip"
       instance:
         duration: "Duration (days)"
         description: "Description"
@@ -160,6 +164,9 @@ en:
     unknown: "Unknown"
   api:
     v1:
+      health_facilities:
+        show:
+          no_health_facility: "Please provide a valid Health Facility ID"
       versions:
         index:
           no_version: "No version of the algorithm is associated with this Health Facility"
@@ -190,6 +197,7 @@ en:
     edit: "Edit"
     final_diagnostics: "Final diagnoses"
     health_facilities: "Health facilities"
+    generate_stickers: "Generate stickers"
     home: "Home"
     managements: "Managements"
     questions: "Variables"
@@ -404,13 +412,15 @@ en:
     index:
       columns:
         name: "Name"
+        country: "Country"
+        area: "Area"
         nb_people: "Number of devices"
         actions: "Actions"
       title: "Health Facilities"
     edit:
       title: "Edit Health Facility"
     errors:
-      code_pin_unvalid: "The PIN code must contain 4 digits"
+      code_pin_invalid: "The PIN code must contain 4 digits"
       ip_invalid: "IP address format invalid."
     new:
       title: "Add Health Facility"
@@ -421,6 +431,7 @@ en:
       error_remove_device: "An error occurred when removing the device from the Health Facility"
     show:
       generate_json: "Generate JSON file"
+      generate_stickers: "Generate Stickers"
       title: "Details of %{name}"
       second_title: "Accesses"
       no_algorithm: "There is not algorithm associated to this Health Facility"
@@ -435,6 +446,9 @@ en:
       medical_staff: "Medical Staff"
     form:
       medical_staffs: "Medical Staff"
+    sticker_generator:
+      group_id: "Group ID"
+      generate: "Generate"
   health_facility_accesses:
     new:
       title: "New release"
@@ -484,6 +498,11 @@ en:
     label: "label_"
     new:
       title: "New language"
+  studies:
+    edit:
+      title: "Edit study"
+    new:
+      title: "New study"
   logout: "Logout"
   managements:
     edit:
@@ -677,6 +696,7 @@ en:
   settings:
     index:
       languages: "Languages"
+      studies: "Studies"
   show: "Show"
   drugs:
     breakable:
@@ -741,6 +761,7 @@ en:
       title: "Add an algorithm version"
     edit:
       title: "Edit an algorithm version"
+      is_arm_control_label: "For control arm facilities"
     show:
       deployed_version: "This version is deployed in the field, it cannot be edited. You can either duplicate this version or create a new one."
       questions_sequences: "Question Sequences"

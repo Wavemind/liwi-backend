@@ -36,4 +36,12 @@ class HealthFacilityPolicy < ApplicationPolicy
   def remove_device?
     new?
   end
+
+  def sticker_form?
+    new?
+  end
+
+  def generate_stickers?
+    new?
+  end
 end

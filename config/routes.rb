@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   resources :technical_files, only: [:index, :create]
   resources :settings, only: [:index]
   resources :languages, only: [:new, :create, :update, :destroy]
+  resources :studies, only: [:new, :create, :update, :destroy]
 
   resources :algorithms, only: [:index, :show, :new, :create, :edit, :update] do
     member do
@@ -159,6 +160,8 @@ Rails.application.routes.draw do
   resources :health_facilities, only: [:index, :show, :new, :create, :edit, :update] do
     delete 'devices/:device_id/remove_device', to: 'health_facilities#remove_device', as: 'remove_device'
     post 'add_device', to: 'health_facilities#add_device', as: 'add_device'
+    get 'sticker_form', to: 'health_facilities#sticker_form', as: 'sticker_form'
+    post 'generate_stickers', to: 'health_facilities#generate_stickers', as: 'generate_stickers'
   end
 
   resources :health_facility_accesses, only: [:index, :create]
@@ -211,6 +214,8 @@ Rails.application.routes.draw do
 
       get 'is_available', to: 'application#is_available'
       get 'categories', to: 'application#categories'
+
+      resources :health_facilities, only: [:show]
     end
   end
 end
