@@ -41,7 +41,6 @@ class AccessesComponent extends Component {
    * @returns {Promise<void>}
    */
   checkStatus = async () => {
-
     const { current_health_facility_access: {
       version
     }} = this.state;
@@ -84,7 +83,6 @@ class AccessesComponent extends Component {
    * @returns {Promise<void>}
    */
   handleGenerate = async () => {
-
     const { current_health_facility_access: {
       version
     }} = this.state;
@@ -119,7 +117,6 @@ class AccessesComponent extends Component {
    * @returns {Promise<void>}
    */
   handleAdd = async () => {
-
     const { health_facility } = this.props;
 
     this.setState({
@@ -196,7 +193,6 @@ class AccessesComponent extends Component {
    * @returns {JSX.Element}
    */
   renderAlert = () => {
-
     const { generating, validating, current_health_facility_access } = this.state;
 
     let message = ""
@@ -217,7 +213,6 @@ class AccessesComponent extends Component {
   }
 
   render() {
-
     const { generating, validating, versions, selectedVersion, message } = this.state;
 
     return (
