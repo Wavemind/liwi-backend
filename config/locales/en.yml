@@ -434,7 +434,8 @@ en:
       generate_stickers: "Generate Stickers"
       title: "Details of %{name}"
       second_title: "Accesses"
-      no_algorithm: "There is not algorithm associated to this Health Facility"
+      no_algorithm: "There is no algorithm associated to this Health Facility"
+      validating: "Validating the algorithm... Don't go anywhere"
       generating: "The algorithm is currently being generated, be a bit patient"
       columns:
         algorithm: "Algorithm"
@@ -777,9 +778,11 @@ en:
       subtitle_translations: "Translations"
       subtitle_triage_conditions: "Triage variables conditions"
       title: "Details of %{name} - version %{version}"
-      json_generating: "Json is being generated it will be available in a few minutes"
     translations:
       generate_translations: "Generate translations excel"
+    job_status:
+      json_generation_failed: "There was an error while generating the JSON. Please contact the admins."
+      json_generation_interrupted: "JSON generation was interrupted. Please contact the admins."
   warning_dependency: "Warning! Editing this node will affect: "
   close: "Close"
   back: "Back"

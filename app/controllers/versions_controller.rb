@@ -1,8 +1,8 @@
 class VersionsController < ApplicationController
   before_action :authenticate_user!, except: [:change_triage_order, :change_systems_order]
-  before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :duplicate, :create_triage_condition, :remove_triage_condition, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnostics, :import_translations]
+  before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :duplicate, :create_triage_condition, :remove_triage_condition, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnostics, :import_translations, :job_status]
   before_action :set_breadcrumb, only: [:show, :new, :edit]
-  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :change_triage_order, :change_systems_order, :components, :create_triage_condition, :duplicate, :remove_components, :remove_triage_condition, :update_list, :regenerate_json, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnostics, :import_translations]
+  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :change_triage_order, :change_systems_order, :components, :create_triage_condition, :duplicate, :remove_components, :remove_triage_condition, :update_list, :regenerate_json, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnostics, :import_translations, :job_status]
 
   def index
     authorize policy_scope(Version)
@@ -229,9 +229,8 @@ class VersionsController < ApplicationController
   def regenerate_json
     invalid_diagnostics = []
 
-    unless @version.algorithm.village_json.present?
-      flash[:alert] = t('flash_message.version.missing_villages')
-      redirect_back(fallback_location: root_path)
+    if @version.algorithm.village_json.nil?
+      render json: { success: false, message: t('flash_message.version.missing_villages') } and return
     end
 
     @version.diagnostics.each do |diagnostic|
@@ -240,8 +239,7 @@ class VersionsController < ApplicationController
     end
 
     if invalid_diagnostics.any?
-      flash[:alert] = t('flash_message.version.invalids_diagnostics', diagnostics: invalid_diagnostics)
-      redirect_back(fallback_location: root_path)
+      render json: { success: false, message: t('flash_message.version.invalids_diagnostics', diagnostics: invalid_diagnostics) }
     else
       components_count = @version.components.count
       questions_orders = []
@@ -250,19 +248,15 @@ class VersionsController < ApplicationController
       end
 
       if components_count != questions_orders.count
-        flash[:alert] = t('flash_message.version_components_data_error')
-        redirect_back(fallback_location: root_path)
+        render json: { success: false, message: t('flash_message.version_components_data_error') }
       else
         missing_nodes = Node.where(id: @version.identify_missing_questions)
-
         if missing_nodes.any?
-          flash[:alert] = t('flash_message.missing_nodes_error', missing_nodes: missing_nodes.map(&:reference_label))
-          redirect_back(fallback_location: root_path)
+          render json: { success: false, message: t('flash_message.missing_nodes_error', missing_nodes: missing_nodes.map(&:reference_label)) }
         else
-          GenerateJsonJob.perform_later(@version.id)
-          @version.update(generating: true)
-          flash[:notice] = t('.show.json_generating')
-          redirect_back(fallback_location: root_path)
+          job_id = GenerateJsonJob.perform_later(@version.id)
+          @version.update(job_id: job_id.provider_job_id)
+          render json: { success: true, version: @version.reload }
         end
       end
     end
@@ -302,6 +296,22 @@ class VersionsController < ApplicationController
     config = @version.medal_r_config
     config["#{params[:list]}_list_order"] = params[:order]
     @version.update(medal_r_config: config)
+  end
+
+  # GET algorithms/:algorithm_id/version/:id/job_status
+  # Checks the status of the ongoing background job and returns the correct status and message
+  def job_status
+    status = Sidekiq::Status::status(@version.job_id)
+    message = ""
+    if [:complete, :failed, :interrupted].include?(status)
+      @version.update(job_id: "")
+      if status == :failed
+        message = t("versions.job_status.json_generation_failed")
+      elsif status == :interrupted
+        message = t("versions.job_status.json_generation_interrupted")
+      end
+    end
+    render json: { job_status: status, message: message }
   end
 
   private

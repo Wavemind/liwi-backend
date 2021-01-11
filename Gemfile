@@ -17,6 +17,7 @@ gem 'amoeba'
 # Added
 gem 'sidekiq'
 gem 'sidekiq-failures', '~> 1.0'
+gem 'sidekiq-status'
 gem 'devise'
 gem 'devise_invitable', '~> 1.7.0'
 gem 'simple_form'
