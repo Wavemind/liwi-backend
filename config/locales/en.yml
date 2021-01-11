@@ -68,7 +68,7 @@ en:
         stage: "Stage"
         system: "System"
         unavailable: "Test can be unavailable"
-        measurement_unavailable: "Value can be unavailable to measure"
+        measurement_unavailable: "Value can be unavailable, unfeasible or unknown"
       questions_sequence:
         min_score: "Minimal score"
         type: "Category"
@@ -156,6 +156,8 @@ en:
         less_greater_than_more_or_equal: "Your answer with the LESS THAN operator can't be greater than your answer with the GREATER THAN OR EQUAL operator."
         less_equal_more_or_equal: "The value for the LESS THAN operator must be equal to the value for the GREATER THAN OR EQUAL operator."
     unavailable: "Test/Assessment is unavailable"
+    unfeasible: "Not feasible"
+    unknown: "Unknown"
   api:
     v1:
       versions:

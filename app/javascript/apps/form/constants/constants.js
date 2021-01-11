@@ -50,9 +50,14 @@ export const NO_ANSWERS_ATTACHED_TYPE = [
 ];
 
 export const CATEGORIES_DISPLAYING_UNAVAILABLE_OPTION = [
-  "Questions::VitalSignAnthropometric",
+  "Questions::AssessmentTest",
   "Questions::BasicMeasurement",
-  "Questions::AssessmentTest"
+  "Questions::ChronicCondition",
+  "Questions::Exposure",
+  "Questions::PhysicalExam",
+  "Questions::Symptom",
+  "Questions::Vaccine",
+  "Questions::VitalSignAnthropometric"
 ];
 
 export const MEASUREMENT_CATEGORIES = [
