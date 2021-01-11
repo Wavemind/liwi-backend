@@ -409,7 +409,7 @@ export default class QuestionForm extends React.Component {
                   <Form.Group controlId="validationUnavailable">
                     <Form.Check
                       name="unavailable"
-                      label={MEASUREMENT_CATEGORIES.includes(values.type) ? I18n.t("activerecord.attributes.question.measurement_unavailable") : I18n.t("activerecord.attributes.question.unavailable")}
+                      label={I18n.t("activerecord.attributes.question.unavailable")}
                       value={values.unavailable}
                       checked={values.unavailable}
                       onChange={handleChange}
