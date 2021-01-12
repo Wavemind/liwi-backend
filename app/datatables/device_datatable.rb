@@ -39,7 +39,7 @@ class DeviceDatatable < AjaxDatatablesRails::ActiveRecord
         name: record.name,
         brand: record.brand,
         model: record.model,
-        last_activity: record.last_activity.present? ? datetime_format(record.last_activity['created_at']) : '',
+        last_activity: record.last_activity.present? ? datetime_format(Date.parse(record.last_activity['created_at'])) : '',
         last_user: record.last_activity.present? && record.last_activity['user'].present? ? link_to(record.last_activity['user']['first_name'] + ' ' + record.last_activity['user']['last_name'], user_url( record.last_activity['user']['id'])) : '',
         health_facility: link_to(record.health_facility.name, health_facility_url(record.health_facility)),
         actions: actions

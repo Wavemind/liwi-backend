@@ -2,15 +2,15 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# Note that this schema.rb definition is the authoritative source for your
-# database schema. If you need to create the application database on another
-# system, you should be using db:schema:load, not running all the migrations
-# from scratch. The latter is a flawed and unsustainable approach (the more migrations
-# you'll amass, the slower it'll run and the greater likelihood for issues).
+# This file is the source Rails uses to define your schema when running `rails
+# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# be faster and is potentially less error prone than running all of your
+# migrations from scratch. Old migrations may fail to apply correctly if those
+# migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_11_133428) do
+ActiveRecord::Schema.define(version: 2021_01_12_111019) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -300,7 +300,6 @@ ActiveRecord::Schema.define(version: 2021_01_11_133428) do
     t.string "snomed_label"
     t.integer "system"
     t.boolean "is_mandatory", default: false
-    t.bigint "node_id"
     t.boolean "is_anti_malarial", default: false
     t.boolean "is_antibiotic", default: false
     t.boolean "is_triage", default: false
@@ -317,13 +316,12 @@ ActiveRecord::Schema.define(version: 2021_01_11_133428) do
     t.bigint "reference_table_z_id"
     t.boolean "is_neonat", default: false
     t.boolean "is_danger_sign", default: false
-    t.boolean "unavailable", default: false
     t.integer "emergency_status", default: 0
+    t.boolean "unavailable", default: false
     t.integer "level_of_urgency", default: 5
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
     t.index ["diagnostic_id"], name: "index_nodes_on_diagnostic_id"
-    t.index ["node_id"], name: "index_nodes_on_node_id"
     t.index ["reference_table_x_id"], name: "index_nodes_on_reference_table_x_id"
     t.index ["reference_table_y_id"], name: "index_nodes_on_reference_table_y_id"
     t.index ["reference_table_z_id"], name: "index_nodes_on_reference_table_z_id"
@@ -437,7 +435,6 @@ ActiveRecord::Schema.define(version: 2021_01_11_133428) do
   add_foreign_key "node_exclusions", "nodes", column: "excluding_node_id"
   add_foreign_key "nodes", "algorithms"
   add_foreign_key "nodes", "answer_types"
-  add_foreign_key "nodes", "nodes"
   add_foreign_key "nodes", "nodes", column: "reference_table_z_id"
   add_foreign_key "technical_files", "users"
   add_foreign_key "versions", "algorithms"
