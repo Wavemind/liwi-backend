@@ -2,6 +2,9 @@ import "core-js/stable";
 import "regenerator-runtime/runtime";
 import I18n from "i18n-js";
 
+require("trix")
+require("@rails/actiontext")
+
 I18n.translations = <%= I18n::JS.translations.to_json %>;
 
 let componentRequireContext = require.context("apps", true);
