@@ -196,7 +196,7 @@ Rails.application.routes.draw do
   end
 
 
-  require "sidekiq/web"
+  require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
   require 'sidekiq-status/web'
 
