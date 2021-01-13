@@ -1,9 +1,11 @@
+<%= tinymce_assets %>
 <%= simple_form_for @study, html: { class: 'form-horizontal' } do |f| %>
 
   <%= f.input :label %>
   <div class="form-group">
     <label for="description" class="form-label">Description</label>
-    <%= f.rich_text_area :description %>
+    <%= f.text_area :description, class: "tinymce", rows: 20, cols: 120 %>
+    <%= tinymce %>
   </div>
   <%= f.association :algorithm, collection: Algorithm.all, label_method: :name, prompt: t('select')  %>
 
