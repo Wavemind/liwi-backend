@@ -44,7 +44,6 @@ class StudiesController < ApplicationController
     params.require(:study).permit(
       :id,
       :label,
-      :algorithm_id,
       )
   end
 end

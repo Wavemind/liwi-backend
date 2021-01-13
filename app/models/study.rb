@@ -1,5 +1,5 @@
 class Study < ApplicationRecord
-  belongs_to :algorithm, optional: true
+  has_many :algorithms
 
   validates_presence_of :label
 end

@@ -199,7 +199,8 @@ class AlgorithmsController < ApplicationController
       :age_limit,
       :age_limit_message,
       :consent_management,
-      :minimum_age
+      :minimum_age,
+      :study_id
     )
   end
 end
