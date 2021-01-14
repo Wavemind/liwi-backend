@@ -135,6 +135,7 @@ class VersionsService
     hash['config']['age_limit_message'] = @version.algorithm.age_limit_message
     hash['config']['minimum_age'] = @version.algorithm.minimum_age
     hash['config']['consent_management'] = @version.algorithm.consent_management
+    hash['config']['track_referral'] = @version.algorithm.track_referral
 
     hash['triage'] = extract_triage_metadata
     hash['author'] = @version.user.full_name

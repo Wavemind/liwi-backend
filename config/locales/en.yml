@@ -5,7 +5,8 @@ en:
         age_limit: "Age threshold in years for ineligibility (inclusion stops day before birthday)"
         age_limit_message_html: "Message displayed in medAL-<i>reader</i> if patient above threshold"
         minimum_age: "Minimum age for consultation (in days)"
-        consent_management: "Consent management is mandatory ?"
+        consent_management: "Consent management ?"
+        track_referral: "Display referral step ?"
       answer:
         operator: "Operator"
         value: "Value"
