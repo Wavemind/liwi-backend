@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_12_133929) do
+ActiveRecord::Schema.define(version: 2021_01_14_142749) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -85,6 +85,8 @@ ActiveRecord::Schema.define(version: 2021_01_12_133929) do
     t.json "village_json"
     t.integer "minimum_age"
     t.boolean "consent_management", default: true
+    t.boolean "track_referral", default: true
+    t.integer "study_id"
     t.index ["user_id"], name: "index_algorithms_on_user_id"
   end
 
@@ -376,11 +378,9 @@ ActiveRecord::Schema.define(version: 2021_01_12_133929) do
 
   create_table "studies", force: :cascade do |t|
     t.string "label"
-    t.bigint "algorithm_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "description", default: ""
-    t.index ["algorithm_id"], name: "index_studies_on_algorithm_id"
   end
 
   create_table "technical_files", force: :cascade do |t|
