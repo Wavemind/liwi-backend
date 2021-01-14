@@ -13,6 +13,7 @@
     "@projectstorm/react-canvas-core": "^6.0.1-beta.7",
     "@projectstorm/react-diagrams": "^6.0.1-beta.7",
     "@projectstorm/react-diagrams-defaults": "^6.0.1-beta.7",
+    "@rails/actiontext": "^6.0.3-4",
     "@rails/webpacker": "4.0.7",
     "@tarekraafat/autocomplete.js": "^7.0.1",
     "@types/node": "^11.11.6",
@@ -43,6 +44,7 @@
     "redux": "^4.0.5",
     "resize-observer-polyfill": "^1.5.1",
     "style-loader": "^0.23.1",
+    "trix": "^1.2.0",
     "yup": "^0.28.3"
   },
   "devDependencies": {

@@ -3,7 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.6.0'
 
-gem 'rails', '~> 5.2.4.1'
+gem 'rails', '~> 6.0'
 gem 'pg'
 gem 'puma'
 gem 'sass-rails'
@@ -19,7 +19,7 @@ gem 'sidekiq'
 gem 'sidekiq-failures', '~> 1.0'
 gem 'sidekiq-status'
 gem 'devise'
-gem 'devise_invitable', '~> 1.7.0'
+gem 'devise_invitable', '~> 2.0.0'
 gem 'simple_form'
 gem 'cocoon'
 gem 'bootstrap'
@@ -52,6 +52,7 @@ gem 'pundit'
 gem 'prawn'
 gem 'prawn-qrcode'
 gem 'city-state'
+gem 'tinymce-rails'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

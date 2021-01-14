@@ -121,7 +121,8 @@ class VersionsService
     hash['village_json'] = @version.algorithm.village_json
     hash['study'] = {
       id: @version.algorithm.study.present? ? @version.algorithm.study.id : nil,
-      label: @version.algorithm.study.present? ? @version.algorithm.study.label: nil
+      label: @version.algorithm.study.present? ? @version.algorithm.study.label : nil,
+      description: @version.algorithm.study.present? ? @version.algorithm.study.description : nil
     }
 
     hash['mobile_config'] = extract_mobile_config
