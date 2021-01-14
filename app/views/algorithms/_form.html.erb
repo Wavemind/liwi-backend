@@ -6,6 +6,7 @@
   <%= f.input :minimum_age, as: :numeric, label: t('activerecord.attributes.algorithm.minimum_age') %>
   <%= f.input :consent_management, as: :boolean, label: t('activerecord.attributes.algorithm.consent_management') %>
   <%= f.input :track_referral, as: :boolean, label: t('activerecord.attributes.algorithm.track_referral') %>
+  <%= f.association :study, collection: Study.all, label_method: :label, prompt: t('select')  %>
   <%= f.input :description, as: :text %>
 
   <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
