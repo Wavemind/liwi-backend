@@ -2,7 +2,7 @@
   <% @studies.each do |study| %>
     <li class="list-group-item">
       <div class="row">
-        <div class="col"><%= study.label %> <%= "(used by algorithms: #{study.algorithm.name})" if study.algorithm.present? %></div>
+        <div class="col"><%= study.label %> <%= "(used by algorithms: #{study.algorithms.map(&:name).to_s}})" if study.algorithms.any? %></div>
         <div class="col text-right">
           <%= link_to(I18n.t('edit'), edit_study_url(study), method: :get, class: 'btn btn-outline-info') %>
           <%= link_to(I18n.t('destroy'), study_url(study), method: :delete, class: 'btn btn-outline-danger', data: {confirm: 'Are you sure?'}) %>
