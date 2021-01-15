@@ -1,8 +1,8 @@
 class VersionsController < ApplicationController
   before_action :authenticate_user!, except: [:change_triage_order, :change_systems_order]
-  before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :duplicate, :create_triage_condition, :remove_triage_condition, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnostics, :import_translations, :job_status]
+  before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :duplicate, :create_triage_condition, :set_medal_data_config, :remove_triage_condition, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnostics, :import_translations, :job_status]
   before_action :set_breadcrumb, only: [:show, :new, :edit]
-  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :change_triage_order, :change_systems_order, :components, :create_triage_condition, :duplicate, :remove_components, :remove_triage_condition, :update_list, :regenerate_json, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnostics, :import_translations, :job_status]
+  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :change_triage_order, :change_systems_order, :components, :create_triage_condition, :set_medal_data_config, :duplicate, :remove_components, :remove_triage_condition, :update_list, :regenerate_json, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnostics, :import_translations, :job_status]
 
   def index
     authorize policy_scope(Version)
@@ -270,6 +270,17 @@ class VersionsController < ApplicationController
       redirect_to algorithm_version_url(@algorithm, @version, panel: 'triage_conditions'), notice: t('flash_message.success_created')
     else
       redirect_to algorithm_version_url(@algorithm, @version, panel: 'triage_conditions'), notice: t('flash_message.create_fail')
+    end
+  end
+
+  # Update MedAL-data config with the automatic questions.
+  def set_medal_data_config
+    @version.medal_data_config = params['set_medal_data_config']
+
+    if @version.save
+      redirect_to algorithm_version_url(@algorithm, @version, panel: 'medal_data_config'), notice: t('flash_message.success_updated')
+    else
+      redirect_to algorithm_version_url(@algorithm, @version, panel: 'medal_data_config'), notice: t('flash_message.update_fail')
     end
   end
 
