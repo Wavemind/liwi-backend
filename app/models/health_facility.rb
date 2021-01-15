@@ -24,6 +24,11 @@ class HealthFacility < ApplicationRecord
 
   accepts_nested_attributes_for :medical_staffs, reject_if: :all_blank, allow_destroy: true
 
+  def current_version
+    version_access = health_facility_accesses.where(end_date: nil)
+    version_access.present? ? version_access.version : nil
+  end
+
   private
 
   # Ensure the code pin is a 4 digits

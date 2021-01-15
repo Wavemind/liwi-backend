@@ -771,6 +771,7 @@ en:
       subtitle_diagnostics: "Diagnoses"
       subtitle_final_diagnoses: "Final diagnoses"
       subtitle_final_diagnoses_exclusions: "Final diagnoses exclusions"
+      subtitle_medal_data_config_html: "Config medAL-<i>data</i>"
       subtitle_medal_r_config_html: "Config medAL-<i>reader</i>"
       subtitle_questions_order: "Triage variables order"
       subtitle_registration_triage_questions: "Registration and triage variables"

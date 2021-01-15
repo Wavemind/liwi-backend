@@ -45,6 +45,10 @@ class VersionPolicy < ApplicationPolicy
     true
   end
 
+  def set_medal_data_config?
+    true
+  end
+
   def components?
     new?
   end
