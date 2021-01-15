@@ -61,14 +61,28 @@ export const CATEGORIES_DISPLAYING_UNAVAILABLE_OPTION = [
 ];
 
 export const MEASUREMENT_CATEGORIES = [
-  "Questions::VitalSignAnthropometric",
   "Questions::BasicMeasurement",
+  "Questions::VitalSignAnthropometric",
 ];
 
 export const CATEGORIES_DISPLAYING_FILTERABLE = [
   "Questions::BasicDemographic",
   "Questions::Demographic",
 ];
+
+export const CATEGORIES_UNAVAILABLE_UNKNOWN = [
+  "Questions::ChronicCondition",
+  "Questions::Exposure",
+  "Questions::Symptom",
+  "Questions::Vaccine"
+];
+
+export const CATEGORIES_UNAVAILABLE_NOT_FEASIBLE = [
+  "Questions::BasicMeasurement",
+  "Questions::PhysicalExam",
+  "Questions::VitalSignAnthropometric"
+];
+
 
 export const NO_ANSWERS_ATTACHED_ANSWER_TYPE = [
   1,

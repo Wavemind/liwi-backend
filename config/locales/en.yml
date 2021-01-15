@@ -71,7 +71,9 @@ en:
         snomed: "SNOMED label"
         stage: "Stage"
         system: "System"
-        unavailable: "Test can be unavailable"
+        unavailable: "Variable can be unavailable"
+        unknown: "Variable can be unknown"
+        unfeasible: "Variable can be not feasible"
         measurement_unavailable: "Value can be unavailable, unfeasible or unknown"
       questions_sequence:
         min_score: "Minimal score"
