@@ -14,7 +14,8 @@ import {
   CATEGORIES_DISPLAYING_SYSTEM,
   CATEGORIES_DISABLING_ANSWER_TYPE,
   CATEGORIES_DISPLAYING_UNAVAILABLE_OPTION,
-  MEASUREMENT_CATEGORIES,
+  CATEGORIES_UNAVAILABLE_UNKNOWN,
+  CATEGORIES_UNAVAILABLE_NOT_FEASIBLE,
   NO_ANSWERS_ATTACHED_TYPE,
   NO_ANSWERS_ATTACHED_ANSWER_TYPE,
   NUMERIC_ANSWER_TYPES,
@@ -409,7 +410,7 @@ export default class QuestionForm extends React.Component {
                   <Form.Group controlId="validationUnavailable">
                     <Form.Check
                       name="unavailable"
-                      label={I18n.t("activerecord.attributes.question.unavailable")}
+                      label={CATEGORIES_UNAVAILABLE_UNKNOWN.includes(values.type) ? I18n.t("activerecord.attributes.question.unknown") : CATEGORIES_UNAVAILABLE_NOT_FEASIBLE.includes(values.type) ? I18n.t("activerecord.attributes.question.unfeasible") : I18n.t("activerecord.attributes.question.unavailable")}
                       value={values.unavailable}
                       checked={values.unavailable}
                       onChange={handleChange}
