@@ -117,6 +117,7 @@ class VersionsService
     hash['description'] = @version.description
     hash['algorithm_id'] = @version.algorithm.id
     hash['algorithm_name'] = @version.algorithm.name
+    hash['algorithm_emergency_content'] = @version.algorithm.emergency_content
     hash['is_arm_control'] = @version.is_arm_control
     hash['village_json'] = @version.algorithm.village_json
     hash['study'] = {
