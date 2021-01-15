@@ -22,6 +22,7 @@ class DeviceDatatable < AjaxDatatablesRails::ActiveRecord
       name: { source: 'Device.name' },
       brand: { source: 'Device.brand' },
       model: { source: 'Device.model' },
+      health_facility: { source: 'HealthFacility.name'}
     }
   end
 
@@ -39,9 +40,9 @@ class DeviceDatatable < AjaxDatatablesRails::ActiveRecord
         name: record.name,
         brand: record.brand,
         model: record.model,
+        health_facility: record.health_facility.present? ? link_to(record.health_facility.name, health_facility_url(record.health_facility)) : '',
         last_activity: record.last_activity.present? ? datetime_format(record.last_activity['created_at']) : '',
         last_user: record.last_activity.present? && record.last_activity['user'].present? ? link_to(record.last_activity['user']['first_name'] + ' ' + record.last_activity['user']['last_name'], user_url( record.last_activity['user']['id'])) : '',
-        health_facility: link_to(record.health_facility.name, health_facility_url(record.health_facility)),
         actions: actions
       }
     end
@@ -54,7 +55,7 @@ class DeviceDatatable < AjaxDatatablesRails::ActiveRecord
       Device.where(health_facility_id: params[:id])
     else
       # Devices
-      Device.all
+      Device.all.includes(:health_facility)
     end
   end
 
