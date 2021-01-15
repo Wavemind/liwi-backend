@@ -1,5 +1,6 @@
 # Container of many versions of algorithms
 class Algorithm < ApplicationRecord
+  has_rich_text :emergency_content
 
   has_many :versions
   has_many :nodes, dependent: :destroy

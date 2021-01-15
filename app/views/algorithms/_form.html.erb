@@ -7,6 +7,10 @@
   <%= f.input :consent_management, as: :boolean, label: t('activerecord.attributes.algorithm.consent_management') %>
   <%= f.association :study, collection: Study.all, label_method: :label, prompt: t('select')  %>
   <%= f.input :description, as: :text %>
+  <div class="form-group">
+    <label for="emergency_content" class="form-label"><%= t('algorithms.new.emergency') %></label>
+    <%= f.text_area :emergency_content, class: 'tinymce-emergency', rows: 20, cols: 120 %>
+  </div>
 
   <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
 <% end %>
