@@ -380,7 +380,6 @@ ActiveRecord::Schema.define(version: 2021_01_13_101738) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "description", default: ""
-    t.index ["algorithm_id"], name: "index_studies_on_algorithm_id"
   end
 
   create_table "technical_files", force: :cascade do |t|
