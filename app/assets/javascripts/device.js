@@ -11,16 +11,16 @@ jQuery(document).ready(function () {
       { "data": "name" },
       { "data": "brand" },
       { "data": "model" },
+      { "data": "health_facility" },
       { "data": "last_activity" },
       { "data": "last_user" },
-      { "data": "health_facility" },
       { "data": "actions", "className": "text-right"  },
     ],
     'columnDefs': [ {
-      'targets': [7],
+      'targets': [5,6,7],
       'orderable': false,
     }, {
-      'targets': [6],
+      'targets': [4],
       'visible': $("#devices-datatable").data('from') !== 'health_facility'
     }]
   });

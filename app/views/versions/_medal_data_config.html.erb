@@ -1,0 +1,15 @@
+<%= simple_form_for :set_medal_data_config, url: set_medal_data_config_algorithm_version_url(@version.algorithm, @version), method: :put, html: { class: 'form-horizontal' } do |f| %>
+
+  <%= f.input :first_name_caregiver_id, collection: @version.components, label_method: :node_label, selected: @version.medal_data_config['first_name_caregiver_id'] || nil, prompt: t('select') %>
+  <%= f.input :last_name_caregiver_id, collection: @version.components, label_method: :node_label, selected: @version.medal_data_config['last_name_caregiver_id'] || nil, prompt: t('select') %>
+  <%= f.input :relationship_to_child_id, collection: @version.components, label_method: :node_label, selected: @version.medal_data_config['relationship_to_child_id'] || nil, prompt: t('select') %>
+  <%= f.input :phone_number_caregiver_id, collection: @version.components, label_method: :node_label, selected: @version.medal_data_config['phone_number_caregiver_id'] || nil, prompt: t('select') %>
+  <%= f.input :other_number_id, collection: @version.components, label_method: :node_label, selected: @version.medal_data_config['other_number_id'] || nil, prompt: t('select') %>
+  <%= f.input :last_two_weeks_visit_id, collection: @version.components, label_method: :node_label, selected: @version.medal_data_config['last_two_weeks_visit_id'] || nil, prompt: t('select') %>
+  <%= f.input :which_facility_id, collection: @version.components, label_method: :node_label, selected: @version.medal_data_config['which_facility_id'] || nil, prompt: t('select') %>
+  <%= f.input :kind_of_consultation_id, collection: @version.components, label_method: :node_label, selected: @version.medal_data_config['kind_of_consultation_id'] || nil, prompt: t('select') %>
+  <%= f.input :hospitalized_overnight_id, collection: @version.components, label_method: :node_label, selected: @version.medal_data_config['hospitalized_overnight_id'] || nil, prompt: t('select') %>
+  <%= f.input :parent_in_study_id, collection: @version.components, label_method: :node_label, selected: @version.medal_data_config['parent_in_study_id'] || nil, prompt: t('select') %>
+
+  <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
+<% end %>

@@ -50,6 +50,7 @@ Rails.application.routes.draw do
         put 'regenerate_json'
         put 'update_list'
         put 'import_translations'
+        put 'set_medal_data_config'
       end
 
       resources :final_diagnostics do
@@ -208,6 +209,7 @@ Rails.application.routes.draw do
           post 'retrieve_algorithm_version', to: 'versions#retrieve_algorithm_version'
           get 'json_from_facility', to: 'versions#json_from_facility'
           get 'facility_attributes', to: 'versions#facility_attributes'
+          get 'medal_data_config', to: 'versions#medal_data_config'
         end
       end
       resources :devices, only: [:show]
