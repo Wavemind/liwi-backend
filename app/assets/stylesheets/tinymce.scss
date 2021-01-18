@@ -1,0 +1,29 @@
+.tinymce-wrapper {
+  width: 500px;
+  display: flex;
+  margin: 0 auto
+}
+
+// Galaxy Tab A SCREEN SIZE (NOT DEVICE SIZE):
+// 6.8 inch X 4.2 inch
+// 650px X 408px
+// HEIGHT AND WIDTH ARE CALCULATED BASED ON THE ABOVE AND THE MARGINS AND PADDINGS
+#algorithm_emergency_content_ifr, #study_description_ifr {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding: 65px 12px;
+  max-width: 432px;
+  height: 780px;
+  border-radius: 30px;
+  border: .5px solid #E0E0E0;
+  background-color: black;
+  float: left;
+  box-shadow: inset 0px 0px 0px -4px rgba(255, 255, 255, 0.1), 1px 1px 6px rgba(0, 0, 0, 0.05), 1px 1px 8px rgba(0, 0, 0, 0.07);
+}
+
+.tox:not([dir=rtl]) {border:none;}
+
+.tox-edit-area {
+  display: flex;
+  justify-content: center;
+}

@@ -1,6 +1,6 @@
 class StudiesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_study, only: [:show, :update, :destroy]
+  before_action :set_study, only: [:show, :update, :edit, :destroy]
 
   def new
     authorize policy_scope(Study)
@@ -15,6 +15,9 @@ class StudiesController < ApplicationController
     else
       render :new
     end
+  end
+
+  def edit
   end
 
   def update
@@ -44,6 +47,7 @@ class StudiesController < ApplicationController
     params.require(:study).permit(
       :id,
       :label,
+      :description,
       )
   end
 end
