@@ -1,6 +1,6 @@
 const descriptionSettings = {
   selector: '.tinymce-description',
-  plugins: 'print preview paste autolink autosave save directionality code visualblocks visualchars fullscreen image link media codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern noneditable help charmap emoticons',
+  plugins: 'print preview paste autolink autosave save directionality code visualblocks visualchars fullscreen image link media codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern noneditable help charmap emoticons autoresize',
   menubar: 'file edit view insert format tools table help',
   toolbar: 'fontselect fontsizeselect formatselect | bold italic underline | alignleft aligncenter alignright alignjustify | outdent indent | numlist bullist | forecolor backcolor removeformat | insertfile image template link anchor',
 }
@@ -8,7 +8,7 @@ const descriptionSettings = {
 const emergencySettings = {
   selector: '.tinymce-emergency',
   plugins: 'print paste autolink autosave save directionality code visualblocks visualchars image link codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern noneditable help charmap emoticons autoresize',
-  menubar: 'file edit view insert format tools table help',
+  menubar: 'file edit view insert format tools help',
   toolbar: 'fontselect fontsizeselect formatselect | bold italic underline | alignleft aligncenter alignright alignjustify | outdent indent | numlist bullist | forecolor backcolor removeformat | insertfile image template link anchor',
 }
 
