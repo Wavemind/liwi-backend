@@ -1,6 +1,5 @@
 # Container of many versions of algorithms
 class Algorithm < ApplicationRecord
-
   has_many :versions
   has_many :nodes, dependent: :destroy
   has_many :final_diagnostics, -> { where type: 'FinalDiagnostic' }, source: :node
