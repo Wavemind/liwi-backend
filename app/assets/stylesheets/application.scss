@@ -94,6 +94,12 @@ a:focus {
   display: flex;
 }
 
+.current-user {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 2px solid $gray
+}
+
 #sidebar {
   min-width: 250px;
   max-width: 250px;

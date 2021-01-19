@@ -1,24 +1,8 @@
 <div class="row">
   <h1><%= t('.title', name: @health_facility.name) %> - <small><%= t("health_facilities.architectures.#{@health_facility.architecture}") %></small></h1>
-  <% if ["deployment_manager", "admin"].include?(current_user.role) %>
+  <% if %w[deployment_manager admin].include?(current_user.role) %>
     <div class="col d-flex align-items-center justify-content-end">
       <%= link_to t('health_facilities.show.generate_stickers'), health_facility_sticker_form_url(@health_facility), class:'btn btn-info' %>
-    </div>
-  <% end %>
-</div>
-
-<hr class="my-4"/>
-
-<h2><%= t('.medical_staff') %></h2>
-<div class="row">
-  <% @health_facility.medical_staffs.each do |medical_staff| %>
-    <div class="col-md-4">
-      <div class="card mb-4">
-        <div class="card-body">
-          <h5 class="card-title"><%= medical_staff.full_name %></h5>
-          <h6 class="card-subtitle mb-2 text-muted"><%= t("medical_staffs.roles.#{medical_staff.role}") %></h6>
-        </div>
-      </div>
     </div>
   <% end %>
 </div>
@@ -41,6 +25,12 @@
   </div>
 </div>
 
+<hr class="my-4"/>
+
+<h2><%= t('.medical_staff') %></h2>
+<%= render 'medical_staffs/table' %>
+
+<hr class="my-4"/>
 
 <table class="table table-condensed table-hover" id="devices-datatable" data-from="health_facility" data-source="<%= devices_url(format: :json, from: 'health_facility', id: params[:id]) %>">
   <thead>

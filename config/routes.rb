@@ -165,6 +165,7 @@ Rails.application.routes.draw do
     post 'add_device', to: 'health_facilities#add_device', as: 'add_device'
     get 'sticker_form', to: 'health_facilities#sticker_form', as: 'sticker_form'
     post 'generate_stickers', to: 'health_facilities#generate_stickers', as: 'generate_stickers'
+    resources :medical_staffs, only: [:index]
   end
 
   resources :health_facility_accesses, only: [:index, :create]

@@ -18,8 +18,8 @@ class QuestionsSequenceScoredDatatable < AjaxDatatablesRails::ActiveRecord
       id: { source: 'QuestionsSequence.id' },
       reference: { source: 'QuestionsSequence.reference' },
       label: { source: 'QuestionsSequence.label_translations' },
-      min_score: { source: 'QuestionsSequence.min_score' },
       description: { source: 'QuestionsSequence.description_translations' },
+      min_score: { source: 'QuestionsSequence.min_score' },
     }
   end
 
@@ -31,8 +31,8 @@ class QuestionsSequenceScoredDatatable < AjaxDatatablesRails::ActiveRecord
         id: record.id,
         reference: record.full_reference,
         label: record.label,
-        min_score: record.min_score,
         description: record.description,
+        min_score: record.min_score,
         actions: actions
       }
     end

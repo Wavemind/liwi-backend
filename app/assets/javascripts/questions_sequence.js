@@ -10,9 +10,9 @@ jQuery(document).ready(function () {
     "columns": [
       { "data": "id" },
       { "data": "reference" },
-      { "data": "category" },
       { "data": "label" },
       { "data": "description" },
+      { "data": "category" },
       { "data": "actions", "className": "text-right" },
     ],
     'columnDefs': [ {
@@ -33,8 +33,8 @@ jQuery(document).ready(function () {
       { "data": "id" },
       { "data": "reference" },
       { "data": "label" },
-      { "data": "min_score" },
       { "data": "description" },
+      { "data": "min_score" },
       { "data": "actions", "className": "text-right" },
     ],
     'columnDefs': [ {

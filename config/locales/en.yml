@@ -194,7 +194,7 @@ en:
   breadcrumbs:
     algorithms: "Algorithms"
     apk: "APK"
-    dashboard: "Dashboard"
+    dashboard: "Home"
     devices: "Devices"
     diagnostics: "Diagnoses"
     drugs: "Drugs"
@@ -533,6 +533,11 @@ en:
       nurse: "Nurse"
       midwife: "Midwife"
       pharmacist: "Pharmacist"
+    table:
+      columns:
+        first_name: "First name"
+        last_name: "Last name"
+        role: "Role"
   nodes:
     validation:
       reference_used: "This reference is already used"

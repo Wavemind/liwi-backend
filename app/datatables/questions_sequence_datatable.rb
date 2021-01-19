@@ -30,9 +30,9 @@ class QuestionsSequenceDatatable < AjaxDatatablesRails::ActiveRecord
       {
         id: record.id,
         reference: record.full_reference,
-        category: Object.const_get(record.type).display_label,
         label: record.label,
         description: record.description,
+        category: Object.const_get(record.type).display_label,
         actions: actions
       }
     end
