@@ -2,6 +2,8 @@
 # Reference prefix : S
 class Questions::Symptom < Question
 
+  after_create :create_unavailable_answer, if: Proc.new { unavailable == '1' || unavailable == true} # Ensure unavailable is checked
+
   def self.policy_class
     QuestionPolicy
   end

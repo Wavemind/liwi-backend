@@ -9,7 +9,7 @@ class Algorithm < ApplicationRecord
   has_many :questions_sequences, -> { where type: QuestionsSequence.descendants.map(&:name) }, source: :node
 
   belongs_to :user
-  has_one :study
+  belongs_to :study
 
   validates_presence_of :name, :age_limit, :age_limit_message, :minimum_age
   validates_uniqueness_of :name

@@ -19,6 +19,9 @@
 //= require moment
 //= require cocoon
 //= require jquery-ui
+//= require tinymce.js
+//= require tinymce-jquery
+//= require tinymce-init
 //= require_tree .
 
 $(function () {

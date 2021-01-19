@@ -5,7 +5,8 @@ en:
         age_limit: "Age threshold in years for ineligibility (inclusion stops day before birthday)"
         age_limit_message_html: "Message displayed in medAL-<i>reader</i> if patient above threshold"
         minimum_age: "Minimum age for consultation (in days)"
-        consent_management: "Consent management is mandatory ?"
+        consent_management: "Consent management ?"
+        track_referral: "Display referral step ?"
       answer:
         operator: "Operator"
         value: "Value"
@@ -71,7 +72,9 @@ en:
         snomed: "SNOMED label"
         stage: "Stage"
         system: "System"
-        unavailable: "Test can be unavailable"
+        unavailable: "Variable can be unavailable"
+        unknown: "Variable can be unknown"
+        unfeasible: "Variable can be not feasible"
         measurement_unavailable: "Value can be unavailable, unfeasible or unknown"
       questions_sequence:
         min_score: "Minimal score"
@@ -105,6 +108,7 @@ en:
       title: "Algorithms"
     new:
       title: "Add an algorithm"
+      emergency: "Emergency content"
     edit:
       title: "Edit this algorithm"
     show:
@@ -500,6 +504,7 @@ en:
     new:
       title: "New language"
   studies:
+    description: "Description"
     edit:
       title: "Edit study"
     new:
@@ -771,6 +776,7 @@ en:
       subtitle_diagnostics: "Diagnoses"
       subtitle_final_diagnoses: "Final diagnoses"
       subtitle_final_diagnoses_exclusions: "Final diagnoses exclusions"
+      subtitle_medal_data_config_html: "Config medAL-<i>data</i>"
       subtitle_medal_r_config_html: "Config medAL-<i>reader</i>"
       subtitle_questions_order: "Triage variables order"
       subtitle_registration_triage_questions: "Registration and triage variables"

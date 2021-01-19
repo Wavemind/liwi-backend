@@ -113,6 +113,7 @@ class VersionsService
     hash = {}
     hash['version_id'] = @version.id
     hash['version_name'] = @version.name
+    hash['algorithm_emergency_content'] = @version.algorithm.emergency_content
     hash['json_version'] = @version.medal_r_json_version
     hash['description'] = @version.description
     hash['algorithm_id'] = @version.algorithm.id
@@ -121,7 +122,8 @@ class VersionsService
     hash['village_json'] = @version.algorithm.village_json
     hash['study'] = {
       id: @version.algorithm.study.present? ? @version.algorithm.study.id : nil,
-      label: @version.algorithm.study.present? ? @version.algorithm.study.label: nil
+      label: @version.algorithm.study.present? ? @version.algorithm.study.label: nil,
+      description: @version.algorithm.study.present? ? @version.algorithm.study.description : nil
     }
 
     hash['mobile_config'] = extract_mobile_config
@@ -135,6 +137,7 @@ class VersionsService
     hash['config']['age_limit_message'] = @version.algorithm.age_limit_message
     hash['config']['minimum_age'] = @version.algorithm.minimum_age
     hash['config']['consent_management'] = @version.algorithm.consent_management
+    hash['config']['track_referral'] = @version.algorithm.track_referral
 
     hash['triage'] = extract_triage_metadata
     hash['author'] = @version.user.full_name

@@ -96,4 +96,22 @@ class Api::V1::VersionsController < Api::V1::ApplicationController
       render json: { errors: t('api.v1.versions.index.no_health_facility_id') }, status: :unprocessable_entity
     end
   end
+
+  # PUT /versions/medal_data_config
+  # @params health_facility_id [Integer]
+  # Get the MedAL-data config within basic questions, medal-data related questions and study id
+  def medal_data_config
+    if params[:health_facility_id].present?
+      facility = HealthFacility.find_by(id: params[:health_facility_id])
+      if facility.present?
+        version = facility.current_version
+        config = version.medal_data_config.merge(version.algorithm.medal_r_config['basic_questions'])
+        config['study_id'] = version.algorithm.study_id
+        render json: config
+      else
+        render json: { errors: t('api.v1.versions.index.invalid_health_facility') }, status: :unprocessable_entity
+      end
+    end
+  end
+
 end
