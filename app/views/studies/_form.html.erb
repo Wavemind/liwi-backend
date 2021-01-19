@@ -1,8 +1,10 @@
 <%= simple_form_for @study, html: { class: 'form-horizontal' } do |f| %>
   <%= f.input :label %>
   <div class="form-group">
-    <label for="description" class="form-label"><%= t('studies.description') %></label>
-    <%= f.text_area :description, class: 'tinymce-description', rows: 20, cols: 120 %>
+    <label for="emergency_content" class="form-label"><%= t('studies.description') %></label>
+    <div class="tinymce-wrapper">
+      <%= f.text_area :description, class: 'tinymce-description' %>
+    </div>
   </div>
   <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
 <% end %>

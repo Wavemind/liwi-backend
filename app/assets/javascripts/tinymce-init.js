@@ -1,31 +1,35 @@
 const descriptionSettings = {
   selector: '.tinymce-description',
-  plugins: 'print preview paste autolink autosave save directionality code visualblocks visualchars fullscreen image link media codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern noneditable help charmap emoticons',
+  plugins: 'print preview paste autolink autosave save directionality code visualblocks visualchars fullscreen image link media codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern noneditable help charmap emoticons autoresize',
   menubar: 'file edit view insert format tools table help',
-  toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media template link anchor codesample | ltr rtl',
+  toolbar: 'fontselect fontsizeselect formatselect | bold italic underline | alignleft aligncenter alignright alignjustify | outdent indent | numlist bullist | forecolor backcolor removeformat | insertfile image template link anchor',
 }
 
 const emergencySettings = {
   selector: '.tinymce-emergency',
-  plugins: 'print preview paste autolink autosave save directionality code visualblocks visualchars fullscreen image link media codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern noneditable help charmap emoticons',
-  menubar: 'file edit view insert format tools table help',
-  toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media template link anchor codesample | ltr rtl',
+  plugins: 'print paste autolink autosave save directionality code visualblocks visualchars image link codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern noneditable help charmap emoticons autoresize',
+  menubar: 'file edit view insert format tools help',
+  toolbar: 'fontselect fontsizeselect formatselect | bold italic underline | alignleft aligncenter alignright alignjustify | outdent indent | numlist bullist | forecolor backcolor removeformat | insertfile image template link anchor',
 }
 
 const commonSettings = {
+  skin: 'oxide-dark',
+  toolbar_mode: 'sliding',
   branding: false,
+  statusbar: false,
   imagetools_cors_hosts: ['picsum.photos'],
-  toolbar_sticky: true,
   autosave_ask_before_unload: true,
   autosave_interval: "30s",
   autosave_prefix: "{path}{query}-{id}-",
   autosave_restore_when_empty: false,
   autosave_retention: "2m",
   image_advtab: true,
+  min_height: 875,
+  max_height: 953,
+  content_style: "body {background-color: white; margin-left: 25px; margin-right: 25px;}",
   content_css: '//www.tiny.cloud/css/codepen.min.css',
   importcss_append: true,
   file_picker_callback: (callback, value, meta) => file_picker_function(callback, value, meta),
-  toolbar_mode: 'sliding',
 };
 
 const file_picker_function = (callback, value, meta) => {
@@ -60,9 +64,9 @@ const file_picker_function = (callback, value, meta) => {
 }
 
 tinymce.init({
-  ...descriptionSettings, ...commonSettings
+  ...commonSettings, ...descriptionSettings
 });
 
 tinymce.init({
-  ...emergencySettings, ...commonSettings
+  ...commonSettings, ...emergencySettings
 });

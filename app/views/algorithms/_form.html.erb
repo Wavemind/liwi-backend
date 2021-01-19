@@ -10,7 +10,9 @@
   <%= f.input :description, as: :text %>
   <div class="form-group">
     <label for="emergency_content" class="form-label"><%= t('algorithms.new.emergency') %></label>
-    <%= f.text_area :emergency_content, class: 'tinymce-emergency', rows: 20, cols: 120 %>
+    <div class="tinymce-wrapper">
+      <%= f.text_area :emergency_content, class: 'tinymce-emergency' %>
+    </div>
   </div>
 
   <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>

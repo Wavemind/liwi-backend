@@ -48,7 +48,6 @@ class StudiesController < ApplicationController
       :id,
       :label,
       :description,
-      :algorithm_id,
       )
   end
 end

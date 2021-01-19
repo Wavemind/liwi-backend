@@ -108,7 +108,7 @@ en:
       title: "Algorithms"
     new:
       title: "Add an algorithm"
-      emergency: "Emergency button content"
+      emergency: "Emergency content"
     edit:
       title: "Edit this algorithm"
     show:
