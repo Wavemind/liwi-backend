@@ -3,9 +3,9 @@ Language.create!(name: 'French', code: 'fr')
 Language.create!(name: 'Swahili', code: 'sw')
 
 # Facilities
-group_wavemind = HealthFacility.create!(name: 'Wavemind', architecture: HealthFacility.architectures[:client_server], pin_code: '1234')
-standalone = HealthFacility.create!(name: 'Standalone test', architecture: HealthFacility.architectures[:standalone], pin_code: '1234')
-client_server = HealthFacility.create!(name: 'Client server test', architecture: HealthFacility.architectures[:client_server], pin_code: '1234')
+group_wavemind = HealthFacility.create!(name: 'Wavemind', architecture: HealthFacility.architectures[:client_server], pin_code: '1234', country: 'Switzerland', area: 'Vaud', main_data_ip: 'http://9f3aac086a16.ngrok.io', local_data_ip: 'http://127.0.0.1')
+standalone = HealthFacility.create!(name: 'Standalone test', architecture: HealthFacility.architectures[:standalone], pin_code: '1234', country: 'Switzerland', area: 'Vaud', main_data_ip: 'http://9f3aac086a16.ngrok.io')
+client_server = HealthFacility.create!(name: 'Client server test', architecture: HealthFacility.architectures[:client_server], pin_code: '1234', country: 'Switzerland', area: 'Vaud', main_data_ip: 'http://9f3aac086a16.ngrok.io', local_data_ip: 'http://127.0.0.1')
 
 # Role
 registration = Role.create!(name: 'Registration', stage: Role.stages[:registration])
