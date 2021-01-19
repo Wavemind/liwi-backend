@@ -244,7 +244,7 @@ class AccessesComponent extends Component {
                     variant="primary"
                     type="submit"
                     className="btn btn-primary"
-                    disabled={generating || validating}
+                    disabled={generating || validating || selectedVersion === ""}
                     onClick={this.handleAdd}
                   >
                     {I18n.t('add')}
