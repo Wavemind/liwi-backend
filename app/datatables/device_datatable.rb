@@ -22,7 +22,7 @@ class DeviceDatatable < AjaxDatatablesRails::ActiveRecord
       name: { source: 'Device.name' },
       brand: { source: 'Device.brand' },
       model: { source: 'Device.model' },
-      health_facility: { source: 'HealthFacility.name'}
+      health_facility: { source: 'HealthFacility.name' }
     }
   end
 
@@ -56,7 +56,7 @@ class DeviceDatatable < AjaxDatatablesRails::ActiveRecord
       Device.where(health_facility_id: params[:id])
     else
       # Devices
-      Device.all.includes(:health_facility)
+      Device.all.includes(:health_facility).references(:health_facility)
     end
   end
 
