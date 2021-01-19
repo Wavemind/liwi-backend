@@ -201,7 +201,8 @@ class AlgorithmsController < ApplicationController
       :consent_management,
       :track_referral,
       :minimum_age,
-      :study_id
+      :study_id,
+      :emergency_content,
     )
   end
 end

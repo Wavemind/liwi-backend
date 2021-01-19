@@ -8,6 +8,12 @@
   <%= f.input :track_referral, as: :boolean, label: t('activerecord.attributes.algorithm.track_referral') %>
   <%= f.association :study, collection: Study.all, label_method: :label, prompt: t('select')  %>
   <%= f.input :description, as: :text %>
+  <div class="form-group">
+    <label for="emergency_content" class="form-label"><%= t('algorithms.new.emergency') %></label>
+    <div class="tinymce-wrapper">
+      <%= f.text_area :emergency_content, class: 'tinymce-emergency' %>
+    </div>
+  </div>
 
   <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
 <% end %>
