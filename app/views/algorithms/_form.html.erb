@@ -9,9 +9,9 @@
   <%= f.association :study, collection: Study.all, label_method: :label, prompt: t('select')  %>
   <%= f.input :description, as: :text %>
   <div class="form-group">
-    <label for="emergency_content" class="form-label"><%= t('algorithms.new.emergency') %></label>
+    <label for="emergency_content_en" class="form-label"><%= t('algorithms.new.emergency') %></label>
     <div class="tinymce-wrapper">
-      <%= f.text_area :emergency_content, class: 'tinymce-emergency' %>
+      <%= f.text_area :emergency_content_en, class: 'tinymce-emergency' %>
     </div>
   </div>
 

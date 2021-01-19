@@ -47,7 +47,7 @@ class StudiesController < ApplicationController
     params.require(:study).permit(
       :id,
       :label,
-      :description,
+      :description_en,
       )
   end
 end

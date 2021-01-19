@@ -202,7 +202,7 @@ class AlgorithmsController < ApplicationController
       :track_referral,
       :minimum_age,
       :study_id,
-      :emergency_content,
+      :emergency_content_en,
     )
   end
 end
