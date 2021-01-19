@@ -15,7 +15,7 @@ class CreateFormulation < ActiveRecord::Migration[5.2]
       t.references :node
       t.references :administration_route
 
-      t.timestamp
+      t.timestamps
     end
   end
 end

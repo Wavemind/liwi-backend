@@ -1,5 +1,8 @@
 {
   "name": "medAL-creator",
+  "author": "Wavemind Sàrl",
+  "email": "info@wavemind.ch",
+  "license": "MIT",
   "private": true,
   "dependencies": {
     "@appsignal/javascript": "^1.3.6",
