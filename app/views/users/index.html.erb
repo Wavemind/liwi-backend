@@ -1,6 +1,6 @@
 <h1><%= t('.title') %></h1>
 <%= link_to new_user_url do %>
-  <button type="button" class="btn btn-outline-secondary"><%= t('add') %></button>
+  <button type="button" class="btn btn-outline-primary"><%= t('add') %></button>
 <% end %>
 
 <table class="table table-condensed table-hover" id="users-datatable" data-source="<%= users_url(format: :json) %>">

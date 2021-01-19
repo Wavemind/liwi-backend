@@ -30,7 +30,7 @@ class UserDatatable < AjaxDatatablesRails::ActiveRecord
   # Value display
   def data
     records.map do |record|
-      actions = link_to(I18n.t('show'), user_url(record), class: 'btn btn-outline-primary') + " " + link_to(I18n.t('edit'), edit_user_url(record), class: 'btn btn-outline-info') + " "
+      actions = link_to(I18n.t('show'), user_url(record), class: 'btn btn-outline-info') + " " + link_to(I18n.t('edit'), edit_user_url(record), class: 'btn btn-outline-success') + " "
       actions += record.deactivated ? link_to(I18n.t('.activated'), activated_users_url(record), class: 'btn btn-outline-danger', method: :post, data: { confirm: I18n.t('confirmation') }) : link_to(I18n.t('.deactivated'), deactivated_users_url(record), class: 'btn btn-outline-danger', method: :post, data: { confirm: I18n.t('confirmation') })
       {
         first_name: record.first_name,

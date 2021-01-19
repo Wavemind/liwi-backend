@@ -1,6 +1,6 @@
 <h1><%= t('.title') %></h1>
 <%= link_to new_health_facility_url do %>
-  <button type="button" class="btn btn-outline-secondary"><%= t('add') %></button>
+  <button type="button" class="btn btn-outline-primary"><%= t('add') %></button>
 <% end %>
 
 <table class="table table-condensed table-hover" id="health_facilities-datatable" data-source="<%= health_facilities_url(format: :json) %>">

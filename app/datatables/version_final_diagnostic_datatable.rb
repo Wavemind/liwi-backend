@@ -22,7 +22,7 @@ class VersionFinalDiagnosticDatatable < AjaxDatatablesRails::ActiveRecord
 
   def data
     records.map do |record|
-      actions = link_to(I18n.t('edit'), edit_algorithm_version_diagnostic_final_diagnostic_url(params[:algorithm_id], params[:id], record.diagnostic, record, source: 'version'), class: 'btn btn-outline-info')
+      actions = link_to(I18n.t('edit'), edit_algorithm_version_diagnostic_final_diagnostic_url(params[:algorithm_id], params[:id], record.diagnostic, record, source: 'version'), class: 'btn btn-outline-success')
       {
         id: record.id,
         reference: record.full_reference,

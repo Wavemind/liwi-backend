@@ -2,6 +2,9 @@
   <h1><%= t('.title', name: @health_facility.name) %> - <small><%= t("health_facilities.architectures.#{@health_facility.architecture}") %></small></h1>
   <% if %w[deployment_manager admin].include?(current_user.role) %>
     <div class="col d-flex align-items-center justify-content-end">
+      <div class="mr-2">
+        <%= link_to(I18n.t('edit'), edit_health_facility_url(@health_facility), class: 'btn btn-outline-success') %>
+      </div>
       <%= link_to t('health_facilities.show.generate_stickers'), health_facility_sticker_form_url(@health_facility), class:'btn btn-info' %>
     </div>
   <% end %>

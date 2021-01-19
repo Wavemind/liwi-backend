@@ -211,6 +211,7 @@ en:
     users: "Users"
     new: "New"
     versions: "Versions"
+  cancel: "Cancel"
   conditions:
     operators:
       and_operator: "AND"

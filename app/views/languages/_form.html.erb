@@ -3,5 +3,6 @@
   <%= f.input :name %>
   <%= f.input :code %>
 
+  <%= link_to t('cancel'), :back, class: 'btn btn-danger my-4 float-left' %>
   <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
 <% end %>

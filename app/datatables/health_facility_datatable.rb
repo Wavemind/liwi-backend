@@ -22,7 +22,7 @@ class HealthFacilityDatatable < AjaxDatatablesRails::ActiveRecord
   # Value display
   def data
     records.map do |record|
-      actions = link_to(I18n.t('show'), health_facility_url(record), class: 'btn btn-outline-primary') + " " + link_to(I18n.t('edit'), edit_health_facility_url(record), class: 'btn btn-outline-info')
+      actions = link_to(I18n.t('show'), health_facility_url(record), class: 'btn btn-outline-info') + " " + link_to(I18n.t('edit'), edit_health_facility_url(record), class: 'btn btn-outline-success')
       {
         name: record.name,
         country: record.country,
