@@ -1,9 +1,9 @@
 <%= simple_form_for @study, html: { class: 'form-horizontal' } do |f| %>
   <%= f.input :label %>
   <div class="form-group">
-    <label for="emergency_content" class="form-label"><%= t('studies.description') %></label>
+    <label for="description_en" class="form-label"><%= t('studies.description') %></label>
     <div class="tinymce-wrapper">
-      <%= f.text_area :description, class: 'tinymce-description' %>
+      <%= f.text_area :description_en, class: 'tinymce-description' %>
     </div>
   </div>
   <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
