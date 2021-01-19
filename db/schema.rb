@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_19_082040) do
+ActiveRecord::Schema.define(version: 2021_01_19_115733) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -56,7 +56,7 @@ ActiveRecord::Schema.define(version: 2021_01_19_082040) do
     t.boolean "consent_management", default: true
     t.integer "study_id"
     t.boolean "track_referral", default: true
-    t.text "emergency_content", default: ""
+    t.hstore "emergency_content_translations"
     t.index ["user_id"], name: "index_algorithms_on_user_id"
   end
 
@@ -352,7 +352,7 @@ ActiveRecord::Schema.define(version: 2021_01_19_082040) do
     t.string "label"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "description", default: ""
+    t.hstore "description_translations"
   end
 
   create_table "technical_files", force: :cascade do |t|
