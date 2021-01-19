@@ -308,7 +308,7 @@ class VersionsService
       hash[health_care.id]['id'] = health_care.id
       hash[health_care.id]['duration'] = instance.duration
       # Get instance description for drugs and node descriptions for management
-      hash[health_care.id]['description'] = instance.node.is_a?(HealthCares::Drug) ? instance.description : instance.node.description_en
+      hash[health_care.id]['description'] = instance.node.is_a?(HealthCares::Drug) ? instance.description : instance.node.description
 
       # Append the health care in order to list them all at the end of the json.
       assign_node(health_care)
@@ -431,7 +431,7 @@ class VersionsService
     medias = []
     node.medias.map do |media|
       hash = {}
-      hash['label'] = media.label_en
+      hash['label'] = media.label
       hash['url'] = media.url.url
       hash['extension'] = media.url.file.extension.downcase
       medias.push(hash)
@@ -585,9 +585,9 @@ class VersionsService
           formulation_hash['maximal_dose_per_kg'] = formulation.maximal_dose_per_kg
           formulation_hash['maximal_dose'] = formulation.maximal_dose
           formulation_hash['doses_per_day'] = formulation.doses_per_day
-          formulation_hash['description'] = formulation.description_en
-          formulation_hash['injection_instructions'] = formulation.injection_instructions_en
-          formulation_hash['dispensing_description'] = formulation.dispensing_description_en
+          formulation_hash['description'] = formulation.description
+          formulation_hash['injection_instructions'] = formulation.injection_instructions
+          formulation_hash['dispensing_description'] = formulation.dispensing_description
           hash[health_care.id]['formulations'].push(formulation_hash)
         end
       else
