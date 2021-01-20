@@ -234,8 +234,9 @@ class VersionsService
     hash['type'] = final_diagnostic.node_type
     hash['drugs'] = extract_health_cares(final_diagnostic.health_cares.drugs, instance.instanceable.id, final_diagnostic.id)
     hash['managements'] = extract_health_cares(final_diagnostic.health_cares.managements, instance.instanceable.id, final_diagnostic.id)
-    hash['excluding_final_diagnostics'] = final_diagnostic.excluding_nodes_ids
-    hash['excluded_final_diagnostics'] = final_diagnostic.excluded_nodes_ids
+    # Don't mention any exclusions if the version is arm control. Hopefully this is temporary...
+    hash['excluding_final_diagnostics'] = @version.is_arm_control ? [] : final_diagnostic.excluding_nodes_ids
+    hash['excluded_final_diagnostics'] = @version.is_arm_control ? [] : final_diagnostic.excluded_nodes_ids
     hash['cc'] = final_diagnostic.diagnostic.node_id
     hash
   end
@@ -561,8 +562,9 @@ class VersionsService
       hash[health_care.id]['category'] = health_care.category_name
       hash[health_care.id]['label'] = health_care.label
       hash[health_care.id]['description'] = health_care.description
-      hash[health_care.id]['excluding_nodes_ids'] = health_care.excluding_nodes_ids
-      hash[health_care.id]['excluded_nodes_ids'] = health_care.excluded_nodes_ids
+      # Don't mention any exclusions if the version is arm control. Hopefully this is temporary...
+      hash[health_care.id]['excluding_nodes_ids'] = @version.is_arm_control ? [] : health_care.excluding_nodes_ids
+      hash[health_care.id]['excluded_nodes_ids'] = @version.is_arm_control ? [] : health_care.excluded_nodes_ids
       # Fields specific to drugs
       if health_care.is_a?(HealthCares::Drug)
         hash[health_care.id]['formulations'] = []
