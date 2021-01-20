@@ -1,70 +1,81 @@
-<div class="row">
-  <h1><%= t('.title', name: @health_facility.name) %> - <small><%= t("health_facilities.architectures.#{@health_facility.architecture}") %></small></h1>
-  <% if %w[deployment_manager admin].include?(current_user.role) %>
-    <div class="col d-flex align-items-center justify-content-end">
-      <div class="mr-2">
-        <%= link_to(I18n.t('edit'), edit_health_facility_url(@health_facility), class: 'btn btn-outline-success') %>
+<h1>
+  <%= t('.title', name: @health_facility.name) %> - <small><%= t("health_facilities.architectures.#{@health_facility.architecture}") %></small>
+  <%= link_to(I18n.t('edit'), edit_health_facility_url(@health_facility), class: 'btn btn-outline-success ml-3') %>
+</h1>
+
+<ul class="nav nav-tabs mt-3" id="myTab" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link <%= 'active' if params[:panel].blank? || params[:panel] == 'accesses' %>" id="accesses-tab" data-toggle="tab" href="#accesses" role="tab" aria-controls="accesses" aria-selected="false"><%= t('.second_title') %></a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'devices' %>" id="devices-tab" data-toggle="tab" href="#devices" role="tab" aria-controls="devices" aria-selected="false"><%= t('.devices') %></a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'medical_staff' %>" id="medical_staff-tab" data-toggle="tab" href="#medical_staff" role="tab" aria-controls="medical_staff" aria-selected="false"><%= t('.medical_staff') %> </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'generate_stickers' %>" id="generate_stickers-tab" data-toggle="tab" href="#generate_stickers" role="tab" aria-controls="generate_stickers" aria-selected="false"><%= t('health_facilities.show.generate_stickers') %> </a>
+  </li>
+</ul>
+
+<div class="tab-content mt-4 ml-4" id="health_facility_tabs">
+  <div class="tab-pane fade <%= 'show active' if params[:panel].blank? || params[:panel] == 'accesses' %>" id="accesses" role="tabpanel" aria-labelledby="accesses-tab">
+    <h2><%= t('.second_title') %></h2>
+    <%= react_component('accesses/index', { versions: @versions, current_health_facility_access: @current_health_facility_access, health_facility: @health_facility }) %>
+    <h3><%= t('.archived') %></h3>
+    <table class="table table-condensed table-hover" id="health_facility_accesses-datatable" data-source="<%= health_facility_accesses_url(format: :json, id: params[:id]) %>">
+      <thead>
+      <tr>
+        <th><%= t('.columns.created_at') %></th>
+        <th><%= t('.columns.end_date') %></th>
+        <th><%= t('.columns.algorithm') %></th>
+        <th><%= t('.columns.version') %></th>
+      </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div class="tab-pane fade <%= 'show active' if params[:panel] == 'devices' %>" id="devices" role="tabpanel" aria-labelledby="devices-tab">
+    <h2><%= t('.devices') %></h2>
+    <div class="row">
+      <div class="col">
+        <%= simple_form_for @device, url: health_facility_add_device_url(@health_facility), method: :post do |f| %>
+          <div class="row">
+            <div class="col">
+              <%= f.input :id, collection: Device.where(health_facility_id: nil), label_method: :label, label: false, prompt: t('prompt') %>
+            </div>
+            <div class="col">
+              <%= f.submit t('add'), class: 'btn btn-primary' %>
+            </div>
+          </div>
+        <% end %>
       </div>
-      <%= link_to t('health_facilities.show.generate_stickers'), health_facility_sticker_form_url(@health_facility), class:'btn btn-info' %>
     </div>
-  <% end %>
-</div>
+    <table class="table table-condensed table-hover" id="devices-datatable" data-from="health_facility" data-source="<%= devices_url(format: :json, from: 'health_facility', id: params[:id]) %>">
+      <thead>
+      <tr>
+        <th><%= t('.columns.mac_address') %></th>
+        <th><%= t('.columns.name') %></th>
+        <th><%= t('.columns.brand') %></th>
+        <th><%= t('.columns.model') %></th>
+        <th><%= t('.columns.health_facility') %></th>
+        <th><%= t('.columns.last_activity') %></th>
+        <th><%= t('.columns.last_user') %></th>
+        <th class="text-right"><%= t('.columns.actions') %></th>
+      </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
 
-<hr class="my-4"/>
+  <div class="tab-pane fade <%= 'show active' if params[:panel] == 'medical_staff' %>" id="medical_staff" role="tabpanel" aria-labelledby="medical_staff-tab">
+    <h2><%= t('.medical_staff') %></h2>
+    <%= render 'medical_staffs/table' %>
+  </div>
 
-<h2><%= t('.devices') %></h2>
-<div class="row">
-  <div class="col">
-    <%= simple_form_for @device, url: health_facility_add_device_url(@health_facility), method: :post do |f| %>
-      <div class="row">
-        <div class="col">
-          <%= f.input :id, collection: Device.where(health_facility_id: nil), label_method: :label, label: false, prompt: t('prompt') %>
-        </div>
-        <div class="col">
-          <%= f.submit t('add'), class: 'btn btn-primary' %>
-        </div>
-      </div>
-    <% end %>
+  <div class="tab-pane fade <%= 'show active' if params[:panel] == 'generate_stickers' %>" id="generate_stickers" role="tabpanel" aria-labelledby="generate_stickers-tab">
+    <h2>Generate Stickers</h2>
+    <%= render 'sticker_form' %>
   </div>
 </div>
-
-<hr class="my-4"/>
-
-<h2><%= t('.medical_staff') %></h2>
-<%= render 'medical_staffs/table' %>
-
-<hr class="my-4"/>
-
-<table class="table table-condensed table-hover" id="devices-datatable" data-from="health_facility" data-source="<%= devices_url(format: :json, from: 'health_facility', id: params[:id]) %>">
-  <thead>
-  <tr>
-    <th><%= t('.columns.mac_address') %></th>
-    <th><%= t('.columns.name') %></th>
-    <th><%= t('.columns.brand') %></th>
-    <th><%= t('.columns.model') %></th>
-    <th><%= t('.columns.health_facility') %></th>
-    <th><%= t('.columns.last_activity') %></th>
-    <th><%= t('.columns.last_user') %></th>
-    <th class="text-right"><%= t('.columns.actions') %></th>
-  </tr>
-  </thead>
-  <tbody></tbody>
-</table>
-
-<hr class="my-4"/>
-
-<h2><%= t('.second_title') %></h2>
-<%= react_component('accesses/index', { versions: @versions, current_health_facility_access: @current_health_facility_access, health_facility: @health_facility }) %>
-
-<h3><%= t('.archived') %></h3>
-<table class="table table-condensed table-hover" id="health_facility_accesses-datatable" data-source="<%= health_facility_accesses_url(format: :json, id: params[:id]) %>">
-  <thead>
-  <tr>
-    <th><%= t('.columns.created_at') %></th>
-    <th><%= t('.columns.end_date') %></th>
-    <th><%= t('.columns.algorithm') %></th>
-    <th><%= t('.columns.version') %></th>
-  </tr>
-  </thead>
-  <tbody></tbody>
-</table>

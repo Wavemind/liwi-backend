@@ -454,8 +454,10 @@ en:
     form:
       medical_staffs: "Medical Staff"
     sticker_generator:
-      group_id: "Group ID"
       generate: "Generate"
+      errors:
+        missing_study_id: "Study must be selected"
+        must_be_positive: "Number of stickers must be greater than 0"
   health_facility_accesses:
     new:
       title: "New release"

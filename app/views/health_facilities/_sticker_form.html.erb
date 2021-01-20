@@ -1,0 +1,11 @@
+<div class="row">
+  <div class="col">
+    <%= simple_form_for :sticker, url: health_facility_generate_stickers_url(@health_facility, format: :pdf), method: :post, format: :pdf do |f| %>
+      <%= f.input :health_facility_id, as: :hidden, input_html: { value: @health_facility.id }%>
+      <%= f.input :study_id, collection: @studies, prompt: t('prompt'), label_method: lambda { |study| study.label } %>
+      <%= f.input :number_of_stickers, as: :integer, input_html: { min: '1', step: '1', value: '5' } %>
+
+      <%= f.submit t('health_facilities.sticker_generator.generate'), class: 'btn btn-primary my-4 float-right' %>
+    <% end %>
+  </div>
+</div>
