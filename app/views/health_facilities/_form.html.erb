@@ -20,9 +20,9 @@
   <% end %>
 
   <div class="links">
-    <%= link_to_add_association "<button class='btn btn-outline-success'>#{t('add')}</button>".html_safe, f, :medical_staffs, partial: 'medical_staffs/fields' %>
+    <%= link_to_add_association "<button class='btn btn-outline-primary'>#{t('add')}</button>".html_safe, f, :medical_staffs, partial: 'medical_staffs/fields' %>
   </div>
 
-
+  <%= link_to t('cancel'), :back, class: 'btn btn-danger my-4 float-left' %>
   <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
 <% end %>

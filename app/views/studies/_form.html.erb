@@ -6,5 +6,7 @@
       <%= f.text_area :description_en, class: 'tinymce-description' %>
     </div>
   </div>
+
+  <%= link_to t('cancel'), :back, class: 'btn btn-danger my-4 float-left' %>
   <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
 <% end %>

@@ -3,5 +3,6 @@
   <%= f.input :label_en %>
   <%= f.association :node, collection: @algorithm.questions.where(type: 'Questions::ComplaintCategory'), label_method: :reference_label, prompt: t('select')  %>
 
+  <%= link_to t('cancel'), :back, class: 'btn btn-danger my-4 float-left' %>
   <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
 <% end %>

@@ -27,7 +27,7 @@ class QuestionDatatable < AjaxDatatablesRails::ActiveRecord
   # Value display
   def data
     records.map do |record|
-      actions = link_to(I18n.t('edit'), edit_algorithm_question_url(params[:id], record), class: "btn btn-outline-info") + " " + link_to(I18n.t('delete'), algorithm_question_url(record.algorithm, record), class: "btn btn-outline-danger #{(record.dependencies? || record.used_in_deployed_version || record.is_default) ? 'disabled' : ''}", method: :delete, data: { confirm: I18n.t('confirmation') })
+      actions = link_to(I18n.t('edit'), edit_algorithm_question_url(params[:id], record), class: "btn btn-outline-success") + " " + link_to(I18n.t('delete'), algorithm_question_url(record.algorithm, record), class: "btn btn-outline-danger #{(record.dependencies? || record.used_in_deployed_version || record.is_default) ? 'disabled' : ''}", method: :delete, data: { confirm: I18n.t('confirmation') })
       {
         id: record.id,
         reference: record.full_reference,

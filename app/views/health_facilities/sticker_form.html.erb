@@ -7,7 +7,9 @@
         <%= n.input :study_id, collection: @study_ids, prompt: t('prompt'), label_method: lambda { |study| study.label } %>
         <%= n.input :number_of_stickers, as: :integer, input_html: { min: '0', step: '1', value: '5' } %>
       <% end %>
-      <%= f.submit t('health_facilities.sticker_generator.generate'), class: 'btn btn-primary' %>
+
+      <%= link_to t('cancel'), :back, class: 'btn btn-danger my-4 float-left' %>
+      <%= f.submit t('health_facilities.sticker_generator.generate'), class: 'btn btn-primary my-4 float-right' %>
     <% end %>
   </div>
 </div>

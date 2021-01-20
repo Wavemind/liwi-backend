@@ -26,9 +26,9 @@ class VersionDatatable < AjaxDatatablesRails::ActiveRecord
   def data
     records.map do |record|
       actions =
-        link_to(I18n.t('show'), algorithm_version_url(record.algorithm, record), class: 'btn btn-outline-primary') + " " +
-        link_to(I18n.t('edit'), edit_algorithm_version_url(record.algorithm, record), class: 'btn btn-outline-info') + " " +
-        link_to(I18n.t('duplicate'), duplicate_algorithm_version_url(params[:algorithm_id], record), class: 'btn btn-outline-info', method: :post) + " "
+        link_to(I18n.t('show'), algorithm_version_url(record.algorithm, record), class: 'btn btn-outline-info') + " " +
+        link_to(I18n.t('edit'), edit_algorithm_version_url(record.algorithm, record), class: 'btn btn-outline-success') + " " +
+        link_to(I18n.t('duplicate'), duplicate_algorithm_version_url(params[:algorithm_id], record), class: 'btn btn-outline-warning', method: :post) + " "
         actions += record.archived ? link_to(I18n.t('unarchive'), unarchive_algorithm_version_url(record.algorithm, record), class: 'btn btn-outline-danger', method: :put, data: { confirm: I18n.t('confirmation') }) : link_to(I18n.t('archive'), archive_algorithm_version_url(record.algorithm, record), class: 'btn btn-outline-danger', method: :put, data: { confirm: I18n.t('confirmation') })
       {
         name: record.name,

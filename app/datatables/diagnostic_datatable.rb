@@ -23,10 +23,10 @@ class DiagnosticDatatable < AjaxDatatablesRails::ActiveRecord
 
   def data
     records.map do |record|
-      actions = link_to(I18n.t('open_diagram'), diagram_algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], record), class: 'btn btn-outline-primary') + " " +
-        link_to(I18n.t('show'), algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], record), class: 'btn btn-outline-primary') + " " +
-        link_to(I18n.t('edit'), edit_algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], record), class: 'btn btn-outline-info') + " " +
-        link_to(I18n.t('duplicate'), duplicate_algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], record), class: 'btn btn-outline-info', method: :post) + " " +
+      actions = link_to(I18n.t('open_diagram'), diagram_algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], record), class: 'btn btn-outline-dark') + " " +
+        link_to(I18n.t('show'), algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], record), class: 'btn btn-outline-info') + " " +
+        link_to(I18n.t('edit'), edit_algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], record), class: 'btn btn-outline-success') + " " +
+        link_to(I18n.t('duplicate'), duplicate_algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], record), class: 'btn btn-outline-warning', method: :post) + " " +
         link_to(I18n.t('delete'), algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], record), class: 'btn btn-outline-danger', method: :delete, data: { confirm: I18n.t('confirmation') })
       {
         reference: record.full_reference,

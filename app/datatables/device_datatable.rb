@@ -29,7 +29,7 @@ class DeviceDatatable < AjaxDatatablesRails::ActiveRecord
   # Value display
   def data
     records.map do |record|
-      actions = link_to(I18n.t('show'), device_url(record), class: 'btn btn-outline-primary')
+      actions = link_to(I18n.t('show'), device_url(record), class: 'btn btn-outline-info')
 
       # This table is used in 2 views, and actions are not the same
       if params[:from].present?
