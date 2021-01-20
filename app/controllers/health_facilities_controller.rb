@@ -1,7 +1,7 @@
 class HealthFacilitiesController < ApplicationController
 
   before_action :authenticate_user!
-  before_action :set_health_facility, only: [:show, :edit, :update, :add_device, :remove_device, :sticker_form, :generate_stickers]
+  before_action :set_health_facility, only: [:show, :edit, :update, :add_device, :remove_device, :generate_stickers]
   before_action :set_breadcrumb, only: [:show, :new, :edit]
   before_action :set_countries, only: [:new, :edit, :create, :update]
 
@@ -23,6 +23,7 @@ class HealthFacilitiesController < ApplicationController
     health_facility_access = HealthFacilityAccess.find_by(health_facility_id: params[:id], end_date: nil)
     @current_health_facility_access = health_facility_access.as_json(include: { version: { include: { algorithm: {only: [:id, :name]} }, only: [:id, :name, :job_id], methods: :display_label}})
     @versions = Version.includes(:algorithm).where.not(id: (health_facility_access.version_id if health_facility_access.present?), archived: true).as_json(only: [:id, :name])
+    @studies = Study.all
   end
 
   def new
@@ -92,32 +93,31 @@ class HealthFacilitiesController < ApplicationController
     end
   end
 
-  # GET  health_facilities/health_facility_id/devices/:device_id/sticker_form
-  # @params health_facility_id [Integer] id of health_facility
-  # Renders the sticker_form for the given health_facility
-  def sticker_form
-    authorize @health_facility
-    @study_ids = Study.all
-  end
-
-  # POST  health_facilities/health_facility_id/devices/:device_id/generate_stickers
+  # POST health_facilities/health_facility_id/devices/:device_id/generate_stickers
   # @params health_facility_id [Integer] id of health_facility
   # @params health_facility [Hash] contains the data filled in the form
   # Generates the PDF containing the stickers and sends the file to the browser
   def generate_stickers
-    @study_id = Study.find(params[:health_facility][:sticker_generator][:study_id])
-    @number_of_stickers = params[:health_facility][:sticker_generator][:number_of_stickers]
-    authorize @health_facility
-    respond_to do |format|
-      format.pdf do
-        tempfile = Tempfile.new(["tempPDF", ".pdf"], Rails.root.join("tmp"))
-        pdf = StickerPdf.new(@health_facility, @study_id, @number_of_stickers)
-        tempfile.write pdf.render_file tempfile.path
-        File.open(tempfile, 'r') do |f|
-          send_data(f.read, filename: "uuid_stickers_#{Time.now.strftime('%Y%m%d_%H%M%S')}.pdf", type: "application/pdf")
+    if sticker_params[:study_id].present?
+      if sticker_params[:number_of_stickers].to_i > 1
+        @study_id = Study.find(sticker_params[:study_id])
+        @number_of_stickers = sticker_params[:number_of_stickers]
+        respond_to do |format|
+          format.pdf do
+            tempfile = Tempfile.new(["tempPDF", ".pdf"], Rails.root.join("tmp"))
+            pdf = StickerPdf.new(@health_facility, @study_id, @number_of_stickers)
+            tempfile.write pdf.render_file tempfile.path
+            File.open(tempfile, 'r') do |f|
+              send_data(f.read, filename: "uuid_stickers_#{Time.now.strftime('%Y%m%d_%H%M%S')}.pdf", type: "application/pdf")
+            end
+            tempfile.close(true)
+          end
         end
-        tempfile.close(true)
+      else
+        redirect_to health_facility_url(@health_facility, panel: 'generate_stickers'), alert: t('health_facilities.sticker_generator.errors.must_be_positive')
       end
+    else
+      redirect_to health_facility_url(@health_facility, panel: 'generate_stickers'), alert: t('.sticker_generator.errors.missing_study_id')
     end
   end
 
@@ -156,5 +156,13 @@ class HealthFacilitiesController < ApplicationController
         :_destroy
       ]
     )
+  end
+
+  def sticker_params
+    params.require(:sticker).permit(
+        :health_facility_id,
+        :study_id,
+        :number_of_stickers,
+        )
   end
 end

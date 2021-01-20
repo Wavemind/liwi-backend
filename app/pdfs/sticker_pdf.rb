@@ -14,9 +14,9 @@ class StickerPdf < Prawn::Document
     @group_id = health_facility.id.to_s
     @study_id = study_id.label
     @number_of_stickers = number_of_stickers.to_i
+    @uuid = SecureRandom.uuid
 
     (1..@number_of_stickers).each do |sticker|
-      @uuid = SecureRandom.uuid
       qr_content = {study_id: @study_id, group_id: @group_id, uid: @uuid}.to_json
       define_grid(columns: 5, rows: 1, gutter: 0)
       grid([0, 0], [0, 1]).bounding_box do
