@@ -34,6 +34,8 @@ export default class ScoreForm extends React.Component {
     // Set score to link + set label with score + reload canvas + close modal
     if (httpRequest.status === 200) {
       diagramObject.options.score = values.score;
+      diagramObject.options.parentInstanceId = diagramObject.sourcePort.parent.options.dbInstance.id;
+      diagramObject.options.dbConditionId = result.id;
 
       if (method === "create") {
         diagramObject.addLabel(values.score);
