@@ -5,6 +5,11 @@
 
   <div class="current-user">
     <%= current_user.full_name.upcase %>
+    <%= link_to edit_user_registration_path, class: "ml-3" do %>
+      <i class="material-icons md-light md-18">
+        edit
+      </i>
+    <% end %>
   </div>
 
   <ul class="list-unstyled components">
