@@ -96,9 +96,13 @@ a:focus {
 
 .current-user {
   font-size: 20px;
-  padding: 10px;
+  padding: 20px 10px;
   text-align: center;
-  border-bottom: 2px solid $gray
+  border-bottom: 2px solid $gray;
+  border-top: 2px solid $gray;
+  a:hover {
+    color: $base-color-lighter;
+  }
 }
 
 #sidebar {
