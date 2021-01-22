@@ -47,6 +47,7 @@ class ApplicationController < ActionController::Base
     devise_controller? || params[:controller] =~ /(^(rails_)?admin)|(^pages$)|^(dashboard$)|^(settings$)|^(api\/v1\/)/
   end
 
+  # Whitelists additional parameters for Devise Controllers (default: email, password)
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:account_update, keys: [
         :first_name,
