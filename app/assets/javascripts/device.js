@@ -16,7 +16,7 @@ jQuery(document).ready(function () {
       { "data": "last_user" },
       { "data": "actions", "className": "text-right"  },
     ],
-    'columnDefs': [ {
+    'columnDefs': [{
       'targets': [5,6,7],
       'orderable': false,
     }, {

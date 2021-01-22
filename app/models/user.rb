@@ -1,7 +1,7 @@
 # Manage user
 class User < ApplicationRecord
 
-  devise :invitable, :database_authenticatable, :recoverable, :rememberable, :lockable, :trackable
+  devise :invitable, :database_authenticatable, :recoverable, :rememberable, :lockable, :trackable, :registerable
   include DeviseTokenAuth::Concerns::User
 
   enum role: [:admin, :clinician, :deployment_manager, :medal_r_user]

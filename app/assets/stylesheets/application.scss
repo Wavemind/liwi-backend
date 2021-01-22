@@ -95,9 +95,14 @@ a:focus {
 }
 
 .current-user {
-  padding: 10px;
+  font-size: 20px;
+  padding: 20px 10px;
   text-align: center;
-  border-bottom: 2px solid $gray
+  border-bottom: 2px solid $gray;
+  border-top: 2px solid $gray;
+  a:hover {
+    color: $base-color-lighter;
+  }
 }
 
 #sidebar {
@@ -198,6 +203,15 @@ a.article:hover {
   border-radius: 0;
   background-color: $base-color-light;
   color: white;
+  padding-left: 5px;
+  a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    padding: 0 5px;
+    &:hover {
+      color: $base-color;
+    }
+  }
 }
 
 .btn-primary-light{

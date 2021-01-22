@@ -4,7 +4,7 @@
   </div>
 
   <div class="current-user">
-    <%= current_user.full_name.upcase %>
+    <%= link_to current_user.full_name, edit_user_registration_url %>
   </div>
 
   <ul class="list-unstyled components">
