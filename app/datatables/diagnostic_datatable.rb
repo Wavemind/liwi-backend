@@ -18,6 +18,7 @@ class DiagnosticDatatable < AjaxDatatablesRails::ActiveRecord
       reference: { source: 'Diagnostic.reference' },
       label: { source: 'Diagnostic.label_translations' },
       node: { source: 'Node.reference' },
+      last_update: { source: 'Diagnostic.updated_at' }
     }
   end
 
