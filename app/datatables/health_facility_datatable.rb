@@ -16,6 +16,8 @@ class HealthFacilityDatatable < AjaxDatatablesRails::ActiveRecord
   def view_columns
     @view_columns ||= {
       name: { source: 'HealthFacility.name' },
+      country: { source: 'HealthFacility.country'},
+      area: { source: 'HealthFacility.area' },
     }
   end
 

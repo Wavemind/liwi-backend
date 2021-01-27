@@ -15,8 +15,8 @@ class HealthFacilityAccessDatatable < AjaxDatatablesRails::ActiveRecord
   def view_columns
     @view_columns ||= {
       created_at: { source: 'HealthFacilityAccess.created_at' },
-      algorithm: { source: 'HealthFacilityAccess.version.algorithm.name' },
-      version: { source: 'HealthFacilityAccess.version.name' },
+      algorithm: { source: 'Version.algorithm.name' },
+      version: { source: 'Version.name' },
       end_date: { source: 'HealthFacilityAccess.end_date' },
     }
   end
@@ -35,7 +35,7 @@ class HealthFacilityAccessDatatable < AjaxDatatablesRails::ActiveRecord
 
   # Activerecord request
   def get_raw_records
-    HealthFacilityAccess.where(health_facility_id: params[:id]).where.not(end_date: nil).includes([version: [:algorithm]])
+      HealthFacilityAccess.where(health_facility_id: params[:id]).where.not(end_date: nil).includes(version: [:algorithm]).references(version: [:algorithm])
   end
 
 end
