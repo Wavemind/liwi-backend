@@ -371,7 +371,8 @@ class VersionsController < ApplicationController
       :first_top_right_question_id,
       :second_top_right_question_id,
       :is_arm_control,
-      :nodes_ids
+      :nodes_ids,
+      language_ids: []
     )
   end
 end

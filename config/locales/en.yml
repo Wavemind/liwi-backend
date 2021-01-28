@@ -86,6 +86,8 @@ en:
         deactivated: "Deactivated"
         role_html: "medAL-<i>creator</i> access"
         roles_html: "medAL-<i>reader</i> accesses"
+      version:
+        languages: "Available languages for this version"
   activated: "Activate"
   add: "Add"
   add_file: "Attach new file in description"

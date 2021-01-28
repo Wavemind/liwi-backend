@@ -13,6 +13,9 @@ class Version < ApplicationRecord
   has_many :group_accesses
   has_many :groups, through: :group_accesses
 
+  has_many :version_languages
+  has_many :languages, through: :version_languages
+
   has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy
 
   belongs_to :top_left_question, class_name: 'Instance', optional: true

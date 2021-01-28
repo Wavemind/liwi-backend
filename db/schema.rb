@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_19_115733) do
+ActiveRecord::Schema.define(version: 2021_01_28_151654) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -154,8 +154,6 @@ ActiveRecord::Schema.define(version: 2021_01_19_115733) do
     t.boolean "by_age", default: false
     t.bigint "node_id"
     t.bigint "administration_route_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.hstore "description_translations"
     t.hstore "injection_instructions_translations"
     t.hstore "dispensing_description_translations"
@@ -402,6 +400,13 @@ ActiveRecord::Schema.define(version: 2021_01_19_115733) do
     t.index ["invited_by_type", "invited_by_id"], name: "index_users_on_invited_by_type_and_invited_by_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
+  end
+
+  create_table "version_languages", force: :cascade do |t|
+    t.bigint "version_id"
+    t.bigint "language_id"
+    t.index ["language_id"], name: "index_version_languages_on_language_id"
+    t.index ["version_id"], name: "index_version_languages_on_version_id"
   end
 
   create_table "versions", force: :cascade do |t|
