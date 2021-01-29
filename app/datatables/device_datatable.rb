@@ -43,7 +43,6 @@ class DeviceDatatable < AjaxDatatablesRails::ActiveRecord
         health_facility: record.health_facility.present? ? link_to(record.health_facility.name, health_facility_url(record.health_facility)) : '',
         last_activity: record.last_activity.present? ? datetime_format(Date.parse(record.last_activity['created_at'])) : '',
         last_user: record.last_activity.present? && record.last_activity['user'].present? ? link_to(record.last_activity['user']['first_name'] + ' ' + record.last_activity['user']['last_name'], user_url( record.last_activity['user']['id'])) : '',
-        health_facility: link_to(record.health_facility.name, health_facility_url(record.health_facility)),
         actions: actions
       }
     end
@@ -53,7 +52,7 @@ class DeviceDatatable < AjaxDatatablesRails::ActiveRecord
   def get_raw_records
     if params[:from].present?
       # Users from a health facility
-      Device.where(health_facility_id: params[:id])
+      Device.all.includes(:health_facility).references(:health_facility).where(health_facility_id: params[:id])
     else
       # Devices
       Device.all.includes(:health_facility).references(:health_facility)
