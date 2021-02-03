@@ -11,13 +11,14 @@ class StickerPdf < Prawn::Document
       page_layout: :landscape,
       margin: [0, 0.42.cm, 0, 0.2.cm],
     )
-    @group_id = health_facility.id.to_s
-    @study_id = study_id.label
-    @number_of_stickers = number_of_stickers.to_i
-    @uuid = SecureRandom.uuid
+    group_id = health_facility.id.to_s
+    study_id = study_id.label
+    number_of_stickers = number_of_stickers.to_i
 
-    (1..@number_of_stickers).each do |sticker|
-      qr_content = {study_id: @study_id, group_id: @group_id, uid: @uuid}.to_json
+    (1..number_of_stickers).each do |sticker|
+      uuid = SecureRandom.uuid
+
+      qr_content = {study_id: study_id, group_id: group_id, uid: uuid}.to_json
       define_grid(columns: 5, rows: 1, gutter: 0)
       grid([0, 0], [0, 1]).bounding_box do
         move_down 0.4.cm
@@ -28,14 +29,14 @@ class StickerPdf < Prawn::Document
         font_size 7
         indent(0.1.cm) do
           move_down 0.4.cm
-          text "<b>study_id:</b> #{@study_id}", inline_format: true
+          text "<b>study_id:</b> #{study_id}", inline_format: true
           move_down 0.5.cm
-          text "<b>group_id:</b> #{@group_id}", inline_format: true
+          text "<b>group_id:</b> #{group_id}", inline_format: true
           move_down 0.5.cm
-          text "<b>uid:</b> #{@uuid}", inline_format: true
+          text "<b>uid:</b> #{uuid}", inline_format: true
         end
       end
-      start_new_page unless sticker == @number_of_stickers
+      start_new_page unless sticker == number_of_stickers
     end
   end
 end
