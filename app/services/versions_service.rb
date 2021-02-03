@@ -349,7 +349,7 @@ class VersionsService
       hash[question.id]['id'] = question.id
       hash[question.id]['type'] = question.node_type
       hash[question.id]['label'] = question.label.present? ? question.label_translations.slice(@available_languages) : nil
-      hash[question.id]['description'] = question.description ? question.description_translations.slice(@available_languages) : nil
+      hash[question.id]['description'] = question.description.present? ? question.description_translations.slice(@available_languages) : nil
       hash[question.id]['is_mandatory'] = question.is_mandatory
       hash[question.id]['emergency_status'] = question.emergency_status
       hash[question.id]['is_neonat'] = question.is_neonat
@@ -565,8 +565,8 @@ class VersionsService
       hash[health_care.id]['id'] = health_care.id
       hash[health_care.id]['type'] = health_care.node_type
       hash[health_care.id]['category'] = health_care.category_name
-      hash[health_care.id]['label'] = health_care.label.presemt? ? health_care.label_translations.slice(@available_languages) : nil
-      hash[health_care.id]['description'] = health_care.description.prsent? ? health_care.description_translations.slice(@available_languages) : nil
+      hash[health_care.id]['label'] = health_care.label.present? ? health_care.label_translations.slice(@available_languages) : nil
+      hash[health_care.id]['description'] = health_care.description.present? ? health_care.description_translations.slice(@available_languages) : nil
       # Don't mention any exclusions if the version is arm control. Hopefully this is temporary...
       hash[health_care.id]['excluding_nodes_ids'] = @version.is_arm_control ? [] : health_care.excluding_nodes_ids
       hash[health_care.id]['excluded_nodes_ids'] = @version.is_arm_control ? [] : health_care.excluded_nodes_ids
