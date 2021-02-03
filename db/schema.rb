@@ -154,6 +154,8 @@ ActiveRecord::Schema.define(version: 2021_01_28_151654) do
     t.boolean "by_age", default: false
     t.bigint "node_id"
     t.bigint "administration_route_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.hstore "description_translations"
     t.hstore "injection_instructions_translations"
     t.hstore "dispensing_description_translations"
