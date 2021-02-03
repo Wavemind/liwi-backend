@@ -589,7 +589,7 @@ class VersionsService
           formulation_hash['maximal_dose_per_kg'] = formulation.maximal_dose_per_kg
           formulation_hash['maximal_dose'] = formulation.maximal_dose
           formulation_hash['doses_per_day'] = formulation.doses_per_day
-          formulation_hash['description'] = formulation.descriiption.present? ? formulation.description_translations.slice(@available_languages) : nil
+          formulation_hash['description'] = formulation.description.present? ? formulation.description_translations.slice(@available_languages) : nil
           formulation_hash['injection_instructions'] = formulation.injection_instructions.present? ? formulation.injection_instructions_translations.slice(@available_languages) : nil
           formulation_hash['dispensing_description'] = formulation.dispensing_description.present? ? formulation.dispensing_description_translations.slice(@available_languages) : nil
           hash[health_care.id]['formulations'].push(formulation_hash)
