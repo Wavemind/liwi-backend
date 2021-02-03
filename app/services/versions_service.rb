@@ -125,7 +125,7 @@ class VersionsService
     hash['study'] = {
       id: @version.algorithm.study.present? ? @version.algorithm.study.id : nil,
       label: @version.algorithm.study.present? ? @version.algorithm.study.label : nil,
-      description: @version.algorithm.study.present? ? @version.algorithm.study.description_translations.slice(@available_languages) : nil
+      description: @version.algorithm.study.present? ? @version.algorithm.study.description : nil
     }
 
     hash['mobile_config'] = extract_mobile_config
@@ -190,7 +190,7 @@ class VersionsService
   def self.extract_diagnostic(diagnostic)
     hash = {}
     hash['id'] = diagnostic.id
-    hash['label'] = diagnostic.label_translations.slice(@available_languages)
+    hash['label'] = diagnostic.label
     hash['complaint_category'] = diagnostic.node_id
     hash['instances'] = {}
     hash['final_diagnostics'] = {}
@@ -232,8 +232,8 @@ class VersionsService
     hash = extract_conditions(instance.conditions)
     hash['diagnostic_id'] = final_diagnostic.diagnostic.id
     hash['id'] = final_diagnostic.id
-    hash['label'] = final_diagnostic.label_translations.slice(@available_languages)
-    hash['description'] = final_diagnostic.description_translations.slice(@available_languages)
+    hash['label'] = final_diagnostic.label
+    hash['description'] = final_diagnostic.description
     hash['level_of_urgency'] = final_diagnostic.level_of_urgency
     hash['medias'] = extract_medias(final_diagnostic)
     hash['type'] = final_diagnostic.node_type
@@ -348,8 +348,8 @@ class VersionsService
       hash[question.id] = {}
       hash[question.id]['id'] = question.id
       hash[question.id]['type'] = question.node_type
-      hash[question.id]['label'] = question.label_translations.slice(@available_languages)
-      hash[question.id]['description'] = question.description_translations.slice(@available_languages)
+      hash[question.id]['label'] = question.label
+      hash[question.id]['description'] = question.description
       hash[question.id]['is_mandatory'] = question.is_mandatory
       hash[question.id]['emergency_status'] = question.emergency_status
       hash[question.id]['is_neonat'] = question.is_neonat
@@ -403,7 +403,7 @@ class VersionsService
       question.answers.each do |answer|
         answer_hash = {}
         answer_hash['id'] = answer.id
-        answer_hash['label'] = answer.label_translations.slice(@available_languages)
+        answer_hash['label'] = answer.label
         answer_hash['value'] = answer.value
         answer_hash['operator'] = answer.operator
 
@@ -434,7 +434,7 @@ class VersionsService
     medias = []
     node.medias.map do |media|
       hash = {}
-      hash['label'] = media.label_translations.slice(@available_languages)
+      hash['label'] = media.label
       hash['url'] = media.url.url
       hash['extension'] = media.url.file.extension.downcase
       medias.push(hash)
@@ -565,8 +565,8 @@ class VersionsService
       hash[health_care.id]['id'] = health_care.id
       hash[health_care.id]['type'] = health_care.node_type
       hash[health_care.id]['category'] = health_care.category_name
-      hash[health_care.id]['label'] = health_care.label_translations.slice(@available_languages)
-      hash[health_care.id]['description'] = health_care.description_translations.slice(@available_languages)
+      hash[health_care.id]['label'] = health_care.label
+      hash[health_care.id]['description'] = health_care.description
       # Don't mention any exclusions if the version is arm control. Hopefully this is temporary...
       hash[health_care.id]['excluding_nodes_ids'] = @version.is_arm_control ? [] : health_care.excluding_nodes_ids
       hash[health_care.id]['excluded_nodes_ids'] = @version.is_arm_control ? [] : health_care.excluded_nodes_ids
