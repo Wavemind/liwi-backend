@@ -7,6 +7,7 @@ class VersionsService
     init
     @version = Version.find(id)
     @version.medal_r_json_version = @version.medal_r_json_version + 1
+    @available_languages = @version.languages.map(&:code).unshift('en')
 
     @patient_questions = []
 
@@ -113,7 +114,8 @@ class VersionsService
     hash = {}
     hash['version_id'] = @version.id
     hash['version_name'] = @version.name
-    hash['emergency_content'] = @version.algorithm.emergency_content
+    hash['version_languages'] = @available_languages
+    hash['emergency_content'] = @version.algorithm.emergency_content_translations.slice(@available_languages)
     hash['json_version'] = @version.medal_r_json_version
     hash['description'] = @version.description
     hash['algorithm_id'] = @version.algorithm.id
@@ -123,7 +125,7 @@ class VersionsService
     hash['study'] = {
       id: @version.algorithm.study.present? ? @version.algorithm.study.id : nil,
       label: @version.algorithm.study.present? ? @version.algorithm.study.label : nil,
-      description: @version.algorithm.study.present? ? @version.algorithm.study.description : nil
+      description: @version.algorithm.study.present? ? @version.algorithm.study.description_translations.slice(@available_languages) : nil
     }
 
     hash['mobile_config'] = extract_mobile_config
@@ -188,7 +190,7 @@ class VersionsService
   def self.extract_diagnostic(diagnostic)
     hash = {}
     hash['id'] = diagnostic.id
-    hash['label'] = diagnostic.label
+    hash['label'] = diagnostic.label_translations.slice(@available_languages)
     hash['complaint_category'] = diagnostic.node_id
     hash['instances'] = {}
     hash['final_diagnostics'] = {}
@@ -230,8 +232,8 @@ class VersionsService
     hash = extract_conditions(instance.conditions)
     hash['diagnostic_id'] = final_diagnostic.diagnostic.id
     hash['id'] = final_diagnostic.id
-    hash['label'] = final_diagnostic.label
-    hash['description'] = final_diagnostic.description
+    hash['label'] = final_diagnostic.label_translations.slice(@available_languages)
+    hash['description'] = final_diagnostic.description_translations.slice(@available_languages)
     hash['level_of_urgency'] = final_diagnostic.level_of_urgency
     hash['medias'] = extract_medias(final_diagnostic)
     hash['type'] = final_diagnostic.node_type
@@ -346,8 +348,8 @@ class VersionsService
       hash[question.id] = {}
       hash[question.id]['id'] = question.id
       hash[question.id]['type'] = question.node_type
-      hash[question.id]['label'] = question.label
-      hash[question.id]['description'] = question.description
+      hash[question.id]['label'] = question.label_translations.slice(@available_languages)
+      hash[question.id]['description'] = question.description_translations.slice(@available_languages)
       hash[question.id]['is_mandatory'] = question.is_mandatory
       hash[question.id]['emergency_status'] = question.emergency_status
       hash[question.id]['is_neonat'] = question.is_neonat
@@ -401,7 +403,7 @@ class VersionsService
       question.answers.each do |answer|
         answer_hash = {}
         answer_hash['id'] = answer.id
-        answer_hash['label'] = answer.label
+        answer_hash['label'] = answer.label_translations.slice(@available_languages)
         answer_hash['value'] = answer.value
         answer_hash['operator'] = answer.operator
 
@@ -432,7 +434,7 @@ class VersionsService
     medias = []
     node.medias.map do |media|
       hash = {}
-      hash['label'] = media.label
+      hash['label'] = media.label_translations.slice(@available_languages)
       hash['url'] = media.url.url
       hash['extension'] = media.url.file.extension.downcase
       medias.push(hash)
@@ -563,8 +565,8 @@ class VersionsService
       hash[health_care.id]['id'] = health_care.id
       hash[health_care.id]['type'] = health_care.node_type
       hash[health_care.id]['category'] = health_care.category_name
-      hash[health_care.id]['label'] = health_care.label
-      hash[health_care.id]['description'] = health_care.description
+      hash[health_care.id]['label'] = health_care.label_translations.slice(@available_languages)
+      hash[health_care.id]['description'] = health_care.description_translations.slice(@available_languages)
       # Don't mention any exclusions if the version is arm control. Hopefully this is temporary...
       hash[health_care.id]['excluding_nodes_ids'] = @version.is_arm_control ? [] : health_care.excluding_nodes_ids
       hash[health_care.id]['excluded_nodes_ids'] = @version.is_arm_control ? [] : health_care.excluded_nodes_ids
@@ -587,9 +589,9 @@ class VersionsService
           formulation_hash['maximal_dose_per_kg'] = formulation.maximal_dose_per_kg
           formulation_hash['maximal_dose'] = formulation.maximal_dose
           formulation_hash['doses_per_day'] = formulation.doses_per_day
-          formulation_hash['description'] = formulation.description
-          formulation_hash['injection_instructions'] = formulation.injection_instructions
-          formulation_hash['dispensing_description'] = formulation.dispensing_description
+          formulation_hash['description'] = formulation.description_translations.slice(@available_languages)
+          formulation_hash['injection_instructions'] = formulation.injection_instructions_translations.slice(@available_languages)
+          formulation_hash['dispensing_description'] = formulation.dispensing_description_translations.slice(@available_languages)
           hash[health_care.id]['formulations'].push(formulation_hash)
         end
       else
@@ -607,7 +609,7 @@ class VersionsService
     @questions_sequences.each do |key, questions_sequence|
       hash[questions_sequence.id] = extract_conditions(questions_sequence.instances.find_by(instanceable_id: questions_sequence.id).conditions)
       hash[questions_sequence.id]['id'] = questions_sequence.id
-      hash[questions_sequence.id]['label'] = questions_sequence.label
+      hash[questions_sequence.id]['label'] = questions_sequence.label_translations.slice(@available_languages)
       hash[questions_sequence.id]['min_score'] = questions_sequence.min_score
       hash[questions_sequence.id]['type'] = questions_sequence.node_type
       hash[questions_sequence.id]['category'] = questions_sequence.category_name
@@ -639,7 +641,7 @@ class VersionsService
     questions_sequence.answers.each do |answer|
       answer_hash = {}
       answer_hash['id'] = answer.id
-      answer_hash['label'] = answer.label
+      answer_hash['label'] = answer.label_translations.slice(@available_languages)
 
       hash[answer.id] = answer_hash
     end
