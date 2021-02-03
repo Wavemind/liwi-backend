@@ -7,5 +7,5 @@
 
 <%= f.association :roles, collection: Role.all, label_method: :name, as: :check_boxes, label: t("activerecord.attributes.user.roles_html") %>
 
-<%= link_to t('cancel'), :users, class: 'btn btn-danger my-4 float-left' %>
+<%= link_to t('cancel'), users_url, class: 'btn btn-danger my-4 float-left' %>
 <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
