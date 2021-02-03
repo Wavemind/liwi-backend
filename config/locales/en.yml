@@ -211,6 +211,7 @@ en:
     users: "Users"
     new: "New"
     versions: "Versions"
+  cancel: "Cancel"
   conditions:
     operators:
       and_operator: "AND"
@@ -218,6 +219,7 @@ en:
     validation:
       loop: "You are trying to do a loop in your diagnosis. This is impossible."
       link_already_exist: "Link already exists"
+      link_answer_to_answer: "You can't link an answer to another answer"
   confirmation: "Are you sure ?"
   deactivated: "Deactivate"
   delete: "Delete"
@@ -452,8 +454,10 @@ en:
     form:
       medical_staffs: "Medical Staff"
     sticker_generator:
-      group_id: "Group ID"
       generate: "Generate"
+      errors:
+        missing_study_id: "Study must be selected"
+        must_be_positive: "Number of stickers must be greater than 0"
   health_facility_accesses:
     new:
       title: "New release"

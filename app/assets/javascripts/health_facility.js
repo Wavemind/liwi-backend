@@ -14,7 +14,7 @@ jQuery(document).ready(function () {
       { "data": "actions", "className": "text-right" },
     ],
     'columnDefs': [ {
-      'targets': [2],
+      'targets': [3,4],
       'orderable': false,
     }]
   });

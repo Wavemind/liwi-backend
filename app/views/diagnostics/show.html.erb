@@ -1,4 +1,4 @@
-<h1><%= t('.title', name: @diagnostic.label) %> <%= link_to(I18n.t('open_diagram'), diagram_algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], params[:id]), class: 'btn btn-primary') %></h1>
+<h1><%= t('.title', name: @diagnostic.label) %> <%= link_to(I18n.t('open_diagram'), diagram_algorithm_version_diagnostic_url(params[:algorithm_id], params[:version_id], params[:id]), class: 'btn btn-dark') %></h1>
 
 <ul class="nav nav-tabs" id="myTab" role="tablist">
   <li class="nav-item">
@@ -12,7 +12,7 @@
 
     <h3 class="mt-5"><%= t('.subtitle_final_diagnostics') %></h3>
     <%= link_to new_algorithm_version_diagnostic_final_diagnostic_url(@algorithm, @version, @diagnostic) do %>
-      <button type="button" class="btn btn-outline-secondary"><%= t('add') %></button>
+      <button type="button" class="btn btn-outline-primary"><%= t('add') %></button>
     <% end %>
 
     <%= render 'final_diagnostics/table' %>

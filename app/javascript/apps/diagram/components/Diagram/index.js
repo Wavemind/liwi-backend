@@ -6,8 +6,6 @@ import { NotificationContainer, NotificationManager } from "react-notifications"
 import Appsignal from "@appsignal/javascript"
 import 'react-notifications/lib/notifications.css';
 
-
-
 // Internal import
 import { withDiagram } from "../../engine/context/Diagram.context";
 import { linkNode, createNode, linkFinalDiagnosticExclusion, getConditionPort } from "../../helpers/nodeHelpers";

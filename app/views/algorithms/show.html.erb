@@ -1,6 +1,11 @@
-<h1><%= t('.title', name: @algorithm.name) %></h1>
+<div class="d-flex align-items-center jusify-content-start">
+  <h1><%= t('.title', name: @algorithm.name) %></h1>
+  <div class="ml-3">
+    <%= link_to(I18n.t('edit'), edit_algorithm_url(@algorithm), class: 'btn btn-outline-success') %>
+  </div>
+</div>
 
-<ul class="nav nav-tabs" id="myTab" role="tablist">
+<ul class="nav nav-tabs mt-3" id="myTab" role="tablist">
   <li class="nav-item">
     <a class="nav-link <%= 'active' if params[:panel].blank? || params[:panel] == 'versions'%>" id="versions-tab" data-toggle="tab" href="#versions" role="tab" aria-controls="versions" aria-selected="true"><%= t('.subtitle_versions') %></a>
   </li>

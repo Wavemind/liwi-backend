@@ -55,29 +55,36 @@ export default class AdvancedLinkModel extends DefaultLinkModel {
     let instanceId = this.targetPort.options.id;
     let answerId = this.sourcePort.options.id;
 
-    if (this.targetPort.parent.options.diagramType === "scored") {
-      this.options.selected = false;
-      store.dispatch(
-        openModal(I18n.t("questions_sequences.edit.title"), "ScoreForm", {
-          answerId,
-          instanceId,
-          diagramObject: this,
-          engine: this.sourcePort.parent.options.engine,
-          score: this.options.score,
-          method: 'create'
-        })
-      );
+    if (this.targetPort.options.in === false){
+      this.options.triggerEvent = false;
+      this.remove();
+      NotificationManager.error(I18n.t("conditions.validation.link_answer_to_answer"));
     } else {
-      let httpRequest = await this.http.createLink(instanceId, answerId);
-      let result = await httpRequest.json();
-
-      if (httpRequest.status === 200) {
-        this.options.dbConditionId = result.id;
-        this.options.parentInstanceId = this.sourcePort.parent.options.dbInstance.id;
+      if (this.targetPort.parent.options.diagramType === "scored") {
+        this.options.selected = false;
+        store.dispatch(
+          openModal(I18n.t("questions_sequences.edit.title"), "ScoreForm", {
+            answerId,
+            instanceId,
+            diagramObject: this,
+            engine: this.sourcePort.parent.options.engine,
+            score: this.options.score,
+            method: 'create'
+          })
+        );
       } else {
-        this.options.triggerEvent = false;
-        this.remove();
-        NotificationManager.error(result);
+        let httpRequest = await this.http.createLink(instanceId, answerId);
+        let result = await httpRequest.json();
+
+        if (httpRequest.status === 200) {
+          this.options.dbConditionId = result.id;
+          this.options.parentInstanceId = this.sourcePort.parent.options.dbInstance.id;
+        } else {
+          console.log(result)
+          this.options.triggerEvent = false;
+          this.remove();
+          NotificationManager.error(result);
+        }
       }
     }
   };
