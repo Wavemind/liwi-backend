@@ -1,14 +1,11 @@
-<%= simple_form_for @user, html: { class: 'form-horizontal' } do |f| %>
+<%= f.input :first_name %>
+<%= f.input :last_name %>
+<%= f.input :email %>
+<%= f.input :deactivated, as: :boolean %>
 
-  <%= f.input :first_name %>
-  <%= f.input :last_name %>
-  <%= f.input :email %>
-  <%= f.input :deactivated, as: :boolean %>
+<%= f.input :role, collection: User.roles.map { |k, v| [t("user.role.#{k}"), k] }, label: t("activerecord.attributes.user.role_html"), prompt: t('select') %>
 
-  <%= f.input :role, collection: User.roles.map { |k, v| [t("user.role.#{k}"), k] }, label: t("activerecord.attributes.user.role_html"), prompt: t('select') %>
+<%= f.association :roles, collection: Role.all, label_method: :name, as: :check_boxes, label: t("activerecord.attributes.user.roles_html") %>
 
-  <%= f.association :roles, collection: Role.all, label_method: :name, as: :check_boxes, label: t("activerecord.attributes.user.roles_html") %>
-
-  <%= link_to t('cancel'), :back, class: 'btn btn-danger my-4 float-left' %>
-  <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
-<% end %>
+<%= link_to t('cancel'), :users, class: 'btn btn-danger my-4 float-left' %>
+<%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>

@@ -171,10 +171,12 @@ Rails.application.routes.draw do
 
   resources :devices, only: [:index, :show, :new, :create]
 
-  resources :users, only: [:index, :show, :new, :create, :edit, :update] do
+  resources :users, only: [:index, :show, :new, :edit, :update] do
     collection do
       post ':id/activated', to: 'users#activated', as: 'activated'
       post ':id/deactivated', to: 'users#deactivated', as: 'deactivated'
+      # Needed to specify an another route due to devise. It's using the same route
+      post  'generate', to: 'users#create'
     end
   end
 
