@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_28_151654) do
+ActiveRecord::Schema.define(version: 2021_02_04_101248) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -154,8 +154,6 @@ ActiveRecord::Schema.define(version: 2021_01_28_151654) do
     t.boolean "by_age", default: false
     t.bigint "node_id"
     t.bigint "administration_route_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.hstore "description_translations"
     t.hstore "injection_instructions_translations"
     t.hstore "dispensing_description_translations"
@@ -324,6 +322,7 @@ ActiveRecord::Schema.define(version: 2021_01_28_151654) do
     t.integer "emergency_status", default: 0
     t.boolean "unavailable", default: false
     t.integer "level_of_urgency", default: 5
+    t.integer "step"
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
     t.index ["diagnostic_id"], name: "index_nodes_on_diagnostic_id"

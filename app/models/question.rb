@@ -1,10 +1,12 @@
 # Child of Node / Questions asked to the patient
 class Question < Node
 
+  before_create :associate_step
   after_create :create_boolean, if: Proc.new { answer_type.value == 'Boolean' }
   after_create :create_positive, if: Proc.new { answer_type.value == 'Positive' }
   after_create :create_present, if: Proc.new { answer_type.value == 'Present' }
 
+  enum step: [:registration, :first_look_assessment, :complaint_categories, :basic_measurements, :medical_history, :physical_exam, :test, :health_care_questions, :referral]
   enum stage: [:registration, :triage, :test, :consultation, :diagnosis_management]
   enum system: [
     :general,
@@ -222,6 +224,11 @@ class Question < Node
   end
 
   private
+
+  # Associate proper step depending on category ; empty for parent
+  def associate_step
+
+  end
 
   # Display the label for the current child
   def self.display_label
