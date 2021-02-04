@@ -350,7 +350,7 @@ class VersionsService
       hash[question.id]['type'] = question.node_type
       hash[question.id]['label'] = question.label
       hash[question.id]['description'] = question.description
-      hash[question.id]['is_mandatory'] = question.is_mandatory
+      hash[question.id]['is_mandatory'] = (@version.is_arm_control && !%w(Questions::BasicDemographic Questions::Demographic Questions::Referral).include?(question.type)) ? false : question.is_mandatory
       hash[question.id]['emergency_status'] = question.emergency_status
       hash[question.id]['is_neonat'] = question.is_neonat
       hash[question.id]['stage'] = question.stage
