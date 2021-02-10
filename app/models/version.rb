@@ -13,6 +13,8 @@ class Version < ApplicationRecord
   has_many :group_accesses
   has_many :groups, through: :group_accesses
 
+  has_many :health_facility_accesses, dependent: :destroy
+
   has_many :version_languages
   has_many :languages, through: :version_languages
 

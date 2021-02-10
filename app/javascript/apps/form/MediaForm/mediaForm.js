@@ -55,7 +55,7 @@ export default class MediaForm extends React.Component {
                 </Col>
                 <Col className="align-self-center">
                   {values.medias_attributes[key].url.url !== undefined ? (
-                    <Button className="float-right" variant="link" href={values.medias_attributes[key].url.url}>{I18n.t("questions.medias.current_file")}</Button>
+                    <a className="float-right btn btn-link" target="_blank" href={values.medias_attributes[key].url.url}>{I18n.t("questions.medias.current_file")}</a>
                   ) : null }
                 </Col>
                 <Col className="align-self-center">
