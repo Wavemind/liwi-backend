@@ -18,4 +18,9 @@ class Questions::ComplaintCategory < Question
   def instance_dependencies?
     instances.any? || diagnostics.any?
   end
+
+  # Associate proper step depending on category ; empty for parent
+  def associate_step
+    self.step = Question.steps[:complaint_categories]
+  end
 end

@@ -10,4 +10,8 @@ class Questions::Demographic < Question
     'demographic'
   end
 
+  # Associate proper step depending on category ; empty for parent
+  def associate_step
+    self.step = Question.steps[:registration_step]
+  end
 end

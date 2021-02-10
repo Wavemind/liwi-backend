@@ -20,4 +20,10 @@ class Questions::AssessmentTest < Question
     answer = self.answers.new(reference: '0', value: 'not_available', label_en: I18n.t('answers.unavailable'))
     answer.save(validate: false)
   end
+
+  # Associate proper step depending on category ; empty for parent
+  def associate_step
+    self.step = Question.steps(:test_step)
+  end
 end
+

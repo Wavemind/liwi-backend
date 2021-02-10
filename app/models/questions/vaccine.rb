@@ -21,4 +21,8 @@ class Questions::Vaccine < Question
     answer.save(validate: false)
   end
 
+  # Associate proper step depending on category ; empty for parent
+  def associate_step
+    self.step = Question.steps[:medical_history]
+  end
 end

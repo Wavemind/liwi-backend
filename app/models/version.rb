@@ -134,13 +134,10 @@ class Version < ApplicationRecord
   def init_config
     self.medal_r_config = {
       questions_orders: {
-        basic_measurement: [],
-        consultation_related: [],
-        complaint_category: [],
-        basic_demographic: [],
-        demographic: [],
-        unique_triage_physical_sign: [],
-        unique_triage_question: []
+        basic_measurements: [],
+        registration_step: [],
+        complaint_categories: [],
+        first_look_assessment: [],
       },
       systems_order: Question.systems.to_a.map(&:first),
       patient_list_order: [],

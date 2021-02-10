@@ -10,4 +10,8 @@ class Questions::VitalSignAnthropometric < Question
     'vital_sign_anthropometric'
   end
 
+  # Associate proper step depending on category ; empty for parent
+  def associate_step
+    self.step = Question.steps[:basic_measurements]
+  end
 end

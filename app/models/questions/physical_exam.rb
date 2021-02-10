@@ -21,4 +21,8 @@ class Questions::PhysicalExam < Question
     answer.save(validate: false)
   end
 
+  # Associate proper step depending on category ; empty for parent
+  def associate_step
+    self.step = Question.steps[:physical_exam]
+  end
 end
