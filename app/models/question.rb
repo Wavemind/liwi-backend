@@ -6,7 +6,9 @@ class Question < Node
   after_create :create_positive, if: Proc.new { answer_type.value == 'Positive' }
   after_create :create_present, if: Proc.new { answer_type.value == 'Present' }
 
-  enum step: [:registration, :first_look_assessment, :complaint_categories, :basic_measurements, :medical_history, :physical_exam, :test, :health_care_questions, :referral]
+
+
+  enum step: [:registration_step, :first_look_assessment, :complaint_categories, :basic_measurements, :medical_history, :physical_exam, :test_step, :health_care_questions, :referral_step]
   enum stage: [:registration, :triage, :test, :consultation, :diagnosis_management]
   enum system: [
     :general,
@@ -59,7 +61,6 @@ class Question < Node
       Questions::BackgroundCalculation,
       Questions::BasicMeasurement,
       Questions::ChronicCondition,
-      Questions::ConsultationRelated,
       Questions::ComplaintCategory,
       Questions::BasicDemographic,
       Questions::Demographic,
@@ -69,7 +70,6 @@ class Question < Node
       Questions::Referral,
       Questions::Symptom,
       Questions::TreatmentQuestion,
-      Questions::UniqueTriagePhysicalSign,
       Questions::UniqueTriageQuestion,
       Questions::Vaccine,
       Questions::VitalSignAnthropometric,

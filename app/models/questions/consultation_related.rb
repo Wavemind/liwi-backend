@@ -1,3 +1,4 @@
+# TODO : Define its utility ?
 # Category of question concerning questions concerning previous consultations
 # Reference prefix : CR
 class Questions::ConsultationRelated < Question
@@ -10,4 +11,8 @@ class Questions::ConsultationRelated < Question
     'consultation_related'
   end
 
+  # Associate proper step depending on category ; empty for parent
+  def associate_step
+    self.step = Question.steps(:registration_step)
+  end
 end

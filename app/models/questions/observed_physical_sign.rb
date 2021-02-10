@@ -10,4 +10,8 @@ class Questions::ObservedPhysicalSign < Question
     'observed_physical_sign'
   end
 
+  # Associate proper step depending on category ; empty for parent
+  def associate_step
+    self.step = Question.steps[:medical_history]
+  end
 end

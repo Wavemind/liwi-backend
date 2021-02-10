@@ -10,4 +10,8 @@ class Questions::Referral < Question
     'referral'
   end
 
+  # Associate proper step depending on category ; empty for parent
+  def associate_step
+    self.step = Question.steps[:referral_test]
+  end
 end

@@ -10,4 +10,8 @@ class Questions::TreatmentQuestion < Question
     'treatment_question'
   end
 
+  # Associate proper step depending on category ; empty for parent
+  def associate_step
+    self.step = Question.steps[:health_care_questions]
+  end
 end
