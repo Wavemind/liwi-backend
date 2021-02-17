@@ -371,10 +371,10 @@ class VersionsService
       format = question.answer_type.value if %w(Date String).include?(question.answer_type.value)
       format = 'Autocomplete' if question.algorithm.medal_r_config["basic_questions"]["village_question_id"] === question.id
       hash[question.id]['display_format'] = format
-      hash[question.id]['qs'] = get_node_questions_sequences(question, [])
-      hash[question.id]['dd'] = get_node_diagnostics(question, [])
-      hash[question.id]['df'] = get_node_final_diagnostics(question)
-      hash[question.id]['cc'] = get_node_complaint_categories(question, [])
+      hash[question.id]['qs'] = get_node_questions_sequences(question, []).uniq
+      hash[question.id]['dd'] = get_node_diagnostics(question, []).uniq
+      hash[question.id]['df'] = get_node_final_diagnostics(question).uniq
+      hash[question.id]['cc'] = get_node_complaint_categories(question, []).uniq
       hash[question.id]['conditioned_by_cc'] = question.complaint_categories.map(&:id)
       hash[question.id]['referenced_in'] = []
       hash[question.id]['vital_signs'] = extract_vital_signs_array(hash[question.id], question)
