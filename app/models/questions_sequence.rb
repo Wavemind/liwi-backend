@@ -17,6 +17,11 @@ class QuestionsSequence < Node
     [QuestionsSequences::PredefinedSyndrome, QuestionsSequences::Comorbidity, QuestionsSequences::Triage, QuestionsSequences::Scored]
   end
 
+  # Add a warning level to rails validation
+  def warnings
+    @warnings ||= ActiveModel::Errors.new(self)
+  end
+
   # @params [Array][Array][Instances] instances before delete, [Instance] instance to delete
   # @@return [Array][Array][Instances] instances after delete
   # Remove the duplicated node if it was already set before. We keep the last one in order to be coherent in the diagram.
@@ -72,7 +77,7 @@ class QuestionsSequence < Node
         end
       else
         unless instance.children.any?
-          errors.add(:basic, I18n.t('flash_message.questions_sequence.question_no_children', type: instance.node.node_type, reference: instance.node.reference))
+          warnings.add(:basic, I18n.t('flash_message.questions_sequence.question_no_children', type: instance.node.node_type, reference: instance.node.reference))
         end
       end
     end
