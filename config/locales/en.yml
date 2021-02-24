@@ -764,6 +764,23 @@ en:
       title: "Details of %{name}"
   validate: "Validate"
   versions:
+    medal_data_config:
+      first_name_patient_id: "Patient first name"
+      middle_name_patient_id: "Patient middle name"
+      last_name_patient_id: "Patient last name"
+      gender_patient_id: "Patient gender"
+      birth_date_patient_id: "Patient date of birth"
+      first_name_caregiver_id: "Caregiver first name"
+      last_name_caregiver_id: "Caregiver last name"
+      relationship_to_child_id: "Relationship to child"
+      phone_number_caregiver_id: "Primary phone number"
+      phone_number_owner_id: "Primary phone owner"
+      other_number_id: "Secondary phone number"
+      other_number_owner_id: "Secondary phone owner"
+      last_two_weeks_visit_id: "Last two weeks visit"
+      kind_of_consultation_id: "Kind of consultation"
+      hospitalized_overnight_id: "Hospitalized overnight"
+      parent_in_study_id: "Patient existing in study"
     table:
       columns:
         name: "Name"
