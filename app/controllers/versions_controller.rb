@@ -254,8 +254,8 @@ class VersionsController < ApplicationController
         if missing_nodes.any?
           render json: { success: false, message: t('flash_message.missing_nodes_error', missing_nodes: missing_nodes.map(&:reference_label)) }
         else
-          job_id = GenerateJsonJob.perform_later(@version.id)
-          @version.update(job_id: job_id.provider_job_id)
+          job_id = VersionsService.generate_version_hash(@version.id)
+          # @version.update(job_id: job_id.provider_job_id)
           render json: { success: true, version: @version.reload }
         end
       end
