@@ -11,7 +11,7 @@ class VersionsService
 
     @patient_questions = []
 
-    hash = extract_version_metadata
+    hash = {}
     hash['diagnostics'] = {}
 
     # Add every question instantiated in the version
@@ -210,6 +210,11 @@ class VersionsService
 
       hash['instances'][question_instance.node.id] = extract_instances(question_instance) if hash['instances'][question_instance.node.id].nil? || question_instance.final_diagnostic_id.nil?
       hash['final_diagnostics'][question_instance.final_diagnostic_id]['instances'][question_instance.node.id] = extract_instances(question_instance) unless question_instance.final_diagnostic_id.nil?
+      puts '****'
+      puts question_instance.final_diagnostic_id
+      puts '****'
+      puts question_instance.node.id
+      puts '****'
     end
 
     # Loop in each predefined syndromes used in current diagnostic
