@@ -26,7 +26,7 @@ class HealthFacility < ApplicationRecord
 
   # Get current version from facility
   def current_version
-    version_access = health_facility_accesses.where(end_date: nil)
+    version_access = health_facility_accesses.find_by(end_date: nil)
     version_access.present? ? version_access.version : nil
   end
 
