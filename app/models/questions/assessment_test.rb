@@ -23,7 +23,7 @@ class Questions::AssessmentTest < Question
 
   # Associate proper step depending on category ; empty for parent
   def associate_step
-    self.step = Question.steps(:test_step)
+    self.step = Question.steps[:test_step]
   end
 end
 

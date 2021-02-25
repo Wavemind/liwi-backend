@@ -12,6 +12,6 @@ class Questions::BasicMeasurement < Question
 
   # Associate proper step depending on category ; empty for parent
   def associate_step
-    self.step = Question.steps(:basic_measurements)
+    self.step = Question.steps[:basic_measurements]
   end
 end
