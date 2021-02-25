@@ -24,14 +24,14 @@ class Algorithm < ApplicationRecord
   def create_reference_table_questions
     birth_date = questions.create!(label_en: 'Birth date', type: 'Questions::BasicDemographic', stage: Question.stages[:registration], is_mandatory: true, is_identifiable: true, answer_type_id: 6, is_default: true)
     age_in_days = questions.create!(label_en: 'Age in days', type: 'Questions::BasicDemographic', stage: Question.stages[:registration], is_mandatory: true, answer_type_id: 5, formula: '[ToDay(BD1)]', is_default: true)
-    weight = questions.create!(label_en: 'Weight (kg)', type: 'Questions::BasicMeasurement', stage: Question.stages[:triage], is_mandatory: true, answer_type_id: 4, estimable: true, is_default: true)
+    weight = questions.create!(label_en: 'Current Weight (kg)', type: 'Questions::BasicMeasurement', stage: Question.stages[:triage], is_mandatory: true, answer_type_id: 4, estimable: true, is_default: true)
     hr = questions.create!(label_en: 'Heart rate', type: 'Questions::VitalSignAnthropometric', stage: Question.stages[:consultation], answer_type_id: 4, is_default: true)
     rr = questions.create!(label_en: 'Respiratory rate', type: 'Questions::VitalSignAnthropometric', stage: Question.stages[:consultation], answer_type_id: 4, is_default: true)
-    muac = questions.create!(label_en: 'MUAC', type: 'Questions::BasicMeasurement', description_en: 'Mid Upper Arm Circumference', stage: Question.stages[:triage], answer_type_id: 4, is_default: true)
+    muac = questions.create!(label_en: 'MUAC in cm (only if age >6 months)', type: 'Questions::BasicMeasurement', description_en: 'Mid Upper Arm Circumference', stage: Question.stages[:triage], answer_type_id: 4, is_default: true)
     first_name = questions.create!(label_en: 'First name', type: 'Questions::BasicDemographic', stage: Question.stages[:registration], answer_type_id: 9, is_mandatory: true, is_identifiable: true, is_default: true)
     last_name = questions.create!(label_en: 'Last name', type: 'Questions::BasicDemographic', stage: Question.stages[:registration], answer_type_id: 9, is_mandatory: true, is_identifiable: true, is_default: true)
     gender = questions.create!(label_en: 'Gender', type: 'Questions::Demographic', stage: Question.stages[:registration], answer_type_id: 2, is_mandatory: true, is_default: true)
-    height = questions.create!(label_en: 'Height (cm)', type: 'Questions::BasicMeasurement', stage: Question.stages[:triage], answer_type_id: 4, is_default: true)
+    height = questions.create!(label_en: 'Height (cm) - if length is measured subtract 0.7cm', type: 'Questions::BasicMeasurement', stage: Question.stages[:triage], answer_type_id: 4, is_default: true)
     length = questions.create!(label_en: 'Length (cm)', type: 'Questions::BasicMeasurement', stage: Question.stages[:triage], answer_type_id: 4, is_default: true)
     bmi = questions.create!(label_en: 'BMI', type: 'Questions::BasicMeasurement', stage: Question.stages[:registration], answer_type_id: 5, formula: '[BM1] / (([BM3] / 100) * ([BM3] / 100))', is_default: true)
     temperature = questions.create!(label_en: 'Axillary temperature', type: 'Questions::BasicMeasurement', stage: Question.stages[:triage], answer_type_id: 4, is_default: true)
@@ -108,7 +108,7 @@ class Algorithm < ApplicationRecord
        {label_en: 'more than 97th', value: '97', operator: Answer.operators[:more_or_equal]},
      ])
 
-    muac_z_score = questions.create!(label_en: 'MUAC for age (z-score)', type: 'Questions::BackgroundCalculation', answer_type_id: 3, reference_table_x_id: age_in_days.id, reference_table_y_id: muac.id, reference_table_male: "muac_z_score_male_table", reference_table_female: "muac_z_score_female_table", is_default: true)
+    muac_z_score = questions.create!(label_en: 'MUAC for age z-score', type: 'Questions::BackgroundCalculation', answer_type_id: 3, reference_table_x_id: age_in_days.id, reference_table_y_id: muac.id, reference_table_male: "muac_z_score_male_table", reference_table_female: "muac_z_score_female_table", is_default: true)
     muac_z_score.answers.create([
        {label_en: 'less than -3 z-score', value: '-3', operator: Answer.operators[:less]},
        {label_en: '-2 z-score', value: '-3, -2', operator: Answer.operators[:between]},
