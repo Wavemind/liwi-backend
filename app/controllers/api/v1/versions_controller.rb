@@ -101,15 +101,14 @@ class Api::V1::VersionsController < Api::V1::ApplicationController
   # @params health_facility_id [Integer]
   # Get the MedAL-data config within basic questions, medal-data related questions and study id
   def medal_data_config
-    if params[:health_facility_id].present?
-      facility = HealthFacility.find_by(id: params[:health_facility_id])
-      if facility.present?
-        version = facility.current_version
+    if params[:version_id].present?
+      version = Version.find_by(id: params[:version_id])
+      if version.present?
         config = version.medal_data_config.merge(version.algorithm.medal_r_config['basic_questions'])
-        config['study_id'] = version.algorithm.study_id
+        config['study_id'] = version.algorithm.study.label
         render json: config
       else
-        render json: { errors: t('api.v1.versions.index.invalid_health_facility') }, status: :unprocessable_entity
+        render json: { errors: t('api.v1.versions.index.invalid_version') }, status: :unprocessable_entity
       end
     end
   end
