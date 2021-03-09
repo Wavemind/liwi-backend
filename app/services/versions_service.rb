@@ -594,7 +594,7 @@ class VersionsService
           formulation_hash['maximal_dose_per_kg'] = formulation.maximal_dose_per_kg
           formulation_hash['maximal_dose'] = formulation.maximal_dose
           formulation_hash['doses_per_day'] = formulation.doses_per_day
-          formulation_hash['description'] = formulation.description
+          formulation_hash['description'] = return_hstore_translated(formulation.description_translations)
           formulation_hash['injection_instructions'] = return_hstore_translated(formulation.injection_instructions_translations)
           formulation_hash['dispensing_description'] = return_hstore_translated(formulation.dispensing_description_translations)
           hash[health_care.id]['formulations'].push(formulation_hash)
