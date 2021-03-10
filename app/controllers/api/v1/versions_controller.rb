@@ -42,16 +42,16 @@ class Api::V1::VersionsController < Api::V1::ApplicationController
               render json: version.medal_r_json
             end
           else
-            render json: { errors: t('.no_version') }, status: :unprocessable_entity
+            render json: { errors: t('api.v1.versions.index.no_version') }, status: :unprocessable_entity
           end
         else
-          render json:  { errors: t('.invalid_token') }, status: :unprocessable_entity
+          render json:  { errors: t('api.v1.versions.index.invalid_token') }, status: :unprocessable_entity
         end
       else
-        render json: { errors: t('.no_health_facility') }, status: :unprocessable_entity
+        render json: { errors: t('api.v1.versions.index.no_health_facility') }, status: :unprocessable_entity
       end
     else
-      render json: { errors: t('.device_not_exist') }, status: :unprocessable_entity
+      render json: { errors: t('api.v1.versions.index.device_not_exist') }, status: :unprocessable_entity
     end
   end
 

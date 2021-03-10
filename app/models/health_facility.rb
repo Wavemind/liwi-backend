@@ -46,6 +46,7 @@ class HealthFacility < ApplicationRecord
     end
   end
 
+  # Generate secured token
   def generate_token
     key = SecureRandom.random_bytes(32)
     crypt = ActiveSupport::MessageEncryptor.new(key)
