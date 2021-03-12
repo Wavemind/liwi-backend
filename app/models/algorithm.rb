@@ -69,37 +69,37 @@ class Algorithm < ApplicationRecord
 
     z_score = questions.create!(label_en: 'Weight for age (z-score)', type: 'Questions::BackgroundCalculation', answer_type_id: 3, reference_table_x_id: age_in_days.id, reference_table_y_id: weight.id, reference_table_male: "z_score_male_table", reference_table_female: "z_score_female_table", is_default: true)
     z_score.answers.create([
-       {label_en: 'less than -3 z-score', value: '-3', operator: Answer.operators[:less]},
-       {label_en: '-2 z-score', value: '-3, -2', operator: Answer.operators[:between]},
-       {label_en: 'more than -2 z-score', value: '-2', operator: Answer.operators[:more_or_equal]},
+       {label_en: 'less than -2 z-score', value: '-2', operator: Answer.operators[:less]},
+       {label_en: '-2 z-score', value: '-2, -1', operator: Answer.operators[:between]},
+       {label_en: 'more than -2 z-score', value: '-1', operator: Answer.operators[:more_or_equal]},
      ])
 
     bmi_z_score = questions.create!(label_en: 'BMI (z-score)', type: 'Questions::BackgroundCalculation', answer_type_id: 3, reference_table_x_id: age_in_days.id, reference_table_y_id: bmi.id, reference_table_male: "bmi_for_age_male_table", reference_table_female: "bmi_for_age_female_table", is_default: true)
     bmi_z_score.answers.create([
-       {label_en: 'less than -3 z-score', value: '-3', operator: Answer.operators[:less]},
-       {label_en: '-2 z-score', value: '-3, -2', operator: Answer.operators[:between]},
-       {label_en: 'more than -2 z-score', value: '-2', operator: Answer.operators[:more_or_equal]},
+       {label_en: 'less than -2 z-score', value: '-2', operator: Answer.operators[:less]},
+       {label_en: '-2 z-score', value: '-2, -1', operator: Answer.operators[:between]},
+       {label_en: 'more than -2 z-score', value: '-1', operator: Answer.operators[:more_or_equal]},
      ])
 
     weight_for_height = questions.create!(label_en: 'Weight for height', type: 'Questions::BackgroundCalculation', answer_type_id: 3, reference_table_x_id: height.id, reference_table_y_id: weight.id, reference_table_male: "weight_for_height_male_table", reference_table_female: "weight_for_height_female_table", is_default: true)
     weight_for_height.answers.create([
-      {label_en: 'less than -3 z-score', value: '-3', operator: Answer.operators[:less]},
-      {label_en: '-2 z-score', value: '-3, -2', operator: Answer.operators[:between]},
-      {label_en: 'more than -2 z-score', value: '-2', operator: Answer.operators[:more_or_equal]},
+       {label_en: 'less than -2 z-score', value: '-2', operator: Answer.operators[:less]},
+       {label_en: '-2 z-score', value: '-2, -1', operator: Answer.operators[:between]},
+       {label_en: 'more than -2 z-score', value: '-1', operator: Answer.operators[:more_or_equal]},
     ])
 
     weight_for_length = questions.create!(label_en: 'Weight for length', type: 'Questions::BackgroundCalculation', answer_type_id: 3, reference_table_x_id: length.id, reference_table_y_id: weight.id, reference_table_male: "weight_for_length_male_table", reference_table_female: "weight_for_length_female_table", is_default: true)
     weight_for_length.answers.create([
-       {label_en: 'less than -3 z-score', value: '-3', operator: Answer.operators[:less]},
-       {label_en: '-2 z-score', value: '-3, -2', operator: Answer.operators[:between]},
-       {label_en: 'more than -2 z-score', value: '-2', operator: Answer.operators[:more_or_equal]},
+       {label_en: 'less than -2 z-score', value: '-2', operator: Answer.operators[:less]},
+       {label_en: '-2 z-score', value: '-2, -1', operator: Answer.operators[:between]},
+       {label_en: 'more than -2 z-score', value: '-1', operator: Answer.operators[:more_or_equal]},
      ])
 
-    hr_th = questions.create!(label_en: 'Heart rate in percentile', type: 'Questions::BackgroundCalculation', answer_type_id: 3, reference_table_x_id: age.id, reference_table_y_id: hr.id, reference_table_male: "heart_rate_table", reference_table_female: "heart_rate_table", is_default: true)
-    hr_th.answers.create([
-       {label_en: 'less than 90th', value: '90', operator: Answer.operators[:less]},
-       {label_en: 'more than 90th', value: '90', operator: Answer.operators[:more_or_equal]},
-     ])
+    # hr_th = questions.create!(label_en: 'Heart rate in percentile', type: 'Questions::BackgroundCalculation', answer_type_id: 3, reference_table_x_id: age.id, reference_table_y_id: hr.id, reference_table_male: "heart_rate_table", reference_table_female: "heart_rate_table", is_default: true)
+    # hr_th.answers.create([
+    #    {label_en: 'less than 90th', value: '90', operator: Answer.operators[:less]},
+    #    {label_en: 'more than 90th', value: '90', operator: Answer.operators[:more_or_equal]},
+    #  ])
 
     rr_th = questions.create!(label_en: 'Respiratory rate in percentile', type: 'Questions::BackgroundCalculation', answer_type_id: 3, reference_table_x_id: age.id, reference_table_y_id: temperature.id, reference_table_z_id: rr.id, reference_table_male: "respiratory_rate_table", reference_table_female: "respiratory_rate_table", is_default: true)
     rr_th.answers.create([
@@ -110,9 +110,9 @@ class Algorithm < ApplicationRecord
 
     muac_z_score = questions.create!(label_en: 'MUAC for age z-score', type: 'Questions::BackgroundCalculation', answer_type_id: 3, reference_table_x_id: age_in_days.id, reference_table_y_id: muac.id, reference_table_male: "muac_z_score_male_table", reference_table_female: "muac_z_score_female_table", is_default: true)
     muac_z_score.answers.create([
-       {label_en: 'less than -3 z-score', value: '-3', operator: Answer.operators[:less]},
-       {label_en: '-2 z-score', value: '-3, -2', operator: Answer.operators[:between]},
-       {label_en: 'more than -2 z-score', value: '-2', operator: Answer.operators[:more_or_equal]},
+      {label_en: 'less than -2 z-score', value: '-2', operator: Answer.operators[:less]},
+      {label_en: '-2 z-score', value: '-2, -1', operator: Answer.operators[:between]},
+      {label_en: 'more than -2 z-score', value: '-1', operator: Answer.operators[:more_or_equal]},
      ])
   end
 end
