@@ -99,7 +99,8 @@ namespace :algorithms do
             end
 
             diagnostic.final_diagnostics.map do |fd|
-              nodes[fd.id].update(diagnostic: new_diagnostic)
+              new_fd = nodes[fd.id]
+              new_fd.update(diagnostic: new_diagnostic) if new_fd.present?
             end
           end
         end
