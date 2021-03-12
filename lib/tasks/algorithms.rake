@@ -20,7 +20,14 @@ namespace :algorithms do
         Diagnostic.skip_callback(:create, :after, :generate_reference)
         Answer.skip_callback(:create, :after, :generate_reference)
         Node.skip_callback(:create, :after, :generate_reference)
-        Node.skip_callback(:create, :after, :create_unavailable_answer)
+
+        Questions::AssessmentTest.skip_callback(:create, :after, :create_unavailable_answer)
+        Questions::ChronicCondition.skip_callback(:create, :after, :create_unavailable_answer)
+        Questions::Exposure.skip_callback(:create, :after, :create_unavailable_answer)
+        Questions::PhysicalExam.skip_callback(:create, :after, :create_unavailable_answer)
+        Questions::Symptom.skip_callback(:create, :after, :create_unavailable_answer)
+        Questions::Vaccine.skip_callback(:create, :after, :create_unavailable_answer)
+
         Question.skip_callback(:create, :before, :associate_step)
         Question.skip_callback(:create, :after, :create_positive)
         Question.skip_callback(:create, :after, :create_present)
@@ -74,7 +81,7 @@ namespace :algorithms do
           new_version = copied_algorithm.versions.new(version.attributes.except('id', 'name', 'algorithm_id', 'medal_r_json', 'medal_r_json_version', 'created_at', 'updated_at'))
           new_version.name = "Copy of #{version.name}"
           versions[version.id] = new_version
-
+          new_version.save
           version.diagnostics.map do |diagnostic|
             new_diagnostic = new_version.diagnostics.create(reference: diagnostic.reference, label_translations: diagnostic.label_translations, node: nodes[diagnostic.node_id])
             diagnostics[diagnostic.id] = new_diagnostic
@@ -127,7 +134,12 @@ namespace :algorithms do
 
           # Recreate configs
 
-      rescue
+      rescue => e
+        puts '****'
+        puts e
+        puts '****'
+        puts e.backtrace
+        puts '****'
         raise ActiveRecord::Rollback, ''
       end
     end
