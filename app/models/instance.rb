@@ -32,7 +32,6 @@ class Instance < ApplicationRecord
   before_destroy :remove_condition_from_children
   after_destroy :remove_exclusion, if: Proc.new { self.node.is_a?(FinalDiagnostic) }
 
-
   validate :already_exist, on: :create
 
   # Enable recursive duplicating
