@@ -3,6 +3,7 @@ namespace :algorithms do
   task copy_algo: :environment do
     ActiveRecord::Base.transaction(requires_new: true) do
       begin
+        puts "#{Time.zone.now.strftime("%I:%M")} - Copying the Algorithm ..."
         origin_algorithm = Algorithm.find(1)
         copied_algorithm = Algorithm.new(origin_algorithm.attributes.except('id', 'name', 'created_at', 'updated_at'))
         copied_algorithm.name = "Copy of #{origin_algorithm.name}"
@@ -36,6 +37,7 @@ namespace :algorithms do
         Version.skip_callback(:create, :before, :init_config)
         Instance.skip_callback(:create, :after, :push_in_version_order)
 
+        puts "#{Time.zone.now.strftime("%I:%M")} - Copying the Nodes ..."
         origin_algorithm.nodes.each do |node|
           new_node = copied_algorithm.nodes.new(node.attributes.except('id', 'algorithm_id', 'created_at', 'updated_at'))
           new_node.save(validate: false)
@@ -61,6 +63,7 @@ namespace :algorithms do
         end
 
         # Recreate QS diagrams
+        puts "#{Time.zone.now.strftime("%I:%M")} - Instancing Nodes in QS diagrams ..."
         qss.map do |key, value|
           old_qs = Node.find(key)
           new_qs = value
@@ -77,6 +80,7 @@ namespace :algorithms do
           end
         end
 
+        puts "#{Time.zone.now.strftime("%I:%M")} - Copying Versions and their Diagnoses, along with the Instances in the diagrams..."
         origin_algorithm.versions.each do |version|
           new_version = copied_algorithm.versions.new(version.attributes.except('id', 'name', 'algorithm_id', 'medal_r_json', 'medal_r_json_version', 'created_at', 'updated_at'))
           new_version.name = "Copy of #{version.name}"
@@ -105,30 +109,31 @@ namespace :algorithms do
           end
         end
 
+        puts "#{Time.zone.now.strftime("%I:%M")} - Recreating links between Instances on the copied diagrams..."
         instances.map do |key, value|
           old_instance = Instance.find(key)
           new_instance = value
-          old_instance.children.map do |child|
-            Child.create(instance: new_instance, node: nodes[child.node_id])
-          end
 
           old_instance.conditions.map do |condition|
-            Condition.create(instance: new_instance, first_conditionable: answers[condition.first_conditionable_id], top_level: condition.top_level, score: condition.score)
+            Condition.create(referenceable: new_instance, first_conditionable: answers[condition.first_conditionable_id], top_level: condition.top_level, score: condition.score)
           end
         end
 
+        puts "#{Time.zone.now.strftime("%I:%M")} - Recreating Exclusions on the copied Nodes..."
         NodeExclusion.where(excluding_node_id: nodes.keys).map do |exclusion|
           NodeExclusion.create(node_type: exclusion.node_type, excluding_node: nodes[exclusion.excluding_node_id], excluded_node: nodes[exclusion.excluded_node_id])
         end
 
+        puts "#{Time.zone.now.strftime("%I:%M")} - Recreating Complaint Category restrictions on the copied nodes..."
         NodeComplaintCategory.where(node_id: nodes.keys).map do |association|
           NodeComplaintCategory.create(node: nodes[association.node_id], complaint_category: nodes[association.complaint_category_id])
         end
 
+        puts "#{Time.zone.now.strftime("%I:%M")} - Relinking the reference tables to the copied Nodes..."
         copied_algorithm.questions.where.not(reference_table_x_id: nil).map do |reference_table|
           x = nodes[reference_table.reference_table_x_id]
           y = nodes[reference_table.reference_table_y_id]
-          z = reference_table.reference_table_z_id.present ? nodes[reference_table.reference_table_z_id] : nil
+          z = reference_table.reference_table_z_id.present? ? nodes[reference_table.reference_table_z_id] : nil
           reference_table.update(reference_table_x: x, reference_table_y: y, reference_table_z: z)
         end
 
@@ -136,11 +141,8 @@ namespace :algorithms do
           # Recreate configs
 
       rescue => e
-        puts '****'
         puts e
-        puts '****'
         puts e.backtrace
-        puts '****'
         raise ActiveRecord::Rollback, ''
       end
     end
