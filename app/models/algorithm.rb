@@ -95,11 +95,11 @@ class Algorithm < ApplicationRecord
        {label_en: 'more than -2 z-score', value: '-1', operator: Answer.operators[:more_or_equal]},
      ])
 
-    hr_th = questions.create!(label_en: 'Heart rate in percentile', type: 'Questions::BackgroundCalculation', answer_type_id: 3, reference_table_x_id: age.id, reference_table_y_id: hr.id, reference_table_male: "heart_rate_table", reference_table_female: "heart_rate_table", is_default: true)
-    hr_th.answers.create([
-       {label_en: 'less than 90th', value: '90', operator: Answer.operators[:less]},
-       {label_en: 'more than 90th', value: '90', operator: Answer.operators[:more_or_equal]},
-     ])
+    # hr_th = questions.create!(label_en: 'Heart rate in percentile', type: 'Questions::BackgroundCalculation', answer_type_id: 3, reference_table_x_id: age.id, reference_table_y_id: hr.id, reference_table_male: "heart_rate_table", reference_table_female: "heart_rate_table", is_default: true)
+    # hr_th.answers.create([
+    #    {label_en: 'less than 90th', value: '90', operator: Answer.operators[:less]},
+    #    {label_en: 'more than 90th', value: '90', operator: Answer.operators[:more_or_equal]},
+    #  ])
 
     rr_th = questions.create!(label_en: 'Respiratory rate in percentile', type: 'Questions::BackgroundCalculation', answer_type_id: 3, reference_table_x_id: age.id, reference_table_y_id: temperature.id, reference_table_z_id: rr.id, reference_table_male: "respiratory_rate_table", reference_table_female: "respiratory_rate_table", is_default: true)
     rr_th.answers.create([
