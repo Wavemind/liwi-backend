@@ -82,7 +82,7 @@ namespace :algorithms do
 
         puts "#{Time.zone.now.strftime("%I:%M")} - Copying Versions and their Diagnoses, along with the Instances in the diagrams..."
         origin_algorithm.versions.each do |version|
-          new_version = copied_algorithm.versions.new(version.attributes.except('id', 'name', 'algorithm_id', 'medal_r_json', 'medal_r_json_version', 'created_at', 'updated_at'))
+          new_version = copied_algorithm.versions.new(version.attributes.except('id', 'name', 'algorithm_id', 'medal_r_config', 'medal_data_config', 'medal_r_json', 'medal_r_json_version', 'created_at', 'updated_at'))
           new_version.name = "Copy of #{version.name}"
           versions[version.id] = new_version
           new_version.save
@@ -104,7 +104,7 @@ namespace :algorithms do
 
             diagnostic.final_diagnostics.map do |fd|
               new_fd = nodes[fd.id]
-              new_fd.update(diagnostic: new_diagnostic) if new_fd.present?
+              new_fd.update(diagnostic: new_diagnostic, algorithm_id: copied_algorithm.id) if new_fd.present?
             end
           end
         end
@@ -137,8 +137,11 @@ namespace :algorithms do
           reference_table.update(reference_table_x: x, reference_table_y: y, reference_table_z: z)
         end
 
-
-          # Recreate configs
+        puts "#{Time.zone.now.strftime("%I:%M")} - Recreating configs ..."
+        config = copied_algorithm.medal_r_config
+        config['basic_questions'].map do |k,v|
+          config['basic_questions'][k] = nodes[v].id
+        end
 
       rescue => e
         puts e
