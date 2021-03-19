@@ -51,12 +51,16 @@ namespace :algorithms do
               new_answer = new_node.answers.create(answer.attributes.except('id', 'node_id', 'created_at', 'updated_at'))
               answers[answer.id] = new_answer
             end
+          elsif node.is_a?(QuestionsSequence)
+            node.answers.each do |answer|
+              new_answer = new_node.answers.create(answer.attributes.except('id', 'node_id', 'created_at', 'updated_at'))
+              answers[answer.id] = new_answer
+            end
+            qss[node.id] = new_node
           elsif node.is_a?(HealthCares::Drug)
             node.formulations.each do |formulation|
               new_node.formulations.create(formulation.attributes.except('id', 'node_id', 'created_at', 'updated_at'))
             end
-          elsif node.is_a?(QuestionsSequence)
-            qss[node.id] = new_node
           end
 
           nodes[node.id] = new_node
@@ -84,6 +88,7 @@ namespace :algorithms do
         origin_algorithm.versions.each do |version|
           new_version = copied_algorithm.versions.new(version.attributes.except('id', 'name', 'algorithm_id', 'medal_r_config', 'medal_data_config', 'medal_r_json', 'medal_r_json_version', 'created_at', 'updated_at'))
           new_version.name = "Copy of #{version.name}"
+          new_version.init_config
           versions[version.id] = new_version
           new_version.save
           version.diagnostics.map do |diagnostic|
