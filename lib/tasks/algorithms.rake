@@ -118,7 +118,11 @@ namespace :algorithms do
         instances.map do |key, value|
           old_instance = Instance.find(key)
           new_instance = value
+          old_instance.children.map do |child|
+            Child.create(instance: new_instance, node: nodes[child.node_id])
+          end
 
+          Condition.skip_callback(:validation, :before, :prevent_loop)
           old_instance.conditions.map do |condition|
             Condition.create(referenceable: new_instance, first_conditionable: answers[condition.first_conditionable_id], top_level: condition.top_level, score: condition.score)
           end
