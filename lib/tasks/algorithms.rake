@@ -41,6 +41,9 @@ namespace :algorithms do
         puts "#{Time.zone.now.strftime("%I:%M")} - Copying the Nodes ..."
         origin_algorithm.nodes.each do |node|
           new_node = copied_algorithm.nodes.new(node.attributes.except('id', 'algorithm_id', 'created_at', 'updated_at'))
+          if node.is_a?(FinalDiagnostic)
+            node.algorithm_id = copied_algorithm.id
+          end
           new_node.save(validate: false)
 
           node.medias.map do |media|
@@ -110,7 +113,7 @@ namespace :algorithms do
 
             diagnostic.final_diagnostics.map do |fd|
               new_fd = nodes[fd.id]
-              new_fd.update(diagnostic: new_diagnostic, algorithm_id: copied_algorithm.id) if new_fd.present?
+              new_fd.update(diagnostic: new_diagnostic) if new_fd.present?
             end
           end
         end
