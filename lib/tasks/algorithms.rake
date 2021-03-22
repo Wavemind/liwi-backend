@@ -36,6 +36,7 @@ namespace :algorithms do
         QuestionsSequence.skip_callback(:create, :after, :create_boolean)
         Version.skip_callback(:create, :before, :init_config)
         Instance.skip_callback(:create, :after, :push_in_version_order)
+        Condition.skip_callback(:validation, :before, :prevent_loop)
 
         puts "#{Time.zone.now.strftime("%I:%M")} - Copying the Nodes ..."
         origin_algorithm.nodes.each do |node|
@@ -122,7 +123,6 @@ namespace :algorithms do
             Child.create(instance: new_instance, node: nodes[child.node_id])
           end
 
-          Condition.skip_callback(:validation, :before, :prevent_loop)
           old_instance.conditions.map do |condition|
             Condition.create(referenceable: new_instance, first_conditionable: answers[condition.first_conditionable_id], top_level: condition.top_level, score: condition.score)
           end
