@@ -510,7 +510,7 @@ class VersionsService
   # @return [Array]
   # Recursive method in order to retrieve every diagnostics the question appears in.
   def self.get_node_diagnostics(node, diagnostics)
-    node.instances.where(final_diagnostic_id: nil).map(&:instanceable).each do |instanceable|
+    node.instances.map(&:instanceable).each do |instanceable|
       unless instanceable == node
         if instanceable.is_a? Diagnostic
           # push the id in the array only if it is not already there and if it is handled by the current algorithm version
