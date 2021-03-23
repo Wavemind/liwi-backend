@@ -42,7 +42,7 @@ namespace :algorithms do
         origin_algorithm.nodes.each do |node|
           new_node = copied_algorithm.nodes.new(node.attributes.except('id', 'algorithm_id', 'created_at', 'updated_at'))
           if node.is_a?(FinalDiagnostic)
-            node.algorithm_id = copied_algorithm.id
+            new_node.algorithm_id = copied_algorithm.id
           end
           new_node.save(validate: false)
 
