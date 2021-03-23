@@ -41,7 +41,7 @@ namespace :algorithms do
 
         puts "#{Time.zone.now.strftime("%I:%M")} - Copying the Nodes ..."
         origin_algorithm.nodes.each do |node|
-          new_node = copied_algorithm.nodes.new(node.attributes.except('id', 'algorithm_id', 'created_at', 'updated_at'))
+          new_node = copied_algorithm.nodes.new(node.attributes.except('id', 'algorithm_id', 'diagnostic_id', 'created_at', 'updated_at'))
           new_node.save(validate: false)
 
           node.medias.map do |media|
