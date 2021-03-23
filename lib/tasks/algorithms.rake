@@ -29,6 +29,7 @@ namespace :algorithms do
         Questions::Symptom.skip_callback(:create, :after, :create_unavailable_answer)
         Questions::Vaccine.skip_callback(:create, :after, :create_unavailable_answer)
 
+        FinalDiagnostic.skip_callback(:create, :before, :link_algorithm)
         Question.skip_callback(:create, :before, :associate_step)
         Question.skip_callback(:create, :after, :create_positive)
         Question.skip_callback(:create, :after, :create_present)
@@ -41,9 +42,6 @@ namespace :algorithms do
         puts "#{Time.zone.now.strftime("%I:%M")} - Copying the Nodes ..."
         origin_algorithm.nodes.each do |node|
           new_node = copied_algorithm.nodes.new(node.attributes.except('id', 'algorithm_id', 'created_at', 'updated_at'))
-          if node.is_a?(FinalDiagnostic)
-            new_node.algorithm_id = copied_algorithm.id
-          end
           new_node.save(validate: false)
 
           node.medias.map do |media|
