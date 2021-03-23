@@ -41,31 +41,33 @@ namespace :algorithms do
 
         puts "#{Time.zone.now.strftime("%I:%M")} - Copying the Nodes ..."
         origin_algorithm.nodes.each do |node|
-          new_node = copied_algorithm.nodes.new(node.attributes.except('id', 'algorithm_id', 'diagnostic_id', 'created_at', 'updated_at'))
-          new_node.save(validate: false)
+          unless node.is_a?(FinalDiagnostic)
+            new_node = copied_algorithm.nodes.new(node.attributes.except('id', 'algorithm_id', 'created_at', 'updated_at'))
+            new_node.save(validate: false)
 
-          node.medias.map do |media|
-            new_node.medias.create(media.attributes.except('id', 'fileable_id', 'created_at', 'updated_at'))
+            node.medias.map do |media|
+              new_node.medias.create(media.attributes.except('id', 'fileable_id', 'created_at', 'updated_at'))
+            end
+
+            if node.is_a?(Question)
+              node.answers.each do |answer|
+                new_answer = new_node.answers.create(answer.attributes.except('id', 'node_id', 'created_at', 'updated_at'))
+                answers[answer.id] = new_answer
+              end
+            elsif node.is_a?(QuestionsSequence)
+              node.answers.each do |answer|
+                new_answer = new_node.answers.create(answer.attributes.except('id', 'node_id', 'created_at', 'updated_at'))
+                answers[answer.id] = new_answer
+              end
+              qss[node.id] = new_node
+            elsif node.is_a?(HealthCares::Drug)
+              node.formulations.each do |formulation|
+                new_node.formulations.create(formulation.attributes.except('id', 'node_id', 'created_at', 'updated_at'))
+              end
+            end
+
+            nodes[node.id] = new_node
           end
-
-          if node.is_a?(Question)
-            node.answers.each do |answer|
-              new_answer = new_node.answers.create(answer.attributes.except('id', 'node_id', 'created_at', 'updated_at'))
-              answers[answer.id] = new_answer
-            end
-          elsif node.is_a?(QuestionsSequence)
-            node.answers.each do |answer|
-              new_answer = new_node.answers.create(answer.attributes.except('id', 'node_id', 'created_at', 'updated_at'))
-              answers[answer.id] = new_answer
-            end
-            qss[node.id] = new_node
-          elsif node.is_a?(HealthCares::Drug)
-            node.formulations.each do |formulation|
-              new_node.formulations.create(formulation.attributes.except('id', 'node_id', 'created_at', 'updated_at'))
-            end
-          end
-
-          nodes[node.id] = new_node
         end
 
         # Recreate QS diagrams
@@ -97,6 +99,16 @@ namespace :algorithms do
             new_diagnostic = new_version.diagnostics.create(reference: diagnostic.reference, label_translations: diagnostic.label_translations, node: nodes[diagnostic.node_id])
             diagnostics[diagnostic.id] = new_diagnostic
 
+            diagnostic.final_diagnostics.map do |fd|
+              puts "Final diagnosis being copied : #{fd.id}"
+
+              new_fd = copied_algorithm.nodes.new(fd.attributes.except('id', 'algorithm_id', 'diagnostic_id', 'created_at', 'updated_at'))
+              new_fd.diagnostic_id = new_diagnostic.id
+              new_fd.save(validate: false)
+
+              nodes[fd.id] = new_fd
+            end
+
             diagnostic.components.map do |instance|
               new_instance = new_diagnostic.components.create(
                 node: nodes[instance.node_id],
@@ -107,12 +119,6 @@ namespace :algorithms do
                 description: instance.description
               )
               instances[instance.id] = new_instance
-            end
-
-            diagnostic.final_diagnostics.map do |fd|
-              puts "Final diagnosis being copied : #{fd.id}"
-              new_fd = nodes[fd.id]
-              new_fd.update(diagnostic_id: new_diagnostic.id)
             end
           end
         end
