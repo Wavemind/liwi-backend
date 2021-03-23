@@ -380,7 +380,7 @@ class VersionsService
       hash[question.id]['dd'] = get_node_diagnostics(question, []).uniq
       hash[question.id]['df'] = get_node_final_diagnostics(question).uniq
       hash[question.id]['cc'] = get_node_complaint_categories(question, []).uniq
-      hash[question.id]['conditioned_by_cc'] = question.complaint_categories.map(&:id)
+      hash[question.id]['conditioned_by_cc'] = question.is_a?(Questions::ComplaintCategory) ? [] : question.complaint_categories.map(&:id)
       hash[question.id]['referenced_in'] = []
       hash[question.id]['vital_signs'] = extract_vital_signs_array(hash[question.id], question)
       hash[question.id]['counter'] = 0
@@ -401,7 +401,11 @@ class VersionsService
       hash[question.id]['max_message_warning'] = question.max_message_warning
       hash[question.id]['min_message_error'] = question.min_message_error
       hash[question.id]['max_message_error'] = question.max_message_error
-      hash[question.id]['diagnostics_related_to_cc'] = get_complaint_category_diagnostics(question, []) if question.is_a?(Questions::ComplaintCategory)
+      if question.is_a?(Questions::ComplaintCategory)
+        hash[question.id]['questions_related_to_cc'] = get_complaint_category_questions(question)
+        hash[question.id]['questions_sequences_related_to_cc'] = get_complaint_category_questions_sequences(question)
+        hash[question.id]['diagnostics_related_to_cc'] = get_complaint_category_diagnostics(question, [])
+      end
 
       hash[question.id]['medias'] = extract_medias(question)
 
@@ -488,11 +492,25 @@ class VersionsService
     diagnostics
   end
 
+  # @params [Node]
+  # @return [Array]
+  # Return all questions conditioned by given complaint category
+  def self.get_complaint_category_questions(cc)
+    NodeComplaintCategory.where(complaint_category: cc).map(&:node).select{|n| n.is_a?(Question)}.map(&:id)
+  end
+
+  # @params [Node]
+  # @return [Array]
+  # Return all questions sequences conditioned by given complaint category
+  def self.get_complaint_category_questions_sequences(cc)
+    NodeComplaintCategory.where(complaint_category: cc).map(&:node).select{|n| n.is_a?(QuestionsSequence)}.map(&:id)
+  end
+
   # @params [Node, Array]
   # @return [Array]
   # Recursive method in order to retrieve every diagnostics the question appears in.
   def self.get_node_diagnostics(node, diagnostics)
-    node.instances.map(&:instanceable).each do |instanceable|
+    node.instances.where(final_diagnostic_id: nil).map(&:instanceable).each do |instanceable|
       unless instanceable == node
         if instanceable.is_a? Diagnostic
           # push the id in the array only if it is not already there and if it is handled by the current algorithm version
