@@ -112,7 +112,7 @@ namespace :algorithms do
             diagnostic.final_diagnostics.map do |fd|
               puts "Final diagnosis being copied : #{fd.id}"
               new_fd = nodes[fd.id]
-              new_fd.update(diagnostic: new_diagnostic)
+              new_fd.update(diagnostic_id: new_diagnostic.id)
             end
           end
         end
