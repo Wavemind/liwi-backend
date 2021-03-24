@@ -159,6 +159,9 @@ namespace :algorithms do
         config['basic_questions'].map do |k,v|
           config['basic_questions'][k] = nodes[v].id
         end
+        copied_algorithm.update(medal_r_config: config)
+
+
 
       rescue => e
         puts e
