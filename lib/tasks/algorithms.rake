@@ -46,23 +46,27 @@ namespace :algorithms do
             new_node.save(validate: false)
 
             node.medias.map do |media|
-              new_node.medias.create(media.attributes.except('id', 'fileable_id', 'created_at', 'updated_at'))
+              new_media = new_node.medias.new(media.attributes.except('id', 'fileable_id', 'created_at', 'updated_at'))
+              new_media.save(validate: false)
             end
 
             if node.is_a?(Question)
               node.answers.each do |answer|
-                new_answer = new_node.answers.create(answer.attributes.except('id', 'node_id', 'created_at', 'updated_at'))
+                new_answer = new_node.answers.new(answer.attributes.except('id', 'node_id', 'created_at', 'updated_at'))
+                new_answer.save(validate: false)
                 answers[answer.id] = new_answer
               end
             elsif node.is_a?(QuestionsSequence)
               node.answers.each do |answer|
-                new_answer = new_node.answers.create(answer.attributes.except('id', 'node_id', 'created_at', 'updated_at'))
+                new_answer = new_node.answers.new(answer.attributes.except('id', 'node_id', 'created_at', 'updated_at'))
+                new_answer.save(validate: false)
                 answers[answer.id] = new_answer
               end
               qss[node.id] = new_node
             elsif node.is_a?(HealthCares::Drug)
               node.formulations.each do |formulation|
-                new_node.formulations.create(formulation.attributes.except('id', 'node_id', 'created_at', 'updated_at'))
+                new_formulation = new_node.formulations.new(formulation.attributes.except('id', 'node_id', 'created_at', 'updated_at'))
+                new_formulation.save(validate: false)
               end
             end
 
@@ -76,7 +80,7 @@ namespace :algorithms do
           old_qs = Node.find(key)
           new_qs = value
           old_qs.components.map do |instance|
-            new_instance = new_qs.components.create(
+            new_instance = new_qs.components.create!(
               node: nodes[instance.node_id],
               final_diagnostic: nodes[instance.final_diagnostic_id],
               position_x: instance.position_x,
@@ -96,7 +100,7 @@ namespace :algorithms do
           versions[version.id] = new_version
           new_version.save
           version.diagnostics.map do |diagnostic|
-            new_diagnostic = new_version.diagnostics.create(reference: diagnostic.reference, label_translations: diagnostic.label_translations, node: nodes[diagnostic.node_id])
+            new_diagnostic = new_version.diagnostics.create!(reference: diagnostic.reference, label_translations: diagnostic.label_translations, node: nodes[diagnostic.node_id])
             diagnostics[diagnostic.id] = new_diagnostic
 
             diagnostic.final_diagnostics.map do |fd|
@@ -107,14 +111,14 @@ namespace :algorithms do
               new_fd.save(validate: false)
 
               FinalDiagnosticHealthCare.where(final_diagnostic: fd).map do |link|
-                FinalDiagnosticHealthCare.create(final_diagnostic: new_fd, node: nodes[link.node_id])
+                FinalDiagnosticHealthCare.create!(final_diagnostic: new_fd, node: nodes[link.node_id])
               end
 
               nodes[fd.id] = new_fd
             end
 
             diagnostic.components.map do |instance|
-              new_instance = new_diagnostic.components.create(
+              new_instance = new_diagnostic.components.create!(
                 node: nodes[instance.node_id],
                 final_diagnostic: nodes[instance.final_diagnostic_id],
                 position_x: instance.position_x,
@@ -132,22 +136,22 @@ namespace :algorithms do
           old_instance = Instance.find(key)
           new_instance = value
           old_instance.children.map do |child|
-            Child.create(instance: new_instance, node: nodes[child.node_id])
+            Child.create!(instance: new_instance, node: nodes[child.node_id])
           end
 
           old_instance.conditions.map do |condition|
-            Condition.create(referenceable: new_instance, first_conditionable: answers[condition.first_conditionable_id], top_level: condition.top_level, score: condition.score)
+            Condition.create!(referenceable: new_instance, first_conditionable: answers[condition.first_conditionable_id], top_level: condition.top_level, score: condition.score)
           end
         end
 
         puts "#{Time.zone.now.strftime("%I:%M")} - Recreating Exclusions on the copied Nodes..."
         NodeExclusion.where(excluding_node_id: nodes.keys).map do |exclusion|
-          NodeExclusion.create(node_type: exclusion.node_type, excluding_node: nodes[exclusion.excluding_node_id], excluded_node: nodes[exclusion.excluded_node_id])
+          NodeExclusion.create!(node_type: exclusion.node_type, excluding_node: nodes[exclusion.excluding_node_id], excluded_node: nodes[exclusion.excluded_node_id])
         end
 
         puts "#{Time.zone.now.strftime("%I:%M")} - Recreating Complaint Category restrictions on the copied nodes..."
         NodeComplaintCategory.where(node_id: nodes.keys).map do |association|
-          NodeComplaintCategory.create(node: nodes[association.node_id], complaint_category: nodes[association.complaint_category_id])
+          NodeComplaintCategory.create!(node: nodes[association.node_id], complaint_category: nodes[association.complaint_category_id])
         end
 
         puts "#{Time.zone.now.strftime("%I:%M")} - Relinking the reference tables to the copied Nodes..."
