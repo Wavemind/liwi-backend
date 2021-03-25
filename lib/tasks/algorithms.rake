@@ -106,6 +106,10 @@ namespace :algorithms do
               new_fd.diagnostic_id = new_diagnostic.id
               new_fd.save(validate: false)
 
+              FinalDiagnosticHealthCare.where(final_diagnostic: fd).map do |link|
+                FinalDiagnosticHealthCare.create(final_diagnostic: new_fd, node: nodes[link.node_id])
+              end
+
               nodes[fd.id] = new_fd
             end
 
