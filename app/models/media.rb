@@ -11,8 +11,13 @@ class Media < ApplicationRecord
   translates :label
 
   def duplicate_file(original_media)
-    copy_carrierwave_file(original_media, self, :content_file)
-    self.save!
+    begin
+      copy_carrierwave_file(original_media, self, :url)
+      self.save!
+    rescue
+      self.url = "https://images.unsplash.com/photo-1485550409059-9afb054cada4?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tfGVufDB8fDB8&ixlib=rb-1.2.1&w=1000&q=80"
+      self.save
+    end
   end
 
 end
