@@ -74,6 +74,7 @@ namespace :algorithms do
           end
         end
 
+
         # Recreate QS diagrams
         puts "#{Time.zone.now.strftime("%I:%M")} - Instancing Nodes in QS diagrams ..."
         qss.map do |key, value|
@@ -175,7 +176,7 @@ namespace :algorithms do
         config['basic_questions'].map do |k,v|
           config['basic_questions'][k] = nodes[v].id
         end
-        copied_algorithm.update(medal_r_config: config)
+        copied_algorithm.update!(medal_r_config: config)
 
 
 
