@@ -45,7 +45,7 @@ namespace :algorithms do
             new_node = copied_algorithm.nodes.new(node.attributes.except('id', 'algorithm_id', 'created_at', 'updated_at'))
             new_node.save(validate: false)
 
-            node.medias.map do |media| #TODO : Fix and do it on DFs aswell
+            node.medias.map do |media| 
               new_media = Media.new(label_translations: media.label_translations, fileable: new_node)
               new_media.duplicate_file(media)
             end
@@ -112,6 +112,11 @@ namespace :algorithms do
               new_fd = copied_algorithm.nodes.new(fd.attributes.except('id', 'algorithm_id', 'diagnostic_id', 'created_at', 'updated_at'))
               new_fd.diagnostic_id = new_diagnostic.id
               new_fd.save(validate: false)
+
+              fd.medias.map do |media|
+                new_media = Media.new(label_translations: media.label_translations, fileable: new_fd)
+                new_media.duplicate_file(media)
+              end
 
               FinalDiagnosticHealthCare.where(final_diagnostic: fd).map do |link|
                 FinalDiagnosticHealthCare.create!(final_diagnostic: new_fd, node_id: nodes[link.node_id].id)
