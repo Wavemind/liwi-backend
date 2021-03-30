@@ -405,7 +405,7 @@ class VersionsService
 
       hash[question.id]['medias'] = extract_medias(question)
 
-      question.answers.each do |answer|
+      question.answers.order(:reference).each do |answer|
         answer_hash = {}
         answer_hash['id'] = answer.id
         answer_hash['label'] = return_hstore_translated(answer.label_translations)
@@ -643,7 +643,7 @@ class VersionsService
   # Loop in each output possibilities(answer) for defined predefined syndrome
   def self.push_questions_sequence_answers(questions_sequence)
     hash = {}
-    questions_sequence.answers.each do |answer|
+    questions_sequence.answers.order(:reference).each do |answer|
       answer_hash = {}
       answer_hash['id'] = answer.id
       answer_hash['label'] = answer.label
