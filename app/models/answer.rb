@@ -11,7 +11,7 @@ class Answer < ApplicationRecord
   validates_presence_of :operator, if: Proc.new { self.node.is_a?(Question) && self.node.answer_type.display == 'Input' && !%w(Questions::BasicMeasurement Questions::VitalSignAnthropometric).include?(self.node.type)}
 
   after_validation :correct_value_type
-  after_create :generate_reference, if: Proc.new { self.node.is_a?(QuestionsSequence) || [1,7,8].include?(self.node.answer_type_id) }
+  after_create :generate_reference, if: Proc.new { !self.node.is_a?(QuestionsSequence) || ![1,7,8].include?(self.node.answer_type_id) }
   before_destroy :remove_conditions
 
   translates :label
