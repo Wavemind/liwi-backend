@@ -26,13 +26,13 @@ class Api::V1::VersionsController < Api::V1::ApplicationController
           version = device.health_facility.versions.where('health_facility_accesses.end_date IS NULL').first
 
           Activity.create(
-              version: version,
-              device: device,
-              user: current_user,
-              timezone: params[:timezone],
-              latitude: params[:latitude],
-              longitude: params[:longitude],
-          )
+            version: version,
+            device: device,
+            user: current_user,
+            timezone: params[:timezone],
+            latitude: params[:latitude],
+            longitude: params[:longitude],
+            )
 
           if version.present?
             medal_r_json_version = params[:json_version]
@@ -72,7 +72,12 @@ class Api::V1::VersionsController < Api::V1::ApplicationController
       facility = HealthFacility.find_by(id: params[:health_facility_id])
       if facility.present?
         facility_version = facility.health_facility_accesses.where(end_date: nil).first.version
-        render json: facility_version.medal_r_json
+        medal_r_json_version = params[:json_version]
+        if medal_r_json_version == facility_version.medal_r_json_version
+          render json: {}, status: 204
+        else
+          render json: facility_version.medal_r_json
+        end
       else
         render json: { errors: t('api.v1.versions.index.invalid_health_facility') }, status: :unprocessable_entity
       end

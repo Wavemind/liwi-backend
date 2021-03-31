@@ -11,8 +11,8 @@ class FinalDiagnosisExclusionDatatable < AjaxDatatablesRails::ActiveRecord
 
   def view_columns
     @view_columns ||= {
-      excluding_diagnosis_id: { source: 'NodeExclusion.excluding_node_id' },
-      excluded_diagnosis_id: { source: 'NodeExclusion.excluded_node_id' },
+      excluding_diagnosis_id: { source: 'Node.label_translations' },
+      excluded_diagnosis_id: { source: 'Node.label_translations' },
     }
   end
 
@@ -29,6 +29,6 @@ class FinalDiagnosisExclusionDatatable < AjaxDatatablesRails::ActiveRecord
 
   def get_raw_records
     version_final_diagnosis_ids = Version.find(params[:id]).diagnostics.map(&:final_diagnostics).flatten.map(&:id)
-    NodeExclusion.final_diagnostic.where(excluding_node_id: version_final_diagnosis_ids, excluded_node_id: version_final_diagnosis_ids)
+    NodeExclusion.joins(:excluded_node, :excluding_node).final_diagnostic.where(excluding_node_id: version_final_diagnosis_ids, excluded_node_id: version_final_diagnosis_ids)
   end
 end
