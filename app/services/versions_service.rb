@@ -49,7 +49,7 @@ class VersionsService
   private
 
   def self.return_hstore_translated(field)
-    return nil if field.nil?
+    return Hash[@available_languages.collect { |k| [k, ""] } ] if field.nil?
     field.select {|k,v| @available_languages.include?(k)}
   end
 
