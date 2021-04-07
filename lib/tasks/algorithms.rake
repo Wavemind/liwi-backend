@@ -4,7 +4,7 @@ namespace :algorithms do
     ActiveRecord::Base.transaction(requires_new: true) do
       begin
         puts "#{Time.zone.now.strftime("%I:%M")} - Copying the Algorithm ..."
-        origin_algorithm = Algorithm.find(1)
+        origin_algorithm = Algorithm.find(5)
         copied_algorithm = Algorithm.new(origin_algorithm.attributes.except('id', 'name', 'created_at', 'updated_at'))
         copied_algorithm.name = "Copy of #{origin_algorithm.name}"
         Algorithm.skip_callback(:create, :after, :create_reference_table_questions)
