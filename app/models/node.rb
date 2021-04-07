@@ -41,6 +41,12 @@ class Node < ApplicationRecord
     "#{full_reference} - #{label}"
   end
 
+  # @return [String]
+  # Return the label with the reference formatted for dropdown lists
+  def reference_label_dropdown_list
+    "#{label} (#{label})"
+  end
+
   # @return [Boolean]
   # Verify if current node have instances dependencies
   def dependencies?
