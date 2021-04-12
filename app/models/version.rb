@@ -27,6 +27,8 @@ class Version < ApplicationRecord
   scope :archived, ->(){ where(archived: true) }
   scope :active, ->(){ where(archived: false) }
 
+  translates :description
+
   before_create :init_config
 
   validates_presence_of :name

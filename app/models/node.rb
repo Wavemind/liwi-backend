@@ -20,7 +20,7 @@ class Node < ApplicationRecord
   validates_presence_of :label_en
   after_create :generate_reference
 
-  translates :label, :description
+  translates :label, :description, :min_message_error, :max_message_error, :min_message_warning, :max_message_warning
 
   # Puts nil instead of empty string when formula is not set in the view.
   nilify_blanks only: [:formula]

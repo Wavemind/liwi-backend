@@ -17,6 +17,7 @@ class Algorithm < ApplicationRecord
 
   after_create :create_reference_table_questions
 
+  translates :age_limit_message
   translates :emergency_content
 
   # Create all hardcoded questions related to reference tables and age.
