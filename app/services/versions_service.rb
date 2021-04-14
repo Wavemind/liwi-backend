@@ -137,7 +137,7 @@ class VersionsService
     hash['config'] = @version.algorithm.medal_r_config
     translated_systems_order = {}
     @version.medal_r_config['systems_order'].map do |system|
-      translated_systems_order[system] = I18n.t("questions.systems.#{system}")
+      translated_systems_order[system] = Hash[@available_languages.collect { |k| [k, I18n.t("questions.systems.#{system}", locale: k)] } ]
     end
     hash['config']['systems_translations'] = translated_systems_order
     hash['config']['age_limit'] = @version.algorithm.age_limit
