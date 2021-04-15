@@ -4,7 +4,7 @@ namespace :algorithms do
     ActiveRecord::Base.transaction(requires_new: true) do
       begin
         puts "#{Time.zone.now.strftime("%I:%M")} - Copying the Algorithm ..."
-        origin_algorithm = Algorithm.find(1)
+        origin_algorithm = Algorithm.find(5)
         copied_algorithm = Algorithm.new(origin_algorithm.attributes.except('id', 'name', 'created_at', 'updated_at'))
         copied_algorithm.name = "Copy of #{origin_algorithm.name}"
         Algorithm.skip_callback(:create, :after, :create_reference_table_questions)
@@ -29,6 +29,7 @@ namespace :algorithms do
         Questions::Symptom.skip_callback(:create, :after, :create_unavailable_answer)
         Questions::Vaccine.skip_callback(:create, :after, :create_unavailable_answer)
 
+        FinalDiagnostic.skip_callback(:create, :before, :link_algorithm)
         Question.skip_callback(:create, :before, :associate_step)
         Question.skip_callback(:create, :after, :create_positive)
         Question.skip_callback(:create, :after, :create_present)
@@ -40,35 +41,39 @@ namespace :algorithms do
 
         puts "#{Time.zone.now.strftime("%I:%M")} - Copying the Nodes ..."
         origin_algorithm.nodes.each do |node|
-          new_node = copied_algorithm.nodes.new(node.attributes.except('id', 'algorithm_id', 'created_at', 'updated_at'))
-          if node.is_a?(FinalDiagnostic)
-            new_node.algorithm_id = copied_algorithm.id
-          end
-          new_node.save(validate: false)
+          unless node.is_a?(FinalDiagnostic)
+            new_node = copied_algorithm.nodes.new(node.attributes.except('id', 'algorithm_id', 'created_at', 'updated_at'))
+            new_node.save(validate: false)
 
-          node.medias.map do |media|
-            new_node.medias.create(media.attributes.except('id', 'fileable_id', 'created_at', 'updated_at'))
-          end
+            node.medias.map do |media| 
+              new_media = Media.new(label_translations: media.label_translations, fileable: new_node)
+              new_media.duplicate_file(media)
+            end
 
-          if node.is_a?(Question)
-            node.answers.each do |answer|
-              new_answer = new_node.answers.create(answer.attributes.except('id', 'node_id', 'created_at', 'updated_at'))
-              answers[answer.id] = new_answer
+            if node.is_a?(Question)
+              node.answers.each do |answer|
+                new_answer = new_node.answers.new(answer.attributes.except('id', 'node_id', 'created_at', 'updated_at'))
+                new_answer.save(validate: false)
+                answers[answer.id] = new_answer
+              end
+            elsif node.is_a?(QuestionsSequence)
+              node.answers.each do |answer|
+                new_answer = new_node.answers.new(answer.attributes.except('id', 'node_id', 'created_at', 'updated_at'))
+                new_answer.save(validate: false)
+                answers[answer.id] = new_answer
+              end
+              qss[node.id] = new_node
+            elsif node.is_a?(HealthCares::Drug)
+              node.formulations.each do |formulation|
+                new_formulation = new_node.formulations.new(formulation.attributes.except('id', 'node_id', 'created_at', 'updated_at'))
+                new_formulation.save(validate: false)
+              end
             end
-          elsif node.is_a?(QuestionsSequence)
-            node.answers.each do |answer|
-              new_answer = new_node.answers.create(answer.attributes.except('id', 'node_id', 'created_at', 'updated_at'))
-              answers[answer.id] = new_answer
-            end
-            qss[node.id] = new_node
-          elsif node.is_a?(HealthCares::Drug)
-            node.formulations.each do |formulation|
-              new_node.formulations.create(formulation.attributes.except('id', 'node_id', 'created_at', 'updated_at'))
-            end
-          end
 
-          nodes[node.id] = new_node
+            nodes[node.id] = new_node
+          end
         end
+
 
         # Recreate QS diagrams
         puts "#{Time.zone.now.strftime("%I:%M")} - Instancing Nodes in QS diagrams ..."
@@ -76,7 +81,7 @@ namespace :algorithms do
           old_qs = Node.find(key)
           new_qs = value
           old_qs.components.map do |instance|
-            new_instance = new_qs.components.create(
+            new_instance = new_qs.components.create!(
               node: nodes[instance.node_id],
               final_diagnostic: nodes[instance.final_diagnostic_id],
               position_x: instance.position_x,
@@ -89,18 +94,40 @@ namespace :algorithms do
         end
 
         puts "#{Time.zone.now.strftime("%I:%M")} - Copying Versions and their Diagnoses, along with the Instances in the diagrams..."
-        origin_algorithm.versions.each do |version|
+        origin_algorithm.versions.active.each do |version|
+
+          # TODO : Add left/right top questions
+          # Update medal_r_config and medal_data_config instead of reseting it
           new_version = copied_algorithm.versions.new(version.attributes.except('id', 'name', 'algorithm_id', 'medal_r_config', 'medal_data_config', 'medal_r_json', 'medal_r_json_version', 'created_at', 'updated_at'))
           new_version.name = "Copy of #{version.name}"
           new_version.init_config
           versions[version.id] = new_version
           new_version.save
           version.diagnostics.map do |diagnostic|
-            new_diagnostic = new_version.diagnostics.create(reference: diagnostic.reference, label_translations: diagnostic.label_translations, node: nodes[diagnostic.node_id])
+            new_diagnostic = new_version.diagnostics.create!(reference: diagnostic.reference, label_translations: diagnostic.label_translations, node: nodes[diagnostic.node_id])
             diagnostics[diagnostic.id] = new_diagnostic
 
+            diagnostic.final_diagnostics.map do |fd|
+              puts "Final diagnosis being copied : #{fd.id}"
+
+              new_fd = copied_algorithm.nodes.new(fd.attributes.except('id', 'algorithm_id', 'diagnostic_id', 'created_at', 'updated_at'))
+              new_fd.diagnostic_id = new_diagnostic.id
+              new_fd.save(validate: false)
+
+              fd.medias.map do |media|
+                new_media = Media.new(label_translations: media.label_translations, fileable: new_fd)
+                new_media.duplicate_file(media)
+              end
+
+              FinalDiagnosticHealthCare.where(final_diagnostic: fd).map do |link|
+                FinalDiagnosticHealthCare.create!(final_diagnostic: new_fd, node_id: nodes[link.node_id].id)
+              end
+
+              nodes[fd.id] = new_fd
+            end
+
             diagnostic.components.map do |instance|
-              new_instance = new_diagnostic.components.create(
+              new_instance = new_diagnostic.components.create!(
                 node: nodes[instance.node_id],
                 final_diagnostic: nodes[instance.final_diagnostic_id],
                 position_x: instance.position_x,
@@ -110,11 +137,6 @@ namespace :algorithms do
               )
               instances[instance.id] = new_instance
             end
-
-            diagnostic.final_diagnostics.map do |fd|
-              new_fd = nodes[fd.id]
-              new_fd.update(diagnostic: new_diagnostic) if new_fd.present?
-            end
           end
         end
 
@@ -123,22 +145,22 @@ namespace :algorithms do
           old_instance = Instance.find(key)
           new_instance = value
           old_instance.children.map do |child|
-            Child.create(instance: new_instance, node: nodes[child.node_id])
+            Child.create!(instance: new_instance, node: nodes[child.node_id])
           end
 
           old_instance.conditions.map do |condition|
-            Condition.create(referenceable: new_instance, first_conditionable: answers[condition.first_conditionable_id], top_level: condition.top_level, score: condition.score)
+            Condition.create!(referenceable: new_instance, first_conditionable: answers[condition.first_conditionable_id], top_level: condition.top_level, score: condition.score)
           end
         end
 
         puts "#{Time.zone.now.strftime("%I:%M")} - Recreating Exclusions on the copied Nodes..."
         NodeExclusion.where(excluding_node_id: nodes.keys).map do |exclusion|
-          NodeExclusion.create(node_type: exclusion.node_type, excluding_node: nodes[exclusion.excluding_node_id], excluded_node: nodes[exclusion.excluded_node_id])
+          NodeExclusion.create!(node_type: exclusion.node_type, excluding_node: nodes[exclusion.excluding_node_id], excluded_node: nodes[exclusion.excluded_node_id])
         end
 
         puts "#{Time.zone.now.strftime("%I:%M")} - Recreating Complaint Category restrictions on the copied nodes..."
         NodeComplaintCategory.where(node_id: nodes.keys).map do |association|
-          NodeComplaintCategory.create(node: nodes[association.node_id], complaint_category: nodes[association.complaint_category_id])
+          NodeComplaintCategory.create!(node: nodes[association.node_id], complaint_category: nodes[association.complaint_category_id])
         end
 
         puts "#{Time.zone.now.strftime("%I:%M")} - Relinking the reference tables to the copied Nodes..."
@@ -154,6 +176,8 @@ namespace :algorithms do
         config['basic_questions'].map do |k,v|
           config['basic_questions'][k] = nodes[v].id
         end
+        copied_algorithm.medal_r_config = config
+        copied_algorithm.save(validate: false)
 
       rescue => e
         puts e

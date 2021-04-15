@@ -24,6 +24,9 @@ class Version < ApplicationRecord
   belongs_to :first_top_right_question, class_name: 'Instance', optional: true
   belongs_to :second_top_right_question, class_name: 'Instance', optional: true
 
+  scope :archived, ->(){ where(archived: true) }
+  scope :active, ->(){ where(archived: false) }
+
   before_create :init_config
 
   validates_presence_of :name

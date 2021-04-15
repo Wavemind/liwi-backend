@@ -49,7 +49,7 @@ class VersionsService
   private
 
   def self.return_hstore_translated(field)
-    return nil if field.nil?
+    return Hash[@available_languages.collect { |k| [k, ""] } ] if field.nil?
     field.select {|k,v| @available_languages.include?(k)}
   end
 
@@ -412,6 +412,7 @@ class VersionsService
       question.answers.each do |answer|
         answer_hash = {}
         answer_hash['id'] = answer.id
+        answer_hash['reference'] = answer.reference
         answer_hash['label'] = return_hstore_translated(answer.label_translations)
         answer_hash['value'] = answer.value
         answer_hash['operator'] = answer.operator
@@ -664,6 +665,7 @@ class VersionsService
     questions_sequence.answers.each do |answer|
       answer_hash = {}
       answer_hash['id'] = answer.id
+      answer_hash['reference'] = answer.reference
       answer_hash['label'] = answer.label
 
       hash[answer.id] = answer_hash

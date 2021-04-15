@@ -1,9 +1,9 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.6.0'
+ruby '2.7.0'
 
-gem 'rails', '~> 6.0'
+gem 'rails', '6.0.3.4'
 gem 'pg'
 gem 'puma'
 gem 'sass-rails'
@@ -53,6 +53,7 @@ gem 'prawn'
 gem 'prawn-qrcode'
 gem 'city-state'
 gem 'tinymce-rails'
+gem 'copy_carrierwave_file'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
