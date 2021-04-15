@@ -153,8 +153,8 @@ class InstancesController < ApplicationController
       :condition_id,
       :score,
       :final_diagnostic_id,
-      :duration,
-      :description
+      :duration_en,
+      :description_en
     )
   end
 end

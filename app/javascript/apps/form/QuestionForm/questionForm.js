@@ -662,14 +662,14 @@ export default class QuestionForm extends React.Component {
                       <Form.Label>{I18n.t("activerecord.attributes.question.min_message_warning")}</Form.Label>
                       <Form.Control
                         as="textarea"
-                        name="min_message_warning"
+                        name="min_message_warning_en"
                         disabled={deployedMode}
-                        value={values.min_message_warning}
+                        value={values.min_message_warning_en}
                         onChange={handleChange}
-                        isInvalid={touched.min_message_warning && !!errors.min_message_warning}
+                        isInvalid={touched.min_message_warning_en && !!errors.min_message_warning_en}
                       />
                       <Form.Control.Feedback type="invalid">
-                        {errors.min_message_warning}
+                        {errors.min_message_warning_en}
                       </Form.Control.Feedback>
                     </Form.Group>
 
@@ -681,10 +681,10 @@ export default class QuestionForm extends React.Component {
                         disabled={deployedMode}
                         value={values.max_message_warning}
                         onChange={handleChange}
-                        isInvalid={touched.max_message_warning && !!errors.max_message_warning}
+                        isInvalid={touched.max_message_warning_en && !!errors.max_message_warning_en}
                       />
                       <Form.Control.Feedback type="invalid">
-                        {errors.max_message_warning}
+                        {errors.max_message_warning_en}
                       </Form.Control.Feedback>
                     </Form.Group>
 
@@ -692,14 +692,14 @@ export default class QuestionForm extends React.Component {
                       <Form.Label>{I18n.t("activerecord.attributes.question.min_message_error")}</Form.Label>
                       <Form.Control
                         as="textarea"
-                        name="min_message_error"
+                        name="min_message_error_en"
                         disabled={deployedMode}
-                        value={values.min_message_error}
+                        value={values.min_message_error_en}
                         onChange={handleChange}
-                        isInvalid={touched.min_message_error && !!errors.min_message_error}
+                        isInvalid={touched.min_message_error_en && !!errors.min_message_error_en}
                       />
                       <Form.Control.Feedback type="invalid">
-                        {errors.min_message_error}
+                        {errors.min_message_error_en}
                       </Form.Control.Feedback>
                     </Form.Group>
 
@@ -707,14 +707,14 @@ export default class QuestionForm extends React.Component {
                       <Form.Label>{I18n.t("activerecord.attributes.question.max_message_error")}</Form.Label>
                       <Form.Control
                         as="textarea"
-                        name="max_message_error"
+                        name="max_message_error_en"
                         disabled={deployedMode}
-                        value={values.max_message_error}
+                        value={values.max_message_error_en}
                         onChange={handleChange}
-                        isInvalid={touched.max_message_error && !!errors.max_message_error}
+                        isInvalid={touched.max_message_error_en && !!errors.max_message_error_en}
                       />
                       <Form.Control.Feedback type="invalid">
-                        {errors.max_message_error}
+                        {errors.max_message_error_en}
                       </Form.Control.Feedback>
                     </Form.Group>
                   </>
