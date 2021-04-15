@@ -73,7 +73,7 @@ class Api::V1::VersionsController < Api::V1::ApplicationController
       if facility.present?
         facility_version = facility.health_facility_accesses.where(end_date: nil).first.version
         medal_r_json_version = params[:json_version]
-        if medal_r_json_version == facility_version.medal_r_json_version
+        if medal_r_json_version.to_i == facility_version.medal_r_json_version
           render json: {}, status: 204
         else
           render json: facility_version.medal_r_json
