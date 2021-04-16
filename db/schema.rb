@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_01_143206) do
+ActiveRecord::Schema.define(version: 2021_04_14_122059) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -38,7 +38,7 @@ ActiveRecord::Schema.define(version: 2021_04_01_143206) do
 
   create_table "administration_routes", force: :cascade do |t|
     t.string "category"
-    t.string "name"
+    t.string "old_name"
     t.hstore "name_translations"
   end
 
@@ -50,7 +50,7 @@ ActiveRecord::Schema.define(version: 2021_04_01_143206) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "age_limit"
-    t.string "age_limit_message"
+    t.string "old_age_limit_message"
     t.json "medal_r_config"
     t.json "village_json"
     t.integer "minimum_age"
@@ -156,6 +156,8 @@ ActiveRecord::Schema.define(version: 2021_04_01_143206) do
     t.boolean "by_age", default: false
     t.bigint "node_id"
     t.bigint "administration_route_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.hstore "description_translations"
     t.hstore "injection_instructions_translations"
     t.hstore "dispensing_description_translations"
@@ -196,8 +198,8 @@ ActiveRecord::Schema.define(version: 2021_04_01_143206) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "final_diagnostic_id"
-    t.string "duration"
-    t.string "description"
+    t.string "old_duration"
+    t.string "old_description"
     t.integer "position_x", default: 100
     t.integer "position_y", default: 100
     t.hstore "duration_translations"
@@ -315,10 +317,10 @@ ActiveRecord::Schema.define(version: 2021_04_01_143206) do
     t.float "max_value_warning"
     t.float "min_value_error"
     t.float "max_value_error"
-    t.string "min_message_warning"
-    t.string "max_message_warning"
-    t.string "min_message_error"
-    t.string "max_message_error"
+    t.string "old_min_message_warning"
+    t.string "old_max_message_warning"
+    t.string "old_min_message_error"
+    t.string "old_max_message_error"
     t.boolean "estimable", default: false
     t.bigint "reference_table_z_id"
     t.boolean "is_neonat", default: false
@@ -425,7 +427,7 @@ ActiveRecord::Schema.define(version: 2021_04_01_143206) do
     t.bigint "algorithm_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "description"
+    t.text "old_description"
     t.bigint "top_left_question_id"
     t.bigint "first_top_right_question_id"
     t.bigint "second_top_right_question_id"

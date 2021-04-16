@@ -140,10 +140,10 @@ fr:
   answers:
     predefined:
       absent: "Absent"
-      negative: "Negative"
+      negative: "Négatif"
       "no": "Non"
-      positive: "Positive"
-      present: "Present"
+      positive: "Positif"
+      present: "Présent"
       "yes": "Oui"
     edit:
       title: "Edit answers"
@@ -165,9 +165,9 @@ fr:
         between_not_following: "There must be be no gap when you use several BETWEEN operators. Make sure the values follow each other nicely."
         less_greater_than_more_or_equal: "Your answer with the LESS THAN operator can't be greater than your answer with the GREATER THAN OR EQUAL operator."
         less_equal_more_or_equal: "The value for the LESS THAN operator must be equal to the value for the GREATER THAN OR EQUAL operator."
-    unavailable: "Test/Assessment is unavailable"
-    unfeasible: "Not feasible"
-    unknown: "Unknown"
+    unavailable: "Indisponible"
+    unfeasible: "Infaisable"
+    unknown: "Inconnu"
   api:
     v1:
       health_facilities:
@@ -680,11 +680,11 @@ fr:
       health_care_questions: "Health Care Questions"
       referral_step: "Referral"
     systems:
-      general: "General"
-      respiratory_circulation: "Respiratory and Circulatory system"
-      ear_nose_mouth_throat: "Ear, Nose, Mouth and Throat system"
-      visual: "Eye / visual system"
-      integumentary: "Skin/Hair/Mucosae system"
+      general: "Général"
+      respiratory_circulation: "Système respiratoire et circulaire"
+      ear_nose_mouth_throat: "Système Oreille, Nez, Bouche et Gorge"
+      visual: "Système visuel / des yeux"
+      integumentary: "Système de la peau/cheveux/mucoses"
       digestive: "Gastrointestinal system"
       urinary_reproductive: "Genitourinary system"
       nervous: "Nervous system"
@@ -695,8 +695,8 @@ fr:
       prevention: "Screening / Prevention"
       follow_up_questions: "Additional follow-up questions"
       complementary_medical_history: "Complementary Medical History Questions"
-      vital_sign: "Vital Signs"
-      priority_sign: "Danger / Priority signs"
+      vital_sign: "Signes vitaux"
+      priority_sign: "Signes dangereux / prioritaires"
       feeding: "Feeding"
     table:
       columns:

@@ -53,6 +53,10 @@ class VersionsService
     field.select {|k,v| @available_languages.include?(k)}
   end
 
+  def self.return_intern_label_translated(path)
+    Hash[@available_languages.collect { |k| [k, I18n.t(path, locale: k)] } ]
+  end
+
   # Fetch every nodes and add to vital sign where they are used in formula or reference tables
   def self.add_reference_links(nodes)
     nodes.map do |k, node|
@@ -137,7 +141,7 @@ class VersionsService
     hash['config'] = @version.algorithm.medal_r_config
     translated_systems_order = {}
     @version.medal_r_config['systems_order'].map do |system|
-      translated_systems_order[system] = Hash[@available_languages.collect { |k| [k, I18n.t("questions.systems.#{system}", locale: k)] } ]
+      translated_systems_order[system] = return_intern_label_translated("questions.systems.#{system}")
     end
     hash['config']['systems_translations'] = translated_systems_order
     hash['config']['age_limit'] = @version.algorithm.age_limit
@@ -367,7 +371,7 @@ class VersionsService
       hash[question.id]['is_identifiable'] = question.is_identifiable
       hash[question.id]['is_danger_sign'] = question.is_danger_sign
       hash[question.id]['unavailable'] = question.unavailable
-      hash[question.id]['unavailable_label'] = (question.is_a?(Questions::VitalSignAnthropometric) || question.is_a?(Questions::BasicMeasurement)) ? I18n.t('answers.unfeasible') : ''
+      hash[question.id]['unavailable_label'] = (question.is_a?(Questions::VitalSignAnthropometric) || question.is_a?(Questions::BasicMeasurement)) ? return_intern_label_translated('answers.unfeasible') : ''
       hash[question.id]['estimable'] = question.estimable
       # Send Reference instead of actual display format to help f-e interpret the question correctly
       hash[question.id]['value_format'] = question.answer_type.value
