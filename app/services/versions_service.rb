@@ -126,7 +126,7 @@ class VersionsService
     hash['version_languages'] = @available_languages
     hash['emergency_content'] = @version.algorithm.emergency_content
     hash['json_version'] = @version.medal_r_json_version
-    hash['description'] = @version.description
+    hash['description'] = return_intern_label_translated(@version.description_translations)
     hash['algorithm_id'] = @version.algorithm.id
     hash['algorithm_name'] = @version.algorithm.name
     hash['is_arm_control'] = @version.is_arm_control
@@ -134,7 +134,7 @@ class VersionsService
     hash['study'] = {
       id: @version.algorithm.study.present? ? @version.algorithm.study.id : nil,
       label: @version.algorithm.study.present? ? @version.algorithm.study.label : nil,
-      description: @version.algorithm.study.present? ? @version.algorithm.study.description : nil
+      description: @version.algorithm.study.present? ? return_intern_label_translated(@version.algorithm.study.description_translations) : nil
     }
 
     hash['mobile_config'] = extract_mobile_config
@@ -145,7 +145,7 @@ class VersionsService
     end
     hash['config']['systems_translations'] = translated_systems_order
     hash['config']['age_limit'] = @version.algorithm.age_limit
-    hash['config']['age_limit_message'] = @version.algorithm.age_limit_message
+    hash['config']['age_limit_message'] = return_intern_label_translated(@version.algorithm.age_limit_message_translations)
     hash['config']['minimum_age'] = @version.algorithm.minimum_age
     hash['config']['consent_management'] = @version.algorithm.consent_management
     hash['config']['track_referral'] = @version.algorithm.track_referral
@@ -371,7 +371,7 @@ class VersionsService
       hash[question.id]['is_identifiable'] = question.is_identifiable
       hash[question.id]['is_danger_sign'] = question.is_danger_sign
       hash[question.id]['unavailable'] = question.unavailable
-      hash[question.id]['unavailable_label'] = (question.is_a?(Questions::VitalSignAnthropometric) || question.is_a?(Questions::BasicMeasurement)) ? return_intern_label_translated('answers.unfeasible') : ''
+      hash[question.id]['unavailable_label'] = (question.is_a?(Questions::VitalSignAnthropometric) || question.is_a?(Questions::BasicMeasurement)) ? return_intern_label_translated('answers.unfeasible') : {}
       hash[question.id]['estimable'] = question.estimable
       # Send Reference instead of actual display format to help f-e interpret the question correctly
       hash[question.id]['value_format'] = question.answer_type.value
@@ -401,10 +401,10 @@ class VersionsService
       hash[question.id]['max_value_warning'] = question.max_value_warning
       hash[question.id]['min_value_error'] = question.min_value_error
       hash[question.id]['max_value_error'] = question.max_value_error
-      hash[question.id]['min_message_warning'] = question.min_message_warning
-      hash[question.id]['max_message_warning'] = question.max_message_warning
-      hash[question.id]['min_message_error'] = question.min_message_error
-      hash[question.id]['max_message_error'] = question.max_message_error
+      hash[question.id]['min_message_warning'] = return_hstore_translated(question.min_message_warning_translations)
+      hash[question.id]['max_message_warning'] = return_hstore_translated(question.max_message_warning_translations)
+      hash[question.id]['min_message_error'] = return_hstore_translated(question.min_message_error_translations)
+      hash[question.id]['max_message_error'] = return_hstore_translated(question.max_message_error_translations)
       if question.is_a?(Questions::ComplaintCategory)
         hash[question.id]['questions_related_to_cc'] = get_complaint_category_questions(question)
         hash[question.id]['questions_sequences_related_to_cc'] = get_complaint_category_questions_sequences(question)
