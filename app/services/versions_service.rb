@@ -126,7 +126,7 @@ class VersionsService
     hash['version_languages'] = @available_languages
     hash['emergency_content'] = @version.algorithm.emergency_content
     hash['json_version'] = @version.medal_r_json_version
-    hash['description'] = return_hstore_translated(@version.description_translations)
+    hash['description'] = return_intern_label_translated(@version.description_translations)
     hash['algorithm_id'] = @version.algorithm.id
     hash['algorithm_name'] = @version.algorithm.name
     hash['is_arm_control'] = @version.is_arm_control
@@ -134,7 +134,7 @@ class VersionsService
     hash['study'] = {
       id: @version.algorithm.study.present? ? @version.algorithm.study.id : nil,
       label: @version.algorithm.study.present? ? @version.algorithm.study.label : nil,
-      description: @version.algorithm.study.present? ? return_hstore_translated(@version.algorithm.study.description_translations) : nil
+      description: @version.algorithm.study.present? ? return_intern_label_translated(@version.algorithm.study.description_translations) : nil
     }
 
     hash['mobile_config'] = extract_mobile_config
@@ -145,7 +145,7 @@ class VersionsService
     end
     hash['config']['systems_translations'] = translated_systems_order
     hash['config']['age_limit'] = @version.algorithm.age_limit
-    hash['config']['age_limit_message'] = return_hstore_translated(@version.algorithm.age_limit_message_translations)
+    hash['config']['age_limit_message'] = return_intern_label_translated(@version.algorithm.age_limit_message_translations)
     hash['config']['minimum_age'] = @version.algorithm.minimum_age
     hash['config']['consent_management'] = @version.algorithm.consent_management
     hash['config']['track_referral'] = @version.algorithm.track_referral
