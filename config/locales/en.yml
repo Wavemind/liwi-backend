@@ -540,6 +540,7 @@ en:
       nurse: "Nurse"
       midwife: "Midwife"
       pharmacist: "Pharmacist"
+      registration_assistant: "Registration Assistant"
     table:
       columns:
         first_name: "First name"
