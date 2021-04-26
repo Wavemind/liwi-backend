@@ -90,6 +90,7 @@ export default class QuestionForm extends React.Component {
         answerTypes: result.answer_types,
         categories: result.categories,
         stages: result.stages,
+        rounds: result.rounds,
         emergency_statuses: result.emergency_statuses,
         complaintCategories: result.complaint_categories,
         isLoading: false
@@ -245,6 +246,8 @@ export default class QuestionForm extends React.Component {
       target
     } = this.state;
 
+    console.log(stages);
+    console.log(rounds);
     return (
       isLoading ? <Loader/> :
         <FadeIn>
@@ -597,7 +600,7 @@ export default class QuestionForm extends React.Component {
                   </>
                   : null}
 
-                {values.answer_type_id === 4} ?
+                {values.answer_type_id === 4 ?
                   <Form.Group controlId="validationRound">
                     <Form.Label>{I18n.t("activerecord.attributes.question.round")}</Form.Label>
                     <Form.Control
@@ -608,8 +611,8 @@ export default class QuestionForm extends React.Component {
                       isInvalid={touched.round && !!errors.round}
                     >
                       <option value="">{I18n.t("select")}</option>
-                      {rounds.map(round => (
-                        <option key={`round-${round}`} value={round}>{I18n.t(`questions.rounds.${round}.label`)}</option>
+                      {Object.keys(rounds).map(key => (
+                        <option key={`rounds-${rounds[key]}`} value={key}>{I18n.t(`questions.rounds.${key}.label`)}</option>
                       ))}
                     </Form.Control>
                     <Form.Control.Feedback type="invalid">

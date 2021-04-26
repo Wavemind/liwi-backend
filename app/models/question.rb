@@ -6,7 +6,7 @@ class Question < Node
   after_create :create_positive, if: Proc.new { answer_type.value == 'Positive' }
   after_create :create_present, if: Proc.new { answer_type.value == 'Present' }
 
-  enum round [:tenth, :half, :unit]
+  enum round: [:tenth, :half, :unit]
   enum step: [:registration_step, :first_look_assessment, :complaint_categories, :basic_measurements, :medical_history, :physical_exam, :test_step, :health_care_questions, :referral_step]
   enum stage: [:registration, :triage, :test, :consultation, :diagnosis_management]
   enum system: [

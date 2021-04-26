@@ -59,6 +59,7 @@ export default class StepperQuestionForm extends React.Component {
       max_message_warning: question?.max_message_warning_translations?.en || "",
       min_message_error: question?.min_message_error_translations?.en || "",
       max_message_error: question?.max_message_error_translations?.en || "",
+      round: question?.round || "",
       complaint_categories_attributes: question?.complaint_categories || [],
       answers_attributes: question?.answers || [],
       // Don't touch this shit. Due to carrierwave give us to much info and json parsing create 2 element instead of one
