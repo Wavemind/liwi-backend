@@ -69,6 +69,7 @@ en:
         min_message_warning: "Warning message if below range"
         min_value_error: "Lower limit before error"
         min_value_warning: "Lower limit before warning"
+        round: "Value rounded to"
         snomed: "SNOMED label"
         stage: "Stage"
         system: "System"
@@ -663,6 +664,16 @@ en:
     priorities:
       basic: "Basic"
       mandatory: "Mandatory"
+    rounds:
+      half:
+        label: "Half"
+        value: "0.5"
+      tenth:
+        label: "Tenth"
+        value: "0.1"
+      unit:
+        label: "Unit"
+        value: "1"
     stages:
       registration: "Registration"
       triage: "Triage"

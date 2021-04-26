@@ -144,6 +144,7 @@ class QuestionsController < ApplicationController
       :max_message_warning,
       :min_message_error,
       :max_message_error,
+      :round,
       :estimable,
       :is_neonat,
       :is_danger_sign,

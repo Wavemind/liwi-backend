@@ -6,6 +6,7 @@ class Question < Node
   after_create :create_positive, if: Proc.new { answer_type.value == 'Positive' }
   after_create :create_present, if: Proc.new { answer_type.value == 'Present' }
 
+  enum round [:tenth, :half, :unit]
   enum step: [:registration_step, :first_look_assessment, :complaint_categories, :basic_measurements, :medical_history, :physical_exam, :test_step, :health_care_questions, :referral_step]
   enum stage: [:registration, :triage, :test, :consultation, :diagnosis_management]
   enum system: [
@@ -103,13 +104,14 @@ class Question < Node
     categories
   end
 
-  # TODO: COMMENTAIRE
+  # Send dropdown list values for react forms
   def self.list_attributes(diagram_type, algorithm)
     {
       categories: categories(diagram_type),
       answer_types: AnswerType.all.as_json(methods: :display_name),
       systems: Question.systems.map { |k, v| [I18n.t("questions.systems.#{k}"), k] },
       stages: Question.stages,
+      rounds: Question.rounds,
       emergency_statuses: Question.emergency_statuses,
       complaint_categories: algorithm.questions.where(type: 'Questions::ComplaintCategory')
     }

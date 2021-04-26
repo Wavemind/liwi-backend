@@ -233,6 +233,7 @@ export default class QuestionForm extends React.Component {
       categories,
       stages,
       systems,
+      rounds,
       emergency_statuses,
       snomedResults,
       isLoading,
@@ -594,6 +595,27 @@ export default class QuestionForm extends React.Component {
                       </Popover>
                     </Overlay>
                   </>
+                  : null}
+
+                {values.answer_type_id === 4} ?
+                  <Form.Group controlId="validationRound">
+                    <Form.Label>{I18n.t("activerecord.attributes.question.round")}</Form.Label>
+                    <Form.Control
+                      as="select"
+                      name="round"
+                      value={values.round}
+                      onChange={handleChange}
+                      isInvalid={touched.round && !!errors.round}
+                    >
+                      <option value="">{I18n.t("select")}</option>
+                      {rounds.map(round => (
+                        <option key={`round-${round}`} value={round}>{I18n.t(`questions.rounds.${round}.label`)}</option>
+                      ))}
+                    </Form.Control>
+                    <Form.Control.Feedback type="invalid">
+                      {errors.round}
+                    </Form.Control.Feedback>
+                  </Form.Group>
                   : null}
 
                 {NUMERIC_ANSWER_TYPES.includes(values.answer_type_id) ?
