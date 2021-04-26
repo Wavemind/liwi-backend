@@ -27,8 +27,9 @@ namespace :translations do
     puts 'Start Node'
     puts Node.all.count
 
-    Node.all.each do |question|
-      question.update!(min_message_error_en: question.old_min_message_error, max_message_error_en: question.old_max_message_error, min_message_warning_en: question.old_min_message_warning, max_message_warning_en: question.old_max_message_warning)
+    Question.all.each do |question|
+      question.assign_attributes(min_message_error_en: question.old_min_message_error, max_message_error_en: question.old_max_message_error, min_message_warning_en: question.old_min_message_warning, max_message_warning_en: question.old_max_message_warning)
+      question.save(validate: false)
     end
     puts 'Finish Node'
   end

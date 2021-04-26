@@ -29,6 +29,8 @@ class VersionsService
     hash['nodes'] = generate_nodes
 
     hash['nodes'] = add_reference_links(hash['nodes'])
+    hash['health_cares'] = generate_health_cares
+    hash['final_diagnostics'] = @final_diagnostics
 
     hash['patient_level_questions'] = @patient_questions
 
@@ -104,9 +106,7 @@ class VersionsService
   def self.generate_nodes
     hash = {}
     hash = hash.merge(generate_questions_sequences)
-    hash = hash.merge(generate_questions)
-    hash = hash.merge(generate_health_cares)
-    hash.merge(@final_diagnostics)
+    hash.merge(generate_questions)
   end
 
   # @return hash
