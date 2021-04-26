@@ -34,6 +34,8 @@ class Instance < ApplicationRecord
 
   validate :already_exist, on: :create
 
+  translates :duration, :description
+
   # Enable recursive duplicating
   # https://github.com/amoeba-rb/amoeba#usage
   amoeba do

@@ -29,6 +29,8 @@ class VersionsService
     hash['nodes'] = generate_nodes
 
     hash['nodes'] = add_reference_links(hash['nodes'])
+    hash['health_cares'] = generate_health_cares
+    hash['final_diagnostics'] = @final_diagnostics
 
     hash['patient_level_questions'] = @patient_questions
 
@@ -51,6 +53,10 @@ class VersionsService
   def self.return_hstore_translated(field)
     return Hash[@available_languages.collect { |k| [k, ""] } ] if field.nil?
     field.select {|k,v| @available_languages.include?(k)}
+  end
+
+  def self.return_intern_label_translated(path)
+    Hash[@available_languages.collect { |k| [k, I18n.t(path, locale: k)] } ]
   end
 
   # Fetch every nodes and add to vital sign where they are used in formula or reference tables
@@ -100,9 +106,7 @@ class VersionsService
   def self.generate_nodes
     hash = {}
     hash = hash.merge(generate_questions_sequences)
-    hash = hash.merge(generate_questions)
-    hash = hash.merge(generate_health_cares)
-    hash.merge(@final_diagnostics)
+    hash.merge(generate_questions)
   end
 
   # @return hash
@@ -122,7 +126,7 @@ class VersionsService
     hash['version_languages'] = @available_languages
     hash['emergency_content'] = @version.algorithm.emergency_content
     hash['json_version'] = @version.medal_r_json_version
-    hash['description'] = @version.description
+    hash['description'] = return_hstore_translated(@version.description_translations)
     hash['algorithm_id'] = @version.algorithm.id
     hash['algorithm_name'] = @version.algorithm.name
     hash['is_arm_control'] = @version.is_arm_control
@@ -130,18 +134,18 @@ class VersionsService
     hash['study'] = {
       id: @version.algorithm.study.present? ? @version.algorithm.study.id : nil,
       label: @version.algorithm.study.present? ? @version.algorithm.study.label : nil,
-      description: @version.algorithm.study.present? ? @version.algorithm.study.description : nil
+      description: @version.algorithm.study.present? ? return_hstore_translated(@version.algorithm.study.description_translations) : nil
     }
 
     hash['mobile_config'] = extract_mobile_config
     hash['config'] = @version.algorithm.medal_r_config
     translated_systems_order = {}
     @version.medal_r_config['systems_order'].map do |system|
-      translated_systems_order[system] = I18n.t("questions.systems.#{system}")
+      translated_systems_order[system] = return_intern_label_translated("questions.systems.#{system}")
     end
     hash['config']['systems_translations'] = translated_systems_order
     hash['config']['age_limit'] = @version.algorithm.age_limit
-    hash['config']['age_limit_message'] = @version.algorithm.age_limit_message
+    hash['config']['age_limit_message'] = return_hstore_translated(@version.algorithm.age_limit_message_translations)
     hash['config']['minimum_age'] = @version.algorithm.minimum_age
     hash['config']['consent_management'] = @version.algorithm.consent_management
     hash['config']['track_referral'] = @version.algorithm.track_referral
@@ -316,7 +320,7 @@ class VersionsService
       hash[health_care.id]['id'] = health_care.id
       hash[health_care.id]['duration'] = instance.duration
       # Get instance description for drugs and node descriptions for management
-      hash[health_care.id]['description'] = instance.node.is_a?(HealthCares::Drug) ? instance.description : instance.node.description
+      hash[health_care.id]['description'] = instance.node.is_a?(HealthCares::Drug) ? return_hstore_translated(instance.description_translations) : return_hstore_translated(instance.node.description_translations)
 
       # Append the health care in order to list them all at the end of the json.
       assign_node(health_care)
@@ -367,7 +371,7 @@ class VersionsService
       hash[question.id]['is_identifiable'] = question.is_identifiable
       hash[question.id]['is_danger_sign'] = question.is_danger_sign
       hash[question.id]['unavailable'] = question.unavailable
-      hash[question.id]['unavailable_label'] = (question.is_a?(Questions::VitalSignAnthropometric) || question.is_a?(Questions::BasicMeasurement)) ? I18n.t('answers.unfeasible') : ''
+      hash[question.id]['unavailable_label'] = (question.is_a?(Questions::VitalSignAnthropometric) || question.is_a?(Questions::BasicMeasurement)) ? return_intern_label_translated('answers.unfeasible') : {}
       hash[question.id]['estimable'] = question.estimable
       # Send Reference instead of actual display format to help f-e interpret the question correctly
       hash[question.id]['value_format'] = question.answer_type.value
@@ -397,10 +401,10 @@ class VersionsService
       hash[question.id]['max_value_warning'] = question.max_value_warning
       hash[question.id]['min_value_error'] = question.min_value_error
       hash[question.id]['max_value_error'] = question.max_value_error
-      hash[question.id]['min_message_warning'] = question.min_message_warning
-      hash[question.id]['max_message_warning'] = question.max_message_warning
-      hash[question.id]['min_message_error'] = question.min_message_error
-      hash[question.id]['max_message_error'] = question.max_message_error
+      hash[question.id]['min_message_warning'] = return_hstore_translated(question.min_message_warning_translations)
+      hash[question.id]['max_message_warning'] = return_hstore_translated(question.max_message_warning_translations)
+      hash[question.id]['min_message_error'] = return_hstore_translated(question.min_message_error_translations)
+      hash[question.id]['max_message_error'] = return_hstore_translated(question.max_message_error_translations)
       if question.is_a?(Questions::ComplaintCategory)
         hash[question.id]['questions_related_to_cc'] = get_complaint_category_questions(question)
         hash[question.id]['questions_sequences_related_to_cc'] = get_complaint_category_questions_sequences(question)

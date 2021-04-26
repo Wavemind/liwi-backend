@@ -10,6 +10,30 @@ drugs = []
 managements = []
 languages_codes = Language.all.map(&:code)
 
+
+wb.add_worksheet(name: "General") do |sheet|
+  sheet.sheet_protection.password = 'P@ssw0rd'
+  rows = ["ID", "Model", "Field", "en"]
+  unlocked_rows_indexes = []
+  languages_codes.map do |l|
+    unlocked_rows_indexes.push(rows.count)
+    rows.push("#{l}")
+  end
+  sheet.add_row rows
+
+  rows = [@version.algorithm_id, 'Algorithm', "Age limit message", @version.algorithm.age_limit_message_en]
+  languages_codes.map do |l|
+    rows.push(@version.algorithm.send("age_limit_message_#{l}"))
+  end
+  sheet.add_row rows
+
+  rows = [@version.id, 'Version', "Description", @version.description_en]
+  languages_codes.map do |l|
+    rows.push(@version.send("description_#{l}"))
+  end
+  sheet.add_row rows
+end
+
 # Build Diagnostic sheet
 wb.add_worksheet(name: "Diagnoses") do |sheet|
   sheet.sheet_protection.password = 'P@ssw0rd'
@@ -101,6 +125,30 @@ wb.add_worksheet(name: "Variables") do |sheet|
     unlocked_rows_indexes.push(rows.count)
     rows.push("Description (#{l})")
   end
+
+  rows.push("Min message warning (en)")
+  languages_codes.map do |l|
+    unlocked_rows_indexes.push(rows.count)
+    rows.push("Min message warning (#{l})")
+  end
+
+  rows.push("Max message warning (en)")
+  languages_codes.map do |l|
+    unlocked_rows_indexes.push(rows.count)
+    rows.push("Max message warning (#{l})")
+  end
+
+  rows.push("Min message error (en)")
+  languages_codes.map do |l|
+    unlocked_rows_indexes.push(rows.count)
+    rows.push("Min message error (#{l})")
+  end
+
+  rows.push("Max message error (en)")
+  languages_codes.map do |l|
+    unlocked_rows_indexes.push(rows.count)
+    rows.push("Max message error (#{l})")
+  end
   # Create first line (with column names)
   sheet.add_row rows
 
@@ -109,9 +157,30 @@ wb.add_worksheet(name: "Variables") do |sheet|
     languages_codes.map do |l|
       rows.push(node.send("label_#{l}"))
     end
+
     rows.push(node.description_en)
     languages_codes.map do |l|
       rows.push(node.send("description_#{l}"))
+    end
+
+    rows.push(node.min_message_warning_en)
+    languages_codes.map do |l|
+      rows.push(node.send("min_message_warning_#{l}"))
+    end
+
+    rows.push(node.max_message_warning_en)
+    languages_codes.map do |l|
+      rows.push(node.send("max_message_warning_#{l}"))
+    end
+
+    rows.push(node.min_message_error_en)
+    languages_codes.map do |l|
+      rows.push(node.send("min_message_error_#{l}"))
+    end
+
+    rows.push(node.min_message_error_en)
+    languages_codes.map do |l|
+      rows.push(node.send("max_message_error_#{l}"))
     end
 
     sheet.add_row rows, style: wrap
@@ -192,6 +261,44 @@ wb.add_worksheet(name: "Drugs") do |sheet|
     sheet.col_style(i,unlocked,row_offset: 0)
   end
 end
+
+wb.add_worksheet(name: "Drugs in diagnoses") do |sheet|
+  sheet.sheet_protection.password = 'P@ssw0rd'
+
+  rows = ["ID", "Drug", "Diagnosis", "Duration (en)"]
+
+  unlocked_rows_indexes = []
+  languages_codes.map do |l|
+    unlocked_rows_indexes.push(rows.count)
+    rows.push("Duration (#{l})")
+  end
+  rows.push("Description (en)")
+  languages_codes.map do |l|
+    unlocked_rows_indexes.push(rows.count)
+    rows.push("Description (#{l})")
+  end
+
+  sheet.add_row rows, style: wrap
+
+  final_diagnoses.map(&:components).each_with_index do |instance, index|
+    if instance.node.is_a?(HealthCare::Drug)
+      rows = [instance.id, instance.node.reference_label, instance.final_diagnostic.reference_label]
+
+      languages_codes.map do |l|
+        rows.push(node.send("duration#{l}"))
+      end
+      rows.push(node.description_en)
+      languages_codes.map do |l|
+        rows.push(node.send("description_#{l}"))
+      end
+
+      sheet.add_row rows, style: wrap
+    end
+  end
+
+  sheet.add_row rows, style: wrap
+end
+
 
 # Build Management sheet
 wb.add_worksheet(name: "Managements") do |sheet|
