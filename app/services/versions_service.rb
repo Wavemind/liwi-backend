@@ -367,7 +367,7 @@ class VersionsService
       hash[question.id] = format_formula(hash[question.id], question)
 
       hash[question.id]['category'] = question.category_name
-      hash[question.id]['round'] = I18n.t("questions.rounds.#{question.round}.value")
+      hash[question.id]['round'] = question.round.nil? ? nil : I18n.t("questions.rounds.#{question.round}.value").to_f
       hash[question.id]['is_triage'] = question.is_triage
       hash[question.id]['is_identifiable'] = question.is_identifiable
       hash[question.id]['is_danger_sign'] = question.is_danger_sign
