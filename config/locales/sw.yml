@@ -273,7 +273,7 @@ sw:
       excluding_diagnostics: "Excluding diagnoses"
       instances: "Instance of nodes"
       questions_sequences: "Question sequences"
-      subtitle_final_diagnostics: "Finals diagnoses"
+      subtitle_final_diagnostics: "Final diagnoses"
       title: "Details of %{name}"
       translations: "Translations"
       subtitle_health_cares: "Health cares diagram"
