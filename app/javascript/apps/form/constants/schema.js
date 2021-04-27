@@ -89,12 +89,12 @@ export const formulationSchema = yup.object().shape({
     by_age: yup.boolean(),
     breakable: yup.string().nullable()
       .when(['medication_form', 'by_age'], {
-        is: (medication_form, by_age) => medication_form === "tablet" && by_age === false,
+        is: (medication_form, by_age) => ["tablet", "dispersible_tablet"].includes(medication_form) && by_age === false,
         then: yup.string().required(I18n.t("errors.messages.required"))
       }),
     unique_dose: yup.number().nullable()
       .when("medication_form", {
-        is: (medication_form) => !["tablet", "capsule", "suspension", "syrup", "solution", "powder_for_injection"].includes(medication_form),
+        is: (medication_form) => !["tablet", "dispersible_tablet", "capsule", "suspension", "syrup", "solution", "powder_for_injection"].includes(medication_form),
         then: yup.number().required(I18n.t("errors.messages.required"))
       })
       .when("by_age", {
@@ -108,22 +108,22 @@ export const formulationSchema = yup.object().shape({
       }),
     dose_form: yup.number().nullable()
       .when(['medication_form', 'by_age'], {
-        is: (medication_form, by_age) => ["tablet", "capsule", "suspension", "syrup", "solution", "powder_for_injection"].includes(medication_form) && by_age === false,
+        is: (medication_form, by_age) => ["tablet", "dispersible_tablet", "capsule", "suspension", "syrup", "solution", "powder_for_injection"].includes(medication_form) && by_age === false,
         then: yup.number().required(I18n.t("errors.messages.required"))
       }),
     maximal_dose: yup.number().nullable()
       .when(['medication_form', 'by_age'], {
-        is: (medication_form, by_age) => ["tablet", "capsule", "suspension", "syrup", "solution", "powder_for_injection"].includes(medication_form) && by_age === false,
+        is: (medication_form, by_age) => ["tablet", "dispersible_tablet", "capsule", "suspension", "syrup", "solution", "powder_for_injection"].includes(medication_form) && by_age === false,
         then: yup.number().required(I18n.t("errors.messages.required"))
       }),
     minimal_dose_per_kg: yup.number().nullable()
       .when(['medication_form', 'by_age'], {
-        is: (medication_form, by_age) => ["tablet", "capsule", "suspension", "syrup", "solution", "powder_for_injection"].includes(medication_form) && by_age === false,
+        is: (medication_form, by_age) => ["tablet", "dispersible_tablet", "capsule", "suspension", "syrup", "solution", "powder_for_injection"].includes(medication_form) && by_age === false,
         then: yup.number().required(I18n.t("errors.messages.required"))
       }),
     maximal_dose_per_kg: yup.number().nullable()
       .when(['medication_form', 'by_age'], {
-        is: (medication_form, by_age) => ["tablet", "capsule", "suspension", "syrup", "solution", "powder_for_injection"].includes(medication_form) && by_age === false,
+        is: (medication_form, by_age) => ["tablet", "dispersible_tablet", "capsule", "suspension", "syrup", "solution", "powder_for_injection"].includes(medication_form) && by_age === false,
         then: yup.number().required(I18n.t("errors.messages.required"))
       })
   }))
