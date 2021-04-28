@@ -67,8 +67,8 @@ export const managementSchema = yup.object().shape({
 });
 
 export const drugInstanceSchema = yup.object().shape({
-  duration: yup.string().required(I18n.t("errors.messages.required")),
-  description: yup.string()
+  duration_en: yup.string().required(I18n.t("errors.messages.required")),
+  description_en: yup.string()
 });
 
 export const questionSequencesSchema = yup.object().shape({

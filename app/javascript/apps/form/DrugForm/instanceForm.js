@@ -67,8 +67,8 @@ export default class InstanceForm extends React.Component {
         <Formik
           validationSchema={drugInstanceSchema}
           initialValues={{
-            duration: method === "create" ? "" : diagramObject.options.dbInstance.duration_translations?.en || "",
-            description: method === "create" ? drug?.description_translations?.en : diagramObject.options.dbInstance.description_translations?.en || ""
+            duration_en: method === "create" ? "" : diagramObject.options.dbInstance.duration_translations?.en || "",
+            description_en: method === "create" ? drug?.description_translations?.en : diagramObject.options.dbInstance.description_translations?.en || ""
           }}
           onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
         >
@@ -89,7 +89,7 @@ export default class InstanceForm extends React.Component {
                   name="duration_en"
                   value={values.duration_en}
                   onChange={handleChange}
-                  isInvalid={touched.duration && !!errors.duration_en}
+                  isInvalid={touched.duration_en && !!errors.duration_en}
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.duration_en}
