@@ -68,7 +68,7 @@ class HealthCareNodeWidget extends React.Component {
     const { getReferencePrefix, node, engine, readOnly } = this.props;
 
     return (
-      <div className="node">
+      <div className={`node ${node.options.dbInstance.node.is_neonat ? 'is_neonat' : null}`}>
         <div className="port py-2 node-category">
           <div className="port srd-port in-port">
             <PortWidget engine={engine} port={node.getInPort()}>

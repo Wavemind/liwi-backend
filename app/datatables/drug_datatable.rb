@@ -27,7 +27,8 @@ class DrugDatatable < AjaxDatatablesRails::ActiveRecord
         reference: record.full_reference,
         label: record.label,
         description: record.description,
-        actions: actions
+        actions: actions,
+        is_neonat: record.is_neonat, # is a hidden column in the datatable in question.js
       }
     end
   end

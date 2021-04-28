@@ -20,6 +20,7 @@ export const drugSchema = yup.object().shape({
   description_en: yup.string(),
   is_anti_malarial : yup.boolean(),
   is_antibiotic: yup.boolean(),
+  is_neonat: yup.boolean(),
 });
 
 export const finalDiagnosticSchema = yup.object().shape({

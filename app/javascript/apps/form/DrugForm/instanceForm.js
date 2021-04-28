@@ -101,7 +101,7 @@ export default class InstanceForm extends React.Component {
                 <Form.Control
                   name="description_en"
                   as="textarea"
-                  value={values.descriptionv}
+                  value={values.description_em}
                   onChange={handleChange}
                   isInvalid={touched.description_en && !!errors.description_en}
                 />
