@@ -667,13 +667,13 @@ en:
       mandatory: "Mandatory"
     rounds:
       half:
-        label: "Half"
+        label: "Half (0.5)"
         value: "0.5"
       tenth:
-        label: "Tenth"
+        label: "Tenth (0.1)"
         value: "0.1"
       unit:
-        label: "Unit"
+        label: "Unit (1.0)"
         value: "1"
     stages:
       registration: "Registration"

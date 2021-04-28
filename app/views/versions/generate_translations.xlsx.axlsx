@@ -280,16 +280,16 @@ wb.add_worksheet(name: "Drugs in diagnoses") do |sheet|
 
   sheet.add_row rows, style: wrap
 
-  final_diagnoses.map(&:components).each_with_index do |instance, index|
-    if instance.node.is_a?(HealthCare::Drug)
+  final_diagnoses.map(&:components).flatten.each_with_index do |instance, index|
+    if instance.node.is_a?(HealthCares::Drug)
       rows = [instance.id, instance.node.reference_label, instance.final_diagnostic.reference_label]
 
       languages_codes.map do |l|
-        rows.push(node.send("duration#{l}"))
+        rows.push(instance.send("duration_#{l}"))
       end
-      rows.push(node.description_en)
+      rows.push(instance.description_en)
       languages_codes.map do |l|
-        rows.push(node.send("description_#{l}"))
+        rows.push(instance.send("description_#{l}"))
       end
 
       sheet.add_row rows, style: wrap
