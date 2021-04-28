@@ -19,20 +19,20 @@ class StickerPdf < Prawn::Document
       uuid = SecureRandom.uuid
 
       qr_content = {study_id: study_id, group_id: group_id, uid: uuid}.to_json
-      define_grid(columns: 5, rows: 1, gutter: 0)
-      grid([0, 0], [0, 1]).bounding_box do
-        move_down 0.4.cm
+      define_grid(columns: 6, rows: 1, gutter: 0)
+      grid([0, 0], [0, 2]).bounding_box do
+        move_down 0.2.cm
         qrcode = RQRCode::QRCode.new(qr_content, level: :h)
-        render_qr_code(qrcode, align: :left, extent: 2.1.cm)
+        render_qr_code(qrcode, align: :left, extent: 2.6.cm)
       end
-      grid([0, 2], [0, 4]).bounding_box do
+      grid([0, 3], [0, 5]).bounding_box do
         font_size 7
         indent(0.1.cm) do
-          move_down 0.4.cm
+          move_down 0.2.cm
           text "<b>study_id:</b> #{study_id}", inline_format: true
-          move_down 0.5.cm
+          move_down 0.3.cm
           text "<b>group_id:</b> #{group_id}", inline_format: true
-          move_down 0.5.cm
+          move_down 0.3.cm
           text "<b>uid:</b> #{uuid}", inline_format: true
         end
       end
