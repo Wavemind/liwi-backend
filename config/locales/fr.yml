@@ -1,4 +1,4 @@
-en:
+fr:
   activerecord:
     attributes:
       algorithm:
@@ -69,7 +69,6 @@ en:
         min_message_warning: "Warning message if below range"
         min_value_error: "Lower limit before error"
         min_value_warning: "Lower limit before warning"
-        round: "Value rounded to"
         snomed: "SNOMED label"
         stage: "Stage"
         system: "System"
@@ -141,11 +140,11 @@ en:
   answers:
     predefined:
       absent: "Absent"
-      negative: "Negative"
-      "no": "No"
-      positive: "Positive"
-      present: "Present"
-      "yes": "Yes"
+      negative: "Négatif"
+      "no": "Non"
+      positive: "Positif"
+      present: "Présent"
+      "yes": "Oui"
     edit:
       title: "Edit answers"
     new:
@@ -166,9 +165,9 @@ en:
         between_not_following: "There must be be no gap when you use several BETWEEN operators. Make sure the values follow each other nicely."
         less_greater_than_more_or_equal: "Your answer with the LESS THAN operator can't be greater than your answer with the GREATER THAN OR EQUAL operator."
         less_equal_more_or_equal: "The value for the LESS THAN operator must be equal to the value for the GREATER THAN OR EQUAL operator."
-    unavailable: "Test/Assessment is unavailable"
-    unfeasible: "Not feasible"
-    unknown: "Unknown"
+    unavailable: "Test non disponible"
+    unfeasible: "Pas faisable"
+    unknown: "Inconnu"
   api:
     v1:
       health_facilities:
@@ -541,7 +540,6 @@ en:
       nurse: "Nurse"
       midwife: "Midwife"
       pharmacist: "Pharmacist"
-      registration_assistant: "Registration Assistant"
     table:
       columns:
         first_name: "First name"
@@ -665,16 +663,6 @@ en:
     priorities:
       basic: "Basic"
       mandatory: "Mandatory"
-    rounds:
-      half:
-        label: "Half (0.5)"
-        value: "0.5"
-      tenth:
-        label: "Tenth (0.1)"
-        value: "0.1"
-      unit:
-        label: "Unit (1.0)"
-        value: "1"
     stages:
       registration: "Registration"
       triage: "Triage"
@@ -692,24 +680,24 @@ en:
       health_care_questions: "Health Care Questions"
       referral_step: "Referral"
     systems:
-      general: "General"
-      respiratory_circulation: "Respiratory and Circulatory system"
-      ear_nose_mouth_throat: "Ear, Nose, Mouth and Throat system"
-      visual: "Eye / visual system"
-      integumentary: "Skin/Hair/Mucosae system"
-      digestive: "Gastrointestinal system"
-      urinary_reproductive: "Genitourinary system"
-      nervous: "Nervous system"
-      muscular_skeletal: "Musculoskeletal system"
-      exposures: "Exposures"
-      chronic_conditions: "Chronic conditions"
-      comorbidities: "Comorbidities / Past medical history"
-      prevention: "Screening / Prevention"
-      follow_up_questions: "Additional follow-up questions"
-      complementary_medical_history: "Complementary Medical History Questions"
-      vital_sign: "Vital Signs"
-      priority_sign: "Danger / Priority signs"
-      feeding: "Feeding"
+      general: "Général"
+      respiratory_circulation: "Systèmes respiratoire et de circulation"
+      ear_nose_mouth_throat: "ORL"
+      visual: "Œil / système visuel"
+      integumentary: "Peau/Cheveux/Poils/Muqueuses Dermatologie"
+      digestive: "Système gastrointestinal"
+      urinary_reproductive: "Système génital/urinaire"
+      nervous: "Système nerveux"
+      muscular_skeletal: "Squelette et muscles"
+      exposures: "Expositions"
+      chronic_conditions: "Maladies chroniques"
+      comorbidities: "Comorbidités / Anamnèse"
+      prevention: "Dépistage / Prévention"
+      follow_up_questions: "Questions supplémentaires de suivi"
+      complementary_medical_history: "Questions supplémentaires d'anamnèse"
+      vital_sign: "Signes vitaux"
+      priority_sign: "Signe de danger / priorités"
+      feeding: "Alimentation"
     table:
       columns:
         label: "Label"

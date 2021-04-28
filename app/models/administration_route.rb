@@ -3,6 +3,8 @@ class AdministrationRoute < ApplicationRecord
 
   has_many :formulations
 
+  translates :name
+
   # @return [String]
   # Return a displayable string for the view
   def display_name

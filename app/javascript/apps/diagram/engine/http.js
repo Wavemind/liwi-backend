@@ -490,14 +490,14 @@ export default class Http {
    * @params [Integer] positionY
    * @return [Object] body of request
    */
-  updateInstance = async (id, positionX, positionY, duration = '', description = '') => {
+  updateInstance = async (id, positionX, positionY, duration_en = '', description_en = '') => {
     const url = `${this.url}/instances/${id}`;
     const body = {
       instance: {
         position_x: positionX,
         position_y: positionY,
-        duration,
-        description,
+        duration_en,
+        description_en,
       }
     };
 
