@@ -292,7 +292,7 @@ class VersionsService
   def self.push_condition(condition)
     hash = {}
     hash['first_id'] = condition.first_conditionable_id
-    hash['first_type'] = condition.first_conditionable_type
+    # hash['first_type'] = condition.first_conditionable_type
 
     # Give the question's/predefined syndrome's id in order to retrieve it in front-end
     hash['first_node_id'] = condition.first_conditionable.is_a?(Answer) ? condition.first_conditionable.node.id : nil
