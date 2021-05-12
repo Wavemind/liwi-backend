@@ -702,9 +702,9 @@ export default class QuestionForm extends React.Component {
                       <Form.Label>{I18n.t("activerecord.attributes.question.max_message_warning")}</Form.Label>
                       <Form.Control
                         as="textarea"
-                        name="max_message_warning"
+                        name="max_message_warning_en"
                         disabled={deployedMode}
-                        value={values.max_message_warning}
+                        value={values.max_message_warning_en}
                         onChange={handleChange}
                         isInvalid={touched.max_message_warning_en && !!errors.max_message_warning_en}
                       />
