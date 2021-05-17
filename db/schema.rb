@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_05_081150) do
+ActiveRecord::Schema.define(version: 2021_05_17_091750) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -91,20 +91,21 @@ ActiveRecord::Schema.define(version: 2021_05_05_081150) do
   end
 
   create_table "conditions", force: :cascade do |t|
-    t.integer "operator"
     t.string "referenceable_type"
     t.bigint "referenceable_id"
     t.string "first_conditionable_type"
     t.bigint "first_conditionable_id"
-    t.string "second_conditionable_type"
-    t.bigint "second_conditionable_id"
-    t.boolean "top_level", default: true
     t.integer "score"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "cut_off_start"
+    t.integer "cut_off_end"
+    t.bigint "instance_id"
+    t.bigint "answer_id"
+    t.index ["answer_id"], name: "index_conditions_on_answer_id"
     t.index ["first_conditionable_type", "first_conditionable_id"], name: "index_first_conditionable_id"
+    t.index ["instance_id"], name: "index_conditions_on_instance_id"
     t.index ["referenceable_type", "referenceable_id"], name: "index_referenceable_id"
-    t.index ["second_conditionable_type", "second_conditionable_id"], name: "index_second_conditionable_id"
   end
 
   create_table "devices", force: :cascade do |t|
@@ -128,6 +129,8 @@ ActiveRecord::Schema.define(version: 2021_05_05_081150) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "node_id"
+    t.integer "cut_off_start"
+    t.integer "cut_off_end"
     t.index ["node_id"], name: "index_diagnostics_on_node_id"
     t.index ["version_id"], name: "index_diagnostics_on_version_id"
   end
@@ -326,6 +329,8 @@ ActiveRecord::Schema.define(version: 2021_05_05_081150) do
     t.hstore "min_message_warning_translations"
     t.hstore "max_message_warning_translations"
     t.integer "round"
+    t.integer "cut_off_start"
+    t.integer "cut_off_end"
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
     t.index ["diagnostic_id"], name: "index_nodes_on_diagnostic_id"

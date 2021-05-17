@@ -93,7 +93,7 @@ export class Diagram extends React.Component {
 
       // Link between nodes
       diagramNode.options.dbInstance.conditions.map(condition => {
-        let answerPort = getConditionPort(diagramNodes, condition.first_conditionable_id);
+        let answerPort = getConditionPort(diagramNodes, condition.answer_id);
 
         let link = linkNode(answerPort, diagramNode, condition);
         model.addLink(link);

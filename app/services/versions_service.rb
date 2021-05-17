@@ -184,8 +184,8 @@ class VersionsService
         hash['conditions'][instance.node_id] = []
         instance.conditions.each do |cond|
           condition = {}
-          condition['complaint_category_id'] = cond.first_conditionable.node_id
-          condition['answer_id'] = cond.first_conditionable_id
+          condition['complaint_category_id'] = cond.answer.node_id
+          condition['answer_id'] = cond.answer_id
           hash['conditions'][instance.node_id].push(condition)
         end
       end
@@ -275,7 +275,7 @@ class VersionsService
     hash['conditions'] = []
 
     if conditions.present?
-      conditions.includes([:first_conditionable, :second_conditionable]).top_level.each do |condition|
+      conditions.includes([:answer]).each do |condition|
         hash['top_conditions'] << push_condition(condition)
       end
 

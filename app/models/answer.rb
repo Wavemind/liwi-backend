@@ -49,7 +49,7 @@ class Answer < ApplicationRecord
 
   # Remove conditions linked to the answer when it is deleted
   def remove_conditions
-    Condition.where(first_conditionable: self).or(Condition.where(second_conditionable: self)).destroy_all
+    Condition.where(answer: self).destroy_all
   end
 
   # Ensure that the entered values are in the correct type

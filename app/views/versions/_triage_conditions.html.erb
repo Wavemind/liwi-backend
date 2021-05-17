@@ -2,7 +2,7 @@
   <% @version.components.map(&:conditions).flatten.each do |condition| %>
     <li class="list-group-item">
       <div class="row">
-        <div class="col"><%= condition.referenceable.reference_label %></div>
+        <div class="col"><%= condition.instance.reference_label %></div>
         <div class="col text-center"><%= t('.depends_on') %></div>
         <div class="col"><%= condition.first_conditionable.node.reference_label %></div>
         <div class="col text-right"><%= link_to(I18n.t('destroy'), remove_triage_condition_algorithm_version_url(@version.algorithm, @version, condition_id: condition.id), method: :put, class: 'btn btn-outline-danger', data: { confirm: 'Are you sure?' }) %></div>

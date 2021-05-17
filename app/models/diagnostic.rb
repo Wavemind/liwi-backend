@@ -8,7 +8,7 @@ class Diagnostic < ApplicationRecord
   belongs_to :version
   belongs_to :node # Complaint Category
   has_many :final_diagnostics, dependent: :destroy
-  has_many :conditions, as: :referenceable, dependent: :destroy
+  has_many :conditions, as: :referenceable, dependent: :destroy#TODO : Remove after data migration
   has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy
 
   before_validation :validate_complaint_category
@@ -188,7 +188,7 @@ class Diagnostic < ApplicationRecord
     ActiveRecord::Base.transaction(requires_new: true) do
       instances_ids = components.map(&:id)
       Child.where(instance_id: instances_ids).map(&:delete)
-      Condition.where(referenceable_type: 'Instance', referenceable_id: instances_ids).map(&:delete)
+      Condition.where(instance_id: instances_ids).map(&:delete)
       components.map(&:delete)
       fd_ids = final_diagnostics.map(&:id)
       NodeExclusion.where(excluding_node_id: fd_ids).or(NodeExclusion.where(excluded_node_id: fd_ids)).map(&:delete)
