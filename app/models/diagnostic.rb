@@ -4,6 +4,7 @@
 include Rails.application.routes.url_helpers
 class Diagnostic < ApplicationRecord
   attr_accessor :duplicating
+  attr_accessor :cut_off_value_type
 
   belongs_to :version
   belongs_to :node # Complaint Category

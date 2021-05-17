@@ -127,6 +127,8 @@ class QuestionsSequencesController < ApplicationController
       :algorithm_id,
       :min_score,
       :node_id,
+      :cut_off_start,
+      :cut_off_end,
       complaint_category_ids: []
     )
   end
