@@ -149,7 +149,7 @@ namespace :algorithms do
           end
 
           old_instance.conditions.map do |condition|
-            Condition.create!(referenceable: new_instance, first_conditionable: answers[condition.first_conditionable_id], top_level: condition.top_level, score: condition.score)
+            Condition.create!(instance: new_instance, answer: answers[condition.answer_id], score: condition.score)
           end
         end
 

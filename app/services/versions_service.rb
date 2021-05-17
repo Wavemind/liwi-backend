@@ -247,7 +247,7 @@ class VersionsService
     hash['conditions'] = []
 
     if conditions.present?
-      conditions.includes([:first_conditionable, :second_conditionable]).top_level.each do |condition|
+      conditions.includes([:answer]).each do |condition|
         hash['conditions'] << push_condition(condition)
       end
 
@@ -260,17 +260,9 @@ class VersionsService
   # Set metadata for condition
   def self.push_condition(condition)
     hash = {}
-    hash['answer_id'] = condition.first_conditionable_id
+    hash['answer_id'] = condition.answer_id
+    hash['node_id'] = condition.answer.node.id
 
-    # Give the question's/predefined syndrome's id in order to retrieve it in front-end
-    hash['node_id'] = condition.first_conditionable.is_a?(Answer) ? condition.first_conditionable.node.id : nil
-
-    # hash['operator'] = condition.operator
-    # hash['second_id'] = condition.second_conditionable_id
-    # hash['second_type'] = condition.second_conditionable_type
-    #
-    # # Give the question's/predefined syndrome's id in order to retrieve it in front-end
-    # hash['second_node_id'] = condition.second_conditionable.is_a?(Answer) ? condition.second_conditionable.node.id : nil
     hash['score'] = condition.score unless condition.score.nil?
     hash
   end

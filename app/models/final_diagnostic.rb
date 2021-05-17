@@ -33,7 +33,7 @@ class FinalDiagnostic < Node
         },
         conditions: {
           include: [
-            first_conditionable: {
+            answer: {
               methods: [:get_node]
             }
           ]
@@ -47,7 +47,7 @@ class FinalDiagnostic < Node
         },
         conditions: {
           include: [
-            first_conditionable: {
+            answer: {
               methods: [:get_node]
             }
           ]
@@ -74,7 +74,7 @@ class FinalDiagnostic < Node
       include: [
         conditions: {
           include: [
-            first_conditionable: {
+            answer: {
               methods: [
                 :get_node
               ]

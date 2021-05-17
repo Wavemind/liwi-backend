@@ -146,16 +146,6 @@ Rails.application.routes.draw do
       end
       resources :conditions, only: [:destroy]
     end
-
-    resources :conditions, only: [] do
-      collection do
-        post 'differential', to: 'conditions#add_diagnostic_condition'
-      end
-
-      member do
-        delete 'differential', to: 'conditions#destroy_diagnostic_condition'
-      end
-    end
   end
 
   get 'instanceable/:type/:id', to: 'instances#index', as: 'instanceable'
