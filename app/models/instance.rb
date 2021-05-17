@@ -118,6 +118,23 @@ class Instance < ApplicationRecord
     NodeExclusion.final_diagnostic.where(excluding_node_id: node_id).or(NodeExclusion.final_diagnostic.where(excluded_node_id: node_id)).map(&:destroy)
   end
 
+  # Get translatable attributes to translate with excel import
+  def self.get_translatable_params(data)
+    fields_to_update = {}
+
+    data.row(1).each_with_index do |head, index|
+      if head.include?('Duration')
+        code = head[/\((.*?)\)/m, 1]
+        fields_to_update["duration_#{code}"] = index unless code == 'en'
+      elsif head.include?('Description')
+        code = head[/\((.*?)\)/m, 1]
+        fields_to_update["description_#{code}"] = index unless code == 'en'
+      end
+    end
+
+    fields_to_update
+  end
+
   private
 
   # Save if validation is true and node_id doesn't already exist in current diagnostic
