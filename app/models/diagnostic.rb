@@ -8,7 +8,6 @@ class Diagnostic < ApplicationRecord
   belongs_to :version
   belongs_to :node # Complaint Category
   has_many :final_diagnostics, dependent: :destroy
-  has_many :conditions, as: :referenceable, dependent: :destroy#TODO : Remove after data migration
   has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy
 
   before_validation :validate_complaint_category

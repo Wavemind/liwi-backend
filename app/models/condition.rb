@@ -4,8 +4,8 @@ class Condition < ApplicationRecord
   belongs_to :instance
   belongs_to :answer
 
-  belongs_to :referenceable, polymorphic: true #TODO : Remove after data migration
-  belongs_to :first_conditionable, polymorphic: true #TODO : Remove after data migration
+  # belongs_to :referenceable, polymorphic: true #TODO : Remove after data migration
+  # belongs_to :first_conditionable, polymorphic: true #TODO : Remove after data migration
 
   before_destroy :remove_children
   before_validation :prevent_loop, unless: Proc.new {(self.instance.instanceable.is_a?(Diagnostic) && self.instance.instanceable.duplicating) }
