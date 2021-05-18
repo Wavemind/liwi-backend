@@ -203,25 +203,15 @@ class VersionsController < ApplicationController
 
       ActiveRecord::Base.transaction(requires_new: true) do
         begin
-          puts '111'
           update_specific_translations(xl_file.sheet(0))
-          puts '222'
           update_generic_translations(Diagnostic, Diagnostic.get_translatable_params(xl_file.sheet(1)), xl_file.sheet(1))
-          puts '333'
           update_generic_translations(FinalDiagnostic, Node.get_translatable_params(xl_file.sheet(2)), xl_file.sheet(2))
-          puts '444'
           update_generic_translations(Question, Question.get_translatable_params(xl_file.sheet(3)), xl_file.sheet(3))
-          puts '555'
           update_generic_translations(Answer, Answer.get_translatable_params(xl_file.sheet(3)), xl_file.sheet(3))
-          puts '666'
           update_generic_translations(HealthCares::Drug, Node.get_translatable_params(xl_file.sheet(4)), xl_file.sheet(4))
-          puts '777'
           update_generic_translations(Formulation, Formulation.get_translatable_params(xl_file.sheet(4)), xl_file.sheet(4))
-          puts '888'
           update_generic_translations(Instance, Instance.get_translatable_params(xl_file.sheet(5)), xl_file.sheet(5))
-          puts '999'
           update_generic_translations(HealthCares::Management, Node.get_translatable_params(xl_file.sheet(6)), xl_file.sheet(6))
-          puts '1000'
 
           redirect_to algorithm_version_url(@algorithm, @version, panel: 'translations'), notice: t('flash_message.import_successful')
         rescue
@@ -365,17 +355,10 @@ class VersionsController < ApplicationController
             languages.push(head)
           end
         end
-        puts '***'
-        puts languages
-        puts '***'
       else
         model = Object.const_get(row[1])
-        puts model
-        puts '***'
         object = model.find(row[0])
         field_to_update = "#{row[2].parameterize.underscore}_translations"
-        puts field_to_update
-        puts '***'
         translations = {}
         languages.each_with_index do |language, i|
           translations[language] = row[2+i]
