@@ -40,7 +40,7 @@ class QuestionsSequence < Node
       include: [
         conditions: {
           include: [
-            first_conditionable: {
+            answer: {
               methods: [
                 :get_node
               ]
@@ -87,8 +87,8 @@ class QuestionsSequence < Node
   def validate_score
     higher_node_score = {}
     components.find_by(node: self).conditions.each do |condition|
-      score = higher_node_score[condition.first_conditionable.node.id]
-      higher_node_score[condition.first_conditionable.node.id] = condition.score if score.nil? || higher_node_score[condition.first_conditionable.node.id] < condition.score
+      score = higher_node_score[condition.answer.node_id]
+      higher_node_score[condition.answer.node_id] = condition.score if score.nil? || higher_node_score[condition.answer.node_id] < condition.score
     end
     higher_score = higher_node_score.values.inject(0) { |a, b| a + b }
 
@@ -111,7 +111,7 @@ class QuestionsSequence < Node
         },
         conditions: {
           include: [
-            first_conditionable: {
+            answer: {
               methods: [
                 :get_node
               ]

@@ -78,7 +78,7 @@ class InstancesController < ApplicationController
   # @params [Diagnostic] Current diagnostic, [Answer] Answer from parent of the link, [Node] child of the link
   # Create link in both way from diagram
   def create_link
-    condition = @instance.conditions.new(first_conditionable_type: 'Answer', first_conditionable_id: instance_params[:answer_id], top_level: true, score: instance_params[:score], cut_off_start: params[:cut_off_start], cut_off_end: params[:cut_off_end])
+    condition = @instance.conditions.new(answer_id: instance_params[:answer_id], score: instance_params[:score])
     if condition.save
       render json: condition
     else

@@ -9,7 +9,6 @@ class Diagnostic < ApplicationRecord
   belongs_to :version
   belongs_to :node # Complaint Category
   has_many :final_diagnostics, dependent: :destroy
-  has_many :conditions, as: :referenceable, dependent: :destroy
   has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy
 
   before_validation :validate_complaint_category
@@ -120,7 +119,7 @@ class Diagnostic < ApplicationRecord
       include: [
         conditions: {
           include: [
-            first_conditionable: {
+            answer: {
               methods: [
                 :get_node
               ]
@@ -148,7 +147,7 @@ class Diagnostic < ApplicationRecord
         },
         conditions: {
           include: [
-            first_conditionable: {
+            answer: {
               include: [
                 node: {
                   include: [:answers]
@@ -165,7 +164,7 @@ class Diagnostic < ApplicationRecord
   # @return [Json]
   # Return drugs and managements in json format
   def health_cares_json
-    components.drugs.as_json(include: [node: {methods: [:node_type, :type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}]) + components.managements.as_json(include: [node: {methods: [:node_type, :type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}])
+    components.drugs.as_json(include: [node: {methods: [:node_type, :type]}, conditions: { include: [answer: { methods: [:get_node] }]}]) + components.managements.as_json(include: [node: {methods: [:node_type, :type]}, conditions: { include: [first_conditionable: { methods: [:get_node] }]}])
   end
 
   # @return [Json]
@@ -173,7 +172,7 @@ class Diagnostic < ApplicationRecord
   # TODO: ADD MEDIA
   def available_nodes_json
     # Exclude triage questions if they have a condition on a CC which is not defined in this diagnostic
-    excluded_ids = version.components.select { |i| i.conditions.any? && i.conditions.map(&:first_conditionable).map(&:node).flatten.exclude?(node) }.map(&:node_id)
+    excluded_ids = version.components.select { |i| i.conditions.any? && i.conditions.map(&:answer).map(&:node).flatten.exclude?(node) }.map(&:node_id)
     # Exclude the questions that are already used in the diagnostic diagram (it still takes the questions used in the final diagnostic diagram, since it can be used in both diagram)
     excluded_ids += components.not_health_care_conditions.map(&:node_id)
     (
@@ -189,7 +188,7 @@ class Diagnostic < ApplicationRecord
     ActiveRecord::Base.transaction(requires_new: true) do
       instances_ids = components.map(&:id)
       Child.where(instance_id: instances_ids).map(&:delete)
-      Condition.where(referenceable_type: 'Instance', referenceable_id: instances_ids).map(&:delete)
+      Condition.where(instance_id: instances_ids).map(&:delete)
       components.map(&:delete)
       fd_ids = final_diagnostics.map(&:id)
       NodeExclusion.where(excluding_node_id: fd_ids).or(NodeExclusion.where(excluded_node_id: fd_ids)).map(&:delete)
@@ -226,7 +225,7 @@ class Diagnostic < ApplicationRecord
       elsif instance.node.is_a?(HealthCares::Drug) && instance.node.formulations.map(&:by_age).include?(true)
         age_missing = true
         instance.conditions.each do |cond|
-          age_missing = false if cond.first_conditionable.is_a?(Answer) && !cond.first_conditionable.node.formula.nil? && version.algorithm.questions.where(answer_type_id: 6).map(&:full_reference).any? { |ref| cond.first_conditionable.node.formula.include? ref }
+          age_missing = false if !cond.answer.node.formula.nil? && version.algorithm.questions.where(answer_type_id: 6).map(&:full_reference).any? { |ref| cond.answer.node.formula.include? ref }
         end
         errors.add(:basic, I18n.t('flash_message.diagnostic.drug_conditioned_by_age_without_age', url: diagram_algorithm_version_diagnostic_final_diagnostic_url(version.algorithm.id, version.id, id, instance.final_diagnostic_id).to_s, df_reference: instance.final_diagnostic.full_reference)) if age_missing
       end
@@ -240,7 +239,7 @@ class Diagnostic < ApplicationRecord
     triage_questions = components.joins(:node).where('nodes.stage = ?', Question.stages[:triage])
     triage_questions.each do |instance|
       version_instance = version.components.find_by(node: instance.node)
-      errors.add(:node, I18n.t('flash_message.diagnostic.complaint_category_exclude_triage_question')) if version_instance.conditions.any? && version_instance.conditions.map(&:first_conditionable).map(&:node).flatten.exclude?(node)
+      errors.add(:node, I18n.t('flash_message.diagnostic.complaint_category_exclude_triage_question')) if version_instance.conditions.any? && version_instance.conditions.map(&:answer).map(&:node).flatten.exclude?(node)
     end
   end
 

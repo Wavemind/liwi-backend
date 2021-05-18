@@ -150,7 +150,6 @@ class VersionsService
     hash['config']['consent_management'] = @version.algorithm.consent_management
     hash['config']['track_referral'] = @version.algorithm.track_referral
 
-    hash['triage'] = extract_triage_metadata
     hash['author'] = @version.user.full_name
     hash['created_at'] = @version.created_at
     hash['updated_at'] = @version.updated_at
@@ -162,34 +161,8 @@ class VersionsService
   def self.extract_mobile_config
     hash = {}
 
-    hash['left_top_question_id'] = @version.top_left_question.present? ? @version.top_left_question.node_id : nil
-    hash['first_top_right_question_id'] = @version.first_top_right_question.present? ? @version.first_top_right_question.node_id : nil
-    hash['second_top_right_question_id'] = @version.second_top_right_question.present? ? @version.second_top_right_question.node_id : nil
-
     hash['questions_orders'] = @version.medal_r_config['questions_orders']
     hash['systems_order'] = @version.medal_r_config['systems_order']
-    hash['medical_case_list'] = @version.medal_r_config['medical_case_list_order']
-    hash['patient_list'] = @version.medal_r_config['patient_list_order']
-    hash
-  end
-
-  # @return hash
-  # Build a hash of metadata about the triage questions
-  def self.extract_triage_metadata
-    hash = {}
-
-    hash['conditions'] = {}
-    @version.components.each do |instance|
-      if instance.conditions.any?
-        hash['conditions'][instance.node_id] = []
-        instance.conditions.each do |cond|
-          condition = {}
-          condition['complaint_category_id'] = cond.first_conditionable.node_id
-          condition['answer_id'] = cond.first_conditionable_id
-          hash['conditions'][instance.node_id].push(condition)
-        end
-      end
-    end
     hash
   end
 
@@ -208,8 +181,9 @@ class VersionsService
     diagnostic.components.final_diagnostics.each do |final_diagnostic_instance|
       final_diagnostic_hash = extract_final_diagnostic(final_diagnostic_instance)
       @final_diagnostics[final_diagnostic_instance.node.id] = final_diagnostic_hash
-      hash['final_diagnostics'][final_diagnostic_instance.node.id] = final_diagnostic_hash
-      hash['final_diagnostics'][final_diagnostic_instance.node.id]['instances'] = {}
+      hash['final_diagnostics'][final_diagnostic_instance.node_id] = {}
+      hash['final_diagnostics'][final_diagnostic_instance.node_id]['id'] = final_diagnostic_instance.node_id
+      hash['final_diagnostics'][final_diagnostic_instance.node_id]['instances'] = {}
     end
 
     # Loop in each question used in current diagnostic
@@ -217,7 +191,7 @@ class VersionsService
       # Append the questions in order to list them all at the end of the json.
       assign_node(question_instance.node)
 
-      hash['instances'][question_instance.node.id] = extract_instances(question_instance) if hash['instances'][question_instance.node.id].nil? || question_instance.final_diagnostic_id.nil?
+      hash['instances'][question_instance.node_id] = extract_instances(question_instance) if hash['instances'][question_instance.node_id].nil? || question_instance.final_diagnostic_id.nil?
       hash['final_diagnostics'][question_instance.final_diagnostic_id]['instances'][question_instance.node.id] = extract_instances(question_instance) unless question_instance.final_diagnostic_id.nil?
     end
 
@@ -250,7 +224,6 @@ class VersionsService
     hash['managements'] = extract_health_cares(final_diagnostic.health_cares.managements, instance.instanceable.id, final_diagnostic.id)
     # Don't mention any exclusions if the version is arm control. Hopefully this is temporary...
     hash['excluding_final_diagnostics'] = @version.is_arm_control ? [] : final_diagnostic.excluding_nodes_ids
-    hash['excluded_final_diagnostics'] = @version.is_arm_control ? [] : final_diagnostic.excluded_nodes_ids
     hash['cc'] = final_diagnostic.diagnostic.node_id
     hash
   end
@@ -271,17 +244,13 @@ class VersionsService
   # Return hash of top conditions and conditions
   def self.extract_conditions(conditions)
     hash = {}
-    hash['top_conditions'] = []
     hash['conditions'] = []
 
     if conditions.present?
-      conditions.includes([:first_conditionable, :second_conditionable]).top_level.each do |condition|
-        hash['top_conditions'] << push_condition(condition)
-      end
-
-      conditions.low_level.each do |condition|
+      conditions.includes([:answer]).each do |condition|
         hash['conditions'] << push_condition(condition)
       end
+
     end
     hash
   end
@@ -291,19 +260,10 @@ class VersionsService
   # Set metadata for condition
   def self.push_condition(condition)
     hash = {}
-    hash['first_id'] = condition.first_conditionable_id
-    hash['first_type'] = condition.first_conditionable_type
+    hash['answer_id'] = condition.answer_id
+    hash['node_id'] = condition.answer.node.id
 
-    # Give the question's/predefined syndrome's id in order to retrieve it in front-end
-    hash['first_node_id'] = condition.first_conditionable.is_a?(Answer) ? condition.first_conditionable.node.id : nil
-
-    # hash['operator'] = condition.operator
-    # hash['second_id'] = condition.second_conditionable_id
-    # hash['second_type'] = condition.second_conditionable_type
-    #
-    # # Give the question's/predefined syndrome's id in order to retrieve it in front-end
-    # hash['second_node_id'] = condition.second_conditionable.is_a?(Answer) ? condition.second_conditionable.node.id : nil
-    hash['score'] = condition.score
+    hash['score'] = condition.score unless condition.score.nil?
     hash
   end
 
@@ -362,18 +322,16 @@ class VersionsService
       hash[question.id]['is_mandatory'] = (@version.is_arm_control && !%w(Questions::BasicDemographic Questions::Demographic Questions::Referral).include?(question.type)) ? false : question.is_mandatory
       hash[question.id]['emergency_status'] = question.emergency_status
       hash[question.id]['is_neonat'] = question.is_neonat
-      hash[question.id]['stage'] = question.stage
       hash[question.id]['system'] = question.system
       hash[question.id] = format_formula(hash[question.id], question)
 
       hash[question.id]['category'] = question.category_name
-      hash[question.id]['round'] = question.round.nil? ? nil : I18n.t("questions.rounds.#{question.round}.value").to_f
-      hash[question.id]['is_triage'] = question.is_triage
+      hash[question.id]['round'] = I18n.t("questions.rounds.#{question.round}.value").to_f unless question.round.nil?
       hash[question.id]['is_identifiable'] = question.is_identifiable
       hash[question.id]['is_danger_sign'] = question.is_danger_sign
       hash[question.id]['unavailable'] = question.unavailable
       hash[question.id]['unavailable_label'] = (question.is_a?(Questions::VitalSignAnthropometric) || question.is_a?(Questions::BasicMeasurement)) ? return_intern_label_translated('answers.unfeasible') : {}
-      hash[question.id]['estimable'] = question.estimable
+      hash[question.id]['estimable'] = question.estimable unless question.estimable.nil?
       # Send Reference instead of actual display format to help f-e interpret the question correctly
       hash[question.id]['value_format'] = question.answer_type.value
       format = question.answer_type.display
@@ -387,25 +345,36 @@ class VersionsService
       hash[question.id]['cc'] = get_node_complaint_categories(question, []).uniq
       hash[question.id]['conditioned_by_cc'] = question.is_a?(Questions::ComplaintCategory) ? [] : question.complaint_categories.map(&:id)
       hash[question.id]['referenced_in'] = []
-      hash[question.id]['vital_signs'] = extract_vital_signs_array(hash[question.id], question)
-      hash[question.id]['counter'] = 0
-      hash[question.id]['value'] = nil
-      hash[question.id]['answer'] = nil
       hash[question.id]['answers'] = {}
-      hash[question.id]['reference_table_x_id'] = question.reference_table_x_id
-      hash[question.id]['reference_table_y_id'] = question.reference_table_y_id
-      hash[question.id]['reference_table_z_id'] = question.reference_table_z_id
-      hash[question.id]['reference_table_male'] = question.reference_table_male
-      hash[question.id]['reference_table_female'] = question.reference_table_female
 
-      hash[question.id]['min_value_warning'] = question.min_value_warning
-      hash[question.id]['max_value_warning'] = question.max_value_warning
-      hash[question.id]['min_value_error'] = question.min_value_error
-      hash[question.id]['max_value_error'] = question.max_value_error
-      hash[question.id]['min_message_warning'] = return_hstore_translated(question.min_message_warning_translations)
-      hash[question.id]['max_message_warning'] = return_hstore_translated(question.max_message_warning_translations)
-      hash[question.id]['min_message_error'] = return_hstore_translated(question.min_message_error_translations)
-      hash[question.id]['max_message_error'] = return_hstore_translated(question.max_message_error_translations)
+      unless question.reference_table_x_id.nil?
+        hash[question.id]['reference_table_x_id'] = question.reference_table_x_id
+        hash[question.id]['reference_table_y_id'] = question.reference_table_y_id
+        hash[question.id]['reference_table_z_id'] = question.reference_table_z_id
+        hash[question.id]['reference_table_male'] = question.reference_table_male
+        hash[question.id]['reference_table_female'] = question.reference_table_female
+      end
+
+      unless question.min_value_warning.nil?
+        hash[question.id]['min_value_warning'] = question.min_value_warning
+        hash[question.id]['min_message_warning'] = return_hstore_translated(question.min_message_warning_translations)
+      end
+
+      unless question.max_value_warning.nil?
+        hash[question.id]['max_value_warning'] = question.max_value_warning
+        hash[question.id]['max_message_warning'] = return_hstore_translated(question.max_message_warning_translations)
+      end
+
+      unless question.min_value_error.nil?
+        hash[question.id]['min_value_error'] = question.min_value_error
+        hash[question.id]['min_message_error'] = return_hstore_translated(question.min_message_error_translations)
+      end
+
+      unless question.max_value_error.nil?
+        hash[question.id]['max_value_error'] = question.max_value_error
+        hash[question.id]['max_message_error'] = return_hstore_translated(question.max_message_error_translations)
+      end
+
       if question.is_a?(Questions::ComplaintCategory)
         hash[question.id]['questions_related_to_cc'] = get_complaint_category_questions(question)
         hash[question.id]['questions_sequences_related_to_cc'] = get_complaint_category_questions_sequences(question)
@@ -417,7 +386,6 @@ class VersionsService
       question.answers.each do |answer|
         answer_hash = {}
         answer_hash['id'] = answer.id
-        answer_hash['reference'] = answer.reference
         answer_hash['label'] = return_hstore_translated(answer.label_translations)
         answer_hash['value'] = answer.value
         answer_hash['operator'] = answer.operator
@@ -429,17 +397,6 @@ class VersionsService
       @patient_questions.push(question.id) if %w(Questions::BasicDemographic Questions::Demographic Questions::ChronicalCondition Questions::Vaccine).include?(question.type)
     end
     hash
-  end
-
-  # @params [Node]
-  # @return [Array]
-  # Get all Vital Signs that the question need to be calculated
-  def self.extract_vital_signs_array(hash, question)
-    vital_signs = hash['vital_signs']
-    vital_signs.push(question.reference_table_x_id) if question.reference_table_x.present? && question.reference_table_x.is_a?(Questions::VitalSignAnthropometric)
-    vital_signs.push(question.reference_table_y_id) if question.reference_table_y.present? && question.reference_table_y.is_a?(Questions::VitalSignAnthropometric)
-    vital_signs.push(question.reference_table_z_id) if question.reference_table_z.present? && question.reference_table_z.is_a?(Questions::VitalSignAnthropometric)
-    vital_signs
   end
 
   # @params [Node]
@@ -592,13 +549,11 @@ class VersionsService
     @health_cares.each do |key, health_care|
       hash[health_care.id] = {}
       hash[health_care.id]['id'] = health_care.id
-      hash[health_care.id]['type'] = health_care.node_type
       hash[health_care.id]['category'] = health_care.category_name
       hash[health_care.id]['label'] = return_hstore_translated(health_care.label_translations)
       hash[health_care.id]['description'] = return_hstore_translated(health_care.description_translations)
       # Don't mention any exclusions if the version is arm control. Hopefully this is temporary...
       hash[health_care.id]['excluding_nodes_ids'] = @version.is_arm_control ? [] : health_care.excluding_nodes_ids
-      hash[health_care.id]['excluded_nodes_ids'] = @version.is_arm_control ? [] : health_care.excluded_nodes_ids
       # Fields specific to drugs
       if health_care.is_a?(HealthCares::Drug)
         hash[health_care.id]['formulations'] = []
@@ -639,7 +594,7 @@ class VersionsService
       hash[questions_sequence.id] = extract_conditions(questions_sequence.instances.find_by(instanceable_id: questions_sequence.id).conditions)
       hash[questions_sequence.id]['id'] = questions_sequence.id
       hash[questions_sequence.id]['label'] = return_hstore_translated(questions_sequence.label_translations)
-      hash[questions_sequence.id]['min_score'] = questions_sequence.min_score
+      hash[questions_sequence.id]['min_score'] = questions_sequence.min_score unless questions_sequence.min_score.nil?
       hash[questions_sequence.id]['type'] = questions_sequence.node_type
       hash[questions_sequence.id]['category'] = questions_sequence.category_name
       hash[questions_sequence.id]['instances'] = {}
@@ -670,7 +625,6 @@ class VersionsService
     questions_sequence.answers.each do |answer|
       answer_hash = {}
       answer_hash['id'] = answer.id
-      answer_hash['reference'] = answer.reference
       answer_hash['label'] = answer.label
 
       hash[answer.id] = answer_hash

@@ -12,7 +12,7 @@ class Instance < ApplicationRecord
   has_many :children
   has_many :nodes, through: :children
 
-  has_many :conditions, as: :referenceable, dependent: :destroy
+  has_many :conditions, dependent: :destroy #TODO : remove after data migration
 
   scope :managements, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'HealthCares::Management') }
   scope :questions, ->() { joins(:node).includes(:conditions).where('nodes.type IN (?)', Question.descendants.map(&:name)) }
@@ -56,15 +56,8 @@ class Instance < ApplicationRecord
 
   # Remove condition - cut the method in order to be called for one condition
   def self.remove_condition(cond, instance)
-    if cond.first_conditionable.is_a?(Answer) && cond.first_conditionable.node == instance.node
-      if cond.second_conditionable.is_a?(Answer)
-        cond.update!(first_conditionable: cond.second_conditionable, operator: nil, second_conditionable: nil)
-      else
-        cond.second_conditionable.update!(top_level: cond.top_level) if cond.second_conditionable.is_a?(Condition)
-        cond.destroy!
-      end
-    elsif cond.second_conditionable.is_a?(Answer) && cond.second_conditionable.node == instance.node
-      cond.update!(operator: nil, second_conditionable: nil)
+    if cond.answer.node == instance.node
+      cond.destroy!
     end
   end
 

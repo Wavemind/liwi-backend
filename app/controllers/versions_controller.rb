@@ -123,7 +123,7 @@ class VersionsController < ApplicationController
       instance = Instance.find(version_params[:triage_id])
       cc_answer = Instance.find(version_params[:cc_id]).node.answers.first
 
-      condition = Condition.new(referenceable: instance, first_conditionable: cc_answer)
+      condition = Condition.new(instance: instance, answer: cc_answer)
 
       if condition.save
         redirect_to algorithm_version_url(@algorithm, @version, panel: 'triage_conditions'), notice: t('flash_message.success_created')
