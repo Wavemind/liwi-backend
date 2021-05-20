@@ -45,6 +45,7 @@ en:
         label_translations: "Label"
         url: "File"
       node:
+        cut_off_start: "Cut-offs from"
         type: "Category"
         description_translations: "Description"
         label_translations: "Label"
@@ -225,6 +226,7 @@ en:
       link_already_exist: "Link already exists"
       link_answer_to_answer: "You can't link an answer to another answer"
   confirmation: "Are you sure ?"
+  days: "Days"
   deactivated: "Deactivate"
   delete: "Delete"
   destroy: "Remove"
@@ -547,6 +549,7 @@ en:
         first_name: "First name"
         last_name: "Last name"
         role: "Role"
+  months: "Months"
   nodes:
     validation:
       reference_used: "This reference is already used"
@@ -756,6 +759,7 @@ en:
     medication_forms:
       select: "Select a medication form"
       required: "Medication form has to be completed"
+  to: "to"
   toolbar:
     new: "New"
     question: "Variable"

@@ -212,7 +212,7 @@ export default class Http {
    * @params [String] from
    * @return [Object] body of request
    */
-  createQuestionsSequence = async (label, description, type, min_score, complaint_category_ids, from) => {
+  createQuestionsSequence = async (label, description, type, min_score, cut_off_start, cut_off_end, cut_off_value_type, complaint_category_ids, from) => {
     const url = `${this.url}/algorithms/${this.algorithm}/questions_sequences`;
     const body = {
       questions_sequence: {
@@ -220,6 +220,9 @@ export default class Http {
         description_en: description,
         type,
         min_score,
+        cut_off_start,
+        cut_off_end,
+        cut_off_value_type,
         complaint_category_ids
       },
       instanceable_id: this.instanceableId,
@@ -534,7 +537,7 @@ export default class Http {
    * @params [String] from
    * @return [Object] body of request
    */
-  updateQuestionsSequence = async (id, label, description, type, min_score, complaint_category_ids, from) => {
+  updateQuestionsSequence = async (id, label, description, type, min_score, cut_off_start, cut_off_end, cut_off_value_type, complaint_category_ids, from) => {
     const url = `${this.url}/algorithms/${this.algorithm}/questions_sequences/${id}`;
     const body = {
       questions_sequence: {
@@ -543,6 +546,9 @@ export default class Http {
         description_en: description,
         type,
         min_score,
+        cut_off_start,
+        cut_off_end,
+        cut_off_value_type,
         complaint_category_ids
       },
       from

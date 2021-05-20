@@ -597,6 +597,8 @@ class VersionsService
       hash[questions_sequence.id]['min_score'] = questions_sequence.min_score unless questions_sequence.min_score.nil?
       hash[questions_sequence.id]['type'] = questions_sequence.node_type
       hash[questions_sequence.id]['category'] = questions_sequence.category_name
+      hash[questions_sequence.id]['cut_off_start'] = questions_sequence.cut_off_start
+      hash[questions_sequence.id]['cut_off_end'] = questions_sequence.cut_off_end
       hash[questions_sequence.id]['instances'] = {}
       hash[questions_sequence.id]['answers'] = push_questions_sequence_answers(questions_sequence)
       hash[questions_sequence.id]['qs'] = get_node_questions_sequences(questions_sequence, [])

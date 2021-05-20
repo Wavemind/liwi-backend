@@ -19,8 +19,6 @@ class DiagnosticsController < ApplicationController
 
     @instance = Instance.new
     @instanceable = @diagnostic
-    @conditions = @diagnostic.conditions
-    @condition = Condition.new
 
     @final_diagnostic = FinalDiagnostic.new
   end
@@ -133,6 +131,7 @@ class DiagnosticsController < ApplicationController
       :node_id,
       :cut_off_start,
       :cut_off_end,
+      :cut_off_value_type,
       Language.label_params
     )
   end

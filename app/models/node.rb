@@ -1,6 +1,8 @@
 # Every component of an algorithm
 class Node < ApplicationRecord
 
+  attr_accessor :cut_off_value_type
+
   # DF are not linked to algorithm this way, but through diagnostic > version
   belongs_to :algorithm, optional: true
 
