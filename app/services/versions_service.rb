@@ -174,6 +174,8 @@ class VersionsService
     hash['id'] = diagnostic.id
     hash['label'] = return_hstore_translated(diagnostic.label_translations)
     hash['complaint_category'] = diagnostic.node_id
+    hash['cut_off_start'] = diagnostic.cut_off_start
+    hash['cut_off_end'] = diagnostic.cut_off_end
     hash['instances'] = {}
     hash['final_diagnostics'] = {}
 
@@ -263,6 +265,8 @@ class VersionsService
     hash['answer_id'] = condition.answer_id
     hash['node_id'] = condition.answer.node.id
 
+    hash['cut_off_start'] = condition.cut_off_start unless condition.cut_off_start.nil?
+    hash['cut_off_end'] = condition.cut_off_end unless condition.cut_off_end.nil?
     hash['score'] = condition.score unless condition.score.nil?
     hash
   end

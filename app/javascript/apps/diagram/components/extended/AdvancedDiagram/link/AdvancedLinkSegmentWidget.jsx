@@ -40,13 +40,15 @@ class AdvancedLinkSegmentWidget extends DefaultLinkSegmentWidget {
       onContextMenu: () => {
         if (!this.props.link.isLocked()) {
           event.preventDefault();
-          const { link, diagnosticDeployed, engine } = this.props;
+          const { link, diagnosticDeployed } = this.props;
+          const engine = link.sourcePort.parent.options.engine;
           const conditionId = link.options.dbConditionId;
           const conditionCutOffStart = link.options.cutOffStart;
           const conditionCutOffEnd = link.options.cutOffEnd;
           store.dispatch(
             openModal(I18n.t("conditions.cut_off_modal"), "CutOffForm", {
               engine,
+              diagramObject: link,
               diagnosticDeployed,
               conditionId,
               conditionCutOffStart,

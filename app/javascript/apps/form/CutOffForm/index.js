@@ -25,30 +25,25 @@ export default class CutOffForm extends React.Component {
 
     httpRequest = await http.updateCutOffs(conditionId, values.cut_off_start, values.cut_off_end, values.cut_off_value_type);
 
-    console.log(conditionId)
-    console.log(values.cut_off_start)
-    console.log(values.cut_off_end)
-    console.log(values.cut_off_value_type)
-
     let result = await httpRequest.json();
 
     // Set score to link + set label with score + reload canvas + close modal
     if (httpRequest.status === 200) {
-      // diagramObject.options.score = values.score;
-      // diagramObject.options.parentInstanceId = diagramObject.sourcePort.parent.options.dbInstance.id;
-      // diagramObject.options.dbConditionId = result.id;
-      //
-      // if (method === "create") {
-      //   diagramObject.addLabel(values.score);
-      // } else {
-      //   diagramObject.getLabel().setLabel(values.score);
-      // }
-      //
-      // engine.repaintCanvas();
-      //
-      // store.dispatch(
-      //   closeModal()
-      // );
+      diagramObject.options.cutOffStart = values.cut_off_start;
+      diagramObject.options.cutOffEnd = values.cut_off_end;
+
+      const label = `${values.cut_off_start} to ${values.cut_off_end} days`;
+      if (diagramObject.getLabel() === undefined) {
+        diagramObject.addLabel(label);
+      } else {
+        diagramObject.getLabel().setLabel(label);
+      }
+
+      engine.repaintCanvas();
+
+      store.dispatch(
+        closeModal()
+      );
     } else {
       actions.setStatus({ result });
     }
@@ -68,7 +63,7 @@ export default class CutOffForm extends React.Component {
           initialValues={{
             cut_off_start: conditionCutOffStart || "",
             cut_off_end: conditionCutOffEnd || "",
-            cut_off_value_type: "months",
+            cut_off_value_type: "days",
 
           }}
           onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}

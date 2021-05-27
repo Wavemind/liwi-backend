@@ -29,7 +29,6 @@ export default class AdvancedLinkModel extends DefaultLinkModel {
       },
       eventWillFire: _.debounce(
         (event) => {
-          console.log(event);
           switch (event.function) {
             case "targetPortChanged":
               // Trigger only on user action

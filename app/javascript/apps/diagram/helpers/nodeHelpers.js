@@ -84,6 +84,10 @@ export const linkNode = (answerPort, diagramNode, condition) => {
     link.addLabel(condition.score);
   }
 
+  if (condition.cut_off_start && condition.cut_off_end) {
+    link.addLabel(`${condition.cut_off_start} to ${condition.cut_off_end} days`)
+  }
+
   // Add value in link
   link.options.score = condition.score;
   link.options.dbConditionId = condition.id;
