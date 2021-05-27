@@ -90,6 +90,20 @@ export default class Http {
     return await fetch(url, header).catch(error => console.log(error));
   };
 
+  updateCutOffs = async (id, cutOffStart, cutOffEnd, cutOffValueType) => {
+    const url = `${this.url}/conditions/${id}/update_cut_offs`;
+    const body = {
+      condition: {
+        id,
+        cut_off_start: cutOffStart,
+        cut_off_end: cutOffEnd,
+        cut_off_value_type: cutOffValueType,
+      },
+    };
+    const header = await this.setHeaders("PUT", body);
+    return await fetch(url, header).catch(error => console.log(error));
+  };
+
   /**
    * Update a management
    * @params [String] label_en

@@ -1,5 +1,6 @@
 # Define the conditions for a node to be available.
 class Condition < ApplicationRecord
+  attr_accessor :cut_off_value_type
 
   belongs_to :instance
   belongs_to :answer
@@ -8,7 +9,15 @@ class Condition < ApplicationRecord
   # belongs_to :first_conditionable, polymorphic: true #TODO : Remove after data migration
 
   before_destroy :remove_children
+  before_save :adjust_cut_offs
   before_validation :prevent_loop, unless: Proc.new {(self.instance.instanceable.is_a?(Diagnostic) && self.instance.instanceable.duplicating) }
+
+
+  # Adjust cut offs at creation
+  def adjust_cut_offs
+    self.cut_off_start = (cut_off_start * 30.4166667) if cut_off_start.present? && cut_off_value_type == 'months'
+    self.cut_off_end = (cut_off_end * 30.4166667) if cut_off_end.present? && cut_off_value_type == 'months'
+  end
 
   # @return [String]
   # Return the id displayed for the view

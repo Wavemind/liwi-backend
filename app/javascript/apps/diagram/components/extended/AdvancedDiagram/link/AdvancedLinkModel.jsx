@@ -24,8 +24,12 @@ export default class AdvancedLinkModel extends DefaultLinkModel {
 
     // Set event listener
     this.registerListener({
+      onContextMenu: () => {
+        event.preventDefault();
+      },
       eventWillFire: _.debounce(
         (event) => {
+          console.log(event);
           switch (event.function) {
             case "targetPortChanged":
               // Trigger only on user action
@@ -80,7 +84,6 @@ export default class AdvancedLinkModel extends DefaultLinkModel {
           this.options.dbConditionId = result.id;
           this.options.parentInstanceId = this.sourcePort.parent.options.dbInstance.id;
         } else {
-          console.log(result)
           this.options.triggerEvent = false;
           this.remove();
           NotificationManager.error(result);
@@ -116,6 +119,8 @@ export default class AdvancedLinkModel extends DefaultLinkModel {
       dbConditionId: this.dbConditionId,
       parentInstanceId: this.parentInstanceId,
       score: this.score,
+      cutOffStart: this.cutOffStart,
+      cutOffEnd: this.cutOffEnd,
       triggerEvent: this.triggerEvent,
       http: this.http
     };
@@ -126,6 +131,8 @@ export default class AdvancedLinkModel extends DefaultLinkModel {
     this.dbConditionId = event.data.dbConditionId;
     this.parentInstanceId = event.data.parentInstanceId;
     this.score = event.data.score;
+    this.cutOffStart = event.data.cutOffStart;
+    this.cutOffEnd = event.data.cutOffEnd;
     this.triggerEvent = event.data.triggerEvent;
   }
 }

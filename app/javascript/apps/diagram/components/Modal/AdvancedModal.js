@@ -4,6 +4,7 @@ import { Modal } from "react-bootstrap";
 import store from "../../engine/reducers/store";
 import { closeModal } from "../../engine/reducers/creators.actions";
 
+import CutOffForm from "../../../form/CutOffForm";
 import ScoreForm from "../../../form/ScoreForm";
 import DrugInstanceForm from "../../../form/DrugForm/instanceForm";
 import DrugForm from "../../../form/DrugForm/stepper";
@@ -55,6 +56,8 @@ export default class AdvancedModal extends React.Component {
     switch (content) {
       case "ScoreForm":
         return <ScoreForm {...params} />;
+      case "CutOffForm":
+        return <CutOffForm {...params} />;
       case "DrugForm":
         return <DrugForm {...params} />;
       case "FinalDiagnosticForm":

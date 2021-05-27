@@ -25,7 +25,6 @@ class Diagnostic < ApplicationRecord
     include_association :components
   end
 
-
   # Adjust cut offs at creation
   def adjust_cut_offs
     self.cut_off_start = (cut_off_start * 30.4166667) if cut_off_start.present? && cut_off_value_type == 'months'

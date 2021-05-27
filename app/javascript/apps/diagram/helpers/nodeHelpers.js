@@ -87,6 +87,8 @@ export const linkNode = (answerPort, diagramNode, condition) => {
   // Add value in link
   link.options.score = condition.score;
   link.options.dbConditionId = condition.id;
+  link.options.cutOffStart = condition.cut_off_start;
+  link.options.cutOffEnd = condition.cut_off_end;
   link.options.parentInstanceId = link.sourcePort.parent.options.dbInstance.id;
 
   return link;

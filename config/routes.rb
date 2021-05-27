@@ -109,6 +109,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :conditions do
+    member do
+      put 'update_cut_offs'
+    end
+  end
+
   resources :questions_sequences, only: [] do
     resources :instances, only: [:destroy, :create] do
       collection do
@@ -187,7 +193,6 @@ Rails.application.routes.draw do
       get 'operators'
     end
   end
-
 
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'

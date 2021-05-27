@@ -7,6 +7,12 @@ export const scoreSchema = yup.object().shape({
   score: yup.number().required(I18n.t("errors.messages.required"))
 });
 
+export const cutOffSchema = yup.object().shape({
+  cut_off_start: yup.number().required(I18n.t("errors.messages.required")),
+  cut_off_end: yup.number().required(I18n.t("errors.messages.required")),
+  cut_off_value_type: yup.string().required(I18n.t("errors.messages.required"))
+});
+
 export const answerSchema = yup.object().shape({
   answers_attributes: yup.array().of(yup.object().shape({
     label_en: yup.string().required(I18n.t("errors.messages.required")),
