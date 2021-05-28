@@ -20,7 +20,7 @@ class VersionsService
     end
 
     # Loop in each diagnostics defined in current algorithm version
-    @version.diagnostics.includes(:conditions).each do |diagnostic|
+    @version.diagnostics.each do |diagnostic|
       @diagnostics_ids << diagnostic.id
       hash['diagnostics'][diagnostic.id] = extract_diagnostic(diagnostic)
     end
