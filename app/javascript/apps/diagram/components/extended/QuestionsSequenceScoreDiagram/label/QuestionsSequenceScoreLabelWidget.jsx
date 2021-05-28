@@ -13,23 +13,24 @@ class QuestionsSequenceScoreLabelWidget extends React.Component {
     const { model } = this.props;
 
     let diagramObject = model.parent;
-    let engine = diagramObject.sourcePort.parent.options.engine;
-    let instanceId = diagramObject.targetPort.options.id;
-    let answerId = diagramObject.sourcePort.options.id;
-    let method = 'update';
+    if (diagramObject.targetPort.parent.options.diagramType === "scored") {
+      let engine = diagramObject.sourcePort.parent.options.engine;
+      let instanceId = diagramObject.targetPort.options.id;
+      let answerId = diagramObject.sourcePort.options.id;
+      let method = 'update';
+      diagramObject.options.selected = false;
 
-    diagramObject.options.selected = false;
-
-    store.dispatch(
-      openModal(I18n.t("questions_sequences.edit.title"), "ScoreForm", {
-        answerId,
-        instanceId,
-        diagramObject,
-        engine,
-        score,
-        method
-      })
-    );
+      store.dispatch(
+        openModal(I18n.t("questions_sequences.edit.title"), "ScoreForm", {
+          answerId,
+          instanceId,
+          diagramObject,
+          engine,
+          score,
+          method
+        })
+      );
+    }
   };
 
   render() {

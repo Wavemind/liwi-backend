@@ -38,9 +38,9 @@ class AdvancedLinkSegmentWidget extends DefaultLinkSegmentWidget {
       strokeWidth: 20,
       fill: 'none',
       onContextMenu: () => {
-        if (!this.props.link.isLocked()) {
+        const { link, diagnosticDeployed } = this.props;
+        if (!link.isLocked() && link.targetPort.parent.options.diagramType !== "scored") {
           event.preventDefault();
-          const { link, diagnosticDeployed } = this.props;
           const engine = link.sourcePort.parent.options.engine;
           const conditionId = link.options.dbConditionId;
           const conditionCutOffStart = link.options.cutOffStart;

@@ -29,10 +29,10 @@ export default class CutOffForm extends React.Component {
 
     // Set score to link + set label with score + reload canvas + close modal
     if (httpRequest.status === 200) {
-      diagramObject.options.cutOffStart = values.cut_off_start;
-      diagramObject.options.cutOffEnd = values.cut_off_end;
+      diagramObject.options.cutOffStart = result.cut_off_start;
+      diagramObject.options.cutOffEnd = result.cut_off_end;
 
-      const label = `${values.cut_off_start} to ${values.cut_off_end} days`;
+      const label = `${result.cut_off_start} to ${result.cut_off_end} days`;
       if (diagramObject.getLabel() === undefined) {
         diagramObject.addLabel(label);
       } else {
