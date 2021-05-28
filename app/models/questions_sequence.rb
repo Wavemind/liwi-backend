@@ -1,5 +1,6 @@
 # Define a sequence of questions to be included in a diagnostic
 class QuestionsSequence < Node
+  before_create :adjust_cut_offs
   after_create :create_boolean
 
   has_many :answers, foreign_key: 'node_id', dependent: :destroy
@@ -11,6 +12,12 @@ class QuestionsSequence < Node
 
   scope :scored, ->() { where(type: 'QuestionsSequences::Scored') }
   scope :not_scored, ->() { where.not(type: 'QuestionsSequences::Scored') }
+
+  # Adjust cut offs at creation
+  def adjust_cut_offs
+    self.cut_off_start = (cut_off_start * 30.4166667) if cut_off_start.present? && cut_off_value_type == 'months'
+    self.cut_off_end = (cut_off_end * 30.4166667) if cut_off_end.present? && cut_off_value_type == 'months'
+  end
 
   # Preload the children of class Question
   def self.descendants

@@ -1,4 +1,5 @@
 import * as React from "react";
+import I18n from "i18n-js";
 import _ from "lodash";
 import QuestionNodeModel from "../components/extended/QuestionDiagram/node/QuestionNodeModel";
 import FinalDiagnosticNodeModel from "../components/extended/FinalDiagnosticDiagram/node/FinalDiagnosticNodeModel";
@@ -84,9 +85,16 @@ export const linkNode = (answerPort, diagramNode, condition) => {
     link.addLabel(condition.score);
   }
 
+  // Add label to display cut offs
+  if (condition.cut_off_start && condition.cut_off_end) {
+    link.addLabel(I18n.t("conditions.cut_off_label", {start: condition.cut_off_start, end: condition.cut_off_end}))
+  }
+
   // Add value in link
   link.options.score = condition.score;
   link.options.dbConditionId = condition.id;
+  link.options.cutOffStart = condition.cut_off_start;
+  link.options.cutOffEnd = condition.cut_off_end;
   link.options.parentInstanceId = link.sourcePort.parent.options.dbInstance.id;
 
   return link;

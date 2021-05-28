@@ -12,7 +12,8 @@
         availableNodes: @diagnostic.available_nodes_json,
         questionCategories: Question.categories('Diagnostic').as_json,
         questionsSequenceCategories: QuestionsSequence.categories.as_json,
-        readOnly: !policy(@diagnostic).new?
+        readOnly: !policy(@diagnostic).new?,
+        diagnosticDeployed: @diagnostic.version.is_deployed?
       }
     }) %>
     <button type="button" class="btn btn-sm btn-info help" data-toggle="popover" data-placement="top" data-html="true" data-content="<%= render 'helps/diagram' %>">

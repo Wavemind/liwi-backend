@@ -4,6 +4,7 @@
 include Rails.application.routes.url_helpers
 class Diagnostic < ApplicationRecord
   attr_accessor :duplicating
+  attr_accessor :cut_off_value_type
 
   belongs_to :version
   belongs_to :node # Complaint Category
@@ -11,6 +12,7 @@ class Diagnostic < ApplicationRecord
   has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy
 
   before_validation :validate_complaint_category
+  before_create :adjust_cut_offs
   after_create :generate_reference
   validates_presence_of :label_en
 
@@ -21,6 +23,12 @@ class Diagnostic < ApplicationRecord
   amoeba do
     enable
     include_association :components
+  end
+
+  # Adjust cut offs at creation
+  def adjust_cut_offs
+    self.cut_off_start = (cut_off_start * 30.4166667) if cut_off_start.present? && cut_off_value_type == 'months'
+    self.cut_off_end = (cut_off_end * 30.4166667) if cut_off_end.present? && cut_off_value_type == 'months'
   end
 
   # @return [String]

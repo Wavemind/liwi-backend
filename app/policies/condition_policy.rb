@@ -9,6 +9,10 @@ class ConditionPolicy < ApplicationPolicy
     user.admin? || user.clinician?
   end
 
+  def update_cut_offs?
+    user.admin? || user.clinician?
+  end
+
   def add_diagnostic_condition?
     destroy?
   end

@@ -246,8 +246,6 @@ export default class QuestionForm extends React.Component {
       target
     } = this.state;
 
-    console.log(stages);
-    console.log(rounds);
     return (
       isLoading ? <Loader/> :
         <FadeIn>

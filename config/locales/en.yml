@@ -45,6 +45,7 @@ en:
         label_translations: "Label"
         url: "File"
       node:
+        cut_off_start: "Cut-offs from"
         type: "Category"
         description_translations: "Description"
         label_translations: "Label"
@@ -217,6 +218,8 @@ en:
     versions: "Versions"
   cancel: "Cancel"
   conditions:
+    cut_off_modal: "Define cut offs for this link"
+    cut_off_label: "%{start} to %{end} days"
     operators:
       and_operator: "AND"
       or_operator: "OR"
@@ -225,6 +228,7 @@ en:
       link_already_exist: "Link already exists"
       link_answer_to_answer: "You can't link an answer to another answer"
   confirmation: "Are you sure ?"
+  days: "Days"
   deactivated: "Deactivate"
   delete: "Delete"
   destroy: "Remove"
@@ -547,6 +551,7 @@ en:
         first_name: "First name"
         last_name: "Last name"
         role: "Role"
+  months: "Months"
   nodes:
     validation:
       reference_used: "This reference is already used"
@@ -653,6 +658,7 @@ en:
       formula_wrong_characters: "Incorrect formula format. You can only use numbers, operators and variable references (between square brackets). Eg [BM1] / (([BM3] / 100) * ([BM3] / 100))"
       formula_wrong_reference: "The reference '%{reference}' does not match any variable in this algorithm"
       formula_wrong_type: "The reference prefix you used does not match any variable category"
+      formula_using_function: "You're trying to use a function (%{formula}) which is not allowed anymore"
       formula_reference_not_date: "The variable '%{reference}' is not in date format."
       formula_reference_not_numeric: "The variable '%{reference}' is not in numeric format."
       formula_reference_no_underscore: "The reference must contain an underscore (eg: A_1)"
@@ -756,6 +762,7 @@ en:
     medication_forms:
       select: "Select a medication form"
       required: "Medication form has to be completed"
+  to: "to"
   toolbar:
     new: "New"
     question: "Variable"

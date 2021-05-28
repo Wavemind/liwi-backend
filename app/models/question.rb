@@ -189,18 +189,15 @@ class Question < Node
   # Ensure that the formula is in a correct format
   def validate_formula
     errors.add(:formula, I18n.t('questions.errors.formula_wrong_characters')) if formula.match(/^(\[(.*?)\]|[ \(\)\*\/\+\-|0-9])*$/).nil?
+
+    # Check if the functions ToDay or ToMonth are being used. If so, formula is correct.
+    if %w(ToDay ToMonth).include?(formula)
+      errors.add(:formula, I18n.t('questions.errors.formula_using_function', formula: formula))
+      return true
+    end
+
     # Extract references and functions from the formula
     formula.scan(/\[.*?\]/).each do |reference|
-      # Check for date functions ToDay() or ToMonth() and remove element if it's correct
-      is_date = false
-      if reference.include?('ToDay')
-        is_date = true
-        reference = reference.sub!('ToDay', '').tr('()', '')
-      elsif reference.include?('ToMonth')
-        is_date = true
-        reference = reference.sub!('ToMonth', '').tr('()', '')
-      end
-
       # Extract type and reference from full reference
       full_reference = reference.gsub(/[\[\]]/, '')
       type, reference = full_reference.match(/([A-Z]*)([0-9]*)/i).captures
@@ -209,11 +206,7 @@ class Question < Node
       if type.present?
         question = algorithm.questions.find_by(type: type.to_s, reference: reference.to_i)
         if question.present?
-          if is_date
-            errors.add(:formula, I18n.t('questions.errors.formula_reference_not_date', reference: full_reference)) unless question.answer_type.value == 'Date'
-          else
-            errors.add(:formula, I18n.t('questions.errors.formula_reference_not_numeric', reference: full_reference)) unless %w(Integer Float).include?(question.answer_type.value)
-          end
+          errors.add(:formula, I18n.t('questions.errors.formula_reference_not_numeric', reference: full_reference)) unless %w(Integer Float).include?(question.answer_type.value)
         else
           errors.add(:formula, I18n.t('questions.errors.formula_wrong_reference', reference: full_reference))
         end
