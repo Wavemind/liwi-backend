@@ -219,6 +219,7 @@ en:
   cancel: "Cancel"
   conditions:
     cut_off_modal: "Define cut offs for this link"
+    cut_off_label: "%{start} to %{end} days"
     operators:
       and_operator: "AND"
       or_operator: "OR"

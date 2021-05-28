@@ -27,12 +27,12 @@ export default class CutOffForm extends React.Component {
 
     let result = await httpRequest.json();
 
-    // Set score to link + set label with score + reload canvas + close modal
+    // Set cut offs  + set label with infos + reload canvas + close modal
     if (httpRequest.status === 200) {
       diagramObject.options.cutOffStart = result.cut_off_start;
       diagramObject.options.cutOffEnd = result.cut_off_end;
 
-      const label = `${result.cut_off_start} to ${result.cut_off_end} days`;
+      const label = I18n.t("conditions.cut_off_label", {start: result.cut_off_start, end: result.cut_off_end});
       if (diagramObject.getLabel() === undefined) {
         diagramObject.addLabel(label);
       } else {

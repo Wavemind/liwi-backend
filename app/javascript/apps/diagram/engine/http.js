@@ -90,6 +90,14 @@ export default class Http {
     return await fetch(url, header).catch(error => console.log(error));
   };
 
+  /**
+   * Update a condition with its cut offs
+   * @params [Integer] id
+   * @params [Integer] cutOffStart
+   * @params [Integer] cutOffEnd
+   * @params [String] cutOffValueType
+   * @return [Object] body of request
+   */
   updateCutOffs = async (id, cutOffStart, cutOffEnd, cutOffValueType) => {
     const url = `${this.url}/conditions/${id}/update_cut_offs`;
     const body = {
