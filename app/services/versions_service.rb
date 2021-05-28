@@ -386,6 +386,7 @@ class VersionsService
       question.answers.each do |answer|
         answer_hash = {}
         answer_hash['id'] = answer.id
+        answer_hash['reference'] = answer.reference
         answer_hash['label'] = return_hstore_translated(answer.label_translations)
         answer_hash['value'] = answer.value
         answer_hash['operator'] = answer.operator
