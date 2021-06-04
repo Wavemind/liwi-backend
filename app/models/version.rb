@@ -143,7 +143,7 @@ class Version < ApplicationRecord
       hash['title'] = I18n.t("questions.steps.#{step_name}")
       hash['subtitle'] =  I18n.t('activerecord.attributes.question.step')
       hash['children'] = []
-      if %w(medical_history physical_exam).include?(step_name)
+      if %w(medical_history_step physical_exam_step).include?(step_name)
         Question.systems.each do |system_name, system_index|
           system_hash = {}
           system_hash['title'] = I18n.t("questions.systems.#{system_name}")

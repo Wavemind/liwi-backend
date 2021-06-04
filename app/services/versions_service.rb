@@ -164,7 +164,7 @@ class VersionsService
     hash = {}
     Question.steps.each do |step_name, step_index|
       hash[step_name] = []
-      if %w(medical_history physical_exam).include?(step_name)
+      if %w(medical_history_step physical_exam_step).include?(step_name)
         Question.systems.each do |system_name, system_index|
           system_hash = {}
           system_hash[system_name] = full_order[step_index]['children'][system_index]['children'].map{|node| node['id']}

@@ -222,7 +222,7 @@ class Question < Node
   def add_to_version_orders
     algorithm.versions.each do |version|
       order = JSON.parse(version.full_order_json)
-      if %w(medical_history physical_exam).include?(step)
+      if %w(medical_history_step physical_exam_step).include?(step)
         order.select{|i| i['title'] == I18n.t("questions.steps.#{step}")}[0]['children'].select{|i| i['title'] == I18n.t("questions.systems.#{system}")}[0]['children'].push(generate_node_tree_hash)
       else
         order.select{|i| i['title'] == I18n.t("questions.steps.#{step}")}[0]['children'].push(generate_node_tree_hash)
@@ -235,7 +235,7 @@ class Question < Node
   def remove_from_version_orders
     algorithm.versions.each do |version|
       order = JSON.parse(version.full_order_json)
-      if %w(medical_history physical_exam).include?(step)
+      if %w(medical_history_step physical_exam_step).include?(step)
         order.select{|i| i['title'] == I18n.t("questions.steps.#{step}")}[0]['children'].select{|i| i['title'] == I18n.t("questions.systems.#{system}")}[0]['children'].delete_if{|i| i['id'] == id}
       else
         order.select{|i| i['title'] == I18n.t("questions.steps.#{step}")}[0]['children'].delete_if{|i| i['id'] == id}
