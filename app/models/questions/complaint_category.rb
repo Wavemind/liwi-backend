@@ -21,6 +21,6 @@ class Questions::ComplaintCategory < Question
 
   # Associate proper step depending on category ; empty for parent
   def associate_step
-    self.step = Question.steps[:complaint_categories]
+    self.step = Question.steps[:complaint_categories_step]
   end
 end

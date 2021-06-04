@@ -7,7 +7,7 @@ class Question < Node
   after_create :create_present, if: Proc.new { answer_type.value == 'Present' }
 
   enum round: [:tenth, :half, :unit]
-  enum step: [:registration_step, :first_look_assessment, :complaint_categories, :basic_measurements, :medical_history, :physical_exam, :test_step, :health_care_questions, :referral_step]
+  enum step: [:registration_step, :first_look_assessment_step, :complaint_categories_step, :basic_measurements_step, :medical_history_step, :physical_exam_step, :test_step, :health_care_questions_step, :referral_step]
   enum stage: [:registration, :triage, :test, :consultation, :diagnosis_management]
   enum system: [
     :general,
@@ -42,6 +42,8 @@ class Question < Node
 
   before_validation :validate_formula, if: Proc.new { self.formula.present? }
   before_validation :validate_ranges, if: Proc.new { [3, 4].include?(self.answer_type_id) }
+  after_create :add_to_version_orders
+  after_destroy :remove_from_version_orders
   validates_presence_of :stage, unless: Proc.new { self.is_a? Questions::BackgroundCalculation }
   validates_presence_of :formula, if: Proc.new { self.answer_type.display == 'Formula' }
   validates_presence_of :type
@@ -214,6 +216,41 @@ class Question < Node
         errors.add(:formula, I18n.t('questions.errors.formula_wrong_type', reference: full_reference))
       end
     end
+  end
+
+  # Add the new node to the versions orders so they can reorder it correctly
+  def add_to_version_orders
+    algorithm.versions.each do |version|
+      order = JSON.parse(version.full_order_json)
+      if %w(medical_history physical_exam).include?(step)
+        order.select{|i| i['title'] == I18n.t("questions.steps.#{step}")}[0]['children'].select{|i| i['title'] == I18n.t("questions.systems.#{system}")}[0]['children'].push(generate_node_tree_hash)
+      else
+        order.select{|i| i['title'] == I18n.t("questions.steps.#{step}")}[0]['children'].push(generate_node_tree_hash)
+      end
+      version.update(full_order_json: order.to_json)
+    end
+  end
+
+  # Remove the destroyed node in the versions orders so they don't consider it anymore
+  def remove_from_version_orders
+    algorithm.versions.each do |version|
+      order = JSON.parse(version.full_order_json)
+      if %w(medical_history physical_exam).include?(step)
+        order.select{|i| i['title'] == I18n.t("questions.steps.#{step}")}[0]['children'].select{|i| i['title'] == I18n.t("questions.systems.#{system}")}[0]['children'].delete_if{|i| i['id'] == id}
+      else
+        order.select{|i| i['title'] == I18n.t("questions.steps.#{step}")}[0]['children'].delete_if{|i| i['id'] == id}
+      end
+      version.update(full_order_json: order.to_json)
+    end
+  end
+
+  # Generate node hash for tree order
+  def generate_node_tree_hash
+    question_hash = {}
+    question_hash['id'] = id
+    question_hash['title'] = reference_label
+    question_hash['placeholder'] = diagnostics.map(&:reference_label) + dependencies.map(&:reference_label)
+    question_hash
   end
 
   private

@@ -52,6 +52,7 @@ Rails.application.routes.draw do
         put 'update_list'
         put 'import_translations'
         put 'set_medal_data_config'
+        put 'update_full_order'
       end
 
       resources :final_diagnostics do

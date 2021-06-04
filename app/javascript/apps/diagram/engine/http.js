@@ -113,6 +113,22 @@ export default class Http {
   };
 
   /**
+   * Update the full order for a version
+   * @params [json] tree
+   * @return [Object] body of request
+   */
+  updateFullOrder = async (tree) => {
+    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/update_full_order`;
+    const body = {
+      version: {
+        full_order_json: tree,
+      },
+    };
+    const header = await this.setHeaders("PUT", body);
+    return await fetch(url, header).catch(error => console.log(error));
+  };
+
+  /**
    * Update a management
    * @params [String] label_en
    * @params [String] description_en

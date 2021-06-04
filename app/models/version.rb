@@ -135,6 +135,35 @@ class Version < ApplicationRecord
     nodes_to_add.uniq
   end
 
+  # Generate node order tree from version
+  def generate_nodes_order_tree
+    tree = []
+    Question.steps.each do |step_name, step_index|
+      hash = {}
+      hash['title'] = I18n.t("questions.steps.#{step_name}")
+      hash['subtitle'] =  I18n.t('activerecord.attributes.question.step')
+      hash['children'] = []
+      if %w(medical_history physical_exam).include?(step_name)
+        Question.systems.each do |system_name, system_index|
+          system_hash = {}
+          system_hash['title'] = I18n.t("questions.systems.#{system_name}")
+          system_hash['subtitle'] =  I18n.t('activerecord.attributes.question.system')
+          system_hash['children'] = []
+          algorithm.questions.where(step: step_index, system: system_index).each do |question|
+            system_hash['children'].push(question.generate_node_tree_hash)
+          end
+          hash['children'].push(system_hash)
+        end
+      else
+        algorithm.questions.where(step: step_index).each do |question|
+          hash['children'].push(question.generate_node_tree_hash)
+        end
+      end
+      tree.push(hash)
+    end
+    tree.to_json
+  end
+
   # Init orders for new version
   def init_config
     self.medal_r_config = {

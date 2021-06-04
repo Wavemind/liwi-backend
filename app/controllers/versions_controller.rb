@@ -1,8 +1,8 @@
 class VersionsController < ApplicationController
   before_action :authenticate_user!, except: [:change_triage_order, :change_systems_order]
-  before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :duplicate, :create_triage_condition, :set_medal_data_config, :remove_triage_condition, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnostics, :import_translations, :job_status]
+  before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :duplicate, :create_triage_condition, :set_medal_data_config, :remove_triage_condition, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnostics, :import_translations, :job_status, :update_full_order]
   before_action :set_breadcrumb, only: [:show, :new, :edit]
-  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :change_triage_order, :change_systems_order, :components, :create_triage_condition, :set_medal_data_config, :duplicate, :remove_components, :remove_triage_condition, :update_list, :regenerate_json, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnostics, :import_translations, :job_status]
+  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :change_triage_order, :change_systems_order, :components, :create_triage_condition, :set_medal_data_config, :duplicate, :remove_components, :remove_triage_condition, :update_list, :regenerate_json, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnostics, :import_translations, :job_status, :update_full_order]
 
   def index
     authorize policy_scope(Version)
@@ -325,6 +325,14 @@ class VersionsController < ApplicationController
     render json: { job_status: status, message: message }
   end
 
+  def update_full_order
+    if @version.update(full_order_json: version_params[:full_order_json])
+      render json: {result: 'success'}
+    else
+      render json: {result: 'error'}
+    end
+  end
+
   private
 
   # Generic method to update translations for a given model with a given ID from excel sheet
@@ -372,6 +380,7 @@ class VersionsController < ApplicationController
       :second_top_right_question_id,
       :is_arm_control,
       :nodes_ids,
+      :full_order_json,
       language_ids: []
     )
   end

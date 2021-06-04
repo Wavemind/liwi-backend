@@ -139,6 +139,8 @@ class VersionsService
 
     hash['mobile_config'] = extract_mobile_config
     hash['config'] = @version.algorithm.medal_r_config
+    hash['full_order'] = extract_full_order_json
+
     translated_systems_order = {}
     @version.medal_r_config['systems_order'].map do |system|
       translated_systems_order[system] = return_intern_label_translated("questions.systems.#{system}")
@@ -153,6 +155,25 @@ class VersionsService
     hash['author'] = @version.user.full_name
     hash['created_at'] = @version.created_at
     hash['updated_at'] = @version.updated_at
+    hash
+  end
+
+  def self.extract_full_order_json
+    full_order = JSON.parse(@version.full_order_json)
+
+    hash = {}
+    Question.steps.each do |step_name, step_index|
+      hash[step_name] = []
+      if %w(medical_history physical_exam).include?(step_name)
+        Question.systems.each do |system_name, system_index|
+          system_hash = {}
+          system_hash[system_name] = full_order[step_index]['children'][system_index]['children'].map{|node| node['id']}
+          hash[step_name].push(system_hash)
+        end
+      else
+        hash[step_name] = full_order[step_index]['children'].map{|node| node['id']}
+      end
+    end
     hash
   end
 

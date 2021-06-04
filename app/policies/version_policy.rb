@@ -49,6 +49,10 @@ class VersionPolicy < ApplicationPolicy
     true
   end
 
+  def update_full_order?
+    true
+  end
+
   def components?
     new?
   end

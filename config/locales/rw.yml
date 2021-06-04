@@ -77,6 +77,7 @@ rw:
         unknown: "Variable can be unknown"
         unfeasible: "Variable can be not feasible"
         measurement_unavailable: "Value can be unavailable, unfeasible or unknown"
+        step: "Step"
       questions_sequence:
         min_score: "Minimal score"
         type: "Category"
@@ -684,13 +685,13 @@ rw:
       diagnosis_management: "Diagnosis and management"
     steps:
       registration_step: "Registration"
-      first_look_assessment: "First Look Assessment"
-      complaint_categories: "Complaint Categories"
-      basic_measurements: "Basic Measurements"
-      medical_history: "Medical History"
-      physical_exam: "Physical Exams"
+      first_look_assessment_step: "First Look Assessment"
+      complaint_categories_step: "Complaint Categories"
+      basic_measurements_step: "Basic Measurements"
+      medical_history_step: "Medical History"
+      physical_exam_step: "Physical Exams"
       test_step: "Tests"
-      health_care_questions: "Health Care Questions"
+      health_care_questions_step: "Health Care Questions"
       referral_step: "Referral"
     systems:
       general: "General"
