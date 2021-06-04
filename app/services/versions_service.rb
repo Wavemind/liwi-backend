@@ -167,11 +167,11 @@ class VersionsService
       if %w(medical_history_step physical_exam_step).include?(step_name)
         Question.systems.each do |system_name, system_index|
           system_hash = {}
-          system_hash[system_name] = full_order[step_index]['children'][system_index]['children'].map{|node| node['id']}
+          system_hash[system_name] = full_order.select{|i| i['title'] == I18n.t("questions.systems.#{step_name}")}[0]['children'].select{|i| i['title'] == I18n.t("questions.systems.#{system_name}")}[0]['children'].map{|node| node['id']}
           hash[step_name].push(system_hash)
         end
       else
-        hash[step_name] = full_order[step_index]['children'].map{|node| node['id']}
+        hash[step_name] = full_order.select{|i| i['title'] == I18n.t("questions.systems.#{step_name}")}[0]['children'].map{|node| node['id']}
       end
     end
     hash
