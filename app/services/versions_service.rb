@@ -172,7 +172,7 @@ class VersionsService
           system_hash[system_name] = full_order.select{|i| i['title'] == I18n.t("questions.steps.#{step_name}")}[0]['children'].select{|i| i['title'] == I18n.t("questions.systems.#{system_name}")}[0]['children'].map{|node| node['id']}
           temp_systems[new_index] = system_hash
         end
-        hash[step_name] = temp_systems.sort.map(:last)
+        hash[step_name] = temp_systems.sort.map(&:last)
       else
         hash[step_name] = full_order.select{|i| i['title'] == I18n.t("questions.steps.#{step_name}")}[0]['children'].map{|node| node['id']}
       end
