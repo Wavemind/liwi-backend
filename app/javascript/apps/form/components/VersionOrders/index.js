@@ -29,15 +29,15 @@ export default class VersionOrders extends Component {
           onChange={treeData => this.setState({ treeData })}
           onMoveNode={this.onChange}
           canDrag={treeData => {
-            return treeData["node"]["subtitle"] !== "Step";
+            return !["attribute", "step"].includes(treeData["node"]["type"]);
           }}
           canDrop={treeData => {
             return treeData['nextParent'] !== null && treeData['prevParent']['title'] === treeData['nextParent']['title']
           }}
           generateNodeProps={rowInfo => {
-            if (["Attribute", "Step"].includes(rowInfo["node"]["subtitle"])) {
+            if (["attribute", "step"].includes(rowInfo["node"]["type"])) {
               rowInfo.className = "order-step";
-            } else if (rowInfo["node"]["subtitle"] === "System"){
+            } else if (rowInfo["node"]["type"] === "system"){
               rowInfo.className = "order-system";
             } else {
               if (selected.includes(rowInfo["node"]["id"])){

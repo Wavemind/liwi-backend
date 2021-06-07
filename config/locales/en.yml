@@ -171,7 +171,6 @@ en:
     unavailable: "Test/Assessment is unavailable"
     unfeasible: "Not feasible"
     unknown: "Unknown"
-  attribute: "Attribute"
   api:
     v1:
       health_facilities:
@@ -798,6 +797,11 @@ en:
       title: "Details of %{name}"
   validate: "Validate"
   versions:
+    full_order_tree:
+      subtitles:
+        attribute: "Attribute"
+        step: "Step"
+        system: "System"
     medal_data_config:
       first_name_patient_id: "Patient first name"
       middle_name_patient_id: "Patient middle name"

@@ -141,14 +141,16 @@ class Version < ApplicationRecord
     Question.steps.each do |step_name, step_index|
       hash = {}
       hash['title'] = I18n.t("questions.steps.#{step_name}")
-      hash['subtitle'] =  I18n.t('activerecord.attributes.question.step')
+      hash['subtitle'] =  I18n.t('versions.full_order_tree.subtitles.step')
+      hash['type'] = 'step'
       hash['children'] = []
       if %w(medical_history_step physical_exam_step).include?(step_name)
         Question.systems.each do |system_name, system_index|
           system_hash = {}
           system_hash['title'] = I18n.t("questions.systems.#{system_name}")
-          system_hash['subtitle'] =  I18n.t('activerecord.attributes.question.system')
+          system_hash['subtitle'] =  I18n.t('versions.full_order_tree.subtitles.system')
           system_hash['subtitle_name'] = system_name
+          system_hash['type'] = 'system'
           system_hash['children'] = []
           algorithm.questions.where(step: step_index, system: system_index).each do |question|
             system_hash['children'].push(question.generate_node_tree_hash)
@@ -158,8 +160,9 @@ class Version < ApplicationRecord
       elsif step_name == 'complaint_categories_step'
         older_children_hash = {}
         older_children_hash['title'] = I18n.t('older_children')
-        older_children_hash['subtitle'] = I18n.t('attribute')
+        older_children_hash['subtitle'] = I18n.t('versions.full_order_tree.subtitles.attribute')
         older_children_hash['subtitle_name'] = 'older_children'
+        older_children_hash['type'] = 'attribute'
         older_children_hash['children'] = []
         algorithm.questions.where(step: step_index, is_neonat: false).each do |question|
           older_children_hash['children'].push(question.generate_node_tree_hash)
@@ -168,8 +171,9 @@ class Version < ApplicationRecord
 
         neonat_hash = {}
         neonat_hash['title'] = I18n.t('neonat_children')
-        neonat_hash['subtitle'] = I18n.t('attribute')
+        neonat_hash['subtitle'] = I18n.t('versions.full_order_tree.subtitles.attribute')
         neonat_hash['subtitle_name'] = 'neonat_children'
+        neonat_hash['type'] = 'attribute'
         neonat_hash['children'] = []
         algorithm.questions.where(step: step_index, is_neonat: true).each do |question|
           neonat_hash['children'].push(question.generate_node_tree_hash)
