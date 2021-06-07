@@ -35,7 +35,7 @@ export default class VersionOrders extends Component {
             return treeData['nextParent'] !== null && treeData['prevParent']['title'] === treeData['nextParent']['title']
           }}
           generateNodeProps={rowInfo => {
-            if (rowInfo["node"]["subtitle"] === "Step") {
+            if (["Attribute", "Step"].includes(rowInfo["node"]["subtitle"])) {
               rowInfo.className = "order-step";
             } else if (rowInfo["node"]["subtitle"] === "System"){
               rowInfo.className = "order-system";

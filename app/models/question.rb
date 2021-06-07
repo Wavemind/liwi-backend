@@ -224,6 +224,9 @@ class Question < Node
       order = JSON.parse(version.full_order_json)
       if %w(medical_history_step physical_exam_step).include?(step)
         order.select{|i| i['title'] == I18n.t("questions.steps.#{step}")}[0]['children'].select{|i| i['title'] == I18n.t("questions.systems.#{system}")}[0]['children'].push(generate_node_tree_hash)
+      elsif step == 'complaint_categories_step'
+        index = is_neonat ? 1 : 0 # Older children list is first
+        order.select{|i| i['title'] == I18n.t("questions.steps.#{step}")}[0]['children'][index]['children'].push(generate_node_tree_hash)
       else
         order.select{|i| i['title'] == I18n.t("questions.steps.#{step}")}[0]['children'].push(generate_node_tree_hash)
       end
@@ -237,6 +240,9 @@ class Question < Node
       order = JSON.parse(version.full_order_json)
       if %w(medical_history_step physical_exam_step).include?(step)
         order.select{|i| i['title'] == I18n.t("questions.steps.#{step}")}[0]['children'].select{|i| i['title'] == I18n.t("questions.systems.#{system}")}[0]['children'].delete_if{|i| i['id'] == id}
+      elsif step == 'complaint_categories_step'
+        index = is_neonat ? 1 : 0 # Older children list is first
+        order.select{|i| i['title'] == I18n.t("questions.steps.#{step}")}[0]['children'][index]['children'].delete_if{|i| i['id'] == id}
       else
         order.select{|i| i['title'] == I18n.t("questions.steps.#{step}")}[0]['children'].delete_if{|i| i['id'] == id}
       end

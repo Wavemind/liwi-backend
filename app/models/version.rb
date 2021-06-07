@@ -148,13 +148,31 @@ class Version < ApplicationRecord
           system_hash = {}
           system_hash['title'] = I18n.t("questions.systems.#{system_name}")
           system_hash['subtitle'] =  I18n.t('activerecord.attributes.question.system')
-          system_hash['system_name'] = system_name
+          system_hash['subtitle_name'] = system_name
           system_hash['children'] = []
           algorithm.questions.where(step: step_index, system: system_index).each do |question|
             system_hash['children'].push(question.generate_node_tree_hash)
           end
           hash['children'].push(system_hash)
         end
+      elsif step_name == 'complaint_categories_step'
+        older_children_hash = {}
+        older_children_hash['title'] = I18n.t('older_children')
+        older_children_hash['subtitle'] = I18n.t('attribute')
+        older_children_hash['subtitle_name'] = 'older_children'
+        algorithm.questions.where(step: step_index, is_neonat: false).each do |question|
+          older_children_hash['children'].push(question.generate_node_tree_hash)
+        end
+        hash['children'].push(older_children_hash)
+
+        neonat_hash = {}
+        neonat_hash['title'] = I18n.t('neonat_children')
+        neonat_hash['subtitle'] = I18n.t('attribute')
+        neonat_hash['subtitle_name'] = 'neonat_children'
+        algorithm.questions.where(step: step_index, is_neonat: true).each do |question|
+          neonat_hash['children'].push(question.generate_node_tree_hash)
+        end
+        hash['children'].push(neonat_hash)
       else
         algorithm.questions.where(step: step_index).each do |question|
           hash['children'].push(question.generate_node_tree_hash)

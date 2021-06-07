@@ -169,6 +169,7 @@ fr:
     unavailable: "Test non disponible"
     unfeasible: "Pas faisable"
     unknown: "Inconnu"
+  attribute: "Attribute"
   api:
     v1:
       health_facilities:
@@ -546,9 +547,11 @@ fr:
         first_name: "First name"
         last_name: "Last name"
         role: "Role"
+  neonat_children: "Neonat children"
   nodes:
     validation:
       reference_used: "This reference is already used"
+  older_children: "Older children"
   questions_sequences:
     categories:
       predefined_syndrome:

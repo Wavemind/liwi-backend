@@ -171,6 +171,7 @@ en:
     unavailable: "Test/Assessment is unavailable"
     unfeasible: "Not feasible"
     unknown: "Unknown"
+  attribute: "Attribute"
   api:
     v1:
       health_facilities:
@@ -553,9 +554,11 @@ en:
         last_name: "Last name"
         role: "Role"
   months: "Months"
+  neonat_children: "Neonat children"
   nodes:
     validation:
       reference_used: "This reference is already used"
+  older_children: "Older children"
   questions_sequences:
     categories:
       predefined_syndrome:
