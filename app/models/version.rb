@@ -160,6 +160,7 @@ class Version < ApplicationRecord
         older_children_hash['title'] = I18n.t('older_children')
         older_children_hash['subtitle'] = I18n.t('attribute')
         older_children_hash['subtitle_name'] = 'older_children'
+        older_children_hash['children'] = []
         algorithm.questions.where(step: step_index, is_neonat: false).each do |question|
           older_children_hash['children'].push(question.generate_node_tree_hash)
         end
@@ -169,6 +170,7 @@ class Version < ApplicationRecord
         neonat_hash['title'] = I18n.t('neonat_children')
         neonat_hash['subtitle'] = I18n.t('attribute')
         neonat_hash['subtitle_name'] = 'neonat_children'
+        neonat_hash['children'] = []
         algorithm.questions.where(step: step_index, is_neonat: true).each do |question|
           neonat_hash['children'].push(question.generate_node_tree_hash)
         end
