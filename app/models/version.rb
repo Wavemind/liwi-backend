@@ -148,6 +148,7 @@ class Version < ApplicationRecord
           system_hash = {}
           system_hash['title'] = I18n.t("questions.systems.#{system_name}")
           system_hash['subtitle'] =  I18n.t('activerecord.attributes.question.system')
+          system_hash['system_name'] = system_name
           system_hash['children'] = []
           algorithm.questions.where(step: step_index, system: system_index).each do |question|
             system_hash['children'].push(question.generate_node_tree_hash)

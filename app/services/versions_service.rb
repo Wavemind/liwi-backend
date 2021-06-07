@@ -165,11 +165,10 @@ class VersionsService
     Question.steps.each do |step_name, step_index|
       hash[step_name] = [] # TODO : Essayer de faire un hash ici, d'utilise system_index comme clé et à la fin de faire .to_a
       if %w(medical_history_step physical_exam_step).include?(step_name)
-        Question.systems.each do |system_name, system_index|
+        full_order[step_index]['children'].each do |system|
           system_hash = {}
-          new_index = full_order.select{|i| i['title'] == I18n.t("questions.steps.#{step_name}")}[0]['children'].index{|i| i['title'] == I18n.t("questions.systems.#{system_name}")}
-          system_hash[system_name] = full_order.select{|i| i['title'] == I18n.t("questions.steps.#{step_name}")}[0]['children'].select{|i| i['title'] == I18n.t("questions.systems.#{system_name}")}[0]['children'].map{|node| node['id']}
-          hash[step_name].insert(new_index, system_hash)
+          system_hash[system['system_name']] = system['children'].map{|node| node['id']}
+          hash[step_name].push(system_hash)
         end
       else
         hash[step_name] = full_order.select{|i| i['title'] == I18n.t("questions.steps.#{step_name}")}[0]['children'].map{|node| node['id']}
