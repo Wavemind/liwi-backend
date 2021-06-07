@@ -20,6 +20,18 @@ export default class VersionOrders extends Component {
     http.updateFullOrder(JSON.stringify(treeData));
   };
 
+  // Display the dependencies of the node clicked on
+  alertNodeDependencies = async (rowInfo) => {
+    const { http } = this.state;
+
+    let httpRequest = await http.getQuestionDependencies(rowInfo['node']['id']);
+    let result = await httpRequest.json();
+
+    global.alert(
+      result.toString().replaceAll(',', '\n')
+    );
+  };
+
   render() {
     const { selected } = this.props;
     return (
@@ -42,10 +54,22 @@ export default class VersionOrders extends Component {
             } else {
               if (selected.includes(rowInfo["node"]["id"])){
                 rowInfo.className = "order-node";
+                rowInfo.buttons = [
+                  <button
+                    className="btn btn-outline-success"
+                    style={{
+                      verticalAlign: "middle"
+                    }}
+                    onClick={() => this.alertNodeDependencies(rowInfo)}
+                  >
+                    ℹ
+                  </button>
+                ];
               } else {
                 rowInfo.className = "order-node-disabled";
               }
             }
+
             return rowInfo;
           }}
         />

@@ -2,7 +2,7 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy, :validate, :lists]
   before_action :set_breadcrumb, only: [:new, :edit]
-  before_action :set_question, only: [:edit, :update, :category_reference, :destroy]
+  before_action :set_question, only: [:edit, :update, :category_reference, :destroy, :dependencies]
 
   def new
     add_breadcrumb t('breadcrumbs.new')
@@ -71,6 +71,13 @@ class QuestionsController < ApplicationController
     end
   end
 
+  # GET questions/:id/dependencies
+  # @params Question id
+  # @return Dependencies for given question
+  def dependencies
+    authorize policy_scope(Question)
+    render json: @question.diagnostics.map(&:reference_label) + @question.dependencies.map(&:instanceable).flatten.map(&:reference_label)
+  end
   # GET
   # @return Hash
   # Return attributes of question that are listed

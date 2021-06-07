@@ -23,7 +23,6 @@ export default class Http {
     this.token = document.querySelector("meta[name='csrf-token']").content;
   }
 
-
   /**
    * Create a drug
    * @params [Hash] drug body
@@ -87,6 +86,17 @@ export default class Http {
       from
     };
     const header = await this.setHeaders("POST", body);
+    return await fetch(url, header).catch(error => console.log(error));
+  };
+
+  /**
+   * Get dependencies of given question
+   * @params [Integer] question id
+   * @return [Object] body of request
+   */
+  getQuestionDependencies = async (id) => {
+    const url = `${this.url}/questions/${id}/dependencies`;
+    const header = await this.setHeaders("GET", null);
     return await fetch(url, header).catch(error => console.log(error));
   };
 

@@ -255,7 +255,6 @@ class Question < Node
     question_hash = {}
     question_hash['id'] = id
     question_hash['title'] = reference_label
-    question_hash['placeholder'] = diagnostics.map(&:reference_label) + dependencies.map(&:reference_label)
     question_hash
   end
 

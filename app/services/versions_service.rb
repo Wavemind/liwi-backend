@@ -163,7 +163,7 @@ class VersionsService
 
     hash = {}
     Question.steps.each do |step_name, step_index|
-      hash[step_name] = [] # TODO : Essayer de faire un hash ici, d'utilise system_index comme clé et à la fin de faire .to_a
+      hash[step_name] = []
       if %w(complaint_categories_step medical_history_step physical_exam_step).include?(step_name)
         full_order[step_index]['children'].each do |system|
           system_hash = {}

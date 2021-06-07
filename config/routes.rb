@@ -178,6 +178,10 @@ Rails.application.routes.draw do
   end
 
   resources :questions, only: [] do
+    member do
+      get 'dependencies'
+    end
+
     collection do
       get 'reference_prefix'
     end
