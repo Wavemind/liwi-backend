@@ -151,6 +151,7 @@ class VersionsService
     hash['config']['minimum_age'] = @version.algorithm.minimum_age
     hash['config']['consent_management'] = @version.algorithm.consent_management
     hash['config']['track_referral'] = @version.algorithm.track_referral
+    hash['config']['birth_date_formulas'] = @version.algorithm.questions.where(formula: %w(ToDay ToMonth))
 
     hash['author'] = @version.user.full_name
     hash['created_at'] = @version.created_at
