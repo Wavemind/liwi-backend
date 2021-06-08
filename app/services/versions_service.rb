@@ -139,7 +139,6 @@ class VersionsService
 
     hash['mobile_config'] = extract_mobile_config
     hash['config'] = @version.algorithm.medal_r_config
-    hash['full_order'] = extract_full_order_json
 
     translated_systems_order = {}
     @version.medal_r_config['systems_order'].map do |system|
@@ -151,6 +150,7 @@ class VersionsService
     hash['config']['minimum_age'] = @version.algorithm.minimum_age
     hash['config']['consent_management'] = @version.algorithm.consent_management
     hash['config']['track_referral'] = @version.algorithm.track_referral
+    hash['config']['full_order'] = extract_full_order_json
     hash['config']['birth_date_formulas'] = @version.algorithm.questions.where(formula: %w(ToDay ToMonth))
 
     hash['author'] = @version.user.full_name

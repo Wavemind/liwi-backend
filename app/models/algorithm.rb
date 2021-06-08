@@ -22,13 +22,11 @@ class Algorithm < ApplicationRecord
   # Create all hardcoded questions related to reference tables and age.
   # Answer types ids : 3 is Integer, 4 is Decimal, 6 is Date, 9 is String
   def create_reference_table_questions
-    age_in_days = questions.create!(label_en: 'Age in days', type: 'Questions::BasicDemographic', stage: Question.stages[:registration], is_mandatory: true, answer_type_id: 5, formula: '[ToDay()]', is_default: true)
+    age_in_days = questions.create!(label_en: 'Age in days', type: 'Questions::BasicDemographic', stage: Question.stages[:registration], is_mandatory: true, answer_type_id: 5, formula: 'ToDay', is_default: true)
     weight = questions.create!(label_en: 'Current Weight (kg)', type: 'Questions::BasicMeasurement', stage: Question.stages[:triage], is_mandatory: true, answer_type_id: 4, estimable: true, is_default: true)
     hr = questions.create!(label_en: 'Heart rate', type: 'Questions::VitalSignAnthropometric', stage: Question.stages[:consultation], answer_type_id: 4, is_default: true)
     rr = questions.create!(label_en: 'Respiratory rate', type: 'Questions::VitalSignAnthropometric', stage: Question.stages[:consultation], answer_type_id: 4, is_default: true)
     muac = questions.create!(label_en: 'MUAC in cm (only if age >6 months)', type: 'Questions::BasicMeasurement', description_en: 'Mid Upper Arm Circumference', stage: Question.stages[:triage], answer_type_id: 4, is_default: true)
-    first_name = questions.create!(label_en: 'First name', type: 'Questions::BasicDemographic', stage: Question.stages[:registration], answer_type_id: 9, is_mandatory: true, is_identifiable: true, is_default: true)
-    last_name = questions.create!(label_en: 'Last name', type: 'Questions::BasicDemographic', stage: Question.stages[:registration], answer_type_id: 9, is_mandatory: true, is_identifiable: true, is_default: true)
     gender = questions.create!(label_en: 'Gender', type: 'Questions::Demographic', stage: Question.stages[:registration], answer_type_id: 2, is_mandatory: true, is_default: true)
     height = questions.create!(label_en: 'Height (cm) - if length is measured subtract 0.7cm', type: 'Questions::BasicMeasurement', stage: Question.stages[:triage], answer_type_id: 4, is_default: true)
     length = questions.create!(label_en: 'Length (cm)', type: 'Questions::BasicMeasurement', stage: Question.stages[:triage], answer_type_id: 4, is_default: true)
@@ -40,8 +38,6 @@ class Algorithm < ApplicationRecord
 
     # Configure basic questions into the algorithm to be used in json generation
     self.update(medal_r_config: {basic_questions: {
-      first_name_question_id: first_name.id,
-      last_name_question_id: last_name.id,
       gender_question_id: gender.id,
       weight_question_id: weight.id,
       general_cc_id: cc_general.id,
@@ -54,7 +50,7 @@ class Algorithm < ApplicationRecord
       {label_en: 'Female', value: 'female'}
     ])
 
-    age = questions.create!(label_en: 'Age in months', type: 'Questions::BackgroundCalculation', is_mandatory: true, answer_type_id: 5, formula: '[ToMonth()]', is_default: true)
+    age = questions.create!(label_en: 'Age in months', type: 'Questions::BackgroundCalculation', is_mandatory: true, answer_type_id: 5, formula: 'ToMonth', is_default: true)
     age.answers.create([
       {label_en: 'less than 2 months', value: '2', operator: Answer.operators[:less]},
       {label_en: 'between 2 and 6 months', value: '2, 6', operator: Answer.operators[:between]},
