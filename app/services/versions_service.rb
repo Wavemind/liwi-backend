@@ -161,7 +161,7 @@ class VersionsService
 
   def self.extract_full_order_json
     full_order = JSON.parse(@version.full_order_json)
-    available_ids = @questions.map(&:id)
+    available_ids = @questions.keys # Get all node ids
 
     hash = {}
     Question.steps.each do |step_name, step_index|
