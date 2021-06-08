@@ -166,12 +166,15 @@ class VersionsService
     hash = {}
     Question.steps.each do |step_name, step_index|
       hash[step_name] = []
-      if %w(complaint_categories_step medical_history_step physical_exam_step).include?(step_name)
+      if %w(medical_history_step physical_exam_step).include?(step_name)
         full_order[step_index]['children'].each do |system|
           system_hash = {}
-          system_hash[system['subtitle_name']] = system['children'].map{|node| node['id']}
+          system_hash[system['subtitle_name']] = system['children'].map{|node| node['id'] if available_ids.include?(node['id'])}.compact
           hash[step_name].push(system_hash)
         end
+      elsif step_name == 'complaint_categories_step'
+        hash[step_name]['older'] = full_order[step_index]['children'][0]['children'].map{|node| node['id'] if available_ids.include?(node['id'])}.compact
+        hash[step_name]['neonat'] = full_order[step_index]['children'][1]['children'].map{|node| node['id'] if available_ids.include?(node['id'])}.compact
       else
         hash[step_name] = full_order.select{|i| i['title'] == I18n.t("questions.steps.#{step_name}")}[0]['children'].map{|node| node['id'] if available_ids.include?(node['id'])}.compact
       end
