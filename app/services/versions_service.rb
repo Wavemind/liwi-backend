@@ -11,7 +11,7 @@ class VersionsService
 
     @patient_questions = []
 
-    hash = extract_version_metadata
+    hash = {}
     hash['diagnostics'] = {}
 
     # Add every question instantiated in the version
@@ -25,6 +25,7 @@ class VersionsService
       hash['diagnostics'][diagnostic.id] = extract_diagnostic(diagnostic)
     end
 
+    hash = extract_version_metadata(hash)
     # Set all questions/drugs/managements used in this version of algorithm
     hash['nodes'] = generate_nodes
 
@@ -119,8 +120,7 @@ class VersionsService
 
   # @return hash
   # Build a hash of metadata about the algorithm and algorithm version
-  def self.extract_version_metadata
-    hash = {}
+  def self.extract_version_metadata(hash)
     hash['version_id'] = @version.id
     hash['version_name'] = @version.name
     hash['version_languages'] = @available_languages
@@ -161,6 +161,7 @@ class VersionsService
 
   def self.extract_full_order_json
     full_order = JSON.parse(@version.full_order_json)
+    available_ids = @questions.map(&:id)
 
     hash = {}
     Question.steps.each do |step_name, step_index|
@@ -172,7 +173,7 @@ class VersionsService
           hash[step_name].push(system_hash)
         end
       else
-        hash[step_name] = full_order.select{|i| i['title'] == I18n.t("questions.steps.#{step_name}")}[0]['children'].map{|node| node['id']}
+        hash[step_name] = full_order.select{|i| i['title'] == I18n.t("questions.steps.#{step_name}")}[0]['children'].map{|node| node['id'] if available_ids.include?(node['id'])}.compact
       end
     end
     hash
