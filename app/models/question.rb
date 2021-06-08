@@ -255,6 +255,7 @@ class Question < Node
     question_hash = {}
     question_hash['id'] = id
     question_hash['title'] = reference_label
+    question_hash['is_neonat'] = is_neonat
     question_hash
   end
 

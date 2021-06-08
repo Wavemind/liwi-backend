@@ -3,6 +3,7 @@ import SortableTree from 'react-sortable-tree';
 import 'react-sortable-tree/style.css';
 import DualListBox from "../VersionComponents";
 import Http from "../../../diagram/engine/http";
+import I18n from "i18n-js";
 
 export default class VersionOrders extends Component {
   constructor(props) {
@@ -26,9 +27,10 @@ export default class VersionOrders extends Component {
 
     let httpRequest = await http.getQuestionDependencies(rowInfo['node']['id']);
     let result = await httpRequest.json();
+    const message = result.length === 0 ? I18n.t("version.full_order_tree.no_dependency") : result.toString().replaceAll(',', '\n')
 
     global.alert(
-      result.toString().replaceAll(',', '\n')
+      message
     );
   };
 
@@ -53,18 +55,26 @@ export default class VersionOrders extends Component {
               rowInfo.className = "order-system";
             } else {
               if (selected.includes(rowInfo["node"]["id"])){
-                rowInfo.className = "order-node";
-                rowInfo.buttons = [
-                  <button
-                    className="btn btn-outline-success"
-                    style={{
-                      verticalAlign: "middle"
-                    }}
-                    onClick={() => this.alertNodeDependencies(rowInfo)}
-                  >
-                    ℹ
-                  </button>
-                ];
+                if (rowInfo["node"]["is_neonat"]){
+                  rowInfo.className = "order-node-neonat";
+                } else {
+                  rowInfo.className = "order-node";
+                }
+
+                if (![0,1,3,8].includes(rowInfo["path"][0])) { // Don't display the dependencies button for the 4 steps in array (registration, fla, bm and referral)
+                  rowInfo.buttons = [
+                    <button
+                      className="btn btn-outline-success"
+                      style={{
+                        verticalAlign: "middle"
+                      }}
+                      onClick={() => this.alertNodeDependencies(rowInfo)}
+                      placeholder={I18n.t("version.full_order_tree.show_dependencies")}
+                    >
+                      ℹ
+                    </button>
+                  ];
+                }
               } else {
                 rowInfo.className = "order-node-disabled";
               }

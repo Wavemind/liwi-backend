@@ -780,6 +780,13 @@ fr:
       title: "Details of %{name}"
   validate: "Validate"
   versions:
+    full_order_tree:
+      no_dependency: "This node is not used in any diagram of the current version."
+      show_dependencies: "Display variable dependencies"
+      subtitles:
+        attribute: "Attribute"
+        step: "Step"
+        system: "System"
     medal_data_config:
       first_name_patient_id: "Patient first name"
       middle_name_patient_id: "Patient middle name"
