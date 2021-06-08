@@ -169,10 +169,12 @@ class VersionsService
       if %w(medical_history_step physical_exam_step).include?(step_name)
         full_order[step_index]['children'].each do |system|
           system_hash = {}
-          system_hash[system['subtitle_name']] = system['children'].map{|node| node['id'] if available_ids.include?(node['id'])}.compact
+          system_hash['title'] = system['subtitle_name']
+          system_hash['data'] = system['children'].map{|node| node['id'] if available_ids.include?(node['id'])}.compact
           hash[step_name].push(system_hash)
         end
       elsif step_name == 'complaint_categories_step'
+        hash[step_name] = {}
         hash[step_name]['older'] = full_order[step_index]['children'][0]['children'].map{|node| node['id'] if available_ids.include?(node['id'])}.compact
         hash[step_name]['neonat'] = full_order[step_index]['children'][1]['children'].map{|node| node['id'] if available_ids.include?(node['id'])}.compact
       else
