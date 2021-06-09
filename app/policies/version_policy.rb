@@ -5,103 +5,107 @@ class VersionPolicy < ApplicationPolicy
     end
   end
 
+  def has_study_access?
+    @user.studies.where(id: @record.algorithm.study_id).any?
+  end
+
   def index?
-    user.admin? || user.clinician? || user.deployment_manager?
+    has_study_access? && (user.admin? || user.clinician? || user.deployment_manager?)
   end
 
   def show?
-    index?
+    has_study_access? && index?
   end
 
   def new?
-    user.admin? || user.clinician?
+    has_study_access? && (user.admin? || user.clinician?)
   end
 
   def create?
-    new?
+    has_study_access? && new?
   end
 
   def edit?
-    new?
+    has_study_access? && new?
   end
 
   def update?
-    new?
+    has_study_access? && new?
   end
 
   def archive?
-    new?
+    has_study_access? && new?
   end
 
   def unarchive?
-    new?
+    has_study_access? && new?
   end
 
   def change_triage_order?
-    true
+    has_study_access?
   end
 
   def change_systems_order?
-    true
+    has_study_access?
   end
 
   def set_medal_data_config?
-    true
+    has_study_access?
   end
 
   def update_full_order?
-    true
+    has_study_access?
   end
 
   def components?
-    new?
+    has_study_access?
   end
 
   def remove_components?
-    new?
+    has_study_access?
   end
 
   def create_triage_condition?
-    new?
+    has_study_access?
   end
 
   def duplicate?
-    new?
+    has_study_access?
   end
 
   def final_diagnostics?
-    index?
+    has_study_access?
   end
 
   def final_diagnoses_exclusions?
-    index?
+    has_study_access?
   end
 
   def generate_translations?
-    new?
+    has_study_access?
   end
 
   def generate_variables?
-    new?
+    has_study_access?
   end
 
   def import_translations?
-    new?
+    has_study_access?
   end
 
   def regenerate_json?
-    index?
+    has_study_access?
   end
 
   def remove_triage_condition?
-    new?
+    has_study_access?
   end
 
   def update_list?
-    new?
+    has_study_access?
   end
 
   def job_status?
-    new?
+    has_study_access?
   end
 end

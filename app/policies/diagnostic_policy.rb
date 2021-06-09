@@ -5,43 +5,48 @@ class DiagnosticPolicy < ApplicationPolicy
     end
   end
 
+  def has_study_access?
+    record = @record.is_a?(ActiveRecord::Relation) ? @record.first : @record
+    @user.studies.where(id: record.version.algorithm.study_id).any?
+  end
+
   def index?
-    user.admin? || user.clinician? || user.deployment_manager?
+    has_study_access? && (user.admin? || user.clinician? || user.deployment_manager?)
   end
 
   def new?
-    user.admin? || user.clinician?
+    has_study_access? && (user.admin? || user.clinician?)
   end
 
   def show?
-    new?
+    has_study_access? && new?
   end
 
   def create?
-    new?
+    has_study_access? && new?
   end
 
   def edit?
-    new?
+    has_study_access? && new?
   end
 
   def update?
-    new?
+    has_study_access? && new?
   end
 
   def destroy?
-    new?
+    has_study_access? && new?
   end
 
   def diagram?
-    index?
+    has_study_access? && index?
   end
 
   def duplicate?
-    new?
+    has_study_access? && new?
   end
 
   def validate?
-    new?
+    has_study_access? && new?
   end
 end

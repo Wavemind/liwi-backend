@@ -5,6 +5,10 @@ class QuestionsSequencePolicy < ApplicationPolicy
     end
   end
 
+  def has_study_access?
+    @user.studies.where(id: @record.algorithm.study_id).any?
+  end
+
   def new?
     user.admin? || user.clinician?
   end
@@ -26,7 +30,7 @@ class QuestionsSequencePolicy < ApplicationPolicy
   end
 
   def diagram?
-    user.admin? || user.clinician? || user.deployment_manager?
+    has_study_access? && (user.admin? || user.clinician? || user.deployment_manager?)
   end
 
   def lists?
