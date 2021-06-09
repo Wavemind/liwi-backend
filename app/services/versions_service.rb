@@ -151,7 +151,7 @@ class VersionsService
     hash['config']['consent_management'] = @version.algorithm.consent_management
     hash['config']['track_referral'] = @version.algorithm.track_referral
     hash['config']['full_order'] = extract_full_order_json
-    hash['config']['birth_date_formulas'] = @version.algorithm.questions.where(formula: %w(ToDay ToMonth))
+    hash['config']['birth_date_formulas'] = @version.algorithm.questions.where(formula: %w(ToDay ToMonth)).map(&:id)
 
     hash['author'] = @version.user.full_name
     hash['created_at'] = @version.created_at
@@ -354,7 +354,7 @@ class VersionsService
       hash[question.id]['is_mandatory'] = (@version.is_arm_control && !%w(Questions::BasicDemographic Questions::Demographic Questions::Referral).include?(question.type)) ? false : question.is_mandatory
       hash[question.id]['emergency_status'] = question.emergency_status
       hash[question.id]['is_neonat'] = question.is_neonat
-      hash[question.id]['system'] = question.system
+      hash[question.id]['system'] = question.system unless question.system.nil?
       hash[question.id] = format_formula(hash[question.id], question)
 
       hash[question.id]['category'] = question.category_name
@@ -374,7 +374,6 @@ class VersionsService
       hash[question.id]['qs'] = get_node_questions_sequences(question, []).uniq
       hash[question.id]['dd'] = get_node_diagnostics(question, []).uniq
       hash[question.id]['df'] = get_node_final_diagnostics(question).uniq
-      hash[question.id]['cc'] = get_node_complaint_categories(question, []).uniq
       hash[question.id]['conditioned_by_cc'] = question.is_a?(Questions::ComplaintCategory) ? [] : question.complaint_categories.map(&:id)
       hash[question.id]['referenced_in'] = []
       hash[question.id]['answers'] = {}
@@ -513,7 +512,6 @@ class VersionsService
           if @diagnostics_ids.include?(instanceable.id) && !diagnostics.include?(instanceable.id)
             hash = {}
             hash['id'] = instanceable.id
-            hash['conditionValue'] = nil
             diagnostics << hash
           end
         end
@@ -532,27 +530,10 @@ class VersionsService
       if df.present? && @final_diagnostics[df].present?
         hash = {}
         hash['id'] = df
-        hash['conditionValue'] = nil
         final_diagnostics.push(hash)
       end
     end
     final_diagnostics.uniq
-  end
-
-  # @params [Node, Array]
-  # @return [Array]
-  # Recursive method in order to retrieve every complaint categories the question appears in.
-  def self.get_node_complaint_categories(node, complaint_categories)
-    node.instances.map(&:instanceable).each do |instanceable|
-      unless instanceable == node
-        if instanceable.is_a? Diagnostic
-          complaint_categories << instanceable.node_id if @diagnostics_ids.include?(instanceable.id) && !complaint_categories.include?(instanceable.node_id)
-        elsif instanceable.is_a? Node
-          get_node_complaint_categories(instanceable, complaint_categories)
-        end
-      end
-    end
-    complaint_categories
   end
 
   # @params [Node, Array]
@@ -566,7 +547,6 @@ class VersionsService
           if @questions_sequences_ids.include?(instanceable.id) && !questions_sequences.include?(instanceable.id)
             hash = {}
             hash['id'] = instanceable.id
-            hash['conditionValue'] = nil
             questions_sequences << hash
           end
         end
