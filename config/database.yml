@@ -22,7 +22,7 @@ development:
   password:  <%= ENV['DEV_DB_PASSWORD'] %>
 #  url: postgres://rsatqeudafkjyx:e49c00cceb37a34b2c72541db5f82df7bdebc94ab838862c63d2424b94637c20@ec2-46-137-124-19.eu-west-1.compute.amazonaws.com:5432/dbjkihe8tjm9ut
 #  url: postgres://postgres:65af6dceb56b2eec96182fedc122d627@liwi-test.wavelab.top:17834/liwi_test # allow to test with ctlq database
-  url: postgres://postgres:e6ad100af582bb53b3e23ea0c98b056a@medalc.unisante.ch:32462/medalc # allow to test with prod database
+#  url: postgres://postgres:e6ad100af582bb53b3e23ea0c98b056a@medalc.unisante.ch:32462/medalc # allow to test with prod database
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
