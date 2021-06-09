@@ -1,6 +1,7 @@
 # Manage groups
 class HealthFacility < ApplicationRecord
 
+  belongs_to :study
   has_many :devices
   has_many :health_facility_accesses
   has_many :versions, through: :health_facility_accesses
@@ -13,6 +14,7 @@ class HealthFacility < ApplicationRecord
   validates_presence_of :pin_code
   validates_presence_of :country
   validates_presence_of :area
+  validates_presence_of :study_id
 
   validates_presence_of :main_data_ip
   validates_presence_of :local_data_ip, unless: :standalone?

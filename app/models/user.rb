@@ -10,6 +10,8 @@ class User < ApplicationRecord
   has_many :devices, through: :activities
   has_many :accesses
   has_many :roles, through: :accesses
+  has_many :user_studies
+  has_many :studies, through: :user_studies
 
   validates_presence_of :first_name
   validates_presence_of :last_name

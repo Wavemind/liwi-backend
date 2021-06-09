@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_05_081150) do
+ActiveRecord::Schema.define(version: 2021_06_09_122225) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -98,10 +98,10 @@ ActiveRecord::Schema.define(version: 2021_05_05_081150) do
     t.integer "score"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "cut_off_start"
+    t.integer "cut_off_end"
     t.bigint "instance_id"
     t.bigint "answer_id"
-    t.boolean "top_level"
-    t.integer "operator"
     t.index ["answer_id"], name: "index_conditions_on_answer_id"
     t.index ["first_conditionable_type", "first_conditionable_id"], name: "index_first_conditionable_id"
     t.index ["instance_id"], name: "index_conditions_on_instance_id"
@@ -129,6 +129,8 @@ ActiveRecord::Schema.define(version: 2021_05_05_081150) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "node_id"
+    t.integer "cut_off_start"
+    t.integer "cut_off_end"
     t.index ["node_id"], name: "index_diagnostics_on_node_id"
     t.index ["version_id"], name: "index_diagnostics_on_version_id"
   end
@@ -155,6 +157,8 @@ ActiveRecord::Schema.define(version: 2021_05_05_081150) do
     t.boolean "by_age", default: false
     t.bigint "node_id"
     t.bigint "administration_route_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.hstore "description_translations"
     t.hstore "injection_instructions_translations"
     t.hstore "dispensing_description_translations"
@@ -175,6 +179,8 @@ ActiveRecord::Schema.define(version: 2021_05_05_081150) do
     t.decimal "longitude"
     t.string "country"
     t.string "area"
+    t.bigint "study_id"
+    t.index ["study_id"], name: "index_health_facilities_on_study_id"
   end
 
   create_table "health_facility_accesses", force: :cascade do |t|
@@ -304,7 +310,6 @@ ActiveRecord::Schema.define(version: 2021_05_05_081150) do
     t.string "snomed_label"
     t.integer "system"
     t.boolean "is_mandatory", default: false
-    t.bigint "node_id"
     t.boolean "is_anti_malarial", default: false
     t.boolean "is_antibiotic", default: false
     t.boolean "is_triage", default: false
@@ -317,8 +322,8 @@ ActiveRecord::Schema.define(version: 2021_05_05_081150) do
     t.bigint "reference_table_z_id"
     t.boolean "is_neonat", default: false
     t.boolean "is_danger_sign", default: false
-    t.boolean "unavailable", default: false
     t.integer "emergency_status", default: 0
+    t.boolean "unavailable", default: false
     t.integer "level_of_urgency", default: 5
     t.integer "step"
     t.hstore "min_message_error_translations"
@@ -326,10 +331,11 @@ ActiveRecord::Schema.define(version: 2021_05_05_081150) do
     t.hstore "min_message_warning_translations"
     t.hstore "max_message_warning_translations"
     t.integer "round"
+    t.integer "cut_off_start"
+    t.integer "cut_off_end"
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
     t.index ["diagnostic_id"], name: "index_nodes_on_diagnostic_id"
-    t.index ["node_id"], name: "index_nodes_on_node_id"
     t.index ["reference_table_x_id"], name: "index_nodes_on_reference_table_x_id"
     t.index ["reference_table_y_id"], name: "index_nodes_on_reference_table_y_id"
     t.index ["reference_table_z_id"], name: "index_nodes_on_reference_table_z_id"
@@ -365,6 +371,13 @@ ActiveRecord::Schema.define(version: 2021_05_05_081150) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_technical_files_on_user_id"
+  end
+
+  create_table "user_studies", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "study_id"
+    t.index ["study_id"], name: "index_user_studies_on_study_id"
+    t.index ["user_id"], name: "index_user_studies_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -431,6 +444,7 @@ ActiveRecord::Schema.define(version: 2021_05_05_081150) do
     t.string "job_id", default: ""
     t.json "medal_data_config", default: {}
     t.hstore "description_translations"
+    t.json "full_order_json"
     t.index ["algorithm_id"], name: "index_versions_on_algorithm_id"
     t.index ["first_top_right_question_id"], name: "index_versions_on_first_top_right_question_id"
     t.index ["second_top_right_question_id"], name: "index_versions_on_second_top_right_question_id"
@@ -444,13 +458,13 @@ ActiveRecord::Schema.define(version: 2021_05_05_081150) do
   add_foreign_key "devices", "health_facilities"
   add_foreign_key "diagnostics", "nodes"
   add_foreign_key "diagnostics", "versions"
+  add_foreign_key "health_facilities", "studies"
   add_foreign_key "health_facility_accesses", "health_facilities"
   add_foreign_key "health_facility_accesses", "versions"
   add_foreign_key "node_exclusions", "nodes", column: "excluded_node_id"
   add_foreign_key "node_exclusions", "nodes", column: "excluding_node_id"
   add_foreign_key "nodes", "algorithms"
   add_foreign_key "nodes", "answer_types"
-  add_foreign_key "nodes", "nodes"
   add_foreign_key "nodes", "nodes", column: "reference_table_z_id"
   add_foreign_key "technical_files", "users"
   add_foreign_key "versions", "algorithms"
