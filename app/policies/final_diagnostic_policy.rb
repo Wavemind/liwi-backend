@@ -5,10 +5,6 @@ class FinalDiagnosticPolicy < ApplicationPolicy
     end
   end
 
-  def has_study_access?
-    @user.studies.where(id: @record.algorithm.study_id).any?
-  end
-
   def index?
     user.admin? || user.clinician? || user.deployment_manager?
   end
@@ -43,5 +39,11 @@ class FinalDiagnosticPolicy < ApplicationPolicy
 
   def remove_exclusion?
     new?
+  end
+
+  private
+
+  def has_study_access?
+    @user.studies.where(id: @record.algorithm.study_id).any?
   end
 end

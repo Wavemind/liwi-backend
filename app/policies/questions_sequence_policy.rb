@@ -5,10 +5,6 @@ class QuestionsSequencePolicy < ApplicationPolicy
     end
   end
 
-  def has_study_access?
-    @user.studies.where(id: @record.algorithm.study_id).any?
-  end
-
   def new?
     user.admin? || user.clinician?
   end
@@ -43,5 +39,11 @@ class QuestionsSequencePolicy < ApplicationPolicy
 
   def validate?
     new?
+  end
+
+  private
+
+  def has_study_access?
+    @user.studies.where(id: @record.algorithm.study_id).any?
   end
 end

@@ -5,10 +5,6 @@ class AlgorithmPolicy < ApplicationPolicy
     end
   end
 
-  def has_study_access?
-    @user.studies.where(id: @record.study_id).any?
-  end
-
   def index?
     user.admin? || user.clinician? || user.deployment_manager?
   end
@@ -26,50 +22,56 @@ class AlgorithmPolicy < ApplicationPolicy
   end
 
   def edit?
-    has_study_access? && new?
+    show?
   end
 
   def update?
-    has_study_access? && new?
+    show?
   end
 
   def archive?
-    has_study_access? && new?
+    show?
   end
 
   def unarchive?
-    has_study_access? && new?
+    show?
   end
 
   def managements?
-    has_study_access? && index?
+    show?
   end
 
   def drugs?
-    has_study_access? && index?
+    show?
   end
 
   def questions?
-    has_study_access? && index?
+    show?
   end
 
   def questions_sequences?
-    has_study_access? && index?
+    show?
   end
 
   def questions_sequences_scored?
-    has_study_access? && index?
+    show?
   end
 
   def drug_exclusions?
-    has_study_access? && index?
+    show?
   end
 
   def management_exclusions?
-    has_study_access? && index?
+    show?
   end
 
   def import_villages?
-    has_study_access? && new?
+    show?
+  end
+
+  private
+
+  def has_study_access?
+    @user.studies.where(id: @record.study_id).any?
   end
 end

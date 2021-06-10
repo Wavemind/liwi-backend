@@ -5,16 +5,12 @@ class VersionPolicy < ApplicationPolicy
     end
   end
 
-  def has_study_access?
-    @user.studies.where(id: @record.algorithm.study_id).any?
-  end
-
   def index?
     has_study_access? && (user.admin? || user.clinician? || user.deployment_manager?)
   end
 
   def show?
-    has_study_access? && index?
+    index?
   end
 
   def new?
@@ -22,90 +18,96 @@ class VersionPolicy < ApplicationPolicy
   end
 
   def create?
-    has_study_access? && new?
+    new?
   end
 
   def edit?
-    has_study_access? && new?
+    new?
   end
 
   def update?
-    has_study_access? && new?
+    new?
   end
 
   def archive?
-    has_study_access? && new?
+    new?
   end
 
   def unarchive?
-    has_study_access? && new?
+    new?
   end
 
   def change_triage_order?
-    has_study_access?
+    new?
   end
 
   def change_systems_order?
-    has_study_access?
+    new?
   end
 
   def set_medal_data_config?
-    has_study_access?
+    new?
   end
 
   def update_full_order?
-    has_study_access?
+    new?
   end
 
   def components?
-    has_study_access?
+    new?
   end
 
   def remove_components?
-    has_study_access?
+    new?
   end
 
   def create_triage_condition?
-    has_study_access?
+    new?
   end
 
   def duplicate?
-    has_study_access?
+    new?
   end
 
   def final_diagnostics?
-    has_study_access?
+    new?
   end
 
   def final_diagnoses_exclusions?
-    has_study_access?
+    new?
   end
 
   def generate_translations?
-    has_study_access?
+    new?
   end
 
   def generate_variables?
-    has_study_access?
+    new?
   end
 
   def import_translations?
-    has_study_access?
+    new?
   end
 
   def regenerate_json?
-    has_study_access?
+    new?
   end
 
   def remove_triage_condition?
-    has_study_access?
+    new?
   end
 
   def update_list?
-    has_study_access?
+    new?
   end
 
   def job_status?
-    has_study_access?
+    new?
+  end
+
+  private
+
+  def has_study_access?
+    @user.studies.where(id: @record.algorithm.study_id).any?
   end
 end
