@@ -151,7 +151,7 @@ class VersionsService
     hash['config']['consent_management'] = @version.algorithm.consent_management
     hash['config']['track_referral'] = @version.algorithm.track_referral
     hash['config']['full_order'] = extract_full_order_json
-    hash['config']['birth_date_formulas'] = @version.algorithm.questions.where(formula: %w(ToDay ToMonth)).map(&:id)
+    hash['config']['birth_date_formulas'] = @questions.where(formula: %w(ToDay ToMonth)).map(&:id)
 
     hash['author'] = @version.user.full_name
     hash['created_at'] = @version.created_at
