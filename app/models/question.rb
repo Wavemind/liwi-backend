@@ -220,6 +220,8 @@ class Question < Node
 
   # Add the new node to the versions orders so they can reorder it correctly
   def add_to_version_orders
+    return nil if step.nil?
+    
     algorithm.versions.each do |version|
       order = JSON.parse(version.full_order_json)
       if %w(medical_history_step physical_exam_step).include?(step)
@@ -236,6 +238,8 @@ class Question < Node
 
   # Remove the destroyed node in the versions orders so they don't consider it anymore
   def remove_from_version_orders
+    return nil if step.nil?
+
     algorithm.versions.each do |version|
       order = JSON.parse(version.full_order_json)
       if %w(medical_history_step physical_exam_step).include?(step)
