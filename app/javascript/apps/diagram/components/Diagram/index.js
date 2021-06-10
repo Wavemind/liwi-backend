@@ -8,7 +8,7 @@ import 'react-notifications/lib/notifications.css';
 
 // Internal import
 import { withDiagram } from "../../engine/context/Diagram.context";
-import { linkNode, createNode, linkFinalDiagnosticExclusion, getConditionPort } from "../../helpers/nodeHelpers";
+import { linkNode, createNode, linkFinalDiagnosisExclusion, getConditionPort } from "../../helpers/nodeHelpers";
 import AdvancedCanvasWidget from "../extended/AdvancedDiagram/canvas/AdvancedCanvasWidget";
 import AvailableNodes from "../AvailableNodes";
 import Toolbar from "../Toolbar";
@@ -21,8 +21,8 @@ import AdvancedNodeFactory from "../extended/AdvancedDiagram/node/AdvancedNodeFa
 import QuestionLinkFactory from "../extended/QuestionDiagram/link/QuestionLinkFactory";
 import QuestionNodeFactory from "../extended/QuestionDiagram/node/QuestionNodeFactory";
 
-import FinalDiagnosticLinkFactory from "../extended/FinalDiagnosticDiagram/link/FinalDiagnosticLinkFactory";
-import FinalDiagnosticNodeFactory from "../extended/FinalDiagnosticDiagram/node/FinalDiagnosticNodeFactory";
+import FinalDiagnosisLinkFactory from "../extended/FinalDiagnosisDiagram/link/FinalDiagnosisLinkFactory";
+import FinalDiagnosisNodeFactory from "../extended/FinalDiagnosisDiagram/node/FinalDiagnosisNodeFactory";
 
 import HealthCareLinkFactory from "../extended/HealthCareDiagram/link/HealthCareLinkFactory";
 import HealthCareNodeFactory from "../extended/HealthCareDiagram/node/HealthCareNodeFactory";
@@ -53,8 +53,8 @@ export class Diagram extends React.Component {
     engine.getLinkFactories().registerFactory(new QuestionLinkFactory());
     engine.getNodeFactories().registerFactory(new QuestionNodeFactory());
 
-    engine.getLinkFactories().registerFactory(new FinalDiagnosticLinkFactory());
-    engine.getNodeFactories().registerFactory(new FinalDiagnosticNodeFactory());
+    engine.getLinkFactories().registerFactory(new FinalDiagnosisLinkFactory());
+    engine.getNodeFactories().registerFactory(new FinalDiagnosisNodeFactory());
 
     engine.getLinkFactories().registerFactory(new HealthCareLinkFactory());
     engine.getNodeFactories().registerFactory(new HealthCareNodeFactory());
@@ -102,11 +102,11 @@ export class Diagram extends React.Component {
       //  Exclusion links
       if (diagramNode.options.dbInstance.node.excluded_nodes_ids !== undefined) {
         diagramNode.options.dbInstance.node.excluded_nodes_ids.map(excludedDiagnosisId => {
-          let excludedFinalDiagnostic = _.find(diagramNodes, (node) => {
+          let excludedFinalDiagnosis = _.find(diagramNodes, (node) => {
             return node.options.dbInstance.node_id === excludedDiagnosisId;
           });
-          if (excludedFinalDiagnostic !== undefined) {
-            let link = linkFinalDiagnosticExclusion(diagramNode, excludedFinalDiagnostic);
+          if (excludedFinalDiagnosis !== undefined) {
+            let link = linkFinalDiagnosisExclusion(diagramNode, excludedFinalDiagnosis);
             model.addLink(link);
           }
         });

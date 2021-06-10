@@ -38,7 +38,7 @@ class AdvancedLinkSegmentWidget extends DefaultLinkSegmentWidget {
       strokeWidth: 20,
       fill: 'none',
       onContextMenu: () => {
-        const { link, diagnosticDeployed } = this.props;
+        const { link, diagnosisDeployed } = this.props;
         if (!link.isLocked() && link.targetPort.parent.options.diagramType !== "scored") {
           event.preventDefault();
           const engine = link.sourcePort.parent.options.engine;
@@ -49,7 +49,7 @@ class AdvancedLinkSegmentWidget extends DefaultLinkSegmentWidget {
             openModal(I18n.t("conditions.cut_off_modal"), "CutOffForm", {
               engine,
               diagramObject: link,
-              diagnosticDeployed,
+              diagnosisDeployed,
               conditionId,
               conditionCutOffStart,
               conditionCutOffEnd

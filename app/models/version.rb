@@ -7,7 +7,7 @@ class Version < ApplicationRecord
   belongs_to :algorithm
   belongs_to :user
 
-  has_many :diagnostics, dependent: :destroy
+  has_many :diagnoses, dependent: :destroy
   has_many :medical_case_answers
 
   has_many :group_accesses
@@ -36,7 +36,7 @@ class Version < ApplicationRecord
 
   amoeba do
     enable
-    include_association :diagnostics
+    include_association :diagnoses
     include_association :components
     append name: I18n.t('duplicated')
   end
@@ -83,7 +83,7 @@ class Version < ApplicationRecord
       nodes.push(instance.node)
     end
 
-    diagnostics.each do |diag|
+    diagnoses.each do |diag|
       diag.components.questions.each do |instance|
         nodes.push(instance.node)
       end
@@ -107,8 +107,8 @@ class Version < ApplicationRecord
       nodes_to_add.push(id) unless nodes.include?(id)
     end
 
-    # Ensure CC linked to the Diagnostics are included
-    diagnostics.map(&:node_id).uniq.map do |cc_id|
+    # Ensure CC linked to the Diagnoses are included
+    diagnoses.map(&:node_id).uniq.map do |cc_id|
       nodes_to_add.push(cc_id) unless nodes.include?(cc_id)
     end
 

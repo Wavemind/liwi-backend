@@ -202,10 +202,10 @@ en:
     apk: "APK"
     dashboard: "Home"
     devices: "Devices"
-    diagnostics: "Diagnoses"
+    diagnoses: "Diagnoses"
     drugs: "Drugs"
     edit: "Edit"
-    final_diagnostics: "Final diagnoses"
+    final_diagnoses: "Final diagnoses"
     health_facilities: "Health facilities"
     generate_stickers: "Generate stickers"
     home: "Home"
@@ -257,7 +257,7 @@ en:
       user_actions: "User actions"
     new:
       title: "Add device"
-  diagnostics:
+  diagnoses:
     table:
       columns:
         actions: "Actions"
@@ -276,16 +276,16 @@ en:
     show:
       diagram: "Diagram"
       differential_diagnostic_conditions: "Differential diagnosis conditions"
-      excluding_diagnostics: "Excluding diagnoses"
+      excluding_diagnoses: "Excluding diagnoses"
       instances: "Instance of nodes"
       questions_sequences: "Question sequences"
-      subtitle_final_diagnostics: "Final diagnoses"
+      subtitle_final_diagnoses: "Final diagnoses"
       title: "Details of %{name}"
       translations: "Translations"
       subtitle_health_cares: "Health cares diagram"
     translations:
       diagnostic: "Diagnosis"
-      final_diagnostics: "Final diagnoses"
+      final_diagnoses: "Final diagnoses"
       managements: "Managements"
       questions_sequences: "Question sequences"
       questions: "Variables"
@@ -335,7 +335,7 @@ en:
         one: 1 error prohibited this %{model} from being saved
         other: "%{count} errors prohibited this %{model} from being saved"
   dependencies: "The node you are trying to remove has dependencies"
-  final_diagnostics:
+  final_diagnoses:
     new:
       title: "Create a new final diagnosis"
     reference: "DF"
@@ -398,7 +398,7 @@ en:
       valid: "This question sequence is valid!"
     version:
       complaint_category_missing: "Please select the Complaint Category."
-      invalids_diagnostics: "Your version contains diagnoses that are invalid : %{diagnostics}"
+      invalids_diagnoses: "Your version contains diagnoses that are invalid : %{diagnoses}"
       missing_villages: "Your version is missing village data."
       triage_question_missing: "Please select the triage variable you want to put a condition on."
   formulations:
@@ -843,7 +843,7 @@ en:
       questions_sequences: "Question Sequences"
       generate_translations: "Generate translations excel"
       generate_variables: "Generate variables excel"
-      subtitle_diagnostics: "Diagnoses"
+      subtitle_diagnoses: "Diagnoses"
       subtitle_final_diagnoses: "Final diagnoses"
       subtitle_final_diagnoses_exclusions: "Final diagnoses exclusions"
       subtitle_medal_data_config_html: "Config medAL-<i>data</i>"

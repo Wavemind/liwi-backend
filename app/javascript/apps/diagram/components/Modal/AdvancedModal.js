@@ -8,7 +8,7 @@ import CutOffForm from "../../../form/CutOffForm";
 import ScoreForm from "../../../form/ScoreForm";
 import DrugInstanceForm from "../../../form/DrugForm/instanceForm";
 import DrugForm from "../../../form/DrugForm/stepper";
-import FinalDiagnosticForm from "../../../form/FinalDiagnosticForm";
+import FinalDiagnosisForm from "../../../form/FinalDiagnosisForm";
 import QuestionsSequenceForm from "../../../form/QuestionsSequenceForm";
 import StepperQuestionForm from "../../../form/QuestionForm/stepper";
 import ManagementForm from "../../../form/ManagementForm";
@@ -60,8 +60,8 @@ export default class AdvancedModal extends React.Component {
         return <CutOffForm {...params} />;
       case "DrugForm":
         return <DrugForm {...params} />;
-      case "FinalDiagnosticForm":
-        return <FinalDiagnosticForm {...params} />;
+      case "FinalDiagnosisForm":
+        return <FinalDiagnosisForm {...params} />;
       case "QuestionForm":
         return <StepperQuestionForm {...params} />;
       case "QuestionsSequenceForm":

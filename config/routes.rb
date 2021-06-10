@@ -37,7 +37,7 @@ Rails.application.routes.draw do
         get 'final_diagnoses_exclusions', to: 'versions#final_diagnoses_exclusions', as: 'final_diagnoses_exclusions'
         get 'generate_translations'
         get 'generate_variables'
-        get 'final_diagnostics', to: 'versions#final_diagnostics', as: 'final_diagnostic'
+        get 'final_diagnoses', to: 'versions#final_diagnoses', as: 'final_diagnosis'
         get 'job_status'
         put 'archive', to: 'versions#archive', as: 'archive'
         put 'unarchive', to: 'versions#unarchive', as: 'unarchive'
@@ -55,25 +55,25 @@ Rails.application.routes.draw do
         put 'update_full_order'
       end
 
-      resources :final_diagnostics do
+      resources :final_diagnoses do
         collection do
           post 'add_exclusion'
           delete 'remove_exclusion'
         end
       end
 
-      resources :diagnostics, only: [:index, :new, :create, :edit, :update, :show, :destroy, :duplicate] do
+      resources :diagnoses, only: [:index, :new, :create, :edit, :update, :show, :destroy, :duplicate] do
         member do
           post 'duplicate'
           get 'diagram'
           get 'validate'
         end
 
-        resources :final_diagnostics, only: [:index, :new, :create, :edit, :update, :delete, :destroy] do
+        resources :final_diagnoses, only: [:index, :new, :create, :edit, :update, :delete, :destroy] do
           member do
             get 'diagram'
           end
-          resources :final_diagnostic_health_cares, only: [:create, :destroy]
+          resources :final_diagnosis_health_cares, only: [:create, :destroy]
         end
       end
     end
@@ -141,7 +141,7 @@ Rails.application.routes.draw do
 
   resources :instances, only: [:update]
 
-  resources :diagnostics, only: [] do
+  resources :diagnoses, only: [] do
     resources :instances, only: [:show, :destroy, :create] do
       collection do
         get 'by_reference'

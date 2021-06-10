@@ -7,13 +7,13 @@ import { Formik } from "formik";
 import DisplayErrors from "../components/DisplayErrors";
 import Http from "../../diagram/engine/http";
 import store from "../../diagram/engine/reducers/store";
-import { finalDiagnosticSchema } from "../constants/schema";
+import { finalDiagnoseschema } from "../constants/schema";
 import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
 import MediaForm from "../MediaForm/mediaForm";
 import SliderComponent from "../components/Slider";
 
-export default class FinalDiagnosticForm extends React.Component {
+export default class FinalDiagnosisForm extends React.Component {
 
   state = {
     toDeleteMedias: [],
@@ -42,14 +42,14 @@ export default class FinalDiagnosticForm extends React.Component {
     let httpRequest = {};
 
     if (method === "create") {
-      httpRequest = await http.createFinalDiagnostic(values.label_translations, values.description_translations, values.level_of_urgency, values.medias_attributes, from);
+      httpRequest = await http.createFinalDiagnosis(values.label_translations, values.description_translations, values.level_of_urgency, values.medias_attributes, from);
     } else {
       if (toDeleteMedias.length > 0) {
         toDeleteMedias.map(media_id => {
           values.medias_attributes.push({id: media_id, _destroy: true});
         });
       }
-      httpRequest = await http.updateFinalDiagnostic(values.id, values.label_translations, values.description_translations, values.level_of_urgency, values.medias_attributes, from, source);
+      httpRequest = await http.updateFinalDiagnosis(values.id, values.label_translations, values.description_translations, values.level_of_urgency, values.medias_attributes, from, source);
     }
 
     let result = await httpRequest.json();
@@ -59,7 +59,7 @@ export default class FinalDiagnosticForm extends React.Component {
         window.location.replace(result.url);
       } else {
         if (method === "create") {
-          let diagramInstance = createNode(result, addAvailableNode, false, "Diagnostic", engine);
+          let diagramInstance = createNode(result, addAvailableNode, false, "Diagnosis", engine);
           engine.getModel().addNode(diagramInstance);
         } else {
           diagramObject.options.dbInstance.node = result;
@@ -77,18 +77,18 @@ export default class FinalDiagnosticForm extends React.Component {
   };
 
   render() {
-    const { finalDiagnostic } = this.props;
+    const { finalDiagnosis } = this.props;
 
     return (
       <FadeIn>
         <Formik
-          validationSchema={finalDiagnosticSchema}
+          validationSchema={finalDiagnoseschema}
           initialValues={{
-            id: finalDiagnostic?.id || "",
-            label_translations: finalDiagnostic?.label_translations?.en || "",
-            description_translations: finalDiagnostic?.description_translations?.en || "",
-            level_of_urgency: finalDiagnostic?.level_of_urgency || 5,
-            medias_attributes: finalDiagnostic?.medias?.map((media) => ({
+            id: finalDiagnosis?.id || "",
+            label_translations: finalDiagnosis?.label_translations?.en || "",
+            description_translations: finalDiagnosis?.description_translations?.en || "",
+            level_of_urgency: finalDiagnosis?.level_of_urgency || 5,
+            medias_attributes: finalDiagnosis?.medias?.map((media) => ({
               id: media.id || "",
               url: media.url || "",
               label_en: media.label_translations?.en || "",

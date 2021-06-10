@@ -2,7 +2,7 @@
 class Algorithm < ApplicationRecord
   has_many :versions
   has_many :nodes, dependent: :destroy
-  has_many :final_diagnostics, -> { where type: 'FinalDiagnostic' }, source: :node
+  has_many :final_diagnoses, -> { where type: 'FinalDiagnosis' }, source: :node
   has_many :questions, -> { where type: Question.descendants.map(&:name) }, source: :node
   has_many :health_cares, -> { where type: HealthCare.descendants.map(&:name) }, source: :node
   has_many :questions_sequences, -> { where type: QuestionsSequence.descendants.map(&:name) }, source: :node

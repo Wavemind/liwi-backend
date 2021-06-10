@@ -1,0 +1,25 @@
+<div class="row my-1">
+  <div class="col align-items-center flex breadcrumbs"><%= render_breadcrumbs separator: ' <i class="material-icons md-light md-18">chevron_right</i> ' %></div>
+  <div class="col align-self-center text-right text-uppercase font-weight-light breadcrumbs"><%= link_to @diagnosis.label, diagram_algorithm_version_diagnosis_url(params[:algorithm_id], params[:version_id], params[:diagnosis_id]) %> - <%= @final_diagnosis.label %></div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <p class="mx-0 my-0 metadata" data-type="<%= @final_diagnosis.node_type %>" data-id="<%= @diagnosis.id %>" data-version="<%= @diagnosis.version.id %>" data-algorithm="<%= @diagnosis.version.algorithm.id %>" data-final_diagnosis="<%= @final_diagnosis.id %>"></p>
+    <%= react_component('diagram', {
+      context: {
+        instanceable: @final_diagnosis.diagnosis_json,
+        instances: @final_diagnosis.health_care_questions_json + @final_diagnosis.health_cares_json,
+        availableNodes: @final_diagnosis.available_nodes_health_cares_json,
+        questionCategories: Question.categories('FinalDiagnosis').as_json,
+        questionsSequenceCategories: QuestionsSequence.categories.as_json,
+        readOnly: !policy(@final_diagnosis).new?
+      }
+    }) %>
+  </div>
+  <button type="button" class="btn btn-sm btn-info help" data-toggle="popover" data-placement="top" data-html="true" data-content="<%= render 'helps/diagram' %>">
+    <i class="material-icons">
+      help_outline
+    </i>
+  </button>
+</div>
+

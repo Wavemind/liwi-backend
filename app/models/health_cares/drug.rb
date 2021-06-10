@@ -1,4 +1,4 @@
-# Define every drugs for a diagnostic
+# Define every drugs for a diagnosis
 # Reference prefix : DR
 class HealthCares::Drug < HealthCare
 

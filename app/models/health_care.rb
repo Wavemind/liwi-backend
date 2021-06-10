@@ -1,4 +1,4 @@
-# Define every drugs for a diagnostic
+# Define every drugs for a diagnosis
 class HealthCare < Node
 
   scope :managements, ->() { where('type = ?', 'HealthCares::Management') }

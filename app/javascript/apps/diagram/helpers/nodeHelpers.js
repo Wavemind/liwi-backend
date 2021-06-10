@@ -2,7 +2,7 @@ import * as React from "react";
 import I18n from "i18n-js";
 import _ from "lodash";
 import QuestionNodeModel from "../components/extended/QuestionDiagram/node/QuestionNodeModel";
-import FinalDiagnosticNodeModel from "../components/extended/FinalDiagnosticDiagram/node/FinalDiagnosticNodeModel";
+import FinalDiagnosisNodeModel from "../components/extended/FinalDiagnosisDiagram/node/FinalDiagnosisNodeModel";
 import HealthCareNodeModel from "../components/extended/HealthCareDiagram/node/HealthCareNodeModel";
 import QuestionsSequenceNodeModel
   from "../components/extended/QuestionsSequenceDiagram/node/QuestionsSequenceNodeModel";
@@ -37,8 +37,8 @@ export const createNode = (instance, addAvailableNode, readOnly, diagramType, en
     case "Question":
       diagramNode = new QuestionNodeModel(params);
       break;
-    case "FinalDiagnostic":
-      diagramNode = new FinalDiagnosticNodeModel(params);
+    case "FinalDiagnosis":
+      diagramNode = new FinalDiagnosisNodeModel(params);
       break;
     case "HealthCare":
       diagramNode = new HealthCareNodeModel(params);
@@ -101,13 +101,13 @@ export const linkNode = (answerPort, diagramNode, condition) => {
 };
 
 /**
- * Link excluded final diagnostic in diagram
+ * Link excluded final diagnosis in diagram
  * @params [Object] diagramNode -> outPort or excludingOutPort
- * @params [Integer] excludedFinalDiagnostic -> inPort or excludedInPort
+ * @params [Integer] excludedFinalDiagnosis -> inPort or excludedInPort
  * @return Diagram port
  */
-export const linkFinalDiagnosticExclusion = (diagramNode, excludedFinalDiagnostic) => {
-  let excludedInPort = excludedFinalDiagnostic.getPortByName("excludedInPort");
+export const linkFinalDiagnosisExclusion = (diagramNode, excludedFinalDiagnosis) => {
+  let excludedInPort = excludedFinalDiagnosis.getPortByName("excludedInPort");
   let excludingOutPort = diagramNode.getPortByName("excludingOutPort");
 
   return excludingOutPort.link(excludedInPort);

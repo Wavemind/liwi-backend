@@ -3,16 +3,16 @@ class Node < ApplicationRecord
 
   attr_accessor :cut_off_value_type
 
-  # DF are not linked to algorithm this way, but through diagnostic > version
+  # DF are not linked to algorithm this way, but through diagnosis > version
   belongs_to :algorithm, optional: true
 
   has_many :children
   has_many :instances, dependent: :destroy
   has_many :medias, as: :fileable, dependent: :destroy
-  has_many :diagnostics
+  has_many :diagnoses
 
-  has_many :final_diagnostic_health_cares, dependent: :destroy
-  has_many :final_diagnostics, through: :final_diagnostic_health_cares
+  has_many :final_diagnosis_health_cares, dependent: :destroy
+  has_many :final_diagnoses, through: :final_diagnosis_health_cares
 
   has_many :medical_case_health_cares
   has_many :medical_cases, through: :medical_case_health_cares
@@ -27,12 +27,12 @@ class Node < ApplicationRecord
   # Puts nil instead of empty string when formula is not set in the view.
   nilify_blanks only: [:formula]
 
-  # Get every nodes (final_diagnostic, drug or management) excluded by it
+  # Get every nodes (final_diagnosis, drug or management) excluded by it
   def excluded_nodes_ids
     NodeExclusion.where(excluding_node_id: id).map(&:excluded_node_id)
   end
 
-  # Get every nodes (final_diagnostic, drug or management) excluding it
+  # Get every nodes (final_diagnosis, drug or management) excluding it
   def excluding_nodes_ids
     NodeExclusion.where(excluded_node_id: id).map(&:excluding_node_id)
   end
@@ -67,7 +67,7 @@ class Node < ApplicationRecord
     instances.map do |instance|
       if instance.instanceable.is_a? Version
         involved_versions_ids.push(instance.instanceable_id) unless involved_versions_ids.include?(instance.instanceable_id)
-      elsif instance.instanceable.is_a? Diagnostic
+      elsif instance.instanceable.is_a? Diagnosis
         involved_versions_ids.push(instance.instanceable.version_id) unless involved_versions_ids.include?(instance.instanceable.version_id)
       else
         involved_versions_ids = questions_sequence_instanceables(instance.instanceable, involved_versions_ids)
@@ -82,7 +82,7 @@ class Node < ApplicationRecord
   # Recursively check any questions sequence to get every involved instances
   def questions_sequence_instanceables(qs, versions = [])
     qs.instances.where.not(instanceable: qs).map do |instance|
-      if instance.instanceable.is_a? Diagnostic
+      if instance.instanceable.is_a? Diagnosis
         versions.push(instance.instanceable.version_id) unless versions.include?(instance.instanceable.version_id)
       else
         questions_sequence_instanceables(instance.instanceable, versions)
@@ -107,9 +107,9 @@ class Node < ApplicationRecord
     end
   end
 
-  # Return the parent type of node -> FinalDiagnostic/Question/QuestionsSequence/HealthCare
+  # Return the parent type of node -> FinalDiagnosis/Question/QuestionsSequence/HealthCare
   def node_type
-    self.is_a?(FinalDiagnostic) ? self.class.name : self.class.superclass.name
+    self.is_a?(FinalDiagnosis) ? self.class.name : self.class.superclass.name
   end
 
   # Return the final type of node -> physical_exam, predefined_syndrome, drug, ...
