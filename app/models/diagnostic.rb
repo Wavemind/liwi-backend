@@ -12,7 +12,7 @@ class Diagnostic < ApplicationRecord
   has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy
 
   before_validation :validate_complaint_category
-  before_create :adjust_cut_offs
+  before_save :adjust_cut_offs
   after_create :generate_reference
   validates_presence_of :label_en
 

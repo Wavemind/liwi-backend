@@ -186,38 +186,52 @@ namespace :algorithms do
       end
     end
   end
-
   def values_from_conditions(conditions)
     values = []
-    Answer.find(conditions).each do |answer|
+    answers = Answer.find(conditions)
+    answers.each do |answer|
       answer.value.split(',').each do |value|
         values.push(value.to_i)
       end
     end
-    values.sort
+    values.sort!
+    values.push(values.first) if values.count == 1
+    values.insert(0,nil) if answers.select{|a|a.less?}.any?
+    values.push(nil) if answers.select{|a|a.more_or_equal?}.any?
+    values
   end
+
 
   task update_cut_offs: :environment do
 
     ActiveRecord::Base.transaction(requires_new: true) do
       begin
         impossible_diagram_to_manage = []
+        i = 0
         Algorithm.all.each do |algorithm|
           puts '#######################################'
           puts algorithm.name
           puts '#######################################'
           algorithm.questions.where('formula LIKE ?', '%To%').each do |cut_off_question|
             cut_off_question.instances.each do |cut_off_instance|
+              i += 1
               next if cut_off_instance.instanceable.is_a?(Version)
+              if cut_off_instance.final_diagnostic_id.present? || cut_off_instance.instanceable.is_a?(QuestionsSequences::Scored)
+                    
+                impossible_diagram_to_manage.push(cut_off_instance.instanceable)
+                next
+              end
 
               puts '***'
+              puts i.to_s + '/ 2566'
               puts cut_off_instance.instanceable_type
               puts cut_off_instance.instanceable_id
               puts '***'
 
               if cut_off_instance.conditions.any? # Cut off to put in conditions (because not in the top)
+                next
                 cut_off_instance.children.each do |child|
-                  child_instance = cut_off_instance.instanceable.components.where(node: child.node, final_diagnostic_id: nil)
+                  child_instance = cut_off_instance.instanceable.components.where(node: child.node, final_diagnostic_id: nil).first
                   conditions = []
                   child_instance.conditions.each do |cond|
                     if cond.answer.node == cut_off_question
@@ -234,21 +248,21 @@ namespace :algorithms do
                   end
                 end
               else
-                if cut_off_instance.instanceable.components.select {|component| component.conditions.any? && component.final_diagnostic_id.nil?}.count > 1
+                if cut_off_instance.instanceable.components.select {|component| component.conditions.empty? && component.final_diagnostic_id.nil?}.count > 1
                   impossible_diagram_to_manage.push(cut_off_instance.instanceable)
                 else
-                  first_child_conditions = cut_off_instance.instanceable.components.where(node: cut_off_instance.children.first.node, final_diagnostic_id: nil).first.conditions.map(&:answer_id).sort
+                  first_child_conditions = cut_off_instance.instanceable.components.where(node: cut_off_instance.children.first.node, final_diagnostic_id: nil).first.conditions.map(&:answer_id).sort            
+
                   impossible_to_manage = false
                   cut_off_instance.children.each do |child|
                     impossible_to_manage = true if child.node.formula.present? && child.node.formula.include?('To')
                     impossible_to_manage = true unless first_child_conditions == cut_off_instance.instanceable.components.where(node: child.node, final_diagnostic_id: nil).first.conditions.map(&:answer_id).sort
                   end
-
                   if impossible_to_manage
                     impossible_diagram_to_manage.push(cut_off_instance.instanceable)
                   else
                     values = values_from_conditions(first_child_conditions)
-                    cut_off_instance.instanceable.update(cut_off_start: values.first, cut_off_end: values.last, cut_off_value_type: 'months')
+                    cut_off_instance.instanceable.update!(cut_off_start: values.first, cut_off_end: values.last, cut_off_value_type: 'months')
                     # cut_off_instance.destroy
                   end
                 end
@@ -258,8 +272,8 @@ namespace :algorithms do
         end
         puts '##################################'
         puts 'Diagrams that were impossible to automatically process and need to be handled : '
-        impossible_diagram_to_manage.each do |diagram|
-          puts diagram.reference_label
+        impossible_diagram_to_manage.uniq.each do |diagram|
+          puts "#{diagram.id} #{diagram.reference_label}"
         end
         puts '##################################'
       rescue => e
