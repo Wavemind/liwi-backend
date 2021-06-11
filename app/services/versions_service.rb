@@ -545,9 +545,7 @@ class VersionsService
         if instanceable.is_a?(Node)
           # push the id in the array only if it is not already there and if it is handled by the current algorithm version
           if @questions_sequences_ids.include?(instanceable.id) && !questions_sequences.include?(instanceable.id)
-            hash = {}
-            hash['id'] = instanceable.id
-            questions_sequences << hash
+            questions_sequences.push(instanceable.id)
           end
         end
       end
