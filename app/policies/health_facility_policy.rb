@@ -10,7 +10,7 @@ class HealthFacilityPolicy < ApplicationPolicy
   end
 
   def index?
-    has_study_access? && (user.admin? || user.clinician? || user.deployment_manager?)
+    user.admin? || user.clinician? || user.deployment_manager?
   end
 
   def show?
@@ -18,11 +18,11 @@ class HealthFacilityPolicy < ApplicationPolicy
   end
 
   def new?
-    has_study_access? && (user.admin? || user.deployment_manager?)
+    user.admin? || user.deployment_manager?
   end
 
   def create?
-    has_study_access? && new?
+    new?
   end
 
   def edit?
