@@ -7,5 +7,6 @@ class RenameDiagnosticToDiagnosis < ActiveRecord::Migration[6.0]
 
     rename_table :diagnostics, :diagnoses
     rename_table :medical_case_final_diagnostics, :medical_case_final_diagnoses
+    rename_table :final_diagnostic_health_cares, :final_diagnosis_health_cares
   end
 end

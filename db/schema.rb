@@ -98,10 +98,10 @@ ActiveRecord::Schema.define(version: 2021_06_11_120834) do
     t.integer "score"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "cut_off_start"
-    t.integer "cut_off_end"
     t.bigint "instance_id"
     t.bigint "answer_id"
+    t.integer "cut_off_start"
+    t.integer "cut_off_end"
     t.index ["answer_id"], name: "index_conditions_on_answer_id"
     t.index ["first_conditionable_type", "first_conditionable_id"], name: "index_first_conditionable_id"
     t.index ["instance_id"], name: "index_conditions_on_instance_id"
@@ -135,13 +135,13 @@ ActiveRecord::Schema.define(version: 2021_06_11_120834) do
     t.index ["version_id"], name: "index_diagnoses_on_version_id"
   end
 
-  create_table "final_diagnostic_health_cares", force: :cascade do |t|
+  create_table "final_diagnosis_health_cares", force: :cascade do |t|
     t.bigint "node_id"
     t.bigint "final_diagnosis_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["final_diagnosis_id"], name: "index_final_diagnostic_health_cares_on_final_diagnosis_id"
-    t.index ["node_id"], name: "index_final_diagnostic_health_cares_on_node_id"
+    t.index ["final_diagnosis_id"], name: "index_final_diagnosis_health_cares_on_final_diagnosis_id"
+    t.index ["node_id"], name: "index_final_diagnosis_health_cares_on_node_id"
   end
 
   create_table "formulations", force: :cascade do |t|
@@ -157,8 +157,6 @@ ActiveRecord::Schema.define(version: 2021_06_11_120834) do
     t.boolean "by_age", default: false
     t.bigint "node_id"
     t.bigint "administration_route_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.hstore "description_translations"
     t.hstore "injection_instructions_translations"
     t.hstore "dispensing_description_translations"
@@ -310,6 +308,7 @@ ActiveRecord::Schema.define(version: 2021_06_11_120834) do
     t.string "snomed_label"
     t.integer "system"
     t.boolean "is_mandatory", default: false
+    t.bigint "node_id"
     t.boolean "is_anti_malarial", default: false
     t.boolean "is_antibiotic", default: false
     t.boolean "is_triage", default: false
@@ -322,8 +321,8 @@ ActiveRecord::Schema.define(version: 2021_06_11_120834) do
     t.bigint "reference_table_z_id"
     t.boolean "is_neonat", default: false
     t.boolean "is_danger_sign", default: false
-    t.integer "emergency_status", default: 0
     t.boolean "unavailable", default: false
+    t.integer "emergency_status", default: 0
     t.integer "level_of_urgency", default: 5
     t.integer "step"
     t.hstore "min_message_error_translations"
@@ -336,6 +335,7 @@ ActiveRecord::Schema.define(version: 2021_06_11_120834) do
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
     t.index ["diagnosis_id"], name: "index_nodes_on_diagnosis_id"
+    t.index ["node_id"], name: "index_nodes_on_node_id"
     t.index ["reference_table_x_id"], name: "index_nodes_on_reference_table_x_id"
     t.index ["reference_table_y_id"], name: "index_nodes_on_reference_table_y_id"
     t.index ["reference_table_z_id"], name: "index_nodes_on_reference_table_z_id"
@@ -465,6 +465,7 @@ ActiveRecord::Schema.define(version: 2021_06_11_120834) do
   add_foreign_key "node_exclusions", "nodes", column: "excluding_node_id"
   add_foreign_key "nodes", "algorithms"
   add_foreign_key "nodes", "answer_types"
+  add_foreign_key "nodes", "nodes"
   add_foreign_key "nodes", "nodes", column: "reference_table_z_id"
   add_foreign_key "technical_files", "users"
   add_foreign_key "versions", "algorithms"
