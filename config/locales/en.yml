@@ -89,6 +89,7 @@ en:
         deactivated: "Deactivated"
         role_html: "medAL-<i>creator</i> access"
         roles_html: "medAL-<i>reader</i> accesses"
+        studies: "Studies the user will have access to"
       version:
         languages: "Available languages for this version"
   activated: "Activate"

@@ -6,7 +6,7 @@ class VersionPolicy < ApplicationPolicy
   end
 
   def index?
-    user.admin? || user.clinician? || user.deployment_manager?
+    has_study_access? && (user.admin? || user.clinician? || user.deployment_manager?)
   end
 
   def show?
@@ -14,7 +14,7 @@ class VersionPolicy < ApplicationPolicy
   end
 
   def new?
-    user.admin? || user.clinician?
+    has_study_access? && (user.admin? || user.clinician?)
   end
 
   def create?
@@ -38,19 +38,19 @@ class VersionPolicy < ApplicationPolicy
   end
 
   def change_triage_order?
-    true
+    new?
   end
 
   def change_systems_order?
-    true
+    new?
   end
 
   def set_medal_data_config?
-    true
+    new?
   end
 
   def update_full_order?
-    true
+    new?
   end
 
   def components?
@@ -70,11 +70,11 @@ class VersionPolicy < ApplicationPolicy
   end
 
   def final_diagnoses?
-    index?
+    new?
   end
 
   def final_diagnoses_exclusions?
-    index?
+    new?
   end
 
   def generate_translations?
@@ -90,7 +90,7 @@ class VersionPolicy < ApplicationPolicy
   end
 
   def regenerate_json?
-    index?
+    new?
   end
 
   def remove_triage_condition?
@@ -103,5 +103,11 @@ class VersionPolicy < ApplicationPolicy
 
   def job_status?
     new?
+  end
+
+  private
+
+  def has_study_access?
+    @user.studies.where(id: @record.algorithm.study_id).any?
   end
 end

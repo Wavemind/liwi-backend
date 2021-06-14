@@ -34,10 +34,16 @@ class FinalDiagnosisPolicy < ApplicationPolicy
   end
 
   def diagram?
-    index?
+    has_study_access? && index?
   end
 
   def remove_exclusion?
     new?
+  end
+
+  private
+
+  def has_study_access?
+    @user.studies.where(id: @record.algorithm.study_id).any?
   end
 end

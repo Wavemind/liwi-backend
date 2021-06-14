@@ -6,11 +6,11 @@ class DiagnosisPolicy < ApplicationPolicy
   end
 
   def index?
-    user.admin? || user.clinician? || user.deployment_manager?
+    has_study_access? && (user.admin? || user.clinician? || user.deployment_manager?)
   end
 
   def new?
-    user.admin? || user.clinician?
+    has_study_access? && (user.admin? || user.clinician?)
   end
 
   def show?
@@ -34,7 +34,7 @@ class DiagnosisPolicy < ApplicationPolicy
   end
 
   def diagram?
-    index?
+    new?
   end
 
   def duplicate?
@@ -43,5 +43,12 @@ class DiagnosisPolicy < ApplicationPolicy
 
   def validate?
     new?
+  end
+
+  private
+
+  def has_study_access?
+    record = @record.is_a?(ActiveRecord::Relation) ? @record.first : @record
+    @user.studies.where(id: record.version.algorithm.study_id).any?
   end
 end

@@ -147,6 +147,7 @@ class HealthFacilitiesController < ApplicationController
       :area,
       :longitude,
       :latitude,
+      :study_id,
       device_ids: [],
       medical_staffs_attributes: [
         :id,

@@ -12,6 +12,8 @@
   <%= f.input :main_data_ip, label: t("health_facilities.new.main_data_ip_html") %>
   <%= f.input :pin_code %>
 
+  <%= f.input :study_id, collection: Study.all, label_method: :label, prompt: t('select')  %>
+
   <hr/>
   <h2><%= t('.medical_staffs')%></h2>
 
