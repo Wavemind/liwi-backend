@@ -639,6 +639,7 @@ class VersionsService
       answer_hash = {}
       answer_hash['id'] = answer.id
       answer_hash['label'] = answer.label
+      answer_hash['reference'] = answer.reference
 
       hash[answer.id] = answer_hash
     end

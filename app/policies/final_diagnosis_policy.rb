@@ -44,6 +44,7 @@ class FinalDiagnosisPolicy < ApplicationPolicy
   private
 
   def has_study_access?
-    @user.studies.where(id: @record.algorithm.study_id).any?
+    record = @record.is_a?(ActiveRecord::Relation) ? @record.first : @record
+    @user.studies.where(id: record.algorithm.study_id).any?
   end
 end
