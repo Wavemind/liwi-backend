@@ -151,7 +151,7 @@ class VersionsController < ApplicationController
     end
   end
 
-  # GET algorithms/:algorithm_id/version/:id/final_diagnosics
+  # GET algorithms/:algorithm_id/version/:id/final_diagnoses
   # @params version [Version] version
   # Get every final diagnoses for a version
   def final_diagnoses
