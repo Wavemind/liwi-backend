@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_04_093249) do
+ActiveRecord::Schema.define(version: 2021_06_11_120834) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -122,7 +122,7 @@ ActiveRecord::Schema.define(version: 2021_06_04_093249) do
     t.index ["health_facility_id"], name: "index_devices_on_health_facility_id"
   end
 
-  create_table "diagnostics", force: :cascade do |t|
+  create_table "diagnoses", force: :cascade do |t|
     t.integer "reference"
     t.hstore "label_translations"
     t.bigint "version_id"
@@ -131,16 +131,16 @@ ActiveRecord::Schema.define(version: 2021_06_04_093249) do
     t.bigint "node_id"
     t.integer "cut_off_start"
     t.integer "cut_off_end"
-    t.index ["node_id"], name: "index_diagnostics_on_node_id"
-    t.index ["version_id"], name: "index_diagnostics_on_version_id"
+    t.index ["node_id"], name: "index_diagnoses_on_node_id"
+    t.index ["version_id"], name: "index_diagnoses_on_version_id"
   end
 
   create_table "final_diagnostic_health_cares", force: :cascade do |t|
     t.bigint "node_id"
-    t.bigint "final_diagnostic_id"
+    t.bigint "final_diagnosis_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["final_diagnostic_id"], name: "index_final_diagnostic_health_cares_on_final_diagnostic_id"
+    t.index ["final_diagnosis_id"], name: "index_final_diagnostic_health_cares_on_final_diagnosis_id"
     t.index ["node_id"], name: "index_final_diagnostic_health_cares_on_node_id"
   end
 
@@ -179,6 +179,8 @@ ActiveRecord::Schema.define(version: 2021_06_04_093249) do
     t.decimal "longitude"
     t.string "country"
     t.string "area"
+    t.bigint "study_id"
+    t.index ["study_id"], name: "index_health_facilities_on_study_id"
   end
 
   create_table "health_facility_accesses", force: :cascade do |t|
@@ -198,12 +200,12 @@ ActiveRecord::Schema.define(version: 2021_06_04_093249) do
     t.bigint "instanceable_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "final_diagnostic_id"
+    t.bigint "final_diagnosis_id"
     t.integer "position_x", default: 100
     t.integer "position_y", default: 100
     t.hstore "duration_translations"
     t.hstore "description_translations"
-    t.index ["final_diagnostic_id"], name: "index_instances_on_final_diagnostic_id"
+    t.index ["final_diagnosis_id"], name: "index_instances_on_final_diagnosis_id"
     t.index ["instanceable_type", "instanceable_id"], name: "index_instances_on_instanceable_type_and_instanceable_id"
     t.index ["node_id"], name: "index_instances_on_node_id"
   end
@@ -233,13 +235,13 @@ ActiveRecord::Schema.define(version: 2021_06_04_093249) do
     t.index ["version_id"], name: "index_medical_case_answers_on_version_id"
   end
 
-  create_table "medical_case_final_diagnostics", force: :cascade do |t|
-    t.bigint "final_diagnostic_id"
+  create_table "medical_case_final_diagnoses", force: :cascade do |t|
+    t.bigint "final_diagnosis_id"
     t.bigint "medical_case_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["final_diagnostic_id"], name: "index_medical_case_final_diagnostics_on_final_diagnostic_id"
-    t.index ["medical_case_id"], name: "index_medical_case_final_diagnostics_on_medical_case_id"
+    t.index ["final_diagnosis_id"], name: "index_medical_case_final_diagnoses_on_final_diagnosis_id"
+    t.index ["medical_case_id"], name: "index_medical_case_final_diagnoses_on_medical_case_id"
   end
 
   create_table "medical_case_health_cares", force: :cascade do |t|
@@ -291,7 +293,7 @@ ActiveRecord::Schema.define(version: 2021_06_04_093249) do
     t.integer "reference"
     t.integer "stage"
     t.string "type"
-    t.bigint "diagnostic_id"
+    t.bigint "diagnosis_id"
     t.hstore "description_translations"
     t.integer "min_score", default: 0
     t.bigint "algorithm_id"
@@ -333,7 +335,7 @@ ActiveRecord::Schema.define(version: 2021_06_04_093249) do
     t.integer "cut_off_end"
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
-    t.index ["diagnostic_id"], name: "index_nodes_on_diagnostic_id"
+    t.index ["diagnosis_id"], name: "index_nodes_on_diagnosis_id"
     t.index ["reference_table_x_id"], name: "index_nodes_on_reference_table_x_id"
     t.index ["reference_table_y_id"], name: "index_nodes_on_reference_table_y_id"
     t.index ["reference_table_z_id"], name: "index_nodes_on_reference_table_z_id"
@@ -369,6 +371,13 @@ ActiveRecord::Schema.define(version: 2021_06_04_093249) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_technical_files_on_user_id"
+  end
+
+  create_table "user_studies", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "study_id"
+    t.index ["study_id"], name: "index_user_studies_on_study_id"
+    t.index ["user_id"], name: "index_user_studies_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -447,8 +456,9 @@ ActiveRecord::Schema.define(version: 2021_06_04_093249) do
   add_foreign_key "activities", "users"
   add_foreign_key "algorithms", "users"
   add_foreign_key "devices", "health_facilities"
-  add_foreign_key "diagnostics", "nodes"
-  add_foreign_key "diagnostics", "versions"
+  add_foreign_key "diagnoses", "nodes"
+  add_foreign_key "diagnoses", "versions"
+  add_foreign_key "health_facilities", "studies"
   add_foreign_key "health_facility_accesses", "health_facilities"
   add_foreign_key "health_facility_accesses", "versions"
   add_foreign_key "node_exclusions", "nodes", column: "excluded_node_id"

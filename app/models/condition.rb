@@ -10,7 +10,7 @@ class Condition < ApplicationRecord
 
   before_destroy :remove_children
   before_save :adjust_cut_offs
-  before_validation :prevent_loop, unless: Proc.new {(self.instance.instanceable.is_a?(Diagnostic) && self.instance.instanceable.duplicating) }
+  before_validation :prevent_loop, unless: Proc.new {(self.instance.instanceable.is_a?(Diagnosis) && self.instance.instanceable.duplicating) }
 
 
   # Adjust cut offs at creation
@@ -27,7 +27,7 @@ class Condition < ApplicationRecord
 
   # Create children from conditions automatically
   def create_children
-    parent = answer.node.instances.find_by(instanceable: instance.instanceable, final_diagnostic: instance.final_diagnostic)
+    parent = answer.node.instances.find_by(instanceable: instance.instanceable, final_diagnosis: instance.final_diagnosis)
     parent.children.create!(node: instance.node) unless parent.nil? || parent.children.where(node: instance.node).any?
   end
 
@@ -48,7 +48,7 @@ class Condition < ApplicationRecord
   # @return [Boolean]
   def is_child(new_instance)
     new_instance.children.each do |child|
-      # Gets child instance for the same instanceable (PS OR Diagnostic)
+      # Gets child instance for the same instanceable (PS OR Diagnosis)
       child_instance = instance.instanceable.components.includes(:node).select{ |c| c.node == child.node }.first
       return true if child_instance == instance || (child_instance.children.any? && is_child(child_instance))
     end
@@ -71,7 +71,7 @@ class Condition < ApplicationRecord
   # Remove child by instanceable type and first/second conditionable id
   def remove_children
     node_answers_ids = answer.node.answers.map(&:id) - [answer_id]
-    child = Child.find_by(instance: answer.node.instances.find_by(instanceable: instance.instanceable, final_diagnostic: instance.final_diagnostic), node: instance.node)
+    child = Child.find_by(instance: answer.node.instances.find_by(instanceable: instance.instanceable, final_diagnosis: instance.final_diagnosis), node: instance.node)
     child.destroy! unless instance.conditions.where(answer_id: node_answers_ids).any?
   end
 end

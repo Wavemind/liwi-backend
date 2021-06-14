@@ -15,7 +15,7 @@ class QuestionNodeWidget extends React.Component {
   }
 
   /**
-   * Open modal to edit final diagnostic
+   * Open modal to edit final diagnosis
    */
   editQuestion() {
     const { node } = this.props;

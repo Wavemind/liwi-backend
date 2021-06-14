@@ -22,11 +22,11 @@ end
 
 wb.add_worksheet(name: "Diagnoses") do |sheet|
   sheet.add_row ["ID", "Reference", "Label", "CC"]
-  @version.diagnostics.map do |diag|
+  @version.diagnoses.map do |diag|
     sheet.add_row [diag.id, diag.full_reference, diag.label_en, diag.node.full_reference]
 
     diag.components.map do |instance|
-      if instance.node.is_a? FinalDiagnostic
+      if instance.node.is_a? FinalDiagnosis
         final_diagnoses.push(instance.node)
       elsif instance.node.is_a? HealthCares::Drug
         drugs.push(instance.node)

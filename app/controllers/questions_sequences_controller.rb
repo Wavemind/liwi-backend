@@ -31,9 +31,9 @@ class QuestionsSequencesController < ApplicationController
         render json: { url: diagram_questions_sequence_url(@questions_sequence) }
       else
         type = params[:instanceable_type].camelize.singularize
-        if %w(Diagnostic QuestionsSequence).include? type
+        if %w(Diagnosis QuestionsSequence).include? type
           instanceable = Object.const_get(params[:instanceable_type].camelize.singularize).find(params[:instanceable_id])
-          instanceable.components.create!(node: @questions_sequence, final_diagnostic_id: params[:final_diagnostic_id])
+          instanceable.components.create!(node: @questions_sequence, final_diagnosis_id: params[:final_diagnosis_id])
         end
         render json: @questions_sequence.get_instance_json(instanceable)
       end
@@ -97,7 +97,7 @@ class QuestionsSequencesController < ApplicationController
     if @questions_sequence.errors.messages.any?
       render json: @questions_sequence.errors.messages[:basic], status: 422
     else
-      render json: [t('flash_message.diagnostic.valid')], status: 200
+      render json: [t('flash_message.diagnosis.valid')], status: 200
     end
   end
 

@@ -1,8 +1,8 @@
 class VersionsController < ApplicationController
   before_action :authenticate_user!, except: [:change_triage_order, :change_systems_order]
-  before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :duplicate, :create_triage_condition, :set_medal_data_config, :remove_triage_condition, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnostics, :import_translations, :job_status, :update_full_order]
+  before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :duplicate, :create_triage_condition, :set_medal_data_config, :remove_triage_condition, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnoses, :import_translations, :job_status, :update_full_order]
   before_action :set_breadcrumb, only: [:show, :new, :edit]
-  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :change_triage_order, :change_systems_order, :components, :create_triage_condition, :set_medal_data_config, :duplicate, :remove_components, :remove_triage_condition, :update_list, :regenerate_json, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnostics, :import_translations, :job_status, :update_full_order]
+  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :change_triage_order, :change_systems_order, :components, :create_triage_condition, :set_medal_data_config, :duplicate, :remove_components, :remove_triage_condition, :update_list, :regenerate_json, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnoses, :import_translations, :job_status, :update_full_order]
 
   def index
     authorize policy_scope(Version)
@@ -134,15 +134,15 @@ class VersionsController < ApplicationController
   end
 
   # @params [Version] version to duplicate
-  # Duplicate a version with every diagnostics and their logics (Instances with their Conditions and Children), the FinalDiagnostics and Conditions attached to it
+  # Duplicate a version with every diagnoses and their logics (Instances with their Conditions and Children), the FinalDiagnoses and Conditions attached to it
   def duplicate
     ActiveRecord::Base.transaction(requires_new: true) do
-      @version.diagnostics.each { |diagnostic| diagnostic.update(duplicating: true) }
+      @version.diagnoses.each { |diagnosis| diagnosis.update(duplicating: true) }
       duplicated_version = @version.amoeba_dup
 
       if duplicated_version.save
-        duplicated_version.diagnostics.each_with_index { |diagnostic, index| diagnostic.relink_instance }
-        @version.diagnostics.each { |diagnostic| diagnostic.update(duplicating: false) }
+        duplicated_version.diagnoses.each_with_index { |diagnosis, index| diagnosis.relink_instance }
+        @version.diagnoses.each { |diagnosis| diagnosis.update(duplicating: false) }
         redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_duplicated')
       else
         redirect_to algorithm_url(@algorithm, panel: 'versions'), alert: t('flash_message.duplicate_fail')
@@ -154,11 +154,11 @@ class VersionsController < ApplicationController
   # GET algorithms/:algorithm_id/version/:id/final_diagnosics
   # @params version [Version] version
   # Get every final diagnoses for a version
-  def final_diagnostics
+  def final_diagnoses
     authorize policy_scope(Version)
     respond_to do |format|
       format.html
-      format.json { render json: VersionFinalDiagnosticDatatable.new(params, view_context: view_context) }
+      format.json { render json: VersionFinalDiagnosisDatatable.new(params, view_context: view_context) }
     end
   end
 
@@ -203,8 +203,8 @@ class VersionsController < ApplicationController
 
       ActiveRecord::Base.transaction(requires_new: true) do
         begin
-          update_translations(Diagnostic, Diagnostic.get_translatable_params(xl_file.sheet(0)), xl_file.sheet(0))
-          update_translations(FinalDiagnostic, Node.get_translatable_params(xl_file.sheet(1)), xl_file.sheet(1))
+          update_translations(Diagnosis, Diagnosis.get_translatable_params(xl_file.sheet(0)), xl_file.sheet(0))
+          update_translations(FinalDiagnosis, Node.get_translatable_params(xl_file.sheet(1)), xl_file.sheet(1))
           update_translations(Question, Node.get_translatable_params(xl_file.sheet(2)), xl_file.sheet(2))
           update_translations(Answer, Answer.get_translatable_params(xl_file.sheet(2)), xl_file.sheet(2))
           update_translations(HealthCares::Drug, Node.get_translatable_params(xl_file.sheet(3)), xl_file.sheet(3))
@@ -227,19 +227,19 @@ class VersionsController < ApplicationController
   # @params version [Version] version
   # Generate json for the version
   def regenerate_json
-    invalid_diagnostics = []
+    invalid_diagnoses = []
 
     if @version.algorithm.village_json.nil?
       render json: { success: false, message: t('flash_message.version.missing_villages') } and return
     end
 
-    @version.diagnostics.each do |diagnostic|
-      diagnostic.manual_validate
-      invalid_diagnostics.push(diagnostic.full_reference) if diagnostic.errors.messages.any?
+    @version.diagnoses.each do |diagnosis|
+      diagnosis.manual_validate
+      invalid_diagnoses.push(diagnosis.full_reference) if diagnosis.errors.messages.any?
     end
 
-    if invalid_diagnostics.any?
-      render json: { success: false, message: t('flash_message.version.invalids_diagnostics', diagnostics: invalid_diagnostics) }
+    if invalid_diagnoses.any?
+      render json: { success: false, message: t('flash_message.version.invalids_diagnoses', diagnoses: invalid_diagnoses) }
     else
       components_count = @version.components.count
       questions_orders = []
@@ -339,14 +339,14 @@ class VersionsController < ApplicationController
   def update_translations(model, params, data)
     data.each_with_index do |row, index|
       if index != 0 && row[1] == model.to_s
-        diagnostic = model.find(row[0])
-        unless diagnostic.nil?
-          diagnostic_params = {}
+        diagnosis = model.find(row[0])
+        unless diagnosis.nil?
+          diagnosis_params = {}
           params.map do |field, col|
-            diagnostic_params[field] = row[col]
+            diagnosis_params[field] = row[col]
           end
 
-          diagnostic.update(diagnostic_params)
+          diagnosis.update(diagnosis_params)
         end
       end
     end

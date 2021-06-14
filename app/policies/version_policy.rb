@@ -69,7 +69,7 @@ class VersionPolicy < ApplicationPolicy
     new?
   end
 
-  def final_diagnostics?
+  def final_diagnoses?
     index?
   end
 

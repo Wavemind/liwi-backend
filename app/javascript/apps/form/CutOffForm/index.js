@@ -53,7 +53,7 @@ export default class CutOffForm extends React.Component {
     const {
       conditionCutOffStart,
       conditionCutOffEnd,
-      diagnosticDeployed
+      diagnosisDeployed
     } = this.props;
 
     return (
@@ -86,7 +86,7 @@ export default class CutOffForm extends React.Component {
                     name="cut_off_start"
                     value={values.cut_off_start}
                     onChange={handleChange}
-                    disabled={diagnosticDeployed}
+                    disabled={diagnosisDeployed}
                     isInvalid={touched.cut_off_start && !!errors.cut_off_start}
                   />
                   <Form.Control.Feedback type="invalid">
@@ -100,7 +100,7 @@ export default class CutOffForm extends React.Component {
                     name="cut_off_end"
                     value={values.cut_off_end}
                     onChange={handleChange}
-                    disabled={diagnosticDeployed}
+                    disabled={diagnosisDeployed}
                     isInvalid={touched.cut_off_end && !!errors.cut_off_end}
                   />
                   <Form.Control.Feedback type="invalid">
@@ -114,7 +114,7 @@ export default class CutOffForm extends React.Component {
                     name="cut_off_value_type"
                     value={values.cut_off_value_type}
                     onChange={handleChange}
-                    disabled={diagnosticDeployed}
+                    disabled={diagnosisDeployed}
                     isInvalid={touched.cut_off_value_type && !!errors.cut_off_value_type}
                   >
                     <option value="months">{I18n.t("months")}</option>

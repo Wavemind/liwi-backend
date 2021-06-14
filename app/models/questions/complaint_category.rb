@@ -16,7 +16,7 @@ class Questions::ComplaintCategory < Question
   # @return [Boolean]
   # Verify if current node have instances dependencies
   def instance_dependencies?
-    instances.any? || diagnostics.any?
+    instances.any? || diagnoses.any?
   end
 
   # Associate proper step depending on category ; empty for parent

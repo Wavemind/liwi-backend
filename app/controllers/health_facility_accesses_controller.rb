@@ -15,21 +15,21 @@ class HealthFacilityAccessesController < ApplicationController
         @health_facility_access = HealthFacilityAccess.new(health_facility_access_params)
         authorize @health_facility_access
 
-        invalid_diagnostics = []
-        # Validate every diagnostics of the version being published. Throw error if there is one or several diagnostics invalids with their reference.
+        invalid_diagnoses = []
+        # Validate every diagnoses of the version being published. Throw error if there is one or several diagnoses invalids with their reference.
         version = Version.find(health_facility_access_params[:version_id])
 
         if version.algorithm.village_json.nil?
           render json: { success: false, message: t('flash_message.version.missing_villages') } and return
         end
 
-        version.diagnostics.each do |diagnostic|
-          diagnostic.manual_validate
-          invalid_diagnostics.push(diagnostic.full_reference) if diagnostic.errors.messages.any?
+        version.diagnoses.each do |diagnosis|
+          diagnosis.manual_validate
+          invalid_diagnoses.push(diagnosis.full_reference) if diagnosis.errors.messages.any?
         end
 
-        if invalid_diagnostics.any?
-          render json: { success: false, message: t('flash_message.version.invalids_diagnostics', diagnostics: invalid_diagnostics) }
+        if invalid_diagnoses.any?
+          render json: { success: false, message: t('flash_message.version.invalids_diagnoses', diagnoses: invalid_diagnoses) }
         else
           missing_nodes = Node.where(id: version.identify_missing_questions)
 

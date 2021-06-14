@@ -15,7 +15,7 @@ en:
         is_antibiotic: "Is antibiotic"
       condition:
         score: "Score"
-      diagnostic:
+      diagnosis:
         node: "Complaint category"
       formulation:
         administration_route_id: "Administration route"
@@ -202,10 +202,10 @@ en:
     apk: "APK"
     dashboard: "Home"
     devices: "Devices"
-    diagnostics: "Diagnoses"
+    diagnoses: "Diagnoses"
     drugs: "Drugs"
     edit: "Edit"
-    final_diagnostics: "Final diagnoses"
+    final_diagnoses: "Final diagnoses"
     health_facilities: "Health facilities"
     generate_stickers: "Generate stickers"
     home: "Home"
@@ -257,7 +257,7 @@ en:
       user_actions: "User actions"
     new:
       title: "Add device"
-  diagnostics:
+  diagnoses:
     table:
       columns:
         actions: "Actions"
@@ -275,17 +275,17 @@ en:
     reference: "DD"
     show:
       diagram: "Diagram"
-      differential_diagnostic_conditions: "Differential diagnosis conditions"
-      excluding_diagnostics: "Excluding diagnoses"
+      differential_diagnosis_conditions: "Differential diagnosis conditions"
+      excluding_diagnoses: "Excluding diagnoses"
       instances: "Instance of nodes"
       questions_sequences: "Question sequences"
-      subtitle_final_diagnostics: "Final diagnoses"
+      subtitle_final_diagnoses: "Final diagnoses"
       title: "Details of %{name}"
       translations: "Translations"
       subtitle_health_cares: "Health cares diagram"
     translations:
-      diagnostic: "Diagnosis"
-      final_diagnostics: "Final diagnoses"
+      diagnosis: "Diagnosis"
+      final_diagnoses: "Final diagnoses"
       managements: "Managements"
       questions_sequences: "Question sequences"
       questions: "Variables"
@@ -335,7 +335,7 @@ en:
         one: 1 error prohibited this %{model} from being saved
         other: "%{count} errors prohibited this %{model} from being saved"
   dependencies: "The node you are trying to remove has dependencies"
-  final_diagnostics:
+  final_diagnoses:
     new:
       title: "Create a new final diagnosis"
     reference: "DF"
@@ -350,7 +350,7 @@ en:
         id: "ID"
         reference: "Reference"
         label: "Label"
-        diagnostic: "Diagnostic"
+        diagnosis: "Diagnosis"
         cc: "Complaint category"
         description: "Description"
     edit:
@@ -358,8 +358,8 @@ en:
     show:
       drugs: "Drugs"
       managements: "Managements"
-      excluded_diagnostic: "Excluded diagnosis"
-      no_excluded_diagnostic: "There is no excluded diagnosis"
+      excluded_diagnosis: "Excluded diagnosis"
+      no_excluded_diagnosis: "There is no excluded diagnosis"
     validation:
       loop: "Loop alert: a node cannot exclude itself!"
   flash_message:
@@ -382,10 +382,10 @@ en:
     update_fail: "Error will updating the value"
     version_components_data_error: "There were an error in your version components preventing you to generate your json. Please check this with a developer."
     duplicate_fail: "Error while duplicating your data"
-    diagnostic:
+    diagnosis:
       complaint_category_exclude_triage_question: "One of the questions in your diagnosis is not supported by this Complaint Category."
       error_in_questions_sequence: "The question sequence <u><a href='%{url}'>%{reference}</a></u> is not valid."
-      final_diagnostic_no_condition: "The Final Diagnosis %{reference} has no condition."
+      final_diagnosis_no_condition: "The Final Diagnosis %{reference} has no condition."
       hc_question_no_children: "The %{type} %{reference}, which is in <u><a href='%{url}'>%{df_reference}</a></u> is not linked to any child node."
       node_is_not_complaint_category: "The node you are linking to this diagnosis is not a Complaint Category."
       question_no_children: "The %{type} %{reference} is not linked to any children."
@@ -398,7 +398,7 @@ en:
       valid: "This question sequence is valid!"
     version:
       complaint_category_missing: "Please select the Complaint Category."
-      invalids_diagnostics: "Your version contains diagnoses that are invalid : %{diagnostics}"
+      invalids_diagnoses: "Your version contains diagnoses that are invalid : %{diagnoses}"
       missing_villages: "Your version is missing village data."
       triage_question_missing: "Please select the triage variable you want to put a condition on."
   formulations:
@@ -484,13 +484,13 @@ en:
       dashed-arrow-title: "Dashed arrow"
       in-port-title: "In port"
       out-port-title: "Out port"
-      excluded-diagnostic-title: "Excluded diagnosis"
+      excluded-diagnosis-title: "Excluded diagnosis"
       score-title: "Question Sequence Scored"
       arrow-content: "Define links between questions"
       dashed-arrow-content: "Define which Final Diagnosis has priority. The Final Diagnosis that is targeted by the arrow is excluded."
       in-port-content: "Blue box at the top of the node: in-port where the link ends"
       out-port-content: "Green box below the node: out-port where the link begins"
-      excluded-diagnostic-content: "The green box on the left of the nodes is the out-port for excluding final diagnoses. The blue box is the in-port for excluding final diagnoses."
+      excluded-diagnosis-content: "The green box on the left of the nodes is the out-port for excluding final diagnoses. The blue box is the in-port for excluding final diagnoses."
       score-content: "In order to add scores to your answers, you have to make a link between an answer and the question sequence scored. This will display a pop-up dialog asking you the score for this relation."
     formula:
       formula-tooltip-title: "Formula tooltip"
@@ -770,11 +770,11 @@ en:
     new: "New"
     question: "Variable"
     questions_sequence: "Question sequence"
-    final_diagnostic: "Final diagnosis"
+    final_diagnosis: "Final diagnosis"
     drug: "Drug"
     management: "Management"
     validate: "Validate"
-    diagnostic_diagram: "Diagnosis diagram"
+    diagnosis_diagram: "Diagnosis diagram"
     save: "Save"
   unarchive: "Unarchive"
   users:
@@ -843,7 +843,7 @@ en:
       questions_sequences: "Question Sequences"
       generate_translations: "Generate translations excel"
       generate_variables: "Generate variables excel"
-      subtitle_diagnostics: "Diagnoses"
+      subtitle_diagnoses: "Diagnoses"
       subtitle_final_diagnoses: "Final diagnoses"
       subtitle_final_diagnoses_exclusions: "Final diagnoses exclusions"
       subtitle_medal_data_config_html: "Config medAL-<i>data</i>"

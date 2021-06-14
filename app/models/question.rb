@@ -93,7 +93,7 @@ class Question < Node
   def self.categories(diagram_class_name)
     categories = []
     excluded_categories = diagram_class_name == 'Question' ? [] : [Questions::ComplaintCategory, Questions::BasicMeasurement, Questions::VitalSignAnthropometric, Questions::Referral, Questions::UniqueTriageQuestion, Questions::UniqueTriagePhysicalSign]
-    excluded_categories.push(Questions::TreatmentQuestion) unless %w(FinalDiagnostic Question).include?(diagram_class_name)
+    excluded_categories.push(Questions::TreatmentQuestion) unless %w(FinalDiagnosis Question).include?(diagram_class_name)
     self.descendants.each do |category|
       unless excluded_categories.include?(category)
         current_category = {}

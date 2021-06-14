@@ -2,7 +2,7 @@ class VersionsService
 
   # @params id [Version] id of the algorithm version to extract
   # @return hash
-  # Build a hash of an algorithm version with its diagnostics, predefined syndromes, questions and health cares and metadata
+  # Build a hash of an algorithm version with its diagnoses, predefined syndromes, questions and health cares and metadata
   def self.generate_version_hash(id)
     init
     @version = Version.find(id)
@@ -12,17 +12,17 @@ class VersionsService
     @patient_questions = []
 
     hash = {}
-    hash['diagnostics'] = {}
+    hash['diagnoses'] = {}
 
     # Add every question instantiated in the version
     @version.components.each do |instance|
       assign_node(instance.node)
     end
 
-    # Loop in each diagnostics defined in current algorithm version
-    @version.diagnostics.each do |diagnostic|
-      @diagnostics_ids << diagnostic.id
-      hash['diagnostics'][diagnostic.id] = extract_diagnostic(diagnostic)
+    # Loop in each diagnoses defined in current algorithm version
+    @version.diagnoses.each do |diagnosis|
+      @diagnoses_ids << diagnosis.id
+      hash['diagnoses'][diagnosis.id] = extract_diagnosis(diagnosis)
     end
 
     hash = extract_version_metadata(hash)
@@ -31,7 +31,7 @@ class VersionsService
 
     hash['nodes'] = add_reference_links(hash['nodes'])
     hash['health_cares'] = generate_health_cares
-    hash['final_diagnostics'] = @final_diagnostics
+    hash['final_diagnoses'] = @final_diagnoses
 
     hash['patient_level_questions'] = @patient_questions
 
@@ -39,12 +39,12 @@ class VersionsService
     @version.save
   end
 
-  # @params [Diagnostic]
-  def self.generate_diagnostic_hash(diagnostic)
+  # @params [Diagnosis]
+  def self.generate_diagnosis_hash(diagnosis)
     init
 
-    hash = extract_diagnostic_metadata(diagnostic)
-    hash['diagnostic'] = extract_diagnostic(diagnostic)
+    hash = extract_diagnosis_metadata(diagnosis)
+    hash['diagnosis'] = extract_diagnosis(diagnosis)
     hash['nodes'] = generate_nodes
     hash
   end
@@ -97,10 +97,10 @@ class VersionsService
     @questions = {}
     @health_cares = {}
     @questions_sequences = {}
-    @final_diagnostics = {}
+    @final_diagnoses = {}
 
     # Get all qs and dd ids in order to build working diagnosis
-    @diagnostics_ids = []
+    @diagnoses_ids = []
     @questions_sequences_ids = []
   end
 
@@ -112,9 +112,9 @@ class VersionsService
 
   # @return hash
   # Build a hash of metadata about the algorithm and algorithm version
-  def self.extract_diagnostic_metadata(diagnostic)
+  def self.extract_diagnosis_metadata(diagnosis)
     hash = {}
-    hash['id'] = diagnostic.id
+    hash['id'] = diagnosis.id
     hash
   end
 
@@ -194,44 +194,44 @@ class VersionsService
     hash
   end
 
-  # @params object [Diagnostic]
+  # @params object [Diagnosis]
   # @return hash
-  # Set metadata of diagnostic and it's condition for differential diagnosis
-  def self.extract_diagnostic(diagnostic)
+  # Set metadata of diagnosis and it's condition for differential diagnosis
+  def self.extract_diagnosis(diagnosis)
     hash = {}
-    hash['id'] = diagnostic.id
-    hash['label'] = return_hstore_translated(diagnostic.label_translations)
-    hash['complaint_category'] = diagnostic.node_id
-    hash['cut_off_start'] = diagnostic.cut_off_start
-    hash['cut_off_end'] = diagnostic.cut_off_end
+    hash['id'] = diagnosis.id
+    hash['label'] = return_hstore_translated(diagnosis.label_translations)
+    hash['complaint_category'] = diagnosis.node_id
+    hash['cut_off_start'] = diagnosis.cut_off_start
+    hash['cut_off_end'] = diagnosis.cut_off_end
     hash['instances'] = {}
-    hash['final_diagnostics'] = {}
+    hash['final_diagnoses'] = {}
 
-    # Loop in each final diagnostics for set conditional acceptance and health cares related to it
-    diagnostic.components.final_diagnostics.each do |final_diagnostic_instance|
-      final_diagnostic_hash = extract_final_diagnostic(final_diagnostic_instance)
-      @final_diagnostics[final_diagnostic_instance.node.id] = final_diagnostic_hash
-      hash['final_diagnostics'][final_diagnostic_instance.node_id] = {}
-      hash['final_diagnostics'][final_diagnostic_instance.node_id]['id'] = final_diagnostic_instance.node_id
-      hash['final_diagnostics'][final_diagnostic_instance.node_id]['instances'] = {}
+    # Loop in each final diagnoses for set conditional acceptance and health cares related to it
+    diagnosis.components.final_diagnoses.each do |final_diagnosis_instance|
+      final_diagnosis_hash = extract_final_diagnosis(final_diagnosis_instance)
+      @final_diagnoses[final_diagnosis_instance.node.id] = final_diagnosis_hash
+      hash['final_diagnoses'][final_diagnosis_instance.node_id] = {}
+      hash['final_diagnoses'][final_diagnosis_instance.node_id]['id'] = final_diagnosis_instance.node_id
+      hash['final_diagnoses'][final_diagnosis_instance.node_id]['instances'] = {}
     end
 
-    # Loop in each question used in current diagnostic
-    diagnostic.components.questions.includes([:children, :nodes, node:[:answers, :answer_type]]).each do |question_instance|
+    # Loop in each question used in current diagnosis
+    diagnosis.components.questions.includes([:children, :nodes, node:[:answers, :answer_type]]).each do |question_instance|
       # Append the questions in order to list them all at the end of the json.
       assign_node(question_instance.node)
 
-      hash['instances'][question_instance.node_id] = extract_instances(question_instance) if hash['instances'][question_instance.node_id].nil? || question_instance.final_diagnostic_id.nil?
-      hash['final_diagnostics'][question_instance.final_diagnostic_id]['instances'][question_instance.node.id] = extract_instances(question_instance) unless question_instance.final_diagnostic_id.nil?
+      hash['instances'][question_instance.node_id] = extract_instances(question_instance) if hash['instances'][question_instance.node_id].nil? || question_instance.final_diagnosis_id.nil?
+      hash['final_diagnoses'][question_instance.final_diagnosis_id]['instances'][question_instance.node.id] = extract_instances(question_instance) unless question_instance.final_diagnosis_id.nil?
     end
 
-    # Loop in each predefined syndromes used in current diagnostic
-    diagnostic.components.questions_sequences.includes([:children, :nodes, node:[:answers]]).each do |questions_sequence_instance|
+    # Loop in each predefined syndromes used in current diagnosis
+    diagnosis.components.questions_sequences.includes([:children, :nodes, node:[:answers]]).each do |questions_sequence_instance|
       # Append the predefined syndromes in order to list them all at the end of the json.
       assign_node(questions_sequence_instance.node)
 
-      hash['instances'][questions_sequence_instance.node.id] = extract_instances(questions_sequence_instance) if hash['instances'][questions_sequence_instance.node.id].nil? || questions_sequence_instance.final_diagnostic_id.nil?
-      hash['final_diagnostics'][questions_sequence_instance.final_diagnostic_id]['instances'][questions_sequence_instance.node.id] = extract_instances(questions_sequence_instance) unless questions_sequence_instance.final_diagnostic_id.nil?
+      hash['instances'][questions_sequence_instance.node.id] = extract_instances(questions_sequence_instance) if hash['instances'][questions_sequence_instance.node.id].nil? || questions_sequence_instance.final_diagnosis_id.nil?
+      hash['final_diagnoses'][questions_sequence_instance.final_diagnosis_id]['instances'][questions_sequence_instance.node.id] = extract_instances(questions_sequence_instance) unless questions_sequence_instance.final_diagnosis_id.nil?
     end
 
     hash
@@ -239,22 +239,22 @@ class VersionsService
 
   # @params object [Instance]
   # @return hash
-  # Set metadata of a final diagnostic
-  def self.extract_final_diagnostic(instance)
-    final_diagnostic = instance.node
+  # Set metadata of a final diagnosis
+  def self.extract_final_diagnosis(instance)
+    final_diagnosis = instance.node
     hash = extract_conditions(instance.conditions)
-    hash['diagnostic_id'] = final_diagnostic.diagnostic.id
-    hash['id'] = final_diagnostic.id
-    hash['label'] = return_hstore_translated(final_diagnostic.label_translations)
-    hash['description'] = return_hstore_translated(final_diagnostic.description_translations)
-    hash['level_of_urgency'] = final_diagnostic.level_of_urgency
-    hash['medias'] = extract_medias(final_diagnostic)
-    hash['type'] = final_diagnostic.node_type
-    hash['drugs'] = extract_health_cares(final_diagnostic.health_cares.drugs, instance.instanceable.id, final_diagnostic.id)
-    hash['managements'] = extract_health_cares(final_diagnostic.health_cares.managements, instance.instanceable.id, final_diagnostic.id)
+    hash['diagnosis_id'] = final_diagnosis.diagnosis.id
+    hash['id'] = final_diagnosis.id
+    hash['label'] = return_hstore_translated(final_diagnosis.label_translations)
+    hash['description'] = return_hstore_translated(final_diagnosis.description_translations)
+    hash['level_of_urgency'] = final_diagnosis.level_of_urgency
+    hash['medias'] = extract_medias(final_diagnosis)
+    hash['type'] = final_diagnosis.node_type
+    hash['drugs'] = extract_health_cares(final_diagnosis.health_cares.drugs, instance.instanceable.id, final_diagnosis.id)
+    hash['managements'] = extract_health_cares(final_diagnosis.health_cares.managements, instance.instanceable.id, final_diagnosis.id)
     # Don't mention any exclusions if the version is arm control. Hopefully this is temporary...
-    hash['excluding_final_diagnostics'] = @version.is_arm_control ? [] : final_diagnostic.excluding_nodes_ids
-    hash['cc'] = final_diagnostic.diagnostic.node_id
+    hash['excluding_final_diagnoses'] = @version.is_arm_control ? [] : final_diagnosis.excluding_nodes_ids
+    hash['cc'] = final_diagnosis.diagnosis.node_id
     hash
   end
 
@@ -265,7 +265,7 @@ class VersionsService
     hash = extract_conditions(instance.conditions)
     hash['id'] = instance.node.id
     hash['children'] = instance.nodes.collect(&:id)
-    hash['final_diagnostic_id'] = instance.final_diagnostic_id
+    hash['final_diagnosis_id'] = instance.final_diagnosis_id
     hash
   end
 
@@ -300,14 +300,14 @@ class VersionsService
   end
 
   # @params activerecord collection [Drug, Management]
-  # @params [Integer] id of current diagnostic
+  # @params [Integer] id of current diagnosis
   # @return hash
   # Set metadata for drugs and managements (health cares)
-  def self.extract_health_cares(health_cares, diagnostic_id, final_diagnostic_id)
+  def self.extract_health_cares(health_cares, diagnosis_id, final_diagnosis_id)
     hash = {}
     health_cares.each do |health_care|
 
-      instance = health_care.instances.find_by(instanceable_id: diagnostic_id, final_diagnostic_id: final_diagnostic_id)
+      instance = health_care.instances.find_by(instanceable_id: diagnosis_id, final_diagnosis_id: final_diagnosis_id)
       hash[health_care.id] = extract_conditions(instance.conditions)
       hash[health_care.id]['id'] = health_care.id
       hash[health_care.id]['duration'] = instance.duration
@@ -372,8 +372,8 @@ class VersionsService
       format = 'Autocomplete' if question.algorithm.medal_r_config["basic_questions"]["village_question_id"] === question.id
       hash[question.id]['display_format'] = format
       hash[question.id]['qs'] = get_node_questions_sequences(question, []).uniq
-      hash[question.id]['dd'] = get_node_diagnostics(question, []).uniq
-      hash[question.id]['df'] = get_node_final_diagnostics(question).uniq
+      hash[question.id]['dd'] = get_node_diagnoses(question, []).uniq
+      hash[question.id]['df'] = get_node_final_diagnoses(question).uniq
       hash[question.id]['conditioned_by_cc'] = question.is_a?(Questions::ComplaintCategory) ? [] : question.complaint_categories.map(&:id)
       hash[question.id]['referenced_in'] = []
       hash[question.id]['answers'] = {}
@@ -409,7 +409,7 @@ class VersionsService
       if question.is_a?(Questions::ComplaintCategory)
         hash[question.id]['questions_related_to_cc'] = get_complaint_category_questions(question)
         hash[question.id]['questions_sequences_related_to_cc'] = get_complaint_category_questions_sequences(question)
-        hash[question.id]['diagnostics_related_to_cc'] = get_complaint_category_diagnostics(question, [])
+        hash[question.id]['diagnoses_related_to_cc'] = get_complaint_category_diagnoses(question, [])
       end
 
       hash[question.id]['medias'] = extract_medias(question)
@@ -477,14 +477,14 @@ class VersionsService
 
   # @params [Node, Array]
   # @return [Array]
-  # Recursive method in order to retrieve every diagnostics the question appears in.
-  def self.get_complaint_category_diagnostics(node, diagnostics)
-    node.diagnostics.each do |diagnostic|
-      if @diagnostics_ids.include?(diagnostic.id) && !diagnostics.include?(diagnostic.id)
-        diagnostics << diagnostic.id
+  # Recursive method in order to retrieve every diagnoses the question appears in.
+  def self.get_complaint_category_diagnoses(node, diagnoses)
+    node.diagnoses.each do |diagnosis|
+      if @diagnoses_ids.include?(diagnosis.id) && !diagnoses.include?(diagnosis.id)
+        diagnoses << diagnosis.id
       end
     end
-    diagnostics
+    diagnoses
   end
 
   # @params [Node]
@@ -503,37 +503,37 @@ class VersionsService
 
   # @params [Node, Array]
   # @return [Array]
-  # Recursive method in order to retrieve every diagnostics the question appears in.
-  def self.get_node_diagnostics(node, diagnostics)
+  # Recursive method in order to retrieve every diagnoses the question appears in.
+  def self.get_node_diagnoses(node, diagnoses)
     node.instances.map(&:instanceable).each do |instanceable|
       unless instanceable == node
-        if instanceable.is_a? Diagnostic
+        if instanceable.is_a? Diagnosis
           # push the id in the array only if it is not already there and if it is handled by the current algorithm version
-          if @diagnostics_ids.include?(instanceable.id) && !diagnostics.include?(instanceable.id)
+          if @diagnoses_ids.include?(instanceable.id) && !diagnoses.include?(instanceable.id)
             hash = {}
             hash['id'] = instanceable.id
-            diagnostics << hash
+            diagnoses << hash
           end
         end
       end
     end
-    diagnostics
+    diagnoses
   end
 
   # @params [Node, Array]
   # @return [Array]
-  # Recursive method in order to retrieve every final_diagnostics the question appears in.
-  def self.get_node_final_diagnostics(node)
-    final_diagnostics = []
+  # Recursive method in order to retrieve every final_diagnoses the question appears in.
+  def self.get_node_final_diagnoses(node)
+    final_diagnoses = []
     node.instances.each do |instance|
-      df = instance.final_diagnostic_id
-      if df.present? && @final_diagnostics[df].present?
+      df = instance.final_diagnosis_id
+      if df.present? && @final_diagnoses[df].present?
         hash = {}
         hash['id'] = df
-        final_diagnostics.push(hash)
+        final_diagnoses.push(hash)
       end
     end
-    final_diagnostics.uniq
+    final_diagnoses.uniq
   end
 
   # @params [Node, Array]
@@ -613,8 +613,8 @@ class VersionsService
       hash[questions_sequence.id]['instances'] = {}
       hash[questions_sequence.id]['answers'] = push_questions_sequence_answers(questions_sequence)
       hash[questions_sequence.id]['qs'] = get_node_questions_sequences(questions_sequence, [])
-      hash[questions_sequence.id]['dd'] = get_node_diagnostics(questions_sequence, [])
-      hash[questions_sequence.id]['df'] = get_node_final_diagnostics(questions_sequence)
+      hash[questions_sequence.id]['dd'] = get_node_diagnoses(questions_sequence, [])
+      hash[questions_sequence.id]['df'] = get_node_final_diagnoses(questions_sequence)
       hash[questions_sequence.id]['conditioned_by_cc'] = questions_sequence.complaint_categories.map(&:id)
       hash[questions_sequence.id]['answer'] = nil
       hash[questions_sequence.id]['value_format'] = 'Boolean'

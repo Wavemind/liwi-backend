@@ -32,7 +32,7 @@ class QuestionsController < ApplicationController
           render json: {url: algorithm_url(@algorithm, panel: 'questions')}
         else
           instanceable = Object.const_get(params[:instanceable_type].camelize.singularize).find(params[:instanceable_id])
-          instance = instanceable.components.create!(node: question, final_diagnostic_id: params[:final_diagnostic_id])
+          instance = instanceable.components.create!(node: question, final_diagnosis_id: params[:final_diagnosis_id])
           render json: instance.generate_json
         end
       else
@@ -76,7 +76,7 @@ class QuestionsController < ApplicationController
   # @return Dependencies for given question
   def dependencies
     authorize policy_scope(Question)
-    render json: @question.diagnostics.map(&:reference_label) + @question.dependencies.map(&:instanceable).flatten.map(&:reference_label)
+    render json: @question.diagnoses.map(&:reference_label) + @question.dependencies.map(&:instanceable).flatten.map(&:reference_label)
   end
   # GET
   # @return Hash

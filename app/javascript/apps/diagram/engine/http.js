@@ -8,16 +8,16 @@ export default class Http {
   instanceableType;
   version;
   algorithm;
-  finalDiagnostic;
+  finalDiagnosis;
 
   constructor() {
     let data = document.querySelector(".metadata");
 
     this.url = window.location.origin;
     this.instanceableId = data.dataset.id;
-    this.finalDiagnostic = data.dataset.final_diagnostic;
+    this.finalDiagnosis = data.dataset.final_diagnosis;
     this.diagramType = data.dataset.type;
-    this.instanceableType = ["Diagnostic", "FinalDiagnostic"].includes(data.dataset.type) ? "diagnostics" : "questions_sequences";
+    this.instanceableType = ["Diagnosis", "FinalDiagnosis"].includes(data.dataset.type) ? "diagnoses" : "questions_sequences";
     this.version = data.dataset.version;
     this.algorithm = data.dataset.algorithm;
     this.token = document.querySelector("meta[name='csrf-token']").content;
@@ -32,8 +32,8 @@ export default class Http {
     const url = `${this.url}/algorithms/${this.algorithm}/drugs`;
     const body = {
       health_cares_drug: drug,
-      diagnostic_id: this.instanceableId,
-      final_diagnostic_id: this.finalDiagnostic,
+      diagnosis_id: this.instanceableId,
+      final_diagnosis_id: this.finalDiagnosis,
       from
     };
 
@@ -42,20 +42,20 @@ export default class Http {
   };
 
   /**
-   * Create a final diagnostic
+   * Create a final diagnosis
    * @params [String] label_en
    * @params [String] description_en
    * @params [String] from
    * @return [Object] body of request
    */
-  createFinalDiagnostic = async (label_en, description_en, level_of_urgency, medias_attributes, from) => {
-    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics`;
+  createFinalDiagnosis = async (label_en, description_en, level_of_urgency, medias_attributes, from) => {
+    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnoses`;
     const body = {
-      final_diagnostic: {
+      final_diagnosis: {
         label_en,
         description_en,
         level_of_urgency,
-        diagnostic_id: this.instanceableId,
+        diagnosis_id: this.instanceableId,
         medias_attributes,
       },
       from
@@ -81,8 +81,8 @@ export default class Http {
         level_of_urgency,
         medias_attributes,
       },
-      diagnostic_id: this.instanceableId,
-      final_diagnostic_id: this.finalDiagnostic,
+      diagnosis_id: this.instanceableId,
+      final_diagnosis_id: this.finalDiagnosis,
       from
     };
     const header = await this.setHeaders("POST", body);
@@ -156,8 +156,8 @@ export default class Http {
         level_of_urgency,
         medias_attributes,
       },
-      diagnostic_id: this.instanceableId,
-      final_diagnostic_id: this.finalDiagnostic,
+      diagnosis_id: this.instanceableId,
+      final_diagnosis_id: this.finalDiagnosis,
       from
     };
     const header = await this.setHeaders("PUT", body);
@@ -174,8 +174,8 @@ export default class Http {
     const url = `${this.url}/algorithms/${this.algorithm}/drugs/${drug.id}`;
     const body = {
       health_cares_drug: drug,
-      diagnostic_id: this.instanceableId,
-      final_diagnostic_id: this.finalDiagnostic,
+      diagnosis_id: this.instanceableId,
+      final_diagnosis_id: this.finalDiagnosis,
       from
     };
     const header = await this.setHeaders("PUT", body);
@@ -198,7 +198,7 @@ export default class Http {
         position_y: y,
         instanceable_id: this.instanceableId,
         instanceable_type: this.instanceableType,
-        final_diagnostic_id: this.finalDiagnostic,
+        final_diagnosis_id: this.finalDiagnosis,
         duration,
         description,
       }
@@ -223,7 +223,7 @@ export default class Http {
       instance: {
         id: instanceId,
         answer_id: answerId,
-        final_diagnostic_id: this.finalDiagnostic,
+        final_diagnosis_id: this.finalDiagnosis,
         score
       }
     };
@@ -243,7 +243,7 @@ export default class Http {
       question,
       instanceable_id: this.instanceableId,
       instanceable_type: this.instanceableType,
-      final_diagnostic_id: this.finalDiagnostic,
+      final_diagnosis_id: this.finalDiagnosis,
       from
     };
     const header = await this.setHeaders("POST", body);
@@ -275,7 +275,7 @@ export default class Http {
       },
       instanceable_id: this.instanceableId,
       instanceable_type: this.instanceableType,
-      final_diagnostic_id: this.finalDiagnostic,
+      final_diagnosis_id: this.finalDiagnosis,
       from
     };
     const header = await this.setHeaders("POST", body);
@@ -338,13 +338,13 @@ export default class Http {
   };
 
   /**
-   * Exclude a final diagnostic
+   * Exclude a final diagnosis
    * @params [Integer] nodeId
    * @params [Integer] nodeId
    * @return [Object] body of request
    */
-  excludeDiagnostic = async (excludingDfId, excludedDfId) => {
-    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/final_diagnostics/add_exclusion`;
+  excludeDiagnosis = async (excludingDfId, excludedDfId) => {
+    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/final_diagnoses/add_exclusion`;
     const body = {
       node_exclusion: {
         excluding_node_id: excludingDfId,
@@ -356,12 +356,12 @@ export default class Http {
   };
 
   /**
-   * Remove excluding final diagnostic
+   * Remove excluding final diagnosis
    * @params [Integer] dfId
    * @return [Object] body of request
    */
   removeExcluding = async (excludingDfId, excludedDfId) => {
-    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/final_diagnostics/remove_exclusion`;
+    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/final_diagnoses/remove_exclusion`;
     const body = {
       node_exclusion: {
         excluding_node_id: excludingDfId,
@@ -382,7 +382,7 @@ export default class Http {
     const body = {
       instance: {
         id: instanceId,
-        final_diagnostic_id: this.finalDiagnostic
+        final_diagnosis_id: this.finalDiagnosis
       }
     };
     const header = await this.setHeaders("DELETE", body);
@@ -401,7 +401,7 @@ export default class Http {
       instance: {
         id,
         condition_id: conditionId,
-        final_diagnostic_id: this.finalDiagnostic
+        final_diagnosis_id: this.finalDiagnosis
       }
     };
     const header = await this.setHeaders("DELETE", body);
@@ -416,16 +416,16 @@ export default class Http {
   };
 
   /**
-   * Redirect to diagnostic
+   * Redirect to diagnosis
    */
-  redirectToDiagnostic = async () => {
+  redirectToDiagnosis = async () => {
     window.location = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}`;
   };
 
   /**
-   * Redirect to diagnostic diagram
+   * Redirect to diagnosis diagram
    */
-  redirectToDiagnosticDiagram = async () => {
+  redirectToDiagnosisDiagram = async () => {
     window.location = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/diagram`;
   };
 
@@ -475,11 +475,11 @@ export default class Http {
   };
 
   /**
-   * Redirect to final diagnostic diagram
+   * Redirect to final diagnosis diagram
    * @params [Integer] dfId
    */
-  showFinalDiagnosticDiagram = async (dfId) => {
-    window.location = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/${dfId}/diagram`;
+  showFinalDiagnosisDiagram = async (dfId) => {
+    window.location = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnoses/${dfId}/diagram`;
   };
 
   /**
@@ -510,17 +510,17 @@ export default class Http {
   };
 
   /**
-   * Update final diagnostic
+   * Update final diagnosis
    * @params [Integer] id
    * @params [Integer] label
    * @params [Integer] description_en
    * @params [Integer] from
    * @return [Object] body of request
    */
-  updateFinalDiagnostic = async (id, label_en, description_en, level_of_urgency, medias_attributes, from, source) => {
-    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnostics/${id}`;
+  updateFinalDiagnosis = async (id, label_en, description_en, level_of_urgency, medias_attributes, from, source) => {
+    const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnoses/${id}`;
     const body = {
-      final_diagnostic: {
+      final_diagnosis: {
         id,
         label_en,
         description_en,
@@ -568,7 +568,7 @@ export default class Http {
       question,
       instanceable_id: this.instanceableId,
       instanceable_type: this.instanceableType,
-      final_diagnostic_id: this.finalDiagnostic,
+      final_diagnosis_id: this.finalDiagnosis,
       from
     };
     const header = await this.setHeaders("PUT", body);
@@ -622,10 +622,10 @@ export default class Http {
   };
 
   /**
-   * Validate diagnostic
+   * Validate diagnosis
    * @return [Object] body of request
    */
-  validateDiagnostic = async () => {
+  validateDiagnosis = async () => {
     const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/validate`;
     const header = await this.setHeaders("GET", null);
     return await fetch(url, header).catch(error => console.log(error));

@@ -19,12 +19,12 @@ class InstancesController < ApplicationController
     @conditions = @instance.conditions
     @condition = Condition.new
 
-    if params[:diagnostic_id].present?
+    if params[:diagnosis_id].present?
       @algorithm = @instanceable.version.algorithm
 
       add_breadcrumb @algorithm.name, algorithm_url(@algorithm)
       add_breadcrumb @instanceable.version.name, algorithm_version_url(@algorithm, @instanceable.version)
-      add_breadcrumb @instanceable.label, algorithm_version_diagnostic_url(@algorithm, @instanceable.version, @instanceable)
+      add_breadcrumb @instanceable.label, algorithm_version_diagnosis_url(@algorithm, @instanceable.version, @instanceable)
       add_breadcrumb @instance.node.label
     else
       @algorithm = @instanceable.algorithm
@@ -43,7 +43,7 @@ class InstancesController < ApplicationController
       instance.errors.add(:base, t('questions_sequences.validation.loop'))
       render json: instance.errors.full_messages, status: 422
     elsif instance.save
-      FinalDiagnosticHealthCare.create!(final_diagnostic: FinalDiagnostic.find(instance_params[:final_diagnostic_id]), health_care: instance.node) if instance.node.is_a?(HealthCare)
+      FinalDiagnosisHealthCare.create!(final_diagnosis: FinalDiagnosis.find(instance_params[:final_diagnosis_id]), health_care: instance.node) if instance.node.is_a?(HealthCare)
 
       render json: instance.generate_json
     else
@@ -52,8 +52,8 @@ class InstancesController < ApplicationController
   end
 
   def destroy
-    if instance_params[:final_diagnostic_id].present?
-      FinalDiagnosticHealthCare.find_by(final_diagnostic_id: instance_params[:final_diagnostic_id], node_id: @instance.node_id).destroy if @instance.node.is_a?(HealthCare)
+    if instance_params[:final_diagnosis_id].present?
+      FinalDiagnosisHealthCare.find_by(final_diagnosis_id: instance_params[:final_diagnosis_id], node_id: @instance.node_id).destroy if @instance.node.is_a?(HealthCare)
     end
 
     if @instance.destroy
@@ -67,7 +67,7 @@ class InstancesController < ApplicationController
   # Find an instance by its node reference
   def by_reference
     authorize policy_scope(Instance)
-    if params[:diagnostic_id].present?
+    if params[:diagnosis_id].present?
       @node = @instanceable.version.algorithm.nodes.find_by(reference: params[:reference]);
     else
       @node = @instanceable.algorithm.nodes.find_by(reference: params[:reference]);
@@ -75,7 +75,7 @@ class InstancesController < ApplicationController
     render json: polymorphic_url([@instanceable, @instanceable.components.find_by(node: @node)])
   end
 
-  # @params [Diagnostic] Current diagnostic, [Answer] Answer from parent of the link, [Node] child of the link
+  # @params [Diagnosis] Current diagnosis, [Answer] Answer from parent of the link, [Node] child of the link
   # Create link in both way from diagram
   def create_link
     condition = @instance.conditions.new(answer_id: instance_params[:answer_id], score: instance_params[:score])
@@ -95,7 +95,7 @@ class InstancesController < ApplicationController
     render json: condition
   end
 
-  # POST /diagnostics/:diagnostic_id/instances/update_from_diagram
+  # POST /diagnoses/:diagnosis_id/instances/update_from_diagram
   # @return JSON of instance
   # Update an instances and return json format
   def update
@@ -106,7 +106,7 @@ class InstancesController < ApplicationController
     end
   end
 
-  # @params [Diagnostic] Current diagnostic, [Answer] Answer from parent of the link, [Node] child of the link
+  # @params [Diagnosis] Current diagnosis, [Answer] Answer from parent of the link, [Node] child of the link
   # Update the score of a condition in a PSS
   def update_score
     authorize policy_scope(Instance)
@@ -123,7 +123,7 @@ class InstancesController < ApplicationController
 
   def set_child
     @child_node = Node.find(instance_params[:node_id])
-    @child_instance = @instanceable.components.find_by(node_id: @child_node.id, final_diagnostic_id: instance_params[:final_diagnostic_id])
+    @child_instance = @instanceable.components.find_by(node_id: @child_node.id, final_diagnosis_id: instance_params[:final_diagnosis_id])
   end
 
   def set_instance
@@ -132,8 +132,8 @@ class InstancesController < ApplicationController
   end
 
   def set_instanceable
-    if params[:diagnostic_id].present?
-      @instanceable = Diagnostic.find(params[:diagnostic_id])
+    if params[:diagnosis_id].present?
+      @instanceable = Diagnosis.find(params[:diagnosis_id])
     elsif params[:questions_sequence_id].present?
       @instanceable = QuestionsSequence.find(params[:questions_sequence_id])
     else
@@ -152,7 +152,7 @@ class InstancesController < ApplicationController
       :answer_id,
       :condition_id,
       :score,
-      :final_diagnostic_id,
+      :final_diagnosis_id,
       :duration_en,
       :description_en
     )

@@ -1,4 +1,4 @@
-# Define a sequence of questions to be included in a diagnostic
+# Define a sequence of questions to be included in a diagnosis
 class QuestionsSequence < Node
   before_create :adjust_cut_offs
   after_create :create_boolean
@@ -183,7 +183,7 @@ class QuestionsSequence < Node
 
   # Check if the user is doing a loop between multiple QS
   def self.is_loop(qs_diagram, qs_node)
-    return false if qs_diagram.is_a? Diagnostic
+    return false if qs_diagram.is_a? Diagnosis
     parents = QuestionsSequence.get_qs_parents(qs_diagram, [])
     parents.include? qs_node.id
   end

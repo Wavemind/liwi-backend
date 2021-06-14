@@ -1,9 +1,9 @@
-# Define the instance of a node in a diagnostic
+# Define the instance of a node in a diagnosis
 class Instance < ApplicationRecord
 
   belongs_to :node
   belongs_to :instanceable, polymorphic: true
-  belongs_to :final_diagnostic, optional: true
+  belongs_to :final_diagnosis, optional: true
 
   has_one :top_left_question, foreign_key: 'top_left_question_id', class_name: 'Version', dependent: :nullify
   has_one :first_top_right_question, foreign_key: 'first_top_right_question_id', class_name: 'Version', dependent: :nullify
@@ -18,19 +18,19 @@ class Instance < ApplicationRecord
   scope :questions, ->() { joins(:node).includes(:conditions).where('nodes.type IN (?)', Question.descendants.map(&:name)) }
   scope :questions_sequences, ->() { joins(:node).includes(:conditions).where('nodes.type IN (?)', QuestionsSequence.descendants.map(&:name)) }
   scope :drugs, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'HealthCares::Drug') }
-  scope :final_diagnostics, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'FinalDiagnostic') }
+  scope :final_diagnoses, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'FinalDiagnosis') }
 
   scope :triage_complaint_category, ->() { joins(:node).where('nodes.stage = ? AND nodes.type = ?', Question.stages[:triage], 'Questions::ComplaintCategory') }
   scope :triage_under_complaint_category, ->() { joins(:node).where('nodes.type NOT IN (?)', %w(Questions::UniqueTriageQuestion Questions::ComplaintCategory)) }
 
-  # Allow to filter if the node is used as a health care condition or as a final diagnostic condition. A node can be used in both of them.
-  scope :health_care_conditions, ->() { joins(:node).includes(:conditions).where.not(final_diagnostic: nil).or(joins(:node).includes(:conditions).where("nodes.type LIKE 'HealthCares::%'")) }
-  scope :not_health_care_conditions, ->() { includes(:conditions).where(final_diagnostic_id: nil) }
+  # Allow to filter if the node is used as a health care condition or as a final diagnosis condition. A node can be used in both of them.
+  scope :health_care_conditions, ->() { joins(:node).includes(:conditions).where.not(final_diagnosis: nil).or(joins(:node).includes(:conditions).where("nodes.type LIKE 'HealthCares::%'")) }
+  scope :not_health_care_conditions, ->() { includes(:conditions).where(final_diagnosis_id: nil) }
 
   after_create :push_in_version_order, if: Proc.new { self.instanceable.is_a?(Version) }
   before_destroy :remove_from_versions, if: Proc.new { self.instanceable.is_a?(Version) }
   before_destroy :remove_condition_from_children
-  after_destroy :remove_exclusion, if: Proc.new { self.node.is_a?(FinalDiagnostic) }
+  after_destroy :remove_exclusion, if: Proc.new { self.node.is_a?(FinalDiagnosis) }
 
   validate :already_exist, on: :create
 
@@ -44,10 +44,10 @@ class Instance < ApplicationRecord
     include_association :children
   end
 
-  # Delete properly conditions from children in the current diagnostic or predefined syndrome.
+  # Delete properly conditions from children in the current diagnosis or predefined syndrome.
   def remove_condition_from_children
     children.each do |child|
-      instance = child.node.instances.find_by(instanceable: instanceable, final_diagnostic: final_diagnostic)
+      instance = child.node.instances.find_by(instanceable: instanceable, final_diagnosis: final_diagnosis)
       instance.conditions.each do |cond|
         self.class.remove_condition(cond, self)
       end
@@ -74,7 +74,7 @@ class Instance < ApplicationRecord
       self.as_json(include: { node: { include: [:answers, :complaint_categories], methods: [:node_type, :category_name, :type] } })
     elsif node.is_a?(HealthCares::Drug)
       self.as_json(include: { node: { include: [:formulations], methods: [:node_type, :category_name, :type] } })
-    elsif node.is_a?(HealthCares::Management) || node.is_a?(FinalDiagnostic)
+    elsif node.is_a?(HealthCares::Management) || node.is_a?(FinalDiagnosis)
       self.as_json(include: { node: { methods: [:node_type, :category_name, :type], include: :medias } })
     else
       self.as_json(include: { node: { methods: [:node_type, :category_name, :type] } })
@@ -108,14 +108,14 @@ class Instance < ApplicationRecord
 
   # Remove exclusion from a final diagnosis instance that has been destroyed
   def remove_exclusion
-    NodeExclusion.final_diagnostic.where(excluding_node_id: node_id).or(NodeExclusion.final_diagnostic.where(excluded_node_id: node_id)).map(&:destroy)
+    NodeExclusion.final_diagnosis.where(excluding_node_id: node_id).or(NodeExclusion.final_diagnosis.where(excluded_node_id: node_id)).map(&:destroy)
   end
 
   private
 
-  # Save if validation is true and node_id doesn't already exist in current diagnostic
+  # Save if validation is true and node_id doesn't already exist in current diagnosis
   def already_exist
-    if instanceable.components.find_by(node_id: node_id, final_diagnostic_id: final_diagnostic_id)
+    if instanceable.components.find_by(node_id: node_id, final_diagnosis_id: final_diagnosis_id)
       errors.add(:base, I18n.t('.already_exist'))
     end
   end

@@ -18,7 +18,7 @@ export default class AdvancedPortModel extends DefaultPortModel {
   }
 
   canLinkToPort(port) {
-    let valueReturned = port.options.type !== "finalDiagnostic" && this.linkIsAvailable(port);
+    let valueReturned = port.options.type !== "finalDiagnosis" && this.linkIsAvailable(port);
 
     // Remove link if valueReturned is false
     if (!valueReturned) {

@@ -29,7 +29,7 @@ export const drugSchema = yup.object().shape({
   is_neonat: yup.boolean(),
 });
 
-export const finalDiagnosticSchema = yup.object().shape({
+export const finalDiagnoseschema = yup.object().shape({
   label_translations: yup.string().required(I18n.t("errors.messages.required")),
   description_translations: yup.string()
 });
