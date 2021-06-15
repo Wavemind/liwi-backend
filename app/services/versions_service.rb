@@ -510,9 +510,7 @@ class VersionsService
         if instanceable.is_a? Diagnosis
           # push the id in the array only if it is not already there and if it is handled by the current algorithm version
           if @diagnoses_ids.include?(instanceable.id) && !diagnoses.include?(instanceable.id)
-            hash = {}
-            hash['id'] = instanceable.id
-            diagnoses << hash
+            diagnoses.push(instanceable.id)
           end
         end
       end
@@ -528,9 +526,7 @@ class VersionsService
     node.instances.each do |instance|
       df = instance.final_diagnosis_id
       if df.present? && @final_diagnoses[df].present?
-        hash = {}
-        hash['id'] = df
-        final_diagnoses.push(hash)
+        final_diagnoses.push(df)
       end
     end
     final_diagnoses.uniq
