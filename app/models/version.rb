@@ -3,6 +3,7 @@ class Version < ApplicationRecord
 
   attr_accessor :triage_id
   attr_accessor :cc_id
+  attr_accessor :duplicating
 
   belongs_to :algorithm
   belongs_to :user
