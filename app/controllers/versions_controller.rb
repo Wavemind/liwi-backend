@@ -136,19 +136,9 @@ class VersionsController < ApplicationController
   # @params [Version] version to duplicate
   # Duplicate a version with every diagnoses and their logics (Instances with their Conditions and Children), the FinalDiagnoses and Conditions attached to it
   def duplicate
-    ActiveRecord::Base.transaction(requires_new: true) do
-      @version.diagnoses.each { |diagnosis| diagnosis.update(duplicating: true) }
-      duplicated_version = @version.amoeba_dup
-
-      if duplicated_version.save
-        duplicated_version.diagnoses.each_with_index { |diagnosis, index| diagnosis.relink_instance }
-        @version.diagnoses.each { |diagnosis| diagnosis.update(duplicating: false) }
-        redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_duplicated')
-      else
-        redirect_to algorithm_url(@algorithm, panel: 'versions'), alert: t('flash_message.duplicate_fail')
-        raise ActiveRecord::Rollback, ''
-      end
-    end
+    job_id = DuplicateVersionJob.perform_later(@version.id)
+    @version.update(job_id: job_id.provider_job_id)
+    render json: { success: true, version: @version.reload }
   end
 
   # GET algorithms/:algorithm_id/version/:id/final_diagnoses

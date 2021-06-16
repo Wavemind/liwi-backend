@@ -27,8 +27,6 @@ class Instance < ApplicationRecord
   scope :health_care_conditions, ->() { joins(:node).includes(:conditions).where.not(final_diagnosis: nil).or(joins(:node).includes(:conditions).where("nodes.type LIKE 'HealthCares::%'")) }
   scope :not_health_care_conditions, ->() { includes(:conditions).where(final_diagnosis_id: nil) }
 
-  after_create :push_in_version_order, if: Proc.new { self.instanceable.is_a?(Version) }
-  before_destroy :remove_from_versions, if: Proc.new { self.instanceable.is_a?(Version) }
   before_destroy :remove_condition_from_children
   after_destroy :remove_exclusion, if: Proc.new { self.node.is_a?(FinalDiagnosis) }
 
@@ -84,26 +82,6 @@ class Instance < ApplicationRecord
   # Return the label of the node for display purpose
   def node_label
     node.label_en
-  end
-
-  # When a question from triage stage is created, push it at the end of the version order
-  def push_in_version_order
-    category = node.step
-    config = instanceable.medal_r_config
-    if config['questions_orders'][category].nil?
-      config['questions_orders'][category] = [node_id]
-    else
-      config['questions_orders'][category].push(node_id)
-    end
-    instanceable.update(medal_r_config: config)
-  end
-
-  # Remove the triage question from the version triage orders
-  def remove_from_versions
-    category = node.step
-    config = instanceable.medal_r_config
-    config['questions_orders'][category].delete(node_id) unless config['questions_orders'][category].nil?
-    instanceable.update(medal_r_config: config)
   end
 
   # Remove exclusion from a final diagnosis instance that has been destroyed
