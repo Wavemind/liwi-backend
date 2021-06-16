@@ -80,16 +80,16 @@ class Version < ApplicationRecord
   def extract_nodes_from_version
     nodes = []
 
-    components.each do |instance|
+    components.includes(:node).each do |instance|
       nodes.push(instance.node)
     end
 
     diagnoses.each do |diag|
-      diag.components.questions.each do |instance|
+      diag.components.includes(:node).questions.each do |instance|
         nodes.push(instance.node)
       end
 
-      diag.components.questions_sequences.each do |instance|
+      diag.components.includes(:node).questions_sequences.each do |instance|
         nodes = instance.node.extract_nodes(nodes)
       end
     end
