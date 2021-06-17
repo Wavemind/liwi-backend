@@ -8,6 +8,7 @@ class VersionsController < ApplicationController
     authorize policy_scope(Version)
     respond_to do |format|
       format.html
+      format.js { }
       format.json { render json: VersionDatatable.new(params, view_context: view_context) }
     end
   end

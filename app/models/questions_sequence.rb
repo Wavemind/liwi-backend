@@ -170,7 +170,7 @@ class QuestionsSequence < Node
   end
 
   def extract_nodes(nodes)
-    components.each do |instance|
+    components.includes(:node).each do |instance|
       node = instance.node
       if node.is_a? Question
         nodes.push(node)

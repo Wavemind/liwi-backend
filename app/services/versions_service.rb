@@ -15,7 +15,7 @@ class VersionsService
     hash['diagnoses'] = {}
 
     # Add every question instantiated in the version
-    @version.components.each do |instance|
+    @version.components.includes(:node).each do |instance|
       assign_node(instance.node)
     end
 
@@ -208,7 +208,7 @@ class VersionsService
     hash['final_diagnoses'] = {}
 
     # Loop in each final diagnoses for set conditional acceptance and health cares related to it
-    diagnosis.components.final_diagnoses.each do |final_diagnosis_instance|
+    diagnosis.components.final_diagnoses.includes(:node).each do |final_diagnosis_instance|
       final_diagnosis_hash = extract_final_diagnosis(final_diagnosis_instance)
       @final_diagnoses[final_diagnosis_instance.node.id] = final_diagnosis_hash
       hash['final_diagnoses'][final_diagnosis_instance.node_id] = {}
