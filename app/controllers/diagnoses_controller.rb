@@ -27,7 +27,7 @@ class DiagnosesController < ApplicationController
     add_breadcrumb t('breadcrumbs.new')
 
     @diagnosis = Diagnosis.new
-    authorize @diagnosis
+    authorize @algorithm
   end
 
   def edit

@@ -27,21 +27,12 @@
       <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'registration_triage_questions' %>" id="registration_triage_questions-tab" data-toggle="tab" href="#registration_triage_questions" role="tab" aria-controls="registration_triage_questions" aria-selected="false"><%= t('.subtitle_registration_triage_questions') %> </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'questions_order' %>" id="questions_order-tab" data-toggle="tab" href="#questions_order" role="tab" aria-controls="questions_order" aria-selected="false"><%= t('.subtitle_questions_order') %> </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'systems_order' %>" id="systems_order-tab" data-toggle="tab" href="#systems_order" role="tab" aria-controls="systems_order" aria-selected="false"><%= t('.subtitle_systems_order') %> </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'medal_r_config' %>" id="medal_r_config-tab" data-toggle="tab" href="#medal_r_config" role="tab" aria-controls="medal_r_config" aria-selected="false"><%= t('.subtitle_medal_r_config_html') %> </a>
+      <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'full_order' %>" id="full_order-tab" data-toggle="tab" href="#full_order" role="tab" aria-controls="full_order" aria-selected="false"><%= t('.subtitle_full_order') %> </a>
     </li>
     <li class="nav-item">
       <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'medal_data_config' %>" id="medal_data_config-tab" data-toggle="tab" href="#medal_data_config" role="tab" aria-controls="medal_data_config" aria-selected="false"><%= t('.subtitle_medal_data_config_html') %> </a>
     </li>
   <% end %>
-  <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'triage_conditions' %>" id="triage_conditions-tab" data-toggle="tab" href="#triage_conditions" role="tab" aria-controls="triage_conditions" aria-selected="false"><%= t('.subtitle_triage_conditions') %> </a>
-  </li>
   <li class="nav-item">
     <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'translations' %>" id="translations-tab" data-toggle="tab" href="#translations" role="tab" aria-controls="translations" aria-selected="false"><%= t('.subtitle_translations') %> </a>
   </li>
@@ -92,26 +83,14 @@
       <%= render 'registration_triage_questions' %>
     </div>
 
-    <div class="tab-pane fade ordering-tab <%= 'show active' if params[:panel].present? && params[:panel] == 'questions_order' %>" id="questions_order" data-url=<%= change_triage_order_algorithm_version_url(@algorithm, @version) %> role="tabpanel" aria-labelledby="questions_order-tab">
-      <%= render 'triage_order' %>
+    <div class="tab-pane fade ordering-tab <%= 'show active' if params[:panel].present? && params[:panel] == 'full_order' %>" id="full_order" data-url=<%= change_systems_order_algorithm_version_url(@algorithm, @version) %> role="tabpanel" aria-labelledby="full_order-tab">
+      <%= render 'full_order' %>
     </div>
 
-    <div class="tab-pane fade ordering-tab <%= 'show active' if params[:panel].present? && params[:panel] == 'systems_order' %>" id="systems_order" data-url=<%= change_systems_order_algorithm_version_url(@algorithm, @version) %> role="tabpanel" aria-labelledby="systems_order-tab">
-      <%= render 'systems_order' %>
-    </div>
-
-    <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'medal_r_config' %>" id="medal_r_config" data-url=<%= change_triage_order_algorithm_version_url(@algorithm, @version) %> role="tabpanel" aria-labelledby="medal_r_config-tab">
-      <%= render 'medal_r_config' %>
-    </div>
-
-    <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'medal_data_config' %>" id="medal_data_config" data-url=<%= change_triage_order_algorithm_version_url(@algorithm, @version) %> role="tabpanel" aria-labelledby="medal_r_config-tab">
+    <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'medal_data_config' %>" id="medal_data_config" data-url=<%= change_triage_order_algorithm_version_url(@algorithm, @version) %> role="tabpanel" aria-labelledby="medal_data_config-tab">
       <%= render 'medal_data_config' %>
     </div>
   <% end %>
-
-  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'triage_conditions' %>" id="triage_conditions" role="tabpanel" aria-labelledby="triage_conditions-tab">
-    <%= render 'triage_conditions' %>
-  </div>
 
   <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'translations' %>" id="translations" role="tabpanel" aria-labelledby="translations-tab">
     <%= render 'translations' %>

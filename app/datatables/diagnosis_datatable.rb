@@ -40,6 +40,6 @@ class DiagnosisDatatable < AjaxDatatablesRails::ActiveRecord
   end
 
   def get_raw_records
-    Version.find(params[:version_id]).diagnoses.joins(:node)
+    Version.find(params[:version_id]).diagnoses.includes(:node).joins(:node)
   end
 end

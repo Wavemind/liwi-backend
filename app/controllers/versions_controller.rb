@@ -21,7 +21,7 @@ class VersionsController < ApplicationController
     add_breadcrumb t('breadcrumbs.new')
 
     @version = Version.new
-    authorize @version
+    authorize @algorithm
   end
 
   def edit

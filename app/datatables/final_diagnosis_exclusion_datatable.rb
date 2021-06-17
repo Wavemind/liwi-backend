@@ -28,7 +28,7 @@ class FinalDiagnosisExclusionDatatable < AjaxDatatablesRails::ActiveRecord
   end
 
   def get_raw_records
-    version_final_diagnosis_ids = Version.find(params[:id]).diagnoses.map(&:final_diagnoses).flatten.map(&:id)
-    NodeExclusion.joins(:excluded_node, :excluding_node).final_diagnosis.where(excluding_node_id: version_final_diagnosis_ids, excluded_node_id: version_final_diagnosis_ids)
+    version_final_diagnosis_ids = Version.find(params[:id]).diagnoses.includes(:final_diagnoses).map(&:final_diagnoses).flatten.map(&:id)
+    NodeExclusion.includes(:excluded_node, :excluding_node).joins(:excluded_node, :excluding_node).final_diagnosis.where(excluding_node_id: version_final_diagnosis_ids, excluded_node_id: version_final_diagnosis_ids)
   end
 end
