@@ -12,8 +12,4 @@ class MedicalStaff < ApplicationRecord
   def full_name
     "#{first_name} #{last_name}"
   end
-
-  def roles
-    MedicalStaff.roles.keys
-  end
 end

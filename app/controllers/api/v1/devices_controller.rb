@@ -17,7 +17,9 @@ class Api::V1::DevicesController < ApplicationController
     # Mac address send instead of device id
     device = Device.find_by_mac_address(params[:id])
     if device.health_facility.present?
-      render json: device.health_facility.as_json(include: {medical_staffs: {methods: [:roles]}})
+      json = device.health_facility.as_json(include: :medical_staffs)
+      json['medical_staff_roles'] = MedicalStaff.roles.keys
+      render json: json
     else
       render json: { errors: t('.no_health_facility') }, status: :unprocessable_entity
     end
