@@ -1,19 +1,15 @@
-<!--<table class="table table-condensed table-hover" id="versions-datatable" data-source="<%#= algorithm_versions_url(@algorithm, format: :json, id: @algorithm.id) %>">-->
-<!--  <thead>-->
-<!--    <tr>-->
-<!--      <th><%#= t('.columns.name') %></th>-->
-<!--      <th><%#= t('.columns.last_update') %></th>-->
-<!--      <th><%#= t('.columns.creator') %></th>-->
-<!--      <th><%#= t('.columns.actions') %></th>-->
-<!--    </tr>-->
-<!--  </thead>-->
-<!--  <tbody></tbody>-->
-<!--</table>-->
-
 <%= react_component('lists/index',
-                    {
-                      list: @algorithm.versions,
-                      title: 'name',
-                      description: 'description_en',
-                      show: algorithm_version_url(@algorithm.id, 0)
-                    }) %>
+  {
+    list: @algorithm.versions,
+    title: 'name',
+    description: 'description_translations.en',
+    show: algorithm_version_url(@algorithm.id, 0),
+    actions: {
+      diagram: false,
+      edit: true,
+      duplicate: true,
+      archive: true,
+      delete: false
+    }
+  })
+%>
