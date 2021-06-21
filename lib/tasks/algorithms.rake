@@ -233,7 +233,7 @@ namespace :algorithms do
             cut_off_question.instances.each do |cut_off_instance|
               i += 1
               next if cut_off_instance.instanceable.is_a?(Version)
-              if cut_off_instance.final_diagnostic_id.present? || cut_off_instance.instanceable.is_a?(QuestionsSequences::Scored)
+              if cut_off_instance.final_diagnosis_id.present? || cut_off_instance.instanceable.is_a?(QuestionsSequences::Scored)
                     
                 impossible_diagram_to_manage.push(cut_off_instance.instanceable)
                 next
@@ -248,7 +248,7 @@ namespace :algorithms do
               if cut_off_instance.conditions.any? # Cut off to put in conditions (because not in the top)
                 next
                 cut_off_instance.children.each do |child|
-                  child_instance = cut_off_instance.instanceable.components.where(node: child.node, final_diagnostic_id: nil).first
+                  child_instance = cut_off_instance.instanceable.components.where(node: child.node, final_diagnosis_id: nil).first
                   conditions = []
                   child_instance.conditions.each do |cond|
                     if cond.answer.node == cut_off_question
@@ -265,15 +265,15 @@ namespace :algorithms do
                   end
                 end
               else
-                if cut_off_instance.instanceable.components.select {|component| component.conditions.empty? && component.final_diagnostic_id.nil?}.count > 1
+                if cut_off_instance.instanceable.components.select {|component| component.conditions.empty? && component.final_diagnosis_id.nil?}.count > 1
                   impossible_diagram_to_manage.push(cut_off_instance.instanceable)
                 else
-                  first_child_conditions = cut_off_instance.instanceable.components.where(node: cut_off_instance.children.first.node, final_diagnostic_id: nil).first.conditions.map(&:answer_id).sort            
+                  first_child_conditions = cut_off_instance.instanceable.components.where(node: cut_off_instance.children.first.node, final_diagnosis_id: nil).first.conditions.map(&:answer_id).sort
 
                   impossible_to_manage = false
                   cut_off_instance.children.each do |child|
                     impossible_to_manage = true if child.node.formula.present? && child.node.formula.include?('To')
-                    impossible_to_manage = true unless first_child_conditions == cut_off_instance.instanceable.components.where(node: child.node, final_diagnostic_id: nil).first.conditions.map(&:answer_id).sort
+                    impossible_to_manage = true unless first_child_conditions == cut_off_instance.instanceable.components.where(node: child.node, final_diagnosis_id: nil).first.conditions.map(&:answer_id).sort
                   end
                   if impossible_to_manage
                     impossible_diagram_to_manage.push(cut_off_instance.instanceable)
