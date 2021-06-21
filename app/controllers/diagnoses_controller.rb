@@ -60,11 +60,13 @@ class DiagnosesController < ApplicationController
 
   def destroy
     authorize policy_scope(Diagnosis)
-    diagnosis = Diagnosis.includes(components: [:node, :conditions, children: [:node]]).find(params[:id])
+    diagnosis = Diagnosis.includes(components: [:conditions, children: [:node]]).find(params[:id])
     if diagnosis.controlled_destroy
-      redirect_to algorithm_version_url(@algorithm, @version), notice: t('flash_message.success_deleted')
+      flash[:notice] = t('flash_message.success_deleted')
+      render json: { status: 'success' }
     else
-      render :new
+      flash[:error] = t('flash_message.delete_fail')
+      render json: { status: 'failed' }
     end
   end
 

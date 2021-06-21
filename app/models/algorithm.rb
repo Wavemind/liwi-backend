@@ -109,4 +109,16 @@ class Algorithm < ApplicationRecord
       {label_en: 'more than -2 z-score', value: '-1', operator: Answer.operators[:more_or_equal]},
      ])
   end
+
+  def display_versions_badges
+    badges = ''
+    versions.map do |version|
+      badges += " <span class='badge badge-info'><a href='#{algorithm_version_url(id, version.id)}'>#{version.name}</a></span>"
+    end
+    badges
+  end
+
+  def display_archive_status
+    archived ? '<span class="badge badge-danger">archived</span>' : ''
+  end
 end

@@ -16,6 +16,9 @@
     list: @version.diagnoses.includes(:node).as_json(include: {node: {methods: :reference_label}}),
     title: 'label_translations.en',
     description: 'node.reference_label',
+    metadata: [
+
+    ],
     show: algorithm_version_diagnosis_url(@algorithm.id, @version.id, 0),
     actions: {
       diagram: true,

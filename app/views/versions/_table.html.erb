@@ -1,8 +1,11 @@
 <%= react_component('lists/index',
   {
-    list: @algorithm.versions,
+    list: @algorithm.versions.as_json(methods: :display_archive_status),
     title: 'name',
     description: 'description_translations.en',
+    metadata:[
+      'display_archive_status'
+    ],
     show: algorithm_version_url(@algorithm.id, 0),
     actions: {
       diagram: false,

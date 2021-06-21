@@ -61,9 +61,11 @@ class VersionsController < ApplicationController
     @version.archived = true
 
     if @version.save
-      redirect_to algorithm_url(@algorithm, panel: 'versions'), notice: t('flash_message.success_created')
+      flash[:notice] = t('flash_message.success_archive')
+      render json: { status: 'success' }
     else
-      redirect_to algorithm_url(@algorithm, panel: 'versions'), alert: t('flash_message.update_fail')
+      flash[:alert] = t('flash_message.update_fail')
+      render json: { status: 'failed' }
     end
   end
 
@@ -283,9 +285,11 @@ class VersionsController < ApplicationController
     @version.archived = false
 
     if @version.save
-      redirect_to algorithm_url(@algorithm, panel: 'versions'), notice: t('flash_message.success_created')
+      flash[:notice] = t('flash_message.success_unarchive')
+      render json: { status: 'success' }
     else
-      redirect_to algorithm_url(@algorithm, panel: 'versions'), danger: t('flash_message.update_fail')
+      flash[:alert] = t('flash_message.update_fail')
+      render json: { status: 'failed' }
     end
   end
 

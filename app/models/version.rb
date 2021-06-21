@@ -206,6 +206,10 @@ class Version < ApplicationRecord
     tree.to_json
   end
 
+  def display_archive_status
+    archived ? '<span class="badge badge-danger">archived</span>' : ''
+  end
+
   # Init orders for new version
   def init_config
     self.medal_r_config = {

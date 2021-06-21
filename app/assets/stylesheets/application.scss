@@ -380,3 +380,27 @@ td {
   font-size: 8px;
   color: grey;
 }
+
+/* ---------------------------------------------------
+    LIST COMPONENT
+----------------------------------------------------- */
+
+.dropleft {
+  float: right;
+  margin-left: 5px;
+}
+
+.metadata-list {
+  margin-left: 5px;
+  margin-right: 10px;
+}
+
+.list-kebab-menu {
+  font-size: 30px;
+  color: #999;
+}
+
+.list-updated-at {
+  float: right;
+  font-size: 15px;
+}

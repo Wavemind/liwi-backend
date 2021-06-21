@@ -371,6 +371,8 @@ sw:
     json_error: "There was an error while generating the JSON or storing it"
     missing_nodes_error: "The following variables are needed for the algorithm to work but are not included in the version. Please check your version's <i>Registration and triage Variables</i> module.<br>%{missing_nodes}"
     reserved_reference: "This reference is reserved."
+    success_archive: "Data successfully archived"
+    success_unarchive: "Data successfully unarchived"
     success_created: "Data successfully created"
     success_deleted: "Data successfully deleted"
     success_duplicated: "Data successfully duplicated"
