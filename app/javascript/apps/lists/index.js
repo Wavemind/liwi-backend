@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Card, Dropdown, Form} from "react-bootstrap";
+import {Card, Dropdown} from "react-bootstrap";
 import I18n from "i18n-js";
 
 const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
@@ -21,7 +21,9 @@ class ListsComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      index: window.location.href
+      index: window.location.href,
+      generating: false,
+      current_duplicated_version: null
     };
   };
 
@@ -77,22 +79,27 @@ class ListsComponent extends Component {
   handleDuplicate = async (object, show) => {
     const header = this.setHeader({}, "POST");
     const response = await fetch(`${show}/duplicate`, header).catch(error => console.log(error));
-    const json = await response.json();
+    const data = await response.json();
 
+    if (data.job_id) { // Duplicate with job
 
-    // if (data.success) {
-    //   this.setState({
-    //     validating: false,
-    //     generating: true,
-    //   })
-    //   this.timer = setInterval(() => this.checkStatus(), 10000);
-    // } else {
-    //   this.setState({
-    //     validating: false,
-    //     generating: false,
-    //     message: data.message,
-    //   })
-    // }
+      if (data.success) {
+        this.setState({
+          current_duplicated_version: object.id,
+          generating: true,
+        });
+        this.timer = setInterval(() => this.checkStatus(), 10000);
+      } else {
+        this.setState({
+          generating: false,
+          message: I18n.t('flash_message.duplicate_fail'),
+        })
+      }
+
+    } else { // Duplicate without job
+      const {index} = this.state;
+      window.location.href = index;
+    }
   };
 
   handleDelete = async (object, show) => {
@@ -104,6 +111,12 @@ class ListsComponent extends Component {
 
       window.location.href = index;
     }
+  };
+
+  formatDate = (dateString) => {
+    let dateFormat = require('dateformat');
+    let date = new Date(dateString);
+    return dateFormat(date, 'dd.mm.yyyy')
   };
 
   /**
@@ -144,64 +157,57 @@ class ListsComponent extends Component {
           <Card key={object["id"]}>
             <Card.Body>
               <Card.Title>
+                <span>
+                  <Dropdown drop="left">
+                    <Dropdown.Toggle as={CustomToggle} id="dropdown-basic"></Dropdown.Toggle>
+                    <Dropdown.Menu>
+                      {actions['diagram'] ?
+                        <Dropdown.Item href={`${this.replaceIdInUrl(show, object["id"])}/diagram`}>{I18n.t('open_diagram')}</Dropdown.Item>
+                      : null}
+
+                      {actions['edit'] ?
+                        <Dropdown.Item href={`${this.replaceIdInUrl(show, object["id"])}/edit`}>{I18n.t('edit')}</Dropdown.Item>
+                      : null}
+
+                      {actions['duplicate'] ?
+                        <Dropdown.Item onClick={() => this.handleDuplicate(object, this.replaceIdInUrl(show, object.id))}>{I18n.t('duplicate')}</Dropdown.Item>
+                      : null}
+
+                      {actions['archive'] ?
+                        (object['archived'] ?
+                          <Dropdown.Item onClick={() => this.handleUnarchive(object, this.replaceIdInUrl(show, object.id))}>{I18n.t('unarchive')}</Dropdown.Item>
+                          :
+                          <Dropdown.Item onClick={() => this.handleArchive(object, this.replaceIdInUrl(show, object.id))}>{I18n.t('archive')}</Dropdown.Item>
+                        )
+                      : null}
+
+                      {actions['delete'] ?
+                        <Dropdown.Item onClick={() => this.handleDelete(object, this.replaceIdInUrl(show, object.id))}>{I18n.t('delete')}</Dropdown.Item>
+                      : null}
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </span>
                 <span style={{cursor: 'pointer'}} onClick={() => window.location.href = this.replaceIdInUrl(show, object.id)}>
                   {this.displayText(object, title)}
                 </span>
                 {metadata.map(data => (
-                  <span class="metadata-list" dangerouslySetInnerHTML={{__html: object[data]}}/>
+                  <p key={data} className="metadata-list" dangerouslySetInnerHTML={{__html: object[data]}}/>
                 ))}
-                <span>
-                  <Dropdown drop="left">
-                    <Dropdown.Toggle as={CustomToggle} id="dropdown-basic"></Dropdown.Toggle>
-
-                    <Dropdown.Menu>
-                      {actions['diagram'] ?
-                        <Dropdown.Item
-                          href={`${this.replaceIdInUrl(show, object["id"])}/diagram`}>{I18n.t('open_diagram')}</Dropdown.Item>
-                        : null}
-
-                      {actions['edit'] ?
-                        <Dropdown.Item
-                          href={`${this.replaceIdInUrl(show, object["id"])}/edit`}>{I18n.t('edit')}</Dropdown.Item>
-                        : null}
-
-                      {actions['duplicate'] ?
-                        <Dropdown.Item
-                          onClick={() => this.handleDuplicate(object, this.replaceIdInUrl(show, object.id))}>{I18n.t('duplicate')}</Dropdown.Item>
-                        : null}
-
-                      {actions['archive'] ?
-                        (object['archived'] ?
-                            <Dropdown.Item
-                              onClick={() => this.handleUnarchive(object, this.replaceIdInUrl(show, object.id))}>{I18n.t('unarchive')}</Dropdown.Item>
-                            :
-                            <Dropdown.Item
-                              onClick={() => this.handleArchive(object, this.replaceIdInUrl(show, object.id))}>{I18n.t('archive')}</Dropdown.Item>
-                        )
-                        : null}
-
-                      {actions['delete'] ?
-                        <Dropdown.Item
-                          onClick={() => this.handleDelete(object, this.replaceIdInUrl(show, object.id))}>{I18n.t('delete')}</Dropdown.Item>
-                        : null}
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </span>
               </Card.Title>
               <Card.Text>
                 {this.displayText(object, description)}
               </Card.Text>
+              <Card.Text className="text-muted">
+                <span className="list-updated-at">
+                  Last updated the {this.formatDate(object["updated_at"].substring(0, 10))}
+                </span>
+              </Card.Text>
             </Card.Body>
-            <Card.Footer className="text-muted">
-              <span className="list-updated-at">
-                Last updated the {object["updated_at"].substring(0, 10)}
-              </span>
-            </Card.Footer>
           </Card>
-          ))}
-          </div>
-          );
-        }
-        }
+        ))}
+      </div>
+    );
+  }
+}
 
-        export default ListsComponent;
+export default ListsComponent;

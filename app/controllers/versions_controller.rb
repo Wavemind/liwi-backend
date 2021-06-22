@@ -141,7 +141,7 @@ class VersionsController < ApplicationController
   def duplicate
     job_id = DuplicateVersionJob.perform_later(@version.id)
     @version.update(job_id: job_id.provider_job_id)
-    render json: { success: true, version: @version.reload }
+    render json: { success: true, job_id: job_id }
   end
 
   # GET algorithms/:algorithm_id/version/:id/final_diagnoses
@@ -308,16 +308,10 @@ class VersionsController < ApplicationController
   # Checks the status of the ongoing background job and returns the correct status and message
   def job_status
     status = Sidekiq::Status::status(@version.job_id)
-    message = ""
     if [:complete, :failed, :interrupted].include?(status)
       @version.update(job_id: "")
-      if status == :failed
-        message = t("versions.job_status.json_generation_failed")
-      elsif status == :interrupted
-        message = t("versions.job_status.json_generation_interrupted")
-      end
     end
-    render json: { job_status: status, message: message }
+    render json: { job_status: status }
   end
 
   def update_full_order

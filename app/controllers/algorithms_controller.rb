@@ -58,9 +58,11 @@ class AlgorithmsController < ApplicationController
     @algorithm.archived = true
 
     if @algorithm.save
-      redirect_to algorithms_url, notice: t('flash_message.success_created')
+      flash[:notice] = t('flash_message.success_archive')
+      render json: { status: 'success' }
     else
-      redirect_to algorithms_url, danger: t('flash_message.update_fail')
+      flash[:alert] = t('flash_message.update_fail')
+      render json: { status: 'failed' }
     end
   end
 
@@ -142,9 +144,11 @@ class AlgorithmsController < ApplicationController
     @algorithm.archived = false
 
     if @algorithm.save
-      redirect_to algorithms_url, notice: t('flash_message.success_created')
+      flash[:notice] = t('flash_message.success_unarchive')
+      render json: { status: 'success' }
     else
-      redirect_to algorithms_url, danger: t('flash_message.update_fail')
+      flash[:alert] = t('flash_message.update_fail')
+      render json: { status: 'failed' }
     end
   end
 

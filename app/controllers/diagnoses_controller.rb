@@ -91,9 +91,11 @@ class DiagnosesController < ApplicationController
     if duplicated_diagnosis.save
       duplicated_diagnosis.relink_instance
       diagnosis.update(duplicating: false)
-      redirect_to algorithm_version_url(@algorithm, @version), notice: t('flash_message.success_duplicated')
+      flash[:notice] = t('flash_message.success_duplicated')
+      render json: { status: 'success' }
     else
-      redirect_to algorithm_version_url(@algorithm, @version), alert: t('flash_message.duplicate_fail')
+      flash[:alert] = t('flash_message.duplicate_fail')
+      render json: { status: 'failed' }
     end
   end
 
