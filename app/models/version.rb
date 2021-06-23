@@ -181,6 +181,11 @@ class Version < ApplicationRecord
         end
         hash['children'].push(neonat_hash)
       else
+        if step_name == 'registration_step' # Add the 3 hard coded questions in the order
+          hash['children'].push({"id"=>'first_name', "title"=>"First name", "is_neonat"=>false, "expanded"=>false})
+          hash['children'].push({"id"=>'last_name', "title"=>"Last name", "is_neonat"=>false, "expanded"=>false})
+          hash['children'].push({"id"=>'birth_date', "title"=>"Birth date", "is_neonat"=>false, "expanded"=>false})
+        end
         algorithm.questions.where(step: step_index).each do |question|
           hash['children'].push(question.generate_node_tree_hash)
         end
@@ -205,3 +210,4 @@ class Version < ApplicationRecord
     }
   end
 end
+
