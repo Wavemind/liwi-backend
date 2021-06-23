@@ -512,6 +512,13 @@ en:
     table:
       columns:
         type: "Type"
+  job_status:
+    json_generation_failed: "There was an error while generating the JSON. Please contact the admins."
+    json_generation_interrupted: "JSON generation was interrupted. Please contact the admins."
+    duplicate_complete: "Your data have been successfully duplicated."
+    duplicate_failed: "There was an error while duplicating your data."
+    duplicate_interrupted: "There was an error while duplicating your data."
+    duplicate_processing: "Your data are being duplicated, please wait..."
   languages:
     description: "description_"
     edit:
@@ -857,9 +864,6 @@ en:
       title: "Details of %{name} - version %{version}"
     translations:
       generate_translations: "Generate translations excel"
-    job_status:
-      json_generation_failed: "There was an error while generating the JSON. Please contact the admins."
-      json_generation_interrupted: "JSON generation was interrupted. Please contact the admins."
   warning_dependency: "Warning! Editing this node will affect: "
   close: "Close"
   back: "Back"

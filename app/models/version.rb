@@ -50,15 +50,14 @@ class Version < ApplicationRecord
   # Duplicate the version
   def duplicate
     ActiveRecord::Base.transaction(requires_new: true) do
-      @version.diagnoses.each { |diagnosis| diagnosis.update(duplicating: true) }
-      duplicated_version = @version.amoeba_dup
+      diagnoses.each { |diagnosis| diagnosis.update(duplicating: true) }
+      duplicated_version = self.amoeba_dup
 
       if duplicated_version.save
         duplicated_version.diagnoses.each_with_index { |diagnosis, index| diagnosis.relink_instance }
-        @version.diagnoses.each { |diagnosis| diagnosis.update(duplicating: false) }
-        redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_duplicated')
+        diagnoses.each { |diagnosis| diagnosis.update(duplicating: false) }
+        true
       else
-        redirect_to algorithm_url(@algorithm, panel: 'versions'), alert: t('flash_message.duplicate_fail')
         raise ActiveRecord::Rollback, ''
       end
     end

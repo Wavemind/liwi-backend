@@ -23,7 +23,9 @@ class ListsComponent extends Component {
     this.state = {
       index: window.location.href,
       generating: false,
-      current_duplicated_version: null
+      current_duplicated_version: null,
+      message: "",
+      alert_type: ""
     };
   };
 
@@ -76,6 +78,27 @@ class ListsComponent extends Component {
     }
   };
 
+  /**
+   * Checks the status of the background job (JSON generation)
+   * @returns {Promise<void>}
+   */
+  checkStatus = async (show) => {
+    const response = await fetch(`${show}/job_status`, {method: "GET"})
+      .catch((error) => {
+        console.error(error);
+      });
+    const data = await response.json();
+
+    if (['complete', 'failed', 'interrupted'].includes(data.job_status)) {
+      clearInterval(this.timer);
+      this.setState({
+        generating: false,
+        message: I18n.t(`job_status.duplicate_${data.job_status}`),
+        alertType: data.job_status === 'complete' ? 'info' : 'danger'
+      })
+    }
+  };
+
   handleDuplicate = async (object, show) => {
     const header = this.setHeader({}, "POST");
     const response = await fetch(`${show}/duplicate`, header).catch(error => console.log(error));
@@ -87,12 +110,15 @@ class ListsComponent extends Component {
         this.setState({
           current_duplicated_version: object.id,
           generating: true,
+          message: I18n.t('job_status.duplicate_processing'),
+          alert_type: "warning"
         });
-        this.timer = setInterval(() => this.checkStatus(), 10000);
+        this.timer = setInterval(() => this.checkStatus(show), 10000);
       } else {
         this.setState({
           generating: false,
           message: I18n.t('flash_message.duplicate_fail'),
+          alert_type: "danger"
         })
       }
 
@@ -143,6 +169,21 @@ class ListsComponent extends Component {
     // return this.renderMessage(message, alertType)
   };
 
+  /**
+   * Renders the correct message with the correct alert colour
+   * @param message
+   * @param alertType
+   * @returns {JSX.Element}
+   */
+  renderMessage = () => {
+    const { message, alert_type } = this.state;
+    return (
+      <div className={`alert alert-${alert_type}`} role="alert">
+        {message}
+      </div>
+    )
+  }
+
   render() {
     const {list, title, description, metadata, show, actions} = this.props;
 
@@ -151,7 +192,7 @@ class ListsComponent extends Component {
     return (
       <div>
         <div className="col">
-          {this.renderAlert()}
+          {this.renderMessage()}
         </div>
         {list.map(object => (
           <Card key={object["id"]}>
