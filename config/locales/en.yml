@@ -751,6 +751,7 @@ en:
     edit:
       title: "Edit role"
   save: "Save"
+  search: "Search"
   select: "Please select"
   settings:
     index:
