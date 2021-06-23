@@ -54,7 +54,7 @@ export default class VersionOrders extends Component {
             } else if (rowInfo["node"]["type"] === "system"){
               rowInfo.className = "order-system";
             } else {
-              if (selected.includes(rowInfo["node"]["id"])){
+              if (selected.includes(rowInfo["node"]["id"]) || typeof rowInfo["node"]["id"] === "string"){ // Check if the id is used in the version OR if it is one of the hardcoded questions
                 if (rowInfo["node"]["is_neonat"]){
                   rowInfo.className = "order-node-neonat";
                 } else {
