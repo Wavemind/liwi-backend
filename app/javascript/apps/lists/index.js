@@ -20,7 +20,9 @@ const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
 class ListsComponent extends Component {
   constructor(props) {
     super(props);
+    const { list } = this.props;
     this.state = {
+      list: list,
       index: window.location.href,
       generating: false,
       current_duplicated_version: null,
@@ -91,11 +93,26 @@ class ListsComponent extends Component {
 
     if (['complete', 'failed', 'interrupted'].includes(data.job_status)) {
       clearInterval(this.timer);
-      this.setState({
-        generating: false,
-        message: I18n.t(`job_status.duplicate_${data.job_status}`),
-        alertType: data.job_status === 'complete' ? 'info' : 'danger'
-      })
+      if (data.job_status === 'complete') {
+        const response = await fetch(`${show.substring(0, show.lastIndexOf("/"))}/list`, {method: "GET"})
+          .catch((error) => {
+            console.error(error);
+          });
+        const newList = await response.json();
+        console.log(newList)
+        this.setState({
+          generating: false,
+          message: I18n.t(`job_status.duplicate_${data.job_status}`),
+          alert_type: 'success',
+          list: newList
+        })
+      } else {
+        this.setState({
+          generating: false,
+          message: I18n.t(`job_status.duplicate_${data.job_status}`),
+          alert_type: 'danger'
+        })
+      }
     }
   };
 
@@ -146,33 +163,7 @@ class ListsComponent extends Component {
   };
 
   /**
-   * Sets the correct message and alert colour before rendering the display
-   * @returns {JSX.Element}
-   */
-  renderAlert = () => {
-    // const { generating, validating, current_health_facility_access } = this.state;
-    //
-    // let message = ""
-    // let alertType = ""
-    // if (generating) {
-    //   message = I18n.t('health_facilities.show.generating')
-    //   alertType = "warning"
-    // } else if (validating) {
-    //   message = I18n.t('health_facilities.show.validating')
-    //   alertType = "warning"
-    // } else if (current_health_facility_access === null) {
-    //   message = I18n.t('health_facilities.show.no_algorithm')
-    //   alertType = "danger"
-    // }else {
-    //   return this.renderGenerateButton();
-    // }
-    // return this.renderMessage(message, alertType)
-  };
-
-  /**
    * Renders the correct message with the correct alert colour
-   * @param message
-   * @param alertType
    * @returns {JSX.Element}
    */
   renderMessage = () => {
@@ -185,7 +176,8 @@ class ListsComponent extends Component {
   }
 
   render() {
-    const {list, title, description, metadata, show, actions} = this.props;
+    const { title, description, metadata, show, actions} = this.props;
+    const { list } = this.state;
 
     console.log(this.props);
 

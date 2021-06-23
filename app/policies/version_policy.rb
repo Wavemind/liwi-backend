@@ -89,6 +89,10 @@ class VersionPolicy < ApplicationPolicy
     new?
   end
 
+  def list?
+    new?
+  end
+
   def regenerate_json?
     new?
   end

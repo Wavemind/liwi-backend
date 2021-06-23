@@ -55,6 +55,10 @@ Rails.application.routes.draw do
         put 'update_full_order'
       end
 
+      collection do
+        get 'list'
+      end
+
       resources :final_diagnoses do
         collection do
           post 'add_exclusion'

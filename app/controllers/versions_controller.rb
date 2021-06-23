@@ -1,6 +1,6 @@
 class VersionsController < ApplicationController
   before_action :authenticate_user!, except: [:change_triage_order, :change_systems_order]
-  before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :duplicate, :create_triage_condition, :set_medal_data_config, :remove_triage_condition, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnoses, :import_translations, :job_status, :update_full_order]
+  before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :duplicate, :create_triage_condition, :set_medal_data_config, :remove_triage_condition, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnoses, :import_translations, :job_status, :update_full_order, :list]
   before_action :set_breadcrumb, only: [:show, :new, :edit]
   before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :change_triage_order, :change_systems_order, :components, :create_triage_condition, :set_medal_data_config, :duplicate, :remove_components, :remove_triage_condition, :update_list, :regenerate_json, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnoses, :import_translations, :job_status, :update_full_order]
 
@@ -214,6 +214,14 @@ class VersionsController < ApplicationController
       redirect_to algorithm_version_url(@algorithm, @version, panel: 'translations'), alert: t('flash_message.import_xl_wrong_file')
     end
 
+  end
+
+  # GET algorithms/:algorithm_id/versions/list
+  # @params algorithm_id [Integer]
+  # Generate versions list json
+  def list
+    authorize policy_scope(Version)
+    render json: @algorithm.versions.as_json(methods: :display_archive_status)
   end
 
   # PUT algorithms/:algorithm_id/version/:id/regenerate_json
