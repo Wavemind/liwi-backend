@@ -82,6 +82,7 @@ class AlgorithmsController < ApplicationController
   def questions
     respond_to do |format|
       format.html
+      format.js { }
       format.json { render json: QuestionDatatable.new(params, view_context: view_context) }
     end
   end

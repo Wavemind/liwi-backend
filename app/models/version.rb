@@ -56,7 +56,6 @@ class Version < ApplicationRecord
       if duplicated_version.save
         duplicated_version.diagnoses.each_with_index { |diagnosis, index| diagnosis.relink_instance }
         diagnoses.each { |diagnosis| diagnosis.update(duplicating: false) }
-        true
       else
         raise ActiveRecord::Rollback, ''
       end

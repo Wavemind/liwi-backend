@@ -1,3 +1,9 @@
+<h3><%= t('algorithms.show.subtitle_versions') %></h3>
+
+<%= link_to new_algorithm_version_url(@algorithm) do %>
+  <button type="button" class="btn btn-outline-primary"><%= t('add') %></button>
+<% end %>
+
 <%= react_component('lists/index',
   {
     list: @algorithm.versions.as_json(methods: :display_archive_status),

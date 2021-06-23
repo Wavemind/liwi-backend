@@ -7,11 +7,14 @@
 
 <ul class="nav nav-tabs mt-3" id="myTab" role="tablist">
   <li class="nav-item">
-    <%= link_to  t('.subtitle_versions'), algorithm_versions_url(@algorithm) , remote:true %>
+    <%= link_to  t('.subtitle_versions'), algorithm_versions_url(@algorithm), class: "nav-link", remote: true %>
   </li>
   <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'questions'%>" id="questions-tab" data-toggle="tab" href="#questions" role="tab" aria-controls="questions" aria-selected="false"><%= t('.subtitle_questions')  %> </a>
+    <%= link_to  t('.subtitle_questions'), question_algorithm_url(@algorithm), class: "nav-link", remote: true %>
   </li>
+<!--  <li class="nav-item">-->
+<!--    <a class="nav-link <%#= 'active' if params[:panel].present? && params[:panel] == 'questions'%>" id="questions-tab" data-toggle="tab" href="#questions" role="tab" aria-controls="questions" aria-selected="false"><%#= t('.subtitle_questions')  %> </a>-->
+<!--  </li>-->
   <li class="nav-item">
     <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'drugs'%>" id="drugs-tab" data-toggle="tab" href="#drugs" role="tab" aria-controls="drugs" aria-selected="false"><%= t('.subtitle_drugs') %></a>
   </li>
@@ -37,12 +40,6 @@
 
 <div class="tab-content mt-4 ml-4" id="algorithm-table">
   <div id="algorithm-index-content">
-    <h3><%= t('.subtitle_versions') %></h3>
-
-    <%= link_to new_algorithm_version_url(@algorithm) do %>
-      <button type="button" class="btn btn-outline-primary"><%= t('add') %></button>
-    <% end %>
-
     <%= render 'versions/table' %>
   </div>
   <% if false  %>
