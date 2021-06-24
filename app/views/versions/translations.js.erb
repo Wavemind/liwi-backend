@@ -1,0 +1,6 @@
+document.getElementById("version-index-content").innerHTML = "<%= escape_javascript render 'versions/translations' %>"
+
+jQuery(document).ready(function () {
+  $("#version-tabs").find(".nav-link").removeClass("active")
+  $("#nav-link-translations").addClass("active")
+});

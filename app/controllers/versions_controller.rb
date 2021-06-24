@@ -2,7 +2,7 @@ class VersionsController < ApplicationController
   before_action :authenticate_user!, except: [:change_triage_order, :change_systems_order]
   before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :duplicate, :create_triage_condition, :set_medal_data_config, :remove_triage_condition, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnoses, :import_translations, :job_status, :update_full_order, :list]
   before_action :set_breadcrumb, only: [:show, :new, :edit]
-  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :change_triage_order, :change_systems_order, :components, :create_triage_condition, :set_medal_data_config, :duplicate, :remove_components, :remove_triage_condition, :update_list, :regenerate_json, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnoses, :import_translations, :job_status, :update_full_order]
+  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :change_triage_order, :change_systems_order, :components, :create_triage_condition, :set_medal_data_config, :duplicate, :remove_components, :remove_triage_condition, :update_list, :regenerate_json, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnoses, :import_translations, :job_status, :update_full_order, :registration_triage_questions, :medal_data_config, :full_order, :translations]
 
   def index
     authorize policy_scope(Version)
@@ -151,6 +151,7 @@ class VersionsController < ApplicationController
     authorize policy_scope(Version)
     respond_to do |format|
       format.html
+      format.js { }
       format.json { render json: VersionFinalDiagnosisDatatable.new(params, view_context: view_context) }
     end
   end
@@ -162,7 +163,44 @@ class VersionsController < ApplicationController
     authorize policy_scope(Version)
     respond_to do |format|
       format.html
+      format.js { }
       format.json { render json: FinalDiagnosisExclusionDatatable.new(params, view_context: view_context) }
+    end
+  end
+
+  # @params algorithm [Algorithm] current algorithm
+  # @return json of drugs
+  # All managements exclusions
+  def registration_triage_questions
+    respond_to do |format|
+      format.js { }
+    end
+  end
+
+  # @params algorithm [Algorithm] current algorithm
+  # @return json of drugs
+  # All managements exclusions
+  def medal_data_config
+    respond_to do |format|
+      format.js { }
+    end
+  end
+
+  # @params algorithm [Algorithm] current algorithm
+  # @return json of drugs
+  # All managements exclusions
+  def full_order
+    respond_to do |format|
+      format.js { }
+    end
+  end
+
+  # @params algorithm [Algorithm] current algorithm
+  # @return json of drugs
+  # All managements exclusions
+  def translations
+    respond_to do |format|
+      format.js { }
     end
   end
 

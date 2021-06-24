@@ -10,6 +10,7 @@ class DiagnosesController < ApplicationController
     authorize policy_scope(Diagnosis)
     respond_to do |format|
       format.html
+      format.js { }
       format.json {render json: DiagnosisDatatable.new(params, view_context: view_context)}
     end
   end

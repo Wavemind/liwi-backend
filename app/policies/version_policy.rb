@@ -93,6 +93,22 @@ class VersionPolicy < ApplicationPolicy
     new?
   end
 
+  def registration_triage_questions?
+    new?
+  end
+
+  def medal_data_config?
+    new?
+  end
+
+  def full_order?
+    new?
+  end
+
+  def translations?
+    new?
+  end
+
   def regenerate_json?
     new?
   end
