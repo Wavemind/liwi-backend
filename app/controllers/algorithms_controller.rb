@@ -1,6 +1,6 @@
 class AlgorithmsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:show, :edit, :update, :archive, :unarchive, :questions, :generate_villages, :import_villages, :managements, :questions, :questions_sequences, :questions_sequences_scored, :drugs, :drug_exclusions, :management_exclusions]
+  before_action :set_algorithm, only: [:show, :edit, :update, :archive, :unarchive, :questions, :generate_villages, :import_villages, :managements, :questions, :questions_sequences, :questions_sequences_scored, :drugs, :drug_exclusions, :management_exclusions, :villages]
 
   def index
     authorize policy_scope(Algorithm)
@@ -72,6 +72,7 @@ class AlgorithmsController < ApplicationController
   def managements
     respond_to do |format|
       format.html
+      format.js { }
       format.json { render json: ManagementDatatable.new(params, view_context: view_context) }
     end
   end
@@ -93,6 +94,7 @@ class AlgorithmsController < ApplicationController
   def questions_sequences
     respond_to do |format|
       format.html
+      format.js { }
       format.json { render json: QuestionsSequenceDatatable.new(params, view_context: view_context) }
     end
   end
@@ -103,6 +105,7 @@ class AlgorithmsController < ApplicationController
   def questions_sequences_scored
     respond_to do |format|
       format.html
+      format.js { }
       format.json { render json: QuestionsSequenceScoredDatatable.new(params, view_context: view_context) }
     end
   end
@@ -113,6 +116,7 @@ class AlgorithmsController < ApplicationController
   def drugs
     respond_to do |format|
       format.html
+      format.js { }
       format.json { render json: DrugDatatable.new(params, view_context: view_context) }
     end
   end
@@ -123,6 +127,7 @@ class AlgorithmsController < ApplicationController
   def drug_exclusions
     respond_to do |format|
       format.html
+      format.js { }
       format.json { render json: DrugExclusionDatatable.new(params, view_context: view_context) }
     end
   end
@@ -133,7 +138,18 @@ class AlgorithmsController < ApplicationController
   def management_exclusions
     respond_to do |format|
       format.html
+      format.js { }
       format.json { render json: ManagementExclusionDatatable.new(params, view_context: view_context) }
+    end
+  end
+
+  # @params algorithm [Algorithm] current algorithm
+  # @return json of drugs
+  # All managements exclusions
+  def villages
+    respond_to do |format|
+      format.html
+      format.js { }
     end
   end
 

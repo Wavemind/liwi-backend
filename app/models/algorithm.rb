@@ -1,4 +1,5 @@
 # Container of many versions of algorithms
+include Rails.application.routes.url_helpers
 class Algorithm < ApplicationRecord
   has_many :versions
   has_many :nodes, dependent: :destroy

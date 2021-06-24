@@ -29,6 +29,7 @@ Rails.application.routes.draw do
       get 'managements', to: 'algorithms#managements', as: 'management'
       get 'questions_sequences', to: 'algorithms#questions_sequences', as: 'questions_sequence'
       get 'questions_sequences_scored', to: 'algorithms#questions_sequences_scored', as: 'questions_sequence_scored'
+      get 'villages', to: 'algorithms#villages', as: 'villages'
       put 'import_villages'
     end
 

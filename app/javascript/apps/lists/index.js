@@ -209,34 +209,34 @@ class ListsComponent extends Component {
         </div>
         {list.map(object => (
           <div className="col">
-            <Card key={object["id"]}>
+            <Card key={object.id}>
               <Card.Body>
                 <Card.Title>
                   <span>
                     <Dropdown drop="left">
                       <Dropdown.Toggle as={CustomToggle} id="dropdown-basic"></Dropdown.Toggle>
                       <Dropdown.Menu>
-                        {actions['diagram'] ?
+                        {actions.diagram ?
                           <Dropdown.Item href={`${this.replaceIdInUrl(show, object["id"])}/diagram`}>{I18n.t('open_diagram')}</Dropdown.Item>
                         : null}
 
-                        {actions['edit'] ?
+                        {actions.edit ?
                           <Dropdown.Item href={`${this.replaceIdInUrl(show, object["id"])}/edit`}>{I18n.t('edit')}</Dropdown.Item>
                         : null}
 
-                        {actions['duplicate'] ?
+                        {actions.duplicate ?
                           <Dropdown.Item onClick={() => this.handleDuplicate(object, this.replaceIdInUrl(show, object.id))}>{I18n.t('duplicate')}</Dropdown.Item>
                         : null}
 
-                        {actions['archive'] ?
-                          (object['archived'] ?
+                        {actions.archive ?
+                          (object.archived ?
                             <Dropdown.Item onClick={() => this.handleUnarchive(object, this.replaceIdInUrl(show, object.id))}>{I18n.t('unarchive')}</Dropdown.Item>
                             :
                             <Dropdown.Item onClick={() => this.handleArchive(object, this.replaceIdInUrl(show, object.id))}>{I18n.t('archive')}</Dropdown.Item>
                           )
                         : null}
 
-                        {actions['delete'] ?
+                        {actions.delete ?
                           <Dropdown.Item onClick={() => this.handleDelete(object, this.replaceIdInUrl(show, object.id))}>{I18n.t('delete')}</Dropdown.Item>
                         : null}
                       </Dropdown.Menu>
