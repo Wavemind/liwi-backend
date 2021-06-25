@@ -7,6 +7,7 @@
     <p class="mx-0 my-0 metadata" data-type="<%= @final_diagnosis.node_type %>" data-id="<%= @diagnosis.id %>" data-version="<%= @diagnosis.version.id %>" data-algorithm="<%= @diagnosis.version.algorithm.id %>" data-final_diagnosis="<%= @final_diagnosis.id %>"></p>
     <%= react_component('diagram', {
       context: {
+        user: current_user,
         instanceable: @final_diagnosis.diagnosis_json,
         instances: @final_diagnosis.health_care_questions_json + @final_diagnosis.health_cares_json,
         availableNodes: @final_diagnosis.available_nodes_health_cares_json,

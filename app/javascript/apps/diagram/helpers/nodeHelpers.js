@@ -22,7 +22,7 @@ export const getLabel = (node) => {
  * @params [Function] addAvailableNode
  * @return diagram node
  */
-export const createNode = (instance, addAvailableNode, readOnly, diagramType, engine) => {
+export const createNode = (instance, addAvailableNode, readOnly, diagramType, engine, user) => {
   let diagramNode;
 
   let params = {
@@ -31,6 +31,7 @@ export const createNode = (instance, addAvailableNode, readOnly, diagramType, en
     locked: readOnly,
     diagramType,
     engine,
+    user
   };
 
   switch (instance.node.node_type) {

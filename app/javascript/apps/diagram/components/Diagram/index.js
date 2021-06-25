@@ -77,13 +77,14 @@ export class Diagram extends React.Component {
    */
   initDiagram() {
     const { engine, model } = this.state;
-    const { instances, addAvailableNode, readOnly, instanceable } = this.props;
+    const { instances, addAvailableNode, readOnly, instanceable, user } = this.props;
 
     let diagramNodes = [];
 
     // Generate questions
     instances.map(instance => {
-      let diagramNode = createNode(instance, addAvailableNode, readOnly, instanceable.category_name, engine);
+      console.log(this.props);
+      let diagramNode = createNode(instance, addAvailableNode, readOnly, instanceable.category_name, engine, user);
       diagramNodes.push(diagramNode);
       model.addAll(diagramNode);
     });
@@ -126,7 +127,7 @@ export class Diagram extends React.Component {
    * @params [Object] event
    */
   onDropAction = async (event) => {
-    const { http, addAvailableNode, removeAvailableNode, readOnly, instanceable } = this.props;
+    const { http, addAvailableNode, removeAvailableNode, readOnly, instanceable, user } = this.props;
     const { engine } = this.state;
 
     let positions = engine.getRelativeMousePoint(event);
@@ -153,7 +154,7 @@ export class Diagram extends React.Component {
       // Generate node if instance creation success
       if (httpRequest.status === 200) {
         // Generate node
-        let diagramInstance = createNode(result, addAvailableNode, readOnly, instanceable.category_name, engine);
+        let diagramInstance = createNode(result, addAvailableNode, readOnly, instanceable.category_name, engine, user);
 
         // Display node in diagram
         engine.getModel().addNode(diagramInstance);
