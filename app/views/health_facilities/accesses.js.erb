@@ -1,0 +1,8 @@
+document.getElementById("health_facility-index-content").innerHTML = "<%= escape_javascript render 'health_facilities/accesses' %>"
+
+jQuery(document).ready(function () {
+  $("#health_facility-tabs").find(".nav-link").removeClass("active")
+  $("#nav-link-accesses").addClass("active")
+});
+
+ReactRailsUJS.mountComponents();

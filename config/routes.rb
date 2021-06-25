@@ -167,6 +167,10 @@ Rails.application.routes.draw do
   get 'instanceable/:type/:id', to: 'instances#index', as: 'instanceable'
 
   resources :health_facilities, only: [:index, :show, :new, :create, :edit, :update] do
+    get 'accesses', to: 'health_facilities#accesses', as: 'access'
+    get 'devices', to: 'health_facilities#devices', as: 'device'
+    get 'medical_staff', to: 'health_facilities#medical_staff', as: 'medical_staff'
+    get 'generate_stickers_view', to: 'health_facilities#generate_stickers_view', as: 'generate_stickers_view'
     delete 'devices/:device_id/remove_device', to: 'health_facilities#remove_device', as: 'remove_device'
     post 'add_device', to: 'health_facilities#add_device', as: 'add_device'
     post 'generate_stickers', to: 'health_facilities#generate_stickers', as: 'generate_stickers'

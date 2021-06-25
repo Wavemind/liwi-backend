@@ -1,0 +1,6 @@
+document.getElementById("health_facility-index-content").innerHTML = "<%= escape_javascript render 'health_facilities/devices' %>"
+
+jQuery(document).ready(function () {
+  $("#health_facility-tabs").find(".nav-link").removeClass("active")
+  $("#nav-link-devices").addClass("active")
+});

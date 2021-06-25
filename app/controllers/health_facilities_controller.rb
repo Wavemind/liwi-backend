@@ -1,7 +1,7 @@
 class HealthFacilitiesController < ApplicationController
 
   before_action :authenticate_user!
-  before_action :set_health_facility, only: [:show, :edit, :update, :add_device, :remove_device, :generate_stickers]
+  before_action :set_health_facility, only: [:show, :edit, :update, :add_device, :remove_device, :generate_stickers, :devices, :accesses, :medical_staff, :generate_stickers_view]
   before_action :set_breadcrumb, only: [:show, :new, :edit]
   before_action :set_countries, only: [:new, :edit, :create, :update]
 
@@ -20,9 +20,6 @@ class HealthFacilitiesController < ApplicationController
 
     @device = Device.new
     @health_facility_access = HealthFacilityAccess.new
-    health_facility_access = HealthFacilityAccess.find_by(health_facility_id: params[:id], end_date: nil)
-    @current_health_facility_access = health_facility_access.as_json(include: { version: { include: { algorithm: {only: [:id, :name]} }, only: [:id, :name, :job_id], methods: :display_label}})
-    @versions = Version.includes(:algorithm).where.not(id: (health_facility_access.version_id if health_facility_access.present?), archived: true).as_json(only: [:id, :name])
     @studies = Study.all
   end
 
@@ -118,6 +115,46 @@ class HealthFacilitiesController < ApplicationController
       end
     else
       redirect_to health_facility_url(@health_facility, panel: 'generate_stickers'), alert: t('.sticker_generator.errors.missing_study_id')
+    end
+  end
+
+  # @params algorithm [Algorithm] current algorithm
+  # @return json of drugs
+  # All managements exclusions
+  def accesses
+    health_facility_access = HealthFacilityAccess.find_by(health_facility_id: params[:id], end_date: nil)
+    @current_health_facility_access = health_facility_access.as_json(include: { version: { include: { algorithm: {only: [:id, :name]} }, only: [:id, :name, :job_id], methods: :display_label}})
+    @versions = Version.includes(:algorithm).where.not(id: (health_facility_access.version_id if health_facility_access.present?), archived: true).as_json(only: [:id, :name])
+
+    respond_to do |format|
+      format.js { }
+    end
+  end
+
+  # @params algorithm [Algorithm] current algorithm
+  # @return json of drugs
+  # All managements exclusions
+  def devices
+    respond_to do |format|
+      format.js { }
+    end
+  end
+
+  # @params algorithm [Algorithm] current algorithm
+  # @return json of drugs
+  # All managements exclusions
+  def generate_stickers_view
+    respond_to do |format|
+      format.js { }
+    end
+  end
+
+  # @params algorithm [Algorithm] current algorithm
+  # @return json of drugs
+  # All managements exclusions
+  def medical_staff
+    respond_to do |format|
+      format.js { }
     end
   end
 
