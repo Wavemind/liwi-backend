@@ -21,6 +21,9 @@ class HealthFacilitiesController < ApplicationController
     @device = Device.new
     @health_facility_access = HealthFacilityAccess.new
     @studies = Study.all
+    health_facility_access = HealthFacilityAccess.find_by(health_facility_id: params[:id], end_date: nil)
+    @current_health_facility_access = health_facility_access.as_json(include: { version: { include: { algorithm: {only: [:id, :name]} }, only: [:id, :name, :job_id], methods: :display_label}})
+    @versions = Version.includes(:algorithm).where.not(id: (health_facility_access.version_id if health_facility_access.present?), archived: true).as_json(only: [:id, :name])
   end
 
   def new

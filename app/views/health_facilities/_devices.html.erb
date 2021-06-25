@@ -15,7 +15,7 @@
   </div>
 </div>
 
-<table class="table table-condensed table-hover" id="devices-datatable" data-from="health_facility" data-source="<%= devices_url(format: :json, from: 'health_facility', id: params[:id]) %>">
+<table class="table table-condensed table-hover" id="devices-datatable" data-from="health_facility" data-source="<%= devices_url(format: :json, from: 'health_facility', id: @health_facility.id) %>">
   <thead>
   <tr>
     <th><%= t('.columns.mac_address') %></th>
