@@ -458,6 +458,8 @@ sw:
       archived: "Archive"
       devices: "Devices"
       medical_staff: "Medical Staff"
+    sticker_form:
+      title: "Generate stickers"
     form:
       medical_staffs: "Medical Staff"
     sticker_generator:

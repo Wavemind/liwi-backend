@@ -63,7 +63,7 @@ class ListsComponent extends Component {
 
   handleArchive = async (object, show) => {
     const {index} = this.state;
-    if (window.confirm('Are you sure ?')) {
+    if (window.confirm(I18n.t('confirmation'))) {
       const header = this.setHeader();
       await fetch(`${show}/archive`, header).catch(error => console.log(error));
 
@@ -73,7 +73,7 @@ class ListsComponent extends Component {
 
   handleUnarchive = async (object, show) => {
     const {index} = this.state;
-    if (window.confirm('Are you sure ?')) {
+    if (window.confirm(I18n.t('confirmation'))) {
       const header = this.setHeader();
       await fetch(`${show}/unarchive`, header).catch(error => console.log(error));
 

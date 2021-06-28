@@ -461,6 +461,8 @@ rw:
       medical_staff: "Medical Staff"
     form:
       medical_staffs: "Medical Staff"
+    sticker_form:
+      title: "Generate stickers"
     sticker_generator:
       generate: "Generate"
       errors:

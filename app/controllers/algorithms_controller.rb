@@ -71,7 +71,6 @@ class AlgorithmsController < ApplicationController
   # All managements available for current algorithm
   def managements
     respond_to do |format|
-      format.html
       format.js { }
       format.json { render json: ManagementDatatable.new(params, view_context: view_context) }
     end
@@ -82,7 +81,6 @@ class AlgorithmsController < ApplicationController
   # All questions available for current algorithm
   def questions
     respond_to do |format|
-      format.html
       format.js { }
       format.json { render json: QuestionDatatable.new(params, view_context: view_context) }
     end
@@ -93,7 +91,6 @@ class AlgorithmsController < ApplicationController
   # All questions sequences available for current algorithm
   def questions_sequences
     respond_to do |format|
-      format.html
       format.js { }
       format.json { render json: QuestionsSequenceDatatable.new(params, view_context: view_context) }
     end
@@ -104,7 +101,6 @@ class AlgorithmsController < ApplicationController
   # All questions sequences scored available for current algorithm
   def questions_sequences_scored
     respond_to do |format|
-      format.html
       format.js { }
       format.json { render json: QuestionsSequenceScoredDatatable.new(params, view_context: view_context) }
     end
@@ -115,7 +111,6 @@ class AlgorithmsController < ApplicationController
   # All drugs available for current algorithm
   def drugs
     respond_to do |format|
-      format.html
       format.js { }
       format.json { render json: DrugDatatable.new(params, view_context: view_context) }
     end
@@ -126,7 +121,6 @@ class AlgorithmsController < ApplicationController
   # All drugs exclusions
   def drug_exclusions
     respond_to do |format|
-      format.html
       format.js { }
       format.json { render json: DrugExclusionDatatable.new(params, view_context: view_context) }
     end
@@ -137,7 +131,6 @@ class AlgorithmsController < ApplicationController
   # All managements exclusions
   def management_exclusions
     respond_to do |format|
-      format.html
       format.js { }
       format.json { render json: ManagementExclusionDatatable.new(params, view_context: view_context) }
     end
@@ -148,7 +141,6 @@ class AlgorithmsController < ApplicationController
   # All managements exclusions
   def villages
     respond_to do |format|
-      format.html
       format.js { }
     end
   end

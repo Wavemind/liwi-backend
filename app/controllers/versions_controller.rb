@@ -162,7 +162,6 @@ class VersionsController < ApplicationController
   def final_diagnoses_exclusions
     authorize policy_scope(Version)
     respond_to do |format|
-      format.html
       format.js { }
       format.json { render json: FinalDiagnosisExclusionDatatable.new(params, view_context: view_context) }
     end
