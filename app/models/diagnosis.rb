@@ -215,7 +215,7 @@ class Diagnosis < ApplicationRecord
   def manual_validate
     components.includes(:node, :children, :conditions).each do |instance|
       if instance.node.is_a? FinalDiagnosis
-        errors.add(:basic, I18n.t('flash_message.diagnosis.final_diagnosis_no_condition', reference: instance.node.full_reference)) unless instance.conditions.any?
+        errors.add(:basic, I18n.t('flash_message.diagnosis.final_diagnosis_no_condition', reference: instance.node.full_reference)) unless version.is_arm_control || instance.conditions.any?
       elsif instance.node.is_a?(Question) || instance.node.is_a?(QuestionsSequence)
         unless instance.children.any?
           if instance.final_diagnosis.nil?
