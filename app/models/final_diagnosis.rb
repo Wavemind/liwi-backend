@@ -25,7 +25,7 @@ class FinalDiagnosis < Node
   # @return [Json]
   # Return drugs and managements in json format
   def health_cares_json
-    diagnosis.components.drugs.where(node_id: health_cares.map(&:id), final_diagnosis_id: id).as_json(
+    diagnosis.components.drugs.includes(:answer).where(node_id: health_cares.map(&:id), final_diagnosis_id: id).as_json(
       include: [
         node: {
           include: [:formulations],
@@ -70,7 +70,7 @@ class FinalDiagnosis < Node
 
   # Return all questions for Final Diagnosis diagram as json
   def health_care_questions_json
-    (components.questions.health_care_conditions + components.questions_sequences.health_care_conditions).as_json(
+    (components.questions.health_care_conditions.includes(:node) + components.questions_sequences.health_care_conditions).as_json(
       include: [
         conditions: {
           include: [
@@ -98,9 +98,9 @@ class FinalDiagnosis < Node
   def available_nodes_health_cares_json
     ids = components.select(:node_id)
     (
-      diagnosis.version.algorithm.questions.no_triage.diagrams_included.where.not(id: ids) +
-      diagnosis.version.algorithm.questions_sequences.where.not(id: ids) +
-      diagnosis.version.algorithm.health_cares.where.not(id: ids)
+      diagnosis.version.algorithm.questions.no_triage.diagrams_included.includes([:answers, :medias]).where.not(id: ids) +
+      diagnosis.version.algorithm.questions_sequences.includes([:answers, :medias]).where.not(id: ids) +
+      diagnosis.version.algorithm.health_cares.includes([:answers, :medias]).where.not(id: ids)
     ).as_json(methods: [:category_name, :node_type, :get_answers, :type], include: :medias)
   end
 
