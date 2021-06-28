@@ -55,7 +55,7 @@ class VersionsController < ApplicationController
   # PUT algorithms/:algorithm_id/version/:id/archive
   # @params version [Version] version of algorithm to archive
   # @return redirect to versions#index with flash message
-  # Archive an algorithm version.
+  # Archive the given algorithm version.
   def archive
     @version.archived = true
 
@@ -97,15 +97,6 @@ class VersionsController < ApplicationController
   def components
     params[:nodes_ids].map do |node_id|
       @version.components.create(node_id: node_id)
-    end
-  end
-
-  # PUT algorithms/:algorithm_id/version/:id/remove_components
-  # Remove instantiated nodes from the version
-  def remove_components
-    params[:nodes_ids].map do |node_id|
-      instance = @version.components.find_by(node_id: node_id)
-      instance.destroy if instance.present?
     end
   end
 
@@ -223,6 +214,22 @@ class VersionsController < ApplicationController
 
   end
 
+  # GET algorithms/:algorithm_id/version/:id/job_status
+  # Checks the status of the ongoing background job and returns the correct status and message
+  def job_status
+    status = Sidekiq::Status::status(@version.job_id)
+    message = ""
+    if [:complete, :failed, :interrupted].include?(status)
+      @version.update(job_id: "")
+      if status == :failed
+        message = t("versions.job_status.json_generation_failed")
+      elsif status == :interrupted
+        message = t("versions.job_status.json_generation_interrupted")
+      end
+    end
+    render json: { job_status: status, message: message }
+  end
+
   # PUT algorithms/:algorithm_id/version/:id/regenerate_json
   # @params version [Version] version
   # Generate json for the version
@@ -262,6 +269,15 @@ class VersionsController < ApplicationController
     end
   end
 
+  # PUT algorithms/:algorithm_id/version/:id/remove_components
+  # Remove instantiated nodes from the version
+  def remove_components
+    params[:nodes_ids].map do |node_id|
+      instance = @version.components.find_by(node_id: node_id)
+      instance.destroy if instance.present?
+    end
+  end
+
   # Remove a condition between a triage question and a complaint category
   def remove_triage_condition
     condition = Condition.find(params[:condition_id])
@@ -298,6 +314,14 @@ class VersionsController < ApplicationController
     end
   end
 
+  def update_full_order
+    if @version.update(full_order_json: version_params[:full_order_json])
+      render json: {result: 'success'}
+    else
+      render json: {result: 'error'}
+    end
+  end
+
   # PUT algorithms/:algorithm_id/version/:id/update_list
   # @params version [Version]
   # @params new order [Hash]
@@ -307,30 +331,6 @@ class VersionsController < ApplicationController
     config = @version.medal_r_config
     config["#{params[:list]}_list_order"] = params[:order]
     @version.update(medal_r_config: config)
-  end
-
-  # GET algorithms/:algorithm_id/version/:id/job_status
-  # Checks the status of the ongoing background job and returns the correct status and message
-  def job_status
-    status = Sidekiq::Status::status(@version.job_id)
-    message = ""
-    if [:complete, :failed, :interrupted].include?(status)
-      @version.update(job_id: "")
-      if status == :failed
-        message = t("versions.job_status.json_generation_failed")
-      elsif status == :interrupted
-        message = t("versions.job_status.json_generation_interrupted")
-      end
-    end
-    render json: { job_status: status, message: message }
-  end
-
-  def update_full_order
-    if @version.update(full_order_json: version_params[:full_order_json])
-      render json: {result: 'success'}
-    else
-      render json: {result: 'error'}
-    end
   end
 
   private
