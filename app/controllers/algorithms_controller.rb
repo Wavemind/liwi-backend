@@ -1,6 +1,6 @@
 class AlgorithmsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:show, :edit, :update, :archive, :unarchive, :questions, :generate_villages, :import_villages, :managements, :questions, :questions_sequences, :questions_sequences_scored, :drugs, :drug_exclusions, :management_exclusions]
+  before_action :set_algorithm, only: [:show, :edit, :update, :archive, :unarchive, :questions, :generate_villages, :import_villages, :managements, :questions, :questions_sequences, :questions_sequences_scored, :drugs, :drug_exclusions, :management_exclusions, :villages]
 
   def index
     authorize policy_scope(Algorithm)
@@ -58,9 +58,11 @@ class AlgorithmsController < ApplicationController
     @algorithm.archived = true
 
     if @algorithm.save
-      redirect_to algorithms_url, notice: t('flash_message.success_created')
+      flash[:notice] = t('flash_message.success_archive')
+      render json: { status: 'success' }
     else
-      redirect_to algorithms_url, danger: t('flash_message.update_fail')
+      flash[:alert] = t('flash_message.update_fail')
+      render json: { status: 'failed' }
     end
   end
 
@@ -69,7 +71,7 @@ class AlgorithmsController < ApplicationController
   # All managements available for current algorithm
   def managements
     respond_to do |format|
-      format.html
+      format.js { }
       format.json { render json: ManagementDatatable.new(params, view_context: view_context) }
     end
   end
@@ -79,7 +81,7 @@ class AlgorithmsController < ApplicationController
   # All questions available for current algorithm
   def questions
     respond_to do |format|
-      format.html
+      format.js { }
       format.json { render json: QuestionDatatable.new(params, view_context: view_context) }
     end
   end
@@ -89,7 +91,7 @@ class AlgorithmsController < ApplicationController
   # All questions sequences available for current algorithm
   def questions_sequences
     respond_to do |format|
-      format.html
+      format.js { }
       format.json { render json: QuestionsSequenceDatatable.new(params, view_context: view_context) }
     end
   end
@@ -99,7 +101,7 @@ class AlgorithmsController < ApplicationController
   # All questions sequences scored available for current algorithm
   def questions_sequences_scored
     respond_to do |format|
-      format.html
+      format.js { }
       format.json { render json: QuestionsSequenceScoredDatatable.new(params, view_context: view_context) }
     end
   end
@@ -109,7 +111,7 @@ class AlgorithmsController < ApplicationController
   # All drugs available for current algorithm
   def drugs
     respond_to do |format|
-      format.html
+      format.js { }
       format.json { render json: DrugDatatable.new(params, view_context: view_context) }
     end
   end
@@ -119,7 +121,7 @@ class AlgorithmsController < ApplicationController
   # All drugs exclusions
   def drug_exclusions
     respond_to do |format|
-      format.html
+      format.js { }
       format.json { render json: DrugExclusionDatatable.new(params, view_context: view_context) }
     end
   end
@@ -129,8 +131,17 @@ class AlgorithmsController < ApplicationController
   # All managements exclusions
   def management_exclusions
     respond_to do |format|
-      format.html
+      format.js { }
       format.json { render json: ManagementExclusionDatatable.new(params, view_context: view_context) }
+    end
+  end
+
+  # @params algorithm [Algorithm] current algorithm
+  # @return json of drugs
+  # All managements exclusions
+  def villages
+    respond_to do |format|
+      format.js { }
     end
   end
 
@@ -142,9 +153,11 @@ class AlgorithmsController < ApplicationController
     @algorithm.archived = false
 
     if @algorithm.save
-      redirect_to algorithms_url, notice: t('flash_message.success_created')
+      flash[:notice] = t('flash_message.success_unarchive')
+      render json: { status: 'success' }
     else
-      redirect_to algorithms_url, danger: t('flash_message.update_fail')
+      flash[:alert] = t('flash_message.update_fail')
+      render json: { status: 'failed' }
     end
   end
 

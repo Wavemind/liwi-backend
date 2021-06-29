@@ -1,0 +1,8 @@
+document.getElementById("version-index-content").innerHTML = "<%= escape_javascript render 'versions/full_order' %>"
+
+jQuery(document).ready(function () {
+  $("#version-tabs").find(".nav-link").removeClass("active")
+  $("#nav-link-full_order").addClass("active")
+});
+
+ReactRailsUJS.mountComponents();

@@ -1,0 +1,8 @@
+document.getElementById("version-index-content").innerHTML = "<%= escape_javascript render 'versions/registration_triage_questions' %>"
+
+jQuery(document).ready(function () {
+  $("#version-tabs").find(".nav-link").removeClass("active")
+  $("#nav-link-registration_triage_questions").addClass("active")
+});
+
+ReactRailsUJS.mountComponents();

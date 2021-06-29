@@ -1,3 +1,9 @@
+<h3><%= t('algorithms.show.subtitle_drugs') %></h3>
+
+<%= link_to new_algorithm_drug_url(@algorithm) do %>
+  <button type="button" class="btn btn-outline-primary"><%= t('add') %></button>
+<% end %>
+
 <table class="table table-condensed table-hover" id="drugs-datatable" data-source="<%= drug_algorithm_url(@algorithm, format: :json) %>">
   <thead>
     <tr>

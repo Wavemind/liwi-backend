@@ -12,87 +12,32 @@
 
 <p class="display-spaces"><%= @version.description %></p>
 
-<ul class="nav nav-tabs" id="myTab" role="tablist">
+<ul class="nav nav-tabs" id="version-tabs" role="tablist">
   <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:panel].blank? || params[:panel] == 'diagnoses' %>" id="diagnoses-tab" data-toggle="tab" href="#diagnoses" role="tab" aria-controls="diagnoses" aria-selected="false"><%= t('.subtitle_diagnoses') %></a>
+    <%= link_to  t('.subtitle_diagnoses'), algorithm_version_diagnoses_url(@version.algorithm, @version), id: 'nav-link-diagnoses', class: "nav-link active", remote: true %>
   </li>
   <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'final_diagnoses' %>" id="final_diagnoses-tab" data-toggle="tab" href="#final_diagnoses" role="tab" aria-controls="final_diagnoses" aria-selected="false"><%= t('.subtitle_final_diagnoses') %></a>
+    <%= link_to  t('.subtitle_final_diagnoses'), final_diagnosis_algorithm_version_url(@version.algorithm, @version), id: 'nav-link-final_diagnoses', class: "nav-link", remote: true %>
   </li>
   <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'final_diagnoses_exclusions' %>" id="registration_triage_questions-tab" data-toggle="tab" href="#final_diagnoses_exclusions" role="tab" aria-controls="final_diagnoses_exclusions" aria-selected="false"><%= t('.subtitle_final_diagnoses_exclusions') %> </a>
+    <%= link_to  t('.subtitle_final_diagnoses_exclusions'), final_diagnoses_exclusions_algorithm_version_url(@version.algorithm, @version), id: 'nav-link-final_diagnosis_exclusions', class: "nav-link", remote: true %>
   </li>
-  <% if policy(@version).new? %>
-    <li class="nav-item">
-      <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'registration_triage_questions' %>" id="registration_triage_questions-tab" data-toggle="tab" href="#registration_triage_questions" role="tab" aria-controls="registration_triage_questions" aria-selected="false"><%= t('.subtitle_registration_triage_questions') %> </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'full_order' %>" id="full_order-tab" data-toggle="tab" href="#full_order" role="tab" aria-controls="full_order" aria-selected="false"><%= t('.subtitle_full_order') %> </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'medal_data_config' %>" id="medal_data_config-tab" data-toggle="tab" href="#medal_data_config" role="tab" aria-controls="medal_data_config" aria-selected="false"><%= t('.subtitle_medal_data_config_html') %> </a>
-    </li>
-  <% end %>
   <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:panel].present? && params[:panel] == 'translations' %>" id="translations-tab" data-toggle="tab" href="#translations" role="tab" aria-controls="translations" aria-selected="false"><%= t('.subtitle_translations') %> </a>
+    <%= link_to  t('.subtitle_registration_triage_questions'), registration_triage_questions_algorithm_version_url(@version.algorithm, @version), id: 'nav-link-registration_triage_questions', class: "nav-link", remote: true %>
+  </li>
+  <li class="nav-item">
+    <%= link_to  t('.subtitle_full_order'), full_order_algorithm_version_url(@version.algorithm, @version), id: 'nav-link-full_order', class: "nav-link", remote: true %>
+  </li>
+  <li class="nav-item">
+    <%= link_to  t('.subtitle_medal_data_config_html'), medal_data_config_algorithm_version_url(@version.algorithm, @version), id: 'nav-link-medal_data_config', class: "nav-link", remote: true %>
+  </li>
+  <li class="nav-item">
+    <%= link_to  t('.subtitle_translations'), translations_algorithm_version_url(@version.algorithm, @version), id: 'nav-link-translations', class: "nav-link", remote: true %>
   </li>
 </ul>
 
 <div class="tab-content mt-4 ml-4" id="version-table">
-  <div class="tab-pane fade <%= 'show active' if params[:panel].blank? || params[:panel] == 'diagnoses' %>" id="diagnoses" role="tabpanel" aria-labelledby="diagnoses-tab">
-    <h2><%= t('.subtitle_diagnoses') %></h2>
-    <%= link_to new_algorithm_version_diagnosis_url(@algorithm, @version) do %>
-      <button type="button" class="btn btn-outline-primary"><%= t('add') %></button>
-    <% end %>
-
+  <div id="version-index-content">
     <%= render 'diagnoses/table' %>
-  </div>
-
-  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'final_diagnoses' %>" id="final_diagnoses" role="tabpanel" aria-labelledby="questions-tab">
-    <h3><%= t('.subtitle_final_diagnoses') %></h3>
-
-    <%= render 'final_diagnoses/table_for_version' %>
-  </div>
-
-  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'final_diagnoses_exclusions' %>" id="final_diagnoses_exclusions" role="tabpanel" aria-labelledby="final_diagnoses_exclusions-tab">
-
-    <h2><%= t('.subtitle_final_diagnoses_exclusions') %></h2>
-
-    <%= simple_form_for NodeExclusion.new, url: add_exclusion_algorithm_version_final_diagnoses_url(@version.algorithm, @version, format: :html), method: :post do |f| %>
-      <div class="row">
-        <div class="col">
-          <%= f.input :excluding_node_id, collection: FinalDiagnosis.where(diagnosis_id: @version.diagnoses.map(&:id)).order('hstore("label_translations")'), value_method: :id, label_method: :reference_label_dropdown_list, label: false, prompt: t('prompt') %>
-        </div>
-        <div class="col text-center">
-          <%= t('.excludes') %>
-        </div>
-        <div class="col">
-          <%= f.input :excluded_node_id, collection: FinalDiagnosis.where(diagnosis_id: @version.diagnoses.map(&:id)).order('hstore("label_translations")'), value_method: :id, label_method: :reference_label_dropdown_list, label: false, prompt: t('prompt') %>
-        </div>
-        <div class="col text-right">
-          <%= f.submit t('add'), class: 'btn btn-primary' %>
-        </div>
-      </div>
-    <% end %>
-
-    <%= render 'final_diagnosis_exclusion/table' %>
-  </div>
-
-  <% if policy(@version).new? %>
-    <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'registration_triage_questions' %>" id="registration_triage_questions" data-url=<%= change_triage_order_algorithm_version_url(@algorithm, @version) %> role="tabpanel" aria-labelledby="registration_triage_questions-tab">
-      <%= render 'registration_triage_questions' %>
-    </div>
-
-    <div class="tab-pane fade ordering-tab <%= 'show active' if params[:panel].present? && params[:panel] == 'full_order' %>" id="full_order" data-url=<%= change_systems_order_algorithm_version_url(@algorithm, @version) %> role="tabpanel" aria-labelledby="full_order-tab">
-      <%= render 'full_order' %>
-    </div>
-
-    <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'medal_data_config' %>" id="medal_data_config" data-url=<%= change_triage_order_algorithm_version_url(@algorithm, @version) %> role="tabpanel" aria-labelledby="medal_data_config-tab">
-      <%= render 'medal_data_config' %>
-    </div>
-  <% end %>
-
-  <div class="tab-pane fade <%= 'show active' if params[:panel].present? && params[:panel] == 'translations' %>" id="translations" role="tabpanel" aria-labelledby="translations-tab">
-    <%= render 'translations' %>
   </div>
 </div>

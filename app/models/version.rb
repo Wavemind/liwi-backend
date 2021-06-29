@@ -3,7 +3,6 @@ class Version < ApplicationRecord
 
   attr_accessor :triage_id
   attr_accessor :cc_id
-  attr_accessor :duplicating
 
   belongs_to :algorithm
   belongs_to :user
@@ -46,6 +45,21 @@ class Version < ApplicationRecord
   # Return a displayable string for this version
   def display_label
     "#{algorithm.name} - #{name}"
+  end
+
+  # Duplicate the version
+  def duplicate
+    ActiveRecord::Base.transaction(requires_new: true) do
+      diagnoses.each { |diagnosis| diagnosis.update(duplicating: true) }
+      duplicated_version = self.amoeba_dup
+
+      if duplicated_version.save
+        duplicated_version.diagnoses.each_with_index { |diagnosis, index| diagnosis.relink_instance }
+        diagnoses.each { |diagnosis| diagnosis.update(duplicating: false) }
+      else
+        raise ActiveRecord::Rollback, ''
+      end
+    end
   end
 
   # Return an array of all questions that can be instantiate in a version
@@ -193,6 +207,10 @@ class Version < ApplicationRecord
       tree.push(hash)
     end
     tree.to_json
+  end
+
+  def display_archive_status
+    archived ? '<span class="badge badge-danger">archived</span>' : ''
   end
 
   # Init orders for new version

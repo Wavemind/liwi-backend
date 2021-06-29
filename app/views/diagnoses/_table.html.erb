@@ -1,13 +1,23 @@
-<table class="table table-condensed table-hover" id="diagnoses-datatable" data-source="<%= algorithm_version_diagnoses_url(@algorithm, @version, format: :json) %>">
-  <thead>
-    <tr>
-      <th><%= t('.columns.reference') %></th>
-      <th><%= t('.columns.label') %></th>
-      <th><%= t('.columns.complaint_category') %></th>
-      <th><%= t('.columns.last_update') %></th>
-      <th><%= t('.columns.actions') %></th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-</table>
+<h2><%= t('versions.show.subtitle_diagnoses') %></h2>
+<%= link_to new_algorithm_version_diagnosis_url(@algorithm, @version) do %>
+  <button type="button" class="btn btn-outline-primary"><%= t('add') %></button>
+<% end %>
 
+<%= react_component('lists/index',
+  {
+    list: @version.diagnoses.includes(:node).as_json(include: {node: {methods: :reference_label}}),
+    title: 'label_translations.en',
+    description: 'node.reference_label',
+    metadata: [
+
+    ],
+    show: algorithm_version_diagnosis_url(@algorithm.id, @version.id, 0),
+    actions: {
+      diagram: true,
+      edit: true,
+      duplicate: true,
+      archive: false,
+      delete: true
+    }
+  })
+%>

@@ -1,3 +1,22 @@
+<h2><%= t('versions.show.subtitle_final_diagnoses_exclusions') %></h2>
+
+<%= simple_form_for NodeExclusion.new, url: add_exclusion_algorithm_version_final_diagnoses_url(@version.algorithm, @version, format: :html), method: :post do |f| %>
+  <div class="row">
+    <div class="col">
+      <%= f.input :excluding_node_id, collection: FinalDiagnosis.where(diagnosis_id: @version.diagnoses.map(&:id)).order('hstore("label_translations")'), value_method: :id, label_method: :reference_label_dropdown_list, label: false, prompt: t('prompt') %>
+    </div>
+    <div class="col text-center">
+      <%= t('.excludes') %>
+    </div>
+    <div class="col">
+      <%= f.input :excluded_node_id, collection: FinalDiagnosis.where(diagnosis_id: @version.diagnoses.map(&:id)).order('hstore("label_translations")'), value_method: :id, label_method: :reference_label_dropdown_list, label: false, prompt: t('prompt') %>
+    </div>
+    <div class="col text-right">
+      <%= f.submit t('add'), class: 'btn btn-primary' %>
+    </div>
+  </div>
+<% end %>
+
 <table class="table table-condensed table-hover" id="final_diagnosis_exclusion-datatable" data-source="<%= final_diagnoses_exclusions_algorithm_version_url(@algorithm, @version, format: :json) %>">
   <thead>
     <tr>
