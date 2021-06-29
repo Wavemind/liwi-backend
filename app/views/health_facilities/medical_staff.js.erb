@@ -1,0 +1,21 @@
+document.getElementById("health_facility-index-content").innerHTML = "<%= escape_javascript render 'medical_staffs/table' %>"
+
+jQuery(document).ready(function () {
+  $("#health_facility-tabs").find(".nav-link").removeClass("active")
+  $("#nav-link-medical_staff").addClass("active")
+
+  $("#medical_staffs-datatable").dataTable({
+    "processing": true,
+    "info": false,
+    "bLengthChange": false,
+    "serverSide": true,
+    "pageLength": 10,
+    "ajax": $("#medical_staffs-datatable").data("source"),
+    "pagingType": "full_numbers",
+    "columns": [
+      {"data": "first_name"},
+      {"data": "last_name"},
+      {"data": "role"},
+    ]
+  });
+});

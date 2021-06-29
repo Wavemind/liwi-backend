@@ -29,6 +29,7 @@ Rails.application.routes.draw do
       get 'managements', to: 'algorithms#managements', as: 'management'
       get 'questions_sequences', to: 'algorithms#questions_sequences', as: 'questions_sequence'
       get 'questions_sequences_scored', to: 'algorithms#questions_sequences_scored', as: 'questions_sequence_scored'
+      get 'villages', to: 'algorithms#villages', as: 'villages'
       put 'import_villages'
     end
 
@@ -38,6 +39,10 @@ Rails.application.routes.draw do
         get 'generate_translations'
         get 'generate_variables'
         get 'final_diagnoses', to: 'versions#final_diagnoses', as: 'final_diagnosis'
+        get 'registration_triage_questions', to: 'versions#registration_triage_questions', as: 'registration_triage_questions'
+        get 'full_order', to: 'versions#full_order', as: 'full_order'
+        get 'medal_data_config', to: 'versions#medal_data_config', as: 'medal_data_config'
+        get 'translations', to: 'versions#translations', as: 'translations'
         get 'job_status'
         put 'archive', to: 'versions#archive', as: 'archive'
         put 'unarchive', to: 'versions#unarchive', as: 'unarchive'
@@ -53,6 +58,10 @@ Rails.application.routes.draw do
         put 'import_translations'
         put 'set_medal_data_config'
         put 'update_full_order'
+      end
+
+      collection do
+        get 'list'
       end
 
       resources :final_diagnoses do
@@ -158,6 +167,10 @@ Rails.application.routes.draw do
   get 'instanceable/:type/:id', to: 'instances#index', as: 'instanceable'
 
   resources :health_facilities, only: [:index, :show, :new, :create, :edit, :update] do
+    get 'accesses', to: 'health_facilities#accesses', as: 'access'
+    get 'devices', to: 'health_facilities#devices', as: 'device'
+    get 'medical_staff', to: 'health_facilities#medical_staff', as: 'medical_staff'
+    get 'generate_stickers_view', to: 'health_facilities#generate_stickers_view', as: 'generate_stickers_view'
     delete 'devices/:device_id/remove_device', to: 'health_facilities#remove_device', as: 'remove_device'
     post 'add_device', to: 'health_facilities#add_device', as: 'add_device'
     post 'generate_stickers', to: 'health_facilities#generate_stickers', as: 'generate_stickers'

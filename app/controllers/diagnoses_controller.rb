@@ -10,6 +10,7 @@ class DiagnosesController < ApplicationController
     authorize policy_scope(Diagnosis)
     respond_to do |format|
       format.html
+      format.js { }
       format.json {render json: DiagnosisDatatable.new(params, view_context: view_context)}
     end
   end
@@ -60,11 +61,13 @@ class DiagnosesController < ApplicationController
 
   def destroy
     authorize policy_scope(Diagnosis)
-    diagnosis = Diagnosis.includes(components: [:node, :conditions, children: [:node]]).find(params[:id])
+    diagnosis = Diagnosis.includes(components: [:conditions, children: [:node]]).find(params[:id])
     if diagnosis.controlled_destroy
-      redirect_to algorithm_version_url(@algorithm, @version), notice: t('flash_message.success_deleted')
+      flash[:notice] = t('flash_message.success_deleted')
+      render json: { status: 'success' }
     else
-      render :new
+      flash[:error] = t('flash_message.delete_fail')
+      render json: { status: 'failed' }
     end
   end
 
@@ -89,9 +92,11 @@ class DiagnosesController < ApplicationController
     if duplicated_diagnosis.save
       duplicated_diagnosis.relink_instance
       diagnosis.update(duplicating: false)
-      redirect_to algorithm_version_url(@algorithm, @version), notice: t('flash_message.success_duplicated')
+      flash[:notice] = t('flash_message.success_duplicated')
+      render json: { status: 'success' }
     else
-      redirect_to algorithm_version_url(@algorithm, @version), alert: t('flash_message.duplicate_fail')
+      flash[:alert] = t('flash_message.duplicate_fail')
+      render json: { status: 'failed' }
     end
   end
 

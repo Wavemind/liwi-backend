@@ -1,13 +1,14 @@
 class VersionsController < ApplicationController
   before_action :authenticate_user!, except: [:change_triage_order, :change_systems_order]
-  before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :duplicate, :create_triage_condition, :set_medal_data_config, :remove_triage_condition, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnoses, :import_translations, :job_status, :update_full_order]
+  before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :duplicate, :create_triage_condition, :set_medal_data_config, :remove_triage_condition, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnoses, :import_translations, :job_status, :update_full_order, :list]
   before_action :set_breadcrumb, only: [:show, :new, :edit]
-  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :change_triage_order, :change_systems_order, :components, :create_triage_condition, :set_medal_data_config, :duplicate, :remove_components, :remove_triage_condition, :update_list, :regenerate_json, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnoses, :import_translations, :job_status, :update_full_order]
+  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :change_triage_order, :change_systems_order, :components, :create_triage_condition, :set_medal_data_config, :duplicate, :remove_components, :remove_triage_condition, :update_list, :regenerate_json, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnoses, :import_translations, :job_status, :update_full_order, :registration_triage_questions, :medal_data_config, :full_order, :translations]
 
   def index
     authorize policy_scope(Version)
     respond_to do |format|
       format.html
+      format.js { }
       format.json { render json: VersionDatatable.new(params, view_context: view_context) }
     end
   end
@@ -60,9 +61,11 @@ class VersionsController < ApplicationController
     @version.archived = true
 
     if @version.save
-      redirect_to algorithm_url(@algorithm, panel: 'versions'), notice: t('flash_message.success_created')
+      flash[:notice] = t('flash_message.success_archive')
+      render json: { status: 'success' }
     else
-      redirect_to algorithm_url(@algorithm, panel: 'versions'), alert: t('flash_message.update_fail')
+      flash[:alert] = t('flash_message.update_fail')
+      render json: { status: 'failed' }
     end
   end
 
@@ -127,19 +130,9 @@ class VersionsController < ApplicationController
   # @params [Version] version to duplicate
   # Duplicate a version with every diagnoses and their logics (Instances with their Conditions and Children), the FinalDiagnoses and Conditions attached to it
   def duplicate
-    ActiveRecord::Base.transaction(requires_new: true) do
-      @version.diagnoses.each { |diagnosis| diagnosis.update(duplicating: true) }
-      duplicated_version = @version.amoeba_dup
-
-      if duplicated_version.save
-        duplicated_version.diagnoses.each_with_index { |diagnosis, index| diagnosis.relink_instance }
-        @version.diagnoses.each { |diagnosis| diagnosis.update(duplicating: false) }
-        redirect_to algorithm_url(@algorithm), notice: t('flash_message.success_duplicated')
-      else
-        redirect_to algorithm_url(@algorithm, panel: 'versions'), alert: t('flash_message.duplicate_fail')
-        raise ActiveRecord::Rollback, ''
-      end
-    end
+    job_id = DuplicateVersionJob.perform_later(@version.id)
+    @version.update(job_id: job_id.provider_job_id)
+    render json: { success: true, job_id: job_id }
   end
 
   # GET algorithms/:algorithm_id/version/:id/final_diagnoses
@@ -149,6 +142,7 @@ class VersionsController < ApplicationController
     authorize policy_scope(Version)
     respond_to do |format|
       format.html
+      format.js { }
       format.json { render json: VersionFinalDiagnosisDatatable.new(params, view_context: view_context) }
     end
   end
@@ -159,8 +153,44 @@ class VersionsController < ApplicationController
   def final_diagnoses_exclusions
     authorize policy_scope(Version)
     respond_to do |format|
-      format.html
+      format.js { }
       format.json { render json: FinalDiagnosisExclusionDatatable.new(params, view_context: view_context) }
+    end
+  end
+
+  # @params algorithm [Algorithm] current algorithm
+  # @return json of drugs
+  # All managements exclusions
+  def registration_triage_questions
+    respond_to do |format|
+      format.js { }
+    end
+  end
+
+  # @params algorithm [Algorithm] current algorithm
+  # @return json of drugs
+  # All managements exclusions
+  def medal_data_config
+    respond_to do |format|
+      format.js { }
+    end
+  end
+
+  # @params algorithm [Algorithm] current algorithm
+  # @return json of drugs
+  # All managements exclusions
+  def full_order
+    respond_to do |format|
+      format.js { }
+    end
+  end
+
+  # @params algorithm [Algorithm] current algorithm
+  # @return json of drugs
+  # All managements exclusions
+  def translations
+    respond_to do |format|
+      format.js { }
     end
   end
 
@@ -218,16 +248,18 @@ class VersionsController < ApplicationController
   # Checks the status of the ongoing background job and returns the correct status and message
   def job_status
     status = Sidekiq::Status::status(@version.job_id)
-    message = ""
     if [:complete, :failed, :interrupted].include?(status)
       @version.update(job_id: "")
-      if status == :failed
-        message = t("versions.job_status.json_generation_failed")
-      elsif status == :interrupted
-        message = t("versions.job_status.json_generation_interrupted")
-      end
     end
-    render json: { job_status: status, message: message }
+    render json: { job_status: status }
+  end
+
+  # GET algorithms/:algorithm_id/versions/list
+  # @params algorithm_id [Integer]
+  # Generate versions list json
+  def list
+    authorize policy_scope(Version)
+    render json: @algorithm.versions.as_json(methods: :display_archive_status)
   end
 
   # PUT algorithms/:algorithm_id/version/:id/regenerate_json
@@ -308,9 +340,11 @@ class VersionsController < ApplicationController
     @version.archived = false
 
     if @version.save
-      redirect_to algorithm_url(@algorithm, panel: 'versions'), notice: t('flash_message.success_created')
+      flash[:notice] = t('flash_message.success_unarchive')
+      render json: { status: 'success' }
     else
-      redirect_to algorithm_url(@algorithm, panel: 'versions'), danger: t('flash_message.update_fail')
+      flash[:alert] = t('flash_message.update_fail')
+      render json: { status: 'failed' }
     end
   end
 

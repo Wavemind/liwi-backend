@@ -179,7 +179,7 @@ class Diagnosis < ApplicationRecord
   # TODO: ADD MEDIA
   def available_nodes_json
     # Exclude triage questions if they have a condition on a CC which is not defined in this diagnosis
-    excluded_ids = version.components.select { |i| i.conditions.any? && i.conditions.map(&:answer).map(&:node).flatten.exclude?(node) }.map(&:node_id)
+    excluded_ids = version.components.includes(:conditions).select { |i| i.conditions.any? && i.conditions.map(&:answer).map(&:node).flatten.exclude?(node) }.map(&:node_id)
     # Exclude the questions that are already used in the diagnosis diagram (it still takes the questions used in the final diagnosis diagram, since it can be used in both diagram)
     excluded_ids += components.not_health_care_conditions.map(&:node_id)
     (
@@ -215,7 +215,7 @@ class Diagnosis < ApplicationRecord
   def manual_validate
     components.includes(:node, :children, :conditions).each do |instance|
       if instance.node.is_a? FinalDiagnosis
-        errors.add(:basic, I18n.t('flash_message.diagnosis.final_diagnosis_no_condition', reference: instance.node.full_reference)) unless instance.conditions.any?
+        errors.add(:basic, I18n.t('flash_message.diagnosis.final_diagnosis_no_condition', reference: instance.node.full_reference)) unless version.is_arm_control || instance.conditions.any?
       elsif instance.node.is_a?(Question) || instance.node.is_a?(QuestionsSequence)
         unless instance.children.any?
           if instance.final_diagnosis.nil?

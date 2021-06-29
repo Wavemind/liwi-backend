@@ -53,9 +53,14 @@ class AccessesComponent extends Component {
 
     if (['complete', 'failed', 'interrupted'].includes(data.job_status)) {
       clearInterval(this.timer);
+
+      let message = "";
+      if (['failed', 'interrupted'].includes(data.job_status)) {
+        message = I18n.t(`versions.job_status.json_generation_${data.job_status}`)
+      }
       this.setState({
         generating: false,
-        message: data.message
+        message: message
       })
     }
   }

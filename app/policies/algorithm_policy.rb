@@ -65,6 +65,10 @@ class AlgorithmPolicy < ApplicationPolicy
     show?
   end
 
+  def villages?
+    show?
+  end
+
   def import_villages?
     show?
   end

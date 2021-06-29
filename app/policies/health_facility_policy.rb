@@ -48,4 +48,20 @@ class HealthFacilityPolicy < ApplicationPolicy
   def generate_stickers?
     has_study_access? && new?
   end
+
+  def accesses?
+    show?
+  end
+
+  def devices?
+    show?
+  end
+
+  def generate_stickers_view?
+    show?
+  end
+
+  def medical_staff?
+    show?
+  end
 end
