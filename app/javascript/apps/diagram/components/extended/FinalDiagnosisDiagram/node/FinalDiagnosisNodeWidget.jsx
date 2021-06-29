@@ -40,7 +40,8 @@ class FinalDiagnosisNodeWidget extends React.Component {
   }
 
   render() {
-    const { getReferencePrefix, node, engine, readOnly } = this.props;
+    const { getReferencePrefix, node, engine, readOnly, user } = this.props;
+    const label = user.role === "admin" ? `${node.options.dbInstance.node.id} : ${getLabel(node.options.dbInstance.node)}` : getLabel(node.options.dbInstance.node);
 
     return (
       <div className="node">
@@ -68,7 +69,7 @@ class FinalDiagnosisNodeWidget extends React.Component {
         <div>
           <div className="py-2 node-label">
             <div className="col text-center">
-              {getLabel(node.options.dbInstance.node)}
+              {label}
             </div>
           </div>
           <div className="port inExcluded">

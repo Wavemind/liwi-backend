@@ -34,7 +34,8 @@ class QuestionNodeWidget extends React.Component {
   }
 
   render() {
-    const { getReferencePrefix, node, engine, readOnly } = this.props;
+    const { getReferencePrefix, node, engine, readOnly, user } = this.props;
+    const label = user.role === "admin" ? `${node.options.dbInstance.node.id} : ${getLabel(node.options.dbInstance.node)}` : getLabel(node.options.dbInstance.node);
     return (
       <div className={`node ${node.options.dbInstance.node.is_neonat ? 'is_neonat' : null}`}>
         <div className="port py-2 node-category">
@@ -62,7 +63,7 @@ class QuestionNodeWidget extends React.Component {
         <div>
           <div className="py-2 node-label">
             <div className="col text-center">
-              {getLabel(node.options.dbInstance.node)}
+              {label}
             </div>
           </div>
           <div className="node-answers">
