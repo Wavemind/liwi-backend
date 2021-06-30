@@ -188,9 +188,9 @@ class AlgorithmsController < ApplicationController
     end
   end
 
-  # @params algorithm [Algorithm] current algorithm
-  # @return json of drugs
-  # All managements exclusions
+  # GET algorithms/:id/questions_sequence_scored
+  # @params algorithm [Algorithm] algorithm
+  # Display villages view
   def villages
     respond_to do |format|
       format.js { }

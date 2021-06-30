@@ -71,7 +71,8 @@ class DiagnosesController < ApplicationController
     end
   end
 
-  # Generate react diagram
+  # GET algorithms/:algorithm_id/versions/:version_id/diagnoses/:id/diagram
+  # Render the diagram view
   def diagram
     authorize policy_scope(Diagnosis)
     add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
@@ -81,6 +82,7 @@ class DiagnosesController < ApplicationController
     add_breadcrumb t('breadcrumbs.diagnoses')
   end
 
+  # GET algorithms/:algorithm_id/versions/:version_id/diagnoses/:id/duplicate
   # @params [Diagnosis] diagnosis to duplicate
   # Duplicate a diagnosis with the whole logic (Instances with their Conditions and Children), the FinalDiagnoses and Conditions attached to it
   def duplicate
@@ -100,7 +102,8 @@ class DiagnosesController < ApplicationController
     end
   end
 
-  # @params [Diagnosis]
+  # GET algorithms/:algorithm_id/versions/:version_id/diagnoses/:id/validate
+  # @params [Diagnosis] diagnosis to validate
   # Manually validate a diagnosis and return flash messages to display in the view
   def validate
     @diagnosis.manual_validate

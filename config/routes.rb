@@ -126,7 +126,6 @@ Rails.application.routes.draw do
   resources :questions_sequences, only: [] do
     resources :instances, only: [:destroy, :create] do
       collection do
-        get 'by_reference'
         put 'update_score'
       end
       member do
@@ -151,7 +150,6 @@ Rails.application.routes.draw do
   resources :diagnoses, only: [] do
     resources :instances, only: [:show, :destroy, :create] do
       collection do
-        get 'by_reference'
         get 'load_conditions'
       end
       member do

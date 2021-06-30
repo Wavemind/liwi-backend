@@ -1,6 +1,8 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
 
+  # GET answers/operators
+  # Return array of operators for react to create dropdown list
   def operators
     authorize policy_scope(Answer)
     render json: Answer.operators.map { |k, v| [I18n.t("answers.operators.#{k}"), k] }

@@ -1,7 +1,7 @@
 class InstancesController < ApplicationController
 
   before_action :authenticate_user!
-  before_action :set_instanceable, only: [:show, :create, :destroy, :by_reference, :create_link, :remove_link]
+  before_action :set_instanceable, only: [:show, :create, :destroy, :create_link, :remove_link]
   before_action :set_instance, only: [:show, :destroy, :update, :create_link, :remove_link]
 
   def index
@@ -51,6 +51,14 @@ class InstancesController < ApplicationController
     end
   end
 
+  def update
+    if @instance.update(instance_params)
+      render json: @instance.generate_json
+    else
+      render json: @instance.errors.full_messages, status: 422
+    end
+  end
+
   def destroy
     if instance_params[:final_diagnosis_id].present?
       FinalDiagnosisHealthCare.find_by(final_diagnosis_id: instance_params[:final_diagnosis_id], node_id: @instance.node_id).destroy if @instance.node.is_a?(HealthCare)
@@ -63,19 +71,10 @@ class InstancesController < ApplicationController
     end
   end
 
-  # @params [String] reference
-  # Find an instance by its node reference
-  def by_reference
-    authorize policy_scope(Instance)
-    if params[:diagnosis_id].present?
-      @node = @instanceable.version.algorithm.nodes.find_by(reference: params[:reference]);
-    else
-      @node = @instanceable.algorithm.nodes.find_by(reference: params[:reference]);
-    end
-    render json: polymorphic_url([@instanceable, @instanceable.components.find_by(node: @node)])
-  end
-
-  # @params [Diagnosis] Current diagnosis, [Answer] Answer from parent of the link, [Node] child of the link
+  # POST /instanceable_type/:instanceable_id/instances/:id/create_link
+  # @params [Instance] Instance of the child
+  # @params [Answer] Answer from parent of the link
+  # @params [Integer] Score to add to the condition
   # Create link in both way from diagram
   def create_link
     condition = @instance.conditions.new(answer_id: instance_params[:answer_id], score: instance_params[:score])
@@ -86,28 +85,19 @@ class InstancesController < ApplicationController
     end
   end
 
+  # DELETE /instanceable_type/:instanceable_id/instances/:id/create_link
   # Remove a link from diagram and remove from both child and parent concerned
   # @params [Instance] Parent of the link
-  # @params [Condition] condition of the answer
+  # @params [Condition] condition to be removed
   def remove_link
     condition = Condition.find(instance_params[:condition_id])
     Instance.remove_condition(condition, @instance)
     render json: condition
   end
 
-  # POST /diagnoses/:diagnosis_id/instances/update_from_diagram
-  # @return JSON of instance
-  # Update an instances and return json format
-  def update
-    if @instance.update(instance_params)
-      render json: @instance.generate_json
-    else
-      render json: @instance.errors.full_messages, status: 422
-    end
-  end
-
-  # @params [Diagnosis] Current diagnosis, [Answer] Answer from parent of the link, [Node] child of the link
-  # Update the score of a condition in a PSS
+  # PUT /questions_sequences/:questions_sequence_id/instances/update_score
+  # @params [Condition] Condition to update
+  # Update the score of a condition in a QSS
   def update_score
     authorize policy_scope(Instance)
     condition = Condition.find(instance_params[:condition_id])
