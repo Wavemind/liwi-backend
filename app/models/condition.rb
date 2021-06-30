@@ -20,9 +20,9 @@ class Condition < ApplicationRecord
   end
 
   # @return [String]
-  # Return the id displayed for the view
-  def display_condition
-    answer.display_condition
+  # Return a formatted String with the id and type of polymorphic instance
+  def conditionable_hash
+    "#{self.id},#{self.class.name}"
   end
 
   # Create children from conditions automatically
@@ -31,16 +31,16 @@ class Condition < ApplicationRecord
     parent.children.create!(node: instance.node) unless parent.nil? || parent.children.where(node: instance.node).any?
   end
 
+  # @return [String]
+  # Return the id displayed for the view
+  def display_condition
+    answer.display_condition
+  end
+
   # Used for rendering json to react. Unavailable if first / second conditionable type is a condition
   # @return nil
   def get_node
     nil
-  end
-
-  # @return [String]
-  # Return a formatted String with the id and type of polymorphic instance
-  def conditionable_hash
-    "#{self.id},#{self.class.name}"
   end
 
   # @param [Object] child

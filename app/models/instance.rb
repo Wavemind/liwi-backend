@@ -42,26 +42,11 @@ class Instance < ApplicationRecord
     include_association :children
   end
 
-  # Delete properly conditions from children in the current diagnosis or predefined syndrome.
-  def remove_condition_from_children
-    children.each do |child|
-      instance = child.node.instances.find_by(instanceable: instanceable, final_diagnosis: final_diagnosis)
-      instance.conditions.each do |cond|
-        self.class.remove_condition(cond, self)
-      end
-    end
-  end
-
   # Remove condition - cut the method in order to be called for one condition
   def self.remove_condition(cond, instance)
     if cond.answer.node == instance.node
       cond.destroy!
     end
-  end
-
-  # Return the reference label of its node
-  def reference_label
-    node.reference_label
   end
 
   # Return json formated of the instance depending on the node type
@@ -82,6 +67,21 @@ class Instance < ApplicationRecord
   # Return the label of the node for display purpose
   def node_label
     node.label_en
+  end
+
+  # Return the reference label of its node
+  def reference_label
+    node.reference_label
+  end
+
+  # Delete properly conditions from children in the current diagnosis or predefined syndrome.
+  def remove_condition_from_children
+    children.each do |child|
+      instance = child.node.instances.find_by(instanceable: instanceable, final_diagnosis: final_diagnosis)
+      instance.conditions.each do |cond|
+        self.class.remove_condition(cond, self)
+      end
+    end
   end
 
   # Remove exclusion from a final diagnosis instance that has been destroyed
