@@ -56,11 +56,6 @@ RSpec.describe VersionsController, type: :controller do
     expect(response.status).to eq(302)
   end
 
-  it 'should work for [PUT:change_triage_order]' do
-    put :change_triage_order, params: { algorithm_id: @algorithm.id, id: @version.id, key: 'triage_questions_order', order: 4 }
-    expect(response.status).to eq(200)
-  end
-
   # TODO @MANU more test should be done here
   it 'should work for [PUT:create_triage_condition]' do
     put :create_triage_condition, params: { algorithm_id: @algorithm.id, id: @version.id, version: { cc_id: nil } }

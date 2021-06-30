@@ -37,14 +37,6 @@ class VersionPolicy < ApplicationPolicy
     new?
   end
 
-  def change_triage_order?
-    new?
-  end
-
-  def change_systems_order?
-    new?
-  end
-
   def set_medal_data_config?
     new?
   end
