@@ -161,8 +161,9 @@ class VersionsService
 
   def self.extract_full_order_json
     full_order = JSON.parse(@version.full_order_json)
-    available_ids = @questions.keys.push('birth_date', 'first_name', 'last_name') # Get all node ids and include the 3 hardcoded questions so it passes through
-    
+    available_ids = @questions.keys # Get all node ids
+    available_ids.push('birth_date', 'first_name', 'last_name') # Include the 3 hardcoded questions so it passes through
+
     hash = {}
     Question.steps.each do |step_name, step_index|
       hash[step_name] = []
