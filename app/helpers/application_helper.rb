@@ -1,3 +1,4 @@
+include Application.routes.url_helpers
 module ApplicationHelper
 
   # Flash message css
