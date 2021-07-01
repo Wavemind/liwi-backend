@@ -5,7 +5,6 @@ class Answer < ApplicationRecord
 
   belongs_to :node
   has_many :children
-  has_many :medical_case_answers
 
   validates_presence_of :label_en
   validates_presence_of :operator, if: Proc.new { self.node.is_a?(Question) && self.node.answer_type.display == 'Input' && !%w(Questions::BasicMeasurement Questions::VitalSignAnthropometric).include?(self.node.type) && value != 'not_available'}

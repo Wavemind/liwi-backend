@@ -14,9 +14,6 @@ class Node < ApplicationRecord
   has_many :final_diagnosis_health_cares, dependent: :destroy
   has_many :final_diagnoses, through: :final_diagnosis_health_cares
 
-  has_many :medical_case_health_cares
-  has_many :medical_cases, through: :medical_case_health_cares
-
   accepts_nested_attributes_for :medias, reject_if: :all_blank, allow_destroy: true
 
   validates_presence_of :label_en
