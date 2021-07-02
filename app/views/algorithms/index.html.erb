@@ -1,7 +1,7 @@
 <h1><%= t('.title') %></h1>
-<%#= link_to new_algorithm_url do %>
-<!--  <button type="button" class="btn btn-outline-primary"><%#= t('add') %></button>-->
-<%# end %>
+<%= link_to new_algorithm_path do %>
+  <button type="button" class="btn btn-outline-primary"><%= t('add') %></button>
+<% end %>
 
 <%= react_component('lists/index',
   {

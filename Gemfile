@@ -3,7 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '3.0.0'
 
-gem 'rails', '6.1.3.2'
+gem 'rails', '6.0.3.4'
 gem 'pg'
 gem 'puma'
 gem 'sass-rails'
@@ -22,7 +22,7 @@ gem 'devise'
 gem 'devise_invitable', '~> 2.0.0'
 gem 'simple_form'
 gem 'cocoon'
-gem 'bootstrap'
+gem 'bootstrap', '~>4.6.0'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'jquery-datatables'

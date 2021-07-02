@@ -3,10 +3,10 @@ include Rails.application.routes.url_helpers
 class Algorithm < ApplicationRecord
   has_many :versions
   has_many :nodes, dependent: :destroy
-  has_many :final_diagnoses, -> { where type: 'FinalDiagnosis' }, class_name: :node
-  has_many :questions, -> { where type: Question.descendants.map(&:name) }, class_name: :node
-  has_many :health_cares, -> { where type: HealthCare.descendants.map(&:name) }, class_name: :node
-  has_many :questions_sequences, -> { where type: QuestionsSequence.descendants.map(&:name) }, class_name: :node
+  has_many :final_diagnoses, -> { where type: 'FinalDiagnosis' }, source: :node
+  has_many :questions, -> { where type: Question.descendants.map(&:name) }, source: :node
+  has_many :health_cares, -> { where type: HealthCare.descendants.map(&:name) }, source: :node
+  has_many :questions_sequences, -> { where type: QuestionsSequence.descendants.map(&:name) }, source: :node
 
   belongs_to :user
   belongs_to :study
