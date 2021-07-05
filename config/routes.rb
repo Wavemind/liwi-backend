@@ -49,8 +49,6 @@ Rails.application.routes.draw do
         post 'duplicate'
         post 'components'
         delete 'remove_components'
-        put 'change_triage_order'
-        put 'change_systems_order'
         put 'create_triage_condition'
         put 'remove_triage_condition'
         put 'regenerate_json'
@@ -128,7 +126,6 @@ Rails.application.routes.draw do
   resources :questions_sequences, only: [] do
     resources :instances, only: [:destroy, :create] do
       collection do
-        get 'by_reference'
         put 'update_score'
       end
       member do
@@ -153,7 +150,6 @@ Rails.application.routes.draw do
   resources :diagnoses, only: [] do
     resources :instances, only: [:show, :destroy, :create] do
       collection do
-        get 'by_reference'
         get 'load_conditions'
       end
       member do

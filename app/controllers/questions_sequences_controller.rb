@@ -67,13 +67,14 @@ class QuestionsSequencesController < ApplicationController
     end
   end
 
-  # React Diagram
+  # GET questions_sequences/:id/diagram
+  # Render the diagram view
   def diagram
     authorize policy_scope(QuestionsSequence)
   end
 
-  # GET
-  # @return give sub categories of questions sequence
+  # GET algorithms/:algorithm_id/questions_sequences/lists
+  # Return several attributes of the model QuestionsSequence to build dropdown lists
   def lists
     authorize policy_scope(QuestionsSequence)
     render json: {
@@ -82,16 +83,17 @@ class QuestionsSequencesController < ApplicationController
     }
   end
 
-  # GET algorithm/:algorithm_id/questions_sequences/reference_prefix/:type
-  # @params QuestionsSequence child
-  # @return json with the reference prefix of the child
+  # GET algorithms/:algorithm_id/questions_sequences/reference_prefix/:type
+  # @params Category of QuestionsSequence
+  # Return class name according to the param
   def reference_prefix
     authorize policy_scope(QuestionsSequence)
     render json: QuestionsSequence.reference_prefix_class(params[:type])
   end
 
-  # @params [QuestionsSequence]
-  # Manually validate a questions sequence and return flash messages to display in the view
+  # POST algorithms/:algorithm_id/questions_sequences/:id/validate
+  # @params questions_sequence [QuestionsSequence] questions_sequence to be validated
+  # Validate the questions_sequence with its formula, its answers and its fields
   def validate
     @questions_sequence.manual_validate
     if @questions_sequence.errors.messages.any?

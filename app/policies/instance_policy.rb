@@ -29,10 +29,6 @@ class InstancePolicy < ApplicationPolicy
     new?
   end
 
-  def by_reference?
-    new?
-  end
-
   def create_link?
     new?
   end

@@ -20,10 +20,15 @@ class User < ApplicationRecord
 
   validates :email, format: { with: /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i }
 
-  # @return [String] contact first_name and last_name
-  # Display full name
-  def full_name
-    "#{first_name} #{last_name}"
+  # Override devise authentication verification with deactivated method
+  def active_for_authentication?
+    super && !deactivated
+  end
+
+  # Replace destroy by lock account
+  # Override destroy method and lock the account instead
+  def destroy
+    update_attributes(deactivated: true) unless deactivated
   end
 
   # @return [String] add html badge
@@ -36,14 +41,9 @@ class User < ApplicationRecord
     end
   end
 
-  # Replace destroy by lock account
-  # Override destroy method and lock the account instead
-  def destroy
-    update_attributes(deactivated: true) unless deactivated
-  end
-
-  # Override devise authentication verification with deactivated method
-  def active_for_authentication?
-    super && !deactivated
+  # @return [String] contact first_name and last_name
+  # Display full name
+  def full_name
+    "#{first_name} #{last_name}"
   end
 end

@@ -5,9 +5,9 @@ class ConditionsController < ApplicationController
   before_action :set_condition, only: [:destroy, :update_cut_offs]
 
 
-  # PUT
-  # @return JSON
-  # Update cut offs for a link and return the object in json format
+  # PUT conditions/:id/update_cut_offs
+  # @params condition [Condition] condition to update
+  # Update cut offs for the given link and return the object in json format
   def update_cut_offs
     if @condition.update(condition_params)
       render json: @condition.as_json

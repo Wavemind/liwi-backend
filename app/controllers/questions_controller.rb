@@ -72,31 +72,31 @@ class QuestionsController < ApplicationController
   end
 
   # GET questions/:id/dependencies
-  # @params Question id
-  # @return Dependencies for given question
+  # @params question [Node] question
+  # @return Dependencies for the given question
   def dependencies
     authorize policy_scope(Question)
     render json: @question.diagnoses.map(&:reference_label) + @question.dependencies.map(&:instanceable).flatten.map(&:reference_label)
   end
-  # GET
-  # @return Hash
-  # Return attributes of question that are listed
+
+  # GET questions/dependencies
+  # Return several attributes of the model Question to build dropdown lists
   def lists
     authorize policy_scope(Question)
     render json: Question.list_attributes(params[:diagram_type], @algorithm)
   end
 
-  # GET algorithm/:algorithm_id/version/:version_id/questions/reference_prefix/:type
-  # @params Question child
-  # @return json with the reference prefix of the child
+  # GET questions/reference_prefix/:type
+  # @params Category of Question
+  # Return class name according to the param
   def reference_prefix
     authorize policy_scope(Question)
     render json: Question.reference_prefix_class(params[:type])
   end
 
-  # POST algorithm/:algorithm_id/questions/validate
-  # @params Question
-  # @return errors messages if question is not valid
+  # POST algorithms/:algorithm_id/questions/:id/validate
+  # @params question [Question] question to be validated
+  # Validate the question with its formula, its answers and its fields
   def validate
     authorize policy_scope(Question)
     question = @algorithm.questions.new(question_params)

@@ -13,6 +13,7 @@ class MedicalStaff < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
+  # Render available roles in array format
   def roles
     MedicalStaff.roles.keys
   end

@@ -77,9 +77,10 @@ class FinalDiagnosesController < ApplicationController
     end
   end
 
-  # POST /algorithms/:algorithm_id/versions/:version_id/final_diagnoses/:id/add_excluded_diagnosis
-  # @return
-  # Add excluded diagnosis to final diagnosis
+  # POST /algorithms/:algorithm_id/versions/:version_id/final_diagnoses/add_excluded_diagnosis
+  # @params [FinalDiagnosis] excluding final diagnosis
+  # @params [FinalDiagnosis] excluded final diagnosis
+  # Exclude a final diagnosis from another
   def add_exclusion
     authorize policy_scope(FinalDiagnosis)
     @final_diagnosis_exclusion = NodeExclusion.new(final_diagnosis_exclusion_params)
@@ -97,7 +98,8 @@ class FinalDiagnosesController < ApplicationController
     end
   end
 
-  # Generate react diagram
+  # GET algorithms/:algorithm_id/versions/:version_id/diagnoses/:diagnosis_id/final_diagnoses/:id/diagram
+  # Render the diagram view
   def diagram
     authorize policy_scope(FinalDiagnosis)
     add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
@@ -107,9 +109,10 @@ class FinalDiagnosesController < ApplicationController
     add_breadcrumb @diagnosis.label_en, algorithm_version_diagnosis_url(@final_diagnosis.diagnosis.version.algorithm, @final_diagnosis.diagnosis.version, @diagnosis, panel: 'final_diagnoses')
   end
 
-  # DELETE /algorithms/:algorithm_id/versions/:version_id/diagnoses/:diagnosis_id/final_diagnoses/:id/remove_excluded_diagnosis
-  # @return
-  # Remove excluded diagnosis to final diagnosis
+  # DELETE /algorithms/:algorithm_id/versions/:version_id/diagnoses/:diagnosis_id/final_diagnoses/remove_excluded_diagnosis
+  # @params [FinalDiagnosis] excluding final diagnosis
+  # @params [FinalDiagnosis] excluded final diagnosis
+  # Remove exclusion between the two final diagnoses
   def remove_exclusion
     authorize policy_scope(FinalDiagnosis)
     @final_diagnosis_exclusion = NodeExclusion.final_diagnosis.find_by(final_diagnosis_exclusion_params)

@@ -25,7 +25,6 @@ class Algorithm < ApplicationRecord
   def create_reference_table_questions
     age_in_days = questions.create!(label_en: 'Age in days', type: 'Questions::BasicDemographic', stage: Question.stages[:registration], is_mandatory: true, answer_type_id: 5, formula: 'ToDay', is_default: true)
     weight = questions.create!(label_en: 'Current Weight (kg)', type: 'Questions::BasicMeasurement', stage: Question.stages[:triage], is_mandatory: true, answer_type_id: 4, estimable: true, is_default: true)
-    hr = questions.create!(label_en: 'Heart rate', type: 'Questions::VitalSignAnthropometric', stage: Question.stages[:consultation], answer_type_id: 4, is_default: true)
     rr = questions.create!(label_en: 'Respiratory rate', type: 'Questions::VitalSignAnthropometric', stage: Question.stages[:consultation], answer_type_id: 4, is_default: true)
     muac = questions.create!(label_en: 'MUAC in cm (only if age >6 months)', type: 'Questions::BasicMeasurement', description_en: 'Mid Upper Arm Circumference', stage: Question.stages[:triage], answer_type_id: 4, is_default: true)
     gender = questions.create!(label_en: 'Gender', type: 'Questions::Demographic', stage: Question.stages[:registration], answer_type_id: 2, is_mandatory: true, is_default: true)
@@ -89,12 +88,6 @@ class Algorithm < ApplicationRecord
        {label_en: '-2 z-score', value: '-2, -1', operator: Answer.operators[:between]},
        {label_en: 'more than -2 z-score', value: '-1', operator: Answer.operators[:more_or_equal]},
      ])
-
-    # hr_th = questions.create!(label_en: 'Heart rate in percentile', type: 'Questions::BackgroundCalculation', answer_type_id: 3, reference_table_x_id: age.id, reference_table_y_id: hr.id, reference_table_male: "heart_rate_table", reference_table_female: "heart_rate_table", is_default: true)
-    # hr_th.answers.create([
-    #    {label_en: 'less than 90th', value: '90', operator: Answer.operators[:less]},
-    #    {label_en: 'more than 90th', value: '90', operator: Answer.operators[:more_or_equal]},
-    #  ])
 
     rr_th = questions.create!(label_en: 'Respiratory rate in percentile', type: 'Questions::BackgroundCalculation', answer_type_id: 3, reference_table_x_id: age.id, reference_table_y_id: temperature.id, reference_table_z_id: rr.id, reference_table_male: "respiratory_rate_table", reference_table_female: "respiratory_rate_table", is_default: true)
     rr_th.answers.create([

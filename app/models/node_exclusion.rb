@@ -10,6 +10,14 @@ class NodeExclusion < ApplicationRecord
   validates :excluded_node_id, uniqueness: { scope: :excluding_node_id, message: I18n.t('errors.final_diagnosis_exclusion_unique') }
   after_validation :prevent_loop
 
+  # Recreate exclusions from final diagnoses pointing to old version to final diagnoses pointing to duplicated version
+  def self.recreate_exclusions_after_duplicate(matching_final_diagnoses)
+    matching_final_diagnoses.each do |key, value|
+      NodeExclusion.where(excluding_node_id: key).map do |exclusion|
+        NodeExclusion.create(excluding_node_id: value, excluded_node_id: matching_final_diagnoses[exclusion.excluded_node_id])
+      end
+    end
+  end
 
   # Recursive loop to make sure it is not excluding a grand child of excluded diagnosis
   def is_excluding_itself(node_id)
@@ -24,15 +32,6 @@ class NodeExclusion < ApplicationRecord
     if excluding_node_id == excluded_node_id || is_excluding_itself(excluded_node_id)
       self.errors.add(:base, I18n.t('final_diagnoses.validation.loop'))
       raise ActiveRecord::Rollback, I18n.t('final_diagnoses.validation.loop')
-    end
-  end
-
-  # Recreate exclusions from final diagnoses pointing to old version to final diagnoses pointing to duplicated version
-  def self.recreate_exclusions_after_duplicate(matching_final_diagnoses)
-    matching_final_diagnoses.each do |key, value|
-      NodeExclusion.where(excluding_node_id: key).map do |exclusion|
-        NodeExclusion.create(excluding_node_id: value, excluded_node_id: matching_final_diagnoses[exclusion.excluded_node_id])
-      end
     end
   end
 end

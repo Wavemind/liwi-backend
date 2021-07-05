@@ -1,8 +1,8 @@
 class VersionsController < ApplicationController
-  before_action :authenticate_user!, except: [:change_triage_order, :change_systems_order]
+  before_action :authenticate_user!
   before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :duplicate, :create_triage_condition, :set_medal_data_config, :remove_triage_condition, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnoses, :import_translations, :job_status, :update_full_order, :list]
   before_action :set_breadcrumb, only: [:show, :new, :edit]
-  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :change_triage_order, :change_systems_order, :components, :create_triage_condition, :set_medal_data_config, :duplicate, :remove_components, :remove_triage_condition, :update_list, :regenerate_json, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnoses, :import_translations, :job_status, :update_full_order, :registration_triage_questions, :medal_data_config, :full_order, :translations]
+  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :components, :create_triage_condition, :set_medal_data_config, :duplicate, :remove_components, :remove_triage_condition, :update_list, :regenerate_json, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnoses, :import_translations, :job_status, :update_full_order, :registration_triage_questions, :medal_data_config, :full_order, :translations]
 
   def index
     authorize policy_scope(Version)
@@ -54,9 +54,9 @@ class VersionsController < ApplicationController
   end
 
   # PUT algorithms/:algorithm_id/version/:id/archive
-  # @params version [Version] version of algorithm to archive
+  # @params version [Version] version to archive
   # @return redirect to versions#index with flash message
-  # Archive an algorithm version.
+  # Archive the given algorithm version.
   def archive
     @version.archived = true
 
@@ -69,33 +69,8 @@ class VersionsController < ApplicationController
     end
   end
 
-  # PUT algorithms/:algorithm_id/version/:id/change_triage_order
-  # @params version [Version] version of algorithm we change order of
-  # Change the order of the triage questions for this version
-  def change_triage_order
-    config = @version.medal_r_config
-    config['questions_orders'][params[:key]] = params[:order].map(&:to_i)
-    if @version.update(medal_r_config: config)
-      render json: {result: 'success'}
-    else
-      render json: {result: 'error'}
-    end
-  end
-
-  # PUT algorithms/:algorithm_id/version/:id/change_triage_order
-  # @params version [Version] version of algorithm we change order of
-  # Change the order of the triage questions for this version
-  def change_systems_order
-    config = @version.medal_r_config
-    config['systems_order'] = params[:order]
-    if @version.update(medal_r_config: config)
-      render json: {result: 'success'}
-    else
-      render json: {result: 'error'}
-    end
-  end
-
-  # PUT algorithms/:algorithm_id/version/:id/components
+  # POST algorithms/:algorithm_id/version/:id/components
+  # @params version [Version] version
   # Instantiate nodes in the version
   def components
     params[:nodes_ids].map do |node_id|
@@ -103,17 +78,8 @@ class VersionsController < ApplicationController
     end
   end
 
-  # PUT algorithms/:algorithm_id/version/:id/remove_components
-  # Remove instantiated nodes from the version
-  def remove_components
-    params[:nodes_ids].map do |node_id|
-      instance = @version.components.find_by(node_id: node_id)
-      instance.destroy if instance.present?
-    end
-  end
-
   # PUT algorithms/:algorithm_id/version/:id/create_triage_condition
-  # @params version [Version] version of algorithm where we create a condition
+  # @params version [Version] version where we create a condition in
   # @params id of the triage question to put the condition on
   # @params id of the complaint category that condition the triage question
   # Create a condition between a triage question and a complaint category
@@ -136,8 +102,9 @@ class VersionsController < ApplicationController
     end
   end
 
+  # PUT algorithms/:algorithm_id/version/:id/duplicate
   # @params [Version] version to duplicate
-  # Duplicate a version with every diagnoses and their logics (Instances with their Conditions and Children), the FinalDiagnoses and Conditions attached to it
+  # Ask a job to duplicate a version with every diagnoses and their logic (Instances with their Conditions and Children), the FinalDiagnoses and Conditions attached to it
   def duplicate
     job_id = DuplicateVersionJob.perform_later(@version.id)
     @version.update(job_id: job_id.provider_job_id)
@@ -146,7 +113,7 @@ class VersionsController < ApplicationController
 
   # GET algorithms/:algorithm_id/version/:id/final_diagnoses
   # @params version [Version] version
-  # Get every final diagnoses for a version
+  # Get every final diagnoses for of the diagnoses of the given version
   def final_diagnoses
     authorize policy_scope(Version)
     respond_to do |format|
@@ -158,7 +125,7 @@ class VersionsController < ApplicationController
 
   # GET algorithms/:algorithm_id/version/:id/final_diagnoses_exclusions
   # @params version [Version] version
-  # Get every final diagnoses exclusions for a version
+  # Get every final diagnoses exclusions defined in the given version
   def final_diagnoses_exclusions
     authorize policy_scope(Version)
     respond_to do |format|
@@ -167,37 +134,10 @@ class VersionsController < ApplicationController
     end
   end
 
-  # @params algorithm [Algorithm] current algorithm
-  # @return json of drugs
-  # All managements exclusions
-  def registration_triage_questions
-    respond_to do |format|
-      format.js { }
-    end
-  end
-
-  # @params algorithm [Algorithm] current algorithm
-  # @return json of drugs
-  # All managements exclusions
-  def medal_data_config
-    respond_to do |format|
-      format.js { }
-    end
-  end
-
-  # @params algorithm [Algorithm] current algorithm
-  # @return json of drugs
-  # All managements exclusions
+  # GET algorithms/:algorithm_id/version/:id/full_order
+  # @params version [Version] version
+  # Display the current full consultation order of the given version
   def full_order
-    respond_to do |format|
-      format.js { }
-    end
-  end
-
-  # @params algorithm [Algorithm] current algorithm
-  # @return json of drugs
-  # All managements exclusions
-  def translations
     respond_to do |format|
       format.js { }
     end
@@ -205,7 +145,7 @@ class VersionsController < ApplicationController
 
   # GET algorithms/:algorithm_id/version/:id/generate_translations
   # @params version [Version] version
-  # Get an excel export of all translatable labels used by the version
+  # Get an excel export of all translatable labels used in the given version
   def generate_translations
     respond_to do |format|
       format.xlsx
@@ -214,7 +154,7 @@ class VersionsController < ApplicationController
 
   # GET algorithms/:algorithm_id/version/:id/generate_variables
   # @params version [Version] version
-  # Get an excel export of variables and final diagnoses used by the version
+  # Get an excel export of variables and final diagnoses used in the given version
   def generate_variables
     authorize policy_scope(Version)
     respond_to do |format|
@@ -253,17 +193,37 @@ class VersionsController < ApplicationController
 
   end
 
+  # GET algorithms/:algorithm_id/version/:id/job_status
+  # @params version [Version] version
+  # Checks the status of the ongoing background job of the given version and returns the correct status
+  def job_status
+    status = Sidekiq::Status::status(@version.job_id)
+    if [:complete, :failed, :interrupted].include?(status)
+      @version.update(job_id: "")
+    end
+    render json: { job_status: status }
+  end
+
   # GET algorithms/:algorithm_id/versions/list
-  # @params algorithm_id [Integer]
-  # Generate versions list json
+  # @params algorithm [Algorithm] algorithm
+  # Generate given algorithm's versions in json format
   def list
     authorize policy_scope(Version)
     render json: @algorithm.versions.as_json(methods: :display_archive_status)
   end
 
+  # GET algorithms/:algorithm_id/versions/:id/medal_data_config
+  # @params version [Version] version
+  # Display medal data config view
+  def medal_data_config
+    respond_to do |format|
+      format.js { }
+    end
+  end
+
   # PUT algorithms/:algorithm_id/version/:id/regenerate_json
   # @params version [Version] version
-  # Generate json for the version
+  # Generate json for the given version
   def regenerate_json
     invalid_diagnoses = []
 
@@ -300,6 +260,27 @@ class VersionsController < ApplicationController
     end
   end
 
+  # GET algorithms/:algorithm_id/versions/:id/registration_triage_questions
+  # @params version [Version] version
+  # Display registration questions view
+  def registration_triage_questions
+    respond_to do |format|
+      format.js { }
+    end
+  end
+
+  # DELETE algorithms/:algorithm_id/version/:id/remove_components
+  # @params version [Version] version
+  # Remove instantiated nodes from the given version
+  def remove_components
+    params[:nodes_ids].map do |node_id|
+      instance = @version.components.find_by(node_id: node_id)
+      instance.destroy if instance.present?
+    end
+  end
+
+  # PUT algorithms/:algorithm_id/version/:id/remove_triage_condition
+  # @params version [Version] version
   # Remove a condition between a triage question and a complaint category
   def remove_triage_condition
     condition = Condition.find(params[:condition_id])
@@ -311,6 +292,8 @@ class VersionsController < ApplicationController
     end
   end
 
+  # PUT algorithms/:algorithm_id/version/:id/set_medal_data_config
+  # @params version [Version] version
   # Update MedAL-data config with the automatic questions.
   def set_medal_data_config
     @version.medal_data_config = params['set_medal_data_config']
@@ -322,10 +305,19 @@ class VersionsController < ApplicationController
     end
   end
 
+  # GET algorithms/:algorithm_id/versions/:id/translations
+  # @params version [Version] version
+  # Display translations view
+  def translations
+    respond_to do |format|
+      format.js { }
+    end
+  end
+
   # PUT algorithms/:algorithm_id/version/:id/unarchive
-  # @params version [Version] version to archive
+  # @params version [Version] version to unarchive
   # @return redirect to algorithms#index with flash message
-  # Unarchive an algorithm version.
+  # Unarchive the given version.
   def unarchive
     @version.archived = false
 
@@ -338,6 +330,17 @@ class VersionsController < ApplicationController
     end
   end
 
+  # PUT algorithms/:algorithm_id/version/:id/update_full_order
+  # @params version [Version] version
+  # Update the full consultation order for the given version.
+  def update_full_order
+    if @version.update(full_order_json: version_params[:full_order_json])
+      render json: {result: 'success'}
+    else
+      render json: {result: 'error'}
+    end
+  end
+
   # PUT algorithms/:algorithm_id/version/:id/update_list
   # @params version [Version]
   # @params new order [Hash]
@@ -347,24 +350,6 @@ class VersionsController < ApplicationController
     config = @version.medal_r_config
     config["#{params[:list]}_list_order"] = params[:order]
     @version.update(medal_r_config: config)
-  end
-
-  # GET algorithms/:algorithm_id/version/:id/job_status
-  # Checks the status of the ongoing background job and returns the correct status and message
-  def job_status
-    status = Sidekiq::Status::status(@version.job_id)
-    if [:complete, :failed, :interrupted].include?(status)
-      @version.update(job_id: "")
-    end
-    render json: { job_status: status }
-  end
-
-  def update_full_order
-    if @version.update(full_order_json: version_params[:full_order_json])
-      render json: {result: 'success'}
-    else
-      render json: {result: 'error'}
-    end
   end
 
   private
