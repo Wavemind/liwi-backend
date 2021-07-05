@@ -127,6 +127,10 @@ class Toolbar extends React.Component {
             <span className="mt-2 btn-transparent">{instanceable.chief_complaint_label}</span>
           ) : null}
 
+          {instanceable.type === "Diagnosis" || instanceable.type === "QuestionsSequence" ? (
+            <span className="mt-2 btn-transparent">{instanceable.cut_offs}</span>
+          ) : null}
+
           <div className="col text-right">
             {instanceable.type === "Diagnosis" || instanceable.type === "QuestionsSequence" ? (
               <button key="validate" type="button" className="btn btn-transparent" disabled={isLoading || readOnly}
