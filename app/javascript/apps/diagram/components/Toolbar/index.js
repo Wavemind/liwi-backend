@@ -100,7 +100,7 @@ class Toolbar extends React.Component {
     return (
       <div className="col-md-12 liwi-toolbar">
         <div className="row">
-          <div className="col">
+          <div className="col-6">
             <div className="btn-group">
               <button key="new" type="button" className="btn btn-transparent" data-toggle="dropdown"
                       aria-haspopup="true" aria-expanded="false" disabled={readOnly}>
@@ -124,11 +124,15 @@ class Toolbar extends React.Component {
             </div>
           </div>
           {instanceable.type !== "QuestionsSequence" ? (
-            <span className="mt-2 btn-transparent">{instanceable.chief_complaint_label}</span>
+            <div className="col mt-2 btn-transparent">
+              {instanceable.chief_complaint_label}
+            </div>
           ) : null}
 
           {instanceable.type === "Diagnosis" || instanceable.type === "QuestionsSequence" ? (
-            <span className="mt-2 btn-transparent">{instanceable.cut_offs}</span>
+            <div className="col mt-2 btn-transparent">
+              {instanceable.cut_offs}
+            </div>
           ) : null}
 
           <div className="col text-right">
