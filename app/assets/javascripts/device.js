@@ -1,7 +1,4 @@
 jQuery(document).ready(function () {
-  $("#health_facility-tabs").find(".nav-link").removeClass("active")
-  $("#nav-link-devices").addClass("active")
-
   $("#devices-datatable").dataTable({
     "processing": true,
     "info": false,
