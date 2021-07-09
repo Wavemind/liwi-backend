@@ -239,23 +239,13 @@ class VersionsController < ApplicationController
     if invalid_diagnoses.any?
       render json: { success: false, message: t('flash_message.version.invalids_diagnoses', diagnoses: invalid_diagnoses) }
     else
-      components_count = @version.components.count
-      questions_orders = []
-      @version.medal_r_config['questions_orders'].map do |key, value|
-        questions_orders += value
-      end
-
-      if components_count != questions_orders.count
-        render json: { success: false, message: t('flash_message.version_components_data_error') }
+      missing_nodes = Node.where(id: @version.identify_missing_questions)
+      if missing_nodes.any?
+        render json: { success: false, message: t('flash_message.missing_nodes_error', missing_nodes: missing_nodes.map(&:reference_label)) }
       else
-        missing_nodes = Node.where(id: @version.identify_missing_questions)
-        if missing_nodes.any?
-          render json: { success: false, message: t('flash_message.missing_nodes_error', missing_nodes: missing_nodes.map(&:reference_label)) }
-        else
-          job_id = GenerateJsonJob.perform_later(@version.id)
-          @version.update(job_id: job_id.provider_job_id)
-          render json: { success: true, version: @version.reload }
-        end
+        job_id = GenerateJsonJob.perform_later(@version.id)
+        @version.update(job_id: job_id.provider_job_id)
+        render json: { success: true, version: @version.reload }
       end
     end
   end

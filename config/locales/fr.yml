@@ -378,7 +378,6 @@ fr:
     success_duplicated: "Data successfully duplicated"
     success_updated: "Data successfully updated"
     update_fail: "Error will updating the value"
-    version_components_data_error: "There were an error in your version components preventing you to generate your json. Please check this with a developer."
     duplicate_fail: "Error while duplicating your data"
     diagnosis:
       complaint_category_exclude_triage_question: "One of the questions in your diagnosis is not supported by this Complaint Category."
