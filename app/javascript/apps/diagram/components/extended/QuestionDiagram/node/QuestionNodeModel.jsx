@@ -10,9 +10,10 @@ export default class QuestionNodeModel extends AdvancedNodeModel {
 
     // outPorts
     this.options.dbInstance.node.answers.map(answer => {
+      const labelId = this.options.user?.role === "admin" ? `${answer.id} : ` : '';
       this.addPort(new AdvancedPortModel({
         in: false,
-        name: getLabel(answer),
+        name: `${labelId}${getLabel(answer)}`,
         id: `answer_${answer.id}`
       }));
     });

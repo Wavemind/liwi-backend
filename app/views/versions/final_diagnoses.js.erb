@@ -1,0 +1,30 @@
+document.getElementById("version-index-content").innerHTML = "<%= escape_javascript render 'final_diagnoses/table_for_version' %>"
+
+jQuery(document).ready(function () {
+  $("#version-tabs").find(".nav-link").removeClass("active")
+  $("#nav-link-final_diagnoses").addClass("active")
+
+  $("#version_final_diagnoses-datatable").dataTable({
+    "processing": true,
+    "info": false,
+    "bLengthChange": false,
+    "serverSide": true,
+    "pageLength": 50,
+    "ajax": $("#version_final_diagnoses-datatable").data("source"),
+    "pagingType": "full_numbers",
+    "columns": [
+      { "data": "id" },
+      { "data": "reference" },
+      { "data": "label" },
+      { "data": "diagnosis" },
+      { "data": "cc" },
+      { "data": "description" },
+      { "data": "actions", "className": "text-right"},
+    ],
+    'columnDefs': [ {
+      'targets': [],
+      'orderable': false,
+    }]
+  });
+});
+

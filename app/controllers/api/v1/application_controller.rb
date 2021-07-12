@@ -7,7 +7,7 @@ class Api::V1::ApplicationController < ActionController::Base
   end
 
   def categories
-    render json: Question.categories('Diagnostic').as_json
+    render json: Question.categories('Diagnosis').as_json
   end
 
   protected

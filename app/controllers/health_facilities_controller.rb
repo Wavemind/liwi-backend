@@ -1,7 +1,7 @@
 class HealthFacilitiesController < ApplicationController
 
   before_action :authenticate_user!
-  before_action :set_health_facility, only: [:show, :edit, :update, :add_device, :remove_device, :generate_stickers]
+  before_action :set_health_facility, only: [:show, :edit, :update, :add_device, :remove_device, :generate_stickers, :devices, :accesses, :medical_staff, :generate_stickers_view]
   before_action :set_breadcrumb, only: [:show, :new, :edit]
   before_action :set_countries, only: [:new, :edit, :create, :update]
 
@@ -20,10 +20,10 @@ class HealthFacilitiesController < ApplicationController
 
     @device = Device.new
     @health_facility_access = HealthFacilityAccess.new
+    @studies = Study.all
     health_facility_access = HealthFacilityAccess.find_by(health_facility_id: params[:id], end_date: nil)
     @current_health_facility_access = health_facility_access.as_json(include: { version: { include: { algorithm: {only: [:id, :name]} }, only: [:id, :name, :job_id], methods: :display_label}})
     @versions = Version.includes(:algorithm).where.not(id: (health_facility_access.version_id if health_facility_access.present?), archived: true).as_json(only: [:id, :name])
-    @studies = Study.all
   end
 
   def new
@@ -57,6 +57,19 @@ class HealthFacilitiesController < ApplicationController
     end
   end
 
+  # GET health_facilities/:id/accesses
+  # @params health_facility [HealthFacility] health_facility
+  # Display view for the given facility accesses
+  def accesses
+    health_facility_access = HealthFacilityAccess.find_by(health_facility_id: params[:health_facility_id], end_date: nil)
+    @current_health_facility_access = health_facility_access.as_json(include: { version: { include: { algorithm: {only: [:id, :name]} }, only: [:id, :name, :job_id], methods: :display_label}})
+    @versions = Version.includes(:algorithm).where.not(id: (health_facility_access.version_id if health_facility_access.present?), archived: true).as_json(only: [:id, :name])
+
+    respond_to do |format|
+      format.js { }
+    end
+  end
+
   # POST health_facilities/:id/add_device
   # @params health_facility_id [Integer] id of health_facility
   # @params device_id [Integer] id of device
@@ -75,21 +88,12 @@ class HealthFacilitiesController < ApplicationController
     end
   end
 
-  # DELETE health_facilities/health_facility_id/devices/:device_id/remove_device
-  # @params health_facility_id [Integer] id of health_facility
-  # @params device_id [Integer] id of device
-  # @return redirect to health_facility#show with flash message
-  # Remove device from health_facility
-  def remove_device
-    authorize @health_facility
-    device = Device.find(params[:device_id])
-
-    device.health_facility_id = nil
-
-    if device.save
-      redirect_to @health_facility, notice: t('.success_remove_device')
-    else
-      redirect_to @health_facility, danger: t('.error_remove_device')
+  # GET health_facilities/:id/devices
+  # @params health_facility [HealthFacility] health_facility
+  # Display view for the given facility devices
+  def devices
+    respond_to do |format|
+      format.js { }
     end
   end
 
@@ -121,6 +125,42 @@ class HealthFacilitiesController < ApplicationController
     end
   end
 
+  # GET health_facilities/:id/generate_stickers_view
+  # @params health_facility [HealthFacility] health_facility
+  # Display view to generate stickers
+  def generate_stickers_view
+    respond_to do |format|
+      format.js { }
+    end
+  end
+
+  # GET health_facilities/:id/medical_staff
+  # @params health_facility [HealthFacility] health_facility
+  # Display view for the given facility medical staff
+  def medical_staff
+    respond_to do |format|
+      format.js { }
+    end
+  end
+
+  # DELETE health_facilities/health_facility_id/devices/:device_id/remove_device
+  # @params health_facility_id [Integer] id of health_facility
+  # @params device_id [Integer] id of device
+  # @return redirect to health_facility#show with flash message
+  # Remove device from health_facility
+  def remove_device
+    authorize @health_facility
+    device = Device.find(params[:device_id])
+
+    device.health_facility_id = nil
+
+    if device.save
+      redirect_to @health_facility, notice: t('.success_remove_device')
+    else
+      redirect_to @health_facility, danger: t('.error_remove_device')
+    end
+  end
+
   private
 
   def set_breadcrumb
@@ -147,6 +187,7 @@ class HealthFacilitiesController < ApplicationController
       :area,
       :longitude,
       :latitude,
+      :study_id,
       device_ids: [],
       medical_staffs_attributes: [
         :id,

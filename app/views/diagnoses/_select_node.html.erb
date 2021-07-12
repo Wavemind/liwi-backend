@@ -1,0 +1,10 @@
+<%= simple_form_for @instance, url: diagnosis_instances_url(@diagnosis), method: :post do |f| %>
+  <div class="row">
+    <div class="col">
+      <%= f.association :node, collection: (@algorithm.nodes.where.not(id: @diagnosis.components.select(:node_id)) + FinalDiagnosis.where(diagnosis_id: params[:id])).flatten.sort_by(&:reference), label_method: :reference_label, prompt: t('select'), label: false %>
+    </div>
+    <div class="col">
+      <%= f.submit t('add'), class: 'btn btn-primary' %>
+    </div>
+  </div>
+<% end %>

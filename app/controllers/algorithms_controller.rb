@@ -1,6 +1,6 @@
 class AlgorithmsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:show, :edit, :update, :archive, :unarchive, :questions, :generate_villages, :import_villages]
+  before_action :set_algorithm, only: [:show, :edit, :update, :archive, :unarchive, :questions, :generate_villages, :import_villages, :managements, :questions, :questions_sequences, :questions_sequences_scored, :drugs, :drug_exclusions, :management_exclusions, :villages]
 
   def index
     authorize policy_scope(Algorithm)
@@ -53,109 +53,44 @@ class AlgorithmsController < ApplicationController
   # PUT algorithms/:id/archive
   # @params algorithm [Algorithm] algorithm to archive
   # @return redirect to algorithms#index with flash message
-  # Archive an algorithm. There is no impact for the user but if a parent is archived, the versions are considered archived too
+  # Archive the given algorithm. There is no impact for the user but if a parent is archived, the versions are considered archived too
   def archive
     @algorithm.archived = true
 
     if @algorithm.save
-      redirect_to algorithms_url, notice: t('flash_message.success_created')
+      flash[:notice] = t('flash_message.success_archive')
+      render json: { status: 'success' }
     else
-      redirect_to algorithms_url, danger: t('flash_message.update_fail')
+      flash[:alert] = t('flash_message.update_fail')
+      render json: { status: 'failed' }
     end
   end
 
-  # @params algorithm [Algorithm] current algorithm
-  # @return json of managements
-  # All managements available for current algorithm
-  def managements
-    authorize policy_scope(Algorithm)
-    respond_to do |format|
-      format.html
-      format.json { render json: ManagementDatatable.new(params, view_context: view_context) }
-    end
-  end
-
-  # @params algorithm [Algorithm] current algorithm
-  # @return json of question
-  # All questions available for current algorithm
-  def questions
-    authorize policy_scope(Algorithm)
-    respond_to do |format|
-      format.html
-      format.json { render json: QuestionDatatable.new(params, view_context: view_context) }
-    end
-  end
-
-  # @params algorithm [Algorithm] current algorithm
-  # @return json of questions_sequences
-  # All questions sequences available for current algorithm
-  def questions_sequences
-    authorize policy_scope(Algorithm)
-    respond_to do |format|
-      format.html
-      format.json { render json: QuestionsSequenceDatatable.new(params, view_context: view_context) }
-    end
-  end
-
-  # @params algorithm [Algorithm] current algorithm
-  # @return json of questions_sequences_scored
-  # All questions sequences scored available for current algorithm
-  def questions_sequences_scored
-    authorize policy_scope(Algorithm)
-    respond_to do |format|
-      format.html
-      format.json { render json: QuestionsSequenceScoredDatatable.new(params, view_context: view_context) }
-    end
-  end
-
-  # @params algorithm [Algorithm] current algorithm
+  # GET algorithms/:id/drug
+  # @params algorithm [Algorithm] algorithm
   # @return json of drugs
-  # All drugs available for current algorithm
+  # All drugs available for the given algorithm
   def drugs
-    authorize policy_scope(Algorithm)
     respond_to do |format|
-      format.html
+      format.js { }
       format.json { render json: DrugDatatable.new(params, view_context: view_context) }
     end
   end
 
-  # @params algorithm [Algorithm] current algorithm
-  # @return json of drugs
-  # All drugs exclusions
+  # GET algorithms/:id/drug_exclusion
+  # @params algorithm [Algorithm] algorithm
+  # @return json of drug_exclusions
+  # All exclusions on the drugs of the given algorithm
   def drug_exclusions
-    authorize policy_scope(Algorithm)
     respond_to do |format|
-      format.html
+      format.js { }
       format.json { render json: DrugExclusionDatatable.new(params, view_context: view_context) }
     end
   end
 
-  # @params algorithm [Algorithm] current algorithm
-  # @return json of drugs
-  # All managements exclusions
-  def management_exclusions
-    authorize policy_scope(Algorithm)
-    respond_to do |format|
-      format.html
-      format.json { render json: ManagementExclusionDatatable.new(params, view_context: view_context) }
-    end
-  end
-
-  # PUT algorithms/:id/unarchive
-  # @params algorithm [Algorithm] algorithm to archive
-  # @return redirect to algorithms#index with flash message
-  # Unarchive an algorithm.
-  def unarchive
-    @algorithm.archived = false
-
-    if @algorithm.save
-      redirect_to algorithms_url, notice: t('flash_message.success_created')
-    else
-      redirect_to algorithms_url, danger: t('flash_message.update_fail')
-    end
-  end
-
   # PUT algorithms/:algorithm_id/import_villages
+  # @params algorithm [Algorithm] algorithm
+  # @params file [File] xl file with the villages in columns
   # Import an excel file to input the villages
   def import_villages
     authorize policy_scope(Algorithm)
@@ -181,6 +116,84 @@ class AlgorithmsController < ApplicationController
       end
     else
       redirect_to algorithm_url(@algorithm, panel: 'villages'), alert: t('flash_message.import_xl_wrong_file_villages')
+    end
+  end
+
+  # GET algorithms/:id/management
+  # @params algorithm [Algorithm] algorithm
+  # @return json of managements
+  # All managements available for given algorithm
+  def managements
+    respond_to do |format|
+      format.js { }
+      format.json { render json: ManagementDatatable.new(params, view_context: view_context) }
+    end
+  end
+
+  # GET algorithms/:id/management_exclusion
+  # @params algorithm [Algorithm] algorithm
+  # @return json of management_exclusions
+  # All exclusions on the managements of the given algorithm
+  def management_exclusions
+    respond_to do |format|
+      format.js { }
+      format.json { render json: ManagementExclusionDatatable.new(params, view_context: view_context) }
+    end
+  end
+
+  # GET algorithms/:id/question
+  # @params algorithm [Algorithm] algorithm
+  # @return json of questions
+  # All questions available for given algorithm
+  def questions
+    respond_to do |format|
+      format.js { }
+      format.json { render json: QuestionDatatable.new(params, view_context: view_context) }
+    end
+  end
+
+  # GET algorithms/:id/questions_sequence
+  # @params algorithm [Algorithm] algorithm
+  # @return json of questions_sequences
+  # All questions sequences available for given algorithm
+  def questions_sequences
+    respond_to do |format|
+      format.js { }
+      format.json { render json: QuestionsSequenceDatatable.new(params, view_context: view_context) }
+    end
+  end
+
+  # GET algorithms/:id/questions_sequence_scored
+  # @params algorithm [Algorithm] algorithm
+  # @return json of questions_sequences_scored
+  # All questions sequences scored available for given algorithm
+  def questions_sequences_scored
+    respond_to do |format|
+      format.js { }
+      format.json { render json: QuestionsSequenceScoredDatatable.new(params, view_context: view_context) }
+    end
+  end
+
+  # PUT algorithms/:id/unarchive
+  # @params algorithm [Algorithm] algorithm to unarchive
+  # @return redirect to algorithms#index with flash message
+  # Unarchive the given algorithm.
+  def unarchive
+    @algorithm.archived = false
+
+    if @algorithm.save
+      redirect_to algorithms_url, notice: t('flash_message.success_created')
+    else
+      redirect_to algorithms_url, danger: t('flash_message.update_fail')
+    end
+  end
+
+  # GET algorithms/:id/questions_sequence_scored
+  # @params algorithm [Algorithm] algorithm
+  # Display villages view
+  def villages
+    respond_to do |format|
+      format.js { }
     end
   end
 

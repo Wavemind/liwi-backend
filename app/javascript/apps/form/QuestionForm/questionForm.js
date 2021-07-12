@@ -246,8 +246,6 @@ export default class QuestionForm extends React.Component {
       target
     } = this.state;
 
-    console.log(stages);
-    console.log(rounds);
     return (
       isLoading ? <Loader/> :
         <FadeIn>
@@ -427,21 +425,6 @@ export default class QuestionForm extends React.Component {
                   </Form.Group>
                 : null}
 
-                <Form.Group controlId="validationIsTriage">
-                  <Form.Check
-                    name="is_triage"
-                    label={I18n.t("activerecord.attributes.question.is_triage")}
-                    value={values.is_triage}
-                    disabled={deployedMode}
-                    checked={values.is_triage}
-                    onChange={handleChange}
-                    isInvalid={touched.is_triage && !!errors.is_triage}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.is_triage}
-                  </Form.Control.Feedback>
-                </Form.Group>
-
                 <Form.Group controlId="validationIsIdentifiable">
                   <Form.Check
                     name="is_identifiable"
@@ -473,21 +456,6 @@ export default class QuestionForm extends React.Component {
                     </Form.Control.Feedback>
                   </Form.Group>
                 : null}
-
-                  <Form.Group controlId="validationIsDangerSign">
-                    <Form.Check
-                      name="is_danger_sign"
-                      label={I18n.t("activerecord.attributes.question.is_danger_sign")}
-                      value={values.is_danger_sign}
-                      checked={values.is_danger_sign}
-                      onChange={handleChange}
-                      disabled={deployedMode}
-                      isInvalid={touched.is_danger_sign && !!errors.is_danger_sign}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.is_danger_sign}
-                    </Form.Control.Feedback>
-                  </Form.Group>
 
                 <Form.Group controlId="validationLabel">
                   <Form.Label>{I18n.t("activerecord.attributes.node.label_translations")}</Form.Label>

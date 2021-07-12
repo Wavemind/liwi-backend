@@ -3,9 +3,9 @@
   <%= f.input :name %>
 
   <% if @version.id.present? %>
-    <%= f.input :top_left_question_id, collection: @version.components, label_method: :node_label, prompt: t('select')  %>
-    <%= f.input :first_top_right_question_id, collection: @version.components, label_method: :node_label, prompt: t('select')  %>
-    <%= f.input :second_top_right_question_id, collection: @version.components, label_method: :node_label, prompt: t('select')  %>
+    <%= f.input :top_left_question_id, collection: @version.components.includes(:node), label_method: :node_label, prompt: t('select')  %>
+    <%= f.input :first_top_right_question_id, collection: @version.components.includes(:node), label_method: :node_label, prompt: t('select')  %>
+    <%= f.input :second_top_right_question_id, collection: @version.components.includes(:node), label_method: :node_label, prompt: t('select')  %>
   <% end %>
 
   <%= f.input :is_arm_control, as: :boolean, label: t('versions.edit.is_arm_control_label') %>

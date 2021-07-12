@@ -1,0 +1,7 @@
+<p class="mx-0 my-0 metadata" data-version="<%= @version.id %>" data-algorithm="<%= @version.algorithm.id %>"></p>
+<%= react_component('form/components/VersionOrders',
+                    {
+                      tree: @version.full_order_json,
+                      selected: @version.extract_nodes_from_version.map(&:id),
+                      disabled: @version.is_deployed?
+                    }) %>

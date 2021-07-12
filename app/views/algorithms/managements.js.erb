@@ -1,0 +1,27 @@
+document.getElementById("algorithm-index-content").innerHTML = "<%= escape_javascript render 'managements/table' %>"
+
+jQuery(document).ready(function () {
+  $("#algorithm-tabs").find(".nav-link").removeClass("active")
+  $("#nav-link-managements").addClass("active")
+
+  $("#managements-datatable").dataTable({
+    "processing": true,
+    "info": false,
+    "bLengthChange": false,
+    "serverSide": true,
+    "pageLength": 50,
+    "ajax": $("#managements-datatable").data("source"),
+    "pagingType": "full_numbers",
+    "columns": [
+      { "data": "id" },
+      { "data": "reference" },
+      { "data": "label" },
+      { "data": "description" },
+      { "data": "actions", "className": "text-right" },
+    ],
+    'columnDefs': [ {
+      'targets': [4],
+      'orderable': false,
+    }]
+  });
+});

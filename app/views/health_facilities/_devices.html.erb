@@ -1,0 +1,32 @@
+<h2><%= t('health_facilities.show.devices') %></h2>
+
+<div class="row">
+  <div class="col">
+    <%= simple_form_for Device.new, url: health_facility_add_device_url(@health_facility), method: :post do |f| %>
+      <div class="row">
+        <div class="col">
+          <%= f.input :id, collection: Device.where(health_facility_id: nil), label_method: :label, label: false, prompt: t('prompt') %>
+        </div>
+        <div class="col">
+          <%= f.submit t('add'), class: 'btn btn-primary' %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<table class="table table-condensed table-hover" id="devices-datatable" data-from="health_facility" data-source="<%= devices_url(format: :json, from: 'health_facility', id: @health_facility.id) %>">
+  <thead>
+  <tr>
+    <th><%= t('.columns.mac_address') %></th>
+    <th><%= t('.columns.name') %></th>
+    <th><%= t('.columns.brand') %></th>
+    <th><%= t('.columns.model') %></th>
+    <th><%= t('.columns.health_facility') %></th>
+    <th><%= t('.columns.last_activity') %></th>
+    <th><%= t('.columns.last_user') %></th>
+    <th class="text-right"><%= t('.columns.actions') %></th>
+  </tr>
+  </thead>
+  <tbody></tbody>
+</table>

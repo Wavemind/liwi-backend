@@ -4,10 +4,11 @@ import { Modal } from "react-bootstrap";
 import store from "../../engine/reducers/store";
 import { closeModal } from "../../engine/reducers/creators.actions";
 
+import CutOffForm from "../../../form/CutOffForm";
 import ScoreForm from "../../../form/ScoreForm";
 import DrugInstanceForm from "../../../form/DrugForm/instanceForm";
 import DrugForm from "../../../form/DrugForm/stepper";
-import FinalDiagnosticForm from "../../../form/FinalDiagnosticForm";
+import FinalDiagnosisForm from "../../../form/FinalDiagnosisForm";
 import QuestionsSequenceForm from "../../../form/QuestionsSequenceForm";
 import StepperQuestionForm from "../../../form/QuestionForm/stepper";
 import ManagementForm from "../../../form/ManagementForm";
@@ -55,10 +56,12 @@ export default class AdvancedModal extends React.Component {
     switch (content) {
       case "ScoreForm":
         return <ScoreForm {...params} />;
+      case "CutOffForm":
+        return <CutOffForm {...params} />;
       case "DrugForm":
         return <DrugForm {...params} />;
-      case "FinalDiagnosticForm":
-        return <FinalDiagnosticForm {...params} />;
+      case "FinalDiagnosisForm":
+        return <FinalDiagnosisForm {...params} />;
       case "QuestionForm":
         return <StepperQuestionForm {...params} />;
       case "QuestionsSequenceForm":

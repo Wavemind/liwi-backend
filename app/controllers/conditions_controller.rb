@@ -1,47 +1,18 @@
 class ConditionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_instanceable, only: [:destroy, :add_diagnostic_condition, :destroy_diagnostic_condition]
+  before_action :set_instanceable, only: [:destroy]
   before_action :set_instance, only: [:destroy]
-  before_action :set_condition, only: [:destroy, :destroy_diagnostic_condition]
+  before_action :set_condition, only: [:destroy, :update_cut_offs]
 
-  def destroy
-    if @condition.destroy
-      respond_to do |format|
-        format.html {}
-        format.json { render json: t('flash_message.success_created') }
-      end
+
+  # PUT conditions/:id/update_cut_offs
+  # @params condition [Condition] condition to update
+  # Update cut offs for the given link and return the object in json format
+  def update_cut_offs
+    if @condition.update(condition_params)
+      render json: @condition.as_json
     else
-      respond_to do |format|
-        format.html {}
-        format.json { render json: t('error') }
-      end
-    end
-  end
-
-  # POST /diagnostics/:diagnostic_id/conditions/differential
-  # @return
-  # Add diagnostic condition
-  def add_diagnostic_condition
-    authorize policy_scope(Condition)
-    @condition = @instanceable.conditions.new(condition_params)
-    @condition.first_conditionable = @condition.create_conditionable(condition_params[:first_conditionable_id]) unless condition_params[:first_conditionable_id].empty?
-    @condition.second_conditionable = @condition.create_conditionable(condition_params[:second_conditionable_id]) unless condition_params[:second_conditionable_id].empty?
-
-    if @condition.save
-      redirect_to algorithm_version_diagnostic_url(@instanceable.version.algorithm, @instanceable.version, @instanceable, panel: 'differential_conditions'), notice: t('flash_message.success_created')
-    else
-      redirect_to algorithm_version_diagnostic_url(@instanceable.version.algorithm, @instanceable.version, @instanceable, panel: 'differential_conditions'), alert: t('error')
-    end
-  end
-
-  # DELETE /diagnostics/:diagnostic_id/conditions/:id/differential
-  # @return
-  # Destroy diagnostic condition
-  def destroy_diagnostic_condition
-    if @condition.destroy
-      redirect_to algorithm_version_diagnostic_url(@instanceable.version.algorithm, @instanceable.version, @instanceable, panel: 'differential_conditions'), notice: t('flash_message.success_updated')
-    else
-      redirect_to algorithm_version_diagnostic_url(@instanceable.version.algorithm, @instanceable.version, @instanceable, panel: 'differential_conditions'), alert: t('error')
+      render json: @condition.errors.full_messages, status: 422
     end
   end
 
@@ -53,8 +24,8 @@ class ConditionsController < ApplicationController
   end
 
   def set_instanceable
-    if params[:diagnostic_id].present?
-      @instanceable = Diagnostic.find(params[:diagnostic_id])
+    if params[:diagnosis_id].present?
+      @instanceable = Diagnosis.find(params[:diagnosis_id])
     elsif params[:questions_sequence_id].present?
       @instanceable = QuestionsSequence.find(params[:questions_sequence_id])
     else
@@ -65,10 +36,10 @@ class ConditionsController < ApplicationController
   def condition_params
     params.require(:condition).permit(
       :id,
-      :operator,
-      :first_conditionable_id,
-      :second_conditionable_id,
-      :top_level,
+      :cut_off_start,
+      :cut_off_end,
+      :cut_off_value_type,
+      :answer_id,
     )
   end
 

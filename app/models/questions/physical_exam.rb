@@ -23,6 +23,6 @@ class Questions::PhysicalExam < Question
 
   # Associate proper step depending on category ; empty for parent
   def associate_step
-    self.step = Question.steps[:physical_exam]
+    self.step = Question.steps[:physical_exam_step]
   end
 end

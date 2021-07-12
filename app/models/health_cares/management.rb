@@ -1,4 +1,4 @@
-# Define every managements for a diagnostic
+# Define every managements for a diagnosis
 # Reference prefix : M
 class HealthCares::Management < HealthCare
 
