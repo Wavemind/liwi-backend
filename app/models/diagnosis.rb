@@ -178,12 +178,12 @@ class Diagnosis < ApplicationRecord
           instance.node.manual_validate
           errors.add(:basic, I18n.t('flash_message.diagnosis.error_in_questions_sequence', url: diagram_questions_sequence_url(instance.node), reference: instance.node.full_reference)) if instance.node.errors.messages.any?
         end
-      elsif instance.node.is_a?(HealthCares::Drug) && instance.node.formulations.map(&:by_age).include?(true)
-        age_missing = true
-        instance.conditions.each do |cond|
-          age_missing = false if %w(ToDay ToMonth).include?(cond.answer.node.formula)
-        end
-        errors.add(:basic, I18n.t('flash_message.diagnosis.drug_conditioned_by_age_without_age', url: diagram_algorithm_version_diagnosis_final_diagnosis_url(version.algorithm.id, version.id, id, instance.final_diagnosis_id).to_s, df_reference: instance.final_diagnosis.full_reference)) if age_missing
+      # elsif instance.node.is_a?(HealthCares::Drug) && instance.node.formulations.map(&:by_age).include?(true)
+      #   age_missing = true
+      #   instance.conditions.each do |cond|
+      #     age_missing = false if %w(ToDay ToMonth).include?(cond.answer.node.formula)
+      #   end
+      #   errors.add(:basic, I18n.t('flash_message.diagnosis.drug_conditioned_by_age_without_age', url: diagram_algorithm_version_diagnosis_final_diagnosis_url(version.algorithm.id, version.id, id, instance.final_diagnosis_id).to_s, df_reference: instance.final_diagnosis.full_reference)) if age_missing
       end
     end
   end
