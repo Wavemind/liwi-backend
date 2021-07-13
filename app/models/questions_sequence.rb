@@ -1,6 +1,6 @@
 # Define a sequence of questions to be included in a diagnosis
 class QuestionsSequence < Node
-  before_create :adjust_cut_offs
+  before_save :adjust_cut_offs
   after_create :create_boolean
 
   has_many :answers, foreign_key: 'node_id', dependent: :destroy
@@ -158,7 +158,6 @@ class QuestionsSequence < Node
       type: 'QuestionsSequence',
       reference: reference,
       label: label,
-      version_id: version_id,
       category_name: category_name,
       cut_offs: display_cut_offs
     }

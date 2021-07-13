@@ -244,7 +244,6 @@ export default class QuestionsSequenceForm extends React.Component {
                     <Form.Control
                       as="select"
                       name="cut_off_value_type"
-                      disabled={updateMode}
                       value={values.cut_off_value_type}
                       onChange={handleChange}
                       isInvalid={touched.cut_off_value_type && !!errors.cut_off_value_type}
