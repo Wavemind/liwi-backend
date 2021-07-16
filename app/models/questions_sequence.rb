@@ -1,6 +1,6 @@
 # Define a sequence of questions to be included in a diagnosis
 class QuestionsSequence < Node
-  before_create :adjust_cut_offs
+  before_save :adjust_cut_offs
   after_create :create_boolean
 
   has_many :answers, foreign_key: 'node_id', dependent: :destroy
@@ -61,8 +61,8 @@ class QuestionsSequence < Node
 
   # Adjust cut offs at creation
   def adjust_cut_offs
-    self.cut_off_start = (cut_off_start * 30.4166667) if cut_off_start.present? && cut_off_value_type == 'months'
-    self.cut_off_end = (cut_off_end * 30.4166667) if cut_off_end.present? && cut_off_value_type == 'months'
+    self.cut_off_start = (cut_off_start * 30.4166667).round if cut_off_start.present? && cut_off_value_type == 'months'
+    self.cut_off_end = (cut_off_end * 30.4166667).round if cut_off_end.present? && cut_off_value_type == 'months'
   end
 
   # @return [Json]
@@ -158,7 +158,6 @@ class QuestionsSequence < Node
       type: 'QuestionsSequence',
       reference: reference,
       label: label,
-      version_id: version_id,
       category_name: category_name,
       cut_offs: display_cut_offs
     }

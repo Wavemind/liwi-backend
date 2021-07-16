@@ -37,13 +37,17 @@ class Algorithm < ApplicationRecord
     village = questions.create!(label_en: 'Village', type: 'Questions::BasicDemographic', stage: Question.stages[:registration], answer_type_id: 9, is_mandatory: true, is_identifiable: true, is_default: true)
 
     # Configure basic questions into the algorithm to be used in json generation
-    self.update(medal_r_config: {basic_questions: {
-      gender_question_id: gender.id,
-      weight_question_id: weight.id,
-      general_cc_id: cc_general.id,
-      yi_general_cc_id: yi_cc_general.id,
-      village_question_id: village.id
-    }})
+    self.update(medal_r_config: {
+      basic_questions: {
+        gender_question_id: gender.id,
+        weight_question_id: weight.id,
+        general_cc_id: cc_general.id,
+        yi_general_cc_id: yi_cc_general.id,
+      },
+      optional_basic_questions: {
+        village_question_id: village.id
+      }
+    })
 
     gender.answers.create([
       {label_en: 'Male', value: 'male'},

@@ -212,7 +212,7 @@ export default class QuestionsSequenceForm extends React.Component {
                   : null}
 
                 <Form.Row>
-                  <Form.Label>{I18n.t("activerecord.attributes.node.cut_off_start")}</Form.Label>
+                  <Form.Label>{I18n.t("activerecord.attributes.node.cut_off_start")}&nbsp;&#x2265;&nbsp;</Form.Label>
                   <Form.Group controlId="validationCutOffStart">
                     <Form.Control
                       name="cut_off_start"
@@ -225,7 +225,7 @@ export default class QuestionsSequenceForm extends React.Component {
                       {errors.cut_off_start}
                     </Form.Control.Feedback>
                   </Form.Group>
-                  <Form.Label>{I18n.t("to")}</Form.Label>
+                  <Form.Label>&nbsp;{I18n.t("to")}&nbsp;&#x3c;&nbsp;</Form.Label>
 
                   <Form.Group controlId="validationCutOffEnd">
                     <Form.Control
@@ -244,7 +244,6 @@ export default class QuestionsSequenceForm extends React.Component {
                     <Form.Control
                       as="select"
                       name="cut_off_value_type"
-                      disabled={updateMode}
                       value={values.cut_off_value_type}
                       onChange={handleChange}
                       isInvalid={touched.cut_off_value_type && !!errors.cut_off_value_type}

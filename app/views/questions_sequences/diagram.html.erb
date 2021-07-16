@@ -8,7 +8,7 @@
     <%= react_component('diagram', {
       context: {
         user: current_user,
-        instanceable: @questions_sequence.as_json(methods: [:category_name, :type]),
+        instanceable: @questions_sequence.questions_sequence_json,
         instances: @questions_sequence.questions_json,
         availableNodes: @questions_sequence.available_nodes_json,
         questionCategories: Question.categories('QuestionsSequence').as_json,

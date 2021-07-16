@@ -210,16 +210,9 @@ class Version < ApplicationRecord
   # Init orders for new version
   def init_config
     self.medal_r_config = {
-      questions_orders: {
-        basic_measurements: [],
-        registration_step: [],
-        complaint_categories: [],
-        first_look_assessment: [],
-      },
-      systems_order: Question.systems.to_a.map(&:first),
-      patient_list_order: [],
-      medical_case_list_order: [],
+      systems_order: Question.systems.to_a.map(&:first)
     }
+    self.full_order_json = generate_nodes_order_tree
   end
 
   # Return if the version is currently deployed and can't be updated

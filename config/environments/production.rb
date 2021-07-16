@@ -116,9 +116,7 @@ Rails.application.configure do
   # config.active_record.database_selector = { delay: 2.seconds }
   # config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
-
   config.action_mailer.delivery_method = :postmark
   config.action_mailer.postmark_settings = { api_token: ENV['POSTMARK_API_TOKEN'] }
-
 end
 Rails.application.routes.default_url_options[:host] = ENV['HOST_URL']

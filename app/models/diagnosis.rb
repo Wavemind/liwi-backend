@@ -41,8 +41,8 @@ class Diagnosis < ApplicationRecord
 
   # Adjust cut offs at creation
   def adjust_cut_offs
-    self.cut_off_start = (cut_off_start * 30.4166667) if cut_off_start.present? && cut_off_value_type == 'months'
-    self.cut_off_end = (cut_off_end * 30.4166667) if cut_off_end.present? && cut_off_value_type == 'months'
+    self.cut_off_start = (cut_off_start * 30.4166667).round if cut_off_start.present? && cut_off_value_type == 'months'
+    self.cut_off_end = (cut_off_end * 30.4166667).round if cut_off_end.present? && cut_off_value_type == 'months'
   end
 
   # @return [Json]
@@ -178,12 +178,12 @@ class Diagnosis < ApplicationRecord
           instance.node.manual_validate
           errors.add(:basic, I18n.t('flash_message.diagnosis.error_in_questions_sequence', url: diagram_questions_sequence_url(instance.node), reference: instance.node.full_reference)) if instance.node.errors.messages.any?
         end
-      elsif instance.node.is_a?(HealthCares::Drug) && instance.node.formulations.map(&:by_age).include?(true)
-        age_missing = true
-        instance.conditions.each do |cond|
-          age_missing = false if %w(ToDay ToMonth).include?(cond.answer.node.formula)
-        end
-        errors.add(:basic, I18n.t('flash_message.diagnosis.drug_conditioned_by_age_without_age', url: diagram_algorithm_version_diagnosis_final_diagnosis_url(version.algorithm.id, version.id, id, instance.final_diagnosis_id).to_s, df_reference: instance.final_diagnosis.full_reference)) if age_missing
+      # elsif instance.node.is_a?(HealthCares::Drug) && instance.node.formulations.map(&:by_age).include?(true)
+      #   age_missing = true
+      #   instance.conditions.each do |cond|
+      #     age_missing = false if %w(ToDay ToMonth).include?(cond.answer.node.formula)
+      #   end
+      #   errors.add(:basic, I18n.t('flash_message.diagnosis.drug_conditioned_by_age_without_age', url: diagram_algorithm_version_diagnosis_final_diagnosis_url(version.algorithm.id, version.id, id, instance.final_diagnosis_id).to_s, df_reference: instance.final_diagnosis.full_reference)) if age_missing
       end
     end
   end

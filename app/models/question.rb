@@ -274,4 +274,33 @@ class Question < Node
   def associate_step
 
   end
+
+  # Get translatable attributes to translate with excel import
+  def self.get_translatable_params(data)
+    fields_to_update = {}
+
+    data.row(1).each_with_index do |head, index|
+      if head.include?('Label')
+        code = head[/\((.*?)\)/m, 1]
+        fields_to_update["label_#{code}"] = index unless code == 'en'
+      elsif head.include?('Description')
+        code = head[/\((.*?)\)/m, 1]
+        fields_to_update["description_#{code}"] = index unless code == 'en'
+      elsif head.include?('Min message warning')
+        code = head[/\((.*?)\)/m, 1]
+        fields_to_update["min_message_warning_#{code}"] = index unless code == 'en'
+      elsif head.include?('Max message warning')
+        code = head[/\((.*?)\)/m, 1]
+        fields_to_update["max_message_warning_#{code}"] = index unless code == 'en'
+      elsif head.include?('Min message error')
+        code = head[/\((.*?)\)/m, 1]
+        fields_to_update["min_message_error_#{code}"] = index unless code == 'en'
+      elsif head.include?('Max message error')
+        code = head[/\((.*?)\)/m, 1]
+        fields_to_update["max_message_error_#{code}"] = index unless code == 'en'
+      end
+    end
+
+    fields_to_update
+  end
 end
