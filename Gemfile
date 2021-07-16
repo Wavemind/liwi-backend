@@ -54,6 +54,7 @@ gem 'prawn-qrcode'
 gem 'city-state'
 gem 'tinymce-rails'
 gem 'copy_carrierwave_file'
+gem 'postmark-rails'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
