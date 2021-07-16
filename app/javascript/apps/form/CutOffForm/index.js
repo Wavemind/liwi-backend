@@ -80,7 +80,7 @@ export default class CutOffForm extends React.Component {
             <Form noValidate onSubmit={handleSubmit}>
               {status ? <DisplayErrors errors={status}/> : null}
               <Form.Row>
-                <Form.Label>{I18n.t("activerecord.attributes.node.cut_off_start")}</Form.Label>
+                <Form.Label>{I18n.t("activerecord.attributes.node.cut_off_start")}&nbsp;&#x2265;&nbsp;</Form.Label>
                 <Form.Group controlId="validationCutOffStart">
                   <Form.Control
                     name="cut_off_start"
@@ -93,7 +93,7 @@ export default class CutOffForm extends React.Component {
                     {errors.cut_off_start}
                   </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Label>{I18n.t("to")}</Form.Label>
+                <Form.Label>&nbsp;{I18n.t("to")}&nbsp;&#x3c;&nbsp;</Form.Label>
 
                 <Form.Group controlId="validationCutOffEnd">
                   <Form.Control
