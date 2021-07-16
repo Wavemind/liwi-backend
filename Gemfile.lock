@@ -211,6 +211,7 @@ GEM
       thor (>= 0.14, < 2.0)
     jquery-ui-rails (6.0.1)
       railties (>= 3.2.16)
+    json (2.5.1)
     libv8 (8.4.255.0)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
@@ -254,6 +255,11 @@ GEM
     pdf-core (0.9.0)
     pg (1.2.3)
     popper_js (1.16.0)
+    postmark (1.21.4)
+      json
+    postmark-rails (0.21.0)
+      actionmailer (>= 3.0.0)
+      postmark (>= 1.21.3, < 2.0)
     prawn (2.4.0)
       pdf-core (~> 0.9.0)
       ttfunk (~> 1.7)
@@ -491,6 +497,7 @@ DEPENDENCIES
   momentjs-rails
   nilify_blanks
   pg
+  postmark-rails
   prawn
   prawn-qrcode
   puma
