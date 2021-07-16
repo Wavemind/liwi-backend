@@ -20,7 +20,7 @@ class Node < ApplicationRecord
   validates_presence_of :label_en
   after_create :generate_reference
 
-  translates :label, :description
+  translates :label, :description, :min_message_error, :max_message_error, :min_message_warning, :max_message_warning
 
   # Puts nil instead of empty string when formula is not set in the view.
   nilify_blanks only: [:formula]
@@ -92,8 +92,8 @@ class Node < ApplicationRecord
   # Automatically create the answers, since they can't be changed
   # Create 2 automatic answers (yes & no) for PS and boolean questions
   def create_boolean
-    self.answers << Answer.new(reference: 1, label_en: I18n.t('answers.predefined.yes'))
-    self.answers << Answer.new(reference: 2, label_en: I18n.t('answers.predefined.no'))
+    self.answers << Answer.new(reference: 1, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.yes', locale: k)] } ])
+    self.answers << Answer.new(reference: 2, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.no', locale: k)] } ])
     self.save
   end
 

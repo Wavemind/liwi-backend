@@ -1,4 +1,4 @@
-en:
+sw:
   activerecord:
     attributes:
       algorithm:
@@ -59,7 +59,7 @@ en:
         is_identifiable: "This question can identify a patient"
         is_mandatory: "Mandatory"
         emergency_status: "Emergency status"
-        is_neonat: "Young infant"
+        is_neonat: "Assign to neonat algorithms"
         is_triage: "Ask in triage (if triage available)"
         max_message_error: "Error message if above range"
         max_message_warning: "Warning message if above range"
@@ -69,7 +69,6 @@ en:
         min_message_warning: "Warning message if below range"
         min_value_error: "Lower limit before error"
         min_value_warning: "Lower limit before warning"
-        round: "Value rounded to"
         snomed: "SNOMED label"
         stage: "Stage"
         system: "System"
@@ -541,7 +540,6 @@ en:
       nurse: "Nurse"
       midwife: "Midwife"
       pharmacist: "Pharmacist"
-      registration_assistant: "Registration Assistant"
     table:
       columns:
         first_name: "First name"
@@ -665,16 +663,6 @@ en:
     priorities:
       basic: "Basic"
       mandatory: "Mandatory"
-    rounds:
-      half:
-        label: "Half (0.5)"
-        value: "0.5"
-      tenth:
-        label: "Tenth (0.1)"
-        value: "0.1"
-      unit:
-        label: "Unit (1.0)"
-        value: "1"
     stages:
       registration: "Registration"
       triage: "Triage"

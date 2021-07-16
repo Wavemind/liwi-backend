@@ -64,6 +64,7 @@ export default class FormulationFields extends React.Component {
     switch(formulation.medication_form) {
       case "capsule":
       case "tablet":
+      case "dispersible_tablet":
         uniqueDoseTrad = "unique_dose_solid";
         break;
       case "suppository":
@@ -154,7 +155,7 @@ export default class FormulationFields extends React.Component {
             </Form.Group>
             : null}
 
-          {(formulation.medication_form === "tablet" && !formulation.by_age) ?
+          {(["tablet", "dispersible_tablet"].includes(formulation.medication_form) && !formulation.by_age) ?
             <Form.Group as={Col} controlId={`${index}-validationBreakable`}>
               <Form.Label>{I18n.t("drugs.breakable.select")}</Form.Label>
               <Form.Control
@@ -175,7 +176,7 @@ export default class FormulationFields extends React.Component {
             </Form.Group>
             : null}
 
-          {(!["capsule", "tablet", "suspension", "syrup", "solution", "powder_for_injection"].includes(formulation.medication_form) || formulation.by_age) ?
+          {(!["capsule", "tablet", "dispersible_tablet", "suspension", "syrup", "solution", "powder_for_injection"].includes(formulation.medication_form) || formulation.by_age) ?
             <Form.Group as={Col} controlId={`${index}-validationUniqueDose`}>
               <Form.Label>{I18n.t(`activerecord.attributes.formulation.${uniqueDoseTrad}`)}</Form.Label>
               <Form.Control
@@ -209,7 +210,7 @@ export default class FormulationFields extends React.Component {
         </Form.Row>
 
 
-        {(["capsule", "tablet", "suspension", "syrup", "solution", "powder_for_injection"].includes(formulation.medication_form) && !formulation.by_age) ?
+        {(["capsule", "tablet", "dispersible_tablet", "suspension", "syrup", "solution", "powder_for_injection"].includes(formulation.medication_form) && !formulation.by_age) ?
           <>
             <Form.Row>
               <Form.Group as={Col} controlId={`${index}-validationDoseForm`}>

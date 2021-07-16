@@ -6,6 +6,7 @@ class Question < Node
   after_create :create_positive, if: Proc.new { answer_type.value == 'Positive' }
   after_create :create_present, if: Proc.new { answer_type.value == 'Present' }
 
+  enum round: [:tenth, :half, :unit]
   enum step: [:registration_step, :first_look_assessment, :complaint_categories, :basic_measurements, :medical_history, :physical_exam, :test_step, :health_care_questions, :referral_step]
   enum stage: [:registration, :triage, :test, :consultation, :diagnosis_management]
   enum system: [
@@ -103,13 +104,14 @@ class Question < Node
     categories
   end
 
-  # TODO: COMMENTAIRE
+  # Send dropdown list values for react forms
   def self.list_attributes(diagram_type, algorithm)
     {
       categories: categories(diagram_type),
       answer_types: AnswerType.all.as_json(methods: :display_name),
       systems: Question.systems.map { |k, v| [I18n.t("questions.systems.#{k}"), k] },
       stages: Question.stages,
+      rounds: Question.rounds,
       emergency_statuses: Question.emergency_statuses,
       complaint_categories: algorithm.questions.where(type: 'Questions::ComplaintCategory')
     }
@@ -118,16 +120,16 @@ class Question < Node
   # Automatically create the answers, since they can't be changed
   # Create 2 automatic answers (positive & negative) for positive questions
   def create_positive
-    self.answers << Answer.new(reference: 1, label_en: I18n.t('answers.predefined.positive'))
-    self.answers << Answer.new(reference: 2, label_en: I18n.t('answers.predefined.negative'))
+    self.answers << Answer.new(reference: 1, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.positive', locale: k)] } ])
+    self.answers << Answer.new(reference: 2, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.negative', locale: k)] } ])
     self.save
   end
 
   # Automatically create the answers, since they can't be changed
   # Create 2 automatic answers (present & absent) for present questions
   def create_present
-    self.answers << Answer.new(reference: 1, label_en: I18n.t('answers.predefined.present'))
-    self.answers << Answer.new(reference: 2, label_en: I18n.t('answers.predefined.absent'))
+    self.answers << Answer.new(reference: 1, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.present', locale: k)] } ])
+    self.answers << Answer.new(reference: 2, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.absent', locale: k)] } ])
     self.save
   end
 
@@ -231,5 +233,34 @@ class Question < Node
   # Display the label for the current child
   def self.display_label
     I18n.t("questions.categories.#{self.variable}.label")
+  end
+
+  # Get translatable attributes to translate with excel import
+  def self.get_translatable_params(data)
+    fields_to_update = {}
+
+    data.row(1).each_with_index do |head, index|
+      if head.include?('Label')
+        code = head[/\((.*?)\)/m, 1]
+        fields_to_update["label_#{code}"] = index unless code == 'en'
+      elsif head.include?('Description')
+        code = head[/\((.*?)\)/m, 1]
+        fields_to_update["description_#{code}"] = index unless code == 'en'
+      elsif head.include?('Min message warning')
+        code = head[/\((.*?)\)/m, 1]
+        fields_to_update["min_message_warning_#{code}"] = index unless code == 'en'
+      elsif head.include?('Max message warning')
+        code = head[/\((.*?)\)/m, 1]
+        fields_to_update["max_message_warning_#{code}"] = index unless code == 'en'
+      elsif head.include?('Min message error')
+        code = head[/\((.*?)\)/m, 1]
+        fields_to_update["min_message_error_#{code}"] = index unless code == 'en'
+      elsif head.include?('Max message error')
+        code = head[/\((.*?)\)/m, 1]
+        fields_to_update["max_message_error_#{code}"] = index unless code == 'en'
+      end
+    end
+
+    fields_to_update
   end
 end

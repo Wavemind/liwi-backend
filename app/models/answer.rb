@@ -8,7 +8,7 @@ class Answer < ApplicationRecord
   has_many :medical_case_answers
 
   validates_presence_of :label_en
-  validates_presence_of :operator, if: Proc.new { self.node.is_a?(Question) && self.node.answer_type.display == 'Input' && !%w(Questions::BasicMeasurement Questions::VitalSignAnthropometric).include?(self.node.type)}
+  validates_presence_of :operator, if: Proc.new { self.node.is_a?(Question) && self.node.answer_type.display == 'Input' && !%w(Questions::BasicMeasurement Questions::VitalSignAnthropometric).include?(self.node.type) && value != 'not_available'}
 
   after_validation :correct_value_type
   after_create :generate_reference, if: Proc.new { !self.node.is_a?(QuestionsSequence) && ![1,7,8].include?(self.node.answer_type_id) }
@@ -73,6 +73,7 @@ class Answer < ApplicationRecord
   # @param [String] val
   # Force value into Integer or Float and raise a validation error otherwise
   def validate_value_type(val)
+    return nil if val == 'not_available'
     if node.answer_type.value == 'Integer'
       Integer(val) rescue errors.add(:value, I18n.t('answers.validation.wrong_value_type', type: node.answer_type.value))
     elsif node.answer_type.value == 'Float'

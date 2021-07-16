@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_04_101248) do
+ActiveRecord::Schema.define(version: 2021_05_05_081150) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -38,7 +38,7 @@ ActiveRecord::Schema.define(version: 2021_02_04_101248) do
 
   create_table "administration_routes", force: :cascade do |t|
     t.string "category"
-    t.string "name"
+    t.hstore "name_translations"
   end
 
   create_table "algorithms", force: :cascade do |t|
@@ -49,7 +49,6 @@ ActiveRecord::Schema.define(version: 2021_02_04_101248) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "age_limit"
-    t.string "age_limit_message"
     t.json "medal_r_config"
     t.json "village_json"
     t.integer "minimum_age"
@@ -57,6 +56,7 @@ ActiveRecord::Schema.define(version: 2021_02_04_101248) do
     t.integer "study_id"
     t.boolean "track_referral", default: true
     t.hstore "emergency_content_translations"
+    t.hstore "age_limit_message_translations"
     t.index ["user_id"], name: "index_algorithms_on_user_id"
   end
 
@@ -154,6 +154,8 @@ ActiveRecord::Schema.define(version: 2021_02_04_101248) do
     t.boolean "by_age", default: false
     t.bigint "node_id"
     t.bigint "administration_route_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.hstore "description_translations"
     t.hstore "injection_instructions_translations"
     t.hstore "dispensing_description_translations"
@@ -194,10 +196,10 @@ ActiveRecord::Schema.define(version: 2021_02_04_101248) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "final_diagnostic_id"
-    t.string "duration"
-    t.string "description"
     t.integer "position_x", default: 100
     t.integer "position_y", default: 100
+    t.hstore "duration_translations"
+    t.hstore "description_translations"
     t.index ["final_diagnostic_id"], name: "index_instances_on_final_diagnostic_id"
     t.index ["instanceable_type", "instanceable_id"], name: "index_instances_on_instanceable_type_and_instanceable_id"
     t.index ["node_id"], name: "index_instances_on_node_id"
@@ -311,10 +313,6 @@ ActiveRecord::Schema.define(version: 2021_02_04_101248) do
     t.float "max_value_warning"
     t.float "min_value_error"
     t.float "max_value_error"
-    t.string "min_message_warning"
-    t.string "max_message_warning"
-    t.string "min_message_error"
-    t.string "max_message_error"
     t.boolean "estimable", default: false
     t.bigint "reference_table_z_id"
     t.boolean "is_neonat", default: false
@@ -323,6 +321,11 @@ ActiveRecord::Schema.define(version: 2021_02_04_101248) do
     t.boolean "unavailable", default: false
     t.integer "level_of_urgency", default: 5
     t.integer "step"
+    t.hstore "min_message_error_translations"
+    t.hstore "max_message_error_translations"
+    t.hstore "min_message_warning_translations"
+    t.hstore "max_message_warning_translations"
+    t.integer "round"
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
     t.index ["diagnostic_id"], name: "index_nodes_on_diagnostic_id"
@@ -417,7 +420,6 @@ ActiveRecord::Schema.define(version: 2021_02_04_101248) do
     t.bigint "algorithm_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "description"
     t.bigint "top_left_question_id"
     t.bigint "first_top_right_question_id"
     t.bigint "second_top_right_question_id"
@@ -427,6 +429,7 @@ ActiveRecord::Schema.define(version: 2021_02_04_101248) do
     t.boolean "is_arm_control", default: false
     t.string "job_id", default: ""
     t.json "medal_data_config", default: {}
+    t.hstore "description_translations"
     t.index ["algorithm_id"], name: "index_versions_on_algorithm_id"
     t.index ["first_top_right_question_id"], name: "index_versions_on_first_top_right_question_id"
     t.index ["second_top_right_question_id"], name: "index_versions_on_second_top_right_question_id"

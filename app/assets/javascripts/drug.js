@@ -14,10 +14,20 @@ jQuery(document).ready(function () {
       { "data": "label" },
       { "data": "description" },
       { "data": "actions", "className": "text-right" },
+      { "data": "is_neonat" },
     ],
     'columnDefs': [ {
       'targets': [4],
       'orderable': false,
-    }]
+    },
+    {
+      'targets': [5],
+      'visible': false,
+    }],
+    "createdRow": function( row, data, dataIndex){
+      if (data.is_neonat === "true") {
+        $(row).addClass('is_neonat');
+      }
+    }
   });
 });
