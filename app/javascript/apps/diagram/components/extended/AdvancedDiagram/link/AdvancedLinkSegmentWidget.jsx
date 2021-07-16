@@ -46,7 +46,6 @@ class AdvancedLinkSegmentWidget extends DefaultLinkSegmentWidget {
           const conditionCutOffStart = link.options.cutOffStart;
           const conditionCutOffEnd = link.options.cutOffEnd;
           link.options.selected = false;
-          
           store.dispatch(
             openModal(I18n.t("conditions.cut_off_modal"), "CutOffForm", {
               engine,

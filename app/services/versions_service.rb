@@ -370,7 +370,7 @@ class VersionsService
       format = question.answer_type.display
       format = 'Reference' if question.reference_table_x_id.present?
       format = question.answer_type.value if %w(Date String).include?(question.answer_type.value)
-      format = 'Autocomplete' if question.algorithm.medal_r_config["basic_questions"]["village_question_id"] === question.id
+      format = 'Autocomplete' if question.algorithm.medal_r_config["optional_basic_questions"]["village_question_id"] === question.id
       hash[question.id]['display_format'] = format
       hash[question.id]['qs'] = get_node_questions_sequences(question, []).uniq
       hash[question.id]['dd'] = get_node_diagnoses(question, []).uniq
