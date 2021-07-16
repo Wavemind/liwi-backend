@@ -116,14 +116,9 @@ Rails.application.configure do
   # config.active_record.database_selector = { delay: 2.seconds }
   # config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
+
+  config.action_mailer.delivery_method = :postmark
+  config.action_mailer.postmark_settings = { api_token: ENV['POSTMARK_API_TOKEN'] }
+
 end
 Rails.application.routes.default_url_options[:host] = ENV['HOST_URL']
-
-ActionMailer::Base.smtp_settings = {
-  address: 'email-smtp.eu-west-1.amazonaws.com',
-  port: 587,
-  user_name: 'AKIAI7BG3YDHUQJD57VA',
-  password: 'Al42g06z8Gr0JOgQ8D4m4/gm4U2DIP2s+Df4bBVaEN4x',
-  authentication: :login,
-  enable_starttls_auto: true
-}
