@@ -22,10 +22,10 @@ export default class DiagramProvider extends React.Component {
     // Assign node to correct array
     let orderedNodes = DEFAULT_ORDERED_NODES;
 
-    if (instanceable.type === "Diagnostic") {
+    if (instanceable.type === "Diagnosis") {
       orderedNodes.scored = [];
-      orderedNodes.finalDiagnostic = [];
-    } else if (instanceable.type === "FinalDiagnostic") {
+      orderedNodes.finalDiagnosis = [];
+    } else if (instanceable.type === "FinalDiagnosis") {
       orderedNodes.treatmentQuestion = [];
       orderedNodes.scored = [];
       orderedNodes.drug = [];
@@ -74,7 +74,7 @@ export default class DiagramProvider extends React.Component {
       case "HealthCare":
         prefix = nodeCategory === "HealthCares::Management" ? "M" : "DR";
         break;
-      case "FinalDiagnostic":
+      case "FinalDiagnosis":
         prefix = "DF";
         break;
     }

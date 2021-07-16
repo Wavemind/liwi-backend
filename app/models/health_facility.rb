@@ -1,6 +1,7 @@
 # Manage groups
 class HealthFacility < ApplicationRecord
 
+  belongs_to :study
   has_many :devices
   has_many :health_facility_accesses
   has_many :versions, through: :health_facility_accesses
@@ -13,6 +14,7 @@ class HealthFacility < ApplicationRecord
   validates_presence_of :pin_code
   validates_presence_of :country
   validates_presence_of :area
+  validates_presence_of :study_id
 
   validates_presence_of :main_data_ip
   validates_presence_of :local_data_ip, unless: :standalone?
@@ -32,6 +34,14 @@ class HealthFacility < ApplicationRecord
 
   private
 
+  # Generate secured token
+  def generate_token
+    key = SecureRandom.random_bytes(32)
+    crypt = ActiveSupport::MessageEncryptor.new(key)
+    self.token = crypt.encrypt_and_sign(pin_code)
+    self.save
+  end
+
   # Ensure the code pin is a 4 digits
   def validate_code_pin
     self.errors.add(:pin_code, I18n.t('health_facilities.errors.code_pin_invalid')) if pin_code.match('^[0-9]{4}$').nil?
@@ -44,13 +54,5 @@ class HealthFacility < ApplicationRecord
     elsif standalone?
       self.errors.add(:main_data_ip, I18n.t('health_facilities.errors.ip_invalid')) if main_data_ip.present? && main_data_ip.match('^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$').nil?
     end
-  end
-
-  # Generate secured token
-  def generate_token
-    key = SecureRandom.random_bytes(32)
-    crypt = ActiveSupport::MessageEncryptor.new(key)
-    self.token = crypt.encrypt_and_sign(pin_code)
-    self.save
   end
 end

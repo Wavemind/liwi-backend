@@ -7,8 +7,7 @@ class Version < ApplicationRecord
   belongs_to :algorithm
   belongs_to :user
 
-  has_many :diagnostics, dependent: :destroy
-  has_many :medical_case_answers
+  has_many :diagnoses, dependent: :destroy
 
   has_many :group_accesses
   has_many :groups, through: :group_accesses
@@ -27,16 +26,23 @@ class Version < ApplicationRecord
   scope :archived, ->(){ where(archived: true) }
   scope :active, ->(){ where(archived: false) }
 
+  translates :description
+
   before_create :init_config
 
   validates_presence_of :name
-  validates_presence_of :description
+  validates_presence_of :description_en
 
   amoeba do
     enable
-    include_association :diagnostics
+    include_association :diagnoses
     include_association :components
     append name: I18n.t('duplicated')
+  end
+
+  # Return badge if the version is archived
+  def display_archive_status
+    archived ? '<span class="badge badge-danger">archived</span>' : ''
   end
 
   # @return [String]
@@ -45,52 +51,98 @@ class Version < ApplicationRecord
     "#{algorithm.name} - #{name}"
   end
 
-  # Return an array of all questions that can be instantiate in a version
-  def instanceable_questions
-    questions = algorithm.questions.where(stage: %w(registration triage)).or(algorithm.questions.where(type: %w(Questions::VitalSignAnthropometric Questions::Referral)))
+  # Duplicate the version
+  def duplicate
+    ActiveRecord::Base.transaction(requires_new: true) do
+      diagnoses.each { |diagnosis| diagnosis.update(duplicating: true) }
+      duplicated_version = self.amoeba_dup
 
-    questions_json = []
-    questions.map do |question|
-      questions_json.push({value: question.id, label: question.reference_label})
+      if duplicated_version.save
+        duplicated_version.diagnoses.each_with_index { |diagnosis, index| diagnosis.relink_instance }
+        diagnoses.each { |diagnosis| diagnosis.update(duplicating: false) }
+      else
+        raise ActiveRecord::Rollback, ''
+      end
     end
-    questions_json
-  end
-
-  # Return an array of all questions that has been instantiated
-  def instanciated_questions
-    questions = components.map(&:node)
-
-    questions_json = []
-    questions.map do |question|
-      questions_json.push({value: question.id, label: question.reference_label})
-    end
-    questions_json
-  end
-
-  def is_deployed?
-    # TODO : Test currently disabled so the version can be updated during development phase. To be removed !
-    # group_accesses.where(end_date: nil).any?
-    false
   end
 
   # Add nodes that are called by the json service
   def extract_nodes_from_version
     nodes = []
 
-    components.each do |instance|
+    components.includes(:node).each do |instance|
       nodes.push(instance.node)
     end
 
-    diagnostics.each do |diag|
-      diag.components.questions.each do |instance|
+    diagnoses.each do |diag|
+      diag.components.includes(:node).questions.each do |instance|
         nodes.push(instance.node)
       end
 
-      diag.components.questions_sequences.each do |instance|
+      diag.components.includes(:node).questions_sequences.each do |instance|
         nodes = instance.node.extract_nodes(nodes)
       end
     end
     nodes.uniq
+  end
+
+  # Generate node order tree from version
+  def generate_nodes_order_tree
+    tree = []
+    Question.steps.each do |step_name, step_index|
+      hash = {}
+      hash['title'] = I18n.t("questions.steps.#{step_name}")
+      hash['subtitle'] =  I18n.t('versions.full_order_tree.subtitles.step')
+      hash['type'] = 'step'
+      hash['children'] = []
+      if %w(medical_history_step physical_exam_step).include?(step_name)
+        Question.systems.each do |system_name, system_index|
+          system_hash = {}
+          system_hash['title'] = I18n.t("questions.systems.#{system_name}")
+          system_hash['subtitle'] =  I18n.t('versions.full_order_tree.subtitles.system')
+          system_hash['subtitle_name'] = system_name
+          system_hash['type'] = 'system'
+          system_hash['children'] = []
+          algorithm.questions.where(step: step_index, system: system_index).each do |question|
+            system_hash['children'].push(question.generate_node_tree_hash)
+          end
+          hash['children'].push(system_hash)
+        end
+      elsif step_name == 'complaint_categories_step'
+        older_children_hash = {}
+        older_children_hash['title'] = I18n.t('older_children')
+        older_children_hash['subtitle'] = I18n.t('versions.full_order_tree.subtitles.attribute')
+        older_children_hash['subtitle_name'] = 'older_children'
+        older_children_hash['type'] = 'attribute'
+        older_children_hash['children'] = []
+        algorithm.questions.where(step: step_index, is_neonat: false).each do |question|
+          older_children_hash['children'].push(question.generate_node_tree_hash)
+        end
+        hash['children'].push(older_children_hash)
+
+        neonat_hash = {}
+        neonat_hash['title'] = I18n.t('neonat_children')
+        neonat_hash['subtitle'] = I18n.t('versions.full_order_tree.subtitles.attribute')
+        neonat_hash['subtitle_name'] = 'neonat_children'
+        neonat_hash['type'] = 'attribute'
+        neonat_hash['children'] = []
+        algorithm.questions.where(step: step_index, is_neonat: true).each do |question|
+          neonat_hash['children'].push(question.generate_node_tree_hash)
+        end
+        hash['children'].push(neonat_hash)
+      else
+        if step_name == 'registration_step' # Add the 3 hard coded questions in the order
+          hash['children'].push({"id"=>'first_name', "title"=>"First name", "is_neonat"=>false, "expanded"=>false})
+          hash['children'].push({"id"=>'last_name', "title"=>"Last name", "is_neonat"=>false, "expanded"=>false})
+          hash['children'].push({"id"=>'birth_date', "title"=>"Birth date", "is_neonat"=>false, "expanded"=>false})
+        end
+        algorithm.questions.where(step: step_index).each do |question|
+          hash['children'].push(question.generate_node_tree_hash)
+        end
+      end
+      tree.push(hash)
+    end
+    tree.to_json
   end
 
   # Return needed nodes for the algorithm version to work but that are not included in it, in order to prevent crash.
@@ -105,8 +157,8 @@ class Version < ApplicationRecord
       nodes_to_add.push(id) unless nodes.include?(id)
     end
 
-    # Ensure CC linked to the Diagnostics are included
-    diagnostics.map(&:node_id).uniq.map do |cc_id|
+    # Ensure CC linked to the Diagnoses are included
+    diagnoses.map(&:node_id).uniq.map do |cc_id|
       nodes_to_add.push(cc_id) unless nodes.include?(cc_id)
     end
 
@@ -133,6 +185,28 @@ class Version < ApplicationRecord
     nodes_to_add.uniq
   end
 
+  # Return an array of all questions that can be instantiate in a version
+  def instanceable_questions
+    questions = algorithm.questions.where(stage: %w(registration triage)).or(algorithm.questions.where(type: %w(Questions::VitalSignAnthropometric Questions::Referral)))
+
+    questions_json = []
+    questions.map do |question|
+      questions_json.push({value: question.id, label: question.reference_label})
+    end
+    questions_json
+  end
+
+  # Return an array of all questions that has been instantiated
+  def instanciated_questions
+    questions = components.map(&:node)
+
+    questions_json = []
+    questions.map do |question|
+      questions_json.push({value: question.id, label: question.reference_label})
+    end
+    questions_json
+  end
+
   # Init orders for new version
   def init_config
     self.medal_r_config = {
@@ -147,4 +221,12 @@ class Version < ApplicationRecord
       medical_case_list_order: [],
     }
   end
+
+  # Return if the version is currently deployed and can't be updated
+  def is_deployed?
+    # TODO : Test currently disabled so the version can be updated during development phase. To be removed !
+    # group_accesses.where(end_date: nil).any?
+    false
+  end
 end
+

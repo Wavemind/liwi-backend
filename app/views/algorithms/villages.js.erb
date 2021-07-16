@@ -1,0 +1,6 @@
+document.getElementById("algorithm-index-content").innerHTML = "<%= escape_javascript render 'algorithms/villages' %>"
+
+jQuery(document).ready(function () {
+  $("#algorithm-tabs").find(".nav-link").removeClass("active")
+  $("#nav-link-villages").addClass("active")
+});

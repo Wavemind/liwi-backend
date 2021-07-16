@@ -7,7 +7,8 @@
     <p class="mx-0 my-0 metadata" data-type="<%= @questions_sequence.node_type %>" data-id="<%= @questions_sequence.id %>"  data-algorithm="<%= @questions_sequence.algorithm.id %>"></p>
     <%= react_component('diagram', {
       context: {
-        instanceable: @questions_sequence.as_json(methods: [:category_name, :type]),
+        user: current_user,
+        instanceable: @questions_sequence.questions_sequence_json,
         instances: @questions_sequence.questions_json,
         availableNodes: @questions_sequence.available_nodes_json,
         questionCategories: Question.categories('QuestionsSequence').as_json,

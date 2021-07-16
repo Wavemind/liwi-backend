@@ -1,0 +1,861 @@
+sw:
+  activerecord:
+    attributes:
+      algorithm:
+        age_limit: "Age threshold in years for ineligibility (inclusion stops day before birthday)"
+        age_limit_message_html: "Message displayed in medAL-<i>reader</i> if patient above threshold"
+        minimum_age: "Minimum age for consultation (in days)"
+        consent_management: "Consent management ?"
+        track_referral: "Display referral step ?"
+      answer:
+        operator: "Operator"
+        value: "Value"
+      drug:
+        is_anti_malarial: "Is antimalarial"
+        is_antibiotic: "Is antibiotic"
+      condition:
+        score: "Score"
+      diagnosis:
+        node: "Complaint category"
+      formulation:
+        administration_route_id: "Administration route"
+        by_age: "Fixed-dose administrations"
+        description_translations: "Description"
+        dispensing_description_translations: "Dispensing description"
+        dose_form: "Total drug formulation volume (%{unity})"
+        doses_per_day: "Number of administrations per day"
+        injection_instructions_translations: "Injection dilution instructions"
+        liquid_concentration: "Concentration (mg in dose)"
+        minimal_dose_per_kg: "Minimal dose mg/kg/day"
+        maximal_dose_per_kg: "Maximal dose mg/kg/day"
+        maximal_dose: "Maximal daily dose (mg)"
+        pill_size: "Pill minimal size (mg)"
+        treatment_type: "Medication form"
+        unique_dose_general: "Number of applications per administration"
+        unique_dose_liquid: "Number of ml per administration"
+        unique_dose_solid: "Number of pills per administration"
+        unique_dose_suppository: "Number of suppositories per administration"
+      health_facility:
+        main_data_ip: "medAL-data ip"
+        local_data_ip: "medAL-hub ip"
+      instance:
+        duration: "Duration (days)"
+        description: "Description"
+      media:
+        label_translations: "Label"
+        url: "File"
+      node:
+        type: "Category"
+        description_translations: "Description"
+        label_translations: "Label"
+        level_of_urgency: "Level of urgency"
+        node: "<font color=\"red\">Complaint categories (use with extreme caution: the question will only be displayed if all CCs selected in the reader!)</font>"
+      question:
+        answer_type: "Answer type"
+        is_danger_sign: "Will result in referral"
+        estimable: "Value can be estimated"
+        formula: "Formula"
+        is_filterable: "Question is filterable on patient search"
+        is_identifiable: "This question can identify a patient"
+        is_mandatory: "Mandatory"
+        emergency_status: "Emergency status"
+        is_neonat: "Assign to neonat algorithms"
+        is_triage: "Ask in triage (if triage available)"
+        max_message_error: "Error message if above range"
+        max_message_warning: "Warning message if above range"
+        max_value_error: "Higher limit before error"
+        max_value_warning: "Higher limit before warning"
+        min_message_error: "Error message if below range"
+        min_message_warning: "Warning message if below range"
+        min_value_error: "Lower limit before error"
+        min_value_warning: "Lower limit before warning"
+        snomed: "SNOMED label"
+        stage: "Stage"
+        system: "System"
+        unavailable: "Variable can be unavailable"
+        unknown: "Variable can be unknown"
+        unfeasible: "Variable can be not feasible"
+        measurement_unavailable: "Value can be unavailable, unfeasible or unknown"
+        step: "Step"
+      questions_sequence:
+        min_score: "Minimal score"
+        type: "Category"
+      user:
+        first_name: "First name"
+        last_name: "Last name"
+        email: "Email"
+        deactivated: "Deactivated"
+        role_html: "medAL-<i>creator</i> access"
+        roles_html: "medAL-<i>reader</i> accesses"
+      version:
+        languages: "Available languages for this version"
+  activated: "Activate"
+  add: "Add"
+  add_file: "Attach new file in description"
+  administration_routes:
+    labels:
+      - ~
+      - "Enteral"
+      - "Parenteral or injectable"
+      - "Mucocutaneous"
+  algorithms:
+    age_limit_message_default: "This patient is ineligible for the study (age). No clinical data will be collected"
+    index:
+      columns:
+        name: "Name"
+        description: "Description"
+        version_count: "Number of versions"
+        creator: "Creator"
+        actions: "Actions"
+        versions: "Versions"
+      title: "Algorithms"
+    new:
+      title: "Add an algorithm"
+      emergency: "Emergency content"
+    edit:
+      title: "Edit this algorithm"
+    show:
+      subtitle_drugs: "Drugs"
+      subtitle_drugs_exclusions: "Drugs exclusions"
+      subtitle_managements: "Managements"
+      subtitle_managements_exclusions: "Managements exclusions"
+      subtitle_questions: "Variables"
+      subtitle_questions_sequences: "Questions sequences"
+      subtitle_questions_sequences_scored: "Question sequences scored"
+      subtitle_versions: "Versions list"
+      subtitle_villages: "Villages"
+      title: "Details of %{name}"
+  already_exist: "This instance already exists"
+  answer_type:
+    labels:
+      - ~
+      - "Yes / No"
+      - "Dropdown list"
+      - "Integer"
+      - "Decimal"
+      - "Formula"
+      - "Date"
+      - "Present / Absent"
+      - "Positive / Negative"
+      - "String"
+  answers:
+    predefined:
+      absent: "Absent"
+      negative: "Negative"
+      "no": "No"
+      positive: "Positive"
+      present: "Present"
+      "yes": "Yes"
+    edit:
+      title: "Edit answers"
+    new:
+      title: "Create answers"
+    operators:
+      between: ">=, <"
+      less: "<"
+      more_or_equal: ">="
+    validation:
+      value_missing: "Use coma separated values when using the BETWEEN operator"
+      wrong_value_type: "The value is not of the correct type : %{type}"
+      between_wrong_order: "The first value has to be smaller than the second value"
+      overlap:
+        one_more_or_equal: "One (and only one) answer required with the GREATER THAN OR EQUAL TO operator in order to close your range."
+        one_less: "One (and only one) answer required with the LESS THAN operator in order to open your range."
+        first_between_different_from_less: "The smallest value in your answers with the BETWEEN operator has to be equal to the answer with the LESS THAN operator."
+        last_between_different_from_more_or_equal: "The highest value in your answers with the BETWEEN operator has to be equal to the answer with GREATER THAN OR EQUAL TO operator."
+        between_not_following: "There must be be no gap when you use several BETWEEN operators. Make sure the values follow each other nicely."
+        less_greater_than_more_or_equal: "Your answer with the LESS THAN operator can't be greater than your answer with the GREATER THAN OR EQUAL operator."
+        less_equal_more_or_equal: "The value for the LESS THAN operator must be equal to the value for the GREATER THAN OR EQUAL operator."
+    unavailable: "Test/Assessment is unavailable"
+    unfeasible: "Not feasible"
+    unknown: "Unknown"
+  attribute: "Attribute"
+  api:
+    v1:
+      health_facilities:
+        show:
+          no_health_facility: "Please provide a valid Health Facility ID"
+      versions:
+        index:
+          no_version: "No version of the algorithm is associated with this Health Facility"
+          device_not_exist: "The tablet is not registered in medAL-creator"
+          invalid_token: "Invalid health facility token"
+          invalid_health_facility: "Invalid health facility id"
+          invalid_version: "Invalid version id"
+          no_health_facility_id: "No health facility id specified."
+          no_health_facility: "Your tablet has not been associated with any Health Facility in medAL-creator"
+        show:
+          invalid_version: "Invalid version id"
+      activities:
+        create:
+          errors_device_not_present_html: "The tablet does not exist in medAL-<i>creator</i>"
+          errors_on_save: "An error occurred when saving activities"
+      devices:
+        create:
+          errors_on_save: "An error occurred when saving devices"
+        show:
+          no_health_facility: "Your tablet has not been associated with any Health Facility in medAL-creator"
+  archive: "Archive"
+  breadcrumbs:
+    algorithms: "Algorithms"
+    apk: "APK"
+    dashboard: "Home"
+    devices: "Devices"
+    diagnoses: "Diagnoses"
+    drugs: "Drugs"
+    edit: "Edit"
+    final_diagnoses: "Final diagnoses"
+    health_facilities: "Health facilities"
+    generate_stickers: "Generate stickers"
+    home: "Home"
+    managements: "Managements"
+    questions: "Variables"
+    questions_sequences: "Questions sequences"
+    roles: "Roles"
+    settings: "Settings"
+    users: "Users"
+    new: "New"
+    versions: "Versions"
+  cancel: "Cancel"
+  conditions:
+    operators:
+      and_operator: "AND"
+      or_operator: "OR"
+    validation:
+      loop: "You are trying to do a loop in your diagnosis. This is impossible."
+      link_already_exist: "Link already exists"
+      link_answer_to_answer: "You can't link an answer to another answer"
+  confirmation: "Are you sure ?"
+  deactivated: "Deactivate"
+  delete: "Delete"
+  destroy: "Remove"
+  devices:
+    index:
+      columns:
+        mac_address: "MAC address"
+        name: "Name"
+        brand: "Brand"
+        model: "Model"
+        last_activity: "Last activity"
+        last_user: "Last user"
+        health_facility: "Health Facility"
+        actions: "Actions"
+      title: "Devices"
+    show:
+      brand: "Brand: "
+      model: "Model: "
+      os: "OS: "
+      os_version: "OS version: "
+      mac_address: "MAC address: "
+      status: "Status: "
+      tablet_connection: "Tablet connection"
+      title: "Details of %{name}"
+      user_actions: "User actions"
+    new:
+      title: "Add device"
+  diagnoses:
+    table:
+      columns:
+        actions: "Actions"
+        complaint_category: "Complaint Category"
+        label: "Name"
+        last_update: "Last update"
+        reference: "Reference"
+      title: "Algorithm versions"
+    new:
+      title: "Add a diagnosis"
+    edit:
+      title: "Edit this diagnosis"
+    excluding:
+      excludes: "excludes"
+    reference: "DD"
+    show:
+      diagram: "Diagram"
+      differential_diagnosis_conditions: "Differential diagnosis conditions"
+      excluding_diagnoses: "Excluding diagnoses"
+      instances: "Instance of nodes"
+      questions_sequences: "Question sequences"
+      subtitle_final_diagnoses: "Final diagnoses"
+      title: "Details of %{name}"
+      translations: "Translations"
+      subtitle_health_cares: "Health cares diagram"
+    translations:
+      diagnosis: "Diagnosis"
+      final_diagnoses: "Final diagnoses"
+      managements: "Managements"
+      questions_sequences: "Question sequences"
+      questions: "Variables"
+      drugs: "Drugs"
+  duplicate: "Duplicate"
+  duplicated: "_duplicated"
+  edit: "Edit"
+  error: "An error occured"
+  errors:
+    fetch_failed: "An error occurred while loading values"
+    final_diagnosis_exclusion_unique: "This exclusion is already set."
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: must be accepted
+      blank: can't be blank
+      confirmation: doesn't match %{attribute}
+      empty: can't be empty
+      equal_to: must be equal to %{count}
+      even: must be even
+      exclusion: is reserved
+      greater_than: must be greater than %{count}
+      greater_than_or_equal_to: must be greater than or equal to %{count}
+      inclusion: is not included in the list
+      invalid: is invalid
+      less_than: must be less than %{count}
+      less_than_or_equal_to: must be less than or equal to %{count}
+      model_invalid: "Validation failed: %{errors}"
+      not_a_number: is not a number
+      not_an_integer: must be an integer
+      odd: must be odd
+      other_than: must be other than %{count}
+      present: must be blank
+      required: must exist
+      taken: has already been taken
+      too_long:
+        one: is too long (maximum is 1 character)
+        other: is too long (maximum is %{count} characters)
+      too_short:
+        one: is too short (minimum is 1 character)
+        other: is too short (minimum is %{count} characters)
+      wrong_length:
+        one: is the wrong length (should be 1 character)
+        other: is the wrong length (should be %{count} characters)
+    template:
+      body: "There were problems with the following fields:"
+      header:
+        one: 1 error prohibited this %{model} from being saved
+        other: "%{count} errors prohibited this %{model} from being saved"
+  dependencies: "The node you are trying to remove has dependencies"
+  final_diagnoses:
+    new:
+      title: "Create a new final diagnosis"
+    reference: "DF"
+    table:
+      columns:
+        reference: "Reference"
+        label: "Label"
+        description: "Description"
+        actions: "Actions"
+    table_for_version:
+      columns:
+        id: "ID"
+        reference: "Reference"
+        label: "Label"
+        diagnosis: "Diagnosis"
+        cc: "Complaint category"
+        description: "Description"
+    edit:
+      title: "Edit final diagnosis"
+    show:
+      drugs: "Drugs"
+      managements: "Managements"
+      excluded_diagnosis: "Excluded diagnosis"
+      no_excluded_diagnosis: "There is no excluded diagnosis"
+    validation:
+      loop: "Loop alert: a node cannot exclude itself!"
+  flash_message:
+    create_fail: "Error will creating the entry"
+    delete_fail: "Error will deleting the entry"
+    import_successful: "The file has been imported successfully. You can re-generate the file to monitor the changes."
+    import_successful_villages: "The file has been imported successfully."
+    import_xl_error: "There was an error importing your file. Please make sure to use the file generated by the option \"Generate translations excel\""
+    import_xl_error_villages: "There was an error importing your file. Please try again."
+    import_xl_wrong_file: "The file you're trying to import is not an Excel file. Please make sure to use the file generated by the option \"Generate translations excel\""
+    import_xl_wrong_file_villages: "The file you're trying to import is not an Excel file. Please make sure to upload an Excel file"
+    json_success: "The JSON file was correctly generated and stored"
+    json_error: "There was an error while generating the JSON or storing it"
+    missing_nodes_error: "The following variables are needed for the algorithm to work but are not included in the version. Please check your version's <i>Registration and triage Variables</i> module.<br>%{missing_nodes}"
+    reserved_reference: "This reference is reserved."
+    success_archive: "Data successfully archived"
+    success_unarchive: "Data successfully unarchived"
+    success_created: "Data successfully created"
+    success_deleted: "Data successfully deleted"
+    success_duplicated: "Data successfully duplicated"
+    success_updated: "Data successfully updated"
+    update_fail: "Error will updating the value"
+    duplicate_fail: "Error while duplicating your data"
+    diagnosis:
+      complaint_category_exclude_triage_question: "One of the questions in your diagnosis is not supported by this Complaint Category."
+      error_in_questions_sequence: "The question sequence <u><a href='%{url}'>%{reference}</a></u> is not valid."
+      final_diagnosis_no_condition: "The Final Diagnosis %{reference} has no condition."
+      hc_question_no_children: "The %{type} %{reference}, which is in <u><a href='%{url}'>%{df_reference}</a></u> is not linked to any child node."
+      node_is_not_complaint_category: "The node you are linking to this diagnosis is not a Complaint Category."
+      question_no_children: "The %{type} %{reference} is not linked to any children."
+      valid: "This diagnosis is valid!"
+      drug_conditioned_by_age_without_age: "You have a drug formulation that is conditioned by age, but yet no age question above it. This error occurs in <u><a href='%{url}'>%{df_reference}</a></u>."
+    questions_sequence:
+      ps_no_condition: "The question sequence you are describing has no condition."
+      question_no_children: "The %{type} %{reference} is not linked to any children."
+      pss_no_combination: "There is no combination for this question sequence to be true."
+      valid: "This question sequence is valid!"
+    version:
+      complaint_category_missing: "Please select the Complaint Category."
+      invalids_diagnoses: "Your version contains diagnoses that are invalid : %{diagnoses}"
+      missing_villages: "Your version is missing village data."
+      triage_question_missing: "Please select the triage variable you want to put a condition on."
+  formulations:
+    breakables:
+      one:
+        label: "No"
+        value: 1
+      two:
+        label: "In 2"
+        value: 2
+      four:
+        label: "In 4"
+        value: 4
+    errors:
+      minimum_higher_than_maximum: "The minimum dose per kg can't be greater than the maximum dose per kg"
+      maximum_per_kg_higher_than_maximum: "The maximum dose per kg can't be greater than the maximum dose per day"
+    new:
+      title: "New formulations"
+    edit:
+      title: "Edit formulations"
+  health_facilities:
+    add_device:
+      success_add_device: "Device successfully added to the Health Facility"
+      error_add_device: "An error occurred when adding the device to the Health Facility"
+    current_algorithm: "Algorithm version currently published: <b>%{version_name}</b>"
+    index:
+      columns:
+        name: "Name"
+        country: "Country"
+        area: "Area"
+        nb_people: "Number of devices"
+        actions: "Actions"
+      title: "Health Facilities"
+    edit:
+      title: "Edit Health Facility"
+    errors:
+      code_pin_invalid: "The PIN code must contain 4 digits"
+      ip_invalid: "IP address format invalid."
+    new:
+      title: "Add Health Facility"
+      main_data_ip_html: "medAL-<i>data</i> ip"
+      local_data_ip_html: "medAL-<i>hub</i> ip"
+    remove_device:
+      success_remove_device: "Device successfully removed from the Health Facility"
+      error_remove_device: "An error occurred when removing the device from the Health Facility"
+    show:
+      generate_json: "Generate JSON file"
+      generate_stickers: "Generate Stickers"
+      title: "Details of %{name}"
+      second_title: "Accesses"
+      no_algorithm: "There is no algorithm associated to this Health Facility"
+      validating: "Validating the algorithm... Don't go anywhere"
+      generating: "The algorithm is currently being generated, be a bit patient"
+      columns:
+        algorithm: "Algorithm"
+        version: "Version"
+        created_at: "Created on"
+        end_date: "Archived date"
+      archived: "Archive"
+      devices: "Devices"
+      medical_staff: "Medical Staff"
+    sticker_form:
+      title: "Generate stickers"
+    form:
+      medical_staffs: "Medical Staff"
+    sticker_generator:
+      generate: "Generate"
+      errors:
+        missing_study_id: "Study must be selected"
+        must_be_positive: "Number of stickers must be greater than 0"
+  health_facility_accesses:
+    new:
+      title: "New release"
+  health_cares:
+    categories:
+      management:
+        label: "Management"
+        reference_prefix: "M"
+      drug:
+        label: "Drug"
+        reference_prefix: "DR"
+  helps:
+    diagram:
+      arrow-title: "Arrow"
+      dashed-arrow-title: "Dashed arrow"
+      in-port-title: "In port"
+      out-port-title: "Out port"
+      excluded-diagnosis-title: "Excluded diagnosis"
+      score-title: "Question Sequence Scored"
+      arrow-content: "Define links between questions"
+      dashed-arrow-content: "Define which Final Diagnosis has priority. The Final Diagnosis that is targeted by the arrow is excluded."
+      in-port-content: "Blue box at the top of the node: in-port where the link ends"
+      out-port-content: "Green box below the node: out-port where the link begins"
+      excluded-diagnosis-content: "The green box on the left of the nodes is the out-port for excluding final diagnoses. The blue box is the in-port for excluding final diagnoses."
+      score-content: "In order to add scores to your answers, you have to make a link between an answer and the question sequence scored. This will display a pop-up dialog asking you the score for this relation."
+    formula:
+      formula-tooltip-title: "Formula tooltip"
+      formula-title: "What is a formula?"
+      formula-content: "A formula helps you use the value of a variable, either by using its value directly, or by doing some operation on it. <i>Eg</i>: <strong>[BM1] / (([BM52] / 100) * ([BM52] / 100))</strong>"
+      reference-title: "How to reference a variable's answer"
+      reference-content: "In order to use the value of a variable's answer, you need to put its <strong>reference</strong> between <strong>square brackets</strong>.<br /><i>Eg</i>: <strong>[PE15]</strong>.<br />Please remember that the variable has to be in a numeric format in order to work"
+      date-title: "How to use a date in the calculation?"
+      date-content: "To use the age in months, use the 'ToMonth' function. To use the age in days, use the 'ToDay' function. These functions will return the number of months or days between the given date (<i>eg</i>: birth date) and the time the question will be asked.<br /><i>Eg</i>: ToMonth(D1).<br />Please remember that the variable has to be in a date format in order to work."
+  instances:
+    new:
+      title_drug: "Add fields for your drug instance"
+    show:
+      children: "Children"
+      title: "Details of %{name} in %{node}"
+    table:
+      columns:
+        type: "Type"
+  languages:
+    description: "description_"
+    edit:
+      title: "Edit the language"
+    label: "label_"
+    new:
+      title: "New language"
+  studies:
+    description: "Description"
+    edit:
+      title: "Edit study"
+    new:
+      title: "New study"
+  logout: "Logout"
+  managements:
+    edit:
+      title: "Edit the management"
+    new:
+      title: "Create a management"
+    reference: "M"
+    table:
+      columns:
+        reference: "Reference"
+        label: "Label"
+        description: "Description"
+        actions: "Actions"
+  medical_case:
+    validation:
+      wrong_node_type: "This node is not a management or a drug."
+  medical_staffs:
+    roles:
+      medical_doctor: "Medical Doctor (MD)"
+      assistant_medical_officer: "Assistant Medical Officer (AMO)"
+      clinical_officer: "Clinical Officer (CO)"
+      nurse: "Nurse"
+      midwife: "Midwife"
+      pharmacist: "Pharmacist"
+    table:
+      columns:
+        first_name: "First name"
+        last_name: "Last name"
+        role: "Role"
+  neonat_children: "Neonat children"
+  nodes:
+    validation:
+      reference_used: "This reference is already used"
+  older_children: "Older children"
+  questions_sequences:
+    categories:
+      predefined_syndrome:
+        label: "Predefined syndrome"
+        reference_prefix: "PS"
+      scored:
+        label: "Question sequence scored"
+        reference_prefix: "QSS"
+      comorbidity:
+        label: "Comorbidity"
+        reference_prefix: "DC"
+      triage:
+        label: "Triage"
+        reference_prefix: "TI"
+    edit:
+      title: "Update the question sequence"
+    edit_scored:
+      title: "Update a question sequence scored"
+    new:
+      title: "Create question sequence"
+    new_scored:
+      title: "Create a question sequence scored"
+    show:
+      title: "Details of %{name}"
+      children: "Children"
+    scored_table:
+      columns:
+        actions: "Actions"
+        description: "Description"
+        label: "Label"
+        min_score: "Minimal score"
+        reference: "Reference"
+    table:
+      columns:
+        actions: "Actions"
+        category: "Category"
+        description: "Description"
+        label: "Label"
+        reference: "Reference"
+    validation:
+      loop: "You are doing a loop using this Questions sequence in this diagram."
+  prompt: "Select"
+  questions:
+    categories:
+      assessment_test:
+        label: "Assessment/Test"
+        reference_prefix: "A"
+      background_calculation:
+        label: "Background Calculation"
+        reference_prefix: "BC"
+      basic_demographic:
+        label: "Demographics not available in diagrams"
+        reference_prefix: "BD"
+      basic_measurement:
+        label: "Basic Measurement"
+        reference_prefix: "BM"
+      complaint_category:
+        label: "Complaint Category"
+        reference_prefix: "CC"
+      chronic_condition:
+        label: "Chronic Condition"
+        reference_prefix: "CH"
+      consultation_related:
+        label: "Consultation-related Variable"
+        reference_prefix: "CH"
+      demographic:
+        label: "Demographics"
+        reference_prefix: "D"
+      exposure:
+        label: "Exposure"
+        reference_prefix: "E"
+      observed_physical_sign:
+        label: "Observed Physical Sign"
+        reference_prefix: "OS"
+      physical_exam:
+        label: "Physical Exam"
+        reference_prefix: "PE"
+      referral:
+        label: "Referral status question"
+        reference_prefix: "R"
+      symptom:
+        label: "Symptom"
+        reference_prefix: "S"
+      treatment_question:
+        label: "Additional Treatment Variable"
+        reference_prefix: "TQ"
+      unique_triage_physical_sign:
+        label: "Unique Triage Physical Sign"
+        reference_prefix: "UP"
+      unique_triage_question:
+        label: "Unique Triage Variable"
+        reference_prefix: "UT"
+      vaccine:
+        label: "Vaccine"
+        reference_prefix: "V"
+      vital_sign_anthropometric:
+        label: "Vital signs / Anthropometric"
+        reference_prefix: "VS"
+    errors:
+      no_blank: "can't be blank"
+      formula_wrong_characters: "Incorrect formula format. You can only use numbers, operators and variable references (between square brackets). Eg [BM1] / (([BM3] / 100) * ([BM3] / 100))"
+      formula_wrong_reference: "The reference '%{reference}' does not match any variable in this algorithm"
+      formula_wrong_type: "The reference prefix you used does not match any variable category"
+      formula_using_function: "You're trying to use a function (%{formula}) which is not allowed anymore"
+      formula_reference_not_date: "The variable '%{reference}' is not in date format."
+      formula_reference_not_numeric: "The variable '%{reference}' is not in numeric format."
+      formula_reference_no_underscore: "The reference must contain an underscore (eg: A_1)"
+      snomed_fetch_failed: "The server could not retrieve any data from SNOMED."
+      validation_range_incorrect: "The values you entered in the validation ranges seem incorrect. Please check the values again."
+    medias:
+      current_file: "Selected file"
+    new:
+      title: "New variable"
+    priorities:
+      basic: "Basic"
+      mandatory: "Mandatory"
+    stages:
+      registration: "Registration"
+      triage: "Triage"
+      test: "Test"
+      consultation: "Consultation"
+      diagnosis_management: "Diagnosis and management"
+    steps:
+      registration_step: "Registration"
+      first_look_assessment_step: "First Look Assessment"
+      complaint_categories_step: "Complaint Categories"
+      basic_measurements_step: "Basic Measurements"
+      medical_history_step: "Medical History"
+      physical_exam_step: "Physical Exams"
+      test_step: "Tests"
+      health_care_questions_step: "Health Care Questions"
+      referral_step: "Referral"
+    systems:
+      general: "General"
+      respiratory_circulation: "Respiratory and Circulatory system"
+      ear_nose_mouth_throat: "Ear, Nose, Mouth and Throat system"
+      visual: "Eye / visual system"
+      integumentary: "Skin/Hair/Mucosae system"
+      digestive: "Gastrointestinal system"
+      urinary_reproductive: "Genitourinary system"
+      nervous: "Nervous system"
+      muscular_skeletal: "Musculoskeletal system"
+      exposures: "Exposures"
+      chronic_conditions: "Chronic conditions"
+      comorbidities: "Comorbidities / Past medical history"
+      prevention: "Screening / Prevention"
+      follow_up_questions: "Additional follow-up questions"
+      complementary_medical_history: "Complementary Medical History Questions"
+      vital_sign: "Vital Signs"
+      priority_sign: "Danger / Priority signs"
+      feeding: "Feeding"
+    table:
+      columns:
+        label: "Label"
+        description: "Description"
+        reference: "Reference"
+        priority: "Priority"
+        category: "Category"
+        answers: "Answers"
+        answer_type: "Answer type"
+        actions: "Actions"
+        is_neonat: "Is NeoNat"
+    edit:
+      title: "Edit variable"
+  remove: "Remove"
+  roles:
+    index:
+      title: "Roles"
+    new:
+      title: "Add role"
+    edit:
+      title: "Edit role"
+  save: "Save"
+  select: "Please select"
+  settings:
+    index:
+      languages: "Languages"
+      studies: "Studies"
+  show: "Show"
+  drugs:
+    breakable:
+      select:  "Is the tablet breakable?"
+    edit:
+      title: "Edit the drug"
+    edit_instance: "Edit the instance"
+    new:
+      title: "Create a drug"
+    reference: "DR"
+    table:
+      columns:
+        reference: "Reference"
+        label: "Label"
+        description: "Description"
+        actions: "Actions"
+    medication_forms:
+      select: "Select a medication form"
+      required: "Medication form has to be completed"
+  toolbar:
+    new: "New"
+    question: "Variable"
+    questions_sequence: "Question sequence"
+    final_diagnosis: "Final diagnosis"
+    drug: "Drug"
+    management: "Management"
+    validate: "Validate"
+    diagnosis_diagram: "Diagnosis diagram"
+    save: "Save"
+  unarchive: "Unarchive"
+  users:
+    new:
+      title: "Add user"
+    edit:
+      title: "Update user"
+    index:
+      columns:
+        first_name: "First name"
+        last_name: "Last name"
+        mail: "Email"
+        last_connection: "Last connection"
+        status: "Status"
+        actions: "Actions"
+      title: "Users"
+    show:
+      last_account_connection: "Last account connection "
+      role: "Role "
+      title: "Details of %{name}"
+  validate: "Validate"
+  versions:
+    full_order_tree:
+      no_dependency: "This node is not used in any diagram of the current version."
+      show_dependencies: "Display variable dependencies"
+      subtitles:
+        attribute: "Attribute"
+        step: "Step"
+        system: "System"
+    medal_data_config:
+      first_name_patient_id: "Patient first name"
+      middle_name_patient_id: "Patient middle name"
+      last_name_patient_id: "Patient last name"
+      gender_patient_id: "Patient gender"
+      birth_date_patient_id: "Patient date of birth"
+      other_id_patient_id: "Patient other ID"
+      first_name_caregiver_id: "Caregiver first name"
+      last_name_caregiver_id: "Caregiver last name"
+      gender_caregiver_id: "Caregiver gender"
+      relationship_to_child_id: "Relationship to child"
+      phone_number_caregiver_id: "Primary phone number"
+      phone_number_owner_id: "Primary phone owner"
+      other_number_id: "Secondary phone number"
+      other_number_owner_id: "Secondary phone owner"
+      last_two_weeks_visit_id: "Last two weeks visit"
+      kind_of_consultation_id: "Kind of consultation"
+      hospitalized_overnight_id: "Hospitalized overnight"
+      parent_in_study_id: "Patient existing in study"
+    table:
+      columns:
+        name: "Name"
+        container: "Container"
+        last_update: "Last update"
+        creator: "Creator"
+        actions: "Actions"
+      title: "Algorithm versions"
+    triage_order:
+      others: "Other triage variables"
+    new:
+      title: "Add an algorithm version"
+    edit:
+      title: "Edit an algorithm version"
+      is_arm_control_label: "For control arm facilities"
+    show:
+      deployed_version: "This version is deployed in the field, it cannot be edited. You can either duplicate this version or create a new one."
+      questions_sequences: "Question Sequences"
+      generate_translations: "Generate translations excel"
+      generate_variables: "Generate variables excel"
+      subtitle_diagnoses: "Diagnoses"
+      subtitle_final_diagnoses: "Final diagnoses"
+      subtitle_final_diagnoses_exclusions: "Final diagnoses exclusions"
+      subtitle_medal_data_config_html: "Config medAL-<i>data</i>"
+      subtitle_medal_r_config_html: "Config medAL-<i>reader</i>"
+      subtitle_questions_order: "Variables order by step"
+      subtitle_registration_triage_questions: "Registration and triage variables"
+      subtitle_systems_order: "Systems order"
+      subtitle_translations: "Translations"
+      subtitle_triage_conditions: "Triage variables conditions"
+      title: "Details of %{name} - version %{version}"
+    translations:
+      generate_translations: "Generate translations excel"
+    job_status:
+      json_generation_failed: "There was an error while generating the JSON. Please contact the admins."
+      json_generation_interrupted: "JSON generation was interrupted. Please contact the admins."
+  warning_dependency: "Warning! Editing this node will affect: "
+  close: "Close"
+  back: "Back"
+  open_diagram: "Open diagram"
+  open_treatments: "Open treatments"
+  next: "Next"
+  loading: "Loading..."
+  help: "Help"
+  type_here: "Type here"
+  something_went_wrong: "Something went wrong"
+  technical_files:
+    index:
+      title: "Upload/Download APK"
+  access_denied: "You are not authorized to perform this action"

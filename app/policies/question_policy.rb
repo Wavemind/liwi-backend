@@ -25,6 +25,10 @@ class QuestionPolicy < ApplicationPolicy
     new?
   end
 
+  def dependencies?
+    new?
+  end
+
   def lists?
     user.admin? || user.clinician? || user.deployment_manager?
   end

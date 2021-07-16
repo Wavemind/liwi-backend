@@ -2,7 +2,7 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_algorithm, only: [:new, :create, :edit, :update, :destroy, :validate, :lists]
   before_action :set_breadcrumb, only: [:new, :edit]
-  before_action :set_question, only: [:edit, :update, :category_reference, :destroy]
+  before_action :set_question, only: [:edit, :update, :category_reference, :destroy, :dependencies]
 
   def new
     add_breadcrumb t('breadcrumbs.new')
@@ -32,7 +32,7 @@ class QuestionsController < ApplicationController
           render json: {url: algorithm_url(@algorithm, panel: 'questions')}
         else
           instanceable = Object.const_get(params[:instanceable_type].camelize.singularize).find(params[:instanceable_id])
-          instance = instanceable.components.create!(node: question, final_diagnostic_id: params[:final_diagnostic_id])
+          instance = instanceable.components.create!(node: question, final_diagnosis_id: params[:final_diagnosis_id])
           render json: instance.generate_json
         end
       else
@@ -71,25 +71,32 @@ class QuestionsController < ApplicationController
     end
   end
 
-  # GET
-  # @return Hash
-  # Return attributes of question that are listed
+  # GET questions/:id/dependencies
+  # @params question [Node] question
+  # @return Dependencies for the given question
+  def dependencies
+    authorize policy_scope(Question)
+    render json: @question.diagnoses.map(&:reference_label) + @question.dependencies.map(&:instanceable).flatten.map(&:reference_label)
+  end
+
+  # GET questions/dependencies
+  # Return several attributes of the model Question to build dropdown lists
   def lists
     authorize policy_scope(Question)
     render json: Question.list_attributes(params[:diagram_type], @algorithm)
   end
 
-  # GET algorithm/:algorithm_id/version/:version_id/questions/reference_prefix/:type
-  # @params Question child
-  # @return json with the reference prefix of the child
+  # GET questions/reference_prefix/:type
+  # @params Category of Question
+  # Return class name according to the param
   def reference_prefix
     authorize policy_scope(Question)
     render json: Question.reference_prefix_class(params[:type])
   end
 
-  # POST algorithm/:algorithm_id/questions/validate
-  # @params Question
-  # @return errors messages if question is not valid
+  # POST algorithms/:algorithm_id/questions/:id/validate
+  # @params question [Question] question to be validated
+  # Validate the question with its formula, its answers and its fields
   def validate
     authorize policy_scope(Question)
     question = @algorithm.questions.new(question_params)
@@ -140,10 +147,11 @@ class QuestionsController < ApplicationController
       :max_value_warning,
       :min_value_error,
       :max_value_error,
-      :min_message_warning,
-      :max_message_warning,
-      :min_message_error,
-      :max_message_error,
+      :min_message_warning_en,
+      :max_message_warning_en,
+      :min_message_error_en,
+      :max_message_error_en,
+      :round,
       :estimable,
       :is_neonat,
       :is_danger_sign,

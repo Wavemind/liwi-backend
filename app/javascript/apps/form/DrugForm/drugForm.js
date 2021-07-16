@@ -72,6 +72,20 @@ export default class DrugForm extends React.Component {
                   </Form.Control.Feedback>
                 </Form.Group>
 
+                <Form.Group controlId="validationIsNeonat">
+                  <Form.Check
+                    name="is_neonat"
+                    label={I18n.t("activerecord.attributes.question.is_neonat")}
+                    value={values.is_neonat}
+                    checked={values.is_neonat}
+                    onChange={handleChange}
+                    isInvalid={touched.is_neonat && !!errors.is_neonat}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.is_neonat}
+                  </Form.Control.Feedback>
+                </Form.Group>
+
                 <Form.Group controlId="validationIsAntiMalarial">
                   <Form.Check
                     name="is_anti_malarial"

@@ -1,8 +1,0 @@
-<p class="mx-0 my-0 metadata" data-version="<%= @version.id %>" data-algorithm="<%= @version.algorithm.id %>"></p>
-<%= react_component('form/components/VersionConfig',
-                    {
-                      selected_medical_case_questions: @version.medal_r_config['medical_case_list_order'],
-                      selected_patient_questions: @version.medal_r_config['patient_list_order'],
-                      questions: @version.instanciated_questions,
-                      disabled: @version.is_deployed?
-                    }) %>

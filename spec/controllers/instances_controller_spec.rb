@@ -75,9 +75,4 @@ RSpec.describe InstancesController, type: :controller do
     expect(@dd7.components.where(node_id: @p1.id).count).to equal(0)
   end
 
-  it 'should work for [GET:by_reference]' do
-    get :by_reference, params: { diagnostic_id: @dd7.id, reference: @p1.reference }
-    expect(response.status).to eq(200)
-  end
-
 end

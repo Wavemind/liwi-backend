@@ -10,7 +10,7 @@ class AlgorithmPolicy < ApplicationPolicy
   end
 
   def show?
-    index?
+    has_study_access? && index?
   end
 
   def new?
@@ -22,50 +22,60 @@ class AlgorithmPolicy < ApplicationPolicy
   end
 
   def edit?
-    new?
+    show?
   end
 
   def update?
-    new?
+    show?
   end
 
   def archive?
-    new?
+    show?
   end
 
   def unarchive?
-    new?
+    show?
   end
 
   def managements?
-    index?
+    show?
   end
 
   def drugs?
-    index?
+    show?
   end
 
   def questions?
-    index?
+    show?
   end
 
   def questions_sequences?
-    index?
+    show?
   end
 
   def questions_sequences_scored?
-    index?
+    show?
   end
 
   def drug_exclusions?
-    index?
+    show?
   end
 
   def management_exclusions?
-    index?
+    show?
+  end
+
+  def villages?
+    show?
   end
 
   def import_villages?
-    new?
+    show?
+  end
+
+  private
+
+  def has_study_access?
+    @user.studies.where(id: @record.study_id).any?
   end
 end

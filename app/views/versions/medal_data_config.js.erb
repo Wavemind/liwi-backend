@@ -1,0 +1,6 @@
+document.getElementById("version-index-content").innerHTML = "<%= escape_javascript render 'versions/medal_data_config' %>"
+
+jQuery(document).ready(function () {
+  $("#version-tabs").find(".nav-link").removeClass("active")
+  $("#nav-link-medal_data_config").addClass("active")
+});

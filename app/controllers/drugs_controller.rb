@@ -130,6 +130,7 @@ class DrugsController < ApplicationController
       :type,
       :is_antibiotic,
       :is_anti_malarial,
+      :is_neonat,
       :label_en,
       Language.label_params,
       :description_en,

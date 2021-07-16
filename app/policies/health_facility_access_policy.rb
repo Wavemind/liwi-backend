@@ -5,11 +5,15 @@ class HealthFacilityAccessPolicy < ApplicationPolicy
     end
   end
 
+  def has_study_access?
+    @user.studies.where(id: @record.health_facility.study_id).any?
+  end
+
   def index?
-    user.admin? || user.deployment_manager?
+    has_study_access? && (user.admin? || user.deployment_manager?)
   end
 
   def create?
-    index?
+    has_study_access? && index?
   end
 end

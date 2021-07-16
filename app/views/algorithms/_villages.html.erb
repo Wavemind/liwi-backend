@@ -1,3 +1,5 @@
+<h3><%= t('algorithms.show.subtitle_villages') %></h3>
+
 <%= simple_form_for @algorithm, url: import_villages_algorithm_path(@algorithm), html: {class: 'form-horizontal'}, method: :put do |f| %>
   <div class="col align-self-center"><%= f.input :file, as: :file %></div>
 

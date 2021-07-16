@@ -97,7 +97,8 @@ class UsersController < ApplicationController
       :email,
       :deactivated,
       :role,
-      role_ids: []
+      role_ids: [],
+      study_ids: []
     )
   end
 

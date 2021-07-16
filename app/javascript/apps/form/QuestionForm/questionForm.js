@@ -90,6 +90,7 @@ export default class QuestionForm extends React.Component {
         answerTypes: result.answer_types,
         categories: result.categories,
         stages: result.stages,
+        rounds: result.rounds,
         emergency_statuses: result.emergency_statuses,
         complaintCategories: result.complaint_categories,
         isLoading: false
@@ -233,6 +234,7 @@ export default class QuestionForm extends React.Component {
       categories,
       stages,
       systems,
+      rounds,
       emergency_statuses,
       snomedResults,
       isLoading,
@@ -423,21 +425,6 @@ export default class QuestionForm extends React.Component {
                   </Form.Group>
                 : null}
 
-                <Form.Group controlId="validationIsTriage">
-                  <Form.Check
-                    name="is_triage"
-                    label={I18n.t("activerecord.attributes.question.is_triage")}
-                    value={values.is_triage}
-                    disabled={deployedMode}
-                    checked={values.is_triage}
-                    onChange={handleChange}
-                    isInvalid={touched.is_triage && !!errors.is_triage}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.is_triage}
-                  </Form.Control.Feedback>
-                </Form.Group>
-
                 <Form.Group controlId="validationIsIdentifiable">
                   <Form.Check
                     name="is_identifiable"
@@ -469,21 +456,6 @@ export default class QuestionForm extends React.Component {
                     </Form.Control.Feedback>
                   </Form.Group>
                 : null}
-
-                  <Form.Group controlId="validationIsDangerSign">
-                    <Form.Check
-                      name="is_danger_sign"
-                      label={I18n.t("activerecord.attributes.question.is_danger_sign")}
-                      value={values.is_danger_sign}
-                      checked={values.is_danger_sign}
-                      onChange={handleChange}
-                      disabled={deployedMode}
-                      isInvalid={touched.is_danger_sign && !!errors.is_danger_sign}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.is_danger_sign}
-                    </Form.Control.Feedback>
-                  </Form.Group>
 
                 <Form.Group controlId="validationLabel">
                   <Form.Label>{I18n.t("activerecord.attributes.node.label_translations")}</Form.Label>
@@ -596,6 +568,27 @@ export default class QuestionForm extends React.Component {
                   </>
                   : null}
 
+                {values.answer_type_id === 4 ?
+                  <Form.Group controlId="validationRound">
+                    <Form.Label>{I18n.t("activerecord.attributes.question.round")}</Form.Label>
+                    <Form.Control
+                      as="select"
+                      name="round"
+                      value={values.round}
+                      onChange={handleChange}
+                      isInvalid={touched.round && !!errors.round}
+                    >
+                      <option value="">{I18n.t("select")}</option>
+                      {Object.keys(rounds).map(key => (
+                        <option key={`rounds-${rounds[key]}`} value={key}>{I18n.t(`questions.rounds.${key}.label`)}</option>
+                      ))}
+                    </Form.Control>
+                    <Form.Control.Feedback type="invalid">
+                      {errors.round}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                  : null}
+
                 {NUMERIC_ANSWER_TYPES.includes(values.answer_type_id) ?
                   <>
                     <Form.Group controlId="validationMinValueWarning">
@@ -662,14 +655,14 @@ export default class QuestionForm extends React.Component {
                       <Form.Label>{I18n.t("activerecord.attributes.question.min_message_warning")}</Form.Label>
                       <Form.Control
                         as="textarea"
-                        name="min_message_warning"
+                        name="min_message_warning_en"
                         disabled={deployedMode}
-                        value={values.min_message_warning}
+                        value={values.min_message_warning_en}
                         onChange={handleChange}
-                        isInvalid={touched.min_message_warning && !!errors.min_message_warning}
+                        isInvalid={touched.min_message_warning_en && !!errors.min_message_warning_en}
                       />
                       <Form.Control.Feedback type="invalid">
-                        {errors.min_message_warning}
+                        {errors.min_message_warning_en}
                       </Form.Control.Feedback>
                     </Form.Group>
 
@@ -677,14 +670,14 @@ export default class QuestionForm extends React.Component {
                       <Form.Label>{I18n.t("activerecord.attributes.question.max_message_warning")}</Form.Label>
                       <Form.Control
                         as="textarea"
-                        name="max_message_warning"
+                        name="max_message_warning_en"
                         disabled={deployedMode}
-                        value={values.max_message_warning}
+                        value={values.max_message_warning_en}
                         onChange={handleChange}
-                        isInvalid={touched.max_message_warning && !!errors.max_message_warning}
+                        isInvalid={touched.max_message_warning_en && !!errors.max_message_warning_en}
                       />
                       <Form.Control.Feedback type="invalid">
-                        {errors.max_message_warning}
+                        {errors.max_message_warning_en}
                       </Form.Control.Feedback>
                     </Form.Group>
 
@@ -692,14 +685,14 @@ export default class QuestionForm extends React.Component {
                       <Form.Label>{I18n.t("activerecord.attributes.question.min_message_error")}</Form.Label>
                       <Form.Control
                         as="textarea"
-                        name="min_message_error"
+                        name="min_message_error_en"
                         disabled={deployedMode}
-                        value={values.min_message_error}
+                        value={values.min_message_error_en}
                         onChange={handleChange}
-                        isInvalid={touched.min_message_error && !!errors.min_message_error}
+                        isInvalid={touched.min_message_error_en && !!errors.min_message_error_en}
                       />
                       <Form.Control.Feedback type="invalid">
-                        {errors.min_message_error}
+                        {errors.min_message_error_en}
                       </Form.Control.Feedback>
                     </Form.Group>
 
@@ -707,14 +700,14 @@ export default class QuestionForm extends React.Component {
                       <Form.Label>{I18n.t("activerecord.attributes.question.max_message_error")}</Form.Label>
                       <Form.Control
                         as="textarea"
-                        name="max_message_error"
+                        name="max_message_error_en"
                         disabled={deployedMode}
-                        value={values.max_message_error}
+                        value={values.max_message_error_en}
                         onChange={handleChange}
-                        isInvalid={touched.max_message_error && !!errors.max_message_error}
+                        isInvalid={touched.max_message_error_en && !!errors.max_message_error_en}
                       />
                       <Form.Control.Feedback type="invalid">
-                        {errors.max_message_error}
+                        {errors.max_message_error_en}
                       </Form.Control.Feedback>
                     </Form.Group>
                   </>

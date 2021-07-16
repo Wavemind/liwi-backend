@@ -27,7 +27,7 @@ export default class InstanceForm extends React.Component {
       httpRequest = await http.createInstance(drug.id, positions.x, positions.y, values.duration, values.description);
     } else {
       const drugInstance = diagramObject.options.dbInstance;
-      httpRequest = await http.updateInstance(drugInstance.id, drugInstance.position_x, drugInstance.position_y, values.duration, values.description);
+      httpRequest = await http.updateInstance(drugInstance.id, drugInstance.position_x, drugInstance.position_y, values.duration_en, values.description_en);
     }
 
     let result = await httpRequest.json();
@@ -67,8 +67,8 @@ export default class InstanceForm extends React.Component {
         <Formik
           validationSchema={drugInstanceSchema}
           initialValues={{
-            duration: method === "create" ? "" : diagramObject.options.dbInstance.duration || "",
-            description: method === "create" ? drug?.description_translations?.en : diagramObject.options.dbInstance.description || ""
+            duration_en: method === "create" ? "" : diagramObject.options.dbInstance.duration_translations?.en || "",
+            description_en: method === "create" ? drug?.description_translations?.en : diagramObject.options.dbInstance.description_translations?.en || ""
           }}
           onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
         >
@@ -86,27 +86,27 @@ export default class InstanceForm extends React.Component {
               <Form.Group controlId="validationDuration">
                 <Form.Label>{I18n.t("activerecord.attributes.instance.duration")}</Form.Label>
                 <Form.Control
-                  name="duration"
-                  value={values.duration}
+                  name="duration_en"
+                  value={values.duration_en}
                   onChange={handleChange}
-                  isInvalid={touched.duration && !!errors.duration}
+                  isInvalid={touched.duration_en && !!errors.duration_en}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {errors.duration}
+                  {errors.duration_en}
                 </Form.Control.Feedback>
               </Form.Group>
 
               <Form.Group controlId="validationDescription">
                 <Form.Label>{I18n.t("activerecord.attributes.instance.description")}</Form.Label>
                 <Form.Control
-                  name="description"
+                  name="description_en"
                   as="textarea"
-                  value={values.description}
+                  value={values.description_em}
                   onChange={handleChange}
-                  isInvalid={touched.description && !!errors.description}
+                  isInvalid={touched.description_en && !!errors.description_en}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {errors.description}
+                  {errors.description_en}
                 </Form.Control.Feedback>
               </Form.Group>
 
