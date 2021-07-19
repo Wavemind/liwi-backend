@@ -74,7 +74,6 @@ class DiagnosesController < ApplicationController
   # GET algorithms/:algorithm_id/versions/:version_id/diagnoses/:id/diagram
   # Render the diagram view
   def diagram
-    authorize policy_scope(Diagnosis)
     add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
     add_breadcrumb @diagnosis.version.algorithm.name, algorithm_url(@diagnosis.version.algorithm)
     add_breadcrumb t('breadcrumbs.versions')
