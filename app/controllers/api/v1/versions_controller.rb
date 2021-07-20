@@ -6,6 +6,10 @@ class Api::V1::VersionsController < Api::V1::ApplicationController
 
   before_action :authenticate_user!, only: [:create]
 
+  def index
+    render json: Version.all
+  end
+
   def show
     version = Version.find_by_id(params[:id])
     if version
