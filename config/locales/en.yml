@@ -16,6 +16,8 @@ en:
       condition:
         score: "Score"
       diagnosis:
+        cut_off_start: "Cut off start (≥)"
+        cut_off_end: "Cut off end (<)"
         node: "Complaint category"
       formulation:
         administration_route_id: "Administration route"
