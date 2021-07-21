@@ -215,7 +215,10 @@ Rails.application.routes.draw do
   # API
   namespace :api do
     namespace :v1 do
-      resources :versions, only: [:index, :show] do
+      resources :algorithms, only: [:index] do
+        resources :versions, only: [:index]
+      end
+      resources :versions, only: [:show] do
         get 'json_test', to: 'versions#json_test'
         collection do
           post 'retrieve_algorithm_version', to: 'versions#retrieve_algorithm_version'

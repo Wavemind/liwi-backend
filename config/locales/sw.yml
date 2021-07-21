@@ -185,6 +185,7 @@ sw:
           no_health_facility_id: "No health facility id specified."
           no_health_facility: "Your tablet has not been associated with any Health Facility in medAL-creator"
         show:
+          invalid_algorithm: "Invalid algorithm id"
           invalid_version: "Invalid version id"
       activities:
         create:
