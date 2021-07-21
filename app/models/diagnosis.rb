@@ -101,11 +101,11 @@ class Diagnosis < ApplicationRecord
   def display_cut_offs
     cut_off = ''
     if cut_off_start.present?
-      cut_off = "From #{cut_off_start.to_s}"
-      cut_off = "#{cut_off} to #{cut_off_end.to_s}" if cut_off_end.present?
+      cut_off = "From ≥ #{cut_off_start.to_s}"
+      cut_off = "#{cut_off} to < #{cut_off_end.to_s}" if cut_off_end.present?
       cut_off = "#{cut_off} days"
     elsif cut_off_end.present?
-      cut_off = "To #{cut_off_end.to_s} days"
+      cut_off = "To < #{cut_off_end.to_s} days"
     end
     cut_off
   end

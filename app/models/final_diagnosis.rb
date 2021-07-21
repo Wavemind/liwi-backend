@@ -39,7 +39,8 @@ class FinalDiagnosis < Node
       reference: diagnosis.reference,
       label: diagnosis.label,
       version_id: diagnosis.version_id,
-      chief_complaint_label: diagnosis.node.reference_label
+      chief_complaint_label: diagnosis.node.reference_label,
+      cut_offs: diagnosis.display_cut_offs
     }
   end
 

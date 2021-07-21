@@ -129,11 +129,9 @@ class Toolbar extends React.Component {
             </div>
           ) : null}
 
-          {instanceable.type === "Diagnosis" || instanceable.type === "QuestionsSequence" ? (
-            <div className="col mt-2 btn-transparent">
-              {instanceable.cut_offs}
-            </div>
-          ) : null}
+          <div className="col mt-2 btn-transparent">
+            {instanceable.cut_offs}
+          </div>
 
           <div className="col text-right">
             {instanceable.type === "Diagnosis" || instanceable.type === "QuestionsSequence" ? (
