@@ -56,7 +56,7 @@ export default class AdvancedNodeModel extends NodeModel {
    * @params [Object] event
    */
   setPositionInstance = async (event) => {
-    let httpRequest = await this.http.updateInstance(this.options.dbInstance.id, event.entity.position.x, event.entity.position.y, this.options.dbInstance.duration.en, this.options.dbInstance.description.en);
+    let httpRequest = await this.http.updateInstance(this.options.dbInstance.id, event.entity.position.x, event.entity.position.y, this.options.dbInstance.duration_translations.en, this.options.dbInstance.description_translations.en);
     let result = await httpRequest.json();
 
     if (httpRequest.status !== 200) {

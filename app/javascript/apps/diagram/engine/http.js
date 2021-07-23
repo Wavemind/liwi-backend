@@ -189,7 +189,7 @@ export default class Http {
    * @params [Integer] y
    * @return [Object] body of request
    */
-  createInstance = async (nodeId, x, y, duration = '', description = '') => {
+  createInstance = async (nodeId, x, y, duration_en = '', description_en = '') => {
     const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances`;
     const body = {
       instance: {
@@ -199,8 +199,8 @@ export default class Http {
         instanceable_id: this.instanceableId,
         instanceable_type: this.instanceableType,
         final_diagnosis_id: this.finalDiagnosis,
-        duration,
-        description,
+        duration_en,
+        description_en,
       }
     };
     const header = await this.setHeaders("POST", body);

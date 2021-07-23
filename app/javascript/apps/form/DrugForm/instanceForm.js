@@ -24,7 +24,7 @@ export default class InstanceForm extends React.Component {
     let httpRequest = {};
 
     if (method === "create") {
-      httpRequest = await http.createInstance(drug.id, positions.x, positions.y, values.duration, values.description);
+      httpRequest = await http.createInstance(drug.id, positions.x, positions.y, values.duration_en, values.description_en);
     } else {
       const drugInstance = diagramObject.options.dbInstance;
       httpRequest = await http.updateInstance(drugInstance.id, drugInstance.position_x, drugInstance.position_y, values.duration_en, values.description_en);
@@ -101,7 +101,7 @@ export default class InstanceForm extends React.Component {
                 <Form.Control
                   name="description_en"
                   as="textarea"
-                  value={values.description_em}
+                  value={values.description_en}
                   onChange={handleChange}
                   isInvalid={touched.description_en && !!errors.description_en}
                 />
