@@ -229,7 +229,8 @@ class VersionsController < ApplicationController
   def regenerate_json
     invalid_diagnoses = []
 
-    if @version.algorithm.village_json.nil?
+    village_question_id = @version.algorithm.medal_r_config['optional_basic_questions']['village_question_id']
+    if @version.components.where(node_id: village_question_id).any? && @version.algorithm.village_json.nil?
       render json: { success: false, message: t('flash_message.version.missing_villages') } and return
     end
 
