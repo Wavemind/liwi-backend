@@ -13,6 +13,7 @@ A clear and concise description of what the bug is.
 ## Context
 - Environment (staging, test, prod)
 - Full URL where the issue occurs
+- Use IDs instead of labels to identify a node/diagram/version
 
 ## To Reproduce
 Steps to reproduce the behavior :
