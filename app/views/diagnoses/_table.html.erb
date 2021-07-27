@@ -5,8 +5,8 @@
 
 <%= react_component('lists/index',
   {
-    list: @version.diagnoses.includes(:node).as_json(include: {node: {methods: :reference_label}}),
-    title: 'label_translations.en',
+    list: @version.diagnoses.includes(:node).as_json(include: {node: {methods: :reference_label}}, methods: :reference_label),
+    title: 'reference_label',
     description: 'node.reference_label',
     metadata: [
 
