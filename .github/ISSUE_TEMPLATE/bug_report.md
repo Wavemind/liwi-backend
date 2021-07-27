@@ -12,7 +12,7 @@ A clear and concise description of what the bug is.
 
 ## Context
 - Environment (staging, test, prod)
-- ID(s) on where the issue occurs (an url provides a lot of information)
+- Full URL where the issue occurs
 
 ## To Reproduce
 Steps to reproduce the behavior :
