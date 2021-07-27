@@ -115,7 +115,6 @@ class VersionsController < ApplicationController
   # @params version [Version] version
   # Get every final diagnoses for of the diagnoses of the given version
   def final_diagnoses
-    authorize policy_scope(Version)
     respond_to do |format|
       format.html
       format.js { }
@@ -127,7 +126,6 @@ class VersionsController < ApplicationController
   # @params version [Version] version
   # Get every final diagnoses exclusions defined in the given version
   def final_diagnoses_exclusions
-    authorize policy_scope(Version)
     respond_to do |format|
       format.js { }
       format.json { render json: FinalDiagnosisExclusionDatatable.new(params, view_context: view_context) }
@@ -156,7 +154,6 @@ class VersionsController < ApplicationController
   # @params version [Version] version
   # Get an excel export of variables and final diagnoses used in the given version
   def generate_variables
-    authorize policy_scope(Version)
     respond_to do |format|
       format.xlsx
     end
@@ -166,7 +163,6 @@ class VersionsController < ApplicationController
   # @params version [Version] version
   # Import an excel file to parse all nodes and update their labels/descriptions translations
   def import_translations
-    authorize policy_scope(Version)
     file = params[:version][:file]
     if file.present? && File.extname(file.original_filename).include?('xls')
       xl_file = Roo::Spreadsheet.open(file.path, extension: :xlsx)
@@ -210,7 +206,7 @@ class VersionsController < ApplicationController
   # @params algorithm [Algorithm] algorithm
   # Generate given algorithm's versions in json format
   def list
-    authorize policy_scope(Version)
+    authorize policy_scope(@algorithm.versions)
     render json: @algorithm.versions.as_json(methods: :display_archive_status)
   end
 
