@@ -93,7 +93,6 @@ class AlgorithmsController < ApplicationController
   # @params file [File] xl file with the villages in columns
   # Import an excel file to input the villages
   def import_villages
-    authorize policy_scope(@algorithm)
     file = params[:algorithm][:file]
     if file.present? && File.extname(file.original_filename).include?('xls')
       xl_file = Roo::Spreadsheet.open(file.path, extension: :xlsx)
