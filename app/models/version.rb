@@ -221,5 +221,25 @@ class Version < ApplicationRecord
     # group_accesses.where(end_date: nil).any?
     false
   end
-end
 
+  # Validate full_order_json
+  def validate_order
+    json = JSON.parse(full_order_json)
+    steps = Question.steps.map(&:first)
+    wrong_steps = []
+    json.each_with_index do |step_order, index|
+      step = steps[index]
+      questions_order_count = 0
+      if %w(complaint_categories_step medical_history_step physical_exam_step).include?(step)
+        step_order['children'].each do |system|
+          questions_order_count += system['children'].count
+        end
+      else
+        questions_order_count = step_order['children'].count
+        questions_order_count -= 3 if step == 'registration_step' # Count the 3 default questions (firstname lastname birthdate)
+      end
+      wrong_steps.push(step) unless algorithm.questions.where(step: step).count == questions_order_count
+    end
+    wrong_steps
+  end
+end

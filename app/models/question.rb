@@ -135,7 +135,7 @@ class Question < Node
       else
         order.select{|i| i['title'] == I18n.t("questions.steps.#{step}")}[0]['children'].push(generate_node_tree_hash)
       end
-      version.update(full_order_json: order.to_json)
+      version.update!(full_order_json: order.to_json)
     end
   end
 
@@ -184,7 +184,7 @@ class Question < Node
       else
         order.select{|i| i['title'] == I18n.t("questions.steps.#{step}")}[0]['children'].delete_if{|i| i['id'] == id}
       end
-      version.update(full_order_json: order.to_json)
+      version.update!(full_order_json: order.to_json)
     end
   end
 
