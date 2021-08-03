@@ -61,8 +61,8 @@ export default class CutOffForm extends React.Component {
         <Formik
           validationSchema={cutOffSchema}
           initialValues={{
-            cut_off_start: conditionCutOffStart || "",
-            cut_off_end: conditionCutOffEnd || "",
+            cut_off_start: conditionCutOffStart != null ? conditionCutOffStart : "",
+            cut_off_end: conditionCutOffEnd != null ? conditionCutOffEnd : "",
             cut_off_value_type: "days",
 
           }}

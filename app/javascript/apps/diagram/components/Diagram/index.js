@@ -83,7 +83,6 @@ export class Diagram extends React.Component {
 
     // Generate questions
     instances.map(instance => {
-      console.log(this.props);
       let diagramNode = createNode(instance, addAvailableNode, readOnly, instanceable.category_name, engine, user);
       diagramNodes.push(diagramNode);
       model.addAll(diagramNode);
