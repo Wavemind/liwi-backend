@@ -28,7 +28,7 @@ class Instance < ApplicationRecord
   scope :not_health_care_conditions, ->() { includes(:conditions).where(final_diagnosis_id: nil) }
 
   before_destroy :remove_condition_from_children
-  after_destroy :remove_exclusion, if: Proc.new { self.node.is_a?(FinalDiagnosis) }
+  after_destroy :remove_dependencies, if: Proc.new { self.node.is_a?(FinalDiagnosis) }
 
   validate :already_exist, on: :create
 
@@ -84,9 +84,10 @@ class Instance < ApplicationRecord
     end
   end
 
-  # Remove exclusion from a final diagnosis instance that has been destroyed
-  def remove_exclusion
+  # Remove exclusion and sub instances from a final diagnosis when its instance has been destroyed
+  def remove_dependencies
     NodeExclusion.final_diagnosis.where(excluding_node_id: node_id).or(NodeExclusion.final_diagnosis.where(excluded_node_id: node_id)).map(&:destroy)
+    Instance.where(final_diagnosis_id: node_id).map(&:destroy)
   end
 
   # Get translatable attributes to translate with excel import

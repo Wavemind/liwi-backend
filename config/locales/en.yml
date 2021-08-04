@@ -340,6 +340,7 @@ en:
         other: "%{count} errors prohibited this %{model} from being saved"
   dependencies: "The node you are trying to remove has dependencies"
   final_diagnoses:
+    confirmation: "You are about to delete a Final Diagnosis instance which will delete all exclusions and instances linked to it. Are you sure ?"
     new:
       title: "Create a new final diagnosis"
     reference: "DF"
