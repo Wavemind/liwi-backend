@@ -44,6 +44,7 @@ class Question < Node
   before_validation :validate_ranges, if: Proc.new { [3, 4].include?(self.answer_type_id) }
   after_create :add_to_version_orders
   after_destroy :remove_from_version_orders
+  before_update :set_system_order
   validates_presence_of :stage, unless: Proc.new { self.is_a? Questions::BackgroundCalculation }
   validates_presence_of :formula, if: Proc.new { self.answer_type.display == 'Formula' }
   validates_presence_of :type
@@ -302,5 +303,23 @@ class Question < Node
     end
 
     fields_to_update
+  end
+
+  # Update json order if the system is changed
+  def set_system_order
+    system_change = changes['system']
+    if system_change.present?
+      old_system = system_change[0]
+      new_system = system_change[1]
+      algorithm.versions.map do |version|
+        json = JSON.parse(version.full_order_json)
+        json_index = Question.steps[step]
+        old_place = json[json_index]['children'].select{|system| system['subtitle_name'] == old_system}[0]['children']
+        node_hash = old_place.select{|node| node['id'] == id}[0]
+        old_place.delete(node_hash)
+        json[json_index]['children'].select{|system| system['subtitle_name'] == new_system}[0]['children'].push(node_hash)
+        version.update!(full_order_json: json.to_json)
+      end
+    end
   end
 end
