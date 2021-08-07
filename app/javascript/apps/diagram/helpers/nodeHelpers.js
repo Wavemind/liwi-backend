@@ -1,7 +1,8 @@
 import * as React from "react";
+import I18n from "i18n-js";
 import _ from "lodash";
 import QuestionNodeModel from "../components/extended/QuestionDiagram/node/QuestionNodeModel";
-import FinalDiagnosticNodeModel from "../components/extended/FinalDiagnosticDiagram/node/FinalDiagnosticNodeModel";
+import FinalDiagnosisNodeModel from "../components/extended/FinalDiagnosisDiagram/node/FinalDiagnosisNodeModel";
 import HealthCareNodeModel from "../components/extended/HealthCareDiagram/node/HealthCareNodeModel";
 import QuestionsSequenceNodeModel
   from "../components/extended/QuestionsSequenceDiagram/node/QuestionsSequenceNodeModel";
@@ -21,7 +22,7 @@ export const getLabel = (node) => {
  * @params [Function] addAvailableNode
  * @return diagram node
  */
-export const createNode = (instance, addAvailableNode, readOnly, diagramType, engine) => {
+export const createNode = (instance, addAvailableNode, readOnly, diagramType, engine, user) => {
   let diagramNode;
 
   let params = {
@@ -30,14 +31,15 @@ export const createNode = (instance, addAvailableNode, readOnly, diagramType, en
     locked: readOnly,
     diagramType,
     engine,
+    user
   };
 
   switch (instance.node.node_type) {
     case "Question":
       diagramNode = new QuestionNodeModel(params);
       break;
-    case "FinalDiagnostic":
-      diagramNode = new FinalDiagnosticNodeModel(params);
+    case "FinalDiagnosis":
+      diagramNode = new FinalDiagnosisNodeModel(params);
       break;
     case "HealthCare":
       diagramNode = new HealthCareNodeModel(params);
@@ -84,22 +86,29 @@ export const linkNode = (answerPort, diagramNode, condition) => {
     link.addLabel(condition.score);
   }
 
+  // Add label to display cut offs
+  if (condition.cut_off_start || condition.cut_off_end) {
+    link.addLabel(I18n.t("conditions.cut_off_label", {start: condition.cut_off_start, end: condition.cut_off_end}))
+  }
+
   // Add value in link
   link.options.score = condition.score;
   link.options.dbConditionId = condition.id;
+  link.options.cutOffStart = condition.cut_off_start;
+  link.options.cutOffEnd = condition.cut_off_end;
   link.options.parentInstanceId = link.sourcePort.parent.options.dbInstance.id;
 
   return link;
 };
 
 /**
- * Link excluded final diagnostic in diagram
+ * Link excluded final diagnosis in diagram
  * @params [Object] diagramNode -> outPort or excludingOutPort
- * @params [Integer] excludedFinalDiagnostic -> inPort or excludedInPort
+ * @params [Integer] excludedFinalDiagnosis -> inPort or excludedInPort
  * @return Diagram port
  */
-export const linkFinalDiagnosticExclusion = (diagramNode, excludedFinalDiagnostic) => {
-  let excludedInPort = excludedFinalDiagnostic.getPortByName("excludedInPort");
+export const linkFinalDiagnosisExclusion = (diagramNode, excludedFinalDiagnosis) => {
+  let excludedInPort = excludedFinalDiagnosis.getPortByName("excludedInPort");
   let excludingOutPort = diagramNode.getPortByName("excludingOutPort");
 
   return excludingOutPort.link(excludedInPort);

@@ -31,9 +31,9 @@ class QuestionsSequencesController < ApplicationController
         render json: { url: diagram_questions_sequence_url(@questions_sequence) }
       else
         type = params[:instanceable_type].camelize.singularize
-        if %w(Diagnostic QuestionsSequence).include? type
+        if %w(Diagnosis QuestionsSequence).include? type
           instanceable = Object.const_get(params[:instanceable_type].camelize.singularize).find(params[:instanceable_id])
-          instanceable.components.create!(node: @questions_sequence, final_diagnostic_id: params[:final_diagnostic_id])
+          instanceable.components.create!(node: @questions_sequence, final_diagnosis_id: params[:final_diagnosis_id])
         end
         render json: @questions_sequence.get_instance_json(instanceable)
       end
@@ -67,13 +67,14 @@ class QuestionsSequencesController < ApplicationController
     end
   end
 
-  # React Diagram
+  # GET questions_sequences/:id/diagram
+  # Render the diagram view
   def diagram
     authorize policy_scope(QuestionsSequence)
   end
 
-  # GET
-  # @return give sub categories of questions sequence
+  # GET algorithms/:algorithm_id/questions_sequences/lists
+  # Return several attributes of the model QuestionsSequence to build dropdown lists
   def lists
     authorize policy_scope(QuestionsSequence)
     render json: {
@@ -82,22 +83,23 @@ class QuestionsSequencesController < ApplicationController
     }
   end
 
-  # GET algorithm/:algorithm_id/questions_sequences/reference_prefix/:type
-  # @params QuestionsSequence child
-  # @return json with the reference prefix of the child
+  # GET algorithms/:algorithm_id/questions_sequences/reference_prefix/:type
+  # @params Category of QuestionsSequence
+  # Return class name according to the param
   def reference_prefix
     authorize policy_scope(QuestionsSequence)
     render json: QuestionsSequence.reference_prefix_class(params[:type])
   end
 
-  # @params [QuestionsSequence]
-  # Manually validate a questions sequence and return flash messages to display in the view
+  # POST algorithms/:algorithm_id/questions_sequences/:id/validate
+  # @params questions_sequence [QuestionsSequence] questions_sequence to be validated
+  # Validate the questions_sequence with its formula, its answers and its fields
   def validate
     @questions_sequence.manual_validate
     if @questions_sequence.errors.messages.any?
       render json: @questions_sequence.errors.messages[:basic], status: 422
     else
-      render json: [t('flash_message.diagnostic.valid')], status: 200
+      render json: [t('flash_message.diagnosis.valid')], status: 200
     end
   end
 
@@ -127,6 +129,9 @@ class QuestionsSequencesController < ApplicationController
       :algorithm_id,
       :min_score,
       :node_id,
+      :cut_off_start,
+      :cut_off_end,
+      :cut_off_value_type,
       complaint_category_ids: []
     )
   end

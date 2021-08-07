@@ -23,6 +23,6 @@ class Questions::Vaccine < Question
 
   # Associate proper step depending on category ; empty for parent
   def associate_step
-    self.step = Question.steps[:medical_history]
+    self.step = Question.steps[:medical_history_step]
   end
 end

@@ -26,10 +26,10 @@ class ManagementsController < ApplicationController
       if params[:from] == 'rails'
         render json: { url: algorithm_url(@algorithm, panel: 'managements'), management: @management }
       else
-        diagnostic = Diagnostic.find(params[:diagnostic_id])
-        final_diagnostic = FinalDiagnostic.find(params[:final_diagnostic_id])
-        final_diagnostic.health_cares << @management
-        instance = diagnostic.components.create!(node: @management, final_diagnostic: final_diagnostic)
+        diagnosis = Diagnosis.find(params[:diagnosis_id])
+        final_diagnosis = FinalDiagnosis.find(params[:final_diagnosis_id])
+        final_diagnosis.health_cares << @management
+        instance = diagnosis.components.create!(node: @management, final_diagnosis: final_diagnosis)
 
         render json: instance.generate_json
       end

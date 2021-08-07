@@ -29,6 +29,7 @@ Rails.application.routes.draw do
       get 'managements', to: 'algorithms#managements', as: 'management'
       get 'questions_sequences', to: 'algorithms#questions_sequences', as: 'questions_sequence'
       get 'questions_sequences_scored', to: 'algorithms#questions_sequences_scored', as: 'questions_sequence_scored'
+      get 'villages', to: 'algorithms#villages', as: 'villages'
       put 'import_villages'
     end
 
@@ -37,42 +38,49 @@ Rails.application.routes.draw do
         get 'final_diagnoses_exclusions', to: 'versions#final_diagnoses_exclusions', as: 'final_diagnoses_exclusions'
         get 'generate_translations'
         get 'generate_variables'
-        get 'final_diagnostics', to: 'versions#final_diagnostics', as: 'final_diagnostic'
+        get 'final_diagnoses', to: 'versions#final_diagnoses', as: 'final_diagnosis'
+        get 'registration_triage_questions', to: 'versions#registration_triage_questions', as: 'registration_triage_questions'
+        get 'full_order', to: 'versions#full_order', as: 'full_order'
+        get 'medal_data_config', to: 'versions#medal_data_config', as: 'medal_data_config'
+        get 'translations', to: 'versions#translations', as: 'translations'
         get 'job_status'
         put 'archive', to: 'versions#archive', as: 'archive'
         put 'unarchive', to: 'versions#unarchive', as: 'unarchive'
         post 'duplicate'
         post 'components'
         delete 'remove_components'
-        put 'change_triage_order'
-        put 'change_systems_order'
         put 'create_triage_condition'
         put 'remove_triage_condition'
         put 'regenerate_json'
         put 'update_list'
         put 'import_translations'
         put 'set_medal_data_config'
+        put 'update_full_order'
       end
 
-      resources :final_diagnostics do
+      collection do
+        get 'list'
+      end
+
+      resources :final_diagnoses do
         collection do
           post 'add_exclusion'
           delete 'remove_exclusion'
         end
       end
 
-      resources :diagnostics, only: [:index, :new, :create, :edit, :update, :show, :destroy, :duplicate] do
+      resources :diagnoses, only: [:index, :new, :create, :edit, :update, :show, :destroy, :duplicate] do
         member do
           post 'duplicate'
           get 'diagram'
           get 'validate'
         end
 
-        resources :final_diagnostics, only: [:index, :new, :create, :edit, :update, :delete, :destroy] do
+        resources :final_diagnoses, only: [:index, :new, :create, :edit, :update, :delete, :destroy] do
           member do
             get 'diagram'
           end
-          resources :final_diagnostic_health_cares, only: [:create, :destroy]
+          resources :final_diagnosis_health_cares, only: [:create, :destroy]
         end
       end
     end
@@ -109,10 +117,15 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :conditions do
+    member do
+      put 'update_cut_offs'
+    end
+  end
+
   resources :questions_sequences, only: [] do
     resources :instances, only: [:destroy, :create] do
       collection do
-        get 'by_reference'
         put 'update_score'
       end
       member do
@@ -134,10 +147,9 @@ Rails.application.routes.draw do
 
   resources :instances, only: [:update]
 
-  resources :diagnostics, only: [] do
+  resources :diagnoses, only: [] do
     resources :instances, only: [:show, :destroy, :create] do
       collection do
-        get 'by_reference'
         get 'load_conditions'
       end
       member do
@@ -146,21 +158,15 @@ Rails.application.routes.draw do
       end
       resources :conditions, only: [:destroy]
     end
-
-    resources :conditions, only: [] do
-      collection do
-        post 'differential', to: 'conditions#add_diagnostic_condition'
-      end
-
-      member do
-        delete 'differential', to: 'conditions#destroy_diagnostic_condition'
-      end
-    end
   end
 
   get 'instanceable/:type/:id', to: 'instances#index', as: 'instanceable'
 
   resources :health_facilities, only: [:index, :show, :new, :create, :edit, :update] do
+    get 'accesses', to: 'health_facilities#accesses', as: 'access'
+    get 'devices', to: 'health_facilities#devices', as: 'device'
+    get 'medical_staff', to: 'health_facilities#medical_staff', as: 'medical_staff'
+    get 'generate_stickers_view', to: 'health_facilities#generate_stickers_view', as: 'generate_stickers_view'
     delete 'devices/:device_id/remove_device', to: 'health_facilities#remove_device', as: 'remove_device'
     post 'add_device', to: 'health_facilities#add_device', as: 'add_device'
     post 'generate_stickers', to: 'health_facilities#generate_stickers', as: 'generate_stickers'
@@ -181,6 +187,10 @@ Rails.application.routes.draw do
   end
 
   resources :questions, only: [] do
+    member do
+      get 'dependencies'
+    end
+
     collection do
       get 'reference_prefix'
     end
@@ -198,7 +208,6 @@ Rails.application.routes.draw do
     end
   end
 
-
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
   require 'sidekiq-status/web'
@@ -206,6 +215,9 @@ Rails.application.routes.draw do
   # API
   namespace :api do
     namespace :v1 do
+      resources :algorithms, only: [:index] do
+        resources :versions, only: [:index]
+      end
       resources :versions, only: [:show] do
         get 'json_test', to: 'versions#json_test'
         collection do

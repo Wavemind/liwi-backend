@@ -12,6 +12,6 @@ class Questions::UniqueTriageQuestion < Question
 
   # Associate proper step depending on category ; empty for parent
   def associate_step
-    self.step = Question.steps[:first_look_assessment]
+    self.step = Question.steps[:first_look_assessment_step]
   end
 end

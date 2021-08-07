@@ -69,9 +69,9 @@ export default class QuestionsSequenceForm extends React.Component {
     values.complaint_categories_attributes.map(cc => (complaint_category_ids.push(cc.id)));
 
     if (method === "create") {
-      httpRequest = await http.createQuestionsSequence(values.label_translations, values.description_translations, values.type, values.min_score, complaint_category_ids, from);
+      httpRequest = await http.createQuestionsSequence(values.label_translations, values.description_translations, values.type, values.min_score, values.cut_off_start, values.cut_off_end, values.cut_off_value_type, complaint_category_ids, from);
     } else {
-      httpRequest = await http.updateQuestionsSequence(values.id, values.label_translations, values.description_translations, values.type, values.min_score, complaint_category_ids, from);
+      httpRequest = await http.updateQuestionsSequence(values.id, values.label_translations, values.description_translations, values.type, values.min_score, values.cut_off_start, values.cut_off_end, values.cut_off_value_type, complaint_category_ids, from);
     }
 
     let result = await httpRequest.json();
@@ -113,6 +113,9 @@ export default class QuestionsSequenceForm extends React.Component {
               label_translations: questionsSequence?.label_translations?.en || "",
               description_translations: questionsSequence?.description_translations?.en || "",
               min_score: questionsSequence?.min_score || "",
+              cut_off_start: questionsSequence?.cut_off_start || "",
+              cut_off_end: questionsSequence?.cut_off_end || "",
+              cut_off_value_type: updateMode ? "days" : "months",
               complaint_categories_attributes: questionsSequence?.complaint_categories || []
             }}
             onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
@@ -207,6 +210,52 @@ export default class QuestionsSequenceForm extends React.Component {
                     </Form.Control.Feedback>
                   </Form.Group>
                   : null}
+
+                <Form.Row>
+                  <Form.Label>{I18n.t("activerecord.attributes.node.cut_off_start")}&nbsp;&#x2265;&nbsp;</Form.Label>
+                  <Form.Group controlId="validationCutOffStart">
+                    <Form.Control
+                      name="cut_off_start"
+                      value={values.cut_off_start}
+                      onChange={handleChange}
+                      disabled={deployedMode}
+                      isInvalid={touched.cut_off_start && !!errors.cut_off_start}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.cut_off_start}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                  <Form.Label>&nbsp;{I18n.t("to")}&nbsp;&#x3c;&nbsp;</Form.Label>
+
+                  <Form.Group controlId="validationCutOffEnd">
+                    <Form.Control
+                      name="cut_off_end"
+                      value={values.cut_off_end}
+                      onChange={handleChange}
+                      disabled={deployedMode}
+                      isInvalid={touched.cut_off_end && !!errors.cut_off_end}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.cut_off_end}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+
+                  <Form.Group controlId="validationCutOffValueType">
+                    <Form.Control
+                      as="select"
+                      name="cut_off_value_type"
+                      value={values.cut_off_value_type}
+                      onChange={handleChange}
+                      isInvalid={touched.cut_off_value_type && !!errors.cut_off_value_type}
+                    >
+                      <option value="months">{I18n.t("months")}</option>
+                      <option value="days">{I18n.t("days")}</option>
+                    </Form.Control>
+                    <Form.Control.Feedback type="invalid">
+                      {errors.cut_off_value_type}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </Form.Row>
 
                 <Form.Group controlId="validationDescription">
                   <Form.Label>{I18n.t("activerecord.attributes.node.description_translations")}</Form.Label>

@@ -42,11 +42,11 @@ class Toolbar extends React.Component {
   }
 
   /**
-   * Redirect to diagnostic diagram
+   * Redirect to diagnosis diagram
    */
-  redirectToDiagnosticDiagram() {
+  redirectToDiagnosisDiagram() {
     const { http } = this.props;
-    http.redirectToDiagnosticDiagram();
+    http.redirectToDiagnosisDiagram();
   }
 
   /**
@@ -54,8 +54,8 @@ class Toolbar extends React.Component {
    */
   save() {
     const { http, instanceable } = this.props;
-    if (instanceable.type === "Diagnostic") {
-      http.redirectToDiagnostic();
+    if (instanceable.type === "Diagnosis") {
+      http.redirectToDiagnosis();
     } else {
       let panel = instanceable.category_name === "scored" ? "questions_sequences_scored" : "questions_sequences";
       http.redirectToAlgorithm(panel);
@@ -70,8 +70,8 @@ class Toolbar extends React.Component {
     let httpRequest = {};
     this.setState({ isLoading: true });
 
-    if (instanceable.type === "Diagnostic") {
-      httpRequest = await http.validateDiagnostic();
+    if (instanceable.type === "Diagnosis") {
+      httpRequest = await http.validateDiagnosis();
     } else {
       httpRequest = await http.validateQuestionsSequence();
     }
@@ -100,7 +100,7 @@ class Toolbar extends React.Component {
     return (
       <div className="col-md-12 liwi-toolbar">
         <div className="row">
-          <div className="col">
+          <div className="col-6">
             <div className="btn-group">
               <button key="new" type="button" className="btn btn-transparent" data-toggle="dropdown"
                       aria-haspopup="true" aria-expanded="false" disabled={readOnly}>
@@ -111,10 +111,10 @@ class Toolbar extends React.Component {
                    onClick={() => this.createNode(I18n.t("questions.new.title"), "QuestionForm")}>{I18n.t("toolbar.question")}</a>
                 <a className="dropdown-item" key="questionsSequence" href="#"
                    onClick={() => this.createNode(I18n.t("questions_sequences.new.title"), "QuestionsSequenceForm")}>{I18n.t("toolbar.questions_sequence")}</a>
-                {instanceable.type === "Diagnostic" ? (
-                  <a className="dropdown-item" key="finalDiagnostic" href="#"
-                     onClick={() => this.createNode(I18n.t("final_diagnostics.new.title"), "FinalDiagnosticForm")}>{I18n.t("toolbar.final_diagnostic")}</a>) : null}
-                {instanceable.type === "FinalDiagnostic" ? ([
+                {instanceable.type === "Diagnosis" ? (
+                  <a className="dropdown-item" key="finalDiagnosis" href="#"
+                     onClick={() => this.createNode(I18n.t("final_diagnoses.new.title"), "FinalDiagnosisForm")}>{I18n.t("toolbar.final_diagnosis")}</a>) : null}
+                {instanceable.type === "FinalDiagnosis" ? ([
                   <a className="dropdown-item" key="drug" href="#"
                      onClick={() => this.createNode(I18n.t("drugs.new.title"), "DrugForm")}>{I18n.t("toolbar.drug")}</a>,
                   <a className="dropdown-item" key="management" href="#"
@@ -124,20 +124,26 @@ class Toolbar extends React.Component {
             </div>
           </div>
           {instanceable.type !== "QuestionsSequence" ? (
-            <span className="mt-2 btn-transparent">{instanceable.chief_complaint_label}</span>
+            <div className="col mt-2 btn-transparent">
+              {instanceable.chief_complaint_label}
+            </div>
           ) : null}
 
+          <div className="col mt-2 btn-transparent">
+            {instanceable.cut_offs}
+          </div>
+
           <div className="col text-right">
-            {instanceable.type === "Diagnostic" || instanceable.type === "QuestionsSequence" ? (
+            {instanceable.type === "Diagnosis" || instanceable.type === "QuestionsSequence" ? (
               <button key="validate" type="button" className="btn btn-transparent" disabled={isLoading || readOnly}
                       onClick={() => this.validate()}>
                 <span>{isLoading ? "Loading" : I18n.t("toolbar.validate")}</span>
               </button>
             ) : null}
-            {instanceable.type === "FinalDiagnostic" ? (
-              <button key="diagnosticDiagram" type="button" className="btn btn-transparent"
-                      onClick={() => this.redirectToDiagnosticDiagram()} disabled={readOnly}>
-                {I18n.t("toolbar.diagnostic_diagram")}
+            {instanceable.type === "FinalDiagnosis" ? (
+              <button key="diagnosisDiagram" type="button" className="btn btn-transparent"
+                      onClick={() => this.redirectToDiagnosisDiagram()} disabled={readOnly}>
+                {I18n.t("toolbar.diagnosis_diagram")}
               </button>
             ) : (
               <button key="save" type="button" className="btn btn-transparent" onClick={() => this.save()} disabled={readOnly}>

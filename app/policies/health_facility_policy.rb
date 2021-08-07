@@ -5,12 +5,16 @@ class HealthFacilityPolicy < ApplicationPolicy
     end
   end
 
+  def has_study_access?
+    @user.studies.where(id: @record.study_id).any?
+  end
+
   def index?
     user.admin? || user.clinician? || user.deployment_manager?
   end
 
   def show?
-    index?
+    has_study_access? && index?
   end
 
   def new?
@@ -22,26 +26,42 @@ class HealthFacilityPolicy < ApplicationPolicy
   end
 
   def edit?
-    new?
+    has_study_access? && new?
   end
 
   def update?
-    new?
+    has_study_access? && new?
   end
 
   def add_device?
-    new?
+    has_study_access? && new?
   end
 
   def remove_device?
-    new?
+    has_study_access? && new?
   end
 
   def sticker_form?
-    new?
+    has_study_access? && new?
   end
 
   def generate_stickers?
-    new?
+    has_study_access? && new?
+  end
+
+  def accesses?
+    show?
+  end
+
+  def devices?
+    show?
+  end
+
+  def generate_stickers_view?
+    show?
+  end
+
+  def medical_staff?
+    show?
   end
 end

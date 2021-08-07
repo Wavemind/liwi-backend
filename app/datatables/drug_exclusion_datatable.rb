@@ -11,8 +11,8 @@ class DrugExclusionDatatable < AjaxDatatablesRails::ActiveRecord
 
   def view_columns
     @view_columns ||= {
-      excluding_drug_id: { source: 'NodeExclusion.excluding_node_id' },
-      excluded_drug_id: { source: 'NodeExclusion.excluded_node_id' },
+      excluding_drug_id: { source: 'Node.label_translations' },
+      excluded_drug_id: { source: 'Node.label_translations' },
     }
   end
 
@@ -29,6 +29,6 @@ class DrugExclusionDatatable < AjaxDatatablesRails::ActiveRecord
 
   def get_raw_records
     drugs_ids = Algorithm.find(params[:id]).health_cares.drugs.map(&:id)
-    NodeExclusion.drug.where(excluding_node_id: drugs_ids, excluded_node_id: drugs_ids)
+    NodeExclusion.includes(:excluded_node, :excluding_node).joins(:excluded_node, :excluding_node).drug.where(excluding_node_id: drugs_ids, excluded_node_id: drugs_ids)
   end
 end

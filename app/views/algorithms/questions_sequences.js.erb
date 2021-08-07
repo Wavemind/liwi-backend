@@ -1,0 +1,28 @@
+document.getElementById("algorithm-index-content").innerHTML = "<%= escape_javascript render 'questions_sequences/table' %>"
+
+jQuery(document).ready(function() {
+  $("#algorithm-tabs").find(".nav-link").removeClass("active")
+  $("#nav-link-questions_sequences").addClass("active")
+
+  $("#questions_sequences-datatable").dataTable({
+    "processing": true,
+    "info": false,
+    "bLengthChange": false,
+    "serverSide": true,
+    "pageLength": 50,
+    "ajax": $("#questions_sequences-datatable").data("source"),
+    "pagingType": "full_numbers",
+    "columns": [
+      { "data": "id" },
+      { "data": "reference" },
+      { "data": "label" },
+      { "data": "description" },
+      { "data": "category" },
+      { "data": "actions", "className": "text-right" },
+    ],
+    'columnDefs': [ {
+      'targets': [5],
+      'orderable': false,
+    }]
+  });
+});

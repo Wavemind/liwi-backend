@@ -1,4 +1,4 @@
-<% if node.dependencies.present? || node.diagnostics.present? %>
+<% if node.dependencies.present? || node.diagnoses.present? %>
   <div class="justify-content-center">
     <div class="col-md-6 offset-md-3">
       <div class="alert alert-danger" role="alert">
@@ -7,8 +7,8 @@
           <% node.dependencies.each do |dependence| %>
             <li><b><%= "#{dependence.instanceable.full_reference} - #{dependence.instanceable.label}" %></b></li>
           <% end %>
-          <% node.diagnostics.each do |diagnostic| %>
-            <li><b><%= "#{diagnostic.full_reference} - #{diagnostic.label}" %></b></li>
+          <% node.diagnoses.each do |diagnosis| %>
+            <li><b><%= "#{diagnosis.full_reference} - #{diagnosis.label}" %></b></li>
           <% end %>
         </ul>
       </div>
