@@ -131,6 +131,12 @@ class FinalDiagnosis < Node
     self.algorithm = diagnosis.version.algorithm
   end
 
+  # @return [String]
+  # Return the label with the reference formatted for dropdown lists
+  def reference_label_dropdown_list
+    "#{label} (#{diagnosis.label})"
+  end
+
   # Get the reference prefix according to the type
   def reference_prefix
     I18n.t("final_diagnoses.reference")

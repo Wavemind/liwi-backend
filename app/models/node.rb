@@ -124,12 +124,6 @@ class Node < ApplicationRecord
     "#{full_reference} - #{label}"
   end
 
-  # @return [String]
-  # Return the label with the reference formatted for dropdown lists
-  def reference_label_dropdown_list
-    "#{label} (#{label})"
-  end
-
   # Check if question is used in a deployed version
   def used_in_deployed_version
     involved_versions_ids = []
