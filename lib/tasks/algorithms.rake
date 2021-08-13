@@ -115,7 +115,7 @@ namespace :algorithms do
                 puts '***'
                 puts node['id']
                 puts '***'
-                node['id'] = nodes[node['id']].id
+                node['id'] = nodes[node['id']].id unless %w(first_name last_name birth_date).include?(node['id'])
               end
             end
           end
