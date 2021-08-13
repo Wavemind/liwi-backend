@@ -113,7 +113,7 @@ namespace :algorithms do
             else
               step['children'].each do |node|
                 puts '***'
-                puts node['id']
+                puts node['title']
                 puts '***'
                 node['id'] = nodes[node['id']].id unless %w(first_name last_name birth_date).include?(node['id'])
               end
