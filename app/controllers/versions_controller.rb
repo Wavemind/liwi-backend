@@ -354,7 +354,7 @@ class VersionsController < ApplicationController
             diagnosis_params[field] = row[col]
           end
 
-          diagnosis.update(diagnosis_params)
+          diagnosis.update!(diagnosis_params)
         end
       end
     end
@@ -379,7 +379,7 @@ class VersionsController < ApplicationController
         end
         params = {}
         params[field_to_update] = translations
-        object.update(params)
+        object.update!(params)
       end
     end
   end
