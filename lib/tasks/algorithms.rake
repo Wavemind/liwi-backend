@@ -102,7 +102,7 @@ namespace :algorithms do
           versions[version.id] = new_version
 
           puts "#{Time.zone.now.strftime("%I:%M")} - Recreating the full ordering of the copied versions..."
-          order = JSON.parse(new_version)
+          order = JSON.parse(new_version.full_order_json)
           order.each do |step|
             if ['Complaint Categories', 'Medical History', 'Physical Exam'].include?(step['title'])
               step['children'].each do |sub|
