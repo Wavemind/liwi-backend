@@ -34,6 +34,7 @@ namespace :algorithms do
         Question.skip_callback(:create, :after, :create_positive)
         Question.skip_callback(:create, :after, :create_present)
         Question.skip_callback(:create, :after, :create_boolean)
+        Question.skip_callback(:create, :after, :add_to_version_orders)
         QuestionsSequence.skip_callback(:create, :after, :create_boolean)
         Version.skip_callback(:create, :before, :init_config)
         Condition.skip_callback(:validation, :before, :prevent_loop)
