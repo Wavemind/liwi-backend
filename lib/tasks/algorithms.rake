@@ -112,6 +112,9 @@ namespace :algorithms do
               end
             else
               step['children'].each do |node|
+                puts '***'
+                puts node['id']
+                puts '***'
                 node['id'] = nodes[node['id']].id
               end
             end
