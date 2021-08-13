@@ -170,14 +170,14 @@ class VersionsController < ApplicationController
       ActiveRecord::Base.transaction(requires_new: true) do
         begin
           update_specific_translations(xl_file.sheet(0))
-          update_generic_translations(Diagnosis, Diagnosis.get_translatable_params(xl_file.sheet(0)), xl_file.sheet(0))
-          update_generic_translations(FinalDiagnosis, Node.get_translatable_params(xl_file.sheet(1)), xl_file.sheet(1))
-          update_generic_translations(Question, Node.get_translatable_params(xl_file.sheet(2)), xl_file.sheet(2))
-          update_generic_translations(Answer, Answer.get_translatable_params(xl_file.sheet(2)), xl_file.sheet(2))
-          update_generic_translations(HealthCares::Drug, Node.get_translatable_params(xl_file.sheet(3)), xl_file.sheet(3))
-          update_generic_translations(Formulation, Formulation.get_translatable_params(xl_file.sheet(3)), xl_file.sheet(3))
+          update_generic_translations(Diagnosis, Diagnosis.get_translatable_params(xl_file.sheet(1)), xl_file.sheet(1))
+          update_generic_translations(FinalDiagnosis, Node.get_translatable_params(xl_file.sheet(2)), xl_file.sheet(2))
+          update_generic_translations(Question, Node.get_translatable_params(xl_file.sheet(3)), xl_file.sheet(3))
+          update_generic_translations(Answer, Answer.get_translatable_params(xl_file.sheet(3)), xl_file.sheet(3))
+          update_generic_translations(HealthCares::Drug, Node.get_translatable_params(xl_file.sheet(4)), xl_file.sheet(4))
+          update_generic_translations(Formulation, Formulation.get_translatable_params(xl_file.sheet(4)), xl_file.sheet(4))
           update_generic_translations(Instance, Instance.get_translatable_params(xl_file.sheet(5)), xl_file.sheet(5))
-          update_generic_translations(HealthCares::Management, Node.get_translatable_params(xl_file.sheet(4)), xl_file.sheet(4))
+          update_generic_translations(HealthCares::Management, Node.get_translatable_params(xl_file.sheet(6)), xl_file.sheet(6))
 
           redirect_to algorithm_version_url(@algorithm, @version, panel: 'translations'), notice: t('flash_message.import_successful')
         rescue

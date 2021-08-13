@@ -239,12 +239,6 @@ namespace :algorithms do
                 next
               end
 
-              puts '***'
-              puts i.to_s + '/ 2566'
-              puts cut_off_instance.instanceable_type
-              puts cut_off_instance.instanceable_id
-              puts '***'
-
               if cut_off_instance.conditions.any? # Cut off to put in conditions (because not in the top)
                 next
                 cut_off_instance.children.each do |child|
