@@ -99,13 +99,13 @@ namespace :algorithms do
           # Update medal_r_config and medal_data_config instead of reseting it
           new_version = copied_algorithm.versions.new(version.attributes.except('id', 'name', 'algorithm_id', 'medal_r_config', 'medal_data_config', 'medal_r_json', 'medal_r_json_version', 'created_at', 'updated_at'))
           new_version.name = "Copy of #{version.name}"
-          new_version.init_config
+          # new_version.init_config
           versions[version.id] = new_version
 
           puts "#{Time.zone.now.strftime("%I:%M")} - Recreating the full ordering of the copied versions..."
           order = JSON.parse(new_version.full_order_json)
           order.each do |step|
-            if ['Complaint Categories', 'Medical History', 'Physical Exam'].include?(step['title'])
+            if ['Complaint Categories', 'Medical History', 'Physical Exams'].include?(step['title'])
               step['children'].each do |sub|
                 sub['children'].each do |node|
                   node['id'] = nodes[node['id']].id
@@ -113,9 +113,6 @@ namespace :algorithms do
               end
             else
               step['children'].each do |node|
-                puts '***'
-                puts node['title']
-                puts '***'
                 node['id'] = nodes[node['id']].id unless %w(first_name last_name birth_date).include?(node['id'])
               end
             end
