@@ -156,6 +156,11 @@ class Question < Node
     self.save
   end
 
+  # Display question with ID
+  def display_label_id
+    "#{label_en} (#{id})"
+  end
+
   # Generate node hash for tree order
   def generate_node_tree_hash
     question_hash = {}

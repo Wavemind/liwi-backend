@@ -45,7 +45,7 @@ class VersionsController < ApplicationController
 
   def update
     if @version.update(version_params)
-      redirect_to algorithm_url(@algorithm, panel: 'versions'), notice: t('flash_message.success_updated')
+      redirect_to algorithm_version_url(@algorithm, @version, panel: 'versions'), notice: t('flash_message.success_updated')
     else
       set_breadcrumb
       add_breadcrumb t('breadcrumbs.edit')
@@ -172,7 +172,7 @@ class VersionsController < ApplicationController
           update_specific_translations(xl_file.sheet(0))
           update_generic_translations(Diagnosis, Diagnosis.get_translatable_params(xl_file.sheet(0)), xl_file.sheet(0))
           update_generic_translations(FinalDiagnosis, Node.get_translatable_params(xl_file.sheet(1)), xl_file.sheet(1))
-          update_generic_translations(Question, Node.get_translatable_params(xl_file.sheet(2)), xl_file.sheet(2))
+          update_generic_translations(Question, Question.get_translatable_params(xl_file.sheet(2)), xl_file.sheet(2))
           update_generic_translations(Answer, Answer.get_translatable_params(xl_file.sheet(2)), xl_file.sheet(2))
           update_generic_translations(HealthCares::Drug, Node.get_translatable_params(xl_file.sheet(3)), xl_file.sheet(3))
           update_generic_translations(Formulation, Formulation.get_translatable_params(xl_file.sheet(3)), xl_file.sheet(3))
@@ -286,6 +286,9 @@ class VersionsController < ApplicationController
   # Update MedAL-data config with the automatic questions.
   def set_medal_data_config
     @version.medal_data_config = params['set_medal_data_config']
+    [first_name_id: 5000]
+    {first_name_id: {label: 'First name', question_id: 5000}}
+    {"middle_name_patient_id"=>"5109", "gender_patient_id"=>"214", "other_id_patient_id"=>"5109", "first_name_caregiver_id"=>"3822", "last_name_caregiver_id"=>"2176", "gender_caregiver_id"=>"2177", "relationship_to_child_id"=>"2178", "phone_number_caregiver_id"=>"2179", "phone_number_owner_id"=>"5104", "other_number_id"=>"2180", "other_number_owner_id"=>"5105", "last_two_weeks_visit_id"=>"3784", "kind_of_consultation_id"=>"7328", "hospitalized_overnight_id"=>"3785", "parent_in_study_id"=>"3784"}
 
     if @version.save
       redirect_to algorithm_version_url(@algorithm, @version, panel: 'medal_data_config'), notice: t('flash_message.success_updated')
@@ -413,6 +416,13 @@ class VersionsController < ApplicationController
       :is_arm_control,
       :nodes_ids,
       :full_order_json,
+      medal_data_config_variables_attributes: [
+        :id,
+        :label,
+        :api_key,
+        :question_id,
+        :_destroy
+      ],
       language_ids: []
     )
   end

@@ -558,6 +558,8 @@ class VersionsService
       hash[health_care.id] = {}
       hash[health_care.id]['id'] = health_care.id
       hash[health_care.id]['category'] = health_care.category_name
+      hash[health_care.id]['is_anti_malarial'] = health_care.is_anti_malarial
+      hash[health_care.id]['is_antibiotic'] = health_care.is_antibiotic
       hash[health_care.id]['label'] = return_hstore_translated(health_care.label_translations)
       hash[health_care.id]['description'] = return_hstore_translated(health_care.description_translations)
       # Don't mention any exclusions if the version is arm control. Hopefully this is temporary...
