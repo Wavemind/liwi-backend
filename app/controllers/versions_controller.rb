@@ -1,8 +1,8 @@
 class VersionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :duplicate, :create_triage_condition, :set_medal_data_config, :remove_triage_condition, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnoses, :import_translations, :job_status, :update_full_order, :list]
+  before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :duplicate, :create_triage_condition, :remove_triage_condition, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnoses, :import_translations, :job_status, :update_full_order, :list]
   before_action :set_breadcrumb, only: [:show, :new, :edit]
-  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :components, :create_triage_condition, :set_medal_data_config, :duplicate, :remove_components, :remove_triage_condition, :update_list, :regenerate_json, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnoses, :import_translations, :job_status, :update_full_order, :registration_triage_questions, :medal_data_config, :full_order, :translations]
+  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :components, :create_triage_condition, :duplicate, :remove_components, :remove_triage_condition, :update_list, :regenerate_json, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnoses, :import_translations, :job_status, :update_full_order, :registration_triage_questions, :medal_data_config, :full_order, :translations]
 
   def index
     authorize policy_scope(Version)
@@ -278,22 +278,6 @@ class VersionsController < ApplicationController
       redirect_to algorithm_version_url(@algorithm, @version, panel: 'triage_conditions'), notice: t('flash_message.success_created')
     else
       redirect_to algorithm_version_url(@algorithm, @version, panel: 'triage_conditions'), notice: t('flash_message.create_fail')
-    end
-  end
-
-  # PUT algorithms/:algorithm_id/version/:id/set_medal_data_config
-  # @params version [Version] version
-  # Update MedAL-data config with the automatic questions.
-  def set_medal_data_config
-    @version.medal_data_config = params['set_medal_data_config']
-    [first_name_id: 5000]
-    {first_name_id: {label: 'First name', question_id: 5000}}
-    {"middle_name_patient_id"=>"5109", "gender_patient_id"=>"214", "other_id_patient_id"=>"5109", "first_name_caregiver_id"=>"3822", "last_name_caregiver_id"=>"2176", "gender_caregiver_id"=>"2177", "relationship_to_child_id"=>"2178", "phone_number_caregiver_id"=>"2179", "phone_number_owner_id"=>"5104", "other_number_id"=>"2180", "other_number_owner_id"=>"5105", "last_two_weeks_visit_id"=>"3784", "kind_of_consultation_id"=>"7328", "hospitalized_overnight_id"=>"3785", "parent_in_study_id"=>"3784"}
-
-    if @version.save
-      redirect_to algorithm_version_url(@algorithm, @version, panel: 'medal_data_config'), notice: t('flash_message.success_updated')
-    else
-      redirect_to algorithm_version_url(@algorithm, @version, panel: 'medal_data_config'), notice: t('flash_message.update_fail')
     end
   end
 
