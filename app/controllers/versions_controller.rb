@@ -1,8 +1,8 @@
 class VersionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :duplicate, :create_triage_condition, :set_medal_data_config, :remove_triage_condition, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnoses, :import_translations, :job_status, :update_full_order, :list]
+  before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :duplicate, :create_triage_condition, :remove_triage_condition, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnoses, :import_translations, :job_status, :update_full_order, :list]
   before_action :set_breadcrumb, only: [:show, :new, :edit]
-  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :components, :create_triage_condition, :set_medal_data_config, :duplicate, :remove_components, :remove_triage_condition, :update_list, :regenerate_json, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnoses, :import_translations, :job_status, :update_full_order, :registration_triage_questions, :medal_data_config, :full_order, :translations]
+  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :components, :create_triage_condition, :duplicate, :remove_components, :remove_triage_condition, :update_list, :regenerate_json, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnoses, :import_translations, :job_status, :update_full_order, :registration_triage_questions, :medal_data_config, :full_order, :translations]
 
   def index
     authorize policy_scope(Version)
@@ -45,7 +45,7 @@ class VersionsController < ApplicationController
 
   def update
     if @version.update(version_params)
-      redirect_to algorithm_url(@algorithm, panel: 'versions'), notice: t('flash_message.success_updated')
+      redirect_to algorithm_version_url(@algorithm, @version, panel: 'versions'), notice: t('flash_message.success_updated')
     else
       set_breadcrumb
       add_breadcrumb t('breadcrumbs.edit')
@@ -172,7 +172,7 @@ class VersionsController < ApplicationController
           update_specific_translations(xl_file.sheet(0))
           update_generic_translations(Diagnosis, Diagnosis.get_translatable_params(xl_file.sheet(1)), xl_file.sheet(1))
           update_generic_translations(FinalDiagnosis, Node.get_translatable_params(xl_file.sheet(2)), xl_file.sheet(2))
-          update_generic_translations(Question, Node.get_translatable_params(xl_file.sheet(3)), xl_file.sheet(3))
+          update_generic_translations(Question, Question.get_translatable_params(xl_file.sheet(3)), xl_file.sheet(3))
           update_generic_translations(Answer, Answer.get_translatable_params(xl_file.sheet(3)), xl_file.sheet(3))
           update_generic_translations(HealthCares::Drug, Node.get_translatable_params(xl_file.sheet(4)), xl_file.sheet(4))
           update_generic_translations(Formulation, Formulation.get_translatable_params(xl_file.sheet(4)), xl_file.sheet(4))
@@ -278,19 +278,6 @@ class VersionsController < ApplicationController
       redirect_to algorithm_version_url(@algorithm, @version, panel: 'triage_conditions'), notice: t('flash_message.success_created')
     else
       redirect_to algorithm_version_url(@algorithm, @version, panel: 'triage_conditions'), notice: t('flash_message.create_fail')
-    end
-  end
-
-  # PUT algorithms/:algorithm_id/version/:id/set_medal_data_config
-  # @params version [Version] version
-  # Update MedAL-data config with the automatic questions.
-  def set_medal_data_config
-    @version.medal_data_config = params['set_medal_data_config']
-
-    if @version.save
-      redirect_to algorithm_version_url(@algorithm, @version, panel: 'medal_data_config'), notice: t('flash_message.success_updated')
-    else
-      redirect_to algorithm_version_url(@algorithm, @version, panel: 'medal_data_config'), notice: t('flash_message.update_fail')
     end
   end
 
@@ -413,6 +400,13 @@ class VersionsController < ApplicationController
       :is_arm_control,
       :nodes_ids,
       :full_order_json,
+      medal_data_config_variables_attributes: [
+        :id,
+        :label,
+        :api_key,
+        :question_id,
+        :_destroy
+      ],
       language_ids: []
     )
   end

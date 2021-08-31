@@ -49,6 +49,11 @@ class Instance < ApplicationRecord
     end
   end
 
+  # Display question with ID
+  def display_node_label_id
+    "#{node.label_en} (#{node_id})"
+  end
+
   # Return json formated of the instance depending on the node type
   def generate_json
     if node.is_a?(Question)

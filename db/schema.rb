@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_30_160251) do
+ActiveRecord::Schema.define(version: 2021_08_30_082803) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -215,6 +215,15 @@ ActiveRecord::Schema.define(version: 2021_06_30_160251) do
     t.string "code"
   end
 
+  create_table "medal_data_config_variables", force: :cascade do |t|
+    t.string "label"
+    t.string "api_key"
+    t.bigint "version_id"
+    t.bigint "question_id"
+    t.index ["question_id"], name: "index_medal_data_config_variables_on_question_id"
+    t.index ["version_id"], name: "index_medal_data_config_variables_on_version_id"
+  end
+
   create_table "medias", force: :cascade do |t|
     t.hstore "label_translations"
     t.string "url"
@@ -414,6 +423,7 @@ ActiveRecord::Schema.define(version: 2021_06_30_160251) do
   add_foreign_key "health_facilities", "studies"
   add_foreign_key "health_facility_accesses", "health_facilities"
   add_foreign_key "health_facility_accesses", "versions"
+  add_foreign_key "medal_data_config_variables", "versions"
   add_foreign_key "node_exclusions", "nodes", column: "excluded_node_id"
   add_foreign_key "node_exclusions", "nodes", column: "excluding_node_id"
   add_foreign_key "nodes", "algorithms"

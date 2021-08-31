@@ -54,7 +54,6 @@ Rails.application.routes.draw do
         put 'regenerate_json'
         put 'update_list'
         put 'import_translations'
-        put 'set_medal_data_config'
         put 'update_full_order'
       end
 
