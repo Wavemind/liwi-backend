@@ -17,6 +17,7 @@ class Algorithm < ApplicationRecord
   validates :minimum_age, numericality: { greater_than_or_equal_to: 0 }
 
   after_create :create_reference_table_questions
+  before_update :set_emergency_content_version
 
   translates :age_limit_message, :emergency_content
 
@@ -118,5 +119,12 @@ class Algorithm < ApplicationRecord
 
   def display_archive_status
     archived ? '<span class="badge badge-danger">archived</span>' : ''
+  end
+
+  # Update emergency content version if the emergency content is updated
+  def set_emergency_content_version
+    if changes['emergency_content'].present?
+      self.emergency_content_version += 1
+    end
   end
 end
