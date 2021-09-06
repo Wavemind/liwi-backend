@@ -121,6 +121,7 @@ class Algorithm < ApplicationRecord
     archived ? '<span class="badge badge-danger">archived</span>' : ''
   end
 
+  # Update emergency content version if the emergency content is updated
   def set_emergency_content_version
     if changes['emergency_content'].present?
       self.emergency_content_version += 1
