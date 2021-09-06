@@ -35,6 +35,7 @@ class Algorithm < ApplicationRecord
     cc_general = questions.create!(label_en: 'General', type: 'Questions::ComplaintCategory', stage: Question.stages[:triage], is_mandatory: true, answer_type_id: 1, is_default: true)
     yi_cc_general = questions.create!(label_en: 'General / Universal Assessment', type: 'Questions::ComplaintCategory', stage: Question.stages[:triage], is_mandatory: true, answer_type_id: 1, is_default: true, is_neonat: true)
     village = questions.create!(label_en: 'Village', type: 'Questions::BasicDemographic', stage: Question.stages[:registration], answer_type_id: 9, is_mandatory: true, is_identifiable: true, is_default: true)
+    kind_of_consultation = questions.create!(label_en: 'What kind of consultation is this?', type: 'Questions::Demographic', stage: Question.stages[:registration], answer_type_id: 2, is_mandatory: true, is_default: true)
 
     # Configure basic questions into the algorithm to be used in json generation
     self.update(medal_r_config: {
@@ -45,13 +46,21 @@ class Algorithm < ApplicationRecord
         yi_general_cc_id: yi_cc_general.id,
       },
       optional_basic_questions: {
-        village_question_id: village.id
+        village_question_id: village.id,
+        kind_of_consultation_id: kind_of_consultation.id,
       }
     })
 
     gender.answers.create([
       {label_en: 'Male', value: 'male'},
       {label_en: 'Female', value: 'female'}
+    ])
+
+    kind_of_consultation.answers.create([
+      {label_en: 'New (self-referral)'},
+      {label_en: 'New (referral from another facility)'},
+      {label_en: 'Scheduled follow-up'},
+      {label_en: 'Unscheduled follow-up'}
     ])
 
     age = questions.create!(label_en: 'Age in months', type: 'Questions::BackgroundCalculation', is_mandatory: true, answer_type_id: 5, formula: 'ToMonth', is_default: true)

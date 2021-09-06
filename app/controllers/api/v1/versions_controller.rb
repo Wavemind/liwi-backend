@@ -118,7 +118,7 @@ class Api::V1::VersionsController < Api::V1::ApplicationController
     if params[:version_id].present?
       version = Version.find_by(id: params[:version_id])
       if version.present?
-        config = version.algorithm.medal_r_config['basic_questions']
+        config = version.algorithm.medal_r_config['basic_questions'].merge(version.algorithm.medal_r_config['optional_basic_questions'])
         version.medal_data_config_variables.each do |var|
           config[var.api_key] = var.question_id
         end

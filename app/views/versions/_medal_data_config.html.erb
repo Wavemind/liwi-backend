@@ -15,7 +15,7 @@
 </div>
 </div>
 
-<% @version.algorithm.medal_r_config['basic_questions'].each do |basic_question| %>
+<% @version.algorithm.medal_r_config['basic_questions'].merge(@version.algorithm.medal_r_config['optional_basic_questions']).each do |basic_question| %>
   <div>
   <div class="row medal-data-config">
     <div class="col align-self-center"></div>
