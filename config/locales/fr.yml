@@ -172,6 +172,8 @@ fr:
   attribute: "Attribute"
   api:
     v1:
+      algorithms:
+        invalid_algorithm: "Invalid algorithm id"
       health_facilities:
         show:
           no_health_facility: "Please provide a valid Health Facility ID"
