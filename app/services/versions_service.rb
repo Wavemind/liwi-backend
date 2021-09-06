@@ -137,14 +137,13 @@ class VersionsService
       description: @version.algorithm.study.present? ? return_hstore_translated(@version.algorithm.study.description_translations) : nil
     }
 
-    hash['mobile_config'] = extract_mobile_config
     hash['config'] = @version.algorithm.medal_r_config
 
-    translated_systems_order = {}
-    @version.medal_r_config['systems_order'].map do |system|
-      translated_systems_order[system] = return_intern_label_translated("questions.systems.#{system}")
+    translated_systems = {}
+    Question.systems.map(&:first).map do |system|
+      translated_systems[system] = return_intern_label_translated("questions.systems.#{system}")
     end
-    hash['config']['systems_translations'] = translated_systems_order
+    hash['config']['systems_translations'] = translated_systems
     hash['config']['age_limit'] = @version.algorithm.age_limit
     hash['config']['age_limit_message'] = return_hstore_translated(@version.algorithm.age_limit_message_translations)
     hash['config']['minimum_age'] = @version.algorithm.minimum_age
@@ -182,16 +181,6 @@ class VersionsService
         hash[step_name] = full_order.select{|i| i['title'] == I18n.t("questions.steps.#{step_name}")}[0]['children'].map{|node| node['id'] if available_ids.include?(node['id'])}.compact
       end
     end
-    hash
-  end
-
-  # @return hash
-  # Build a hash of medAL-reader config for the version
-  def self.extract_mobile_config
-    hash = {}
-
-    hash['questions_orders'] = @version.medal_r_config['questions_orders']
-    hash['systems_order'] = @version.medal_r_config['systems_order']
     hash
   end
 

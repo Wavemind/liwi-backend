@@ -12,7 +12,7 @@ class Instance < ApplicationRecord
   has_many :children
   has_many :nodes, through: :children
 
-  has_many :conditions, dependent: :destroy #TODO : remove after data migration
+  has_many :conditions, dependent: :destroy
 
   scope :managements, ->() { joins(:node).includes(:conditions).where('nodes.type = ?', 'HealthCares::Management') }
   scope :questions, ->() { joins(:node).includes(:conditions).where('nodes.type IN (?)', Question.descendants.map(&:name)) }

@@ -317,17 +317,6 @@ class VersionsController < ApplicationController
     end
   end
 
-  # PUT algorithms/:algorithm_id/version/:id/update_list
-  # @params version [Version]
-  # @params new order [Hash]
-  # @params list type [String]
-  # Update patient_list_order or medical_case_list_order
-  def update_list
-    config = @version.medal_r_config
-    config["#{params[:list]}_list_order"] = params[:order]
-    @version.update(medal_r_config: config)
-  end
-
   private
 
   # Generic method to update translations for a given model with a given ID from excel sheet
