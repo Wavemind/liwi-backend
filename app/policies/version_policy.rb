@@ -37,10 +37,6 @@ class VersionPolicy < ApplicationPolicy
     new?
   end
 
-  def set_medal_data_config?
-    new?
-  end
-
   def update_full_order?
     new?
   end

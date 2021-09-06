@@ -6,10 +6,19 @@ class Api::V1::VersionsController < Api::V1::ApplicationController
 
   before_action :authenticate_user!, only: [:create]
 
+  def index
+    algorithm = Algorithm.find_by_id(params[:algorithm_id])
+    if algorithm
+      render json: algorithm.versions.select(:id, :name, :archived, :created_at, :updated_at, :is_arm_control, :algorithm_id)
+    else
+      render json: { errors: t('api.v1.versions.show.invalid_algorithm') }, status: :unprocessable_entity
+    end
+  end
+
   def show
     version = Version.find_by_id(params[:id])
     if version
-      render json: version.medal_r_json
+      render json: version.as_json(except: [:user_id])
     else
       render json: { errors: t('api.v1.versions.show.invalid_version') }, status: :unprocessable_entity
     end
@@ -109,7 +118,10 @@ class Api::V1::VersionsController < Api::V1::ApplicationController
     if params[:version_id].present?
       version = Version.find_by(id: params[:version_id])
       if version.present?
-        config = version.medal_data_config.merge(version.algorithm.medal_r_config['basic_questions'])
+        config = version.algorithm.medal_r_config['basic_questions']
+        version.medal_data_config_variables.each do |var|
+          config[var.api_key] = var.question_id
+        end
         config['study_id'] = version.algorithm.study.label
         render json: config
       else

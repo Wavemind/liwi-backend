@@ -87,7 +87,7 @@ export const linkNode = (answerPort, diagramNode, condition) => {
   }
 
   // Add label to display cut offs
-  if (condition.cut_off_start && condition.cut_off_end) {
+  if (condition.cut_off_start || condition.cut_off_end) {
     link.addLabel(I18n.t("conditions.cut_off_label", {start: condition.cut_off_start, end: condition.cut_off_end}))
   }
 

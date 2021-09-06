@@ -39,7 +39,8 @@ class FinalDiagnosis < Node
       reference: diagnosis.reference,
       label: diagnosis.label,
       version_id: diagnosis.version_id,
-      chief_complaint_label: diagnosis.node.reference_label
+      chief_complaint_label: diagnosis.node.reference_label,
+      cut_offs: diagnosis.display_cut_offs
     }
   end
 
@@ -128,6 +129,12 @@ class FinalDiagnosis < Node
   # Link the DF to its algorithm (from diagnosis)
   def link_algorithm
     self.algorithm = diagnosis.version.algorithm
+  end
+
+  # @return [String]
+  # Return the label with the reference formatted for dropdown lists
+  def reference_label_dropdown_list
+    "#{label} (#{diagnosis.label})"
   end
 
   # Get the reference prefix according to the type

@@ -16,6 +16,8 @@ en:
       condition:
         score: "Score"
       diagnosis:
+        cut_off_start: "Cut off start (≥)"
+        cut_off_end: "Cut off end (<)"
         node: "Complaint category"
       formulation:
         administration_route_id: "Administration route"
@@ -41,6 +43,10 @@ en:
       instance:
         duration: "Duration (days)"
         description: "Description"
+      medal_data_config_variable:
+        api_key: "API key"
+        label: "Label"
+        question_id: "Question ID"
       media:
         label_translations: "Label"
         url: "File"
@@ -187,6 +193,7 @@ en:
           no_health_facility_id: "No health facility id specified."
           no_health_facility: "Your tablet has not been associated with any Health Facility in medAL-creator"
         show:
+          invalid_algorithm: "Invalid algorithm id"
           invalid_version: "Invalid version id"
       activities:
         create:
@@ -337,6 +344,7 @@ en:
         other: "%{count} errors prohibited this %{model} from being saved"
   dependencies: "The node you are trying to remove has dependencies"
   final_diagnoses:
+    confirmation: "You are about to delete a Final Diagnosis instance which will delete all exclusions and instances linked to it. Are you sure ?"
     new:
       title: "Create a new final diagnosis"
     reference: "DF"

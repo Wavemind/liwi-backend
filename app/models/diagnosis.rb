@@ -43,6 +43,7 @@ class Diagnosis < ApplicationRecord
   def adjust_cut_offs
     self.cut_off_start = (cut_off_start * 30.4166667).round if cut_off_start.present? && cut_off_value_type == 'months'
     self.cut_off_end = (cut_off_end * 30.4166667).round if cut_off_end.present? && cut_off_value_type == 'months'
+    self.cut_off_value_type = '' # Empty attr accessor to prevent callbacks to falsely do the operation more than once
   end
 
   # @return [Json]
@@ -101,11 +102,11 @@ class Diagnosis < ApplicationRecord
   def display_cut_offs
     cut_off = ''
     if cut_off_start.present?
-      cut_off = "From #{cut_off_start.to_s}"
-      cut_off = "#{cut_off} to #{cut_off_end.to_s}" if cut_off_end.present?
+      cut_off = "From ≥ #{cut_off_start.to_s}"
+      cut_off = "#{cut_off} to < #{cut_off_end.to_s}" if cut_off_end.present?
       cut_off = "#{cut_off} days"
     elsif cut_off_end.present?
-      cut_off = "To #{cut_off_end.to_s} days"
+      cut_off = "To < #{cut_off_end.to_s} days"
     end
     cut_off
   end

@@ -1,23 +1,39 @@
-<%= simple_form_for :set_medal_data_config, url: set_medal_data_config_algorithm_version_url(@version.algorithm, @version), method: :put, html: { class: 'form-horizontal' } do |f| %>
+<div>
+  <div class="row medal-data-config">
+  <div class="col align-self-center"><b><%= t('activerecord.attributes.medal_data_config_variable.label') %></b></div>
+  <div class="col align-self-center"><b><%= t('activerecord.attributes.medal_data_config_variable.api_key') %></b></div>
+  <div class="col align-self-center"><b><%= t('activerecord.attributes.medal_data_config_variable.question_id') %></b></div>
+  <div class="col align-self-center"></div>
+</div>
+</div>
+<div>
+<div class="row medal-data-config">
+  <div class="col align-self-center"></div>
+  <div class="col align-self-center"><input class="form-control string" value="study" disabled></div>
+  <div class="col align-self-center"><input class="form-control string" value="<%= @version.algorithm.study.label %>" disabled></div>
+  <div class="col align-self-center"></div>
+</div>
+</div>
 
-  <%= f.input :first_name_patient_id, label: t('.first_name_patient_id'), collection: @version.components, value_method: :node_id, label_method: :node_label, selected: @version.medal_data_config['first_name_patient_id'] || nil, prompt: t('select') %>
-  <%= f.input :middle_name_patient_id, label: t('.middle_name_patient_id'), collection: @version.components, value_method: :node_id, label_method: :node_label, selected: @version.medal_data_config['middle_name_patient_id'] || nil, prompt: t('select') %>
-  <%= f.input :last_name_patient_id, label: t('.last_name_patient_id'), collection: @version.components, value_method: :node_id, label_method: :node_label, selected: @version.medal_data_config['last_name_patient_id'] || nil, prompt: t('select') %>
-  <%= f.input :gender_patient_id, label: t('.gender_patient_id'), collection: @version.components, value_method: :node_id, label_method: :node_label, selected: @version.medal_data_config['gender_patient_id'] || nil, prompt: t('select') %>
-  <%= f.input :birth_date_patient_id, label: t('.birth_date_patient_id'), collection: @version.components, value_method: :node_id, label_method: :node_label, selected: @version.medal_data_config['birth_date_patient_id'] || nil, prompt: t('select') %>
-  <%= f.input :other_id_patient_id, label: t('.other_id_patient_id'), collection: @version.components, value_method: :node_id, label_method: :node_label, selected: @version.medal_data_config['other_id_patient_id'] || nil, prompt: t('select') %>
-  <%= f.input :first_name_caregiver_id, label: t('.first_name_caregiver_id'), collection: @version.components, value_method: :node_id, label_method: :node_label, selected: @version.medal_data_config['first_name_caregiver_id'] || nil, prompt: t('select') %>
-  <%= f.input :last_name_caregiver_id, label: t('.last_name_caregiver_id'), collection: @version.components, value_method: :node_id, label_method: :node_label, selected: @version.medal_data_config['last_name_caregiver_id'] || nil, prompt: t('select') %>
-  <%= f.input :gender_caregiver_id, label: t('.gender_caregiver_id'), collection: @version.components, value_method: :node_id, label_method: :node_label, selected: @version.medal_data_config['gender_caregiver_id'] || nil, prompt: t('select') %>
-  <%= f.input :relationship_to_child_id, label: t('.relationship_to_child_id'), collection: @version.components, value_method: :node_id, label_method: :node_label, selected: @version.medal_data_config['relationship_to_child_id'] || nil, prompt: t('select') %>
-  <%= f.input :phone_number_caregiver_id, label: t('.phone_number_caregiver_id'), collection: @version.components, value_method: :node_id, label_method: :node_label, selected: @version.medal_data_config['phone_number_caregiver_id'] || nil, prompt: t('select') %>
-  <%= f.input :phone_number_owner_id, label: t('.phone_number_owner_id'), collection: @version.components, value_method: :node_id, label_method: :node_label, selected: @version.medal_data_config['phone_number_owner_id'] || nil, prompt: t('select') %>
-  <%= f.input :other_number_id, label: t('.other_number_id'), collection: @version.components, value_method: :node_id, label_method: :node_label, selected: @version.medal_data_config['other_number_id'] || nil, prompt: t('select') %>
-  <%= f.input :other_number_owner_id, label: t('.other_number_owner_id'), collection: @version.components, value_method: :node_id, label_method: :node_label, selected: @version.medal_data_config['other_number_owner_id'] || nil, prompt: t('select') %>
-  <%= f.input :last_two_weeks_visit_id, label: t('.last_two_weeks_visit_id'), collection: @version.components, value_method: :node_id, label_method: :node_label, selected: @version.medal_data_config['last_two_weeks_visit_id'] || nil, prompt: t('select') %>
-  <%= f.input :kind_of_consultation_id, label: t('.kind_of_consultation_id'), collection: @version.components, value_method: :node_id, label_method: :node_label, selected: @version.medal_data_config['kind_of_consultation_id'] || nil, prompt: t('select') %>
-  <%= f.input :hospitalized_overnight_id, label: t('.hospitalized_overnight_id'), collection: @version.components, value_method: :node_id, label_method: :node_label, selected: @version.medal_data_config['hospitalized_overnight_id'] || nil, prompt: t('select') %>
-  <%= f.input :parent_in_study_id, label: t('.parent_in_study_id'), collection: @version.components, value_method: :node_id, label_method: :node_label, selected: @version.medal_data_config['parent_in_study_id'] || nil, prompt: t('select') %>
+<% @version.algorithm.medal_r_config['basic_questions'].each do |basic_question| %>
+  <div>
+  <div class="row medal-data-config">
+    <div class="col align-self-center"></div>
+    <div class="col align-self-center"><input class="form-control string" value="<%= basic_question[0] %>" disabled></div>
+    <div class="col align-self-center"><input class="form-control string" value="<%= Node.find(basic_question[1]).display_label_id %>" disabled></div>
+    <div class="col align-self-center"></div>
+  </div>
+  </div>
+<% end %>
+
+<%= simple_form_for @version, url: algorithm_version_url(@version.algorithm, @version), method: :put, html: { class: 'form-horizontal' } do |f| %>
+  <%= f.simple_fields_for :medal_data_config_variables do |ff| %>
+    <%= render 'medal_data_config_variables/fields', f: ff %>
+  <% end %>
+
+  <div class="links">
+    <%= link_to_add_association "<button class='btn btn-outline-primary'>#{t('add')}</button>".html_safe, f, :medal_data_config_variables, partial: 'medal_data_config_variables/fields' %>
+  </div>
 
   <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
 <% end %>

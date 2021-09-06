@@ -54,7 +54,6 @@ Rails.application.routes.draw do
         put 'regenerate_json'
         put 'update_list'
         put 'import_translations'
-        put 'set_medal_data_config'
         put 'update_full_order'
       end
 
@@ -215,6 +214,9 @@ Rails.application.routes.draw do
   # API
   namespace :api do
     namespace :v1 do
+      resources :algorithms, only: [:index] do
+        resources :versions, only: [:index]
+      end
       resources :versions, only: [:show] do
         get 'json_test', to: 'versions#json_test'
         collection do

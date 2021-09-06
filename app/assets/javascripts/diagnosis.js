@@ -1,9 +1,4 @@
-document.getElementById("version-index-content").innerHTML = "<%= escape_javascript render 'diagnoses/table' %>"
-
-jQuery(document).ready(function() {
-  $("#version-tabs").find(".nav-link").removeClass("active")
-  $("#nav-link-diagnoses").addClass("active")
-
+jQuery(document).ready(function () {
   $("#diagnoses-datatable").dataTable({
     "processing": true,
     "info": false,

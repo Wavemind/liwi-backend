@@ -11,8 +11,8 @@ class ManagementExclusionDatatable < AjaxDatatablesRails::ActiveRecord
 
   def view_columns
     @view_columns ||= {
-      excluding_management_id: { source: 'NodeExclusion.excluding_node_id' },
-      excluded_management_id: { source: 'NodeExclusion.excluded_node_id' },
+      excluding_management_id: { source: 'Node.label_translations' },
+      excluded_management_id: { source: 'Node.label_translations' },
     }
   end
 
@@ -29,6 +29,6 @@ class ManagementExclusionDatatable < AjaxDatatablesRails::ActiveRecord
 
   def get_raw_records
     managements_ids = Algorithm.find(params[:id]).health_cares.managements.map(&:id)
-    NodeExclusion.management.where(excluding_node_id: managements_ids, excluded_node_id: managements_ids)
+    NodeExclusion.includes(:excluded_node, :excluding_node).joins(:excluded_node, :excluding_node).management.where(excluding_node_id: managements_ids, excluded_node_id: managements_ids)
   end
 end

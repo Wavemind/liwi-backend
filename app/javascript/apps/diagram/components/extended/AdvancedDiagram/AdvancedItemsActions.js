@@ -1,5 +1,6 @@
-import { Action, InputType } from '@projectstorm/react-canvas-core';
+import {Action, InputType} from '@projectstorm/react-canvas-core';
 import * as _ from 'lodash';
+import I18n from "i18n-js";
 
 /**
  * Deletes all selected items
@@ -16,19 +17,27 @@ export default class AdvancedItemsActionOptions extends Action {
     };
 
     super({
-      type: InputType.KEY_DOWN,
-      fire: (event) => {
-        const { keyCode, ctrlKey, shiftKey, altKey, metaKey } = event.event;
-        if (keyCodes.indexOf(keyCode) !== -1 && _.isEqual({ ctrlKey, shiftKey, altKey, metaKey }, modifiers)) {
-          _.forEach(this.engine.getModel().getSelectedEntities(), entity => {
-            // only delete items which are not locked
-            if (!entity.locked) {
-              entity.remove();
+        type: InputType.KEY_DOWN,
+        fire: (event) => {
+          const {keyCode, ctrlKey, shiftKey, altKey, metaKey} = event.event;
+          if (keyCodes.indexOf(keyCode) !== -1 && _.isEqual({ctrlKey, shiftKey, altKey, metaKey}, modifiers)) {
+            let confirm = true;
+            if (this.engine.getModel().getSelectedEntities().some((a) => a.options.type === "finalDiagnosis")) {
+              confirm = window.confirm(I18n.t("final_diagnoses.confirmation"));
             }
-          });
-          this.engine.repaintCanvas();
+            if (confirm) {
+              _.forEach(this.engine.getModel().getSelectedEntities(), entity => {
+                // only delete items which are not locked
+                if (!entity.locked) {
+                  console.log(entity);
+                  entity.remove();
+                }
+              });
+            }
+            this.engine.repaintCanvas();
+          }
         }
       }
-    });
+    )
   }
 }
