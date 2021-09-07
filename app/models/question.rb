@@ -327,4 +327,25 @@ class Question < Node
       end
     end
   end
+
+  # TODO Remove after migration
+  def update_z_scores(n_ids, a_id)
+    # upp([7,99,2100,2101],1)
+    # upp([5148,5149,5150,5154],5)
+    # upp([7450,7839,8434,7451],6)
+    # upp([9051,9052,9053,9057],7)
+    # upp([10650,10658,10662,10894],8)
+    al = Algorithm.find(a_id);
+    n_json = [];
+    n_ids.each do |n_id|
+      n = Node.find(n_id);
+      n.update(step: 'basic_measurements_step');
+      n_json.push(n.generate_node_tree_hash);
+    end;
+    al.versions.each do |v|
+      order = JSON.parse(v.full_order_json);
+      order[3]['children'] = order[3]['children'].push(n_json).flatten;
+      v.update(full_order_json: order.to_json);
+    end
+  end
 end
