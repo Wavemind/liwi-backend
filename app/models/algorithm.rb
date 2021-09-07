@@ -52,6 +52,14 @@ class Algorithm < ApplicationRecord
       }
     })
 
+    def upp(a_id, n_id)
+      Node.find(n_id).update(is_default: true);
+      al = Algorithm.find(a_id);
+      config = al.medal_r_config;
+      config['optional_basic_questions']['kind_of_consultation_id'] = n_id;
+      al.update(medal_r_config: config)
+    end
+
     gender.answers.create([
       {label_en: 'Male', value: 'male'},
       {label_en: 'Female', value: 'female'}

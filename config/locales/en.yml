@@ -66,6 +66,11 @@ en:
         is_identifiable: "This question can identify a patient"
         is_mandatory: "Mandatory"
         emergency_status: "Emergency status"
+        emergency_statuses:
+          emergency: "Emergency (if yes/present/positive)"
+          emergency_if_no: "Emergency (if no/absent/negative)"
+          referral: "Referral"
+          standard: "Standard"
         is_neonat: "Young infant"
         is_triage: "Ask in triage (if triage available)"
         max_message_error: "Error message if above range"
