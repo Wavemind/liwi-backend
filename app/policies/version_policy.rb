@@ -98,7 +98,7 @@ class VersionPolicy < ApplicationPolicy
   end
 
   def regenerate_json?
-    new?
+    index?
   end
 
   def remove_triage_condition?
