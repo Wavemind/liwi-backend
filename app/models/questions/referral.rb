@@ -12,6 +12,6 @@ class Questions::Referral < Question
 
   # Associate proper step depending on category ; empty for parent
   def associate_step
-    self.step = Question.steps[:referral_test]
+    self.step = Question.steps[:referral_step]
   end
 end
