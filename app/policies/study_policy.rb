@@ -16,6 +16,6 @@ class StudyPolicy < ApplicationPolicy
   private
 
   def has_study_access?
-    @user.studies.where(id: @record.study_id).any?
+    @user.studies.where(id: @record.id).any?
   end
 end
