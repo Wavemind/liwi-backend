@@ -34,19 +34,19 @@ class HealthFacilityPolicy < ApplicationPolicy
   end
 
   def add_device?
-    has_study_access? && new?
+    has_study_access? && index?
   end
 
   def remove_device?
-    has_study_access? && new?
+    has_study_access? && index?
   end
 
   def sticker_form?
-    has_study_access? && new?
+    has_study_access? && index?
   end
 
   def generate_stickers?
-    has_study_access? && new?
+    has_study_access? && index?
   end
 
   def accesses?

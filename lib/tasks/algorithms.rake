@@ -4,7 +4,7 @@ namespace :algorithms do
     ActiveRecord::Base.transaction(requires_new: true) do
       begin
         puts "#{Time.zone.now.strftime("%I:%M")} - Copying the Algorithm ..."
-        origin_algorithm = Algorithm.find(5)
+        origin_algorithm = Algorithm.find(8)
         copied_algorithm = Algorithm.new(origin_algorithm.attributes.except('id', 'name', 'created_at', 'updated_at'))
         copied_algorithm.name = "Copy of #{origin_algorithm.name}"
         Algorithm.skip_callback(:create, :after, :create_reference_table_questions)
@@ -34,9 +34,9 @@ namespace :algorithms do
         Question.skip_callback(:create, :after, :create_positive)
         Question.skip_callback(:create, :after, :create_present)
         Question.skip_callback(:create, :after, :create_boolean)
+        Question.skip_callback(:create, :after, :add_to_version_orders)
         QuestionsSequence.skip_callback(:create, :after, :create_boolean)
         Version.skip_callback(:create, :before, :init_config)
-        Instance.skip_callback(:create, :after, :push_in_version_order)
         Condition.skip_callback(:validation, :before, :prevent_loop)
 
         puts "#{Time.zone.now.strftime("%I:%M")} - Copying the Nodes ..."
@@ -99,13 +99,13 @@ namespace :algorithms do
           # Update medal_r_config and medal_data_config instead of reseting it
           new_version = copied_algorithm.versions.new(version.attributes.except('id', 'name', 'algorithm_id', 'medal_r_config', 'medal_data_config', 'medal_r_json', 'medal_r_json_version', 'created_at', 'updated_at'))
           new_version.name = "Copy of #{version.name}"
-          new_version.init_config
+          # new_version.init_config
           versions[version.id] = new_version
 
           puts "#{Time.zone.now.strftime("%I:%M")} - Recreating the full ordering of the copied versions..."
-          order = JSON.parse(new_version)
+          order = JSON.parse(new_version.full_order_json)
           order.each do |step|
-            if ['Complaint Categories', 'Medical History', 'Physical Exam'].include?(step['title'])
+            if ['Complaint Categories', 'Medical History', 'Physical Exams'].include?(step['title'])
               step['children'].each do |sub|
                 sub['children'].each do |node|
                   node['id'] = nodes[node['id']].id
@@ -113,7 +113,7 @@ namespace :algorithms do
               end
             else
               step['children'].each do |node|
-                node['id'] = nodes[node['id']].id
+                node['id'] = nodes[node['id']].id unless %w(first_name last_name birth_date).include?(node['id'])
               end
             end
           end
@@ -238,12 +238,6 @@ namespace :algorithms do
                 impossible_diagram_to_manage.push(cut_off_instance.instanceable)
                 next
               end
-
-              puts '***'
-              puts i.to_s + '/ 2566'
-              puts cut_off_instance.instanceable_type
-              puts cut_off_instance.instanceable_id
-              puts '***'
 
               if cut_off_instance.conditions.any? # Cut off to put in conditions (because not in the top)
                 next
