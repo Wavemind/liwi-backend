@@ -132,7 +132,7 @@ class Algorithm < ApplicationRecord
 
   # Update emergency content version if the emergency content is updated
   def set_emergency_content_version
-    if changes['emergency_content'].present?
+    if changes['emergency_content_translations'].present?
       self.emergency_content_version += 1
     end
   end

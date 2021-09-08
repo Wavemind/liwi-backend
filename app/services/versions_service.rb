@@ -124,7 +124,6 @@ class VersionsService
     hash['version_id'] = @version.id
     hash['version_name'] = @version.name
     hash['version_languages'] = @available_languages
-    hash['emergency_content'] = @version.algorithm.emergency_content
     hash['json_version'] = @version.medal_r_json_version
     hash['description'] = return_hstore_translated(@version.description_translations)
     hash['algorithm_id'] = @version.algorithm.id
