@@ -18,7 +18,7 @@ class Api::V1::AlgorithmsController < Api::V1::ApplicationController
     elsif algorithm.emergency_content_version == params[:emergency_content_version].to_i
       render json: {}, status: 204
     else
-      render algorithm.as_json(only: [:emergency_content, :emergency_content_version])
+      render json: algorithm.as_json(only: [:emergency_content_translations, :emergency_content_version])
     end
   end
 
