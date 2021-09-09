@@ -550,6 +550,7 @@ class VersionsService
       hash[health_care.id]['is_antibiotic'] = health_care.is_antibiotic
       hash[health_care.id]['label'] = return_hstore_translated(health_care.label_translations)
       hash[health_care.id]['description'] = return_hstore_translated(health_care.description_translations)
+      hash[health_care.id]['level_of_urgency'] = health_care.level_of_urgency
       # Don't mention any exclusions if the version is arm control. Hopefully this is temporary...
       hash[health_care.id]['excluding_nodes_ids'] = @version.is_arm_control ? [] : health_care.excluding_nodes_ids
       # Fields specific to drugs
@@ -577,7 +578,6 @@ class VersionsService
           hash[health_care.id]['formulations'].push(formulation_hash)
         end
       else
-        hash[health_care.id]['level_of_urgency'] = health_care.level_of_urgency
         hash[health_care.id]['medias'] = extract_medias(health_care)
       end
     end
