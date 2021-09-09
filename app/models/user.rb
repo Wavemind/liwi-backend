@@ -4,6 +4,8 @@ class User < ApplicationRecord
   devise :invitable, :database_authenticatable, :recoverable, :rememberable, :lockable, :trackable, :registerable
   include DeviseTokenAuth::Concerns::User
 
+  attr_accessor :ip
+
   enum role: [:admin, :clinician, :deployment_manager, :medal_r_user]
 
   has_many :activities
@@ -19,6 +21,14 @@ class User < ApplicationRecord
   validates_presence_of :role
 
   validates :email, format: { with: /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i }
+
+  def self.get_current
+    Thread.current[:user]
+  end
+
+  def self.set_current(user)
+    Thread.current[:user] = user
+  end
 
   # Override devise authentication verification with deactivated method
   def active_for_authentication?

@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   layout :layout_by_resource
   before_action :set_home_breadcrumb
   before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :set_current_user
   include Pundit
 
   # Pundit: white-list approach.
@@ -29,6 +30,11 @@ class ApplicationController < ActionController::Base
 
   def set_algorithm
     @algorithm = Algorithm.find(params[:algorithm_id])
+  end
+
+  def set_current_user
+    current_user.ip = request.ip
+    User.set_current(current_user)
   end
 
   def set_instance
