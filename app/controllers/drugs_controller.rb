@@ -132,6 +132,7 @@ class DrugsController < ApplicationController
       :is_anti_malarial,
       :is_neonat,
       :label_en,
+      :level_of_urgency,
       Language.label_params,
       :description_en,
       Language.description_params,
