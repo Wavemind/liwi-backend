@@ -341,10 +341,18 @@ class VersionsService
       hash[question.id]['label'] = return_hstore_translated(question.label_translations)
       hash[question.id]['description'] = return_hstore_translated(question.description_translations)
       hash[question.id]['is_mandatory'] = (@version.is_arm_control && !%w(Questions::BasicDemographic Questions::Demographic Questions::Referral).include?(question.type)) ? false : question.is_mandatory
-      hash[question.id]['emergency_status'] = question.emergency_status
       hash[question.id]['is_neonat'] = question.is_neonat
       hash[question.id]['system'] = question.system unless question.system.nil?
       hash[question.id] = format_formula(hash[question.id], question)
+
+      # Emergency status logic
+      if question.emergency_status.include?('emergency')
+        hash[question.id]['emergency_status'] = 'emergency'
+        reference = question.emergency_status == 'emergency' ? 1 : 2
+        hash[question.id]['emergency_answer_id'] = question.answers.find_by(reference: reference).id
+      else
+        hash[question.id]['emergency_status'] = question.emergency_status
+      end
 
       hash[question.id]['category'] = question.category_name
       hash[question.id]['round'] = I18n.t("questions.rounds.#{question.round}.value").to_f unless question.round.nil?
