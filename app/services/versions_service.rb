@@ -345,9 +345,12 @@ class VersionsService
       hash[question.id]['is_neonat'] = question.is_neonat
       hash[question.id]['system'] = question.system unless question.system.nil?
       hash[question.id] = format_formula(hash[question.id], question)
+
+      # Emergency status logic
       if question.emergency_status.include?('emergency')
         hash[question.id]['emergency_status'] = 'emergency'
-        hash[question.id]['emergency_answer_id'] = question.emergency_status == 'emergency' ? question.answers.find_by(reference: 1) : question.answers.find_by(reference: 2)
+        reference = question.emergency_status == 'emergency' ? 1 : 2
+        hash[question.id]['emergency_answer_id'] = question.answers.find_by(reference: reference).id
       else
         hash[question.id]['emergency_status'] = question.emergency_status
       end
