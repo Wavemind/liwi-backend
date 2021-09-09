@@ -25,7 +25,7 @@ class User < ApplicationRecord
   end
 
   def self.get_current_ip
-    Thread.current[:user]
+    Thread.current[:ip]
   end
 
   def self.set_current(user, ip)
