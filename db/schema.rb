@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_06_135630) do
+ActiveRecord::Schema.define(version: 2021_09_08_125740) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -334,6 +334,16 @@ ActiveRecord::Schema.define(version: 2021_09_06_135630) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_technical_files_on_user_id"
+  end
+
+  create_table "user_logs", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "action"
+    t.string "model_type"
+    t.bigint "model_id"
+    t.json "data"
+    t.string "ip_address"
+    t.index ["user_id"], name: "index_user_logs_on_user_id"
   end
 
   create_table "user_studies", force: :cascade do |t|

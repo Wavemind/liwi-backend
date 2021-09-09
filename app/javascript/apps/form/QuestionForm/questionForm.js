@@ -370,7 +370,7 @@ export default class QuestionForm extends React.Component {
                   >
                     <option value="">{I18n.t("select")}</option>
                     {Object.keys(emergency_statuses).map(key => (
-                      <option key={`stages-${emergency_statuses[key]}`} value={key}>{humanizeString(key)}</option>
+                      <option key={`stages-${emergency_statuses[key]}`} value={key}>{I18n.t(`activerecord.attributes.question.emergency_statuses.${key}`)}</option>
                     ))}
                   </Form.Control>
                   <Form.Control.Feedback type="invalid">
