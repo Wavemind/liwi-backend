@@ -135,13 +135,13 @@ ActiveRecord::Schema.define(version: 2021_08_30_082803) do
     t.index ["version_id"], name: "index_diagnoses_on_version_id"
   end
 
-  create_table "final_diagnostic_health_cares", force: :cascade do |t|
+  create_table "final_diagnosis_health_cares", force: :cascade do |t|
     t.bigint "node_id"
     t.bigint "final_diagnosis_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["final_diagnosis_id"], name: "index_final_diagnostic_health_cares_on_final_diagnosis_id"
-    t.index ["node_id"], name: "index_final_diagnostic_health_cares_on_node_id"
+    t.index ["final_diagnosis_id"], name: "index_final_diagnosis_health_cares_on_final_diagnosis_id"
+    t.index ["node_id"], name: "index_final_diagnosis_health_cares_on_node_id"
   end
 
   create_table "formulations", force: :cascade do |t|

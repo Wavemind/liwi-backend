@@ -10,7 +10,6 @@ import store from "../../diagram/engine/reducers/store";
 import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 
 export default class StepperDrugForm extends React.Component {
-
   constructor(props) {
     super(props);
     const { drug, method, step } = props;
@@ -33,6 +32,7 @@ export default class StepperDrugForm extends React.Component {
     let body = {
       label_en: drug?.label_translations?.en || "",
       description_en: drug?.description_translations?.en || "",
+      level_of_urgency: drug?.level_of_urgency || 5,
       is_anti_malarial: drug?.is_anti_malarial || false,
       is_antibiotic: drug?.is_antibiotic || "",
       is_neonat: drug?.is_neonat || "",
@@ -59,8 +59,10 @@ export default class StepperDrugForm extends React.Component {
           by_age: formulation.by_age,
           breakable: formulation.breakable,
           description_en: formulation.description_translations?.en || "",
-          injection_instructions_en: formulation.injection_instructions_translations?.en || "",
-          dispensing_description_en: formulation.dispensing_description_translations?.en || "",
+          injection_instructions_en:
+            formulation.injection_instructions_translations?.en || "",
+          dispensing_description_en:
+            formulation.dispensing_description_translations?.en || "",
           _destroy: false
         });
       });
@@ -73,7 +75,7 @@ export default class StepperDrugForm extends React.Component {
   /**
    * Send value to server
    */
-  save = async (toDeleteFormulations) => {
+  save = async toDeleteFormulations => {
     const { method, from, diagramObject, engine } = this.props;
     let { drug } = this.state;
     toDeleteFormulations.map(formulation_id => {
@@ -103,9 +105,7 @@ export default class StepperDrugForm extends React.Component {
           diagramObject.options.dbInstance.node = result;
           engine.repaintCanvas();
 
-          store.dispatch(
-            closeModal()
-          );
+          store.dispatch(closeModal());
         }
       }
     } else {
@@ -126,7 +126,7 @@ export default class StepperDrugForm extends React.Component {
    * Set value in context for meta data
    * @param values
    */
-  setMetaData = (values) => {
+  setMetaData = values => {
     this.setState({ drug: values });
   };
 
@@ -148,13 +148,24 @@ export default class StepperDrugForm extends React.Component {
 
   render() {
     const { errors, step, drug, createdDrug } = this.state;
-    const { method, engine, diagramObject, addAvailableNode, from, is_deployed } = this.props;
+    const {
+      method,
+      engine,
+      diagramObject,
+      addAvailableNode,
+      from,
+      is_deployed
+    } = this.props;
 
     switch (step) {
       case 1:
         return (
           <>
-            <h1 className="mb-5">{method === "create" ? I18n.t("drugs.new.title") : I18n.t("drugs.edit.title")}</h1>
+            <h1 className="mb-5">
+              {method === "create"
+                ? I18n.t("drugs.new.title")
+                : I18n.t("drugs.edit.title")}
+            </h1>
             <DrugForm
               formData={drug}
               setFormData={this.setMetaData}
@@ -168,8 +179,12 @@ export default class StepperDrugForm extends React.Component {
       case 2:
         return (
           <>
-            <h1 className="mb-5">{method === "create" ? I18n.t("formulations.new.title") : I18n.t("formulations.edit.title")}</h1>
-            {errors ? <DisplayErrors errors={errors}/> : null}
+            <h1 className="mb-5">
+              {method === "create"
+                ? I18n.t("formulations.new.title")
+                : I18n.t("formulations.edit.title")}
+            </h1>
+            {errors ? <DisplayErrors errors={errors} /> : null}
             <FormulationForm
               formData={drug}
               method={method}
