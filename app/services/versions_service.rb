@@ -346,7 +346,7 @@ class VersionsService
       hash[question.id] = format_formula(hash[question.id], question)
 
       # Emergency status logic
-      if question.emergency_status.include?('emergency')
+      if question.emergency_status && question.emergency_status.include?('emergency')
         hash[question.id]['emergency_status'] = 'emergency'
         reference = question.emergency_status == 'emergency' ? 1 : 2
         hash[question.id]['emergency_answer_id'] = question.answers.find_by(reference: reference).id
