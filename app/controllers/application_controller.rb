@@ -33,8 +33,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_current_user
-    current_user.ip = request.ip
-    User.set_current(current_user)
+    User.set_current(current_user, request.ip)
   end
 
   def set_instance

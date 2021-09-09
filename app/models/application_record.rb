@@ -7,38 +7,37 @@ class ApplicationRecord < ActiveRecord::Base
   before_destroy :log_delete
 
   def log_create
-    user = User.get_current
     UserLog.create(
       user: User.get_current,
       action: 'create',
       model_type: self.class.name,
       model_id: self.id,
       data: self.attributes,
-      ip_address: user.ip
+      ip_address: User.get_current_ip
     )
   end
 
   def log_update
-    user = User.get_current
-    UserLog.create(
-      user: User.get_current,
-      action: 'update',
-      model_type: self.class.name,
-      model_id: self.id,
-      data: changed_attributes,
-      ip_address: user.ip
-    )
+    unless changes.keys == %w(reference updated_at) || changes.keys.include?("position_x")
+      UserLog.create(
+        user: User.get_current,
+        action: 'update',
+        model_type: self.class.name,
+        model_id: self.id,
+        data: changed_attributes,
+        ip_address: User.get_current_ip
+      )
+    end
   end
 
   def log_delete
-    user = User.get_current
     UserLog.create(
-      user: user,
+      user: User.get_current,
       action: 'delete',
       model_type: self.class.name,
       model_id: self.id,
       data: self.attributes,
-      ip_address: user.ip
+      ip_address: User.get_current_ip
     )
   end
 

@@ -4,8 +4,6 @@ class User < ApplicationRecord
   devise :invitable, :database_authenticatable, :recoverable, :rememberable, :lockable, :trackable, :registerable
   include DeviseTokenAuth::Concerns::User
 
-  attr_accessor :ip
-
   enum role: [:admin, :clinician, :deployment_manager, :medal_r_user]
 
   has_many :activities
@@ -26,8 +24,13 @@ class User < ApplicationRecord
     Thread.current[:user]
   end
 
-  def self.set_current(user)
+  def self.get_current_ip
+    Thread.current[:user]
+  end
+
+  def self.set_current(user, ip)
     Thread.current[:user] = user
+    Thread.current[:ip] = ip
   end
 
   # Override devise authentication verification with deactivated method
