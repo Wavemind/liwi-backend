@@ -1,5 +1,7 @@
 wb = xlsx_package.workbook
 wrap = xlsx_package.workbook.styles.add_style alignment: {wrap_text: true}
+align_top = xlsx_package.workbook.styles.add_style border: { style: :thin, color: "000000" }, alignment: {horizontal: :left, vertical: :top, wrap_text: true}
+align_mid = xlsx_package.workbook.styles.add_style b: true, bg_color: "D9D9D9", border: { style: :thin, color: "000000" }, alignment: {horizontal: :center , vertical: :center, wrap_text: true}
 
 nodes = @version.extract_nodes_from_version
 drugs = []
@@ -27,11 +29,11 @@ wb.add_worksheet(name: "Diagnoses") do |sheet|
 
     diag.components.map do |instance|
       if instance.node.is_a? FinalDiagnosis
-        final_diagnoses.push(instance.node)
+        # final_diagnoses.push(instance.node)
       elsif instance.node.is_a? HealthCares::Drug
         drugs.push(instance.node)
       elsif instance.node.is_a? HealthCares::Management
-        managements.push(instance.node)
+        # managements.push(instance.node)
       end
     end
   end
@@ -47,22 +49,40 @@ end
 
 
 wb.add_worksheet(name: "Drugs") do |sheet|
-  row = sheet.add_row ["ID", "Reference", "Label", "Description", "Formulations (ID | medication form)", "Administration route", "Number of administrations per day",
+  sheet.add_row ["ID", "Reference", "Label", "Description", "Diagnoses", "YI/Antibiotic/Antimalarial/None", "Formulations (ID | medication form)", "Administration route", "Number of administrations per day",
                  "Fixed Dose (Y/N)", "Is the tablet breakable", "Concentration (mg in dose)", "Total drug formulation volume (ml)", "Total drug formulation volume (mg)",
                  "Number of pills per administration", "Number of ml per administration", "Number of applications per administration", "Maximal daily dose (mg)",
-                 "Minimal dose (mg/kg/day)", "Maximal dose (mg/kg/day)", "Description", "Injection dilution instructions", "Dispensing description"], height: 99
+                 "Minimal dose (mg/kg/day)", "Maximal dose (mg/kg/day)", "Description", "Injection dilution instructions", "Dispensing description"], height: 99, style: align_mid
 
-  puts '***'
-  puts row.inspect
-  puts '***'
-  drugs.map do |node|
-    formulations = ""
-    node.formulations.each_with_index do |formulation, index|
-      formulations += "\r" unless index == 0
-      formulations += "#{formulation.id} | #{formulation.medication_form}"
+  drugs.uniq.map do |node|
+    drug_rows = []
+    instances = ""
+    node.instances.each_with_index do |instance, index|
+      instances += "\r" unless index == 0
+      instances += instance.instanceable.reference_label
     end
 
-    sheet.add_row [node.id, node.full_reference, node.label_en, node.description_en, formulations], style: wrap
+    bools = ""
+    bools += "YI \r" if node.is_neonat
+    bools += "Antibiotic \r" if node.is_antibiotic
+    bools += "Antimalarial \r" if node.is_anti_malarial
+
+    node.formulations.each_with_index do |formulation, index|
+      row = index == 0 ? [node.id, node.full_reference, node.label_en, node.description_en, instances, bools] : ['', '', '', '', '', '']
+      row.push("#{formulation.id} | #{formulation.medication_form}", formulation.administration_route.name_en, formulation.doses_per_day, formulation.by_age ? 'Y' : 'N',
+               formulation.tablet? ? I18n.t("formulations.breakables.#{formulation.breakable}.label") : '', formulation.liquid_concentration, formulation.dose_form, formulation.dose_form, formulation.dose_form,
+               formulation.dose_form, formulation.dose_form, formulation.maximal_dose, formulation.maximal_dose_per_kg, formulation.minimal_dose_per_kg, formulation.description_en,
+               formulation.injection_instructions_en, formulation.dispensing_description_en)
+      row = sheet.add_row row, style: align_top
+      drug_rows.push(row)
+    end
+
+    %w(A B C D).each do |col|
+      cells = "#{col}#{drug_rows.first.row_index + 1}:#{col}#{drug_rows.last.row_index + 1}"
+      sheet.merge_cells(cells)
+    end if drug_rows.any?
+
+    sheet.column_widths(10, 10, 17, 32, 32, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 32, 32, 32)
   end
 end
 
