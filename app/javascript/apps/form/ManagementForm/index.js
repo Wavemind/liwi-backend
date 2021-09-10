@@ -45,7 +45,7 @@ export default class ManagementForm extends React.Component {
     const { toDeleteMedias } = this.state;
     let http = new Http();
     let httpRequest = {};
-    console.log(values);
+    
     if (method === "create") {
       httpRequest = await http.createManagement(
         values.label_translations,
@@ -102,7 +102,7 @@ export default class ManagementForm extends React.Component {
 
   render() {
     const { management } = this.props;
-    console.log("management", management);
+    
     return (
       <FadeIn>
         <Formik
