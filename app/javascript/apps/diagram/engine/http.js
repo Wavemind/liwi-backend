@@ -1,7 +1,6 @@
 import * as React from "react";
 
 export default class Http {
-
   url;
   token;
   instanceableId;
@@ -17,7 +16,11 @@ export default class Http {
     this.instanceableId = data.dataset.id;
     this.finalDiagnosis = data.dataset.final_diagnosis;
     this.diagramType = data.dataset.type;
-    this.instanceableType = ["Diagnosis", "FinalDiagnosis"].includes(data.dataset.type) ? "diagnoses" : "questions_sequences";
+    this.instanceableType = ["Diagnosis", "FinalDiagnosis"].includes(
+      data.dataset.type
+    )
+      ? "diagnoses"
+      : "questions_sequences";
     this.version = data.dataset.version;
     this.algorithm = data.dataset.algorithm;
     this.token = document.querySelector("meta[name='csrf-token']").content;
@@ -48,7 +51,13 @@ export default class Http {
    * @params [String] from
    * @return [Object] body of request
    */
-  createFinalDiagnosis = async (label_en, description_en, level_of_urgency, medias_attributes, from) => {
+  createFinalDiagnosis = async (
+    label_en,
+    description_en,
+    level_of_urgency,
+    medias_attributes,
+    from
+  ) => {
     const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnoses`;
     const body = {
       final_diagnosis: {
@@ -56,7 +65,7 @@ export default class Http {
         description_en,
         level_of_urgency,
         diagnosis_id: this.instanceableId,
-        medias_attributes,
+        medias_attributes
       },
       from
     };
@@ -72,14 +81,22 @@ export default class Http {
    * @params [String] from
    * @return [Object] body of request
    */
-  createManagement = async (label_en, description_en, level_of_urgency, medias_attributes, from) => {
+  createManagement = async (
+    label_en,
+    description_en,
+    level_of_urgency,
+    is_referral,
+    medias_attributes,
+    from
+  ) => {
     const url = `${this.url}/algorithms/${this.algorithm}/managements`;
     const body = {
       health_cares_management: {
         label_en,
         description_en,
         level_of_urgency,
-        medias_attributes,
+        is_referral,
+        medias_attributes
       },
       diagnosis_id: this.instanceableId,
       final_diagnosis_id: this.finalDiagnosis,
@@ -94,7 +111,7 @@ export default class Http {
    * @params [Integer] question id
    * @return [Object] body of request
    */
-  getQuestionDependencies = async (id) => {
+  getQuestionDependencies = async id => {
     const url = `${this.url}/questions/${id}/dependencies`;
     const header = await this.setHeaders("GET", null);
     return await fetch(url, header).catch(error => console.log(error));
@@ -115,8 +132,8 @@ export default class Http {
         id,
         cut_off_start: cutOffStart,
         cut_off_end: cutOffEnd,
-        cut_off_value_type: cutOffValueType,
-      },
+        cut_off_value_type: cutOffValueType
+      }
     };
     const header = await this.setHeaders("PUT", body);
     return await fetch(url, header).catch(error => console.log(error));
@@ -127,12 +144,12 @@ export default class Http {
    * @params [json] tree
    * @return [Object] body of request
    */
-  updateFullOrder = async (tree) => {
+  updateFullOrder = async tree => {
     const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/update_full_order`;
     const body = {
       version: {
-        full_order_json: tree,
-      },
+        full_order_json: tree
+      }
     };
     const header = await this.setHeaders("PUT", body);
     return await fetch(url, header).catch(error => console.log(error));
@@ -146,7 +163,15 @@ export default class Http {
    * @params [String] from
    * @return [Object] body of request
    */
-  updateManagement = async (id, label_en, description_en, level_of_urgency, medias_attributes, from) => {
+  updateManagement = async (
+    id,
+    label_en,
+    description_en,
+    level_of_urgency,
+    is_referral,
+    medias_attributes,
+    from
+  ) => {
     const url = `${this.url}/algorithms/${this.algorithm}/managements/${id}`;
     const body = {
       health_cares_management: {
@@ -154,7 +179,8 @@ export default class Http {
         label_en,
         description_en,
         level_of_urgency,
-        medias_attributes,
+        is_referral,
+        medias_attributes
       },
       diagnosis_id: this.instanceableId,
       final_diagnosis_id: this.finalDiagnosis,
@@ -189,7 +215,13 @@ export default class Http {
    * @params [Integer] y
    * @return [Object] body of request
    */
-  createInstance = async (nodeId, x, y, duration_en = '', description_en = '') => {
+  createInstance = async (
+    nodeId,
+    x,
+    y,
+    duration_en = "",
+    description_en = ""
+  ) => {
     const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances`;
     const body = {
       instance: {
@@ -200,7 +232,7 @@ export default class Http {
         instanceable_type: this.instanceableType,
         final_diagnosis_id: this.finalDiagnosis,
         duration_en,
-        description_en,
+        description_en
       }
     };
     const header = await this.setHeaders("POST", body);
@@ -216,8 +248,11 @@ export default class Http {
    */
   createLink = async (instanceId, answerId, score = null) => {
     // TODO : Figure a better solution out
-    instanceId = instanceId.substring(instanceId.indexOf("_") + 1, instanceId.length)
-    answerId = answerId.substring(answerId.indexOf("_") + 1, answerId.length)
+    instanceId = instanceId.substring(
+      instanceId.indexOf("_") + 1,
+      instanceId.length
+    );
+    answerId = answerId.substring(answerId.indexOf("_") + 1, answerId.length);
     const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/${instanceId}/create_link`;
     const body = {
       instance: {
@@ -260,7 +295,17 @@ export default class Http {
    * @params [String] from
    * @return [Object] body of request
    */
-  createQuestionsSequence = async (label, description, type, min_score, cut_off_start, cut_off_end, cut_off_value_type, complaint_category_ids, from) => {
+  createQuestionsSequence = async (
+    label,
+    description,
+    type,
+    min_score,
+    cut_off_start,
+    cut_off_end,
+    cut_off_value_type,
+    complaint_category_ids,
+    from
+  ) => {
     const url = `${this.url}/algorithms/${this.algorithm}/questions_sequences`;
     const body = {
       questions_sequence: {
@@ -287,7 +332,7 @@ export default class Http {
    * @params [Array] nodes ids
    * @return [Object] body of request
    */
-  createVersionInstance = async(nodesIds) => {
+  createVersionInstance = async nodesIds => {
     const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/components`;
     const body = {
       nodes_ids: nodesIds,
@@ -377,7 +422,7 @@ export default class Http {
    * @params [Integer] nodeId
    * @return [Object] body of request
    */
-  removeInstance = async (instanceId) => {
+  removeInstance = async instanceId => {
     const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances/${instanceId}`;
     const body = {
       instance: {
@@ -411,7 +456,7 @@ export default class Http {
   /**
    * Redirect to algorithm panel
    */
-  redirectToAlgorithm = async (panel) => {
+  redirectToAlgorithm = async panel => {
     window.location = `${this.url}/algorithms/${this.algorithm}?panel=${panel}`;
   };
 
@@ -434,7 +479,7 @@ export default class Http {
    * @params [Array] nodes ids
    * @return [Object] body of request
    */
-  removeVersionInstances = async(nodesIds) => {
+  removeVersionInstances = async nodesIds => {
     const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/remove_components`;
     const body = {
       nodes_ids: nodesIds,
@@ -449,7 +494,7 @@ export default class Http {
    * @params [String] term
    * @return [Object] json with results
    */
-  searchSnomed = async (term) => {
+  searchSnomed = async term => {
     const url = `https://browser.ihtsdotools.org/snowstorm/snomed-ct/MAIN/concepts?term=${term}&limit=50`;
     return await fetch(url).catch(error => console.log(error));
   };
@@ -465,7 +510,12 @@ export default class Http {
       method,
       headers: {}
     };
-    if (method === "POST" || method === "PATCH" || method === "PUT" || method === "DELETE") {
+    if (
+      method === "POST" ||
+      method === "PATCH" ||
+      method === "PUT" ||
+      method === "DELETE"
+    ) {
       header.body = JSON.stringify(body);
       header.headers["Accept"] = "application/json, text/plain";
       header.headers["Content-Type"] = "application/json";
@@ -478,7 +528,7 @@ export default class Http {
    * Redirect to final diagnosis diagram
    * @params [Integer] dfId
    */
-  showFinalDiagnosisDiagram = async (dfId) => {
+  showFinalDiagnosisDiagram = async dfId => {
     window.location = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnoses/${dfId}/diagram`;
   };
 
@@ -487,7 +537,7 @@ export default class Http {
    * @params [Integer] id
    * @return [Object] body of request
    */
-  showQuestionsSequenceDiagram = async (id) => {
+  showQuestionsSequenceDiagram = async id => {
     window.location = `${this.url}/questions_sequences/${id}/diagram`;
   };
 
@@ -517,7 +567,15 @@ export default class Http {
    * @params [Integer] from
    * @return [Object] body of request
    */
-  updateFinalDiagnosis = async (id, label_en, description_en, level_of_urgency, medias_attributes, from, source) => {
+  updateFinalDiagnosis = async (
+    id,
+    label_en,
+    description_en,
+    level_of_urgency,
+    medias_attributes,
+    from,
+    source
+  ) => {
     const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnoses/${id}`;
     const body = {
       final_diagnosis: {
@@ -525,7 +583,7 @@ export default class Http {
         label_en,
         description_en,
         level_of_urgency,
-        medias_attributes,
+        medias_attributes
       },
       from,
       source
@@ -541,14 +599,20 @@ export default class Http {
    * @params [Integer] positionY
    * @return [Object] body of request
    */
-  updateInstance = async (id, positionX, positionY, duration_en = '', description_en = '') => {
+  updateInstance = async (
+    id,
+    positionX,
+    positionY,
+    duration_en = "",
+    description_en = ""
+  ) => {
     const url = `${this.url}/instances/${id}`;
     const body = {
       instance: {
         position_x: positionX,
         position_y: positionY,
         duration_en,
-        description_en,
+        description_en
       }
     };
 
@@ -585,7 +649,18 @@ export default class Http {
    * @params [String] from
    * @return [Object] body of request
    */
-  updateQuestionsSequence = async (id, label, description, type, min_score, cut_off_start, cut_off_end, cut_off_value_type, complaint_category_ids, from) => {
+  updateQuestionsSequence = async (
+    id,
+    label,
+    description,
+    type,
+    min_score,
+    cut_off_start,
+    cut_off_end,
+    cut_off_value_type,
+    complaint_category_ids,
+    from
+  ) => {
     const url = `${this.url}/algorithms/${this.algorithm}/questions_sequences/${id}`;
     const body = {
       questions_sequence: {
@@ -635,7 +710,7 @@ export default class Http {
    * Validate question before next step
    * @return [Object] body of request
    */
-  validateQuestion = async (question) => {
+  validateQuestion = async question => {
     const url = `${this.url}/algorithms/${this.algorithm}/questions/validate`;
     const body = {
       question
@@ -654,5 +729,4 @@ export default class Http {
     const header = await this.setHeaders("GET", null);
     return await fetch(url, header).catch(error => console.log(error));
   };
-
 }

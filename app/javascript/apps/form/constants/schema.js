@@ -70,6 +70,7 @@ export const questionSchema = yup.object().shape({
 
 export const managementSchema = yup.object().shape({
   label_translations: yup.string().required(I18n.t("errors.messages.required")),
+  is_referral: yup.boolean(),
   description_translations: yup.string()
 });
 

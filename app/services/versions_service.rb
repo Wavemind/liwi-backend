@@ -578,6 +578,7 @@ class VersionsService
           hash[health_care.id]['formulations'].push(formulation_hash)
         end
       else
+        hash[health_care.id]['is_referral'] = health_care.is_referral
         hash[health_care.id]['medias'] = extract_medias(health_care)
       end
     end

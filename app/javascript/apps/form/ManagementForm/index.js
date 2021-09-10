@@ -45,12 +45,13 @@ export default class ManagementForm extends React.Component {
     const { toDeleteMedias } = this.state;
     let http = new Http();
     let httpRequest = {};
-
+    console.log(values);
     if (method === "create") {
       httpRequest = await http.createManagement(
         values.label_translations,
         values.description_translations,
         values.level_of_urgency,
+        values.is_referral,
         values.medias_attributes,
         from
       );
@@ -65,6 +66,7 @@ export default class ManagementForm extends React.Component {
         values.label_translations,
         values.description_translations,
         values.level_of_urgency,
+        values.is_referral,
         values.medias_attributes,
         from
       );
@@ -100,7 +102,7 @@ export default class ManagementForm extends React.Component {
 
   render() {
     const { management } = this.props;
-
+    console.log("management", management);
     return (
       <FadeIn>
         <Formik
