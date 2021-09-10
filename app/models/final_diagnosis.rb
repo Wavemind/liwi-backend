@@ -40,7 +40,8 @@ class FinalDiagnosis < Node
       label: diagnosis.label,
       version_id: diagnosis.version_id,
       chief_complaint_label: diagnosis.node.reference_label,
-      cut_offs: diagnosis.display_cut_offs
+      cut_off_start: diagnosis.cut_off_start,
+      cut_off_end: diagnosis.cut_off_end,
     }
   end
 

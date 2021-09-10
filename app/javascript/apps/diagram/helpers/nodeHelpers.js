@@ -4,15 +4,15 @@ import _ from "lodash";
 import QuestionNodeModel from "../components/extended/QuestionDiagram/node/QuestionNodeModel";
 import FinalDiagnosisNodeModel from "../components/extended/FinalDiagnosisDiagram/node/FinalDiagnosisNodeModel";
 import HealthCareNodeModel from "../components/extended/HealthCareDiagram/node/HealthCareNodeModel";
-import QuestionsSequenceNodeModel
-  from "../components/extended/QuestionsSequenceDiagram/node/QuestionsSequenceNodeModel";
+import QuestionsSequenceNodeModel from "../components/extended/QuestionsSequenceDiagram/node/QuestionsSequenceNodeModel";
+import readableDate from "../../diagram/helpers/readableDate";
 
 /**
  * Get full label of an object
  * @params [Object] node
  * @return label of node
  */
-export const getLabel = (node) => {
+export const getLabel = node => {
   return node.label_translations["en"];
 };
 
@@ -22,7 +22,14 @@ export const getLabel = (node) => {
  * @params [Function] addAvailableNode
  * @return diagram node
  */
-export const createNode = (instance, addAvailableNode, readOnly, diagramType, engine, user) => {
+export const createNode = (
+  instance,
+  addAvailableNode,
+  readOnly,
+  diagramType,
+  engine,
+  user
+) => {
   let diagramNode;
 
   let params = {
@@ -59,9 +66,13 @@ export const createNode = (instance, addAvailableNode, readOnly, diagramType, en
  * @params [Object] node
  * @return label of category
  */
-export const getCategoryNode = (node) => {
+export const getCategoryNode = node => {
   let category = "";
-  if (node.node_type === "Question" || node.node_type === "QuestionsSequence" || node.node_type === "HealthCare") {
+  if (
+    node.node_type === "Question" ||
+    node.node_type === "QuestionsSequence" ||
+    node.node_type === "HealthCare"
+  ) {
     category = _.camelCase(node.category_name);
   } else {
     category = _.camelCase(node.node_type);
@@ -88,7 +99,12 @@ export const linkNode = (answerPort, diagramNode, condition) => {
 
   // Add label to display cut offs
   if (condition.cut_off_start || condition.cut_off_end) {
-    link.addLabel(I18n.t("conditions.cut_off_label", {start: condition.cut_off_start, end: condition.cut_off_end}))
+    link.addLabel(
+      I18n.t("conditions.cut_off_label", {
+        start: readableDate(condition.cut_off_start),
+        end: readableDate(condition.cut_off_end)
+      })
+    );
   }
 
   // Add value in link
@@ -107,7 +123,10 @@ export const linkNode = (answerPort, diagramNode, condition) => {
  * @params [Integer] excludedFinalDiagnosis -> inPort or excludedInPort
  * @return Diagram port
  */
-export const linkFinalDiagnosisExclusion = (diagramNode, excludedFinalDiagnosis) => {
+export const linkFinalDiagnosisExclusion = (
+  diagramNode,
+  excludedFinalDiagnosis
+) => {
   let excludedInPort = excludedFinalDiagnosis.getPortByName("excludedInPort");
   let excludingOutPort = diagramNode.getPortByName("excludingOutPort");
 
@@ -147,12 +166,21 @@ export const AdvancedLinkArrowWidget = props => {
     (Math.atan2(
       point.getPosition().y - previousPoint.getPosition().y,
       point.getPosition().x - previousPoint.getPosition().x
-      ) *
+    ) *
       180) /
-    Math.PI;
+      Math.PI;
 
   return (
-    <g className="arrow" transform={"translate(" + point.getPosition().x + ", " + point.getPosition().y + ")"}>
+    <g
+      className="arrow"
+      transform={
+        "translate(" +
+        point.getPosition().x +
+        ", " +
+        point.getPosition().y +
+        ")"
+      }
+    >
       <g style={{ transform: "rotate(" + angle + "deg)" }}>
         <g transform={"translate(0, -3)"}>
           <polygon
@@ -165,7 +193,8 @@ export const AdvancedLinkArrowWidget = props => {
               this.setState({ selected: true });
             }}
             data-id={point.getID()}
-            data-linkid={point.getLink().getID()}></polygon>
+            data-linkid={point.getLink().getID()}
+          ></polygon>
         </g>
       </g>
     </g>

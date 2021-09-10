@@ -75,20 +75,6 @@ class QuestionsSequence < Node
     nodes.as_json(methods: [:category_name, :node_type, :get_answers, :type])
   end
 
-  # @return [String]
-  # Return a displayable string to indicate the cut_offs
-  def display_cut_offs
-    cut_off = ''
-    if cut_off_start.present?
-      cut_off = "From ≥ #{cut_off_start.to_s}"
-      cut_off = "#{cut_off} to < #{cut_off_end.to_s}" if cut_off_end.present?
-      cut_off = "#{cut_off} days"
-    elsif cut_off_end.present?
-      cut_off = "To < #{cut_off_end.to_s} days"
-    end
-    cut_off
-  end
-
   def extract_nodes(nodes)
     components.includes(:node).each do |instance|
       node = instance.node
@@ -160,7 +146,8 @@ class QuestionsSequence < Node
       reference: reference,
       label: label,
       category_name: category_name,
-      cut_offs: display_cut_offs
+      cut_off_start: cut_off_start,
+      cut_off_end: cut_off_end,
     }
   end
 
