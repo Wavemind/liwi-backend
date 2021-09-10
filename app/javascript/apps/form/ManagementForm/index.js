@@ -45,7 +45,7 @@ export default class ManagementForm extends React.Component {
     const { toDeleteMedias } = this.state;
     let http = new Http();
     let httpRequest = {};
-    
+
     if (method === "create") {
       httpRequest = await http.createManagement(
         values.label_translations,
@@ -102,7 +102,7 @@ export default class ManagementForm extends React.Component {
 
   render() {
     const { management } = this.props;
-    
+
     return (
       <FadeIn>
         <Formik
@@ -159,7 +159,6 @@ export default class ManagementForm extends React.Component {
                   value={values.is_referral}
                   checked={values.is_referral}
                   onChange={handleChange}
-                  is_referral
                   isInvalid={touched.is_referral && !!errors.is_referral}
                 />
                 <Form.Control.Feedback type="invalid">
