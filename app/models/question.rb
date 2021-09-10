@@ -29,7 +29,7 @@ class Question < Node
     :priority_sign,
     :feeding,
   ]
-  enum emergency_status: [:standard, :referral, :emergency]
+  enum emergency_status: [:standard, :referral, :emergency, :emergency_if_no]
 
   has_many :answers, foreign_key: 'node_id', dependent: :destroy
   belongs_to :answer_type
