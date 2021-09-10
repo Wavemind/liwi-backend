@@ -20,6 +20,19 @@ class User < ApplicationRecord
 
   validates :email, format: { with: /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i }
 
+  def self.get_current
+    Thread.current[:user]
+  end
+
+  def self.get_current_ip
+    Thread.current[:ip]
+  end
+
+  def self.set_current(user, ip)
+    Thread.current[:user] = user
+    Thread.current[:ip] = ip
+  end
+
   # Override devise authentication verification with deactivated method
   def active_for_authentication?
     super && !deactivated

@@ -197,6 +197,7 @@ sw:
         create:
           errors_on_save: "An error occurred when saving devices"
         show:
+          no_device: "Your mac_address does not match with any device in medAL-creator"
           no_health_facility: "Your tablet has not been associated with any Health Facility in medAL-creator"
   archive: "Archive"
   breadcrumbs:

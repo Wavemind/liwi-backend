@@ -67,6 +67,11 @@ en:
         is_identifiable: "This question can identify a patient"
         is_mandatory: "Mandatory"
         emergency_status: "Emergency status"
+        emergency_statuses:
+          emergency: "Emergency (if yes/present/positive)"
+          emergency_if_no: "Emergency (if no/absent/negative)"
+          referral: "Referral"
+          standard: "Standard"
         is_neonat: "Young infant"
         is_triage: "Ask in triage (if triage available)"
         max_message_error: "Error message if above range"
@@ -206,6 +211,7 @@ en:
         create:
           errors_on_save: "An error occurred when saving devices"
         show:
+          no_device: "Your mac_address does not match with any device in medAL-creator"
           no_health_facility: "Your tablet has not been associated with any Health Facility in medAL-creator"
   archive: "Archive"
   breadcrumbs:
