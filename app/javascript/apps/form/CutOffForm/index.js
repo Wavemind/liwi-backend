@@ -36,10 +36,10 @@ export default class CutOffForm extends React.Component {
       diagramObject.options.cutOffStart = result.cut_off_start;
       diagramObject.options.cutOffEnd = result.cut_off_end;
 
-      const label =
-        readableDate(result.cut_off_start) +
-        " " +
-        readableDate(result.cut_off_end);
+      const label = I18n.t("conditions.cut_off_label", {
+        start: readableDate(result.cut_off_start),
+        end: readableDate(result.cut_off_end)
+      });
       if (diagramObject.getLabel() === undefined) {
         diagramObject.addLabel(label);
       } else {
