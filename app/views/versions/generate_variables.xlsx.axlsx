@@ -47,8 +47,14 @@ end
 
 
 wb.add_worksheet(name: "Drugs") do |sheet|
-  sheet.add_row ["ID", "Reference", "Label", "Description", "Formulations (ID | medication form)"]
+  row = sheet.add_row ["ID", "Reference", "Label", "Description", "Formulations (ID | medication form)", "Administration route", "Number of administrations per day",
+                 "Fixed Dose (Y/N)", "Is the tablet breakable", "Concentration (mg in dose)", "Total drug formulation volume (ml)", "Total drug formulation volume (mg)",
+                 "Number of pills per administration", "Number of ml per administration", "Number of applications per administration", "Maximal daily dose (mg)",
+                 "Minimal dose (mg/kg/day)", "Maximal dose (mg/kg/day)", "Description", "Injection dilution instructions", "Dispensing description"], height: 99
 
+  puts '***'
+  puts row.inspect
+  puts '***'
   drugs.map do |node|
     formulations = ""
     node.formulations.each_with_index do |formulation, index|
