@@ -238,7 +238,7 @@ en:
   cancel: "Cancel"
   conditions:
     cut_off_modal: "Define cut offs for this link"
-    cut_off_label: "%{start} to %{end} days"
+    cut_off_label: "%{start} to %{end}"
     operators:
       and_operator: "AND"
       or_operator: "OR"
@@ -248,6 +248,11 @@ en:
       link_answer_to_answer: "You can't link an answer to another answer"
   confirmation: "Are you sure ?"
   days: "Days"
+  date:
+    days: "%{value} days"
+    weeks: "%{value} weeks"
+    months: "%{value} months"
+    years: "%{value} years"
   deactivated: "Deactivate"
   delete: "Delete"
   destroy: "Remove"
@@ -806,6 +811,7 @@ en:
     validate: "Validate"
     diagnosis_diagram: "Diagnosis diagram"
     save: "Save"
+    cut_off: "from %{start} to %{end}"
   unarchive: "Unarchive"
   users:
     new:

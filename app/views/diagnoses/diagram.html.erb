@@ -6,7 +6,7 @@
   <div class="col-md-12">
     <p class="mx-0 my-0 metadata" data-type="<%= @diagnosis.class.name %>" data-id="<%= @diagnosis.id %>" data-version="<%= @diagnosis.version.id %>" data-algorithm="<%= @diagnosis.version.algorithm.id %>"></p>
     <%= react_component('diagram', {
-      context: {
+      context: { 
         user: current_user,
         instanceable: @diagnosis.diagnosis_json,
         instances: @diagnosis.questions_json + @diagnosis.final_diagnoses_json,
