@@ -89,6 +89,7 @@ fr:
         role_html: "medAL-<i>creator</i> access"
         roles_html: "medAL-<i>reader</i> accesses"
       version:
+        in_prod: "Is the version in production"
         languages: "Available languages for this version"
   activated: "Activate"
   add: "Add"

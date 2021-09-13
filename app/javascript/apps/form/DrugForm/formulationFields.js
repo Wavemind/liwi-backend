@@ -55,7 +55,8 @@ export default class FormulationFields extends React.Component {
           values,
         }
       },
-      index
+      index,
+      is_deployed
     } = this.props;
 
     let formulation = values.formulations_attributes[index];

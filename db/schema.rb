@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_09_151331) do
+ActiveRecord::Schema.define(version: 2021_09_13_094115) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -204,6 +204,7 @@ ActiveRecord::Schema.define(version: 2021_09_09_151331) do
     t.integer "position_y", default: 100
     t.hstore "duration_translations"
     t.hstore "description_translations"
+    t.boolean "is_pre_referral", default: false
     t.index ["final_diagnosis_id"], name: "index_instances_on_final_diagnosis_id"
     t.index ["instanceable_type", "instanceable_id"], name: "index_instances_on_instanceable_type_and_instanceable_id"
     t.index ["node_id"], name: "index_instances_on_node_id"
@@ -417,6 +418,7 @@ ActiveRecord::Schema.define(version: 2021_09_09_151331) do
     t.string "job_id", default: ""
     t.hstore "description_translations"
     t.json "full_order_json"
+    t.boolean "in_prod", default: false
     t.index ["algorithm_id"], name: "index_versions_on_algorithm_id"
     t.index ["first_top_right_question_id"], name: "index_versions_on_first_top_right_question_id"
     t.index ["second_top_right_question_id"], name: "index_versions_on_second_top_right_question_id"

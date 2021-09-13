@@ -101,7 +101,7 @@ export default class ManagementForm extends React.Component {
   };
 
   render() {
-    const { management } = this.props;
+    const { management, is_deployed } = this.props;
 
     return (
       <FadeIn>
@@ -159,6 +159,7 @@ export default class ManagementForm extends React.Component {
                   value={values.is_referral}
                   checked={values.is_referral}
                   onChange={handleChange}
+                  disabled={is_deployed}
                   isInvalid={touched.is_referral && !!errors.is_referral}
                 />
                 <Form.Control.Feedback type="invalid">
