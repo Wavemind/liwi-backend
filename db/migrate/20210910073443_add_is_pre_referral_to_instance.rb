@@ -1,5 +1,5 @@
 class AddIsPreReferralToInstance < ActiveRecord::Migration[6.0]
   def change
-    add_column :instances, :is_pre_referral, :boolean
+    add_column :instances, :is_pre_referral, :boolean, default: false
   end
 end
