@@ -180,7 +180,9 @@ class VersionsController < ApplicationController
           update_generic_translations(HealthCares::Management, Node.get_translatable_params(xl_file.sheet(6)), xl_file.sheet(6))
 
           redirect_to algorithm_version_url(@algorithm, @version, panel: 'translations'), notice: t('flash_message.import_successful')
-        rescue
+        rescue => e
+          puts e
+          puts e.backtrace
           redirect_to algorithm_version_url(@algorithm, @version, panel: 'translations'), alert: t('flash_message.import_xl_error')
           raise ActiveRecord::Rollback, ''
         end
