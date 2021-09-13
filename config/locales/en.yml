@@ -43,6 +43,7 @@ en:
       instance:
         duration: "Duration (days)"
         description: "Description"
+        is_pre_referral: "Is pre-referral"
       medal_data_config_variable:
         api_key: "API key"
         label: "Label"

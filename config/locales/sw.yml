@@ -41,6 +41,7 @@ sw:
       instance:
         duration: "Duration (days)"
         description: "Description"
+        is_pre_referral: "Is pre-referral"
       media:
         label_translations: "Label"
         url: "File"

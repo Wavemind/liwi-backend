@@ -299,7 +299,8 @@ class VersionsService
       instance = health_care.instances.find_by(instanceable_id: diagnosis_id, final_diagnosis_id: final_diagnosis_id)
       hash[health_care.id] = extract_conditions(instance.conditions)
       hash[health_care.id]['id'] = health_care.id
-      hash[health_care.id]['duration'] = instance.duration
+      hash[health_care.id]['is_pre_referral'] = instance.is_pre_referral
+      hash[health_care.id]['duration'] = return_hstore_translated(instance.duration_translations)
       # Get instance description for drugs and node descriptions for management
       hash[health_care.id]['description'] = instance.node.is_a?(HealthCares::Drug) ? return_hstore_translated(instance.description_translations) : return_hstore_translated(instance.node.description_translations)
 

@@ -67,6 +67,7 @@ export default class InstanceForm extends React.Component {
         <Formik
           validationSchema={drugInstanceSchema}
           initialValues={{
+            is_pre_referral: diagramObject.options.dbInstance?.is_pre_referral || false,
             duration_en: method === "create" ? "" : diagramObject.options.dbInstance.duration_translations?.en || "",
             description_en: method === "create" ? drug?.description_translations?.en : diagramObject.options.dbInstance.description_translations?.en || ""
           }}
@@ -83,12 +84,28 @@ export default class InstanceForm extends React.Component {
             }) => (
             <Form noValidate onSubmit={handleSubmit}>
               {status ? <DisplayErrors errors={status}/> : null}
+
+              <Form.Group controlId="validationIsPreReferral">
+                <Form.Check
+                  name="is_pre_referral"
+                  label={I18n.t("activerecord.attributes.instance.is_pre_referral")}
+                  value={values.is_pre_referral}
+                  checked={values.is_pre_referral}
+                  onChange={handleChange}
+                  isInvalid={touched.is_pre_referral && !!errors.is_pre_referral}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.is_pre_referral}
+                </Form.Control.Feedback>
+              </Form.Group>
+
               <Form.Group controlId="validationDuration">
                 <Form.Label>{I18n.t("activerecord.attributes.instance.duration")}</Form.Label>
                 <Form.Control
                   name="duration_en"
                   value={values.duration_en}
                   onChange={handleChange}
+                  disabled={values.is_pre_referral}
                   isInvalid={touched.duration_en && !!errors.duration_en}
                 />
                 <Form.Control.Feedback type="invalid">
