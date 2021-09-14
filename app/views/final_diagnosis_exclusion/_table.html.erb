@@ -12,7 +12,7 @@
       <%= f.input :excluded_node_id, collection: FinalDiagnosis.where(diagnosis_id: @version.diagnoses.map(&:id)).order('hstore("label_translations")'), value_method: :id, label_method: :reference_label_dropdown_list, label: false, prompt: t('prompt') %>
     </div>
     <div class="col text-right">
-      <%= f.submit t('add'), class: 'btn btn-primary' %>
+      <%= f.submit t('add'), class: "btn btn-primary", disabled: @version.in_prod %>
     </div>
   </div>
 <% end %>

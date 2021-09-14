@@ -169,10 +169,11 @@ export class Diagram extends React.Component {
 
   render() {
     const { readOnly } = this.props;
-    const { engine } = this.state;
+    const { engine, model } = this.state;
 
-    let diagramStyle = readOnly ? "col diagram-wrapper-white" : "col diagram-wrapper";
-    let canvasStyle = readOnly ? "canvas srd-canvas-read-only" : "canvas srd-canvas";
+    if (readOnly) {
+      model.setLocked(true)
+    }
 
     return (
       <div className="content">
@@ -180,13 +181,13 @@ export class Diagram extends React.Component {
           <Toolbar engine={engine} />
           <AvailableNodes />
           <NotificationContainer />
-          <div className={diagramStyle}
+          <div className="col diagram-wrapper"
             onDrop={event => this.onDropAction(event)}
             onDragOver={event => {
               event.preventDefault();
             }}>
             <AdvancedCanvasWidget
-              className={canvasStyle}
+              className="canvas srd-canvas"
               engine={engine}
               allowCanvasZoom={true}
               readOnly={readOnly}
