@@ -27,19 +27,19 @@ class Api::V1::DevicesController < ApplicationController
     else
       render json: {errors: t('.no_device')}, status: :unprocessable_entity
     end
+  end
 
-    private
+  private
 
-    def device_params
-      params.require(:device).permit(
-        :id,
-        :mac_address,
-        :name,
-        :model,
-        :brand,
-        :os,
-        :os_version,
-      )
-    end
+  def device_params
+    params.require(:device).permit(
+      :id,
+      :mac_address,
+      :name,
+      :model,
+      :brand,
+      :os,
+      :os_version,
+    )
   end
 end
