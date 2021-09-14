@@ -171,9 +171,10 @@ export class Diagram extends React.Component {
     const { readOnly } = this.props;
     const { engine, model } = this.state;
 
-    if (readOnly) {
-      model.setLocked(true)
-    }
+    // TODO reactivate when cutoffs are updated
+    // if (readOnly) {
+    //   model.setLocked(true)
+    // }
 
     return (
       <div className="content">
