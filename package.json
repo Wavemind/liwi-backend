@@ -29,7 +29,7 @@
     "html-react-parser": "^1.1.1",
     "humanize-string": "^2.1.0",
     "i18n-js": "^3.5.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "material-ui": "^0.20.2",
     "ml-matrix": "^6.5.0",
     "prop-types": "^15.7.2",
