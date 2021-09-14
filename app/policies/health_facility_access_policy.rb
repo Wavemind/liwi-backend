@@ -14,6 +14,6 @@ class HealthFacilityAccessPolicy < ApplicationPolicy
   end
 
   def create?
-    has_study_access? && index?
+    index?
   end
 end
