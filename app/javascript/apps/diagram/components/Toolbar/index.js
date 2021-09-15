@@ -194,10 +194,8 @@ class Toolbar extends React.Component {
           ) : null}
 
           <div className="col mt-2 btn-transparent">
-            {I18n.t("toolbar.cut_off", {
-              start: instanceable.cut_off_start === undefined ? '' : readableDate(instanceable.cut_off_start),
-              end: instanceable.cut_off_end === undefined ? '' : readableDate(instanceable.cut_off_end)
-            })}
+            {instanceable.cut_off_start === null ? '' : I18n.t("toolbar.cut_off_start", {start: readableDate(instanceable.cut_off_start)})}
+            {instanceable.cut_off_end === null ? '' : I18n.t("toolbar.cut_off_end", {end: readableDate(instanceable.cut_off_end)})}
           </div>
 
           <div className="col text-right">

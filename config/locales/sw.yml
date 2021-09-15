@@ -231,6 +231,11 @@ sw:
       link_already_exist: "Link already exists"
       link_answer_to_answer: "You can't link an answer to another answer"
   confirmation: "Are you sure ?"
+  date:
+    days: "%{value} day(s)"
+    weeks: "%{value} week(s)"
+    months: "%{value} month(s)"
+    years: "%{value} year(s)"
   deactivated: "Deactivate"
   delete: "Delete"
   destroy: "Remove"
@@ -767,6 +772,8 @@ sw:
     validate: "Validate"
     diagnosis_diagram: "Diagnosis diagram"
     save: "Save"
+    cut_off_start: "From ≥ %{start} "
+    cut_off_end: "To < %{end}"
   unarchive: "Unarchive"
   users:
     new:

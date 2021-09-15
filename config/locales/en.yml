@@ -249,10 +249,10 @@ en:
   confirmation: "Are you sure ?"
   days: "Days"
   date:
-    days: "%{value} days"
-    weeks: "%{value} weeks"
-    months: "%{value} months"
-    years: "%{value} years"
+    days: "%{value} day(s)"
+    weeks: "%{value} week(s)"
+    months: "%{value} month(s)"
+    years: "%{value} year(s)"
   deactivated: "Deactivate"
   delete: "Delete"
   destroy: "Remove"
@@ -811,7 +811,8 @@ en:
     validate: "Validate"
     diagnosis_diagram: "Diagnosis diagram"
     save: "Save"
-    cut_off: "from %{start} to %{end}"
+    cut_off_start: "From ≥ %{start} "
+    cut_off_end: "To < %{end}"
   unarchive: "Unarchive"
   users:
     new:
