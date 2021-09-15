@@ -1,7 +1,5 @@
-process.env.NODE_ENV = process.env.NODE_ENV || "development";
+process.env.NODE_ENV = process.env.NODE_ENV || 'development'
 
-const merge = require("webpack-merge");
-const environment = require("./environment");
-const customDevConfig = require("./custom-development");
+const environment = require('./environment')
 
-module.exports = merge(environment.toWebpackConfig(), customDevConfig);
+module.exports = environment.toWebpackConfig()
