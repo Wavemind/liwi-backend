@@ -11,7 +11,7 @@
   <%= f.input :is_arm_control, as: :boolean, label: t('versions.edit.is_arm_control_label') %>
 
   <% if current_user.admin? %>
-    <%= f.input :in_prod, as: :boolean, label: t('activerecord.attributes.version.in_prod') %>
+    <%= f.input :in_prod, as: :boolean %>
   <% end %>
 
   <%= f.association :languages, collection: Language.all, label_method: :name, as: :check_boxes, label: t("activerecord.attributes.version.languages") %>

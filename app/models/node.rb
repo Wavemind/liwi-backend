@@ -138,7 +138,5 @@ class Node < ApplicationRecord
     end
 
     Version.find(involved_versions_ids).map(&:in_prod).include?(true)
-    # Return false during tests in order to make them run easily
-    # false
   end
 end

@@ -2,6 +2,8 @@
 
   <%= f.input :label_en %>
   <%= f.association :node, collection: @algorithm.questions.where(type: 'Questions::ComplaintCategory'), label_method: :reference_label, prompt: t('select'), disabled: @version.in_prod %>
+
+<!--  TODO disable cut_offs when the migration is over-->
   <%= f.input :cut_off_start %>
   <%= f.input :cut_off_end %>
   <%= f.input :cut_off_value_type, collection: %w(months days), selected: @diagnosis.id.present? ? 'days' : 'months', input_html: {value: @diagnosis.id.present? ? 'days' : 'months'}, include_blank: false %>
