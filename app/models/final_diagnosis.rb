@@ -25,7 +25,7 @@ class FinalDiagnosis < Node
   def available_nodes_health_cares_json
     ids = components.select(:node_id)
     (
-    diagnosis.version.algorithm.questions.no_triage.diagrams_included.includes([:answers, :medias]).where.not(id: ids) +
+    diagnosis.version.algorithm.questions.diagrams_included.includes([:answers, :medias]).where.not(id: ids) +
       diagnosis.version.algorithm.questions_sequences.includes([:answers]).where.not(id: ids) +
       diagnosis.version.algorithm.health_cares.where.not(id: ids)
     ).as_json(methods: [:category_name, :node_type, :get_answers, :type], include: :medias)

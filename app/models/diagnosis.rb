@@ -55,7 +55,7 @@ class Diagnosis < ApplicationRecord
     # Exclude the questions that are already used in the diagnosis diagram (it still takes the questions used in the final diagnosis diagram, since it can be used in both diagram)
     excluded_ids += components.not_health_care_conditions.map(&:node_id)
     (
-    version.algorithm.questions.no_triage.no_treatment_condition.diagrams_included.where.not(id: excluded_ids).includes(:answers) +
+    version.algorithm.questions.no_treatment_condition.diagrams_included.where.not(id: excluded_ids).includes(:answers) +
       version.algorithm.questions_sequences.where.not(id: excluded_ids).includes([:answers]) +
       final_diagnoses.where.not(id: components.select(:node_id))
     ).as_json(methods: [:category_name, :node_type, :get_answers, :type])
