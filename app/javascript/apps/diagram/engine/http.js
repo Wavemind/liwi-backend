@@ -219,6 +219,7 @@ export default class Http {
     nodeId,
     x,
     y,
+    is_pre_referral,
     duration_en = "",
     description_en = ""
   ) => {
@@ -231,6 +232,7 @@ export default class Http {
         instanceable_id: this.instanceableId,
         instanceable_type: this.instanceableType,
         final_diagnosis_id: this.finalDiagnosis,
+        is_pre_referral,
         duration_en,
         description_en
       }
@@ -603,6 +605,7 @@ export default class Http {
     id,
     positionX,
     positionY,
+    is_pre_referral,
     duration_en = "",
     description_en = ""
   ) => {
@@ -611,6 +614,7 @@ export default class Http {
       instance: {
         position_x: positionX,
         position_y: positionY,
+        is_pre_referral,
         duration_en,
         description_en
       }
