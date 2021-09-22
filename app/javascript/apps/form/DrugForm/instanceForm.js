@@ -67,7 +67,7 @@ export default class InstanceForm extends React.Component {
         <Formik
           validationSchema={drugInstanceSchema}
           initialValues={{
-            is_pre_referral: diagramObject.options.dbInstance?.is_pre_referral || false,
+            is_pre_referral: method === "create" ? "" : diagramObject.options.dbInstance?.is_pre_referral || false,
             duration_en: method === "create" ? "" : diagramObject.options.dbInstance.duration_translations?.en || "",
             description_en: method === "create" ? drug?.description_translations?.en : diagramObject.options.dbInstance.description_translations?.en || ""
           }}
