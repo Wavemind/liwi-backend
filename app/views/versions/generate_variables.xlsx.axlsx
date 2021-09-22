@@ -29,11 +29,11 @@ wb.add_worksheet(name: "Diagnoses") do |sheet|
 
     diag.components.map do |instance|
       if instance.node.is_a? FinalDiagnosis
-        # final_diagnoses.push(instance.node)
+        final_diagnoses.push(instance.node)
       elsif instance.node.is_a? HealthCares::Drug
         drugs.push(instance.node)
       elsif instance.node.is_a? HealthCares::Management
-        # managements.push(instance.node)
+        managements.push(instance.node)
       end
     end
   end
