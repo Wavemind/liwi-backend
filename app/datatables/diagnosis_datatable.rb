@@ -27,8 +27,8 @@ class DiagnosisDatatable < AjaxDatatablesRails::ActiveRecord
       actions = link_to(I18n.t('open_diagram'), diagram_algorithm_version_diagnosis_url(params[:algorithm_id], params[:version_id], record), class: 'btn btn-outline-dark') + " " +
         link_to(I18n.t('show'), algorithm_version_diagnosis_url(params[:algorithm_id], params[:version_id], record), class: 'btn btn-outline-info') + " " +
         link_to(I18n.t('edit'), edit_algorithm_version_diagnosis_url(params[:algorithm_id], params[:version_id], record), class: 'btn btn-outline-success') + " " +
-        link_to(I18n.t('duplicate'), duplicate_algorithm_version_diagnosis_url(params[:algorithm_id], params[:version_id], record), class: 'btn btn-outline-warning', method: :post) + " " +
-        link_to(I18n.t('delete'), algorithm_version_diagnosis_url(params[:algorithm_id], params[:version_id], record), class: 'btn btn-outline-danger', method: :delete, data: { confirm: I18n.t('confirmation') })
+        link_to(I18n.t('duplicate'), duplicate_algorithm_version_diagnosis_url(params[:algorithm_id], params[:version_id], record), class: "btn btn-outline-warning #{@version.in_prod ? 'disabled' : ''}", method: :post) + " " +
+        link_to(I18n.t('delete'), algorithm_version_diagnosis_url(params[:algorithm_id], params[:version_id], record), class: "btn btn-outline-danger #{@version.in_prod ? 'disabled' : ''}", method: :delete, data: { confirm: I18n.t('confirmation') })
       {
         reference: record.full_reference,
         label: record.label,
@@ -40,6 +40,7 @@ class DiagnosisDatatable < AjaxDatatablesRails::ActiveRecord
   end
 
   def get_raw_records
-    Version.find(params[:version_id]).diagnoses.includes(:node).joins(:node)
+    @version = Version.find(params[:version_id])
+    @version.diagnoses.includes(:node).joins(:node)
   end
 end

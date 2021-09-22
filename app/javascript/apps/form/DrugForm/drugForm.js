@@ -29,7 +29,7 @@ export default class DrugForm extends React.Component {
   };
 
   render() {
-    const { formData, setFormData, nextStep } = this.props;
+    const { formData, setFormData, nextStep, is_deployed } = this.props;
 
     return (
       <FadeIn>
@@ -97,6 +97,7 @@ export default class DrugForm extends React.Component {
                   value={values.is_neonat}
                   checked={values.is_neonat}
                   onChange={handleChange}
+                  disabled={is_deployed}
                   isInvalid={touched.is_neonat && !!errors.is_neonat}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -113,6 +114,7 @@ export default class DrugForm extends React.Component {
                   value={values.is_anti_malarial}
                   checked={values.is_anti_malarial}
                   onChange={handleChange}
+                  disabled={is_deployed}
                   isInvalid={
                     touched.is_anti_malarial && !!errors.is_anti_malarial
                   }
@@ -129,6 +131,7 @@ export default class DrugForm extends React.Component {
                   value={values.is_antibiotic}
                   checked={values.is_antibiotic}
                   onChange={handleChange}
+                  disabled={is_deployed}
                   isInvalid={touched.is_antibiotic && !!errors.is_antibiotic}
                 />
                 <Form.Control.Feedback type="invalid">

@@ -124,7 +124,7 @@ export default class FormulationForm extends React.Component {
   };
 
   render() {
-    const { formData, previousStep } = this.props;
+    const { formData, previousStep, is_deployed } = this.props;
     const {
       selectedMedicationForm,
       medicationForms,
@@ -174,6 +174,7 @@ export default class FormulationForm extends React.Component {
                                       className="float-right"
                                       type="button"
                                       variant="danger"
+                                      disabled={is_deployed}
                                       onClick={() => this.removeFormulation(key, arrayHelpers, values)}>{I18n.t("remove")}</Button>
                                   </Col>
                                 </Form.Row>
@@ -191,6 +192,7 @@ export default class FormulationForm extends React.Component {
                                   administrationRoutes={administrationRoutes}
                                   arrayHelpers={arrayHelpers}
                                   index={key}
+                                  is_deployed={is_deployed}
                                 />
                               </div>
                             </div>

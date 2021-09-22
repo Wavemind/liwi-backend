@@ -55,7 +55,8 @@ export default class FormulationFields extends React.Component {
           values,
         }
       },
-      index
+      index,
+      is_deployed
     } = this.props;
 
     let formulation = values.formulations_attributes[index];
@@ -94,6 +95,7 @@ export default class FormulationFields extends React.Component {
               name={`formulations_attributes.${index}.administration_route_id`}
               value={formulation.administration_route_id}
               onChange={handleChange}
+              disabled={is_deployed}
               isInvalid={this.isInvalid("administration_route_id")}
             >
               <option value="">{I18n.t("select")}</option>
@@ -127,6 +129,7 @@ export default class FormulationFields extends React.Component {
               name={`formulations_attributes.${index}.doses_per_day`}
               value={formulation.doses_per_day}
               onChange={handleChange}
+              disabled={is_deployed}
               isInvalid={this.isInvalid("doses_per_day")}
             />
             <Form.Control.Feedback type="invalid">
@@ -143,6 +146,7 @@ export default class FormulationFields extends React.Component {
               name={`formulations_attributes.${index}.by_age`}
               value={formulation.by_age}
               onChange={handleChange}
+              disabled={is_deployed}
               isInvalid={this.isInvalid("by_age")}
             />
             <Form.Control.Feedback type="invalid">
@@ -163,6 +167,7 @@ export default class FormulationFields extends React.Component {
                 name={`formulations_attributes.${index}.breakable`}
                 onChange={handleChange}
                 value={formulation.breakable}
+                disabled={is_deployed}
                 isInvalid={this.isInvalid("breakable")}
               >
                 <option value="">{I18n.t("select")}</option>
@@ -184,6 +189,7 @@ export default class FormulationFields extends React.Component {
                 name={`formulations_attributes.${index}.unique_dose`}
                 value={formulation.unique_dose}
                 onChange={handleChange}
+                disabled={is_deployed}
                 isInvalid={this.isInvalid("unique_dose")}
               />
               <Form.Control.Feedback type="invalid">
@@ -200,6 +206,7 @@ export default class FormulationFields extends React.Component {
                 name={`formulations_attributes.${index}.liquid_concentration`}
                 value={formulation.liquid_concentration}
                 onChange={handleChange}
+                disabled={is_deployed}
                 isInvalid={this.isInvalid("liquid_concentration")}
               />
               <Form.Control.Feedback type="invalid">
@@ -220,6 +227,7 @@ export default class FormulationFields extends React.Component {
                   name={`formulations_attributes.${index}.dose_form`}
                   value={formulation.dose_form}
                   onChange={handleChange}
+                  disabled={is_deployed}
                   isInvalid={this.isInvalid("dose_form")}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -234,6 +242,7 @@ export default class FormulationFields extends React.Component {
                   name={`formulations_attributes.${index}.maximal_dose`}
                   value={formulation.maximal_dose}
                   onChange={handleChange}
+                  disabled={is_deployed}
                   isInvalid={this.isInvalid("maximal_dose")}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -250,6 +259,7 @@ export default class FormulationFields extends React.Component {
                   name={`formulations_attributes.${index}.minimal_dose_per_kg`}
                   value={formulation.minimal_dose_per_kg}
                   onChange={handleChange}
+                  disabled={is_deployed}
                   isInvalid={this.isInvalid("minimal_dose_per_kg")}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -264,6 +274,7 @@ export default class FormulationFields extends React.Component {
                   name={`formulations_attributes.${index}.maximal_dose_per_kg`}
                   value={formulation.maximal_dose_per_kg}
                   onChange={handleChange}
+                  disabled={is_deployed}
                   isInvalid={this.isInvalid("maximal_dose_per_kg")}
                 />
                 <Form.Control.Feedback type="invalid">

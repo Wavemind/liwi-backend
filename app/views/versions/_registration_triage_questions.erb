@@ -3,5 +3,5 @@
                     {
                       selected: @version.components.map(&:node_id),
                       questions: @version.instanceable_questions,
-                      disabled: @version.is_deployed?
+                      disabled: @version.in_prod
                     }) %>
