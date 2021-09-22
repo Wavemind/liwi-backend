@@ -49,7 +49,6 @@ class Question < Node
   validates_presence_of :formula, if: Proc.new { self.answer_type.display == 'Formula' }
   validates_presence_of :type
 
-  # Return questions which has not triage stage
   scope :no_treatment_condition, ->() { where.not(type: 'Questions::TreatmentQuestion') }
   scope :diagrams_included, ->() { where.not(type: %w(Questions::VitalSignAnthropometric Questions::BasicMeasurement Questions::BasicDemographic Questions::ConsultationRelated Questions::Referral)) }
 
