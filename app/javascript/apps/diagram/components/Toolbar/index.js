@@ -6,10 +6,9 @@ import { openModal } from "../../engine/reducers/creators.actions";
 import { NotificationManager } from "react-notifications";
 import ReactHtmlParser from "react-html-parser";
 import * as _ from "lodash";
-
+import readableDate from "../../helpers/readableDate";
 
 class Toolbar extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -57,7 +56,10 @@ class Toolbar extends React.Component {
     if (instanceable.type === "Diagnosis") {
       http.redirectToDiagnosis();
     } else {
-      let panel = instanceable.category_name === "scored" ? "questions_sequences_scored" : "questions_sequences";
+      let panel =
+        instanceable.category_name === "scored"
+          ? "questions_sequences_scored"
+          : "questions_sequences";
       http.redirectToAlgorithm(panel);
     }
   }
@@ -81,13 +83,13 @@ class Toolbar extends React.Component {
     if (httpRequest.status === 200) {
       NotificationManager.info(result);
     } else if (httpRequest.status === 202) {
-      result.map(error => (
+      result.map(error =>
         NotificationManager.warning(ReactHtmlParser(error), "", 10000)
-      ));
+      );
     } else {
-      result.map(error => (
+      result.map(error =>
         NotificationManager.error(ReactHtmlParser(error), "", 10000)
-      ));
+      );
     }
 
     this.setState({ isLoading: false });
@@ -102,24 +104,86 @@ class Toolbar extends React.Component {
         <div className="row">
           <div className="col-6">
             <div className="btn-group">
-              <button key="new" type="button" className="btn btn-transparent" data-toggle="dropdown"
-                      aria-haspopup="true" aria-expanded="false" disabled={readOnly}>
+              <button
+                key="new"
+                type="button"
+                className="btn btn-transparent"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                disabled={readOnly}
+              >
                 {I18n.t("toolbar.new")}
               </button>
               <div className="dropdown-menu">
-                <a className="dropdown-item" key="questions" href="#"
-                   onClick={() => this.createNode(I18n.t("questions.new.title"), "QuestionForm")}>{I18n.t("toolbar.question")}</a>
-                <a className="dropdown-item" key="questionsSequence" href="#"
-                   onClick={() => this.createNode(I18n.t("questions_sequences.new.title"), "QuestionsSequenceForm")}>{I18n.t("toolbar.questions_sequence")}</a>
+                <a
+                  className="dropdown-item"
+                  key="questions"
+                  href="#"
+                  onClick={() =>
+                    this.createNode(
+                      I18n.t("questions.new.title"),
+                      "QuestionForm"
+                    )
+                  }
+                >
+                  {I18n.t("toolbar.question")}
+                </a>
+                <a
+                  className="dropdown-item"
+                  key="questionsSequence"
+                  href="#"
+                  onClick={() =>
+                    this.createNode(
+                      I18n.t("questions_sequences.new.title"),
+                      "QuestionsSequenceForm"
+                    )
+                  }
+                >
+                  {I18n.t("toolbar.questions_sequence")}
+                </a>
                 {instanceable.type === "Diagnosis" ? (
-                  <a className="dropdown-item" key="finalDiagnosis" href="#"
-                     onClick={() => this.createNode(I18n.t("final_diagnoses.new.title"), "FinalDiagnosisForm")}>{I18n.t("toolbar.final_diagnosis")}</a>) : null}
-                {instanceable.type === "FinalDiagnosis" ? ([
-                  <a className="dropdown-item" key="drug" href="#"
-                     onClick={() => this.createNode(I18n.t("drugs.new.title"), "DrugForm")}>{I18n.t("toolbar.drug")}</a>,
-                  <a className="dropdown-item" key="management" href="#"
-                     onClick={() => this.createNode(I18n.t("managements.new.title"), "ManagementForm")}>{I18n.t("toolbar.management")}</a>])
-                : null}
+                  <a
+                    className="dropdown-item"
+                    key="finalDiagnosis"
+                    href="#"
+                    onClick={() =>
+                      this.createNode(
+                        I18n.t("final_diagnoses.new.title"),
+                        "FinalDiagnosisForm"
+                      )
+                    }
+                  >
+                    {I18n.t("toolbar.final_diagnosis")}
+                  </a>
+                ) : null}
+                {instanceable.type === "FinalDiagnosis"
+                  ? [
+                      <a
+                        className="dropdown-item"
+                        key="drug"
+                        href="#"
+                        onClick={() =>
+                          this.createNode(I18n.t("drugs.new.title"), "DrugForm")
+                        }
+                      >
+                        {I18n.t("toolbar.drug")}
+                      </a>,
+                      <a
+                        className="dropdown-item"
+                        key="management"
+                        href="#"
+                        onClick={() =>
+                          this.createNode(
+                            I18n.t("managements.new.title"),
+                            "ManagementForm"
+                          )
+                        }
+                      >
+                        {I18n.t("toolbar.management")}
+                      </a>
+                    ]
+                  : null}
               </div>
             </div>
           </div>
@@ -130,23 +194,43 @@ class Toolbar extends React.Component {
           ) : null}
 
           <div className="col mt-2 btn-transparent">
-            {instanceable.cut_offs}
+            {instanceable.cut_off_start === null ? '' : I18n.t("toolbar.cut_off_start", {start: readableDate(instanceable.cut_off_start)})}
+            {instanceable.cut_off_end === null ? '' : I18n.t("toolbar.cut_off_end", {end: readableDate(instanceable.cut_off_end)})}
           </div>
 
           <div className="col text-right">
-            {instanceable.type === "Diagnosis" || instanceable.type === "QuestionsSequence" ? (
-              <button key="validate" type="button" className="btn btn-transparent" disabled={isLoading || readOnly}
-                      onClick={() => this.validate()}>
-                <span>{isLoading ? "Loading" : I18n.t("toolbar.validate")}</span>
+            {instanceable.type === "Diagnosis" ||
+            instanceable.type === "QuestionsSequence" ? (
+              <button
+                key="validate"
+                type="button"
+                className="btn btn-transparent"
+                disabled={isLoading || readOnly}
+                onClick={() => this.validate()}
+              >
+                <span>
+                  {isLoading ? "Loading" : I18n.t("toolbar.validate")}
+                </span>
               </button>
             ) : null}
             {instanceable.type === "FinalDiagnosis" ? (
-              <button key="diagnosisDiagram" type="button" className="btn btn-transparent"
-                      onClick={() => this.redirectToDiagnosisDiagram()} disabled={readOnly}>
+              <button
+                key="diagnosisDiagram"
+                type="button"
+                className="btn btn-transparent"
+                onClick={() => this.redirectToDiagnosisDiagram()}
+                disabled={readOnly}
+              >
                 {I18n.t("toolbar.diagnosis_diagram")}
               </button>
             ) : (
-              <button key="save" type="button" className="btn btn-transparent" onClick={() => this.save()} disabled={readOnly}>
+              <button
+                key="save"
+                type="button"
+                className="btn btn-transparent"
+                onClick={() => this.save()}
+                disabled={readOnly}
+              >
                 {I18n.t("toolbar.save")}
               </button>
             )}

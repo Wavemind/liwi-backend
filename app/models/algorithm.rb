@@ -17,6 +17,7 @@ class Algorithm < ApplicationRecord
   validates :minimum_age, numericality: { greater_than_or_equal_to: 0 }
 
   after_create :create_reference_table_questions
+  before_update :set_emergency_content_version
 
   translates :age_limit_message, :emergency_content
 
@@ -35,6 +36,7 @@ class Algorithm < ApplicationRecord
     cc_general = questions.create!(label_en: 'General', type: 'Questions::ComplaintCategory', stage: Question.stages[:triage], is_mandatory: true, answer_type_id: 1, is_default: true)
     yi_cc_general = questions.create!(label_en: 'General / Universal Assessment', type: 'Questions::ComplaintCategory', stage: Question.stages[:triage], is_mandatory: true, answer_type_id: 1, is_default: true, is_neonat: true)
     village = questions.create!(label_en: 'Village', type: 'Questions::BasicDemographic', stage: Question.stages[:registration], answer_type_id: 9, is_mandatory: true, is_identifiable: true, is_default: true)
+    kind_of_consultation = questions.create!(label_en: 'What kind of consultation is this?', type: 'Questions::Demographic', stage: Question.stages[:registration], answer_type_id: 2, is_mandatory: true, is_default: true)
 
     # Configure basic questions into the algorithm to be used in json generation
     self.update(medal_r_config: {
@@ -45,13 +47,29 @@ class Algorithm < ApplicationRecord
         yi_general_cc_id: yi_cc_general.id,
       },
       optional_basic_questions: {
-        village_question_id: village.id
+        village_question_id: village.id,
+        kind_of_consultation_id: kind_of_consultation.id,
       }
     })
+
+    def upp(a_id, n_id)
+      Node.find(n_id).update(is_default: true);
+      al = Algorithm.find(a_id);
+      config = al.medal_r_config;
+      config['optional_basic_questions']['kind_of_consultation_id'] = n_id;
+      al.update(medal_r_config: config)
+    end
 
     gender.answers.create([
       {label_en: 'Male', value: 'male'},
       {label_en: 'Female', value: 'female'}
+    ])
+
+    kind_of_consultation.answers.create([
+      {label_en: 'New (self-referral)'},
+      {label_en: 'New (referral from another facility)'},
+      {label_en: 'Scheduled follow-up'},
+      {label_en: 'Unscheduled follow-up'}
     ])
 
     age = questions.create!(label_en: 'Age in months', type: 'Questions::BackgroundCalculation', is_mandatory: true, answer_type_id: 5, formula: 'ToMonth', is_default: true)
@@ -118,5 +136,12 @@ class Algorithm < ApplicationRecord
 
   def display_archive_status
     archived ? '<span class="badge badge-danger">archived</span>' : ''
+  end
+
+  # Update emergency content version if the emergency content is updated
+  def set_emergency_content_version
+    if changes['emergency_content_translations'].present?
+      self.emergency_content_version += 1
+    end
   end
 end

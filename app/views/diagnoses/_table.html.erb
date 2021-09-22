@@ -1,6 +1,6 @@
 <h2><%= t('versions.show.subtitle_diagnoses') %></h2>
 <%= link_to new_algorithm_version_diagnosis_url(@algorithm, @version) do %>
-  <button type="button" class="btn btn-outline-primary"><%= t('add') %></button>
+  <button type="button" class="btn btn-outline-primary" <%= @version.in_prod ? 'disabled' : '' %>><%= t('add') %></button>
 <% end %>
 
 <table class="table table-condensed table-hover" id="diagnoses-datatable" data-source="<%= algorithm_version_diagnoses_url(@algorithm, @version, format: :json) %>">

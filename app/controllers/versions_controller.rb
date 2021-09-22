@@ -180,7 +180,9 @@ class VersionsController < ApplicationController
           update_generic_translations(HealthCares::Management, Node.get_translatable_params(xl_file.sheet(6)), xl_file.sheet(6))
 
           redirect_to algorithm_version_url(@algorithm, @version, panel: 'translations'), notice: t('flash_message.import_successful')
-        rescue
+        rescue => e
+          puts e
+          puts e.backtrace
           redirect_to algorithm_version_url(@algorithm, @version, panel: 'translations'), alert: t('flash_message.import_xl_error')
           raise ActiveRecord::Rollback, ''
         end
@@ -317,17 +319,6 @@ class VersionsController < ApplicationController
     end
   end
 
-  # PUT algorithms/:algorithm_id/version/:id/update_list
-  # @params version [Version]
-  # @params new order [Hash]
-  # @params list type [String]
-  # Update patient_list_order or medical_case_list_order
-  def update_list
-    config = @version.medal_r_config
-    config["#{params[:list]}_list_order"] = params[:order]
-    @version.update(medal_r_config: config)
-  end
-
   private
 
   # Generic method to update translations for a given model with a given ID from excel sheet
@@ -398,6 +389,7 @@ class VersionsController < ApplicationController
       :first_top_right_question_id,
       :second_top_right_question_id,
       :is_arm_control,
+      :in_prod,
       :nodes_ids,
       :full_order_json,
       medal_data_config_variables_attributes: [

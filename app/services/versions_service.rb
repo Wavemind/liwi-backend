@@ -124,7 +124,6 @@ class VersionsService
     hash['version_id'] = @version.id
     hash['version_name'] = @version.name
     hash['version_languages'] = @available_languages
-    hash['emergency_content'] = @version.algorithm.emergency_content
     hash['json_version'] = @version.medal_r_json_version
     hash['description'] = return_hstore_translated(@version.description_translations)
     hash['algorithm_id'] = @version.algorithm.id
@@ -137,14 +136,13 @@ class VersionsService
       description: @version.algorithm.study.present? ? return_hstore_translated(@version.algorithm.study.description_translations) : nil
     }
 
-    hash['mobile_config'] = extract_mobile_config
     hash['config'] = @version.algorithm.medal_r_config
 
-    translated_systems_order = {}
-    @version.medal_r_config['systems_order'].map do |system|
-      translated_systems_order[system] = return_intern_label_translated("questions.systems.#{system}")
+    translated_systems = {}
+    Question.systems.map(&:first).map do |system|
+      translated_systems[system] = return_intern_label_translated("questions.systems.#{system}")
     end
-    hash['config']['systems_translations'] = translated_systems_order
+    hash['config']['systems_translations'] = translated_systems
     hash['config']['age_limit'] = @version.algorithm.age_limit
     hash['config']['age_limit_message'] = return_hstore_translated(@version.algorithm.age_limit_message_translations)
     hash['config']['minimum_age'] = @version.algorithm.minimum_age
@@ -182,16 +180,6 @@ class VersionsService
         hash[step_name] = full_order.select{|i| i['title'] == I18n.t("questions.steps.#{step_name}")}[0]['children'].map{|node| node['id'] if available_ids.include?(node['id'])}.compact
       end
     end
-    hash
-  end
-
-  # @return hash
-  # Build a hash of medAL-reader config for the version
-  def self.extract_mobile_config
-    hash = {}
-
-    hash['questions_orders'] = @version.medal_r_config['questions_orders']
-    hash['systems_order'] = @version.medal_r_config['systems_order']
     hash
   end
 
@@ -311,7 +299,8 @@ class VersionsService
       instance = health_care.instances.find_by(instanceable_id: diagnosis_id, final_diagnosis_id: final_diagnosis_id)
       hash[health_care.id] = extract_conditions(instance.conditions)
       hash[health_care.id]['id'] = health_care.id
-      hash[health_care.id]['duration'] = instance.duration
+      hash[health_care.id]['is_pre_referral'] = instance.is_pre_referral
+      hash[health_care.id]['duration'] = return_hstore_translated(instance.duration_translations)
       # Get instance description for drugs and node descriptions for management
       hash[health_care.id]['description'] = instance.node.is_a?(HealthCares::Drug) ? return_hstore_translated(instance.description_translations) : return_hstore_translated(instance.node.description_translations)
 
@@ -353,10 +342,18 @@ class VersionsService
       hash[question.id]['label'] = return_hstore_translated(question.label_translations)
       hash[question.id]['description'] = return_hstore_translated(question.description_translations)
       hash[question.id]['is_mandatory'] = (@version.is_arm_control && !%w(Questions::BasicDemographic Questions::Demographic Questions::Referral).include?(question.type)) ? false : question.is_mandatory
-      hash[question.id]['emergency_status'] = question.emergency_status
       hash[question.id]['is_neonat'] = question.is_neonat
       hash[question.id]['system'] = question.system unless question.system.nil?
       hash[question.id] = format_formula(hash[question.id], question)
+
+      # Emergency status logic
+      if question.emergency_status && question.emergency_status.include?('emergency')
+        hash[question.id]['emergency_status'] = 'emergency'
+        reference = question.emergency_status == 'emergency' ? 1 : 2
+        hash[question.id]['emergency_answer_id'] = question.answers.find_by(reference: reference).id
+      else
+        hash[question.id]['emergency_status'] = question.emergency_status
+      end
 
       hash[question.id]['category'] = question.category_name
       hash[question.id]['round'] = I18n.t("questions.rounds.#{question.round}.value").to_f unless question.round.nil?
@@ -562,6 +559,7 @@ class VersionsService
       hash[health_care.id]['is_antibiotic'] = health_care.is_antibiotic
       hash[health_care.id]['label'] = return_hstore_translated(health_care.label_translations)
       hash[health_care.id]['description'] = return_hstore_translated(health_care.description_translations)
+      hash[health_care.id]['level_of_urgency'] = health_care.level_of_urgency
       # Don't mention any exclusions if the version is arm control. Hopefully this is temporary...
       hash[health_care.id]['excluding_nodes_ids'] = @version.is_arm_control ? [] : health_care.excluding_nodes_ids
       # Fields specific to drugs
@@ -589,7 +587,7 @@ class VersionsService
           hash[health_care.id]['formulations'].push(formulation_hash)
         end
       else
-        hash[health_care.id]['level_of_urgency'] = health_care.level_of_urgency
+        hash[health_care.id]['is_referral'] = health_care.is_referral
         hash[health_care.id]['medias'] = extract_medias(health_care)
       end
     end

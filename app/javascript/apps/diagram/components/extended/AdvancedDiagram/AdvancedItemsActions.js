@@ -29,7 +29,6 @@ export default class AdvancedItemsActionOptions extends Action {
               _.forEach(this.engine.getModel().getSelectedEntities(), entity => {
                 // only delete items which are not locked
                 if (!entity.locked) {
-                  console.log(entity);
                   entity.remove();
                 }
               });

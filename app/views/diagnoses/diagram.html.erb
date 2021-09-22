@@ -6,14 +6,14 @@
   <div class="col-md-12">
     <p class="mx-0 my-0 metadata" data-type="<%= @diagnosis.class.name %>" data-id="<%= @diagnosis.id %>" data-version="<%= @diagnosis.version.id %>" data-algorithm="<%= @diagnosis.version.algorithm.id %>"></p>
     <%= react_component('diagram', {
-      context: {
+      context: { 
         user: current_user,
         instanceable: @diagnosis.diagnosis_json,
         instances: @diagnosis.questions_json + @diagnosis.final_diagnoses_json,
         availableNodes: @diagnosis.available_nodes_json,
         questionCategories: Question.categories('Diagnosis').as_json,
         questionsSequenceCategories: QuestionsSequence.categories.as_json,
-        readOnly: !policy(@diagnosis).new?,
+        readOnly: @diagnosis.version.in_prod,
         diagnosisDeployed: @diagnosis.version.is_deployed?
       }
     }) %>

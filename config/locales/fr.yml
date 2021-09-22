@@ -41,6 +41,7 @@ fr:
       instance:
         duration: "Duration (days)"
         description: "Description"
+        is_pre_referral: "Is pre-referral"
       media:
         label_translations: "Label"
         url: "File"
@@ -88,6 +89,7 @@ fr:
         role_html: "medAL-<i>creator</i> access"
         roles_html: "medAL-<i>reader</i> accesses"
       version:
+        in_prod: "Is the version in production"
         languages: "Available languages for this version"
   activated: "Activate"
   add: "Add"
@@ -172,6 +174,8 @@ fr:
   attribute: "Attribute"
   api:
     v1:
+      algorithms:
+        invalid_algorithm: "Invalid algorithm id"
       health_facilities:
         show:
           no_health_facility: "Please provide a valid Health Facility ID"
@@ -195,6 +199,7 @@ fr:
         create:
           errors_on_save: "An error occurred when saving devices"
         show:
+          no_device: "Your mac_address does not match with any device in medAL-creator"
           no_health_facility: "Your tablet has not been associated with any Health Facility in medAL-creator"
   archive: "Archive"
   breadcrumbs:
@@ -227,6 +232,11 @@ fr:
       link_already_exist: "Link already exists"
       link_answer_to_answer: "You can't link an answer to another answer"
   confirmation: "Are you sure ?"
+  date:
+    days: "%{value} day(s)"
+    weeks: "%{value} week(s)"
+    months: "%{value} month(s)"
+    years: "%{value} year(s)"
   deactivated: "Deactivate"
   delete: "Delete"
   destroy: "Remove"
@@ -763,6 +773,8 @@ fr:
     validate: "Validate"
     diagnosis_diagram: "Diagnosis diagram"
     save: "Save"
+    cut_off_start: "From ≥ %{start} "
+    cut_off_end: "To < %{end}"
   unarchive: "Unarchive"
   users:
     new:

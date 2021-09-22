@@ -55,7 +55,7 @@ class Diagnosis < ApplicationRecord
     # Exclude the questions that are already used in the diagnosis diagram (it still takes the questions used in the final diagnosis diagram, since it can be used in both diagram)
     excluded_ids += components.not_health_care_conditions.map(&:node_id)
     (
-    version.algorithm.questions.no_triage.no_treatment_condition.diagrams_included.where.not(id: excluded_ids).includes(:answers) +
+    version.algorithm.questions.no_treatment_condition.diagrams_included.where.not(id: excluded_ids).includes(:answers) +
       version.algorithm.questions_sequences.where.not(id: excluded_ids).includes([:answers]) +
       final_diagnoses.where.not(id: components.select(:node_id))
     ).as_json(methods: [:category_name, :node_type, :get_answers, :type])
@@ -87,7 +87,8 @@ class Diagnosis < ApplicationRecord
       label: label,
       version_id: version_id,
       chief_complaint_label: node.reference_label,
-      cut_offs: display_cut_offs
+      cut_off_start: cut_off_start,
+      cut_off_end: cut_off_end,
     }
   end
 
@@ -95,20 +96,6 @@ class Diagnosis < ApplicationRecord
   # Get every drugs used in a diagnosis
   def drugs
     Node.joins(:instances).where('type = ? AND instances.instanceable_id = ? AND instances.instanceable_type = ?', 'HealthCares::Drug', id, self.class.name)
-  end
-
-  # @return [String]
-  # Return a displayable string to indicate the cut_offs
-  def display_cut_offs
-    cut_off = ''
-    if cut_off_start.present?
-      cut_off = "From ≥ #{cut_off_start.to_s}"
-      cut_off = "#{cut_off} to < #{cut_off_end.to_s}" if cut_off_end.present?
-      cut_off = "#{cut_off} days"
-    elsif cut_off_end.present?
-      cut_off = "To < #{cut_off_end.to_s} days"
-    end
-    cut_off
   end
 
   # @return [Json]

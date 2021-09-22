@@ -144,7 +144,8 @@ class InstancesController < ApplicationController
       :score,
       :final_diagnosis_id,
       :duration_en,
-      :description_en
+      :description_en,
+      :is_pre_referral
     )
   end
 end

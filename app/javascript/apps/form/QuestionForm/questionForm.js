@@ -370,7 +370,7 @@ export default class QuestionForm extends React.Component {
                   >
                     <option value="">{I18n.t("select")}</option>
                     {Object.keys(emergency_statuses).map(key => (
-                      <option key={`stages-${emergency_statuses[key]}`} value={key}>{humanizeString(key)}</option>
+                      <option key={`stages-${emergency_statuses[key]}`} value={key}>{I18n.t(`activerecord.attributes.question.emergency_statuses.${key}`)}</option>
                     ))}
                   </Form.Control>
                   <Form.Control.Feedback type="invalid">
@@ -576,6 +576,7 @@ export default class QuestionForm extends React.Component {
                       name="round"
                       value={values.round}
                       onChange={handleChange}
+                      disabled={deployedMode}
                       isInvalid={touched.round && !!errors.round}
                     >
                       <option value="">{I18n.t("select")}</option>
@@ -656,7 +657,6 @@ export default class QuestionForm extends React.Component {
                       <Form.Control
                         as="textarea"
                         name="min_message_warning_en"
-                        disabled={deployedMode}
                         value={values.min_message_warning_en}
                         onChange={handleChange}
                         isInvalid={touched.min_message_warning_en && !!errors.min_message_warning_en}
@@ -671,7 +671,6 @@ export default class QuestionForm extends React.Component {
                       <Form.Control
                         as="textarea"
                         name="max_message_warning_en"
-                        disabled={deployedMode}
                         value={values.max_message_warning_en}
                         onChange={handleChange}
                         isInvalid={touched.max_message_warning_en && !!errors.max_message_warning_en}
@@ -686,7 +685,6 @@ export default class QuestionForm extends React.Component {
                       <Form.Control
                         as="textarea"
                         name="min_message_error_en"
-                        disabled={deployedMode}
                         value={values.min_message_error_en}
                         onChange={handleChange}
                         isInvalid={touched.min_message_error_en && !!errors.min_message_error_en}
@@ -701,7 +699,6 @@ export default class QuestionForm extends React.Component {
                       <Form.Control
                         as="textarea"
                         name="max_message_error_en"
-                        disabled={deployedMode}
                         value={values.max_message_error_en}
                         onChange={handleChange}
                         isInvalid={touched.max_message_error_en && !!errors.max_message_error_en}

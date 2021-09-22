@@ -97,6 +97,7 @@ class ManagementsController < ApplicationController
   end
 
   private
+  
   def set_breadcrumb
     add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
     add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'managements')
@@ -115,6 +116,7 @@ class ManagementsController < ApplicationController
       :type,
       :label_en,
       :level_of_urgency,
+      :is_referral,
       Language.label_params,
       :description_en,
       Language.description_params,

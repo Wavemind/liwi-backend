@@ -212,9 +212,6 @@ class Version < ApplicationRecord
 
   # Init orders for new version
   def init_config
-    self.medal_r_config = {
-      systems_order: Question.systems.to_a.map(&:first)
-    }
     self.full_order_json = generate_nodes_order_tree
   end
 

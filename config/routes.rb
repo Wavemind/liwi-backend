@@ -215,6 +215,9 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :algorithms, only: [:index] do
+        member do
+          post 'emergency_content'
+        end
         resources :versions, only: [:index]
       end
       resources :versions, only: [:show] do

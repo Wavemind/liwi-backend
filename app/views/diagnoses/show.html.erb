@@ -3,7 +3,7 @@
 <div class="tab-content mt-4 ml-4" id="diagnosis-table">
   <h3 class="mt-5"><%= t('.subtitle_final_diagnoses') %></h3>
   <%= link_to new_algorithm_version_diagnosis_final_diagnosis_url(@algorithm, @version, @diagnosis) do %>
-    <button type="button" class="btn btn-outline-primary"><%= t('add') %></button>
+    <button type="button" class="btn btn-outline-primary" <%= @version.in_prod ? 'disabled' : '' %>><%= t('add') %></button>
   <% end %>
 
   <%= render 'final_diagnoses/table' %>
