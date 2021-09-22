@@ -389,6 +389,7 @@ class VersionsController < ApplicationController
       :first_top_right_question_id,
       :second_top_right_question_id,
       :is_arm_control,
+      :in_prod,
       :nodes_ids,
       :full_order_json,
       medal_data_config_variables_attributes: [
