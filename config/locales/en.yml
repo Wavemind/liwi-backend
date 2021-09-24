@@ -104,6 +104,7 @@ en:
         roles_html: "medAL-<i>reader</i> accesses"
         studies: "Studies the user will have access to"
       version:
+        in_prod: "Is the version in production"
         languages: "Available languages for this version"
   activated: "Activate"
   add: "Add"

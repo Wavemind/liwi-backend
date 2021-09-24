@@ -1,14 +1,25 @@
 <% if node.dependencies.present? || node.diagnoses.present? %>
   <div class="justify-content-center">
     <div class="col-md-6 offset-md-3">
-      <div class="alert alert-danger" role="alert">
+      <div class="alert alert-danger warning_dependencies" role="alert">
         <%= t('warning_dependency') %>
         <ul>
           <% node.dependencies.each do |dependence| %>
-            <li><b><%= "#{dependence.instanceable.full_reference} - #{dependence.instanceable.label}" %></b></li>
+            <% if dependence.instanceable_type == 'Diagnosis' %>
+              <%= link_to algorithm_version_diagnosis_url(dependence.instanceable.version.algorithm_id, dependence.instanceable.version, dependence.instanceable) do %>
+                <li><b><%= "#{dependence.instanceable.full_reference} - #{dependence.instanceable.label}" %></b></li>
+              <% end %>
+            <% else %>
+              <%= link_to algorithm_questions_sequence_url(dependence.instanceable.algorithm_id, dependence.instanceable) do %>
+                <li><b><%= "#{dependence.instanceable.full_reference} - #{dependence.instanceable.label}" %></b></li>
+              <% end %>
+              <li><b><%= "#{dependence.instanceable.full_reference} - #{dependence.instanceable.label}" %></b></li>
+            <% end %>
           <% end %>
           <% node.diagnoses.each do |diagnosis| %>
-            <li><b><%= "#{diagnosis.full_reference} - #{diagnosis.label}" %></b></li>
+            <%= link_to algorithm_version_diagnosis_url(diagnosis.version.algorithm_id, diagnosis.version, diagnosis) do %>
+              <li><b><%= "#{diagnosis.full_reference} - #{diagnosis.label}" %></b></li>
+            <% end %>
           <% end %>
         </ul>
       </div>

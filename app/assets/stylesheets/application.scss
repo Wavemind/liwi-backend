@@ -80,6 +80,14 @@ a:focus {
   white-space: pre-line;
 }
 
+.warning_dependencies b {
+  text-decoration: underline;
+}
+
+.warning_dependencies b:hover {
+  text-decoration: none;
+}
+
 /* ---------------------------------------------------
     SIDEBAR STYLE
 ----------------------------------------------------- */

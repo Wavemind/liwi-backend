@@ -1,6 +1,7 @@
 export const DEFAULT_ORDERED_NODES = {
   assessmentTest: [],
   backgroundCalculation: [],
+  complaintCategory: [],
   chronicCondition: [],
   demographic: [],
   exposure: [],
@@ -11,4 +12,5 @@ export const DEFAULT_ORDERED_NODES = {
   predefinedSyndrome: [],
   comorbidity: [],
   triage: [],
+  uniqueTriageQuestion: []
 };

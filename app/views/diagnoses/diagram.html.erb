@@ -13,7 +13,7 @@
         availableNodes: @diagnosis.available_nodes_json,
         questionCategories: Question.categories('Diagnosis').as_json,
         questionsSequenceCategories: QuestionsSequence.categories.as_json,
-        readOnly: !policy(@diagnosis).new?,
+        readOnly: @diagnosis.version.in_prod,
         diagnosisDeployed: @diagnosis.version.is_deployed?
       }
     }) %>
