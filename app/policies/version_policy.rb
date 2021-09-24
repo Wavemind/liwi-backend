@@ -110,7 +110,7 @@ class VersionPolicy < ApplicationPolicy
   end
 
   def job_status?
-    new?
+    index?
   end
 
   private
