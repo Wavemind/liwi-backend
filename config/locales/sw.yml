@@ -70,6 +70,7 @@ sw:
         min_message_warning: "Warning message if below range"
         min_value_error: "Lower limit before error"
         min_value_warning: "Lower limit before warning"
+        placeholder: "Placeholder"
         snomed: "SNOMED label"
         stage: "Stage"
         system: "System"

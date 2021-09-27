@@ -593,7 +593,7 @@ export default class QuestionForm extends React.Component {
 
                 {INPUT_ANSWER_TYPES.includes(values.answer_type_id) ?
                   <Form.Group controlId="validationPlaceholder">
-                    <Form.Label>{I18n.t("activerecord.attributes.node.placeholder_translations")}</Form.Label>
+                    <Form.Label>{I18n.t("activerecord.attributes.question.placeholder")}</Form.Label>
                     <Form.Control
                       name="placeholder_en"
                       value={values.placeholder_en}

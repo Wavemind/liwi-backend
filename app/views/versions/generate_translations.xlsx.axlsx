@@ -149,6 +149,12 @@ wb.add_worksheet(name: "Variables") do |sheet|
     unlocked_rows_indexes.push(rows.count)
     rows.push("Max message error (#{l})")
   end
+
+  rows.push("Placeholder (en)")
+  languages_codes.map do |l|
+    unlocked_rows_indexes.push(rows.count)
+    rows.push("Placeholder (#{l})")
+  end
   # Create first line (with column names)
   sheet.add_row rows
 
@@ -178,9 +184,14 @@ wb.add_worksheet(name: "Variables") do |sheet|
       rows.push(node.send("min_message_error_#{l}"))
     end
 
-    rows.push(node.min_message_error_en)
+    rows.push(node.max_message_error_en)
     languages_codes.map do |l|
       rows.push(node.send("max_message_error_#{l}"))
+    end
+
+    rows.push(node.placeholder_en)
+    languages_codes.map do |l|
+      rows.push(node.send("placeholder_#{l}"))
     end
 
     sheet.add_row rows, style: wrap
