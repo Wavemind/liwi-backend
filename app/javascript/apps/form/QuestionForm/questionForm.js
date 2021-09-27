@@ -606,23 +606,6 @@ export default class QuestionForm extends React.Component {
                   </Form.Group>
                 : null}
 
-                {values.answer_type_id === 4 ?
-                  <Form.Group controlId="validationMinValueWarning">
-                    <Form.Label>{I18n.t("activerecord.attributes.question.min_value_warning")}</Form.Label>
-                    <Form.Control
-                      type="number"
-                      name="min_value_warning"
-                      disabled={deployedMode}
-                      value={values.min_value_warning}
-                      onChange={handleChange}
-                      isInvalid={touched.min_value_warning && !!errors.min_value_warning}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.min_value_warning}
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                  : null}
-
                 {NUMERIC_ANSWER_TYPES.includes(values.answer_type_id) ?
                   <>
                     <Form.Group controlId="validationMinValueWarning">
