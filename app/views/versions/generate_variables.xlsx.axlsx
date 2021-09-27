@@ -98,6 +98,6 @@ wb.add_worksheet(name: "Media") do |sheet|
   sheet.add_row ["ID", "Node type", "Node label", "Media label", "Link"]
   medias = Media.where(fileable_type: 'Node', fileable_id: (nodes.map(&:id) + managements.map(&:id) + drugs.map(&:id)))
   medias.map do |media|
-    sheet.add_row [media.id, media.node.type, media.fileable.full_reference, media.label_en, media.url.url], style: wrap
+    sheet.add_row [media.id, media.fileable.type, media.fileable.reference_label, media.label_en, media.url.url], style: wrap
   end
 end
