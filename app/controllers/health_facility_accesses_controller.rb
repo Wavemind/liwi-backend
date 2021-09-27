@@ -19,7 +19,8 @@ class HealthFacilityAccessesController < ApplicationController
         # Validate every diagnoses of the version being published. Throw error if there is one or several diagnoses invalids with their reference.
         version = Version.find(health_facility_access_params[:version_id])
 
-        if version.algorithm.village_json.nil?
+        village_question_id = version.algorithm.medal_r_config['optional_basic_questions']['village_question_id']
+        if version.components.where(node_id: village_question_id).any? && version.algorithm.village_json.nil?
           render json: { success: false, message: t('flash_message.version.missing_villages') } and return
         end
 
