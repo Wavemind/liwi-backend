@@ -18,13 +18,13 @@ class ApplicationRecord < ActiveRecord::Base
   end
 
   def log_update
-    unless changes.keys == %w(reference updated_at) || changes.keys.include?("position_x")
-      UserLog.create(
+    unless changes.empty? || changes.keys == %w(reference updated_at) || changes.keys.include?("position_x") || changes.keys.include?("position_y")
+      UserLog.create!(
         user: User.get_current,
         action: 'update',
         model_type: self.class.name,
         model_id: self.id,
-        data: changed_attributes,
+        data: changes,
         ip_address: User.get_current_ip
       )
     end
