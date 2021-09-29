@@ -1,7 +1,7 @@
 # Manage user
 class User < ApplicationRecord
 
-  devise :invitable, :database_authenticatable, :recoverable, :rememberable, :lockable, :trackable, :registerable
+  devise :invitable, :database_authenticatable, :recoverable, :lockable, :trackable, :registerable, :timeoutable
   include DeviseTokenAuth::Concerns::User
 
   enum role: [:admin, :clinician, :deployment_manager, :medal_r_user]
@@ -19,6 +19,8 @@ class User < ApplicationRecord
   validates_presence_of :role
 
   validates :email, format: { with: /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i }
+  validates_confirmation_of :password
+  validate :password_complexity
 
   def self.get_current
     Thread.current[:user]
@@ -58,5 +60,13 @@ class User < ApplicationRecord
   # Display full name
   def full_name
     "#{first_name} #{last_name}"
+  end
+
+  def password_complexity
+    if password.present?
+      if !password.match(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/)
+        errors.add :password, "Password complexity requirement not met"
+      end
+    end
   end
 end
