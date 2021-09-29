@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_13_094115) do
+ActiveRecord::Schema.define(version: 2021_09_29_070257) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -306,6 +306,7 @@ ActiveRecord::Schema.define(version: 2021_09_13_094115) do
     t.integer "cut_off_start"
     t.integer "cut_off_end"
     t.boolean "is_referral", default: false
+    t.hstore "placeholder_translations"
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
     t.index ["diagnosis_id"], name: "index_nodes_on_diagnosis_id"
@@ -343,8 +344,11 @@ ActiveRecord::Schema.define(version: 2021_09_13_094115) do
     t.string "action"
     t.string "model_type"
     t.bigint "model_id"
-    t.json "data"
+    t.json "data_before"
     t.string "ip_address"
+    t.json "data_after"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_user_logs_on_user_id"
   end
 

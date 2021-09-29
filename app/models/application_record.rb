@@ -12,19 +12,20 @@ class ApplicationRecord < ActiveRecord::Base
       action: 'create',
       model_type: self.class.name,
       model_id: self.id,
-      data: self.attributes,
+      data_after: self.attributes,
       ip_address: User.get_current_ip
     )
   end
 
   def log_update
-    unless changes.keys == %w(reference updated_at) || changes.keys.include?("position_x")
+    unless changes.keys == %w(reference updated_at) || changes.keys.include?("position_x") || changes.keys.include?("position_y")
       UserLog.create(
         user: User.get_current,
         action: 'update',
         model_type: self.class.name,
         model_id: self.id,
-        data: changed_attributes,
+        data_before: changed_attributes,
+        data_after: changes,
         ip_address: User.get_current_ip
       )
     end
@@ -36,7 +37,7 @@ class ApplicationRecord < ActiveRecord::Base
       action: 'delete',
       model_type: self.class.name,
       model_id: self.id,
-      data: self.attributes,
+      data_before: self.attributes,
       ip_address: User.get_current_ip
     )
   end
