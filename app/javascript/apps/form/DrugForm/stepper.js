@@ -8,10 +8,12 @@ import InstanceForm from "./instanceForm";
 import DisplayErrors from "../components/DisplayErrors";
 import store from "../../diagram/engine/reducers/store";
 import { closeModal } from "../../diagram/engine/reducers/creators.actions";
+import getStudyLanguage from "../../utils";
 
 export default class StepperDrugForm extends React.Component {
   constructor(props) {
     super(props);
+    console.log(getStudyLanguage());
     const { drug, method, step } = props;
 
     this.state = {

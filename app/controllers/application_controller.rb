@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   before_action :set_home_breadcrumb
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :set_current_user
+  before_action :set_study_language
   include Pundit
 
   # Pundit: white-list approach.
@@ -46,6 +47,16 @@ class ApplicationController < ActionController::Base
 
   def set_version
     @version = Version.find(params[:version_id])
+  end
+
+  def set_study_language
+    if params[:algorithm_id].present?
+      @default_language = Algorithm.find(params[:algorithm_id]).study.default_language
+    elsif controller_name == 'algorithms' && params[:id].present?
+      @default_language = Algorithm.find(params[:id]).study.default_language
+    elsif controller_name == 'questions_sequences'
+      @default_language = QuestionsSequence.find(params[:id]).algorithm.study.default_language
+    end
   end
 
   def skip_pundit?
