@@ -61,7 +61,7 @@ wb.add_worksheet(name: "Drugs") do |sheet|
     instances = ""
     node.instances.each_with_index do |instance, index|
       instances += "\r" unless index == 0
-      instances += instance.instanceable.reference_label
+      instances += instance.final_diagnosis.reference_label
     end
 
     bools = ""
