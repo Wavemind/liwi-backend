@@ -7,9 +7,11 @@ nodes = @version.extract_nodes_from_version
 drugs = []
 managements = []
 final_diagnoses = []
+questions_sequences = []
 
 wb.add_worksheet(name: "Variables") do |sheet|
-  sheet.add_row ["ID", "Category", "Reference", "Label", "Neonat", "System", "Mandatory", "Identifiable", "Estimable", "Emergency status", "Round", "Description", "Answers (ID | full label)"]
+  sheet.add_row ["ID", "Category", "Reference", "Label", "Neonat", "System", "Mandatory", "Identifiable", "Estimable", "Emergency status", "Round", "Description",
+                 "Conditioning complaint categories", "Answers (ID | full label)"]
 
   nodes.map do |node|
     answers = ""
@@ -18,9 +20,12 @@ wb.add_worksheet(name: "Variables") do |sheet|
       answers += "#{answer.id} | #{answer.reference_label}"
     end
 
+    complaint_categories = node.complaint_categories.map(&:full_reference).to_s unless node.is_a?(Questions::ComplaintCategory) || node.complaint_categories.empty?
+
     sheet.add_row [node.id, I18n.t("questions.categories.#{node.class.variable}.label"), node.full_reference, node.label_en, node.is_neonat.to_s,
                    node.system.present? ? I18n.t("questions.systems.#{node.system}") : '', node.is_mandatory.to_s, node.is_identifiable.to_s, node.estimable.to_s,
-                   node.emergency_status.present? ? I18n.t("activerecord.attributes.question.emergency_statuses.#{node.emergency_status}") : '', node.round, node.description_en, answers], style: wrap
+                   node.emergency_status.present? ? I18n.t("activerecord.attributes.question.emergency_statuses.#{node.emergency_status}") : '', node.round,
+                   node.description_en, complaint_categories, answers], style: wrap
   end
 end
 
@@ -36,6 +41,8 @@ wb.add_worksheet(name: "Diagnoses") do |sheet|
         drugs.push(instance.node)
       elsif instance.node.is_a? HealthCares::Management
         managements.push(instance.node)
+      elsif instance.node.is_a? QuestionsSequence
+        questions_sequences.push(instance.node)
       end
     end
   end
@@ -49,6 +56,15 @@ wb.add_worksheet(name: "Final diagnoses") do |sheet|
   end
 end
 
+wb.add_worksheet(name: "Questions sequences") do |sheet|
+  sheet.add_row ["ID", "Reference", "Label", "Cutoff start (days)", "Cutoff end (days)", "Minimum score", "Description", "Conditioning complaint categories"]
+
+  questions_sequences.map do |node|
+    complaint_categories = node.complaint_categories.map(&:full_reference).to_s unless node.complaint_categories.empty?
+
+    sheet.add_row [node.id, node.full_reference, node.label_en, node.cut_off_start, node.cut_off_end, node.min_score, node.description_en, complaint_categories], style: wrap
+  end
+end
 
 wb.add_worksheet(name: "Drugs") do |sheet|
   sheet.add_row ["ID", "Reference", "Label", "Level of urgency", "Description", "Diagnoses", "YI/Antibiotic/Antimalarial/None", "Formulations (ID | medication form)", "Administration route", "Number of administrations per day",
