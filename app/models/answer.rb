@@ -40,8 +40,8 @@ class Answer < ApplicationRecord
 
   # @return [String]
   # Return the label with the reference for the view
-  def reference_label
-    "#{full_reference} - #{label}"
+  def reference_label(l = 'en')
+    "#{full_reference} - #{self.send("label_#{l}")}"
   end
 
   private

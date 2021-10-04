@@ -133,9 +133,9 @@ class DrugsController < ApplicationController
       :is_neonat,
       :label_en,
       :level_of_urgency,
-      Language.label_params,
+      Language.language_params('label'),
+      Language.language_params('description'),
       :description_en,
-      Language.description_params,
       :algorithm_id,
       formulations_attributes: [
         :id,
@@ -151,8 +151,11 @@ class DrugsController < ApplicationController
         :by_age,
         :breakable,
         :description_en,
+        Language.language_params('description'),
         :injection_instructions_en,
+        Language.language_params('injection_instructions'),
         :dispensing_description_en,
+        Language.language_params('dispensing_description'),
         :_destroy
       ]
     )

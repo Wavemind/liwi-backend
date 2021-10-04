@@ -378,6 +378,7 @@ class VersionsController < ApplicationController
       :id,
       :name,
       :description_en,
+      Language.language_params('description'),
       :triage_unique_triage_question_order,
       :triage_complaint_category_order,
       :triage_basic_measurement_order,

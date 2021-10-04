@@ -1,15 +1,10 @@
-class FinalDiagnosisDatatable < AjaxDatatablesRails::ActiveRecord
+class FinalDiagnosisDatatable < ApplicationDatatable
   extend Forwardable
 
   def_delegator :@view, :link_to
   def_delegator :@view, :algorithm_version_diagnosis_final_diagnosis_url
   def_delegator :@view, :edit_algorithm_version_diagnosis_final_diagnosis_url
   def_delegator :@view, :diagram_algorithm_version_diagnosis_final_diagnosis_url
-
-  def initialize(params, opts = {})
-    @view = opts[:view_context]
-    super
-  end
 
   def view_columns
     @view_columns ||= {
@@ -26,8 +21,8 @@ class FinalDiagnosisDatatable < AjaxDatatablesRails::ActiveRecord
       actions += link_to(I18n.t('delete'), algorithm_version_diagnosis_final_diagnosis_url(params[:algorithm_id], params[:version_id], record.diagnosis, record), class: "btn btn-outline-danger #{record.dependencies? ? 'disabled' : ''}", method: :delete, data: { confirm: I18n.t('confirmation') })
       {
         reference: record.full_reference,
-        label: record.label,
-        description: record.description,
+        label: record.send("label_#{@default_language}"),
+        description: record.send("description_#{@default_language}"),
         actions: actions
       }
     end

@@ -1,13 +1,8 @@
-class VersionFinalDiagnosisDatatable < AjaxDatatablesRails::ActiveRecord
+class VersionFinalDiagnosisDatatable < ApplicationDatatable
   extend Forwardable
 
   def_delegator :@view, :link_to
   def_delegator :@view, :edit_algorithm_version_diagnosis_final_diagnosis_url
-
-  def initialize(params, opts = {})
-    @view = opts[:view_context]
-    super
-  end
 
   def view_columns
     @view_columns ||= {
@@ -26,10 +21,10 @@ class VersionFinalDiagnosisDatatable < AjaxDatatablesRails::ActiveRecord
       {
         id: record.id,
         reference: record.full_reference,
-        label: record.label,
-        diagnosis: record.diagnosis.reference_label,
-        cc: record.diagnosis.node.reference_label,
-        description: record.description,
+        label: record.send("label_#{@default_language}"),
+        diagnosis: record.diagnosis.reference_label(@default_language),
+        cc: record.diagnosis.node.reference_label(@default_language),
+        description: record.send("description_#{@default_language}"),
         actions: actions,
       }
     end

@@ -48,6 +48,7 @@ class StudiesController < ApplicationController
       :id,
       :label,
       :description_en,
+      Language.language_params('description'),
       :default_language,
       )
   end

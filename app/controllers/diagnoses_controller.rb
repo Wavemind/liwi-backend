@@ -139,7 +139,7 @@ class DiagnosesController < ApplicationController
       :cut_off_start,
       :cut_off_end,
       :cut_off_value_type,
-      Language.label_params
+      Language.language_params('label'),
     )
   end
 end

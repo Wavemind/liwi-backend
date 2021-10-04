@@ -59,6 +59,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def self.testrot
+    set_study_language
+  end
+
   def skip_pundit?
     devise_controller? || params[:controller] =~ /(^(rails_)?admin)|(^pages$)|^(dashboard$)|^(settings$)|^(api\/v1\/)/
   end

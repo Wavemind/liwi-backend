@@ -1,13 +1,8 @@
-class DrugExclusionDatatable < AjaxDatatablesRails::ActiveRecord
+class DrugExclusionDatatable < ApplicationDatatable
   extend Forwardable
 
   def_delegator :@view, :link_to
   def_delegator :@view, :remove_exclusion_algorithm_drugs_url
-
-  def initialize(params, opts = {})
-    @view = opts[:view_context]
-    super
-  end
 
   def view_columns
     @view_columns ||= {
@@ -20,8 +15,8 @@ class DrugExclusionDatatable < AjaxDatatablesRails::ActiveRecord
     records.map do |record|
       actions = link_to(I18n.t('delete'), remove_exclusion_algorithm_drugs_url(params[:id], node_exclusion: {excluding_node_id: record.excluding_node_id, excluded_node_id: record.excluded_node_id}, format: :html), class: "btn btn-outline-danger", method: :delete, data: { confirm: I18n.t('confirmation') })
       {
-        excluding_drug_id: record.excluding_node.reference_label,
-        excluded_drug_id: record.excluded_node.reference_label,
+        excluding_drug_id: record.excluding_node.reference_label(@default_language),
+        excluded_drug_id: record.excluded_node.reference_label(@default_language),
         actions: actions
       }
     end

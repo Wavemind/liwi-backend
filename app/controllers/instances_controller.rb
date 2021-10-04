@@ -144,7 +144,9 @@ class InstancesController < ApplicationController
       :score,
       :final_diagnosis_id,
       :duration_en,
+      Language.language_params('duration'),
       :description_en,
+      Language.language_params('description'),
       :is_pre_referral
     )
   end

@@ -12,4 +12,8 @@ class Language < ApplicationRecord
   def self.description_params
     Language.pluck(:code).map { |langue| I18n.t('languages.description') + langue }
   end
+
+  def self.language_params(field)
+    Language.pluck(:code).map{ |language| "#{field}_#{language}"}
+  end
 end
