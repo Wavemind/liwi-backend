@@ -2,7 +2,9 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
   # Web
-  devise_for :users
+  devise_for :users, controllers: {
+    sessions: 'sessions'
+}
 
   authenticated :user do
     root to: 'dashboard#index'
@@ -12,6 +14,8 @@ Rails.application.routes.draw do
       get '/' => 'devise/sessions#new'
     end
   end
+
+  resource :two_factor_settings, except: [:index, :show]
 
   resources :technical_files, only: [:index, :create]
   resources :settings, only: [:index]
