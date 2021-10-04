@@ -1,11 +1,18 @@
-<div class="card">
-  <div class="card-header">Two Factor Authentication</div>
-  <div class="card-body">
+<div class="row h-100 w-100 login-background">
+  <div class="col-3 mx-auto my-auto login-content">
+
+    <div class="row my-5">
+      <h2>Two Factor Authentication</h2>
+    </div>
+
     <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name), method: :post) do |f| %>
       <%= f.input :otp_attempt, label: 'OTP' %>
       <div class="actions">
-        <%= f.submit 'Login', class: 'btn btn-primary mt-2' %>
+        <%= f.submit 'Login', class: 'btn btn-succes btn-block btn-primary-light' %>
       </div>
     <% end %>
+
+    <%= render "devise/shared/links" %>
+
   </div>
 </div>
