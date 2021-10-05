@@ -13,14 +13,16 @@ class TwoFactorSettingsController < ApplicationController
   def create
     authorize policy_scope(User)
     unless current_user.valid_password?(enable_2fa_params[:password])
-      return render :new, alert: t('two_factor_settings.flash_messages.two_factor_already_enable')
+    flash.alert = t('two_factor_settings.flash_messages.two_factor_already_enable')
+      return render :new
     end
 
     if current_user.validate_and_consume_otp!(enable_2fa_params[:code])
       current_user.enable_two_factor!
       redirect_to edit_two_factor_settings_path, notice: t('two_factor_settings.flash_messages.incorrect_password')
     else
-      render :new, alert: t('two_factor_settings.flash_messages.incorrect_code')
+      flash.alert = t('two_factor_settings.flash_messages.incorrect_code')
+      render :new
     end
   end
 

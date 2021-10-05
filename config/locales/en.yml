@@ -968,7 +968,7 @@ en:
       step_1: '1. Scan QR Code'
       scan_below_qr_code: 'Please scan the below QR code using an OTP compatible app (such as Google Authenticator or Authy).'
       scan_dont_work: 'If you cannot scan, please enter the following code manually:'
-      step_2: '1. Confirm OTP Code'
+      step_2: '2. Confirm OTP Code'
       confirm_code: 'Please confirm that your authentication application is working by entering a generated code below.'
       password: 'Enter your current password'
       submit: 'Confirm and enable two factor'
