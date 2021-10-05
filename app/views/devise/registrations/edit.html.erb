@@ -44,7 +44,7 @@
         <div class="card-body">
           <% if current_user.otp_required_for_login %>
             <p><%= t('.enable') %></p>
-            <p><%= link_to(t('.disabled_action'), two_factor_settings_path, class: 'btn btn-danger', method: :delete, data: {confirm: 'Are you sure you want to disable two factor authentication?'}) %></p>
+            <p><%= link_to(t('.disabled_action'), two_factor_settings_path, class: 'btn btn-danger', method: :delete, data: {confirm: t('.delete_confirmation')}) %></p>
           <% else %>
             <p><%= t('.disabled') %></p>
             <p><%= link_to(t('.enable_action'), new_two_factor_settings_path, class: 'btn btn-primary') %></p>

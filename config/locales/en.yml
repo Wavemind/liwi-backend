@@ -962,7 +962,9 @@ en:
       keep_backup: 'Keep these backup codes safe in case you lose access to your authenticator app:'
       setup_completed: 'Two factor setup complete'
       enable: 'Two factor authentication has been successfully enabled.'
+      delete_confirmation: 'Are you sure you want to disable two factor authentication?'
       action: 'Return to account'
+
     new:
       title: 'Two factor authentication'
       step_1: '1. Scan QR Code'
