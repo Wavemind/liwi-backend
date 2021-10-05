@@ -363,6 +363,7 @@ en:
     final_diagnosis_exclusion_unique: "This exclusion is already set."
     format: "%{attribute} %{message}"
     messages:
+      password_complexity: Password complexity requirement not met
       accepted: must be accepted
       blank: can't be blank
       confirmation: doesn't match %{attribute}

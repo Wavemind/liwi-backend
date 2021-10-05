@@ -71,10 +71,13 @@ class User < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
+  # Check password complexity
+  # Rules: 8 characters
+  # 1 upcase, 1 low case, 1 number, 1 special char
   def password_complexity
     if password.present?
       if !password.match(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/)
-        errors.add :password, "Password complexity requirement not met"
+        errors.add :password, t('errrors.messages.password_complexity')
       end
     end
   end
