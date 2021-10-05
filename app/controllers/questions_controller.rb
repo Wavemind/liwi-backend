@@ -156,6 +156,7 @@ class QuestionsController < ApplicationController
       :is_neonat,
       :is_danger_sign,
       :emergency_status,
+      :placeholder_en,
       complaint_category_ids: [],
       answers_attributes: [
         :id,

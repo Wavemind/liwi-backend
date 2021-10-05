@@ -70,6 +70,7 @@ rw:
         min_message_warning: "Warning message if below range"
         min_value_error: "Lower limit before error"
         min_value_warning: "Lower limit before warning"
+        placeholder: "Placeholder"
         round: "Value rounded to"
         snomed: "SNOMED label"
         stage: "Stage"

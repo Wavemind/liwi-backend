@@ -40,7 +40,7 @@ wb.add_worksheet(name: "Diagnoses") do |sheet|
 end
 
 wb.add_worksheet(name: "Final diagnoses") do |sheet|
-  sheet.add_row ["ID", "Reference", "Label", "Description"]
+  sheet.add_row %w(ID Reference Label Description)
 
   final_diagnoses.map do |node|
     sheet.add_row [node.id, node.full_reference, node.label_en, node.description_en], style: wrap
@@ -91,5 +91,13 @@ wb.add_worksheet(name: "Managements") do |sheet|
 
   managements.map do |node|
     sheet.add_row [node.id, node.full_reference, node.label_en, node.description_en], style: wrap
+  end
+end
+
+wb.add_worksheet(name: "Media") do |sheet|
+  sheet.add_row ["ID", "Node type", "Node label", "Media label", "Link"]
+  medias = Media.where(fileable_type: 'Node', fileable_id: (nodes.map(&:id) + managements.map(&:id) + drugs.map(&:id)))
+  medias.map do |media|
+    sheet.add_row [media.id, media.fileable.type, media.fileable.reference_label, media.label_en, media.url.url], style: wrap
   end
 end

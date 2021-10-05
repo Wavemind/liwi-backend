@@ -19,6 +19,7 @@ import {
   NO_ANSWERS_ATTACHED_TYPE,
   NO_ANSWERS_ATTACHED_ANSWER_TYPE,
   NUMERIC_ANSWER_TYPES,
+  INPUT_ANSWER_TYPES,
   MEDICAL_HISTORY_SYSTEMS,
   PHYSICAL_EXAM_SYSTEMS,
 } from "../constants/constants";
@@ -589,6 +590,21 @@ export default class QuestionForm extends React.Component {
                     </Form.Control.Feedback>
                   </Form.Group>
                   : null}
+
+                {INPUT_ANSWER_TYPES.includes(values.answer_type_id) ?
+                  <Form.Group controlId="validationPlaceholder">
+                    <Form.Label>{I18n.t("activerecord.attributes.question.placeholder")}</Form.Label>
+                    <Form.Control
+                      name="placeholder_en"
+                      value={values.placeholder_en}
+                      onChange={handleChange}
+                      isInvalid={touched.placeholder_en && !!errors.placeholder_en}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.placeholder_en}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                : null}
 
                 {NUMERIC_ANSWER_TYPES.includes(values.answer_type_id) ?
                   <>
