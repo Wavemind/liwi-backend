@@ -2,17 +2,18 @@
   <div class="col-3 mx-auto my-auto login-content">
 
     <div class="row my-5">
-      <h2>Two Factor Authentication</h2>
+      <h2><%= t('.title') %></h2>
     </div>
 
     <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name), method: :post) do |f| %>
-      <%= f.input :otp_attempt, label: 'OTP' %>
+      <%= f.input :otp_attempt, label: t('.code') %>
       <div class="actions">
-        <%= f.submit 'Login', class: 'btn btn-succes btn-block btn-primary-light' %>
+        <%= f.submit t('.login'), class: 'btn btn-succes btn-block btn-primary-light' %>
       </div>
     <% end %>
 
-    <%= render "devise/shared/links" %>
-
+    <div class="devise-links">
+      <%= render "devise/shared/links" %>
+    </div>
   </div>
 </div>

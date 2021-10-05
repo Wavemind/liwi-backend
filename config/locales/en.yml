@@ -257,6 +257,37 @@ en:
   deactivated: "Deactivate"
   delete: "Delete"
   destroy: "Remove"
+  devise:
+    confirmations:
+      new:
+        title: 'Resend confirmation instructions'
+        send: 'Resend confirmation instructions'
+    passwords:
+      edit:
+        title: 'Change your password'
+        new_password: 'New password'
+        password_confirmation: 'Confirm your new password'
+        change_password: 'Change my password'
+      new:
+        title: 'Forgot your password?'
+        send: 'Send me reset password instructions'
+    shared:
+      links:
+        login: 'Login'
+        forgot_password: 'Forgot your password?'
+        not_receive_confirmation_instructions: "Didn't receive confirmation instructions?"
+        not_receive_unlock_instructions: "Didn't receive unlock instructions?"
+    sessions:
+      new:
+        login: 'Login'
+      two_factor:
+        title: 'Two Factor Authentication'
+        code: 'Code'
+        login: 'Login'
+    unlocks:
+        new:
+          title: 'Resend unlock instructions'
+          send: 'Resend unlock instructions'
   devices:
     index:
       columns:
