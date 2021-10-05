@@ -3,55 +3,51 @@
       <div class="card-deck">
       <div class="card">
         <div class="card-header">
-          Edit <%= resource_name.to_s.humanize %>
+          <%= t('.title') %>
         </div>
         <div class="card-body">
           <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
-        <%= f.error_notification %>
+          <%= f.error_notification %>
 
-        <div class="form-inputs">
-          <%= f.input :email, required: true, autofocus: true %>
+          <div class="form-inputs">
+            <%= f.input :email, required: true, autofocus: true %>
 
-          <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-            <p>Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>
-          <% end %>
-
-          <div class="d-flex justify-content-between">
-            <%= f.input :first_name, wrapper_html: { class: "flex-grow-1 mr-2" } %>
-            <%= f.input :last_name, wrapper_html: { class: "flex-grow-1 ml-2" }  %>
+            <div class="d-flex justify-content-between">
+              <%= f.input :first_name, wrapper_html: { class: "flex-grow-1 mr-2" } %>
+              <%= f.input :last_name, wrapper_html: { class: "flex-grow-1 ml-2" }  %>
+            </div>
+            <%= f.input :password,
+                        hint: t('devise.registrations.change_password_hint'),
+                        required: false,
+                        input_html: { autocomplete: "new-password" } %>
+            <%= f.input :password_confirmation,
+                        required: false,
+                        input_html: { autocomplete: "new-password" } %>
+            <%= f.input :current_password,
+                        hint: t('devise.registrations.current_password_hint'),
+                        required: true,
+                        input_html: { autocomplete: "current-password" } %>
           </div>
-          <%= f.input :password,
-                      hint: t('devise.registrations.change_password_hint'),
-                      required: false,
-                      input_html: { autocomplete: "new-password" } %>
-          <%= f.input :password_confirmation,
-                      required: false,
-                      input_html: { autocomplete: "new-password" } %>
-          <%= f.input :current_password,
-                      hint: t('devise.registrations.current_password_hint'),
-                      required: true,
-                      input_html: { autocomplete: "current-password" } %>
-        </div>
 
-        <div class="form-actions">
-          <%= link_to t('cancel'), :back, class: 'btn btn-danger my-4 float-left' %>
-          <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
-        </div>
-      <% end %>
+          <div class="form-actions">
+            <%= link_to t('cancel'), :back, class: 'btn btn-danger my-4 float-left' %>
+            <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>
+          </div>
+        <% end %>
         </div>
       </div>
 
       <div class="card">
         <div class="card-header">
-          Two factor authentication
+          <%= t('.two_factor') %>
         </div>
         <div class="card-body">
           <% if current_user.otp_required_for_login %>
-            <p>Two factor authentication is enabled.</p>
-            <p><%= link_to('Disable Two Factor Authentication', two_factor_settings_path, class: 'btn btn-danger', method: :delete, data: {confirm: 'Are you sure you want to disable two factor authentication?'}) %></p>
+            <p><%= t('.enable') %></p>
+            <p><%= link_to(t('.disabled_action'), two_factor_settings_path, class: 'btn btn-danger', method: :delete, data: {confirm: 'Are you sure you want to disable two factor authentication?'}) %></p>
           <% else %>
-            <p>Two factor authentication is NOT enabled.</p>
-            <p><%= link_to('Enable Two Factor Authentication', new_two_factor_settings_path, class: 'btn btn-primary') %></p>
+            <p><%= t('.disabled') %></p>
+            <p><%= link_to(t('.enable_action'), new_two_factor_settings_path, class: 'btn btn-primary') %></p>
           <% end %>
         </div>
       </div>
