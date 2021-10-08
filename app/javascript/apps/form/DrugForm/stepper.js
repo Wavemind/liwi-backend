@@ -13,14 +13,13 @@ import getStudyLanguage from "../../utils";
 export default class StepperDrugForm extends React.Component {
   constructor(props) {
     super(props);
-    console.log(getStudyLanguage());
     const { drug, method, step } = props;
 
     this.state = {
       errors: null,
       step: step || 1,
       drug: this.drugBody(drug, method),
-      createdDrug: drug || {}
+      createdDrug: drug || {},
     };
   }
 
@@ -31,15 +30,17 @@ export default class StepperDrugForm extends React.Component {
    * @return [Object] drug object for state
    */
   drugBody = (drug, method) => {
+    const language = getStudyLanguage();
+
     let body = {
-      label_en: drug?.label_translations?.en || "",
-      description_en: drug?.description_translations?.en || "",
       level_of_urgency: drug?.level_of_urgency || 5,
       is_anti_malarial: drug?.is_anti_malarial || false,
       is_antibiotic: drug?.is_antibiotic || "",
       is_neonat: drug?.is_neonat || "",
       formulations_attributes: drug?.formulations || []
     };
+    body[`label_${language}`] = drug?.label_translations?.send(language) || "";
+    body[`description_${language}`] = drug?.description_translations?.send(language) || "";
 
     if (method === "update") {
       body["id"] = drug.id;
@@ -47,7 +48,7 @@ export default class StepperDrugForm extends React.Component {
 
       // Generate hash cause of label_translation
       drug.formulations.map(formulation => {
-        body["formulations_attributes"].push({
+        let formulationBody = {
           id: formulation.id,
           administration_route_id: formulation.administration_route_id,
           minimal_dose_per_kg: formulation.minimal_dose_per_kg,
@@ -60,13 +61,12 @@ export default class StepperDrugForm extends React.Component {
           unique_dose: formulation.unique_dose,
           by_age: formulation.by_age,
           breakable: formulation.breakable,
-          description_en: formulation.description_translations?.en || "",
-          injection_instructions_en:
-            formulation.injection_instructions_translations?.en || "",
-          dispensing_description_en:
-            formulation.dispensing_description_translations?.en || "",
           _destroy: false
-        });
+        };
+        formulationBody[`description_${language}`] = formulation.description_translations?.send(language) || "";
+        formulationBody[`injection_instructions_${language}`] = formulation.injection_instructions_translations?.send(language) || "";
+        formulationBody[`dispensing_description_${language}`] = formulation.dispensing_description_translations?.send(language) || "";
+        body["formulations_attributes"].push(formulationBody);
       });
     } else {
       body["answers_attributes"] = [];

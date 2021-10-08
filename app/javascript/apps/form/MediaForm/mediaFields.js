@@ -2,6 +2,7 @@ import * as React from "react";
 import I18n from "i18n-js";
 import FadeIn from "react-fade-in";
 import {Form, Col, Button} from "react-bootstrap";
+import getStudyLanguage from "../../utils";
 
 export default class MediaFields extends React.Component {
 
@@ -65,6 +66,7 @@ export default class MediaFields extends React.Component {
     } = this.props;
 
     let media = values.medias_attributes[index];
+    const l = getStudyLanguage();
 
     return (
       <FadeIn>
@@ -72,13 +74,13 @@ export default class MediaFields extends React.Component {
           <Form.Group as={Col} controlId="validationLabelTranslations">
             <Form.Label>{I18n.t("activerecord.attributes.media.label_translations")}</Form.Label>
             <Form.Control
-              name={`medias_attributes.${index}.label_en`}
-              value={media.label_en}
+              name={`medias_attributes.${index}.label_${l}`}
+              value={media[`label_${l}`]}
               onChange={handleChange}
-              isInvalid={this.isInvalid("label_en")}>
+              isInvalid={this.isInvalid(`label_${l}`)}>
             </Form.Control>
             <Form.Control.Feedback type="invalid">
-              {this.displayErrors("label_en")}
+              {this.displayErrors(`label_${l}`)}
             </Form.Control.Feedback>
           </Form.Group>
 

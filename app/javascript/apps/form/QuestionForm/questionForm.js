@@ -28,11 +28,14 @@ import Overlay from "react-bootstrap/Overlay";
 import Popover from "react-bootstrap/Popover";
 import AnswerFields from "./answerForm";
 import MediaForm from "../MediaForm/mediaForm";
+import getStudyLanguage from "../../utils";
 
 const humanizeString = require("humanize-string");
+const l = getStudyLanguage();
 const filterOptions = createFilterOptions({
-  stringify: option => option.label_translations.en
+  stringify: option => option.label_translations.send(l)
 });
+
 
 export default class QuestionForm extends React.Component {
   constructor(props) {
@@ -461,13 +464,13 @@ export default class QuestionForm extends React.Component {
                 <Form.Group controlId="validationLabel">
                   <Form.Label>{I18n.t("activerecord.attributes.node.label_translations")}</Form.Label>
                   <Form.Control
-                    name="label_en"
-                    value={values.label_en}
+                    name={`label_${l}`}
+                    value={values[`label_${l}`]}
                     onChange={handleChange}
-                    isInvalid={touched.label_en && !!errors.label_en}
+                    isInvalid={touched[`label_${l}`] && !!errors[`label_${l}`]}
                   />
                   <Form.Control.Feedback type="invalid">
-                    {errors.label_en}
+                    {errors[`label_${l}`]}
                   </Form.Control.Feedback>
                 </Form.Group>
 
@@ -506,10 +509,10 @@ export default class QuestionForm extends React.Component {
                       filterOptions={filterOptions}
                       disabled={deployedMode}
                       onChange={(_, value) => setFieldValue("complaint_categories_attributes", value)}
-                      renderOption={(option) => option.label_translations.en}
+                      renderOption={(option) => option.label_translations.send(l)}
                       renderTags={(value, getTagProps) => (
                         value.map((option, index) => (
-                          <Chip variant="outlined" label={option.label_translations.en} {...getTagProps({index})} />
+                          <Chip variant="outlined" label={option.label_translations.send(l)} {...getTagProps({index})} />
                         ))
                       )}
                       renderInput={params => (
@@ -595,13 +598,13 @@ export default class QuestionForm extends React.Component {
                   <Form.Group controlId="validationPlaceholder">
                     <Form.Label>{I18n.t("activerecord.attributes.question.placeholder")}</Form.Label>
                     <Form.Control
-                      name="placeholder_en"
-                      value={values.placeholder_en}
+                      name={`placeholder_${l}`}
+                      value={values[`placeholder_${l}`]}
                       onChange={handleChange}
-                      isInvalid={touched.placeholder_en && !!errors.placeholder_en}
+                      isInvalid={touched[`placeholder_${l}`] && !!errors[`placeholder_${l}`]}
                     />
                     <Form.Control.Feedback type="invalid">
-                      {errors.placeholder_en}
+                      {errors[`placeholder_${l}`]}
                     </Form.Control.Feedback>
                   </Form.Group>
                 : null}
@@ -672,27 +675,27 @@ export default class QuestionForm extends React.Component {
                       <Form.Label>{I18n.t("activerecord.attributes.question.min_message_warning")}</Form.Label>
                       <Form.Control
                         as="textarea"
-                        name="min_message_warning_en"
-                        value={values.min_message_warning_en}
+                        name={`min_message_warning_${l}`}
+                        value={values[`min_message_warning_${l}`]}
                         onChange={handleChange}
-                        isInvalid={touched.min_message_warning_en && !!errors.min_message_warning_en}
+                        isInvalid={touched[`min_message_warning_${l}`] && !!errors[`min_message_warning_${l}`]}
                       />
                       <Form.Control.Feedback type="invalid">
-                        {errors.min_message_warning_en}
+                        {errors[`min_message_warning_${l}`]}
                       </Form.Control.Feedback>
                     </Form.Group>
 
-                    <Form.Group controlId="validationMaxMessageError">
+                    <Form.Group controlId="validationMaxMessageWarning">
                       <Form.Label>{I18n.t("activerecord.attributes.question.max_message_warning")}</Form.Label>
                       <Form.Control
                         as="textarea"
-                        name="max_message_warning_en"
-                        value={values.max_message_warning_en}
+                        name={`max_message_warning_${l}`}
+                        value={values[`max_message_warning_${l}`]}
                         onChange={handleChange}
-                        isInvalid={touched.max_message_warning_en && !!errors.max_message_warning_en}
+                        isInvalid={touched[`max_message_warning_${l}`] && !!errors[`max_message_warning_${l}`]}
                       />
                       <Form.Control.Feedback type="invalid">
-                        {errors.max_message_warning_en}
+                        {errors[`max_message_warning_${l}`]}
                       </Form.Control.Feedback>
                     </Form.Group>
 
@@ -700,13 +703,13 @@ export default class QuestionForm extends React.Component {
                       <Form.Label>{I18n.t("activerecord.attributes.question.min_message_error")}</Form.Label>
                       <Form.Control
                         as="textarea"
-                        name="min_message_error_en"
-                        value={values.min_message_error_en}
+                        name={`min_message_error_${l}`}
+                        value={values[`min_message_error_${l}`]}
                         onChange={handleChange}
-                        isInvalid={touched.min_message_error_en && !!errors.min_message_error_en}
+                        isInvalid={touched[`min_message_error_${l}`] && !!errors[`min_message_error_${l}`]}
                       />
                       <Form.Control.Feedback type="invalid">
-                        {errors.min_message_error_en}
+                        {errors[`min_message_error_${l}`]}
                       </Form.Control.Feedback>
                     </Form.Group>
 
@@ -714,13 +717,13 @@ export default class QuestionForm extends React.Component {
                       <Form.Label>{I18n.t("activerecord.attributes.question.max_message_error")}</Form.Label>
                       <Form.Control
                         as="textarea"
-                        name="max_message_error_en"
-                        value={values.max_message_error_en}
+                        name={`max_message_error_${l}`}
+                        value={values[`max_message_error_${l}`]}
                         onChange={handleChange}
-                        isInvalid={touched.max_message_error_en && !!errors.max_message_error_en}
+                        isInvalid={touched[`max_message_error_${l}`] && !!errors[`max_message_error_${l}`]}
                       />
                       <Form.Control.Feedback type="invalid">
-                        {errors.max_message_error_en}
+                        {errors[`max_message_error_${l}`]}
                       </Form.Control.Feedback>
                     </Form.Group>
                   </>
@@ -729,14 +732,14 @@ export default class QuestionForm extends React.Component {
                 <Form.Group controlId="validationDescription">
                   <Form.Label>{I18n.t("activerecord.attributes.node.description_translations")}</Form.Label>
                   <Form.Control
-                    name="description_en"
                     as="textarea"
-                    value={values.description_en}
+                    name={`description_${l}`}
+                    value={values[`description_${l}`]}
                     onChange={handleChange}
-                    isInvalid={touched.description_en && !!errors.description_en}
+                    isInvalid={touched[`description_${l}`] && !!errors[`description_${l}`]}
                   />
                   <Form.Control.Feedback type="invalid">
-                    {errors.description_en}
+                    {errors[`description_${l}`]}
                   </Form.Control.Feedback>
                 </Form.Group>
 

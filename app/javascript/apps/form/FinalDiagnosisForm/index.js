@@ -7,11 +7,12 @@ import { Formik } from "formik";
 import DisplayErrors from "../components/DisplayErrors";
 import Http from "../../diagram/engine/http";
 import store from "../../diagram/engine/reducers/store";
-import { finalDiagnoseschema } from "../constants/schema";
+import { finalDiagnosesSchema } from "../constants/schema";
 import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
 import MediaForm from "../MediaForm/mediaForm";
 import SliderComponent from "../components/Slider";
+import getStudyLanguage from "../../utils";
 
 export default class FinalDiagnosisForm extends React.Component {
 
@@ -78,22 +79,28 @@ export default class FinalDiagnosisForm extends React.Component {
 
   render() {
     const { finalDiagnosis } = this.props;
+    const l = getStudyLanguage();
+    let val = {
+      id: finalDiagnosis?.id || "",
+      label_translations: finalDiagnosis?.label_translations?.send(l) || "",
+      description_translations: finalDiagnosis?.description_translations?.send(l) || "",
+      level_of_urgency: finalDiagnosis?.level_of_urgency || 5,
+      medias_attributes: []
+    };
+    finalDiagnosis?.medias?.map(media => {
+      let mediaVals = {
+        id: media.id || "",
+        url: media.url || "",
+      };
+      mediaVals[`label_${l}`] = media.label_translations?.send(l) || "";
+      val['medias_attributes'].push(mediaVals)
+    });
 
     return (
       <FadeIn>
         <Formik
-          validationSchema={finalDiagnoseschema}
-          initialValues={{
-            id: finalDiagnosis?.id || "",
-            label_translations: finalDiagnosis?.label_translations?.en || "",
-            description_translations: finalDiagnosis?.description_translations?.en || "",
-            level_of_urgency: finalDiagnosis?.level_of_urgency || 5,
-            medias_attributes: finalDiagnosis?.medias?.map((media) => ({
-              id: media.id || "",
-              url: media.url || "",
-              label_en: media.label_translations?.en || "",
-            })) || [],
-          }}
+          validationSchema={finalDiagnosesSchema}
+          initialValues={val}
           onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
         >
           {({

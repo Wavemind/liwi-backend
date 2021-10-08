@@ -1,3 +1,5 @@
+import getStudyLanguage from "../../utils";
+
 export const DEFAULT_FORMULATION_VALUE = JSON.stringify({
   id: "",
   administration_route_id: "",
@@ -12,18 +14,20 @@ export const DEFAULT_FORMULATION_VALUE = JSON.stringify({
   by_age: false
 });
 
-export const DEFAULT_ANSWER_VALUE = JSON.stringify({
+let answerHash = {
   id: "",
-  label_en: "",
   operator: "",
   value: "",
-});
+};
+answerHash[`label_${getStudyLanguage()}`] = "";
+export const DEFAULT_ANSWER_VALUE = JSON.stringify(answerHash);
 
-export const DEFAULT_MEDIA_VALUE = JSON.stringify({
+let mediaHash = {
   id: "",
-  label_en: "",
   url: "",
-});
+};
+mediaHash[`label_${getStudyLanguage()}`] = "";
+export const DEFAULT_MEDIA_VALUE = JSON.stringify(mediaHash);
 
 export const CATEGORIES_DISABLING_ANSWER_TYPE = [
   "Questions::ComplaintCategory",

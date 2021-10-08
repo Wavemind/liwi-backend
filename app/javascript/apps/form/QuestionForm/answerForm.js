@@ -29,9 +29,8 @@ export default class AnswerForm extends React.Component {
    */
   init = async () => {
     let http = new Http();
-    let httpRequest = {};
 
-    httpRequest = await http.fetchAnswerOperators();
+    let httpRequest = await http.fetchAnswerOperators();
     let result = await httpRequest.json();
 
     if (httpRequest.status === 200) {

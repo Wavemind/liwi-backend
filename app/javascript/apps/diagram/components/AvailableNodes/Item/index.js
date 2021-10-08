@@ -1,10 +1,13 @@
 import * as React from "react";
 import { withDiagram } from "../../../engine/context/Diagram.context";
+import getStudyLanguage from "../../../../utils";
 
 class Item extends React.Component {
 
   render() {
     const { node, getReferencePrefix, readOnly } = this.props;
+    const l = getStudyLanguage();
+
     return (
       <div className="p-2"
            draggable={!readOnly}
@@ -24,7 +27,7 @@ class Item extends React.Component {
           </div>
           <div className="py-2 node-label">
             <div className="col text-center">
-              {node.label_translations["en"]}
+              {node.label_translations[l]}
             </div>
           </div>
         </div>

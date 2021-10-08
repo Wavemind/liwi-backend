@@ -10,6 +10,7 @@ import DisplayErrors from "../components/DisplayErrors";
 import { drugInstanceSchema } from "../constants/schema";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
 import { closeModal } from "../../diagram/engine/reducers/creators.actions";
+import getStudyLanguage from "../../utils";
 
 export default class InstanceForm extends React.Component {
 
@@ -19,15 +20,16 @@ export default class InstanceForm extends React.Component {
    * @params [Object] actions
    */
   handleOnSubmit = async (values, actions) => {
+    const l = getStudyLanguage();
     const { method, engine, diagramObject, addAvailableNode, drug, positions, removeAvailableNode, from, isFromAvailableNode } = this.props;
     let http = new Http();
     let httpRequest = {};
 
     if (method === "create") {
-      httpRequest = await http.createInstance(drug.id, positions.x, positions.y, values.duration_en, values.description_en);
+      httpRequest = await http.createInstance(drug.id, positions.x, positions.y, values[`duration_${l}`], values[`description_${l}`]);
     } else {
       const drugInstance = diagramObject.options.dbInstance;
-      httpRequest = await http.updateInstance(drugInstance.id, drugInstance.position_x, drugInstance.position_y, values.duration_en, values.description_en);
+      httpRequest = await http.updateInstance(drugInstance.id, drugInstance.position_x, drugInstance.position_y, values[`duration_${l}`], values[`description_${l}`]);
     }
 
     let result = await httpRequest.json();
@@ -62,15 +64,18 @@ export default class InstanceForm extends React.Component {
       drug
     } = this.props;
 
+    const l = getStudyLanguage();
+    let body = {
+      is_pre_referral: diagramObject.options.dbInstance?.is_pre_referral || false,
+    };
+    body[`duration_${l}`] = method === "create" ? "" : diagramObject.options.dbInstance.duration_translations?.send(l) || "",
+    body[`description_${l}`] = method === "create" ? drug?.description_translations?.send(l) : diagramObject.options.dbInstance.description_translations?.send(l) || ""
+
     return (
       <FadeIn>
         <Formik
           validationSchema={drugInstanceSchema}
-          initialValues={{
-            is_pre_referral: diagramObject.options.dbInstance?.is_pre_referral || false,
-            duration_en: method === "create" ? "" : diagramObject.options.dbInstance.duration_translations?.en || "",
-            description_en: method === "create" ? drug?.description_translations?.en : diagramObject.options.dbInstance.description_translations?.en || ""
-          }}
+          initialValues={body}
           onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
         >
           {({
@@ -102,28 +107,28 @@ export default class InstanceForm extends React.Component {
               <Form.Group controlId="validationDuration">
                 <Form.Label>{I18n.t("activerecord.attributes.instance.duration")}</Form.Label>
                 <Form.Control
-                  name="duration_en"
-                  value={values.duration_en}
+                  name={`duration_${l}`}
+                  value={values[`duration_${l}`]}
                   onChange={handleChange}
-                  disabled={values.is_pre_referral}
-                  isInvalid={touched.duration_en && !!errors.duration_en}
+                  disabled={values[`duration_${l}`]}
+                  isInvalid={touched[`duration_${l}`] && !!errors[`duration_${l}`]}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {errors.duration_en}
+                  {errors[`duration_${l}`]}
                 </Form.Control.Feedback>
               </Form.Group>
 
               <Form.Group controlId="validationDescription">
                 <Form.Label>{I18n.t("activerecord.attributes.instance.description")}</Form.Label>
                 <Form.Control
-                  name="description_en"
+                  name={`description_${l}`}
                   as="textarea"
-                  value={values.description_en}
+                  value={values[`description_${l}`]}
                   onChange={handleChange}
-                  isInvalid={touched.description_en && !!errors.description_en}
+                  isInvalid={touched[`description_${l}`] && !!errors[`description_${l}`]}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {errors.description_en}
+                  {errors[`description_${l}`]}
                 </Form.Control.Feedback>
               </Form.Group>
 

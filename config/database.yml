@@ -20,9 +20,7 @@ development:
   timeout: 4
   username:  <%= ENV['DEV_DB_USERNAME'] %>
   password:  <%= ENV['DEV_DB_PASSWORD'] %>
-#  url: postgres://rsatqeudafkjyx:e49c00cceb37a34b2c72541db5f82df7bdebc94ab838862c63d2424b94637c20@ec2-46-137-124-19.eu-west-1.compute.amazonaws.com:5432/dbjkihe8tjm9ut
-#  url: postgres://postgres:d75a6c84a5ab6d7510b74469341ef0fc@liwi-test.wavelab.top:19304/liwi_test # allow to test with ctlq database
-#  url: postgres://postgres:5c9fbaa135cfc78061b07f59c0af9cc8@medalc.unisante.ch:6178/medalc # allow to test with prod database
+  url:  <%= ENV['EXTERNAL_STAGING_URL'] %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".

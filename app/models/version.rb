@@ -189,12 +189,12 @@ class Version < ApplicationRecord
   end
 
   # Return an array of all questions that can be instantiate in a version
-  def instanceable_questions
+  def instanceable_questions(l = 'en')
     questions = algorithm.questions.where(stage: %w(registration triage)).or(algorithm.questions.where(type: %w(Questions::VitalSignAnthropometric Questions::Referral)))
 
     questions_json = []
     questions.map do |question|
-      questions_json.push({value: question.id, label: question.reference_label})
+      questions_json.push({value: question.id, label: question.reference_label(l)})
     end
     questions_json
   end

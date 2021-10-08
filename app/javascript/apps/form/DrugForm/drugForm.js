@@ -10,6 +10,7 @@ import {
   NO_ANSWERS_ATTACHED_ANSWER_TYPE,
   NO_ANSWERS_ATTACHED_TYPE
 } from "../constants/constants";
+import getStudyLanguage from "../../utils";
 
 export default class DrugForm extends React.Component {
   /**
@@ -30,6 +31,7 @@ export default class DrugForm extends React.Component {
 
   render() {
     const { formData, setFormData, nextStep, is_deployed } = this.props;
+    const l = getStudyLanguage();
 
     return (
       <FadeIn>
@@ -47,13 +49,13 @@ export default class DrugForm extends React.Component {
                   {I18n.t("activerecord.attributes.node.label_translations")}
                 </Form.Label>
                 <Form.Control
-                  name="label_en"
-                  value={values.label_en}
+                  name={`label`}
+                  value={values[`label_${l}`]}
                   onChange={handleChange}
-                  isInvalid={touched.label_en && !!errors.label_en}
+                  isInvalid={touched[`label_${l}`] && !!errors[`label_${l}`]}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {errors.label_en}
+                  {errors[`label_${l}`]}
                 </Form.Control.Feedback>
               </Form.Group>
 
@@ -64,14 +66,14 @@ export default class DrugForm extends React.Component {
                   )}
                 </Form.Label>
                 <Form.Control
-                  name="description_en"
+                  name={`description`}
                   as="textarea"
-                  value={values.description_en}
+                  value={values[`description_${l}`]}
                   onChange={handleChange}
-                  isInvalid={touched.description_en && !!errors.description_en}
+                  isInvalid={touched[`description_${l}`] && !!errors[`description_${l}`]}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {errors.description_en}
+                  {errors[`description_${l}`]}
                 </Form.Control.Feedback>
               </Form.Group>
 

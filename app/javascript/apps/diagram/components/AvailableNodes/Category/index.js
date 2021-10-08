@@ -1,6 +1,7 @@
 import * as React from "react";
 import * as _ from "lodash";
 import Item from "../Item";
+import getStudyLanguage from "../../../../utils";
 
 export default class Category extends React.Component {
 
@@ -10,8 +11,10 @@ export default class Category extends React.Component {
 
   render() {
     const { nodes, index } = this.props;
+    const l = getStudyLanguage();
+
     // Sort nodes by label
-    nodes.sort((a,b) => (a.label_translations['en'] > b.label_translations['en']) ? 1 : ((b.label_translations['en'] > a.label_translations['en']) ? -1 : 0));
+    nodes.sort((a,b) => (a.label_translations[l] > b.label_translations[l]) ? 1 : ((b.label_translations[l] > a.label_translations[l]) ? -1 : 0));
 
     return (
       <div className="card" key={index}>

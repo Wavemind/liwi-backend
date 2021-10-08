@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_30_124108) do
+ActiveRecord::Schema.define(version: 2021_10_04_133700) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -136,13 +136,13 @@ ActiveRecord::Schema.define(version: 2021_09_30_124108) do
     t.index ["version_id"], name: "index_diagnoses_on_version_id"
   end
 
-  create_table "final_diagnostic_health_cares", force: :cascade do |t|
+  create_table "final_diagnosis_health_cares", force: :cascade do |t|
     t.bigint "node_id"
     t.bigint "final_diagnosis_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["final_diagnosis_id"], name: "index_final_diagnostic_health_cares_on_final_diagnosis_id"
-    t.index ["node_id"], name: "index_final_diagnostic_health_cares_on_node_id"
+    t.index ["final_diagnosis_id"], name: "index_final_diagnosis_health_cares_on_final_diagnosis_id"
+    t.index ["node_id"], name: "index_final_diagnosis_health_cares_on_node_id"
   end
 
   create_table "formulations", force: :cascade do |t|
@@ -158,8 +158,6 @@ ActiveRecord::Schema.define(version: 2021_09_30_124108) do
     t.boolean "by_age", default: false
     t.bigint "node_id"
     t.bigint "administration_route_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.hstore "description_translations"
     t.hstore "injection_instructions_translations"
     t.hstore "dispensing_description_translations"
@@ -206,7 +204,7 @@ ActiveRecord::Schema.define(version: 2021_09_30_124108) do
     t.integer "position_y", default: 100
     t.hstore "duration_translations"
     t.hstore "description_translations"
-    t.boolean "is_pre_referral"
+    t.boolean "is_pre_referral", default: false
     t.index ["final_diagnosis_id"], name: "index_instances_on_final_diagnosis_id"
     t.index ["instanceable_type", "instanceable_id"], name: "index_instances_on_instanceable_type_and_instanceable_id"
     t.index ["node_id"], name: "index_instances_on_node_id"
@@ -283,6 +281,7 @@ ActiveRecord::Schema.define(version: 2021_09_30_124108) do
     t.string "snomed_label"
     t.integer "system"
     t.boolean "is_mandatory", default: false
+    t.bigint "node_id"
     t.boolean "is_anti_malarial", default: false
     t.boolean "is_antibiotic", default: false
     t.boolean "is_triage", default: false
@@ -295,8 +294,8 @@ ActiveRecord::Schema.define(version: 2021_09_30_124108) do
     t.bigint "reference_table_z_id"
     t.boolean "is_neonat", default: false
     t.boolean "is_danger_sign", default: false
-    t.integer "emergency_status", default: 0
     t.boolean "unavailable", default: false
+    t.integer "emergency_status", default: 0
     t.integer "level_of_urgency", default: 5
     t.integer "step"
     t.hstore "min_message_error_translations"
@@ -311,6 +310,7 @@ ActiveRecord::Schema.define(version: 2021_09_30_124108) do
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
     t.index ["diagnosis_id"], name: "index_nodes_on_diagnosis_id"
+    t.index ["node_id"], name: "index_nodes_on_node_id"
     t.index ["reference_table_x_id"], name: "index_nodes_on_reference_table_x_id"
     t.index ["reference_table_y_id"], name: "index_nodes_on_reference_table_y_id"
     t.index ["reference_table_z_id"], name: "index_nodes_on_reference_table_z_id"
@@ -390,6 +390,12 @@ ActiveRecord::Schema.define(version: 2021_09_30_124108) do
     t.string "uid", default: "", null: false
     t.text "tokens"
     t.integer "role"
+    t.string "encrypted_otp_secret"
+    t.string "encrypted_otp_secret_iv"
+    t.string "encrypted_otp_secret_salt"
+    t.integer "consumed_timestep"
+    t.boolean "otp_required_for_login"
+    t.string "otp_backup_codes", array: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
     t.index ["invitations_count"], name: "index_users_on_invitations_count"
@@ -444,6 +450,7 @@ ActiveRecord::Schema.define(version: 2021_09_30_124108) do
   add_foreign_key "node_exclusions", "nodes", column: "excluding_node_id"
   add_foreign_key "nodes", "algorithms"
   add_foreign_key "nodes", "answer_types"
+  add_foreign_key "nodes", "nodes"
   add_foreign_key "nodes", "nodes", column: "reference_table_z_id"
   add_foreign_key "technical_files", "users"
   add_foreign_key "versions", "algorithms"
