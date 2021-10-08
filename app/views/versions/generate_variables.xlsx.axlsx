@@ -111,3 +111,11 @@ wb.add_worksheet(name: "Managements") do |sheet|
     sheet.add_row [node.id, node.full_reference, node.label_en, node.is_referral.to_s, node.level_of_urgency, node.description_en], style: wrap
   end
 end
+
+wb.add_worksheet(name: "Media") do |sheet|
+  sheet.add_row ["ID", "Node type", "Node label", "Media label", "Link"]
+  medias = Media.where(fileable_type: 'Node', fileable_id: (nodes.map(&:id) + managements.map(&:id) + drugs.map(&:id)))
+  medias.map do |media|
+    sheet.add_row [media.id, media.fileable.type, media.fileable.reference_label, media.label_en, media.url.url], style: wrap
+  end
+end

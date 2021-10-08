@@ -70,6 +70,7 @@ fr:
         min_message_warning: "Warning message if below range"
         min_value_error: "Lower limit before error"
         min_value_warning: "Lower limit before warning"
+        placeholder: "Placeholder"
         snomed: "SNOMED label"
         stage: "Stage"
         step: "Step"
@@ -324,6 +325,7 @@ fr:
       not_an_integer: must be an integer
       odd: must be odd
       other_than: must be other than %{count}
+      password_complexity: Password complexity requirement not met
       present: must be blank
       required: must exist
       taken: has already been taken

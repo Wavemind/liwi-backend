@@ -1,0 +1,41 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h2><%= t('.title') %></h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card-deck">
+        <div class="card">
+          <div class="card-header">
+            <%= t('.step_1') %>
+          </div>
+          <div class="card-body">
+            <p><%= t('.scan_below_qr_code') %></p>
+            <hr />
+            <p class="text-center">
+              <%= qr_code_as_svg(current_user.two_factor_qr_code_uri)%>
+            </p>
+            <hr />
+            <p class="text-center">
+              <%= t('.scan_dont_work') %> <code><%= current_user.otp_secret%></code>
+            </p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <%= t('.step_2') %>
+          </div>
+          <div class="card-body">
+            <%= simple_form_for(:two_fa, url: two_factor_settings_path, method: :post) do |f| %>
+            <%= f.input :code %>
+            <%= f.input :password, label: t('.password') %>
+            <%= f.submit t('.submit'), class: 'btn btn-primary' %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

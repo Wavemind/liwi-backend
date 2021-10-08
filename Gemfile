@@ -55,6 +55,7 @@ gem 'city-state'
 gem 'tinymce-rails'
 gem 'copy_carrierwave_file'
 gem 'postmark-rails'
+gem 'devise-two-factor'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

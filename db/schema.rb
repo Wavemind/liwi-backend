@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_29_093730) do
+ActiveRecord::Schema.define(version: 2021_10_04_133700) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -136,13 +136,13 @@ ActiveRecord::Schema.define(version: 2021_09_29_093730) do
     t.index ["version_id"], name: "index_diagnoses_on_version_id"
   end
 
-  create_table "final_diagnostic_health_cares", force: :cascade do |t|
+  create_table "final_diagnosis_health_cares", force: :cascade do |t|
     t.bigint "node_id"
     t.bigint "final_diagnosis_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["final_diagnosis_id"], name: "index_final_diagnostic_health_cares_on_final_diagnosis_id"
-    t.index ["node_id"], name: "index_final_diagnostic_health_cares_on_node_id"
+    t.index ["final_diagnosis_id"], name: "index_final_diagnosis_health_cares_on_final_diagnosis_id"
+    t.index ["node_id"], name: "index_final_diagnosis_health_cares_on_node_id"
   end
 
   create_table "formulations", force: :cascade do |t|
@@ -206,7 +206,7 @@ ActiveRecord::Schema.define(version: 2021_09_29_093730) do
     t.integer "position_y", default: 100
     t.hstore "duration_translations"
     t.hstore "description_translations"
-    t.boolean "is_pre_referral"
+    t.boolean "is_pre_referral", default: false
     t.index ["final_diagnosis_id"], name: "index_instances_on_final_diagnosis_id"
     t.index ["instanceable_type", "instanceable_id"], name: "index_instances_on_instanceable_type_and_instanceable_id"
     t.index ["node_id"], name: "index_instances_on_node_id"
@@ -389,6 +389,12 @@ ActiveRecord::Schema.define(version: 2021_09_29_093730) do
     t.string "uid", default: "", null: false
     t.text "tokens"
     t.integer "role"
+    t.string "encrypted_otp_secret"
+    t.string "encrypted_otp_secret_iv"
+    t.string "encrypted_otp_secret_salt"
+    t.integer "consumed_timestep"
+    t.boolean "otp_required_for_login"
+    t.string "otp_backup_codes", array: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
     t.index ["invitations_count"], name: "index_users_on_invitations_count"

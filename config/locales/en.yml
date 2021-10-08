@@ -83,6 +83,7 @@ en:
         min_message_warning: "Warning message if below range"
         min_value_error: "Lower limit before error"
         min_value_warning: "Lower limit before warning"
+        placeholder: "Placeholder"
         round: "Value rounded to"
         snomed: "SNOMED label"
         stage: "Stage"
@@ -341,6 +342,7 @@ en:
       not_an_integer: must be an integer
       odd: must be odd
       other_than: must be other than %{count}
+      password_complexity: Password complexity requirement not met
       present: must be blank
       required: must exist
       taken: has already been taken
@@ -905,4 +907,33 @@ en:
   technical_files:
     index:
       title: "Upload/Download APK"
+  two_factor_settings:
+    flash_messages:
+      already_see_backup_code: 'You have already seen your backup codes.'
+      fail_disabled_two_factor: 'Could not disable two factor authentication.'
+      incorrect_password: 'Incorrect password'
+      incorrect_code: 'Incorrect code'
+      incorrect_otp: 'Invalid two-factor code.'
+      please_enable_two_factor: 'Please enable two factor authentication first.'
+      success_enable_two_factor: 'Successfully enabled two factor authentication, please make note of your backup codes.'
+      success_disabled_two_factor: 'Successfully disabled two factor authentication.'
+      two_factor_already_enable: 'Two Factor Authentication is already enabled.'
+    edit:
+      title: 'Two factor authentication'
+      backup: 'Backup codes'
+      keep_backup: 'Keep these backup codes safe in case you lose access to your authenticator app:'
+      setup_completed: 'Two factor setup complete'
+      enable: 'Two factor authentication has been successfully enabled.'
+      delete_confirmation: 'Are you sure you want to disable two factor authentication?'
+      action: 'Return to account'
+
+    new:
+      title: 'Two factor authentication'
+      step_1: '1. Scan QR Code'
+      scan_below_qr_code: 'Please scan the below QR code using an OTP compatible app (such as Google Authenticator or Authy).'
+      scan_dont_work: 'If you cannot scan, please enter the following code manually:'
+      step_2: '2. Confirm OTP Code'
+      confirm_code: 'Please confirm that your authentication application is working by entering a generated code below.'
+      password: 'Enter your current password'
+      submit: 'Confirm and enable two factor'
   access_denied: "You are not authorized to perform this action"
