@@ -1,4 +1,4 @@
-class AlgorithmPolicy < ApplicationPolicy
+class TwoFactorSettingsPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       scope.all
