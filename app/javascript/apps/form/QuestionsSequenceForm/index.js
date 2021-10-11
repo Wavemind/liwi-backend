@@ -15,7 +15,7 @@ import Loader from "../components/Loader";
 import { questionSequencesSchema } from "../constants/schema";
 import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
-import getStudyLanguage from "../../utils";
+import {getTranslatedText, getStudyLanguage} from "../../utils";
 
 
 const filterOptions = createFilterOptions({
@@ -112,8 +112,8 @@ export default class QuestionsSequenceForm extends React.Component {
             initialValues={{
               id: questionsSequence?.id || "",
               type: questionsSequence?.type || "",
-              label_translations: questionsSequence?.label_translations?.send(l) || "",
-              description_translations: questionsSequence?.description_translations?.send(l) || "",
+              label_translations: getTranslatedText(questionsSequence?.label_translations, l),
+              description_translations: getTranslatedText(questionsSequence?.description_translations, l),
               min_score: questionsSequence?.min_score || "",
               cut_off_start: questionsSequence?.cut_off_start || "",
               cut_off_end: questionsSequence?.cut_off_end || "",

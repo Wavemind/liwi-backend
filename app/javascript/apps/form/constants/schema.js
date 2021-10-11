@@ -1,6 +1,6 @@
 import I18n from "i18n-js";
 import { CATEGORIES_DISPLAYING_SYSTEM } from "./constants";
-import getStudyLanguage from "../../utils";
+import { getStudyLanguage } from "../../utils";
 
 let yup = require("yup");
 const l = getStudyLanguage();

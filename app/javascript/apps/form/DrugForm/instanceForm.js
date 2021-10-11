@@ -10,7 +10,7 @@ import DisplayErrors from "../components/DisplayErrors";
 import { drugInstanceSchema } from "../constants/schema";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
 import { closeModal } from "../../diagram/engine/reducers/creators.actions";
-import getStudyLanguage from "../../utils";
+import { getStudyLanguage } from "../../utils";
 
 export default class InstanceForm extends React.Component {
 

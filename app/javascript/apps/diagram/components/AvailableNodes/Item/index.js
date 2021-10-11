@@ -1,6 +1,6 @@
 import * as React from "react";
 import { withDiagram } from "../../../engine/context/Diagram.context";
-import getStudyLanguage from "../../../../utils";
+import { getStudyLanguage } from "../../../../utils";
 
 class Item extends React.Component {
 

@@ -10,7 +10,7 @@ import {
   NO_ANSWERS_ATTACHED_ANSWER_TYPE,
   NO_ANSWERS_ATTACHED_TYPE
 } from "../constants/constants";
-import getStudyLanguage from "../../utils";
+import { getStudyLanguage } from "../../utils";
 
 export default class DrugForm extends React.Component {
   /**
@@ -49,7 +49,7 @@ export default class DrugForm extends React.Component {
                   {I18n.t("activerecord.attributes.node.label_translations")}
                 </Form.Label>
                 <Form.Control
-                  name={`label`}
+                  name={`label_${l}`}
                   value={values[`label_${l}`]}
                   onChange={handleChange}
                   isInvalid={touched[`label_${l}`] && !!errors[`label_${l}`]}
@@ -66,7 +66,7 @@ export default class DrugForm extends React.Component {
                   )}
                 </Form.Label>
                 <Form.Control
-                  name={`description`}
+                  name={`description_${l}`}
                   as="textarea"
                   value={values[`description_${l}`]}
                   onChange={handleChange}

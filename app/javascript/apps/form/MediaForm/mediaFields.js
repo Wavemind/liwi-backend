@@ -2,7 +2,7 @@ import * as React from "react";
 import I18n from "i18n-js";
 import FadeIn from "react-fade-in";
 import {Form, Col, Button} from "react-bootstrap";
-import getStudyLanguage from "../../utils";
+import { getStudyLanguage } from "../../utils";
 
 export default class MediaFields extends React.Component {
 

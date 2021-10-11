@@ -3,7 +3,7 @@ import I18n from "i18n-js";
 import FadeIn from "react-fade-in";
 import {Form, Col} from "react-bootstrap";
 import {MEASUREMENT_CATEGORIES} from "../constants/constants";
-import getStudyLanguage from "../../utils";
+import { getStudyLanguage } from "../../utils";
 
 export default class AnswerFields extends React.Component {
 

@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as _ from "lodash";
 import Item from "../Item";
-import getStudyLanguage from "../../../../utils";
+import { getStudyLanguage } from "../../../../utils";
 
 export default class Category extends React.Component {
 

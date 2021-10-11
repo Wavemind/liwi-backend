@@ -12,7 +12,7 @@ import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
 import MediaForm from "../MediaForm/mediaForm";
 import SliderComponent from "../components/Slider";
-import getStudyLanguage from "../../utils";
+import { getStudyLanguage } from "../../utils";
 
 export default class FinalDiagnosisForm extends React.Component {
 

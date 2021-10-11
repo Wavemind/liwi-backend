@@ -6,7 +6,7 @@ import FinalDiagnosisNodeModel from "../components/extended/FinalDiagnosisDiagra
 import HealthCareNodeModel from "../components/extended/HealthCareDiagram/node/HealthCareNodeModel";
 import QuestionsSequenceNodeModel from "../components/extended/QuestionsSequenceDiagram/node/QuestionsSequenceNodeModel";
 import readableDate from "../../diagram/helpers/readableDate";
-import getStudyLanguage from "../../utils";
+import { getTranslatedText, getStudyLanguage } from "../../utils";
 
 /**
  * Get full label of an object
@@ -15,7 +15,7 @@ import getStudyLanguage from "../../utils";
  */
 export const getLabel = node => {
   const l = getStudyLanguage();
-  return node.label_translations[l];
+  return getTranslatedText(node.label_translations, l);
 };
 
 /**

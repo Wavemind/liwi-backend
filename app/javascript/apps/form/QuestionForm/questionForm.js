@@ -28,12 +28,12 @@ import Overlay from "react-bootstrap/Overlay";
 import Popover from "react-bootstrap/Popover";
 import AnswerFields from "./answerForm";
 import MediaForm from "../MediaForm/mediaForm";
-import getStudyLanguage from "../../utils";
+import {getTranslatedText, getStudyLanguage} from "../../utils";
 
 const humanizeString = require("humanize-string");
 const l = getStudyLanguage();
 const filterOptions = createFilterOptions({
-  stringify: option => option.label_translations.send(l)
+  stringify: option => getTranslatedText(option.label_translations, l)
 });
 
 

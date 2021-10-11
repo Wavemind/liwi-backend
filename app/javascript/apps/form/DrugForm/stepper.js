@@ -8,7 +8,7 @@ import InstanceForm from "./instanceForm";
 import DisplayErrors from "../components/DisplayErrors";
 import store from "../../diagram/engine/reducers/store";
 import { closeModal } from "../../diagram/engine/reducers/creators.actions";
-import getStudyLanguage from "../../utils";
+import {getTranslatedText, getStudyLanguage} from "../../utils";
 
 export default class StepperDrugForm extends React.Component {
   constructor(props) {
@@ -39,8 +39,8 @@ export default class StepperDrugForm extends React.Component {
       is_neonat: drug?.is_neonat || "",
       formulations_attributes: drug?.formulations || []
     };
-    body[`label_${language}`] = drug?.label_translations?.send(language) || "";
-    body[`description_${language}`] = drug?.description_translations?.send(language) || "";
+    body[`label_${language}`] = getTranslatedText(drug?.label_translations, language);
+    body[`description_${language}`] = getTranslatedText(drug?.description_translations, language);
 
     if (method === "update") {
       body["id"] = drug.id;
@@ -63,9 +63,9 @@ export default class StepperDrugForm extends React.Component {
           breakable: formulation.breakable,
           _destroy: false
         };
-        formulationBody[`description_${language}`] = formulation.description_translations?.send(language) || "";
-        formulationBody[`injection_instructions_${language}`] = formulation.injection_instructions_translations?.send(language) || "";
-        formulationBody[`dispensing_description_${language}`] = formulation.dispensing_description_translations?.send(language) || "";
+        formulationBody[`description_${language}`] = getTranslatedText(formulation?.description_translations, language);
+        formulationBody[`injection_instructions_${language}`] = getTranslatedText(formulation?.injection_instructions_translations, language);
+        formulationBody[`dispensing_description_${language}`] = getTranslatedText(formulation?.dispensing_description_translations, language);
         body["formulations_attributes"].push(formulationBody);
       });
     } else {

@@ -1,4 +1,4 @@
-import getStudyLanguage from "../../utils";
+import { getStudyLanguage } from "../../utils";
 
 export const DEFAULT_FORMULATION_VALUE = JSON.stringify({
   id: "",

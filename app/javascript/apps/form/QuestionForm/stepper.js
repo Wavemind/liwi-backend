@@ -9,7 +9,7 @@ import { createNode } from "../../diagram/helpers/nodeHelpers";
 import QuestionForm from "./questionForm";
 import AnswerForm from "./answerForm";
 import DisplayErrors from "../components/DisplayErrors";
-import getStudyLanguage from "../../utils";
+import { getTranslatedText, getStudyLanguage } from "../../utils";
 
 
 export default class StepperQuestionForm extends React.Component {
@@ -65,13 +65,13 @@ export default class StepperQuestionForm extends React.Component {
       }) || []
     };
 
-    body[`label_${language}`] = question?.label_translations[language] || "";
-    body[`description_${language}`] = question?.description_translations[language] || "";
-    body[`placeholder_${language}`] = question?.placeholder_translations[language] || "";
-    body[`min_message_warning_${language}`] = question?.min_message_warning_translations[language] || "";
-    body[`max_message_warning_${language}`] = question?.max_message_warning_translations[language] || "";
-    body[`min_message_error_${language}`] = question?.min_message_error_translations[language] || "";
-    body[`max_message_error_${language}`] = question?.max_message_warning_translations[language] || "";
+    body[`label_${language}`] = getTranslatedText(question?.label_translations, language);
+    body[`description_${language}`] = getTranslatedText(question?.description_translations, language);
+    body[`placeholder_${language}`] = getTranslatedText(question?.placeholder_translations, language);
+    body[`min_message_warning_${language}`] = getTranslatedText(question?.min_message_warning_translations, language);
+    body[`max_message_warning_${language}`] = getTranslatedText(question?.max_message_warning_translations, language);
+    body[`min_message_error_${language}`] = getTranslatedText(question?.min_message_error_translations, language);
+    body[`max_message_error_${language}`] = getTranslatedText(question?.max_message_error_translations, language);
 
     if (method === "update") {
       body["id"] = question.id;
@@ -85,7 +85,7 @@ export default class StepperQuestionForm extends React.Component {
           value: answer.value,
           _destroy: false
         };
-        answerBody[`label_${language}`] = answer.label_translations[language] || "";
+        answerBody[`label_${language}`] = getTranslatedText(answer?.label_translations, language);
         body["answers_attributes"].push(answerBody);
       });
 
@@ -96,7 +96,7 @@ export default class StepperQuestionForm extends React.Component {
           url: media.url,
           _destroy: false
         };
-        mediaBody[`label_${language}`] = media.label_translations[language] || "";
+        mediaBody[`label_${language}`] = getTranslatedText(media?.label_translations, language);
         body["medias_attributes"].push(mediaBody);
       });
     } else {
