@@ -135,9 +135,9 @@ class Version < ApplicationRecord
         hash['children'].push(neonat_hash)
       else
         if step_name == 'registration_step' # Add the 3 hard coded questions in the order
-          hash['children'].push({"id"=>'first_name', "title"=>"First name", "is_neonat"=>false, "expanded"=>false})
-          hash['children'].push({"id"=>'last_name', "title"=>"Last name", "is_neonat"=>false, "expanded"=>false})
-          hash['children'].push({"id"=>'birth_date', "title"=>"Birth date", "is_neonat"=>false, "expanded"=>false})
+          hash['children'].push({"id"=>'first_name', "title"=>I18n.t('questions.basic_questions.first_name'), "is_neonat"=>false, "expanded"=>false})
+          hash['children'].push({"id"=>'last_name', "title"=>I18n.t('questions.basic_questions.last_name'), "is_neonat"=>false, "expanded"=>false})
+          hash['children'].push({"id"=>'birth_date', "title"=>I18n.t('questions.basic_questions.birth_date'), "is_neonat"=>false, "expanded"=>false})
         end
         algorithm.questions.where(step: step_index).each do |question|
           hash['children'].push(question.generate_node_tree_hash)
@@ -222,7 +222,13 @@ class Version < ApplicationRecord
             node['title'] = node.reference_label(l)
           end
         else
-          child['title'] = child.reference_label(l)
+          if %w(first_name last_name birth_date).include?(child['id'])
+            I18n.default_locale = l
+            child['title'] = I18n.t("questions.basic_questions.#{child['id']}")
+            I18n.default_locale = :en
+          else
+            child['title'] = child.reference_label(l)
+          end
         end
       end
     end

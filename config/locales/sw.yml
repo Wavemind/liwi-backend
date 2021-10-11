@@ -610,6 +610,10 @@ sw:
       loop: "You are doing a loop using this Questions sequence in this diagram."
   prompt: "Select"
   questions:
+    basic_questions:
+      first_name: "First name"
+      last_name: "Last name"
+      birth_date: "Birth date"
     categories:
       assessment_test:
         label: "Assessment/Test"
