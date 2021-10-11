@@ -199,17 +199,6 @@ class Version < ApplicationRecord
     questions_json
   end
 
-  # Return an array of all questions that has been instantiated
-  def instanciated_questions
-    questions = components.map(&:node)
-
-    questions_json = []
-    questions.map do |question|
-      questions_json.push({value: question.id, label: question.reference_label})
-    end
-    questions_json
-  end
-
   # Init orders for new version
   def init_config
     self.full_order_json = generate_nodes_order_tree
@@ -220,6 +209,24 @@ class Version < ApplicationRecord
     # TODO : Test currently disabled so the version can be updated during development phase. To be removed !
     # group_accesses.where(end_date: nil).any?
     false
+  end
+
+  # Fill labels for every node with the translation based on study settings
+  def fill_order_labels
+    l = algorithm.study.default_language
+    order = JSON.parse(full_order_json)
+    order.each do |step|
+      step['children'].each do |child|
+        if %w(Attribute System).include?(child['subtitle'])
+          child.each do |node|
+            node['title'] = node.reference_label(l)
+          end
+        else
+          child['title'] = child.reference_label(l)
+        end
+      end
+    end
+    order.to_json
   end
 
   # Validate full_order_json
