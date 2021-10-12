@@ -9,6 +9,10 @@ export default class AnswerFields extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      language: getStudyLanguage()
+    };
   }
 
   /**
@@ -49,8 +53,8 @@ export default class AnswerFields extends React.Component {
       operators
     } = this.props;
 
-    let answer = values.answers_attributes[index];
-    const l = getStudyLanguage();
+    const { language } = this.state;
+    const answer = values.answers_attributes[index];
 
     return (
       <FadeIn>
@@ -58,13 +62,13 @@ export default class AnswerFields extends React.Component {
           <Form.Group as={Col} controlId="validationLabelTranslations">
             <Form.Label>{I18n.t("activerecord.attributes.node.label_translations")}</Form.Label>
             <Form.Control
-              name={`answers_attributes.${index}.label_${l}`}
-              value={answer[`label_${l}`]}
+              name={`answers_attributes.${index}.label_${language}`}
+              value={answer[`label_${language}`]}
               onChange={handleChange}
-              isInvalid={this.isInvalid(`label_${l}`)}>
+              isInvalid={this.isInvalid(`label_${language}`)}>
             </Form.Control>
             <Form.Control.Feedback type="invalid">
-              {this.displayErrors(`label_${l}`)}
+              {this.displayErrors(`label_${language}`)}
             </Form.Control.Feedback>
           </Form.Group>
 

@@ -5,6 +5,7 @@ class StudiesController < ApplicationController
   def new
     authorize policy_scope(Study)
     @study = Study.new
+    @languages = Language.all.to_a.push(Language.new(name: 'English', code: 'en'))
   end
 
   def create
@@ -18,6 +19,7 @@ class StudiesController < ApplicationController
   end
 
   def edit
+    @languages = Language.all.to_a.push(Language.new(name: 'English', code: 'en'))
   end
 
   def update
@@ -47,7 +49,6 @@ class StudiesController < ApplicationController
     params.require(:study).permit(
       :id,
       :label,
-      :description_en,
       Language.language_params('description'),
       :default_language,
       )

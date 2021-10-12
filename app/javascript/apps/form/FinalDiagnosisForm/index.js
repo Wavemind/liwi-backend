@@ -18,6 +18,7 @@ export default class FinalDiagnosisForm extends React.Component {
 
   state = {
     toDeleteMedias: [],
+    language: getStudyLanguage()
   };
 
   /**
@@ -46,7 +47,7 @@ export default class FinalDiagnosisForm extends React.Component {
       httpRequest = await http.createFinalDiagnosis(values.label_translations, values.description_translations, values.level_of_urgency, values.medias_attributes, from);
     } else {
       if (toDeleteMedias.length > 0) {
-        toDeleteMedias.map(media_id => {
+        toDeleteMedias.forEach(media_id => {
           values.medias_attributes.push({id: media_id, _destroy: true});
         });
       }
@@ -79,28 +80,29 @@ export default class FinalDiagnosisForm extends React.Component {
 
   render() {
     const { finalDiagnosis } = this.props;
-    const l = getStudyLanguage();
-    let val = {
+    const { language } = this.state;
+
+    const initialValues = {
       id: finalDiagnosis?.id || "",
-      label_translations: finalDiagnosis?.label_translations?.send(l) || "",
-      description_translations: finalDiagnosis?.description_translations?.send(l) || "",
+      label_translations: finalDiagnosis?.label_translations?.send(language) || "",
+      description_translations: finalDiagnosis?.description_translations?.send(language) || "",
       level_of_urgency: finalDiagnosis?.level_of_urgency || 5,
       medias_attributes: []
     };
-    finalDiagnosis?.medias?.map(media => {
-      let mediaVals = {
+    finalDiagnosis?.medias?.forEach(media => {
+      const mediaVals = {
         id: media.id || "",
         url: media.url || "",
       };
-      mediaVals[`label_${l}`] = media.label_translations?.send(l) || "";
-      val['medias_attributes'].push(mediaVals)
+      mediaVals[`label_${language}`] = media.label_translations?.send(language) || "";
+      initialValues['medias_attributes'].push(mediaVals)
     });
 
     return (
       <FadeIn>
         <Formik
           validationSchema={finalDiagnosesSchema}
-          initialValues={val}
+          initialValues={initialValues}
           onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
         >
           {({

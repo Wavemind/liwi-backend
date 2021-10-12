@@ -377,7 +377,6 @@ class VersionsController < ApplicationController
     params.require(:version).permit(
       :id,
       :name,
-      :description_en,
       Language.language_params('description'),
       :triage_unique_triage_question_order,
       :triage_complaint_category_order,

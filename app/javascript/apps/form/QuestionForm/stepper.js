@@ -35,7 +35,7 @@ export default class StepperQuestionForm extends React.Component {
   questionBody = (question, method) => {
     const language = getStudyLanguage();
 
-    let body = {
+    const body = {
       type: question?.type || "",
       system: question?.system || "",
       answer_type_id: question?.answer_type_id || "",
@@ -78,8 +78,8 @@ export default class StepperQuestionForm extends React.Component {
       body["answers_attributes"] = [];
 
       // Generate hash cause of label_translation
-      question.answers.map(answer => {
-        let answerBody = {
+      question.answers.forEach(answer => {
+        const answerBody = {
           id: answer.id,
           operator: answer.operator,
           value: answer.value,
@@ -90,8 +90,8 @@ export default class StepperQuestionForm extends React.Component {
       });
 
       // Generate hash cause of label_translation
-      question.medias.map(media => {
-        let mediaBody = {
+      question.medias.forEach(media => {
+        const mediaBody = {
           id: media.id,
           url: media.url,
           _destroy: false
@@ -110,9 +110,9 @@ export default class StepperQuestionForm extends React.Component {
    */
   save = async (toDeleteAnswers, toDeleteMedias) => {
     const { method, from, engine, diagramObject, addAvailableNode } = this.props;
-    let { question, http } = this.state;
+    const { question, http } = this.state;
+    const complaint_category_ids = [];
     let httpRequest = {};
-    let complaint_category_ids = [];
 
     toDeleteAnswers.map(answer_id => {
       question.answers_attributes.push({id: answer_id, _destroy: true});
@@ -131,7 +131,7 @@ export default class StepperQuestionForm extends React.Component {
       httpRequest = await http.updateQuestion(question, from);
     }
 
-    let result = await httpRequest.json();
+    const result = await httpRequest.json();
 
     if (httpRequest.status === 200) {
       if (from === "rails") {
@@ -161,8 +161,8 @@ export default class StepperQuestionForm extends React.Component {
   validate = async () => {
     const { question, http } = this.state;
 
-    let httpRequest = await http.validateQuestion(question);
-    let result = await httpRequest.json();
+    const httpRequest = await http.validateQuestion(question);
+    const result = await httpRequest.json();
 
     if (httpRequest.status !== 200) {
       this.setState({ errors: result });

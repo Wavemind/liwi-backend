@@ -60,7 +60,7 @@ export default class FormulationFields extends React.Component {
       is_deployed
     } = this.props;
 
-    let formulation = values.formulations_attributes[index];
+    const formulation = values.formulations_attributes[index];
 
     let uniqueDoseTrad = "";
     switch(formulation.medication_form) {
@@ -81,7 +81,7 @@ export default class FormulationFields extends React.Component {
       default:
         uniqueDoseTrad = "unique_dose_general";
     }
-    const l = getStudyLanguage();
+    const language = getStudyLanguage();
 
     return (
       <FadeIn>
@@ -292,13 +292,13 @@ export default class FormulationFields extends React.Component {
               <Form.Label>{I18n.t("activerecord.attributes.formulation.injection_instructions_translations")}</Form.Label>
               <Form.Control
                 as="textarea"
-                name={`formulations_attributes.${index}.injection_instructions_${l}`}
-                value={formulation[`injection_instructions_${l}`]}
+                name={`formulations_attributes.${index}.injection_instructions_${language}`}
+                value={formulation[`injection_instructions_${language}`]}
                 onChange={handleChange}
-                isInvalid={this.isInvalid(`injection_instructions_${l}`)}
+                isInvalid={this.isInvalid(`injection_instructions_${language}`)}
               />
               <Form.Control.Feedback type="invalid">
-                {this.displayErrors(`injection_instructions_${l}`)}
+                {this.displayErrors(`injection_instructions_${language}`)}
               </Form.Control.Feedback>
             </Form.Group>
           </Form.Row>
@@ -308,13 +308,13 @@ export default class FormulationFields extends React.Component {
           <Form.Group as={Col} controlId={`${index}-validationDescription`}>
             <Form.Label>{I18n.t("activerecord.attributes.formulation.description_translations")}</Form.Label>
             <Form.Control
-              name={`formulations_attributes.${index}.description_${l}`}
-              value={formulation[`description_${l}`]}
+              name={`formulations_attributes.${index}.description_${language}`}
+              value={formulation[`description_${language}`]}
               onChange={handleChange}
-              isInvalid={this.isInvalid(`description_${l}`)}
+              isInvalid={this.isInvalid(`description_${language}`)}
             />
             <Form.Control.Feedback type="invalid">
-              {this.displayErrors(`description_${l}`)}
+              {this.displayErrors(`description_${language}`)}
             </Form.Control.Feedback>
           </Form.Group>
         </Form.Row>
@@ -324,13 +324,13 @@ export default class FormulationFields extends React.Component {
             <Form.Label>{I18n.t("activerecord.attributes.formulation.dispensing_description_translations")}</Form.Label>
             <Form.Control
               as="textarea"
-              name={`formulations_attributes.${index}.dispensing_description_${l}`}
-              value={formulation[`dispensing_description_${l}`]}
+              name={`formulations_attributes.${index}.dispensing_description_${language}`}
+              value={formulation[`dispensing_description_${language}`]}
               onChange={handleChange}
-              isInvalid={this.isInvalid(`dispensing_description_${l}`)}
+              isInvalid={this.isInvalid(`dispensing_description_${language}`)}
             />
             <Form.Control.Feedback type="invalid">
-              {this.displayErrors(`dispensing_description_${l}`)}
+              {this.displayErrors(`dispensing_description_${language}`)}
             </Form.Control.Feedback>
           </Form.Group>
         </Form.Row>

@@ -19,17 +19,16 @@ export default class CutOffForm extends React.Component {
    */
   handleOnSubmit = async (values, actions) => {
     const { conditionId, diagramObject, engine, method } = this.props;
-    let http = new Http();
-    let httpRequest = {};
+    const http = new Http();
 
-    httpRequest = await http.updateCutOffs(
+    const httpRequest = await http.updateCutOffs(
       conditionId,
       values.cut_off_start,
       values.cut_off_end,
       values.cut_off_value_type
     );
 
-    let result = await httpRequest.json();
+    const result = await httpRequest.json();
 
     // Set cut offs + set label with infos + reload canvas + close modal
     if (httpRequest.status === 200) {

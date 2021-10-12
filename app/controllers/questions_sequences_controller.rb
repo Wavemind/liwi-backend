@@ -121,9 +121,7 @@ class QuestionsSequencesController < ApplicationController
     params.require(:questions_sequence).permit(
       :id,
       :reference,
-      :label_en,
       Language.language_params('label'),
-      :description_en,
       Language.language_params('description'),
       :type,
       :algorithm_id,

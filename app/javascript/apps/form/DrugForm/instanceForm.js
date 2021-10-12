@@ -64,12 +64,12 @@ export default class InstanceForm extends React.Component {
       drug
     } = this.props;
 
-    const l = getStudyLanguage();
-    let body = {
+    const language = getStudyLanguage();
+    const body = {
       is_pre_referral: diagramObject.options.dbInstance?.is_pre_referral || false,
     };
-    body[`duration_${l}`] = method === "create" ? "" : diagramObject.options.dbInstance.duration_translations?.send(l) || "",
-    body[`description_${l}`] = method === "create" ? drug?.description_translations?.send(l) : diagramObject.options.dbInstance.description_translations?.send(l) || ""
+    body[`duration_${language}`] = method === "create" ? "" : diagramObject.options.dbInstance.duration_translations?.send(language) || "",
+    body[`description_${language}`] = method === "create" ? drug?.description_translations?.send(language) : diagramObject.options.dbInstance.description_translations?.send(language) || ""
 
     return (
       <FadeIn>
@@ -107,28 +107,28 @@ export default class InstanceForm extends React.Component {
               <Form.Group controlId="validationDuration">
                 <Form.Label>{I18n.t("activerecord.attributes.instance.duration")}</Form.Label>
                 <Form.Control
-                  name={`duration_${l}`}
-                  value={values[`duration_${l}`]}
+                  name={`duration_${language}`}
+                  value={values[`duration_${language}`]}
                   onChange={handleChange}
-                  disabled={values[`duration_${l}`]}
-                  isInvalid={touched[`duration_${l}`] && !!errors[`duration_${l}`]}
+                  disabled={values[`duration_${language}`]}
+                  isInvalid={touched[`duration_${language}`] && !!errors[`duration_${language}`]}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {errors[`duration_${l}`]}
+                  {errors[`duration_${language}`]}
                 </Form.Control.Feedback>
               </Form.Group>
 
               <Form.Group controlId="validationDescription">
                 <Form.Label>{I18n.t("activerecord.attributes.instance.description")}</Form.Label>
                 <Form.Control
-                  name={`description_${l}`}
+                  name={`description_${language}`}
                   as="textarea"
-                  value={values[`description_${l}`]}
+                  value={values[`description_${language}`]}
                   onChange={handleChange}
-                  isInvalid={touched[`description_${l}`] && !!errors[`description_${l}`]}
+                  isInvalid={touched[`description_${language}`] && !!errors[`description_${language}`]}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {errors[`description_${l}`]}
+                  {errors[`description_${language}`]}
                 </Form.Control.Feedback>
               </Form.Group>
 

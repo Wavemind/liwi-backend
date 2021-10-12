@@ -49,6 +49,7 @@ class ApplicationController < ActionController::Base
     @version = Version.find(params[:version_id])
   end
 
+  # Set an instance variable so we can retrieve the current study language whenever we are in an algorithm level or below
   def set_study_language
     if params[:algorithm_id].present?
       @default_language = Algorithm.find(params[:algorithm_id]).study.default_language
@@ -57,10 +58,6 @@ class ApplicationController < ActionController::Base
     elsif controller_name == 'questions_sequences'
       @default_language = QuestionsSequence.find(params[:id]).algorithm.study.default_language
     end
-  end
-
-  def self.testrot
-    set_study_language
   end
 
   def skip_pundit?

@@ -8,6 +8,10 @@ export default class MediaFields extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      language: getStudyLanguage()
+    };
   }
 
   /**
@@ -42,8 +46,8 @@ export default class MediaFields extends React.Component {
    */
   handleFile = (fileEvent) => {
     const {setFieldValue, index} = this.props;
-    let reader = new FileReader();
-    let file = fileEvent.files[0];
+    const reader = new FileReader();
+    const file = fileEvent.files[0];
 
     if (file) {
       reader.readAsDataURL(file);
@@ -52,7 +56,7 @@ export default class MediaFields extends React.Component {
         setFieldValue(`medias_attributes.${index}.filename`, file.name);
       };
     }
-  }
+  };
 
   render() {
     const {
@@ -65,8 +69,8 @@ export default class MediaFields extends React.Component {
       index,
     } = this.props;
 
-    let media = values.medias_attributes[index];
-    const l = getStudyLanguage();
+    const media = values.medias_attributes[index];
+    const { language } = this.state;
 
     return (
       <FadeIn>
@@ -74,13 +78,13 @@ export default class MediaFields extends React.Component {
           <Form.Group as={Col} controlId="validationLabelTranslations">
             <Form.Label>{I18n.t("activerecord.attributes.media.label_translations")}</Form.Label>
             <Form.Control
-              name={`medias_attributes.${index}.label_${l}`}
-              value={media[`label_${l}`]}
+              name={`medias_attributes.${index}.label_${language}`}
+              value={media[`label_${language}`]}
               onChange={handleChange}
-              isInvalid={this.isInvalid(`label_${l}`)}>
+              isInvalid={this.isInvalid(`label_${language}`)}>
             </Form.Control>
             <Form.Control.Feedback type="invalid">
-              {this.displayErrors(`label_${l}`)}
+              {this.displayErrors(`label_${language}`)}
             </Form.Control.Feedback>
           </Form.Group>
 

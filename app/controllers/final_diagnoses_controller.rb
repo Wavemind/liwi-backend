@@ -152,14 +152,11 @@ class FinalDiagnosesController < ApplicationController
     final_diagnosis_param = params.require(:final_diagnosis).permit(
       :id,
       :reference,
-      :label_en,
       :level_of_urgency,
       Language.language_params('label'),
-      :description_en,
       Language.language_params('description'),
       medias_attributes: [
           :id,
-          :label_en,
           Language.language_params('label'),
           :filename,
           :url,

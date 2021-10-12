@@ -16,7 +16,8 @@ import { getStudyLanguage } from "../../utils";
 
 export default class ManagementForm extends React.Component {
   state = {
-    toDeleteMedias: []
+    toDeleteMedias: [],
+    language: getStudyLanguage()
   };
 
   /**
@@ -103,31 +104,31 @@ export default class ManagementForm extends React.Component {
 
   render() {
     const { management, is_deployed } = this.props;
-    const l = getStudyLanguage();
-    let val = {
+    const { language } = this.state;
+    const initialValues = {
       id: management?.id || "",
-      label_translations: management?.label_translations?.send(l) || "",
+      label_translations: management?.label_translations?.send(language) || "",
       description_translations:
-        management?.description_translations?.send(l) || "",
+        management?.description_translations?.send(language) || "",
       level_of_urgency: management?.level_of_urgency || 5,
       is_referral: management?.is_referral || false,
       medias_attributes: []
     };
 
-    management?.medias?.map(media => {
-      let body = {
+    management?.medias?.forEach(media => {
+      const body = {
         id: media.id || "",
         url: media.url || "",
       };
-      body[`label_${l}`] = media.label_translations?.send(l) || "";
-      val["medias_attributes"].push(body);
+      body[`label_${language}`] = media.label_translations?.send(language) || "";
+      initialValues["medias_attributes"].push(body);
     });
 
     return (
       <FadeIn>
         <Formik
           validationSchema={managementSchema}
-          initialValues={val}
+          initialValues={initialValues}
           onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
         >
           {({

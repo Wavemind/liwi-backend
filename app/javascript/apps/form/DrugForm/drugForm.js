@@ -31,7 +31,7 @@ export default class DrugForm extends React.Component {
 
   render() {
     const { formData, setFormData, nextStep, is_deployed } = this.props;
-    const l = getStudyLanguage();
+    const language = getStudyLanguage();
 
     return (
       <FadeIn>
@@ -49,13 +49,13 @@ export default class DrugForm extends React.Component {
                   {I18n.t("activerecord.attributes.node.label_translations")}
                 </Form.Label>
                 <Form.Control
-                  name={`label_${l}`}
-                  value={values[`label_${l}`]}
+                  name={`label_${language}`}
+                  value={values[`label_${language}`]}
                   onChange={handleChange}
-                  isInvalid={touched[`label_${l}`] && !!errors[`label_${l}`]}
+                  isInvalid={touched[`label_${language}`] && !!errors[`label_${language}`]}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {errors[`label_${l}`]}
+                  {errors[`label_${language}`]}
                 </Form.Control.Feedback>
               </Form.Group>
 
@@ -66,14 +66,14 @@ export default class DrugForm extends React.Component {
                   )}
                 </Form.Label>
                 <Form.Control
-                  name={`description_${l}`}
+                  name={`description_${language}`}
                   as="textarea"
-                  value={values[`description_${l}`]}
+                  value={values[`description_${language}`]}
                   onChange={handleChange}
-                  isInvalid={touched[`description_${l}`] && !!errors[`description_${l}`]}
+                  isInvalid={touched[`description_${language}`] && !!errors[`description_${language}`]}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {errors[`description_${l}`]}
+                  {errors[`description_${language}`]}
                 </Form.Control.Feedback>
               </Form.Group>
 

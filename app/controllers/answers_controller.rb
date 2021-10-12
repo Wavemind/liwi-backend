@@ -13,7 +13,6 @@ class AnswersController < ApplicationController
   def answer_params
     params.require(:answer).permit(
       :id,
-      :label_en,
       Language.language_params('label'),
       :reference,
       :is_mandatory,

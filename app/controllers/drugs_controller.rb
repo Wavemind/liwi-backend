@@ -131,11 +131,9 @@ class DrugsController < ApplicationController
       :is_antibiotic,
       :is_anti_malarial,
       :is_neonat,
-      :label_en,
       :level_of_urgency,
       Language.language_params('label'),
       Language.language_params('description'),
-      :description_en,
       :algorithm_id,
       formulations_attributes: [
         :id,
@@ -150,11 +148,8 @@ class DrugsController < ApplicationController
         :unique_dose,
         :by_age,
         :breakable,
-        :description_en,
         Language.language_params('description'),
-        :injection_instructions_en,
         Language.language_params('injection_instructions'),
-        :dispensing_description_en,
         Language.language_params('dispensing_description'),
         :_destroy
       ]

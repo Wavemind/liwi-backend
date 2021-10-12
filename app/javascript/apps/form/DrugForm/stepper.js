@@ -32,7 +32,7 @@ export default class StepperDrugForm extends React.Component {
   drugBody = (drug, method) => {
     const language = getStudyLanguage();
 
-    let body = {
+    const body = {
       level_of_urgency: drug?.level_of_urgency || 5,
       is_anti_malarial: drug?.is_anti_malarial || false,
       is_antibiotic: drug?.is_antibiotic || "",
@@ -48,7 +48,7 @@ export default class StepperDrugForm extends React.Component {
 
       // Generate hash cause of label_translation
       drug.formulations.map(formulation => {
-        let formulationBody = {
+        const formulationBody = {
           id: formulation.id,
           administration_route_id: formulation.administration_route_id,
           minimal_dose_per_kg: formulation.minimal_dose_per_kg,
@@ -79,14 +79,14 @@ export default class StepperDrugForm extends React.Component {
    */
   save = async toDeleteFormulations => {
     const { method, from, diagramObject, engine } = this.props;
-    let { drug } = this.state;
+    const { drug } = this.state;
     toDeleteFormulations.map(formulation_id => {
-      let formulation = drug.formulations_attributes[0];
+      const formulation = drug.formulations_attributes[0];
       formulation.id = formulation_id;
       formulation._destroy = true;
       drug.formulations_attributes.push(formulation);
     });
-    let http = new Http();
+    const http = new Http();
     let httpRequest = {};
 
     if (method === "create") {

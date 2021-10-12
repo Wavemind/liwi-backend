@@ -120,8 +120,8 @@ class Node < ApplicationRecord
 
   # @return [String]
   # Return the label with the reference for the view
-  def reference_label(l = 'en')
-    "#{full_reference} - #{self.send("label_#{l}")}"
+  def reference_label(language = 'en')
+    "#{full_reference} - #{self.send("label_#{language}")}"
   end
 
   # Check if question is used in a deployed version

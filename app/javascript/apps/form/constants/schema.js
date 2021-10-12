@@ -3,7 +3,7 @@ import { CATEGORIES_DISPLAYING_SYSTEM } from "./constants";
 import { getStudyLanguage } from "../../utils";
 
 let yup = require("yup");
-const l = getStudyLanguage();
+const language = getStudyLanguage();
 
 export const scoreSchema = yup.object().shape({
   score: yup.number().required(I18n.t("errors.messages.required"))
@@ -15,21 +15,21 @@ export const cutOffSchema = yup.object().shape({
   cut_off_value_type: yup.string().required(I18n.t("errors.messages.required"))
 });
 
-let answerBody = {
+const answerBody = {
   operator: yup.string().nullable(),
   value: yup.string().nullable()
 };
-answerBody[`label_${l}`] = yup.string().required(I18n.t("errors.messages.required"));
+answerBody[`label_${language}`] = yup.string().required(I18n.t("errors.messages.required"));
 export const answerSchema = yup.object().shape({
   answers_attributes: yup.array().of(yup.object().shape(answerBody))
 });
 
-let drugBody = {
+const drugBody = {
   is_anti_malarial : yup.boolean(),
   is_antibiotic: yup.boolean(),
   is_neonat: yup.boolean()
 };
-drugBody[`label_${l}`] = yup.string().required(I18n.t("errors.messages.required"));
+drugBody[`label_${language}`] = yup.string().required(I18n.t("errors.messages.required"));
 export const drugSchema = yup.object().shape(drugBody);
 
 export const finalDiagnosesSchema = yup.object().shape({
@@ -37,7 +37,7 @@ export const finalDiagnosesSchema = yup.object().shape({
   description_translations: yup.string()
 });
 
-let questionBody = {
+const questionBody = {
   type: yup.string().required(I18n.t("errors.messages.required")),
   system: yup.string().when("type", {
     is: (type) => CATEGORIES_DISPLAYING_SYSTEM.includes(type),
@@ -64,7 +64,7 @@ let questionBody = {
       then: yup.string().required(I18n.t("errors.messages.required"))
     })
 };
-questionBody[`label_${l}`] = yup.string().required(I18n.t("errors.messages.required"));
+questionBody[`label_${language}`] = yup.string().required(I18n.t("errors.messages.required"));
 export const questionSchema = yup.object().shape(questionBody);
 
 export const managementSchema = yup.object().shape({
@@ -73,9 +73,9 @@ export const managementSchema = yup.object().shape({
   description_translations: yup.string()
 });
 
-let drugInstance = {};
-drugInstance[`duration_${l}`] = yup.string().required(I18n.t("errors.messages.required"));
-drugInstance[`description_${l}`] = yup.string();
+const drugInstance = {};
+drugInstance[`duration_${language}`] = yup.string().required(I18n.t("errors.messages.required"));
+drugInstance[`description_${language}`] = yup.string();
 export const drugInstanceSchema = yup.object().shape(drugInstance);
 
 export const questionSequencesSchema = yup.object().shape({
