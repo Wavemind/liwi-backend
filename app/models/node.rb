@@ -16,7 +16,7 @@ class Node < ApplicationRecord
 
   accepts_nested_attributes_for :medias, reject_if: :all_blank, allow_destroy: true
 
-  validates_presence_of :label_en
+  validates_presence_of :label_translations
   after_create :generate_reference
 
   translates :label, :description, :min_message_error, :max_message_error, :min_message_warning, :max_message_warning, :placeholder
@@ -120,8 +120,8 @@ class Node < ApplicationRecord
 
   # @return [String]
   # Return the label with the reference for the view
-  def reference_label
-    "#{full_reference} - #{label}"
+  def reference_label(language = 'en')
+    "#{full_reference} - #{self.send("label_#{language}")}"
   end
 
   # Check if question is used in a deployed version

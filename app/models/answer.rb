@@ -6,7 +6,7 @@ class Answer < ApplicationRecord
   belongs_to :node
   has_many :children
 
-  validates_presence_of :label_en
+  validates_presence_of :label_translations
   validates_presence_of :operator, if: Proc.new { self.node.is_a?(Question) && self.node.answer_type.display == 'Input' && !%w(Questions::BasicMeasurement Questions::VitalSignAnthropometric).include?(self.node.type) && value != 'not_available'}
 
   after_validation :correct_value_type
@@ -40,8 +40,8 @@ class Answer < ApplicationRecord
 
   # @return [String]
   # Return the label with the reference for the view
-  def reference_label
-    "#{full_reference} - #{label}"
+  def reference_label(l = 'en')
+    "#{full_reference} - #{self.send("label_#{l}")}"
   end
 
   private

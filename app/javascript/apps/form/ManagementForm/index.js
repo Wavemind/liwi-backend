@@ -12,10 +12,12 @@ import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
 import MediaForm from "../MediaForm/mediaForm";
 import SliderComponent from "../components/Slider";
+import { getStudyLanguage } from "../../utils";
 
 export default class ManagementForm extends React.Component {
   state = {
-    toDeleteMedias: []
+    toDeleteMedias: [],
+    language: getStudyLanguage()
   };
 
   /**
@@ -102,25 +104,31 @@ export default class ManagementForm extends React.Component {
 
   render() {
     const { management, is_deployed } = this.props;
+    const { language } = this.state;
+    const initialValues = {
+      id: management?.id || "",
+      label_translations: management?.label_translations?.send(language) || "",
+      description_translations:
+        management?.description_translations?.send(language) || "",
+      level_of_urgency: management?.level_of_urgency || 5,
+      is_referral: management?.is_referral || false,
+      medias_attributes: []
+    };
+
+    management?.medias?.forEach(media => {
+      const body = {
+        id: media.id || "",
+        url: media.url || "",
+      };
+      body[`label_${language}`] = media.label_translations?.send(language) || "";
+      initialValues["medias_attributes"].push(body);
+    });
 
     return (
       <FadeIn>
         <Formik
           validationSchema={managementSchema}
-          initialValues={{
-            id: management?.id || "",
-            label_translations: management?.label_translations?.en || "",
-            description_translations:
-              management?.description_translations?.en || "",
-            level_of_urgency: management?.level_of_urgency || 5,
-            is_referral: management?.is_referral || false,
-            medias_attributes:
-              management?.medias?.map(media => ({
-                id: media.id || "",
-                url: media.url || "",
-                label_en: media.label_translations?.en || ""
-              })) || []
-          }}
+          initialValues={initialValues}
           onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
         >
           {({

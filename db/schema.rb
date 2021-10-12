@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_17_134255) do
+ActiveRecord::Schema.define(version: 2021_10_04_133700) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -328,6 +328,7 @@ ActiveRecord::Schema.define(version: 2021_09_17_134255) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.hstore "description_translations"
+    t.string "default_language", default: "en"
   end
 
   create_table "technical_files", force: :cascade do |t|
@@ -346,6 +347,8 @@ ActiveRecord::Schema.define(version: 2021_09_17_134255) do
     t.bigint "model_id"
     t.json "data"
     t.string "ip_address"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_user_logs_on_user_id"
   end
 
@@ -387,6 +390,12 @@ ActiveRecord::Schema.define(version: 2021_09_17_134255) do
     t.string "uid", default: "", null: false
     t.text "tokens"
     t.integer "role"
+    t.string "encrypted_otp_secret"
+    t.string "encrypted_otp_secret_iv"
+    t.string "encrypted_otp_secret_salt"
+    t.integer "consumed_timestep"
+    t.boolean "otp_required_for_login"
+    t.string "otp_backup_codes", array: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
     t.index ["invitations_count"], name: "index_users_on_invitations_count"

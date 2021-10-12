@@ -1,14 +1,9 @@
-class ManagementDatatable < AjaxDatatablesRails::ActiveRecord
+class ManagementDatatable < ApplicationDatatable
   extend Forwardable
 
   def_delegator :@view, :link_to
   def_delegator :@view, :edit_algorithm_management_url
   def_delegator :@view, :algorithm_management_url
-
-  def initialize(params, opts = {})
-    @view = opts[:view_context]
-    super
-  end
 
   def view_columns
     @view_columns ||= {
@@ -25,8 +20,8 @@ class ManagementDatatable < AjaxDatatablesRails::ActiveRecord
       {
         id: record.id,
         reference: record.full_reference,
-        label: record.label,
-        description: record.description,
+        label: record.send("label_#{@default_language}"),
+        description: record.send("description_#{@default_language}"),
         actions: actions
       }
     end

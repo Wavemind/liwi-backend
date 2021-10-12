@@ -134,12 +134,11 @@ class DiagnosesController < ApplicationController
     params.require(:diagnosis).permit(
       :id,
       :reference,
-      :label_en,
       :node_id,
       :cut_off_start,
       :cut_off_end,
       :cut_off_value_type,
-      Language.label_params
+      Language.language_params('label'),
     )
   end
 end

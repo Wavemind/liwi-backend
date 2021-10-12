@@ -135,9 +135,9 @@ class Version < ApplicationRecord
         hash['children'].push(neonat_hash)
       else
         if step_name == 'registration_step' # Add the 3 hard coded questions in the order
-          hash['children'].push({"id"=>'first_name', "title"=>"First name", "is_neonat"=>false, "expanded"=>false})
-          hash['children'].push({"id"=>'last_name', "title"=>"Last name", "is_neonat"=>false, "expanded"=>false})
-          hash['children'].push({"id"=>'birth_date', "title"=>"Birth date", "is_neonat"=>false, "expanded"=>false})
+          hash['children'].push({"id"=>'first_name', "title"=>I18n.t('questions.basic_questions.first_name'), "is_neonat"=>false, "expanded"=>false})
+          hash['children'].push({"id"=>'last_name', "title"=>I18n.t('questions.basic_questions.last_name'), "is_neonat"=>false, "expanded"=>false})
+          hash['children'].push({"id"=>'birth_date', "title"=>I18n.t('questions.basic_questions.birth_date'), "is_neonat"=>false, "expanded"=>false})
         end
         algorithm.questions.where(step: step_index).each do |question|
           hash['children'].push(question.generate_node_tree_hash)
@@ -189,23 +189,12 @@ class Version < ApplicationRecord
   end
 
   # Return an array of all questions that can be instantiate in a version
-  def instanceable_questions
+  def instanceable_questions(l = 'en')
     questions = algorithm.questions.where(stage: %w(registration triage)).or(algorithm.questions.where(type: %w(Questions::VitalSignAnthropometric Questions::Referral)))
 
     questions_json = []
     questions.map do |question|
-      questions_json.push({value: question.id, label: question.reference_label})
-    end
-    questions_json
-  end
-
-  # Return an array of all questions that has been instantiated
-  def instanciated_questions
-    questions = components.map(&:node)
-
-    questions_json = []
-    questions.map do |question|
-      questions_json.push({value: question.id, label: question.reference_label})
+      questions_json.push({value: question.id, label: question.reference_label(l)})
     end
     questions_json
   end
@@ -220,6 +209,30 @@ class Version < ApplicationRecord
     # TODO : Test currently disabled so the version can be updated during development phase. To be removed !
     # group_accesses.where(end_date: nil).any?
     false
+  end
+
+  # Fill labels for every node with the translation based on study settings
+  def fill_order_labels
+    l = algorithm.study.default_language
+    order = JSON.parse(full_order_json)
+    order.each do |step|
+      step['children'].each do |child|
+        if %w(Attribute System).include?(child['subtitle'])
+          child.each do |node|
+            node['title'] = node.reference_label(l)
+          end
+        else
+          if %w(first_name last_name birth_date).include?(child['id'])
+            I18n.default_locale = l
+            child['title'] = I18n.t("questions.basic_questions.#{child['id']}")
+            I18n.default_locale = :en
+          else
+            child['title'] = child.reference_label(l)
+          end
+        end
+      end
+    end
+    order.to_json
   end
 
   # Validate full_order_json

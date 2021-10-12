@@ -1,5 +1,7 @@
 <%= simple_form_for @study, html: { class: 'form-horizontal' } do |f| %>
   <%= f.input :label %>
+  <%= f.input :default_language, collection: @languages, value_method: :code, label_method: :name, prompt: t('prompt') %>
+
   <div class="form-group">
     <label for="description_en" class="form-label"><%= t('studies.description') %></label>
     <div class="tinymce-wrapper">

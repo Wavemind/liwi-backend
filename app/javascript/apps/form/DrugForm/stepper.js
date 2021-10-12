@@ -8,6 +8,7 @@ import InstanceForm from "./instanceForm";
 import DisplayErrors from "../components/DisplayErrors";
 import store from "../../diagram/engine/reducers/store";
 import { closeModal } from "../../diagram/engine/reducers/creators.actions";
+import {getTranslatedText, getStudyLanguage} from "../../utils";
 
 export default class StepperDrugForm extends React.Component {
   constructor(props) {
@@ -18,7 +19,7 @@ export default class StepperDrugForm extends React.Component {
       errors: null,
       step: step || 1,
       drug: this.drugBody(drug, method),
-      createdDrug: drug || {}
+      createdDrug: drug || {},
     };
   }
 
@@ -29,15 +30,17 @@ export default class StepperDrugForm extends React.Component {
    * @return [Object] drug object for state
    */
   drugBody = (drug, method) => {
-    let body = {
-      label_en: drug?.label_translations?.en || "",
-      description_en: drug?.description_translations?.en || "",
+    const language = getStudyLanguage();
+
+    const body = {
       level_of_urgency: drug?.level_of_urgency || 5,
       is_anti_malarial: drug?.is_anti_malarial || false,
       is_antibiotic: drug?.is_antibiotic || "",
       is_neonat: drug?.is_neonat || "",
       formulations_attributes: drug?.formulations || []
     };
+    body[`label_${language}`] = getTranslatedText(drug?.label_translations, language);
+    body[`description_${language}`] = getTranslatedText(drug?.description_translations, language);
 
     if (method === "update") {
       body["id"] = drug.id;
@@ -45,7 +48,7 @@ export default class StepperDrugForm extends React.Component {
 
       // Generate hash cause of label_translation
       drug.formulations.map(formulation => {
-        body["formulations_attributes"].push({
+        const formulationBody = {
           id: formulation.id,
           administration_route_id: formulation.administration_route_id,
           minimal_dose_per_kg: formulation.minimal_dose_per_kg,
@@ -58,13 +61,12 @@ export default class StepperDrugForm extends React.Component {
           unique_dose: formulation.unique_dose,
           by_age: formulation.by_age,
           breakable: formulation.breakable,
-          description_en: formulation.description_translations?.en || "",
-          injection_instructions_en:
-            formulation.injection_instructions_translations?.en || "",
-          dispensing_description_en:
-            formulation.dispensing_description_translations?.en || "",
           _destroy: false
-        });
+        };
+        formulationBody[`description_${language}`] = getTranslatedText(formulation?.description_translations, language);
+        formulationBody[`injection_instructions_${language}`] = getTranslatedText(formulation?.injection_instructions_translations, language);
+        formulationBody[`dispensing_description_${language}`] = getTranslatedText(formulation?.dispensing_description_translations, language);
+        body["formulations_attributes"].push(formulationBody);
       });
     } else {
       body["answers_attributes"] = [];
@@ -77,14 +79,14 @@ export default class StepperDrugForm extends React.Component {
    */
   save = async toDeleteFormulations => {
     const { method, from, diagramObject, engine } = this.props;
-    let { drug } = this.state;
+    const { drug } = this.state;
     toDeleteFormulations.map(formulation_id => {
-      let formulation = drug.formulations_attributes[0];
+      const formulation = drug.formulations_attributes[0];
       formulation.id = formulation_id;
       formulation._destroy = true;
       drug.formulations_attributes.push(formulation);
     });
-    let http = new Http();
+    const http = new Http();
     let httpRequest = {};
 
     if (method === "create") {

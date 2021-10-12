@@ -3,11 +3,16 @@ import I18n from "i18n-js";
 import FadeIn from "react-fade-in";
 import {Form, Col} from "react-bootstrap";
 import {MEASUREMENT_CATEGORIES} from "../constants/constants";
+import { getStudyLanguage } from "../../utils";
 
 export default class AnswerFields extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      language: getStudyLanguage()
+    };
   }
 
   /**
@@ -48,7 +53,8 @@ export default class AnswerFields extends React.Component {
       operators
     } = this.props;
 
-    let answer = values.answers_attributes[index];
+    const { language } = this.state;
+    const answer = values.answers_attributes[index];
 
     return (
       <FadeIn>
@@ -56,13 +62,13 @@ export default class AnswerFields extends React.Component {
           <Form.Group as={Col} controlId="validationLabelTranslations">
             <Form.Label>{I18n.t("activerecord.attributes.node.label_translations")}</Form.Label>
             <Form.Control
-              name={`answers_attributes.${index}.label_en`}
-              value={answer.label_en}
+              name={`answers_attributes.${index}.label_${language}`}
+              value={answer[`label_${language}`]}
               onChange={handleChange}
-              isInvalid={this.isInvalid("label_en")}>
+              isInvalid={this.isInvalid(`label_${language}`)}>
             </Form.Control>
             <Form.Control.Feedback type="invalid">
-              {this.displayErrors("label_en")}
+              {this.displayErrors(`label_${language}`)}
             </Form.Control.Feedback>
           </Form.Group>
 

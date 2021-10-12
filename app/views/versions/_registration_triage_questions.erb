@@ -2,6 +2,6 @@
 <%= react_component('form/components/VersionComponents',
                     {
                       selected: @version.components.map(&:node_id),
-                      questions: @version.instanceable_questions,
+                      questions: @version.instanceable_questions(@default_language),
                       disabled: @version.in_prod
                     }) %>

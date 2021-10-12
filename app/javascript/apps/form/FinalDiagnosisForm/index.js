@@ -7,16 +7,18 @@ import { Formik } from "formik";
 import DisplayErrors from "../components/DisplayErrors";
 import Http from "../../diagram/engine/http";
 import store from "../../diagram/engine/reducers/store";
-import { finalDiagnoseschema } from "../constants/schema";
+import { finalDiagnosesSchema } from "../constants/schema";
 import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
 import MediaForm from "../MediaForm/mediaForm";
 import SliderComponent from "../components/Slider";
+import { getStudyLanguage } from "../../utils";
 
 export default class FinalDiagnosisForm extends React.Component {
 
   state = {
     toDeleteMedias: [],
+    language: getStudyLanguage()
   };
 
   /**
@@ -45,7 +47,7 @@ export default class FinalDiagnosisForm extends React.Component {
       httpRequest = await http.createFinalDiagnosis(values.label_translations, values.description_translations, values.level_of_urgency, values.medias_attributes, from);
     } else {
       if (toDeleteMedias.length > 0) {
-        toDeleteMedias.map(media_id => {
+        toDeleteMedias.forEach(media_id => {
           values.medias_attributes.push({id: media_id, _destroy: true});
         });
       }
@@ -78,22 +80,29 @@ export default class FinalDiagnosisForm extends React.Component {
 
   render() {
     const { finalDiagnosis } = this.props;
+    const { language } = this.state;
+
+    const initialValues = {
+      id: finalDiagnosis?.id || "",
+      label_translations: finalDiagnosis?.label_translations?.send(language) || "",
+      description_translations: finalDiagnosis?.description_translations?.send(language) || "",
+      level_of_urgency: finalDiagnosis?.level_of_urgency || 5,
+      medias_attributes: []
+    };
+    finalDiagnosis?.medias?.forEach(media => {
+      const mediaVals = {
+        id: media.id || "",
+        url: media.url || "",
+      };
+      mediaVals[`label_${language}`] = media.label_translations?.send(language) || "";
+      initialValues['medias_attributes'].push(mediaVals)
+    });
 
     return (
       <FadeIn>
         <Formik
-          validationSchema={finalDiagnoseschema}
-          initialValues={{
-            id: finalDiagnosis?.id || "",
-            label_translations: finalDiagnosis?.label_translations?.en || "",
-            description_translations: finalDiagnosis?.description_translations?.en || "",
-            level_of_urgency: finalDiagnosis?.level_of_urgency || 5,
-            medias_attributes: finalDiagnosis?.medias?.map((media) => ({
-              id: media.id || "",
-              url: media.url || "",
-              label_en: media.label_translations?.en || "",
-            })) || [],
-          }}
+          validationSchema={finalDiagnosesSchema}
+          initialValues={initialValues}
           onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
         >
           {({

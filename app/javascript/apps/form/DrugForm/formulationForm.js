@@ -34,12 +34,10 @@ export default class FormulationForm extends React.Component {
    * Fetch medication form, breakable and administration routes at the initialization of formulationForm
    */
   init = async () => {
-    const { formData, method } = this.props;
-    let http = new Http();
-    let httpRequest = {};
+    const http = new Http();
 
-    httpRequest = await http.fetchDrugMedicationForms();
-    let result = await httpRequest.json();
+    const httpRequest = await http.fetchDrugMedicationForms();
+    const result = await httpRequest.json();
 
     if (httpRequest.status === 200) {
 

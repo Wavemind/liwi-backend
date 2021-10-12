@@ -32,6 +32,6 @@ class DevicesController < ApplicationController
     params.require(:device).permit(
       :mac_address,
       :health_facility_id
-      )
+    )
   end
 end
