@@ -20,9 +20,7 @@ export default class CutOffForm extends React.Component {
   handleOnSubmit = async (values, actions) => {
     const { conditionId, diagramObject, engine, method } = this.props;
     let http = new Http();
-    let httpRequest = {};
-
-    httpRequest = await http.updateCutOffs(
+    let httpRequest = await http.updateCutOffs(
       conditionId,
       values.cut_off_start,
       values.cut_off_end,

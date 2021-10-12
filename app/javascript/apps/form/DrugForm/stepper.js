@@ -205,6 +205,7 @@ export default class StepperDrugForm extends React.Component {
             drug={createdDrug}
             positions={{ x: 100, y: 100 }}
             from={from}
+            is_deployed={is_deployed}
           />
         );
       default:
