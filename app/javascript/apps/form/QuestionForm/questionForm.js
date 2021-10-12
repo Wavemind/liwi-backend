@@ -31,9 +31,9 @@ import MediaForm from "../MediaForm/mediaForm";
 import {getTranslatedText, getStudyLanguage} from "../../utils";
 
 const humanizeString = require("humanize-string");
-const l = getStudyLanguage();
+const language = getStudyLanguage();
 const filterOptions = createFilterOptions({
-  stringify: option => getTranslatedText(option.label_translations, l)
+  stringify: option => getTranslatedText(option.label_translations, language)
 });
 
 
@@ -53,7 +53,6 @@ export default class QuestionForm extends React.Component {
       target: null,
       toDeleteMedias: [],
       systems: this.generateSystemList(formData.type),
-      language: getStudyLanguage()
     };
 
     this.init();
@@ -84,11 +83,10 @@ export default class QuestionForm extends React.Component {
    * Fetch questions parameters for form
    */
   init = async () => {
-    let http = new Http();
-    let httpRequest = {};
+    const http = new Http();
 
-    httpRequest = await http.fetchQuestionsLists();
-    let result = await httpRequest.json();
+    const httpRequest = await http.fetchQuestionsLists();
+    const result = await httpRequest.json();
 
     if (httpRequest.status === 200) {
       this.setState({
@@ -120,11 +118,10 @@ export default class QuestionForm extends React.Component {
    */
   searchSnomed = async (event) => {
     const http = new Http();
-    let httpRequest = {};
 
-    httpRequest = await http.searchSnomed(event.target.value);
+    const httpRequest = await http.searchSnomed(event.target.value);
     if (httpRequest?.status === 200) {
-      let result = await httpRequest.json();
+      const result = await httpRequest.json();
 
       this.setState({
         snomedResults: result.items,
@@ -249,7 +246,6 @@ export default class QuestionForm extends React.Component {
       deployedMode,
       formulaTooltipShow,
       target,
-      language
     } = this.state;
 
     return (

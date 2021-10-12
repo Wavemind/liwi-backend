@@ -13,6 +13,14 @@ import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 import { getStudyLanguage } from "../../utils";
 
 export default class InstanceForm extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      language: getStudyLanguage()
+    };
+
+  }
 
   /**
    * Create or update value in database + update diagram if we're editting from diagram
@@ -64,7 +72,7 @@ export default class InstanceForm extends React.Component {
       drug
     } = this.props;
 
-    const language = getStudyLanguage();
+    const { language } = this.state;
     const body = {
       is_pre_referral: diagramObject.options.dbInstance?.is_pre_referral || false,
     };
