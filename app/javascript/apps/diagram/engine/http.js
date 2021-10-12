@@ -223,11 +223,12 @@ export default class Http {
     nodeId,
     x,
     y,
+    is_pre_referral,
     duration = "",
     description = ""
   ) => {
     const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances`;
-    let body = {
+    const body = {
       instance: {
         node_id: nodeId,
         position_x: x,
@@ -235,6 +236,7 @@ export default class Http {
         instanceable_id: this.instanceableId,
         instanceable_type: this.instanceableType,
         final_diagnosis_id: this.finalDiagnosis,
+        is_pre_referral,
       }
     };
     body['instance'][`duration_${this.l}`] = duration;
@@ -312,7 +314,7 @@ export default class Http {
     from
   ) => {
     const url = `${this.url}/algorithms/${this.algorithm}/questions_sequences`;
-    let body = {
+    const body = {
       questions_sequence: {
         type,
         min_score,
@@ -583,7 +585,7 @@ export default class Http {
     source
   ) => {
     const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnoses/${id}`;
-    let body = {
+    const body = {
       final_diagnosis: {
         id,
         level_of_urgency,
@@ -610,14 +612,16 @@ export default class Http {
     id,
     positionX,
     positionY,
+    is_pre_referral,
     duration = "",
     description = ""
   ) => {
     const url = `${this.url}/instances/${id}`;
-    let body = {
+    const body = {
       instance: {
         position_x: positionX,
         position_y: positionY,
+        is_pre_referral,
       }
     };
     body['instance'][`duration_${this.l}`] = duration;
@@ -669,7 +673,7 @@ export default class Http {
     from
   ) => {
     const url = `${this.url}/algorithms/${this.algorithm}/questions_sequences/${id}`;
-    let body = {
+    const body = {
       questions_sequence: {
         id,
         type,

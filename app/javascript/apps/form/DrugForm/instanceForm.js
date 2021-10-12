@@ -34,10 +34,10 @@ export default class InstanceForm extends React.Component {
     let httpRequest = {};
 
     if (method === "create") {
-      httpRequest = await http.createInstance(drug.id, positions.x, positions.y, values[`duration_${l}`], values[`description_${l}`]);
+      httpRequest = await http.createInstance(drug.id, positions.x, positions.y, values.is_pre_referral, values[`duration_${l}`], values[`description_${l}`]);
     } else {
       const drugInstance = diagramObject.options.dbInstance;
-      httpRequest = await http.updateInstance(drugInstance.id, drugInstance.position_x, drugInstance.position_y, values[`duration_${l}`], values[`description_${l}`]);
+      httpRequest = await http.updateInstance(drugInstance.id, drugInstance.position_x, drugInstance.position_y, values.is_pre_referral, values[`duration_${l}`], values[`description_${l}`]);
     }
 
     let result = await httpRequest.json();
@@ -74,7 +74,7 @@ export default class InstanceForm extends React.Component {
 
     const { language } = this.state;
     const body = {
-      is_pre_referral: diagramObject.options.dbInstance?.is_pre_referral || false,
+      is_pre_referral: method === "create" ? "" : diagramObject.options.dbInstance?.is_pre_referral || false,
     };
     body[`duration_${language}`] = method === "create" ? "" : diagramObject.options.dbInstance.duration_translations?.send(language) || "",
     body[`description_${language}`] = method === "create" ? drug?.description_translations?.send(language) : diagramObject.options.dbInstance.description_translations?.send(language) || ""

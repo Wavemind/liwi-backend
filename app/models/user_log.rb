@@ -1,7 +1,7 @@
 # Log user actions
 class UserLog < ApplicationRecord
 
-  belongs_to :user
+  belongs_to :user, optional: true
 
   # retrieve model from log attributes
   def model

@@ -74,7 +74,10 @@ export const managementSchema = yup.object().shape({
 });
 
 const drugInstance = {};
-drugInstance[`duration_${language}`] = yup.string().required(I18n.t("errors.messages.required"));
+drugInstance[`duration_${language}`] = yup.string().when("is_pre_referral", {
+  is: (is_pre_referral) => is_pre_referral === false,
+  then: yup.string().required(I18n.t("errors.messages.required"))
+});
 drugInstance[`description_${language}`] = yup.string();
 export const drugInstanceSchema = yup.object().shape(drugInstance);
 
