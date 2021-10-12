@@ -6,6 +6,9 @@ en:
       confirmed: "Your email address has been successfully confirmed."
       send_instructions: "You will receive an email with instructions for how to confirm your email address in a few minutes."
       send_paranoid_instructions: "If your email address exists in our database, you will receive an email with instructions for how to confirm your email address in a few minutes."
+      new:
+        title: 'Resend confirmation instructions'
+        send: 'Resend confirmation instructions'
     failure:
       already_authenticated: "You are already signed in."
       inactive: "Your account is not activated yet."
@@ -36,6 +39,14 @@ en:
       send_paranoid_instructions: "If your email address exists in our database, you will receive a password recovery link at your email address in a few minutes."
       updated: "Your password has been changed successfully. You are now signed in."
       updated_not_active: "Your password has been changed successfully."
+      edit:
+        title: 'Change your password'
+        new_password: 'New password'
+        password_confirmation: 'Confirm your new password'
+        change_password: 'Change my password'
+      new:
+        title: 'Forgot your password?'
+        send: 'Send me reset password instructions'
     registrations:
       destroyed: "Bye! Your account has been successfully cancelled. We hope to see you again soon."
       signed_up: "Welcome! You have signed up successfully."
@@ -46,14 +57,36 @@ en:
       updated: "Your account has been updated successfully."
       change_password_hint: "Leave it blank if you don't want to change it"
       current_password_hint: "We need your current password to confirm your changes"
+      edit:
+        title: 'Profile'
+        two_factor: 'Two factor authentication'
+        enable: 'Two factor authentication is enabled.'
+        enable_action: 'Enable Two Factor Authentication'
+        disabled: 'Two factor authentication is NOT enabled.'
+        disabled_action: 'Disable Two Factor Authentication'
     sessions:
       signed_in: "Signed in successfully."
       signed_out: "Signed out successfully."
       already_signed_out: "Signed out successfully."
+      new:
+        login: 'Login'
+      two_factor:
+        title: 'Two Factor Authentication'
+        code: 'Code'
+        login: 'Login'
     unlocks:
       send_instructions: "You will receive an email with instructions for how to unlock your account in a few minutes."
       send_paranoid_instructions: "If your account exists, you will receive an email with instructions for how to unlock it in a few minutes."
       unlocked: "Your account has been unlocked successfully. Please sign in to continue."
+      new:
+          title: 'Resend unlock instructions'
+          send: 'Resend unlock instructions'
+    shared:
+      links:
+        login: 'Login'
+        forgot_password: 'Forgot your password?'
+        not_receive_confirmation_instructions: "Didn't receive confirmation instructions?"
+        not_receive_unlock_instructions: "Didn't receive unlock instructions?"
   errors:
     messages:
       already_confirmed: "was already confirmed, please try signing in"

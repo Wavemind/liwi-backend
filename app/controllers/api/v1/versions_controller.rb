@@ -80,12 +80,17 @@ class Api::V1::VersionsController < Api::V1::ApplicationController
     if params[:health_facility_id].present?
       facility = HealthFacility.find_by(id: params[:health_facility_id])
       if facility.present?
-        facility_version = facility.health_facility_accesses.where(end_date: nil).first.version
-        medal_r_json_version = params[:json_version]
-        if medal_r_json_version.to_i == facility_version.medal_r_json_version
-          render json: {}, status: 204
+        access = facility.health_facility_accesses.where(end_date: nil).first
+        if access.present?
+          facility_version = access.version
+          medal_r_json_version = params[:json_version]
+          if medal_r_json_version.to_i == facility_version.medal_r_json_version
+            render json: {}, status: 204
+          else
+            render json: facility_version.medal_r_json
+          end
         else
-          render json: facility_version.medal_r_json
+          render json: { errors: t('api.v1.versions.index.no_version') }, status: :unprocessable_entity
         end
       else
         render json: { errors: t('api.v1.versions.index.invalid_health_facility') }, status: :unprocessable_entity

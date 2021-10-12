@@ -1,0 +1,37 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h2><%= t('.title') %></h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card-deck">
+        <div class="card">
+          <div class="card-header">
+            <%= t('.backup') %>
+          </div>
+          <div class="card-body">
+            <p><%= t('.keep_backup') %></p>
+            <hr />
+            <% @backup_codes.each_slice(2) do |(code1, code2)| %>
+              <div class="row">
+                <div class="col-6 text-monospace strong"><%= code1 %></div>
+                <div class="col-6 text-monospace strong"><%= code2 %></div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <%= t('.setup_completed') %>
+          </div>
+          <div class="card-body">
+            <p><%= t('.enable') %></p>
+            <%= link_to(t('.action'), edit_user_registration_path, class: 'btn btn-primary') %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

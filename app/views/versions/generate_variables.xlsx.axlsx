@@ -7,9 +7,11 @@ nodes = @version.extract_nodes_from_version
 drugs = []
 managements = []
 final_diagnoses = []
+questions_sequences = []
 
 wb.add_worksheet(name: "Variables") do |sheet|
-  sheet.add_row ["ID", "Category", "Reference", "Label", "Mandatory", "Description", "Answers (ID | full label)"]
+  sheet.add_row ["ID", "Category", "Reference", "Label", "Neonat", "System", "Mandatory", "Identifiable", "Estimable", "Emergency status", "Round", "Description",
+                 "Conditioning complaint categories", "Answers (ID | full label)"]
 
   nodes.map do |node|
     answers = ""
@@ -18,14 +20,19 @@ wb.add_worksheet(name: "Variables") do |sheet|
       answers += "#{answer.id} | #{answer.reference_label}"
     end
 
-    sheet.add_row [node.id, I18n.t("questions.categories.#{node.class.variable}.label"), node.full_reference, "#{node.is_neonat ? 'YI - ' : ''}#{node.label_en}", node.is_mandatory.to_s, node.description_en, answers], style: wrap
+    complaint_categories = node.complaint_categories.map(&:full_reference).to_s unless node.is_a?(Questions::ComplaintCategory) || node.complaint_categories.empty?
+
+    sheet.add_row [node.id, I18n.t("questions.categories.#{node.class.variable}.label"), node.full_reference, node.label_en, node.is_neonat.to_s,
+                   node.system.present? ? I18n.t("questions.systems.#{node.system}") : '', node.is_mandatory.to_s, node.is_identifiable.to_s, node.estimable.to_s,
+                   node.emergency_status.present? ? I18n.t("activerecord.attributes.question.emergency_statuses.#{node.emergency_status}") : '', node.round,
+                   node.description_en, complaint_categories, answers], style: wrap
   end
 end
 
 wb.add_worksheet(name: "Diagnoses") do |sheet|
-  sheet.add_row ["ID", "Reference", "Label", "CC"]
+  sheet.add_row ["ID", "Reference", "Label", "CC", "Cutoff start (days)", "Cutoff end (days)"]
   @version.diagnoses.map do |diag|
-    sheet.add_row [diag.id, diag.full_reference, diag.label_en, diag.node.full_reference]
+    sheet.add_row [diag.id, diag.full_reference, diag.label_en, diag.node.full_reference, diag.cut_off_start, diag.cut_off_end]
 
     diag.components.map do |instance|
       if instance.node.is_a? FinalDiagnosis
@@ -34,22 +41,33 @@ wb.add_worksheet(name: "Diagnoses") do |sheet|
         drugs.push(instance.node)
       elsif instance.node.is_a? HealthCares::Management
         managements.push(instance.node)
+      elsif instance.node.is_a? QuestionsSequence
+        questions_sequences.push(instance.node)
       end
     end
   end
 end
 
 wb.add_worksheet(name: "Final diagnoses") do |sheet|
-  sheet.add_row %w(ID Reference Label Description)
+  sheet.add_row ["ID", "Reference", "Label", "Level of urgency", "Description"]
 
   final_diagnoses.map do |node|
-    sheet.add_row [node.id, node.full_reference, node.label_en, node.description_en], style: wrap
+    sheet.add_row [node.id, node.full_reference, node.label_en, node.level_of_urgency, node.description_en], style: wrap
   end
 end
 
+wb.add_worksheet(name: "Questions sequences") do |sheet|
+  sheet.add_row ["ID", "Reference", "Label", "Cutoff start (days)", "Cutoff end (days)", "Minimum score", "Description", "Conditioning complaint categories"]
+
+  questions_sequences.map do |node|
+    complaint_categories = node.complaint_categories.map(&:full_reference).to_s unless node.complaint_categories.empty?
+
+    sheet.add_row [node.id, node.full_reference, node.label_en, node.cut_off_start, node.cut_off_end, node.min_score, node.description_en, complaint_categories], style: wrap
+  end
+end
 
 wb.add_worksheet(name: "Drugs") do |sheet|
-  sheet.add_row ["ID", "Reference", "Label", "Description", "Diagnoses", "YI/Antibiotic/Antimalarial/None", "Formulations (ID | medication form)", "Administration route", "Number of administrations per day",
+  sheet.add_row ["ID", "Reference", "Label", "Level of urgency", "Description", "Diagnoses", "YI/Antibiotic/Antimalarial/None", "Formulations (ID | medication form)", "Administration route", "Number of administrations per day",
                  "Fixed Dose (Y/N)", "Is the tablet breakable", "Concentration (mg in dose)", "Total drug formulation volume (ml)", "Total drug formulation volume (mg)",
                  "Number of pills per administration", "Number of ml per administration", "Number of applications per administration", "Maximal daily dose (mg)",
                  "Minimal dose (mg/kg/day)", "Maximal dose (mg/kg/day)", "Description", "Injection dilution instructions", "Dispensing description"], height: 99, style: align_mid
@@ -59,7 +77,7 @@ wb.add_worksheet(name: "Drugs") do |sheet|
     instances = ""
     node.instances.each_with_index do |instance, index|
       instances += "\r" unless index == 0
-      instances += instance.instanceable.reference_label
+      instances += instance.final_diagnosis.reference_label
     end
 
     bools = ""
@@ -68,29 +86,29 @@ wb.add_worksheet(name: "Drugs") do |sheet|
     bools += "Antimalarial \r" if node.is_anti_malarial
 
     node.formulations.each_with_index do |formulation, index|
-      row = index == 0 ? [node.id, node.full_reference, node.label_en, node.description_en, instances, bools] : ['', '', '', '', '', '']
+      row = index == 0 ? [node.id, node.full_reference, node.label_en, node.level_of_urgency, node.description_en, instances, bools] : ['', '', '', '', '', '', '']
       row.push("#{formulation.id} | #{formulation.medication_form}", formulation.administration_route.name_en, formulation.doses_per_day, formulation.by_age ? 'Y' : 'N',
-               formulation.tablet? ? I18n.t("formulations.breakables.#{formulation.breakable}.label") : '', formulation.liquid_concentration, formulation.dose_form, formulation.dose_form, formulation.dose_form,
+               formulation.breakable.present? ? I18n.t("formulations.breakables.#{formulation.breakable}.label") : '', formulation.liquid_concentration, formulation.dose_form, formulation.dose_form, formulation.dose_form,
                formulation.dose_form, formulation.dose_form, formulation.maximal_dose, formulation.maximal_dose_per_kg, formulation.minimal_dose_per_kg, formulation.description_en,
                formulation.injection_instructions_en, formulation.dispensing_description_en)
       row = sheet.add_row row, style: align_top
       drug_rows.push(row)
     end
 
-    %w(A B C D).each do |col|
+    %w(A B C D E F G).each do |col|
       cells = "#{col}#{drug_rows.first.row_index + 1}:#{col}#{drug_rows.last.row_index + 1}"
       sheet.merge_cells(cells)
     end if drug_rows.any?
 
-    sheet.column_widths(10, 10, 17, 32, 32, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 32, 32, 32)
+    sheet.column_widths(10, 10, 17, 10, 32, 32, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 32, 32, 32)
   end
 end
 
 wb.add_worksheet(name: "Managements") do |sheet|
-  sheet.add_row %w(ID Reference Label Description)
+  sheet.add_row ["ID", "Reference", "Label", "Referral", "Level of urgency", "Description"]
 
   managements.map do |node|
-    sheet.add_row [node.id, node.full_reference, node.label_en, node.description_en], style: wrap
+    sheet.add_row [node.id, node.full_reference, node.label_en, node.is_referral.to_s, node.level_of_urgency, node.description_en], style: wrap
   end
 end
 

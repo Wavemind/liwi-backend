@@ -1,0 +1,2644 @@
+"<p style=\"text-align: center;\"><span style=\"color: #ba372a; font-size: 14pt;\"><strong>PRISE EN CHARGE EN CAS D'URGENCE</strong></span><a name=\"top\"></a></p>
+<p><span style=\"color: #34495e; font-size: 10pt; text-align: justify;\">Si l'enfant pr&eacute;sente un signe d'urgence, demander de l'aide, &eacute;valuer et r&eacute;animer, donner un/des traitement/s, faire les bonnes investigations de laboratoire, et pr&eacute;parer pour une prise en charge/admission dans un &eacute;tablissement de sant&eacute;.</span></p>
+<!-- new index -->
+<table style=\"border-collapse: collapse; width: 99.41%;\" border=\"1\">
+   <tbody>
+      <tr>
+         <td style=\"background-color: #ff9999; width: 49.8516%; text-align: center;\">
+            <p><strong><span style=\"font-size: 18pt;\">AB</span><br /></strong><br /><strong>Airway Breathing</strong></p>
+         </td>
+<td style=\"background-color: #ff9999; width: 49.8516%;\">
+<ul>
+<li><a href=\"#choking\">Etouffement</a></li>
+<li><a href=\"#obstructedBreathing\">Voies a&eacute;riennes obstru&eacute;es ou absence de respiration </a></li>
+<li><a href=\"#respiratoryDistress\">D&eacute;tresse respiratoire ou cyanose centrale</a></li>
+<li><a href=\"#anaphylaxis\">Anaphylaxie</a></li>
+</ul>
+         </td>
+</tr>
+      <tr>
+         <td style=\"background-color: #ff9999; width: 49.8516%; text-align: center;\">
+            <p><strong><span style=\"font-size: 18pt;\">C</span><br /></strong><br /><strong>Circulation</strong></p>
+         </td>
+<td style=\"background-color: #ff9999; width: 49.8516%;\">
+<ul>
+<li><a href=\"#coldSkin\">Peau froide avec : recoloration capillaire de plus de 3 secondes et un pouls faible&amp;rapide</a></li>
+</ul>
+         </td>
+</tr>
+      <tr>
+         <td style=\"background-color: #ff9999; width: 49.8516%; text-align: center;\">
+            <p><strong><span style=\"font-size: 18pt;\">D</span><br /></strong><br /><strong>Disability</strong></p>
+         </td>
+<td style=\"background-color: #ff9999; width: 49.8516%;\">
+<ul>
+<li><a href=\"#unconscious\">Inconscient</a></li>
+<li><a href=\"#convulsingNow\">Convulsion</a></li>
+</ul>
+         </td>
+</tr>
+      <tr>
+         <td style=\"background-color: #ff9999; width: 49.8516%; text-align: center;\">
+            <p><strong><span style=\"font-size: 18pt;\">E</span><br /></strong><br /><strong>Exposure</strong></p>
+         </td>
+<td style=\"background-color: #ff9999; width: 49.8516%;\">
+<ul>
+<li><a href=\"#majorTrauma\">Traumatisme majeur</a>&nbsp;</li>
+<li><a href=\"#majorBurn\">Br&ucirc;lure sev&egrave;re</a></li>
+</ul>
+         </td>
+</tr>
+   </tbody>
+</table>
+<!--/new index-->
+           <p>&nbsp;</p>
+<!--table style=\"border-collapse: collapse; width: 100%; height: 436px;\" border=\"1\">
+   <tbody>
+     <tr style=\"height: 53px;\">
+       <th style=\"width: 25%; text-align: center; height: 53px;\"><span style=\"font-size: 8pt;\"><strong><span style=\"color: #626262;\"> Airway/ Breathing</span></strong></span></th>
+<th style=\"width: 25%; text-align: center; height: 53px;\"><span style=\"font-size: 8pt;\"><strong><span style=\"color: #626262;\"> Unconscious/ lethargic or convulsing now</span></strong></span></th>
+<th style=\"width: 25%; text-align: center; height: 53px;\"><span style=\"font-size: 8pt;\"><strong><span style=\"color: #626262;\"> Circulation</span></strong></span></th>
+<th style=\"width: 25%; text-align: center; height: 53px;\"><span style=\"font-size: 8pt;\"><strong><span style=\"color: #626262;\"> Disability</span></strong></span></th>
+</tr>
+
+     <tr style=\"text-align: center;\">
+       <td style=\"padding-top: 1px; padding-right: 1px; padding-bottom: 1px; background-color: #ff9999; vertical-align: middle; width: 25%; line-height: 1; height: 159px;\">
+         <p><span style=\"font-size: 8pt;\"><strong><a href=\"#choking\">CHOKING</a></strong></span></p>
+       </td>
+<td style=\"padding-top: 1px; padding-right: 1px; padding-bottom: 1px; background-color: #ff9999; vertical-align: middle; width: 25%; line-height: 1; height: 159px;\">
+<p><span style=\"font-size: 8pt;\"><strong><a href=\"#unconscious\">UNCONSCIOUS</a></strong><br /></span></p>
+       </td>
+<td style=\"padding-top: 1px; padding-right: 1px; padding-bottom: 1px; background-color: #ff9999; vertical-align: middle; width: 25%; line-height: 1; height: 159px;\">
+<p><span style=\"font-size: 8pt;\"><strong><a href=\"#coldSkin\">COLD SKIN WITH: CAPILLARY REFILL LONGER THAN 3 SECONDS AND WEAK AND FAST PULSE</a></strong></span></p>
+</td>
+       <td style=\"padding-top: 1px; padding-right: 1px; padding-bottom: 1px; background-color: #ff9999; vertical-align: middle; width: 25%; line-height: 1; height: 159px;\">
+         <p><span style=\"font-size: 8pt;\"><strong><a href=\"#majorTrauma\">MAJOR TRAUMA</a></strong>&nbsp;</span></p>
+       </td>
+</tr>
+
+     <tr style=\"text-align: center;\">
+       <td style=\"padding-top: 1px; padding-right: 1px; padding-bottom: 1px; background-color: #ff9999; vertical-align: middle; width: 25%; line-height: 1; height: 81px;\">
+         <p><span style=\"font-size: 8pt;\"><strong><a href=\"#obstructedBreathing\">OBSTRUCTED OR ABSENT BREATHING</a></strong><br /></span></p>
+</td>
+       <td style=\"padding-top: 1px; padding-right: 1px; padding-bottom: 1px; background-color: #ff9999; vertical-align: middle; width: 25%; line-height: 1; height: 81px;\">
+         <p><span style=\"font-size: 8pt;\"><strong><a href=\"#convulsingNow\">CONVULSING NOW</a></strong></span></p>
+       </td>
+<td style=\"padding-top: 1px; padding-right: 1px; padding-bottom: 1px; background-color: #ff9999; vertical-align: middle; width: 25%; line-height: 1; height: 81px;\">&nbsp;</td>
+       <td style=\"padding-top: 1px; padding-right: 1px; padding-bottom: 1px; background-color: #ff9999; vertical-align: middle; width: 25%; line-height: 1; height: 81px;\">
+         <p><span style=\"font-size: 8pt;\"><strong><a href=\"#majorBurn\">MAJOR BURN</a></strong><br /></span></p>
+</td>
+     </tr>
+
+<tr style=\"text-align: center;\">
+<td style=\"padding-top: 1px; padding-right: 1px; padding-bottom: 1px; background-color: #ff9999; vertical-align: middle; width: 25%; line-height: 1; height: 104px;\">
+<p><span style=\"font-size: 8pt;\"><strong><a href=\"#respiratoryDistress\">RESPIRATORY DISTRESS OR CENTRAL CYANOSIS</a></strong><br /></span></p>
+       </td>
+<td style=\"padding-top: 1px; padding-right: 1px; padding-bottom: 1px; background-color: #ff9999; vertical-align: middle; width: 25%; line-height: 1; height: 104px;\">&nbsp;</td>
+       <td style=\"padding-top: 1px; padding-right: 1px; padding-bottom: 1px; background-color: #ff9999; vertical-align: middle; width: 25%; line-height: 1; height: 104px;\">&nbsp;</td>
+<td style=\"padding-top: 1px; padding-right: 1px; padding-bottom: 1px; background-color: #ff9999; vertical-align: middle; width: 25%; line-height: 1; height: 104px;\">&nbsp;</td>
+     </tr>
+
+<tr style=\"text-align: center;\">
+<td style=\"padding-top: 1px; padding-right: 1px; padding-bottom: 1px; background-color: #ff9999; vertical-align: middle; width: 25%; line-height: 1; height: 39px;\">
+<p><span style=\"font-size: 8pt;\"><strong><a href=\"#anaphylaxis\">ANAPHYLAXIS</a></strong><br /></span></p>
+       </td>
+<td style=\"padding-top: 1px; padding-right: 1px; padding-bottom: 1px; background-color: #ff9999; vertical-align: middle; width: 25%; line-height: 1; height: 39px;\">&nbsp;</td>
+       <td style=\"padding-top: 1px; padding-right: 1px; padding-bottom: 1px; background-color: #ff9999; vertical-align: middle; width: 25%; line-height: 1; height: 39px;\">&nbsp;</td>
+<td style=\"padding-top: 1px; padding-right: 1px; padding-bottom: 1px; background-color: #ff9999; vertical-align: middle; width: 25%; line-height: 1; height: 39px;\">
+<p><span style=\"font-size: 8pt;\"><br /><br /></span></p>
+</td>
+     </tr>
+</tbody>
+   </table -->
+<p>&nbsp;</p>
+<h2><strong>Airway et Breathing</strong></h2>
+<h3><a name=\"choking\"></a>Etouffement :</h3>
+<h4><a name=\"chokingInfant\"></a>Prendre en charge un &eacute;touffement sur un enfant de moins de 12 mois</h4>
+<p>(<a href=\"#chokingChild\">D&eacute;filer vers le bas si l'enfant a plus de 12 mois</a>)</p>
+<p>&nbsp;</p>
+<!--- CHOKING 1 -->
+<table width=\"100%\">
+   <tbody>
+      <tr>
+         <td style=\"width: 99.7311%;\" colspan=\"2\"><strong>Charte 3. COMMENT PRENDRE EN CHARGE UN ENFANT QUI ETOUFFE</strong></td>
+      </tr>
+      <tr>
+         <td style=\"text-align: center; width: 49.5827%;\"><img src=\"blob:https://medalc.unisante.ch/00feb29f-a7ee-4bbe-b7ae-426cd98c8586\" alt=\"Choking/1 A\" width=\"150\" height=\"193\" /> <br /><em>Tape dans le dos</em></td>
+         <td style=\"width: 50.1484%;\" valign=\"top\">
+            <ul>
+               <li>Allonger le nourrisson &agrave; plat ventre la t&ecirc;te en bas sur votre bras ou votre cuisse.</li>
+               <li>Avec la paume de la main, lui donner 5 tapes au milieu du dos.</li>
+               <li>Si l'obstruction persiste, retourner le nourrisson et lui faire 5 pressions fermes de la poitrine avec 2 doigts sur la moiti&eacute; inf&eacute;rieur du sternum.</li>
+                                                                                                                                                                                                                                        </ul>
+         </td>
+</tr>
+      <tr>
+         <td style=\"text-align: center; width: 49.5827%;\"><img src=\"blob:https://medalc.unisante.ch/3e71bb2c-1f3a-4779-8a9d-535b3ae6ea30\" alt=\"Choking/1 B\" width=\"150\" height=\"195\" /> <br /><em>Pression de la poitrine</em></td>
+         <td style=\"width: 50.1484%;\" valign=\"top\">
+            <ul>
+               <li>Si l'obstruction persiste, v&eacute;rifier que la bouche de du nourrisson ne contient rien qui obstrue et qui puisse &ecirc;tre enlev&eacute;</li>
+               <li>Si n&eacute;cessaire, r&eacute;p&eacute;ter la s&eacute;quence avec les tapes dans le dos.</li>
+            </ul>
+         </td>
+      </tr>
+   </tbody>
+</table>
+<!--- /CHOKING 1 -->
+<h4><a name=\"chokingChild\"></a>Prendre en charge un &eacute;touffement sur un enfant de 1 an ou plus</h4>
+<!--- CHOKING 2 -->
+<table>
+   <tbody>
+      <tr>
+         <td colspan=\"2\"><strong>Charte 3. COMMENT PRENDRE EN CHARGE UN ENFANT QUI ETOUFFE (&gt; 1 AN)</strong></td>
+      </tr>
+      <tr>
+         <td style=\"text-align: center;\" rowspan=\"4\" valign=\"top\"><img src=\"blob:https://medalc.unisante.ch/4e8755e2-ef45-451f-aa99-2e1e3edb6bf8\" alt=\"Choking/2 A\" width=\"150\" height=\"170\" /> <br />&nbsp;<br />&nbsp;</td>
+      </tr>
+      <tr>
+         <td>&nbsp;</td>
+      </tr>
+      <tr>
+         <td><em>Taper dans le dos pour d&eacute;gager les voies a&eacute;riennes sur un enfant qui &eacute;touffe</em><br />&nbsp;<br />&nbsp;</td>
+      </tr>
+      <tr>
+         <td style=\"text-align: center;\" rowspan=\"3\"><img src=\"blob:https://medalc.unisante.ch/22aa51a9-b586-474f-b714-4ffeb68a6a75\" alt=\"Choking/2 B\" width=\"150\" height=\"398\" /></td>
+      </tr>
+      <tr>
+         <td valign=\"top\">
+            Donner 5 tapes dans le dos pour d&eacute;gager les voies a&eacute;riennes d'un enfant qui &eacute;touffe:
+            <ul>
+               <li>Donner 5 tapes milieu du dos de l'enfant avec la paume de la main, l'enfant doit &ecirc;tre assis, sur les genoux, ou bien allong&eacute;.</li>
+               <li>Si l'obstruction persiste, aller derri&egrave;re l'enfant et entourer vos bras autour du corps de l'enfant; former un poing avec une main en dessous du sternum de l'enfant; placer l'autre main sur votre poing et tirer vers le haut dans l'abdomen(regarder la figure) ; r&eacute;p&eacute;ter la manoeuvre de Heimlich 5 fois.</li>
+               <li>Si l'obstruction persiste, v&eacute;rifier que la bouche de l'enfant ne contient rien qui obstrue et qui puisse &ecirc;tre enlev&eacute;.</li>
+               <li>Si n&eacute;cessaire, r&eacute;p&eacute;ter la s&eacute;quence avec les tapes dans le dos.</li>
+            </ul>
+         </td>
+      </tr>
+      <tr>
+         <td>&nbsp;</td>
+      </tr>
+      <tr>
+         <td>&nbsp;</td>
+         <td style=\"text-align: center;\"><em>Manoeuvre de Heimlich sur les enfants &acirc;g&eacute;s</em></td>
+      </tr>
+   </tbody>
+</table>
+<!-- /CHOKING 2 -->
+<p style=\"text-align: center;\"><a href=\"#top\">Retour vers le haut</a></p>
+<h3><a name=\"obstructedBreathing\"></a>Obstruction ou absence de respiration :</h3>
+<h4><a name=\"OBnoNeckTrauma\"></a>Prendre en charge une respiration obstu&eacute;e/absente quand aucun traumatisme cervical n'est suspect&eacute;</h4>
+<p><a href=\"#OBneckTrauma\">(D&eacute;filer vers le bas s'il y a une suspicion de traumatisme cervical)</a></p>
+<!-- Chart 4. How to manage the airway in a child with obstructed breathing -->
+                                                                            <table>
+                                                                            <tbody>
+                                                                            <tr>
+                                                                            <td colspan=\"2\"><strong>Charte 4. COMMENT PRENDRE EN CHARGE LES VOIES AERIENNES D'UN ENFANT AVEC UNE RESPIRATION OBSTRUEE (OU QU'IL NE RESPIRE PAS)</strong></td>
+</tr>
+      <tr>
+         <td colspan=\"2\"><strong>A: Quand aucun traumatisme cervical n'est suspect&eacute;</strong></td>
+      </tr>
+<tr>
+<td valign=\"top\">
+<strong>Enfant conscient</strong><br />
+<ol>
+<li>Inspecter la bouche et enlever tout objet &eacute;tranger si pr&eacute;sent</li>
+               <li>Retirer les s&eacute;cretions de la gorge</li>
+<li>Laisser le nourrisson prendre la position qui lui pla&icirc;t</li>
+            </ol>
+</td>
+         <td style=\"text-align: center;\">
+            <strong>NOURRISSON</strong><br />
+            <p style=\"text-align: center;\"><img src=\"blob:https://medalc.unisante.ch/27407736-1d08-4d92-a8bb-df4a9222d0ba\" alt=\"Choking/3 A\" width=\"150\" height=\"102\" /></p>
+            Position neutre pour d&eacute;gager les voies a&eacute;riennes chez un nourrisson<br />&nbsp;
+         </td>
+      </tr>
+      <tr>
+         <td valign=\"top\">
+            <strong>Enfant inconscient</strong><br />
+            <ol>
+               <li>Faire basculer la t&ecirc;te comme indiqu&eacute;, garder cette position pour ouvrir les voies a&eacute;riennes.</li>
+               <li>Inspecter la bouche et enlever tout objet &eacute;tranger facilement visible.</li>
+               <li>Retirer les s&eacute;cretions de la gorge.</li>
+               <li>V&eacute;rifier que les voies a&eacute;riennes sont d&eacute;gag&eacute;es en observant les mouvements de la poitrine, en &eacute;coutant les sons de la respiration, et en essayant de sentir le souffle de la respiration(voir la figure)</li>
+            </ol>
+         </td>
+         <td style=\"text-align: center;\">
+            <strong>ENFANT PLUS AGE</strong><br />Position inclin&eacute;e pour ouvrir les voies a&eacute;riennes chez un enfant plus &acirc;g&eacute;<br />
+            <p style=\"text-align: center;\"><img src=\"blob:https://medalc.unisante.ch/2ffeb264-fe0d-4dd4-91db-83ec6f864322\" alt=\"Choking/3 B\" width=\"150\" height=\"236\" /><span style=\"font-family: inherit; font-size: inherit; font-style: inherit; font-variant-ligatures: inherit; font-variant-caps: inherit; font-weight: inherit;\">Regardez, &eacute;coutez et sentez si l'enfant respire</span></p>
+         </td>
+      </tr>
+   </tbody>
+</table>
+<h4><a name=\"OBneckTrauma\"></a>Prendre en charge une respiration obstru&eacute;e/absente quand un traumatisme cervical est suspect&eacute;</h4>
+<p><strong>Charte 4. COMMENT PRENDRE EN CHARGE LES VOIES AERIENNES D'UN ENFANT AVEC UNE RESPIRATION OBSTRUEE (OU QU'IL NE RESPIRE PAS)</strong></p>
+<p><strong>B: Quand un traumatisme cervical ou une l&eacute;sion du rachis est suspect&eacute; : faire une subluxation de la machoire</strong></p>
+<ol>
+   <li>Stabiliser la nuque comme indiqu&eacute; dans la <a href=\"#charte6\">charte 6</a> et degager les voies a&eacute;riennes.</li>
+<li>Inspecter la bouche et enlever tout objet &eacute;tranger si pr&eacute;sent.</li>
+<li>Enlever les s&eacute;cretions de la gorge sous observations directes.</li>
+                                                                <li>V&eacute;rifier si les voies a&eacute;riennes sont d&eacute;gag&eacute;es en observant les mouvements de la poitrine, en &eacute;coutant les sons de la respiration, en essayant de sentir le souffle de la respiration.</li>
+                                                                                                                                                                                                                                                                                </ol>
+<p style=\"text-align: center;\"><img src=\"blob:https://medalc.unisante.ch/68e06fcf-1013-40a3-b2bd-7d1ce5e5e1bc\" alt=\"Choking/4 A\" width=\"345\" height=\"143\" /></p>
+<!--Insert image here-->
+<p><strong>Faire une subluxation de la machoire inf&eacute;rieure vers l'avant si les voies a&eacute;riennes ne sont pas ouvertes. Placer le quatri&egrave;me et le cinqui&egrave;me doigt derri&egrave;re l'angle de la machoire et pousser vers le haut pour que la machoire inf&eacute;rieure soit en avant, &agrave; 90&deg; du corps de l'enfant.</strong></p>
+<p style=\"text-align: center;\"><img src=\"blob:https://medalc.unisante.ch/c48eeed7-7912-4a48-934b-102a99bd0d70\" alt=\"Choking/4 B\" width=\"314\" height=\"281\" /></p>
+<!--Insert image here-->
+<p><strong>Si l'enfant ne respire toujours pas, faire une ventilation manuelle avec un masque et un ballon, si possible avec un ballon d'anesth&eacute;sie et de l'oxyg&egrave;ne.</strong></p>
+<h4><a name=\"OBgiveOxygen_a\"></a>Administrer de l'oxyg&egrave;ne</h4>
+<ul>
+   <li>Si l'oxyg&eacute;noth&eacute;rapie est diponible, mesurer la saturation en oxyg&egrave;ne chez tous les enfants avec un signe d'urgence.</li>
+   <li>Quand l'enfant a uniquement une d&eacute;tresse respiratoire, une administration en oxyg&egrave;ne est recommend&eacute;e &agrave; partir d'une saturation en dessous de 90%(SpO2&lt;90%).</li>
+   <li>Si l'enfant pr&eacute;sente d'autres signes d'urgence +/- d&eacute;tresse respiratoire, l'oxyg&eacute;noth&eacute;rapie est recommend&eacute;e &agrave; une saturation en dessous de 94%(SpO2&lt;94%).</li>
+</ul>
+<table>
+   <tbody>
+      <tr>
+         <td colspan=\"2\"><strong>Charte 5. COMMENT DONNER DE L'OXYGENE</strong></td>
+      </tr>
+      <tr>
+         <td valign=\"top\">Donner de l'oxyg&egrave;ne &agrave; l'aide de lunettes nasales ou d'une sonde nasale.</td>
+         <td style=\"text-align: center;\" rowspan=\"2\"><img src=\"blob:https://medalc.unisante.ch/a91eb3ca-fb4e-430b-b471-7e7208656fef\" alt=\"Choking/5 A\" width=\"150\" height=\"138\" /></td>
+      </tr>
+      <tr>
+         <td>
+            LUNETTES NASALES<br />
+            <ul>
+               <li>Placer les lunettes nasales dans les narines et attacher avec du ruban adh&eacute;sif pour les maintenir en place.</li>
+            </ul>
+         </td>
+      </tr>
+      <tr>
+         <td>
+            SONDE NASALE<br />
+            <ul>
+               <li>Utiliser une sonde de calibre CHa 8.</li>
+               <li>Mesurer la distance entre le bord de la narine et le bord des sourcils avec la sonde.</li>
+               <li>Introduire la sonde comme indiqu&eacute; sur la figure.</li>
+               <li>Maintenir la sonde avec du ruban adh&eacute;sif.</li>
+            </ul>
+         </td>
+         <td style=\"text-align: center;\" rowspan=\"2\"><img src=\"blob:https://medalc.unisante.ch/1476d2f6-847a-4674-84c7-325e87e661a6\" alt=\"Choking/5 B\" width=\"150\" height=\"176\" /></td>
+      </tr>
+      <tr>
+         <td>
+            Commencer avec un d&eacute;bit d'oxyg&egrave;ne pour atteindre une saturation en oxyg&egrave;ne de &gt;/= 94% &agrave;:
+            <ul>
+               <li>0.5 - 1L/min pour les nouveaux n&eacute;s</li>
+               <li>1 - 2 L/min pour les nourrissons</li>
+               <li>2 - 4 L/min pour les enfants plus &acirc;g&eacute;es</li>
+               <li>&gt;4 L/min seulement avec un masque</li>
+            </ul>
+         </td>
+      </tr>
+   </tbody>
+</table>
+<h4><a name=\"OBkeepWarm_a\"></a>Garder l'enfant au chaud et le r&eacute;f&eacute;rer pour un traitement d'urgence</h4>
+<p>Couvrer l'enfant avec un drap pour le garder au chaud, et r&eacute;f&eacute;rer l'enfant pour une prise en charge d'urgence.</p>
+<p style=\"text-align: center;\"><a href=\"#top\">Retour vers le haut</a></p>
+<h3><a name=\"respiratoryDistress\"></a>D&eacute;tresse respiratoire ou cyanose centrale :</h3>
+<h4><a name=\"OBgiveOxygen_b\"></a>Administrer&nbsp;de l'oxyg&egrave;ne</h4>
+<ul>
+<li>Si l'oxyg&eacute;noth&eacute;rapie est diponible, mesurer la saturation en oxyg&egrave;ne chez tous les enfants avec un signe d'urgence.</li>
+<li>Quand l'enfant a uniquement une d&eacute;tresse respiratoire, une administration en oxyg&egrave;ne est recommend&eacute;e &agrave; partir d'une saturation en dessous de 90%(SpO2&lt;90%).</li>
+                                                                                                                                                                             <li>Si l'enfant pr&eacute;sente d'autres signes d'urgence +/- d&eacute;tresse respiratoire, l'oxyg&eacute;noth&eacute;rapie est recommend&eacute;e &agrave; une saturation en dessous de 94%(SpO2&lt;94%).</li>
+                                                                                                                                                                                                                                                                                                                                                                      </ul>
+<table>
+   <tbody>
+      <tr>
+         <td colspan=\"2\"><strong>Charte 5. COMMENT DONNER DE L'OXYGENE</strong></td>
+      </tr>
+<tr>
+<td valign=\"top\">Donner de l'oxyg&egrave;ne &agrave; l'aide de lunettes nasales ou d'une sonde nasale.</td>
+         <td style=\"text-align: center;\" rowspan=\"2\"><img src=\"blob:https://medalc.unisante.ch/a91eb3ca-fb4e-430b-b471-7e7208656fef\" alt=\"Choking/5 A\" width=\"150\" height=\"138\" /></td>
+      </tr>
+      <tr>
+         <td>
+            LUNETTES NASALES
+            <ul>
+               <li>Placer les lunettes nasales dans les narines et attacher avec du ruban adh&eacute;sif pour les maintenir en place.</li>
+            </ul>
+         </td>
+      </tr>
+      <tr>
+         <td>
+            SONDE NASALE<br />
+            <ul>
+               <li>Utiliser une sonde de calibre CHa 8.</li>
+               <li>Mesurer la distance entre le bord de la narine et le bord des sourcils avec la sonde.</li>
+               <li>Introduire la sonde comme indiqu&eacute; sur la figure.</li>
+               <li>Maintenir la sonde avec du ruban adh&eacute;sif.</li>
+            </ul>
+         </td>
+         <td style=\"text-align: center;\" rowspan=\"2\"><img src=\"blob:https://medalc.unisante.ch/1476d2f6-847a-4674-84c7-325e87e661a6\" alt=\"Choking/5 B\" width=\"150\" height=\"176\" /></td>
+      </tr>
+      <tr>
+         <td>
+            Commencer avec un d&eacute;bit d'oxyg&egrave;ne pour atteindre une saturation en oxyg&egrave;ne de &gt;/= 94% &agrave;:
+            <ul>
+               <li>0.5 - 1L/min pour les nouveaux n&eacute;s</li>
+               <li>1-2 L/min pour les nourrissons</li>
+               <li>2-4 L/min pour les enfants plus &acirc;g&eacute;s</li>
+               <li>&gt;4 L/min seulement avec un masque</li>
+            </ul>
+</td>
+      </tr>
+</tbody>
+</table>
+<h4><a name=\"AntibioticsSpectrum\"></a>Donner des antiobiotiques &agrave; large spectre avant une hospitalisation</h4>
+<ul>
+<li>
+<p>Ceftriaxone IV ou IM</p>
+      <table style=\"border-collapse: collapse; width: 100%; font-size: 8pt;\" border=\"1\">
+         <thead>
+            <tr>
+               <th rowspan=\"2\"><strong>Age ou poids</strong></th>
+               <th colspan=\"2\">
+                  <table style=\"font-size: 8pt;\">
+                     <thead></thead>
+<tbody>
+<tr>
+<td style=\"text-align: center;\">
+<strong>CEFTRIAXONE IV ou IM (250mg fioles)<br />50 - 100mg/Kg - Traitement pre-hospitali&eacute;</strong><br />
+<p style=\"text-align: left;\"><strong>Instructions de pr&eacute;paration:</strong><br />Etape 1: La poudre pour l'injection doit &ecirc;tre dilu&eacute; avec 0.9ml d'eau pour l'injection.<br />Etape 2: Ajouter de l'eau pour l'injection doucement et ensuite, agiter fortement afin d'avoir un m&eacute;lange homog&egrave;ne. Le volume total va &ecirc;tre d'appoximativement 1ml.</p>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </th>
+            </tr>
+            <tr>
+               <td><strong>Dose en g</strong></td>
+               <td><strong>Volume mL (nombre de fioles)</strong></td>
+            </tr>
+         </thead>
+         <tbody>
+            <tr>
+               <td>2 mois &agrave; 4 mois (4 - &lt; 5 kg)</td>
+               <td>500&nbsp;mg</td>
+               <td>2mL (2 fioles)</td>
+            </tr>
+            <tr>
+               <td>4 mois &agrave; 12 mois (6 - &lt; 10kg)</td>
+               <td>750&nbsp;mg</td>
+               <td>3mL (3 fioles)</td>
+            </tr>
+            <tr>
+               <td>12 mois &agrave; 3 ans (10 - &lt; 14 kg)</td>
+               <td>1000&nbsp;mg</td>
+               <td>4mL (4 fioles)</td>
+            </tr>
+            <tr>
+               <td>3 ans &agrave; 5 ans (14 - &lt; 20 kg)</td>
+               <td>1500&nbsp;mg</td>
+               <td>6mL (6 fioles)</td>
+            </tr>
+            <tr>
+               <td>5 ans (&ge;20 kg)</td>
+               <td>2000&nbsp;mg</td>
+               <td>8mL (8 fioles)</td>
+            </tr>
+         </tbody>
+      </table>
+   </li>
+   <li>
+      <p>Ampicilline et Gentamicine IM (si la Ceftriaxone n'est pas disponible)</p>
+      <table style=\"border-collapse: collapse; width: 100%; font-size: 8pt;\" border=\"1\">
+         <thead>
+            <tr>
+               <th rowspan=\"2\"><strong>Age ou poids</strong></th>
+               <th colspan=\"2\">
+                  <table style=\"font-size: 8pt;\">
+                     <thead></thead>
+<tbody>
+<tr>
+<td style=\"text-align: center;\">
+<strong>AMPICILLINE et GENTAMICINE IM<br />Ampicilline 50mg/kg, gentamicine 7.5mg/kg<br />Traitement pre-hospitali&eacute;</strong><br />
+                              <p style=\"text-align: left;\">Pr&eacute;paration de l'Ampicilline: Diluer 500mg vial avec 2.1ml d'eau st&eacute;rile (500mg/2.5ml)</p>
+                           </td>
+</tr>
+                     </tbody>
+</table>
+               </th>
+</tr>
+            <tr>
+               <td><strong>Ampicilline(500mg/2.5m)</strong></td>
+<td><strong>Gentamicine(40mg/ml dans une fiole de 2ml)</strong></td>
+</tr>
+         </thead>
+<tbody>
+<tr>
+<td>2 mois &agrave; 4 mois (4 - &lt; 5 kg)</td>
+               <td>1&nbsp;mL (200mg)</td>
+<td>0.5&nbsp;&ndash;&nbsp;1.0&nbsp;ml</td>
+            </tr>
+<tr>
+<td>4 mois &agrave; 12 mois (6 - &lt; 10kg)</td>
+               <td>2&nbsp;mL (400mg)</td>
+<td>1.1-1.8&nbsp;ml</td>
+            </tr>
+<tr>
+<td>12 mois &agrave; 3 ans (10 - &lt; 14 kg)</td>
+               <td>3&nbsp;mL (600mg)</td>
+<td>1.9-2.7&nbsp;ml</td>
+            </tr>
+<tr>
+<td>3 ans &agrave; 5 ans (14 - &lt; 20 kg)</td>
+               <td>4&nbsp;mL (800mg)</td>
+<td>2.8-3.5&nbsp;ml</td>
+            </tr>
+<tr>
+<td>5 ans jusqu'&agrave; 8 ans (20 &ndash;&lt; 26 kg)</td>
+               <td>5&nbsp;mL (1000mg)</td>
+               <td>3.8-4.7&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td>8 ans jusqu'&agrave; 10 ans (26 &ndash;&lt; 30 kg)</td>
+               <td>7&nbsp;mL (1400mg)</td>
+<td>4.9-5.4&nbsp;ml</td>
+            </tr>
+<tr>
+<td>30&nbsp;&ndash;&nbsp;33&nbsp;kg</td>
+               <td>8&nbsp;mL (1600mg)</td>
+<td>5.6-6.2&nbsp;ml</td>
+            </tr>
+<tr>
+<td>34&nbsp;&ndash;&nbsp;37&nbsp;kg</td>
+               <td>9&nbsp;mL (1800mg)</td>
+<td>6.4-6.9&nbsp;ml</td>
+            </tr>
+<tr>
+<td>38&nbsp;&ndash;&nbsp;41&nbsp;kg</td>
+               <td>10&nbsp;mL (2000mg)</td>
+<td>7.1-7.7&nbsp;ml</td>
+            </tr>
+<tr>
+<td>42&nbsp;&ndash;&nbsp;45&nbsp;kg</td>
+               <td>10&nbsp;mL (2000mg)</td>
+<td>7.9-8.4&nbsp;ml</td>
+            </tr>
+<tr>
+<td>46&nbsp;&ndash;&nbsp;50&nbsp;kg</td>
+               <td>10&nbsp;mL (2000mg)</td>
+<td>8.6-9.4 ml</td>
+            </tr>
+</tbody>
+      </table>
+</li>
+</ul>
+<h4><a name=\"Salbutamol\"></a>Donner du salbutamol si un sifflement est pr&eacute;sent</h4>
+<p><strong>Donner du Salbutamol &agrave; inhaler si un sifflement est pr&eacute;sent</strong></p>
+<p>Utilisation d'une CHAMBRE A INHALER*</p>
+<p>La chambre &agrave; inhaler est un moyen de d&eacute;liver efficacement les m&eacute;dicaments &agrave; effet bronchodilatateurs dans les poumons. Aucun enfant de moins de 5 ansne devrait recevoir un inhalateur sans chambre &agrave; inhaler. Une chambre &agrave; inhaler fonctionne aussi bien qu'un n&eacute;buliseur s'il est correctement utilis&eacute;.</p>
+<ul>
+   <li>Depuis un inhalateur mesur&eacute; de salbutamol (100&micro;g/bouff&eacute;e) donner 2 bouff&eacute;es.</li>
+   <li>R&eacute;p&eacute;ter jusqu'&agrave; 3 fois la s&eacute;quence chaque 15 minutes avant de poser le diagnostique de pneumonie.</li>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                             </ul>
+<p>Utiliser un inhalateur avec une chambre &agrave; inhaler :</p>
+<ul>
+<li>Enlever le bouchon de l'inhalateur, et bien l'agiter.</li>
+<li>Ins&eacute;rez le bouchon de l'inhalateur &agrave; travers le trou dans la bouteille ou le verre en plastique.</li>
+   <li>L'enfant doit mettre l'ouverture de la bouteille dans sa bouche et respirer par la bouche.</li>
+   <li>Le soignant presse ensuite sur l'inhalateur et pulv&eacute;rise dans la bouteille pendant que l'enfant continue &agrave; respirer normalement.</li>
+   <li>Attendez trois &agrave; quatre respirations et r&eacute;p&eacute;ter.</li>
+   <li>Pour les enfants plus jeunes, placez le verre en plastique au-dessus de la bouche de l'enfant et utilisez-le comme une chambre &agrave; inhaler de la m&ecirc;me mani&egrave;re.</li>
+</ul>
+<p><em>* Si une chambre &agrave; inhaler est utilis&eacute;e pour la premi&egrave;re fois, elle devrait &ecirc;tre utilis&eacute;e par 4-5 bouff&eacute;es suppl&eacute;mentaires de l'inhalateur.</em></p>
+<h4><a name=\"OBkeepWarm_b\"></a>Garder l'enfant au chaud et le r&eacute;f&eacute;rer pour un traitement d'urgence</h4>
+<p>Couvrer l'enfant avec un drap pour le garder au chaud, et r&eacute;f&eacute;rer l'enfant pour une prise en charge d'urgence.</p>
+<p style=\"text-align: center;\"><a href=\"#top\">Retour vers le haut</a></p>
+<h3><a name=\"anaphylaxis\"></a>Traiter une suspicion d'anaphylaxie</h3>
+<p style=\"font-size = 8px; text-align: justify;\">Une anaphylaxie devrait &ecirc;tre suspect&eacute; chez un enfant qui se pr&eacute;sente avec des demangeaisons, des plaques rouges, qui grandissent et apparaissent souvent avec des difficult&eacute;s respiratoires, des douleurs abdominales, une conscience alt&eacute;r&eacute;e, et/ou des vomissements. Le plus souvent apr&egrave;s une exposition &agrave; un potentiel allerg&egrave;ne(m&eacute;dicament, nourriture, piq&ucirc;re d'abeille, etc).&nbsp;</p>
+<h4>Donner de l'adrenaline 0.15 ml d'une solution 1:1000 par IM</h4>
+<h4>Donner de l'anti-histaminique (cetirizine ou chlorpheniramine):</h4>
+<table style=\"border-collapse: collapse; width: 100%; font-size: 8pt;\" border=\"1\">
+   <thead>
+      <tr>
+         <th style=\"text-align: left;\">Age</th>
+<th>Cetirizine 5mg tablettes</th>
+         <th>Chlorpheniramine 4mg tablettes</th>
+</tr>
+   </thead>
+<tbody style=\"text-align: center;\">
+<tr>
+<td style=\"text-align: left;\">6 mois &ndash; 2 ans</td>
+         <td>&frac12;</td>
+<td>&nbsp;</td>
+      </tr>
+<tr>
+<td style=\"text-align: left;\">2 &ndash; 5 ans</td>
+         <td>1</td>
+<td>&frac12;</td>
+      </tr>
+<tr>
+<td style=\"text-align: left;\">5 &ndash; 12 ans</td>
+         <td>2</td>
+<td>&frac12;</td>
+      </tr>
+<tr>
+<td style=\"text-align: left;\">12 &ndash; 14 ans</td>
+         <td>2</td>
+<td>1</td>
+      </tr>
+</tbody>
+</table>
+<h4><a name=\"OBkeepWarm_c\"></a>Garder l'enfant au chaud et le r&eacute;f&eacute;rer pour un traitement d'urgence</h4>
+<p>Couvrer l'enfant avec un drap pour le garder au chaud, et r&eacute;f&eacute;rer l'enfant pour une prise en charge d'urgence.</p>
+<p style=\"text-align: center;\"><a href=\"#top\">Retour vers le haut</a></p>
+<h2><strong>Inconscient / l&eacute;thargique ou convulse</strong></h2>
+<h3><a name=\"unconscious\"></a>Inconscient :</h3>
+<h4><a name=\"OBnoNeckTrauma_2_a\"></a>Prendre en charge une respiration obstu&eacute;e/absente quand aucun traumatisme cervical n'est suspect&eacute;</h4>
+<p><a href=\"#OBneckTrauma_2_a\">(D&eacute;filer vers le bas s'il n'y a aucun traumatime cervical)</a></p>
+<table>
+   <tbody>
+      <tr>
+         <td colspan=\"2\"><strong>Charte 4. COMMENT PRENDRE EN CHARGE LES VOIES AERIENNES D'UN ENFANT AVEC UNE RESPIRATION OBSTRUEE (OU QU'IL NE RESPIRE PAS)</strong></td>
+      </tr>
+<tr>
+<td colspan=\"2\"><strong>A: Quand aucun traumatisme cervical n'est suspect&eacute;</strong></td>
+      </tr>
+      <tr>
+         <td valign=\"top\">
+            <strong>Enfant conscient</strong><br />
+            <ol>
+               <li>Inspecter la bouche et enlever tout objet &eacute;tranger si pr&eacute;sent</li>
+               <li>Retirer les s&eacute;cretions de la gorge</li>
+               <li>Laisser le nourrisson prendre la position qui lui pla&icirc;t</li>
+            </ol>
+         </td>
+         <td style=\"text-align: center;\">
+            <strong>NOURRISSON</strong><br />
+            <p style=\"text-align: center;\"><img src=\"blob:https://medalc.unisante.ch/27407736-1d08-4d92-a8bb-df4a9222d0ba\" alt=\"Choking/3 A\" width=\"150\" height=\"102\" /></p>
+            Position neutre pour d&eacute;gager les voies a&eacute;riennes chez un nourrisson<br />&nbsp;
+         </td>
+      </tr>
+      <tr>
+         <td valign=\"top\">
+            <strong>Enfant inconscient</strong><br />
+            <ol>
+               <li>Faire basculer la t&ecirc;te comme indiqu&eacute;, garder cette position pour ouvrir les voies a&eacute;riennes.</li>
+               <li>Inspecter la bouche et enlever tout objet &eacute;tranger facilement visible.</li>
+               <li>Retirer les s&eacute;cretions de la gorge.</li>
+               <li>V&eacute;rifier que les voies a&eacute;riennes sont d&eacute;gag&eacute;es en observant les mouvements de la poitrine, en &eacute;coutant les sons de la respiration, et en essayant de sentir le souffle de la respiration(voir la figure)</li>
+            </ol>
+         </td>
+         <td style=\"text-align: center;\">
+            <strong>ENFANT PLUS AGE</strong><br />Position inclin&eacute;e pour ouvrir les voies a&eacute;riennes chez un enfant plus &acirc;g&eacute;<br />
+            <p style=\"text-align: center;\"><img src=\"blob:https://medalc.unisante.ch/2ffeb264-fe0d-4dd4-91db-83ec6f864322\" alt=\"Choking/3 B\" width=\"150\" height=\"236\" /><span style=\"font-family: inherit; font-size: inherit; font-style: inherit; font-variant-ligatures: inherit; font-variant-caps: inherit; font-weight: inherit;\">Regarder, &eacute;couter, et senter si l'enfant respire</span></p>
+</td>
+      </tr>
+</tbody>
+</table>
+<h4><a name=\"OBneckTrauma_2_a\"></a>Prendre en charge une respiration obstru&eacute;e/absente quand un traumatisme cervical est suspect&eacute;</h4>
+<p><strong>Charte 4. COMMENT PRENDRE EN CHARGE LES VOIES AERIENNES D'UN ENFANT AVEC UNE RESPIRATION OBSTRUEE (OU QU'IL NE RESPIRE PAS)</strong></p>
+<p><strong>B: Quand un traumatisme cervical ou une l&eacute;sion du rachis est suspect&eacute; : faire une subluxation de la machoire</strong></p>
+<ol>
+   <li>Stabiliser la nuque comme indiqu&eacute; dans la <a href=\"#charte6\">charte 6</a> et degager les voies a&eacute;riennes.</li>
+<li>Inspecter la bouche et enlever tout objet &eacute;tranger si pr&eacute;sent.</li>
+<li>Enlever les s&eacute;cretions de la gorge sous observations directes.</li>
+                                                                <li>V&eacute;rifier si les voies a&eacute;riennes sont d&eacute;gag&eacute;es en observant les mouvements de la poitrine, en &eacute;coutant les sons de la respiration, en essayant de sentir le souffle de la respiration.</li>
+                                                                                                                                                                                                                                                                                </ol>
+<p style=\"text-align: center;\"><img src=\"blob:https://medalc.unisante.ch/68e06fcf-1013-40a3-b2bd-7d1ce5e5e1bc\" alt=\"Choking/4 A\" width=\"345\" height=\"143\" /></p>
+<!--Insert image here-->
+<p><strong>Faire une subluxation de la machoire inf&eacute;rieure vers l'avant si les voies a&eacute;riennes ne sont pas ouvertes. Placer le quatri&egrave;me et le cinqui&egrave;me doigt derri&egrave;re l'angle de la machoire et pousser vers le haut pour que la machoire inf&eacute;rieure soit en avant, &agrave; 90&deg; du corps de l'enfant.</strong></p>
+<p style=\"text-align: center;\"><img src=\"blob:https://medalc.unisante.ch/c48eeed7-7912-4a48-934b-102a99bd0d70\" alt=\"Choking/4 B\" width=\"314\" height=\"281\" /></p>
+<!--Insert image here-->
+<p><strong>Si l'enfant ne respire toujours pas, faire une ventilation manuelle avec un masque et un ballon, si possible avec un ballon d'anesth&eacute;sie et de l'oxyg&egrave;ne.</strong></p>
+<h4><a name=\"UnconsciousChild_2_a\"></a>Positionner un enfant inconscient</h4>
+<table>
+   <tbody>
+      <tr>
+         <td colspan=\"2\"><strong>Charte 6. COMMENT POSITIONNER UN ENFANT INCONSCIENT</strong></td>
+      </tr>
+      <tr>
+         <td>
+            <ul>
+               <li>
+                  <strong>Si un traumatisme cervical est suspect&eacute;</strong>
+                  <ul>
+                     <li>Immobiliser le cou de l'enfant et le maintenir allong&eacute; sur le dos</li>
+                     <li>Placer l'enfant sur un plan dur, et l'immobiliser dans cette position en faisant passer un ruban adh&eacute;sif autour de son front et menton, et en fixant la t&ecirc;te au plan.</li>
+                     <li>Emp&ecirc;cher tout mouvement du cou en immobilisant la t&ecirc;te de l'enfant&nbsp; (par ex. &agrave; l'aide de sac de liquide de perfudion plac&eacute;s des deux c&ocirc;t&eacute;s de la t&ecirc;te).</li>
+                     <li>Si l'enfant vomit, tourner l'enfant sur un c&ocirc;t&eacute; tout en gardant la t&ecirc;te allign&eacute; au reste du corps.</li>
+                  </ul>
+               </li>
+            </ul>
+         </td>
+         <td style=\"text-align: center;\"><img src=\"blob:https://medalc.unisante.ch/b4b9c39e-679b-4254-b53a-4d400b7fe8f4\" alt=\"Unconscious/3 A\" width=\"150\" height=\"146\" /></td>
+      </tr>
+      <tr>
+         <td colspan=\"2\">
+            <ul>
+               <li>
+                  <strong>S'il n'y a pas de suscpicion de traumatisme cervical</strong>
+                  <ul>
+                     <li>Mettre l'enfant sur le c&ocirc;t&eacute; pour &eacute;viter les risque d'une fausse route.</li>
+                     <li>Maintenir le cou l&eacute;g&egrave;rement en extension, et le stabiliser en glissant l'une de mains sous sa joue.</li>
+                     <li>Replier une de ses jambes pour stabiliser le reste du corps.</li>
+                  </ul>
+               </li>
+            </ul>
+            <br />
+            <p style=\"text-align: center;\"><img src=\"blob:https://medalc.unisante.ch/a79465de-ec45-4ed6-b63f-1cc686f5bb98\" alt=\"Unconscious/3 B\" width=\"300\" height=\"113\" /></p>
+         </td>
+      </tr>
+   </tbody>
+</table>
+<h4><a name=\"IVGlucose_2_a\"></a>Traiter / pr&eacute;venir une hypoglyc&eacute;mie</h4>
+<p><strong>Traiter l'enfant pour emp&ecirc;cher une hypoglyc&eacute;mie</strong></p>
+<ul>
+   <li>
+      Si l'enfant est capable d'&ecirc;tre allait&eacute; :
+      <ul>
+         <li>Demandez &agrave; la m&egrave;re d'allaiter l'enfant.</li>
+      </ul>
+   </li>
+   <li>
+      Si l'enfant n'est pas capable d'&ecirc;tre allait&eacute; mais qu'il peut avaler :
+      <ul>
+         <li>Donner du lait maternel tir&eacute; ou un substitut.</li>
+         <li>Si le lait maternel ou un substitut n'est pas disponible, donner de l'eau sucr&eacute;e*.</li>
+         <li>Donner 30 - 50 ml de lait ou de l'eau sucr&eacute;e* avant le d&eacute;part</li>
+      </ul>
+   </li>
+   <li>
+      Si l'enfant n'est pas capable d'avaler :
+      <ul>
+         <li>Donner 50ml de lait ou de l'eau sucr&eacute;e* via une sonde nasogastrique.</li>
+         <li>S'il n'y a pas de sonde nasogastrique disponible, donner une cuill&egrave;re &agrave; caf&eacute; de sucre humidif&eacute;e sous la langue et r&eacute;p&eacute;ter cela toutes les 20 minutes pour &eacute;viter une rechute.</li>
+         <li><em> <span style=\"text-decoration: underline;\">*Faire une eau sucr&eacute;e:</span> Dissoudre 4 cuill&egrave;res &agrave; caf&eacute; de sucre(20 grammes) dans un verre de 200ml d'eau propre.</em></li>
+      </ul>
+   </li>
+</ul>
+<p>Si un traitement orale ou par sonde nasogastrique n'est pas disponible, donner du sucre par voie intraveineuse :</p>
+<p><strong>Charte 10. COMMENT ADMINISTRER DU SUCRE PAR VOIE INTRAVEINEUSE</strong></p>
+<ul>
+   <li>Poser une voie veineuse, et pr&eacute;lever du sang pour les examens de laboratoires &agrave; r&eacute;aliser en urgence.</li>
+   <li>V&eacute;rifier la glyc&eacute;mie avec une bandelette. Si la concentration est&lt; 2.5 mmol/litre (45 mg/dl) chez un enfant bien nourri ou&lt; 3 mmol/litre (54 mg/dl) chez un enfant atteint de malnutrition s&eacute;v&egrave;re ou si la glyc&eacute;mie ne peut pas &ecirc;tre mesur&eacute;e, traiter comme une hypoglyc&eacute;mie :</li>
+   <li>
+      Donner 5 ml/kg d'une solution de 10% de glucose rapidement par la voie veineuse.<br />
+      <table style=\"border-collapse: collapse; width: 100%; font-size: 8pt;\" border=\"1\">
+         <thead>
+            <tr>
+               <th>Age (Poids)</th>
+               <th style=\"text-align: center;\">Volume d'une solution de 10% de glucose en bolus(5 ml/kg)</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr>
+               <td>&lt; 2 mois (&lt; 4 kg)</td>
+               <td style=\"text-align: center;\">15&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td>2 -lt; 4 mois (4 -&lt; 6 kg)</td>
+               <td style=\"text-align: center;\">25&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td>4 -&lt; 12 mois (6 -&lt; 10 kg)</td>
+               <td style=\"text-align: center;\">40&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td>1 -&lt; 3 ans (10 -&lt; 14 kg)</td>
+               <td style=\"text-align: center;\">60&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td>3 -&lt; 5 ans (14 -&lt; 19 kg)</td>
+               <td style=\"text-align: center;\">80&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td>5 ans jusqu'&agrave; 8 ans (20 -&lt; 26 kg)</td>
+               <td style=\"text-align: center;\">100&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td>8 ans jusqu'&agrave; 10 ans (26 -&lt; 30kg)</td>
+               <td style=\"text-align: center;\">140&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td>30 jusqu'&agrave; &lt; 36 kg</td>
+               <td style=\"text-align: center;\">160&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td>36 jusqu'&agrave; &lt; 40 kg</td>
+               <td style=\"text-align: center;\">180&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td>40 jusqu'&agrave; &lt; 46 kg</td>
+               <td style=\"text-align: center;\">200&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td>46 jusqu'&agrave; 50 kg</td>
+               <td style=\"text-align: center;\">240&nbsp;ml</td>
+            </tr>
+         </tbody>
+      </table>
+   </li>
+   <li>Au bout de 30 minutes v&eacute;rifier la glyc&eacute;mie. Si la glyc&eacute;mie est toujours basse, donner &agrave; nouveau 5ml/kg d'une solution de 10% de glucose.</li>
+   <li>
+      Nourir l'enfant d&egrave;s qu'il/elle reprend conscience. <br />Si l'enfant ne peur &ecirc;tre nourri sans danger d'aspiration, donner :
+      <ul>
+         <li>Du lait ou du sucre via une sonde nasogastrique(pour faire une solution de sucre, dissoudre 4 cuill&egrave;res &agrave; caf&eacute;(20g) dans 200ml d'eau propre), ou</li>
+         <li>Une solution par voie veineuse de 5-10% de sucre(dextrose) (<a href=\"http://apps.who.int/iris/bitstream/handle/10665/187940/9789242548372_fre.pdf#page=459\">regarder l'annexe 4, p.377</a>)</li>
+</ul>
+   </li>
+</ul>
+<p><em><strong>Note:</strong></em> Une solution de 50% de glucose est la m&ecirc;me qu'une solution de 50% de dextrose. Si il y a uniquement une solution de 50% de glucose disponible : diluer une partie de la solution de 50% de glucose dans 4 partie avec de l'eau st&eacute;rile, ou diluer une partie de la solution de 50% de glucose en 9 parties de 5% de glucose. Par exemple, 10ml d'une solution de 50% de glucose avec 90ml d'une solution de 5% de glucose donne appoximativement une solution de 100ml de 10% de glucose.</p>
+<p><em><strong>Note:</strong></em> Pour l'utilisation des bandelettes de mesure de la glyc&eacute;mie, se r&eacute;f&eacute;rer aux instructions sur la boite. Ces bandelettes doivent en g&eacute;n&eacute;ral &ecirc;tre conserv&eacute;es dans leur boite, &agrave; une temp&eacute;rature avoisiant les 2-3 &deg;C, en &eacute;vitant la lumi&egrave;re du soleil ou une forte humidit&eacute;. D&eacute;poser une goutte sans sur la bandelette(la goutte doit recouvrir toute la surface sur laquelle se trouve le r&eacute;actif). apr&egrave;s 60 secondes, &eacute;liminer d&eacute;licatement le sang &agrave; l'aide de quelques gouttes d'eau froide et comparer la couleur obtenue avec l'echelle figurant sur le flacon ou obtenir le r&eacute;sultat avec un lecteur de glyc&eacute;mie. (La m&eacute;thode exacte varie en fonction des bandelettes utilis&eacute;es.)</p>
+<p><em> <strong>Note:</strong> Le sucre en sublinguale peut &ecirc;tre utilis&eacute; comme une aide de \"premier recours\" dans la prise en charge d'une hypoglyc&eacute;mie si la voie veineuse n'est pas accessible ou bien retard&eacute;e. Mettre une petite cuill&egrave;re rase de sucre humidifi&eacute; sous la langue toutes les 10-20 min.</em></p>
+<h4><a name=\"TestMalaria_2_a\"></a>Tester et traiter la malaria</h4>
+<p>Faire un test rapide (TDRm) ou un frottis sanguin. Si le r&eacute;sultat est positif, donner un traitement avant une prise en charge ou une administration d'un traitement contre la malaria.</p>
+<ol>
+<li>
+<p>Artesunate Intramusculaire (IM) ou Intraveineux (IV)</p>
+      <table style=\"border-collapse: collapse; width: 100%; text-align: center; font-size: 8pt;\" border=\"1\">
+         <thead>
+            <tr>
+               <th rowspan=\"2\"><strong>Age ou poids</strong></th>
+               <th>
+                  <table style=\"font-size: 8pt;\">
+                     <thead></thead>
+<tbody>
+<tr>
+<td style=\"text-align: center;\">
+<p><strong>ARTESUNATE INTRAMUSCULAIRE(IM) </strong><strong>L'artesunate 60mg injectable a deux &eacute;tapes de dilution<br /></strong></p>
+<p style=\"text-align: left;\">Etape 1: La poudre pour l'injection doit &ecirc;tre dilu&eacute; avec 1ml d'une solution de 5% de bicarbonate de sodium et &ecirc;tre fortement agit&eacute; pendant 2-3 minutes jusqu'&agrave; ce que la solution soit claire.<br />Etape 2: Pour l'injection intramusculaire IM, ajouter 2ml d'une solution de 5% de dextrose ou une solution saline normale pour obtenir une solution d'artesunate &agrave; 20mg/ml. Volume totale pour l'injection IM : 3ml.</p>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </th>
+               <th>
+                  <table style=\"font-size: 8pt;\">
+                     <thead></thead>
+                     <tbody>
+                        <tr>
+                           <td style=\"text-align: center;\">
+                              <strong>ARTESUNATE INTRAVEINEUX(IV)<br />L'artesunate 60mg injectable a deux &eacute;tapes de dilution</strong>
+                              <p style=\"text-align: left;\">Etape 1: La poudre pour l'injection doit &ecirc;tre dilu&eacute; avec 1ml d'une solution de 5% de bicarbonate de sodium et &ecirc;tre bien agit&eacute; pendant 2-3 minutes jusqu'&agrave; ce que la solution soit claire.<br />Etape 2: Pour l'infusion en IV (3&ndash;4 minutes), ajouter 5ml d'une solution de 5% de dextrose ou une oslution saline normale, pour obtenir solution d'artesunate &agrave; 10mg/ml. Volume totale pour l'infusion IV : 6ml.</p>
+</td>
+                        </tr>
+</tbody>
+                  </table>
+</th>
+            </tr>
+<tr>
+<td><strong>60mg vial (20mg/ml) 2.4&nbsp;mg/kg<br />Administrer doucement</strong></td>
+               <td><strong>60mg vial (10mg/ml) 2.4&nbsp;mg/kg<br />Administrer doucement en bolus 3-4 minutes</strong></td>
+            </tr>
+</thead>
+         <tbody>
+            <tr>
+               <td style=\"text-align: left;\">2 mois jusqu'&agrave; 4 mois (4 - &lt; 5 kg)</td>
+<td>&frac12;&nbsp;ml</td>
+               <td>1&nbsp;ml</td>
+</tr>
+            <tr>
+               <td style=\"text-align: left;\">4 mois jusqu'&agrave; 12 mois (6 - &lt; 10kg)</td>
+<td>1&nbsp;ml</td>
+               <td>2&nbsp;ml</td>
+</tr>
+            <tr>
+               <td style=\"text-align: left;\">12 mois jusqu'&agrave;&nbsp; 2 ans (10 - &lt; 12 kg)</td>
+<td>1.5&nbsp;ml</td>
+               <td>3&nbsp;ml</td>
+</tr>
+            <tr>
+               <td style=\"text-align: left;\">2 ans jusqu'&agrave; 3 ans (12 - &lt; 14 kg)</td>
+<td>1.5&nbsp;ml</td>
+               <td>3&nbsp;ml</td>
+</tr>
+            <tr>
+               <td style=\"text-align: left;\">3 ans jusqu'&agrave; 5 ans (14 &ndash;&lt; 20 kg)</td>
+<td>2&nbsp;ml</td>
+               <td>4&nbsp;ml</td>
+</tr>
+            <tr>
+               <td style=\"text-align: left;\">5 ans jusqu'&agrave; 8 ans (20 &ndash;&lt; 26 kg)</td>
+<td>3&nbsp;ml</td>
+               <td>6&nbsp;ml</td>
+</tr>
+            <tr>
+               <td style=\"text-align: left;\">8 ans jusqu'&agrave; 10 ans (26 &ndash;&lt; 30 kg)</td>
+<td>4&nbsp;ml</td>
+               <td>7&nbsp;ml</td>
+</tr>
+            <tr>
+               <td style=\"text-align: left;\">30 &ndash; 33 kg</td>
+<td>4&nbsp;ml</td>
+               <td>8&nbsp;ml</td>
+</tr>
+            <tr>
+               <td style=\"text-align: left;\">34 &ndash; 37 kg</td>
+<td>5&nbsp;ml</td>
+               <td>9&nbsp;ml</td>
+</tr>
+            <tr>
+               <td style=\"text-align: left;\">38 &ndash; 41 kg</td>
+<td>5&nbsp;ml</td>
+               <td>10&nbsp;ml</td>
+</tr>
+            <tr>
+               <td style=\"text-align: left;\">42 &ndash; 45 kg</td>
+<td>6&nbsp;ml</td>
+               <td>11&nbsp;ml</td>
+</tr>
+            <tr>
+               <td style=\"text-align: left;\">46 &ndash; 50 kg</td>
+<td>6&nbsp;ml</td>
+               <td>12&nbsp;ml</td>
+</tr>
+         </tbody>
+</table>
+   </li>
+<li>
+<p>Artesunate rectale (si l'artesunate en IV ou IM n'est pas disponible)</p>
+      <table style=\"border-collapse: collapse; width: 100%; text-align: center; font-size: 8pt;\" border=\"1\">
+         <thead>
+            <tr>
+               <th rowspan=\"2\"><strong>Age ou poids</strong></th>
+               <th colspan=\"2\"><strong>ARTESUNATE EN SUPPOSITOIRE</strong></th>
+            </tr>
+<tr>
+<td><strong>Suppositoires 50mg<br />Dosage 10mg/kg</strong></td>
+<td><strong>Suppositoires 200mg<br />Dosage 10mg/kg</strong></td>
+</tr>
+         </thead>
+<tbody>
+<tr>
+<td style=\"text-align: left;\">2 mois jusqu'&agrave; 4 mois (4 &ndash;&lt; 5 kg)</td>
+               <td>1</td>
+               <td>&nbsp;</td>
+            </tr>
+            <tr>
+               <td style=\"text-align: left;\">4 mois jusqu'&agrave; 12 mois (6 &ndash;&lt; 10kg)</td>
+               <td>2</td>
+<td>&nbsp;</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">12 mois jusqu'&agrave; 2 ans (10 &ndash;&lt; 12 kg)</td>
+               <td>2</td>
+               <td>&nbsp;</td>
+            </tr>
+            <tr>
+               <td style=\"text-align: left;\">2 ans jusqu'&agrave; 3 ans (12 &ndash;&lt; 14 kg)</td>
+               <td>3</td>
+<td>1</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">3 ans jusqu'&agrave; 5 ans (14 &ndash;&lt; 19 kg)</td>
+               <td>3</td>
+               <td>1</td>
+            </tr>
+            <tr>
+               <td style=\"text-align: left;\">5 ans jusq'&agrave; 8 ans (20 &ndash;&lt; 26 kg)</td>
+               <td>4</td>
+<td>1</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">8 ans jusqu'&agrave; 10 ans (26 &ndash;&lt; 30 kg)</td>
+               <td>5</td>
+               <td>1</td>
+            </tr>
+            <tr>
+               <td style=\"text-align: left;\">30 &ndash; 33 kg</td>
+               <td>&nbsp;</td>
+               <td>1</td>
+            </tr>
+            <tr>
+               <td style=\"text-align: left;\">34 &ndash; 50 kg</td>
+               <td>&nbsp;</td>
+               <td>2</td>
+            </tr>
+         </tbody>
+      </table>
+   </li>
+   <li>
+      <p>Quinine en IM (si l'artesunate n'est pas diponible)</p>
+      <table style=\"border-collapse: collapse; width: 100%; text-align: center; font-size: 8pt;\" border=\"1\">
+         <thead>
+            <tr>
+               <th rowspan=\"2\"><strong>Age ou poids</strong></th>
+               <th colspan=\"2\"><strong>QUININE INTRAMUSCULAIRE (10mg/kg)<br />Injecter en deux fois sur la partie ant&eacute;ro-lat&eacute;rale de la cuisse</strong></th>
+            </tr>
+            <tr>
+               <td><strong>150mg/ml (Dans une fiole de 2ml)</strong></td>
+               <td><strong>300mg/ml (dans une fiole de 2ml)</strong></td>
+            </tr>
+         </thead>
+         <tbody>
+            <tr>
+               <td style=\"text-align: left;\">2 mois jusqu'&agrave; 4 mois (4 &ndash;&lt; 5 kg)</td>
+               <td>0.4&nbsp;ml</td>
+<td>0.2&nbsp;ml</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">4 mois jusqu'&agrave; 12 mois (6 &ndash;&lt; 10kg)</td>
+               <td>0.6&nbsp;ml</td>
+               <td>0.3&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td style=\"text-align: left;\">12 mois jusqu'&agrave; 2 ans (10 &ndash;&lt; 12 kg)</td>
+               <td>0.8&nbsp;ml</td>
+<td>0.4&nbsp;ml</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">2 ans jusqu'&agrave; 3 ans (12 &ndash;&lt; 14 kg)</td>
+               <td>1.0&nbsp;ml</td>
+               <td>0.5&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td style=\"text-align: left;\">3 ans jusuq'&agrave; 5 ans (14 &ndash;&lt; 19 kg)</td>
+               <td>1.2&nbsp;ml</td>
+<td>0.6&nbsp;ml</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">5 ans jusuq'&agrave; 8 ans (20 &ndash;&lt; 26 kg)</td>
+               <td>1.4&nbsp;ml</td>
+               <td>0.7&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td style=\"text-align: left;\">8 ans jusqu'&agrave; 10 ans (26 &ndash;&lt; 30 kg)</td>
+               <td>1.8&nbsp;ml</td>
+<td>0.9&nbsp;ml</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">30&nbsp;&ndash;&nbsp;33&nbsp;kg</td>
+               <td>2.0&nbsp;ml</td>
+<td>1.0&nbsp;ml</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">34&nbsp;&ndash;&nbsp;37&nbsp;kg</td>
+               <td>2.4&nbsp;ml</td>
+<td>1.2&nbsp;ml</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">38&nbsp;&ndash;&nbsp;41&nbsp;kg</td>
+               <td>2.6&nbsp;ml</td>
+<td>1.3&nbsp;ml</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">42&nbsp;&ndash;&nbsp;45&nbsp;kg</td>
+               <td>2.8&nbsp;ml</td>
+<td>1.4&nbsp;ml</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">46&nbsp;&ndash;&nbsp;50&nbsp;kg</td>
+               <td>3.2&nbsp;ml</td>
+<td>1.6&nbsp;ml</td>
+            </tr>
+</tbody>
+      </table>
+</li>
+</ol>
+<h4><a name=\"AntibioticsSpectrum_2_a\"></a>Donner des antibiotiques &agrave; large spectre avant une hospitalisation</h4>
+<ol>
+<li>
+<p>Ceftriaxone IV ou IM</p>
+      <table style=\"border-collapse: collapse; width: 100%; font-size: 8pt;\" border=\"1\">
+         <thead>
+            <tr>
+               <th rowspan=\"2\"><strong>Age ou poids</strong></th>
+               <th colspan=\"2\">
+                  <table style=\"font-size: 8pt;\">
+                     <thead></thead>
+<tbody>
+<tr>
+<td style=\"text-align: center;\">
+<strong>CEFTRIAXONE IV ou IM (250mg vial)<br />50 - 100mg/Kg - Traitement pr&eacute;-hospitali&eacute;</strong><br />
+<p style=\"text-align: left;\"><strong>Instructions de pr&eacute;paration:</strong><br />Etape 1: La poudre pour l'injection doit &ecirc;tre dilu&eacute; avec 0.9ml d'eau pour l'injection.<br />Etape 2: Ajouter de l'eau pour l'injection doucement et ensuite, agiter fortement afin d'avoir un m&eacute;lange homog&egrave;ne. Le volume total va &ecirc;tre d'appoximativement 1ml.</p>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </th>
+            </tr>
+            <tr>
+               <td><strong>Dose en g</strong></td>
+               <td><strong>Volume mL (nombre de fiole)</strong></td>
+            </tr>
+         </thead>
+         <tbody>
+            <tr>
+               <td>2 mois jusqu'&agrave; 4 mois (4 - &lt; 5 kg)</td>
+               <td>500&nbsp;mg</td>
+<td>2mL (2 fioles)</td>
+            </tr>
+<tr>
+<td>4 mois jusqu'&agrave; 12 mois (6 - &lt; 10kg)</td>
+               <td>750&nbsp;mg</td>
+               <td>3mL (3 fioles)</td>
+            </tr>
+            <tr>
+               <td>12 mois jusqu'&agrave; 3 ans (10 - &lt; 14 kg)</td>
+               <td>1000&nbsp;mg</td>
+<td>4mL (4 fioles)</td>
+            </tr>
+<tr>
+<td>3 ans jusqu'&agrave; 5 ans (14 - &lt; 20 kg)</td>
+               <td>1500&nbsp;mg</td>
+               <td>6mL (6 fioles)</td>
+            </tr>
+            <tr>
+               <td>&ge; 5 ans (&ge; 20 kg)</td>
+               <td>2000&nbsp;mg</td>
+               <td>8mL (8 fioles)</td>
+            </tr>
+         </tbody>
+      </table>
+   </li>
+   <li>
+      <p>Ampicilline et Gentamicine IM (Si la Ceftriaxone n'est pas disponible)</p>
+      <table style=\"border-collapse: collapse; width: 100%; font-size: 8pt;\" border=\"1\">
+         <thead>
+            <tr>
+               <th rowspan=\"2\"><strong>Age ou poids</strong></th>
+               <th colspan=\"2\">
+                  <table style=\"font-size: 8pt;\">
+                     <thead></thead>
+<tbody>
+<tr>
+<td style=\"text-align: center;\">
+<strong>AMPICILLINE et GENTAMICINE INTRAMUSCULAIRE<br />Ampicilline 100mg/kg (dosage pour une m&eacute;ningite), gentamicine 7.5mg/kg<br />Traitement pr&eacute;-hospitali&eacute;</strong><br />
+                              <p style=\"text-align: left;\">Pr&eacute;paration de l'Ampicilline : Diluer 500mg avec 2.1ml d'eau st&eacute;rile (500mg/2.5ml)</p>
+                           </td>
+</tr>
+                     </tbody>
+</table>
+               </th>
+</tr>
+            <tr>
+               <td><strong>Ampicilline(500mg/2.5m)</strong></td>
+<td><strong>Gentamicine(40mg/ml dans un flacon de 2ml)</strong></td>
+</tr>
+         </thead>
+<tbody>
+<tr>
+<td>2 mois &agrave; 4 mois (4 - &lt; 5 kg)</td>
+               <td>2&nbsp;mL (400mg)</td>
+<td>0.5&nbsp;&ndash;&nbsp;1.0&nbsp;ml</td>
+            </tr>
+<tr>
+<td>4 mois &agrave; 12 mois (6 - &lt; 10kg)</td>
+               <td>4&nbsp;mL (800mg)</td>
+<td>1.1-1.8&nbsp;ml</td>
+            </tr>
+<tr>
+<td>12 mois &agrave; 3 ans (10 - &lt; 14 kg)</td>
+               <td>6&nbsp;mL (1200mg)</td>
+<td>1.9-2.7&nbsp;ml</td>
+            </tr>
+<tr>
+<td>3 ans &agrave; 5 ans (14 - &lt; 20 kg)</td>
+               <td>8&nbsp;mL (1600mg)</td>
+<td>2.8-3.5&nbsp;ml</td>
+            </tr>
+<tr>
+<td>5 ans jusqu'&agrave; 8 ans (20 &ndash;&lt; 26 kg)</td>
+               <td>11&nbsp;mL (2200mg)</td>
+               <td>3.8-4.7&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td>8 ans jusqu'&agrave; 10 ans (26 &ndash;&lt; 30 kg)</td>
+               <td>13&nbsp;mL (2600mg)</td>
+<td>4.9-5.4&nbsp;ml</td>
+            </tr>
+<tr>
+<td>30&nbsp;&ndash;&nbsp;33&nbsp;kg</td>
+               <td>15&nbsp;mL (3000mg)</td>
+<td>5.6-6.2&nbsp;ml</td>
+            </tr>
+<tr>
+<td>34&nbsp;&ndash;&nbsp;37&nbsp;kg</td>
+               <td>15&nbsp;mL (3000mg)</td>
+<td>6.4-6.9&nbsp;ml</td>
+            </tr>
+<tr>
+<td>38&nbsp;&ndash;&nbsp;41&nbsp;kg</td>
+               <td>15&nbsp;mL (3000mg)</td>
+<td>7.1-7.7&nbsp;ml</td>
+            </tr>
+<tr>
+<td>42&nbsp;&ndash;&nbsp;45&nbsp;kg</td>
+               <td>15&nbsp;mL (3000mg)</td>
+<td>7.9-8.4&nbsp;ml</td>
+            </tr>
+<tr>
+<td>46&nbsp;&ndash;&nbsp;50&nbsp;kg</td>
+               <td>15&nbsp;mL (3000mg)</td>
+<td>8.6-9.4 ml</td>
+            </tr>
+</tbody>
+      </table>
+</li>
+</ol>
+<h4><a name=\"OBkeepWarm_2_a\"></a>Garder l'enfant au chaud et le r&eacute;f&eacute;rer pour un traitement d'urgence</h4>
+<p>Couvrer l'enfant avec un drap pour le garder au chaud, et r&eacute;f&eacute;rer l'enfant pour une prise en charge d'urgence.</p>
+<p style=\"text-align: center;\"><a href=\"#top\">Retour vers le haut</a></p>
+<h3><a name=\"convulsingNow\"></a>Convulsion :</h3>
+<h4><a name=\"OBnoNeckTrauma_2_b\"></a>Prendre en charge une respiration obstu&eacute;e/absente quand aucun traumatisme cervicale n'est suspect&eacute;</h4>
+<p><a href=\"#OBneckTrauma_2\">(D&eacute;filer vers le bas s'il n'y a aucun traumatisme cervical)</a></p>
+<table style=\"width: 99.41%;\">
+   <tbody>
+      <tr>
+         <td style=\"width: 99.7033%;\" colspan=\"2\"><strong>Charte 4. COMMENT PRENDRE EN CHARGE LES VOIES AERIENNES D'UN ENFANT AVEC UNE RESPIRATION OBSTRUEE (OU QU'IL NE RESPIRE PAS)</strong></td>
+      </tr>
+<tr>
+<td style=\"width: 99.7033%;\" colspan=\"2\"><strong>A: Quand aucun traumatisme cervical n'est suspect&eacute;</strong></td>
+      </tr>
+      <tr>
+         <td style=\"width: 47.3618%;\" valign=\"top\">
+            <strong>Enfant conscient</strong><br />
+            <ol>
+               <li>Inspecter la bouche et enlever tout objet &eacute;tranger si pr&eacute;sent</li>
+               <li>Retirer les s&eacute;cretions de la gorge</li>
+               <li>Laisser le nourrisson prendre la position qui lui pla&icirc;t</li>
+            </ol>
+         </td>
+         <td style=\"width: 52.3415%;\">
+            NOURISSON<br />
+            <p style=\"text-align: center;\"><img src=\"blob:https://medalc.unisante.ch/27407736-1d08-4d92-a8bb-df4a9222d0ba\" alt=\"Choking/3 A\" width=\"150\" height=\"102\" /></p>
+            <br />Position neutre pour ouvrir les voies a&eacute;riennes chez un nourisson
+         </td>
+      </tr>
+      <tr>
+         <td style=\"width: 47.3618%;\" valign=\"top\">
+            <strong>Enfant inconscient</strong><br />
+            <ol>
+               <li>Faire basculer la t&ecirc;te comme indiqu&eacute;, garder cette position pour ouvrir les voies a&eacute;riennes.</li>
+               <li>Inspecter la bouche et enlever tout objet &eacute;tranger facilement visible.</li>
+               <li>Retirer les s&eacute;cretions de la gorge.</li>
+               <li>V&eacute;rifier que les voies a&eacute;riennes sont d&eacute;gag&eacute;es en observant les mouvements de la poitrine, en &eacute;coutant les sons de la respiration, et en essayant de sentir le souffle de la respiration(voir la figure)</li>
+            </ol>
+         </td>
+         <td style=\"width: 52.3415%;\">
+            ENFANT PLUS AGE<br />Position plus inclin&eacute;e pour ouvrir les voies a&eacute;riennes chez un enfant plus ag&eacute;<br />
+            <p style=\"text-align: center;\"><img src=\"blob:https://medalc.unisante.ch/2ffeb264-fe0d-4dd4-91db-83ec6f864322\" alt=\"Choking/3 B\" width=\"150\" height=\"236\" /></p>
+            <br />Regarder, &eacute;couter et senter si l'enfant respire
+</td>
+      </tr>
+</tbody>
+</table>
+<h4><a name=\"OBneckTrauma_2_b\"></a>Prendre en charge une respiration obstru&eacute;e/absente quand un traumatisme cervical est suspect&eacute;</h4>
+<p><strong>Charte 4. COMMENT PRENDRE EN CHARGE LES VOIES AERIENNES D'UN ENFANT AVEC UNE RESPIRATION OBSTRUEE (OU QU'IL NE RESPIRE PAS)</strong></p>
+<p><strong>B: Quand un traumatisme cervical ou une l&eacute;sion du rachis est suspect&eacute; : faire une subluxation de la machoire</strong></p>
+<ol>
+   <li>Stabiliser la nuque comme indiqu&eacute; dans la <a href=\"#charte6\">charte 6</a> et degager les voies a&eacute;riennes.</li>
+<li>Inspecter la bouche et enlever tout objet &eacute;tranger si pr&eacute;sent.</li>
+<li>Enlever les s&eacute;cretions de la gorge sous observations directes.</li>
+                                                                <li>V&eacute;rifier si les voies a&eacute;riennes sont d&eacute;gag&eacute;es en observant les mouvements de la poitrine, en &eacute;coutant les sons de la respiration, en essayant de sentir le souffle de la respiration.</li>
+                                                                                                                                                                                                                                                                                </ol>
+<p style=\"text-align: center;\"><img src=\"blob:https://medalc.unisante.ch/68e06fcf-1013-40a3-b2bd-7d1ce5e5e1bc\" alt=\"Choking/4 A\" width=\"345\" height=\"143\" /></p>
+<!--Insert image here-->
+<p><strong>Faire une subluxation de la machoire inf&eacute;rieure vers l'avant si les voies a&eacute;riennes ne sont pas ouvertes. Placer le quatri&egrave;me et le cinqui&egrave;me doigt derri&egrave;re l'angle de la machoire et pousser vers le haut pour que la machoire inf&eacute;rieure soit en avant, &agrave; 90&deg; du corps de l'enfant.</strong></p>
+<p style=\"text-align: center;\"><img src=\"blob:https://medalc.unisante.ch/c48eeed7-7912-4a48-934b-102a99bd0d70\" alt=\"Choking/4 B\" width=\"314\" height=\"281\" /></p>
+<!--Insert image here-->
+<p><strong>Si l'enfant ne respire toujours pas, faire une ventilation manuelle avec un masque et un ballon, si possible avec un ballon d'anesth&eacute;sie et de l'oxyg&egrave;ne.</strong></p>
+<h4><a name=\"Convulsions_2\"></a>Traiter les convulsions</h4>
+<p><strong>Charte 9. COMMENT DONNER DU DIAZEPAM PAR VOIE RECTALE</strong></p>
+<ul>
+   <li>
+      <strong>Donner du diazepam par voie rectale:</strong>
+      <ul>
+         <li>Pr&eacute;lever la quantit&eacute; de diazepam n&eacute;cessaire dans une seringue &agrave; tuberculine (seringue de 1ml) syringe. Dans la mesure du possible, calculer la dose en fonction du poids de l'enfant. Ensuite retirer l'aiguille de la seringue.</li>
+         <li>Ins&eacute;rer la seringue dans le rectum de l'enfant sur 4-5 cm, et injecter la solution de diazepam.</li>
+         <li>Maintenir les fesses de l'enfant serr&eacute;es pendant quelques minutes.</li>
+      </ul>
+   </li>
+</ul>
+<table style=\"border-collapse: collapse; width: 100%; font-size: 8pt;\" border=\"1\">
+   <thead>
+      <tr>
+         <th>Age (poids)</th>
+         <th style=\"text-align: center;\">Diazepam given rectally 10&nbsp;mg/2&nbsp;ml solution <br />Dose 0.1&nbsp;ml/kg</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr>
+         <td>2 semaines &agrave; 2 mois (&lt; 4 kg)*</td>
+         <td style=\"text-align: center;\">0.3&nbsp;ml</td>
+      </tr>
+      <tr>
+         <td>2 -&lt; 4 mois (4 -&lt; 6 kg)</td>
+         <td style=\"text-align: center;\">0.5&nbsp;ml</td>
+      </tr>
+      <tr>
+         <td>4 -&lt; 12 mois (6 -&lt; 10 kg)</td>
+         <td style=\"text-align: center;\">1.0&nbsp;ml</td>
+      </tr>
+      <tr>
+         <td>1 -&lt; 3 ans (10 -&lt; 14 kg)</td>
+         <td style=\"text-align: center;\">1.25&nbsp;ml</td>
+      </tr>
+      <tr>
+         <td>3 -&lt; 5 ans (14 -&lt; 19 kg)</td>
+         <td style=\"text-align: center;\">1.5&nbsp;ml</td>
+      </tr>
+      <tr>
+         <td>&ge; 5 ans (&ge; 20 kg)</td>
+         <td style=\"text-align: center;\">2.0&nbsp;ml</td>
+      </tr>
+   </tbody>
+</table>
+<p><small> * Utiliser du phenobarbital (solution de 200 mg/ml) &agrave; une dose de 20 mg/kg pour contr&ocirc;ler les convulsions chez un nourisson de&lt; 2 semaines de vie; <br />Poids 2 kg - dose initiale, 0.2 ml; Donner 0.1 ml apr&egrave;s 30 min (si les convulsions continuent) <br />Poids 3 kg - dose initiale, 0.3 ml; Donner 0.15 ml apr&egrave;s30 min (si les convulsions continuent) </small></p>
+<p><strong>Si les convulsions continuent apr&egrave;s 10 min, donner une seconde dose de diazepam</strong>(ou donner du diazepam par IV &agrave; 0.05 ml/kg = 0.25 mg/kg si une perfusion par IV est pr&eacute;sente).</p>
+<p><strong>Ne pas</strong> donner plus que deux doses de diazepam.</p>
+<p><strong>Si l'enfant convulse toujours apr&egrave;s ces 10 min suppl&eacute;mentaire, suspecter un &eacute;tat de mal &eacute;pileptique : </strong></p>
+<ul>
+   <li>Donner du phenobarbital par IM ou IV &agrave; 15 mg/kg en 15 min; ou</li>
+   <li>Du Phenyto&iuml;ne &agrave; 15-18 mg/kg IV (par une autre voie veineuse que celle qui a servi &agrave; administrer le diazepam) en 60 min. S'assurer qu'il n'y a pas de probl&egrave;me avec la perfusion car ce m&eacute;dicament est corrosif etpeut causer des l&eacute;sions locales en cas d'extravasation.</li>
+</ul>
+<p><strong>En cas de fi&egrave;vre &eacute;lev&eacute;e :</strong></p>
+<ul>
+   <li>D&eacute;shabiller l'enfant pour diminuer la fi&egrave;vre.</li>
+   <li>Ne pas donner de m&eacute;dicaments par voie orale tant que les convulsions persiste (risque de fausse route).</li>
+   <li>Apr&egrave;s l'arr&ecirc;t des convulsions et une fois que l'enfant est capable de prendre des m&eacute;dicaments par voie orale, donner du paracetamol ou de l'ibuprof&egrave;ne.</li>
+</ul>
+<p><em><strong>Attention : </strong>Toujours avoir &agrave; porter de main un masque et un ballon en &eacute;tat de marche au cas ou l'enfant arr&ecirc;terait de respirer, surtout quand du diazepam a &eacute;t&eacute; donn&eacute;.</em></p>
+<h4><a name=\"UnconsciousChild_2_b\"></a>Positionner un enfant inconscient</h4>
+<table>
+   <tbody>
+      <tr>
+         <td colspan=\"2\"><strong>Charte 6. COMMENT POSITIONNER UN ENFANT INCONSCIENT</strong></td>
+      </tr>
+      <tr>
+         <td>
+            <ul>
+               <li>
+                  <strong>Si un traumatisme cervical est suspect&eacute;</strong>
+                  <ul>
+                     <li>Immobiliser le cou de l'enfant et le maintenir allong&eacute; sur le dos</li>
+                     <li>Placer l'enfant sur un plan dur, et l'immobiliser dans cette position en faisant passer un ruban adh&eacute;sif autour de son front et menton, et en fixant la t&ecirc;te au plan.</li>
+                     <li>Emp&ecirc;cher tout mouvement du cou en immobilisant la t&ecirc;te de l'enfant&nbsp; (par ex. &agrave; l'aide de sac de liquide de perfudion plac&eacute;s des deux c&ocirc;t&eacute;s de la t&ecirc;te).</li>
+                     <li>Si l'enfant vomit, tourner l'enfant sur un c&ocirc;t&eacute; tout en gardant la t&ecirc;te allign&eacute; au reste du corps.</li>
+                  </ul>
+               </li>
+            </ul>
+         </td>
+         <td style=\"text-align: center;\"><img src=\"blob:https://medalc.unisante.ch/b4b9c39e-679b-4254-b53a-4d400b7fe8f4\" alt=\"Unconscious/3 A\" width=\"150\" height=\"146\" /></td>
+      </tr>
+      <tr>
+         <td colspan=\"2\">
+            <ul>
+               <li>
+                  <strong>S'il n'y a pas de suscpicion de traumatisme cervical</strong><br />
+                  <ul>
+                     <li>Mettre l'enfant sur le c&ocirc;t&eacute; pour &eacute;viter les risque d'une fausse route.</li>
+                     <li>Maintenir le cou l&eacute;g&egrave;rement en extension, et le stabiliser en glissant l'une de mains sous sa joue.</li>
+                     <li>Replier une de ses jambes pour stabiliser le reste du corps.</li>
+                  </ul>
+               </li>
+            </ul>
+            <br />
+            <p style=\"text-align: center;\"><img src=\"blob:https://medalc.unisante.ch/a79465de-ec45-4ed6-b63f-1cc686f5bb98\" alt=\"Unconscious/3 B\" width=\"300\" height=\"113\" /></p>
+         </td>
+      </tr>
+   </tbody>
+</table>
+<h4><a name=\"Glucose_2_b\"></a>Traiter / pr&eacute;venir une hypoglycemie</h4>
+<p><strong>Traiter l'enfant pour emp&ecirc;cher une hypoglyc&eacute;mie</strong></p>
+<ul>
+   <li>
+      Si l'enfant est capable d'&ecirc;tre allait&eacute; :
+      <ul>
+         <li>Demandez &agrave; la m&egrave;re d'allaiter l'enfant.</li>
+      </ul>
+   </li>
+   <li>
+      Si l'enfant n'est pas capable d'&ecirc;tre allait&eacute; mais qu'il peut avaler :
+      <ul>
+         <li>Donner du lait maternel tir&eacute; ou un substitut.</li>
+         <li>Si le lait maternel ou un substitut n'est pas disponible, donner de l'eau sucr&eacute;e*.</li>
+         <li>Donner 30 - 50 ml de lait ou de l'eau sucr&eacute;e* avant le d&eacute;part</li>
+      </ul>
+   </li>
+   <li>
+      Si l'enfant n'est pas capable d'avaler :
+      <ul>
+         <li>Donner 50ml de lait ou de l'eau sucr&eacute;e* via une sonde nasogastrique.</li>
+         <li>S'il n'y a pas de sonde nasogastrique disponible, donner une cuill&egrave;re &agrave; caf&eacute; de sucre humidif&eacute;e sous la langue et r&eacute;p&eacute;ter cela toutes les 20 minutes pour &eacute;viter une rechute.</li>
+         <li><em> <span style=\"text-decoration: underline;\">*Faire une eau sucr&eacute;e:</span> Dissoudre 4 cuill&egrave;res &agrave; caf&eacute; de sucre(20 grammes) dans un verre de 200ml d'eau propre.</em></li>
+      </ul>
+   </li>
+</ul>
+<p>Si un traitement orale ou par sonde nasogastrique n'est pas disponible, donner du sucre par voie intraveineuse :</p>
+<p><strong>Charte 10. COMMENT ADMINISTRER DU SUCRE PAR VOIE VEINEUSE</strong></p>
+<ul>
+   <li>Poser une voie veineuse, et pr&eacute;lever du sang pour les examens de laboratoires &agrave; r&eacute;aliser en urgence.</li>
+   <li>V&eacute;rifier la glyc&eacute;mie avec une bandelette. Si la concentration est&lt; 2.5 mmol/litre (45 mg/dl) chez un enfant bien nourri ou&lt; 3 mmol/litre (54 mg/dl) chez un enfant atteint de malnutrition s&eacute;v&egrave;re ou si la glyc&eacute;mie ne peut pas &ecirc;tre mesur&eacute;e, traiter comme une hypoglyc&eacute;mie :</li>
+   <li>
+      Donner 5 ml/kg d'une solution de 10% de glucose rapidement par la voie veineuse.
+      <table style=\"border-collapse: collapse; width: 100%; font-size: 8pt;\" border=\"1\">
+         <thead>
+            <tr>
+               <th>Age(poids)</th>
+               <th style=\"text-align: center;\">Volume d'une solution de 10% de glucose en bolus(5 ml/kg)</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr>
+               <td>&lt; 2 mois (&lt; 4 kg)</td>
+               <td style=\"text-align: center;\">15&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td>2 -&lt; 4 mois (4 -&lt; 6 kg)</td>
+               <td style=\"text-align: center;\">25&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td>4 -&lt; 12 mois (6 -&lt; 10 kg)</td>
+               <td style=\"text-align: center;\">40&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td>1 -&lt; 3 ans (10 -&lt; 14 kg)</td>
+               <td style=\"text-align: center;\">60&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td>3 -&lt; 5 ans (14 -&lt; 19 kg)</td>
+               <td style=\"text-align: center;\">80&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td>5 ans jusqu'&agrave; 8 ans (20 -&lt; 26 kg)</td>
+               <td style=\"text-align: center;\">100&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td>8 ans jusqu'&agrave; 10 ans (26 -&lt; 30kg)</td>
+               <td style=\"text-align: center;\">140&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td>30 jusqu'&agrave; &lt; 36 kg</td>
+               <td style=\"text-align: center;\">160&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td>36 jusqu'&agrave; &lt; 40 kg</td>
+               <td style=\"text-align: center;\">180&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td>40 jusqu'&agrave; &lt; 46 kg</td>
+               <td style=\"text-align: center;\">200&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td>46 jusqu'&agrave; 50 kg</td>
+               <td style=\"text-align: center;\">240&nbsp;ml</td>
+            </tr>
+         </tbody>
+      </table>
+   </li>
+   <li>Au bout de 30 minutes v&eacute;rifier la glyc&eacute;mie. Si la glyc&eacute;mie est toujours basse, donner &agrave; nouveau 5ml/kg d'une solution de 10% de glucose.</li>
+   <li>
+      Nourir l'enfant d&egrave;s qu'il/elle reprend conscience. <br />Si l'enfant ne peur &ecirc;tre nourri sans danger d'aspiration, donner :
+      <ul>
+         <li>Du lait ou du sucre via une sonde nasogastrique(pour faire une solution de sucre, dissoudre 4 cuill&egrave;res &agrave; caf&eacute;(20g) dans 200ml d'eau propre), ou</li>
+         <li>Une solution par voie veineuse de 5-10% de sucre(dextrose) (regarder l'<a href=\"http://apps.who.int/iris/bitstream/handle/10665/187940/9789242548372_fre.pdf#page=459\">annexe 4, p.377</a>)</li>
+</ul>
+   </li>
+</ul>
+<p><em><strong>Note:</strong></em> Une solution de 50% de glucose est la m&ecirc;me qu'une solution de 50% de dextrose. Si il y a uniquement une solution de 50% de glucose disponible : diluer une partie de la solution de 50% de glucose dans 4 partie avec de l'eau st&eacute;rile, ou diluer une partie de la solution de 50% de glucose en 9 parties de 5% de glucose. Par exemple, 10ml d'une solution de 50% de glucose avec 90ml d'une solution de 5% de glucose donne appoximativement une solution de 100ml de 10% de glucose.</p>
+<p><em><strong>Note:</strong></em> Pour l'utilisation des bandelettes de mesure de la glyc&eacute;mie, se r&eacute;f&eacute;rer aux instructions sur la boite. Ces bandelettes doivent en g&eacute;n&eacute;ral &ecirc;tre conserv&eacute;es dans leur boite, &agrave; une temp&eacute;rature avoisiant les 2-3 &deg;C, en &eacute;vitant la lumi&egrave;re du soleil ou une forte humidit&eacute;. D&eacute;poser une goutte sans sur la bandelette(la goutte doit recouvrir toute la surface sur laquelle se trouve le r&eacute;actif). apr&egrave;s 60 secondes, &eacute;liminer d&eacute;licatement le sang &agrave; l'aide de quelques gouttes d'eau froide et comparer la couleur obtenue avec l'echelle figurant sur le flacon ou obtenir le r&eacute;sultat avec un lecteur de glyc&eacute;mie. (La m&eacute;thode exacte varie en fonction des bandelettes utilis&eacute;es.)</p>
+<p><em> <strong>Note:</strong> Le sucre en sublinguale peut &ecirc;tre utilis&eacute; comme une aide de \"premier recours\" dans la prise en charge d'une hypoglyc&eacute;mie si la voie veineuse n'est pas accessible ou bien retard&eacute;e. Mettre une petite cuill&egrave;re rase de sucre humidifi&eacute; sous la langue toutes les 10-20 min.</em></p>
+<h4><a name=\"TestMalaria_2_b\"></a>Tester et traiter la malaria</h4>
+<p>Faire un test rapide (TDRm) ou un frottis sanguin. Si le r&eacute;sultat est positif, donner un traitement avant une prise en charge ou une administration d'un traitement contre la malaria.</p>
+<ol>
+<li>
+<p>Artesunate Intramusculaire (IM) ou Intraveineux (IV)</p>
+      <table style=\"border-collapse: collapse; width: 100%; text-align: center; font-size: 8pt;\" border=\"1\">
+         <thead>
+            <tr>
+               <th rowspan=\"2\"><strong>Age ou poids</strong></th>
+               <th>
+                  <table style=\"font-size: 8pt;\">
+                     <thead></thead>
+<tbody>
+<tr>
+<td style=\"text-align: center;\">
+<p><strong>ARTESUNATE INTRAMUSCULAIRE(IM) </strong><strong>L'artesunate 60mg injectable a deux &eacute;tapes de dilution<br /></strong></p>
+<p style=\"text-align: left;\">Etape 1: La poudre pour l'injection doit &ecirc;tre dilu&eacute; avec 1ml d'une solution de 5% de bicarbonate de sodium et &ecirc;tre fortement agit&eacute; pendant 2-3 minutes jusqu'&agrave; ce que la solution soit claire.<br />Etape 2: Pour l'injection intramusculaire IM, ajouter 2ml d'une solution de 5% de dextrose ou une solution saline normale pour obtenir une solution d'artesunate &agrave; 20mg/ml. Volume totale pour l'injection IM : 3ml.</p>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </th>
+               <th>
+                  <table style=\"font-size: 8pt;\">
+                     <thead></thead>
+                     <tbody>
+                        <tr>
+                           <td style=\"text-align: center;\">
+                              <p style=\"text-align: left;\"><strong>ARTESUNATE INTRAVEINEUX(IV)<br />L'artesunate 60mg injectable a deux &eacute;tapes de dilution</strong></p>
+<p style=\"text-align: left;\">Etape 1: La poudre pour l'injection doit &ecirc;tre dilu&eacute; avec 1ml d'une solution de 5% de bicarbonate de sodium et &ecirc;tre bien agit&eacute; pendant 2-3 minutes jusqu'&agrave; ce que la solution soit claire.<br />Etape 2: Pour l'infusion en IV (3&ndash;4 minutes), ajouter 5ml d'une solution de 5% de dextrose ou une solution saline normale, pour obtenir une solution d'artesunate &agrave; 10mg/ml. Volume totale pour l'infusion IV : 6ml.</p>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </th>
+            </tr>
+            <tr>
+               <td><strong>Fiole de 60mg (20mg/ml) 2.4 mg/kg<br />Administrer doucement</strong></td>
+               <td><strong>Fiole de 60mg&nbsp; (10mg/ml) 2.4 mg/kg<br />Administrer doucement en bolus 3-4 minutes</strong></td>
+            </tr>
+         </thead>
+         <tbody>
+            <tr>
+               <td style=\"text-align: left;\">2 mois jusqu'&agrave; 4 mois (4 - &lt; 5 kg)</td>
+               <td>&frac12;&nbsp;ml</td>
+<td>1&nbsp;ml</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">4 mois jusqu'&agrave; 12 mois (6 - &lt; 10kg)</td>
+               <td>1&nbsp;ml</td>
+               <td>2&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td style=\"text-align: left;\">12 mois jusqu'&agrave; 2 ans (10 - &lt; 12 kg)</td>
+               <td>1.5&nbsp;ml</td>
+<td>3&nbsp;ml</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">2 ans jsuqu'&agrave; 3 ans (12 - &lt; 14 kg)</td>
+               <td>1.5&nbsp;ml</td>
+               <td>3&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td style=\"text-align: left;\">3 ans jusqu'&agrave; 5 ans (14 &ndash;&lt; 20 kg)</td>
+               <td>2&nbsp;ml</td>
+<td>4&nbsp;ml</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">5 ans jusqu'&agrave; 8 ans (20 &ndash;&lt; 26 kg)</td>
+               <td>3&nbsp;ml</td>
+               <td>6&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td style=\"text-align: left;\">8 ans jusqu'&agrave; 10 ans (26 &ndash;&lt; 30 kg)</td>
+               <td>4&nbsp;ml</td>
+<td>7&nbsp;ml</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">30&nbsp;&ndash;&nbsp;33&nbsp;kg</td>
+               <td>4&nbsp;ml</td>
+<td>8&nbsp;ml</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">34&nbsp;&ndash;&nbsp;37&nbsp;kg</td>
+               <td>5&nbsp;ml</td>
+<td>9&nbsp;ml</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">38&nbsp;&ndash;&nbsp;41&nbsp;kg</td>
+               <td>5&nbsp;ml</td>
+<td>10&nbsp;ml</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">42&nbsp;&ndash;&nbsp;45&nbsp;kg</td>
+               <td>6&nbsp;ml</td>
+<td>11&nbsp;ml</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">46&nbsp;&ndash;&nbsp;50&nbsp;kg</td>
+               <td>6&nbsp;ml</td>
+<td>12&nbsp;ml</td>
+            </tr>
+</tbody>
+      </table>
+</li>
+   <li>
+      <p>Artesunate rectale (si l'artesunate IV ou IM n'est pas disponible)</p>
+<table style=\"border-collapse: collapse; width: 100%; text-align: center; font-size: 8pt;\" border=\"1\">
+<thead>
+<tr>
+<th rowspan=\"2\"><strong>Age ou poids</strong></th>
+<th colspan=\"2\"><strong>ARTESUNATE EN SUPPOSITOIRE</strong></th>
+</tr>
+            <tr>
+               <td>
+                  <p><strong>Suppositoires 50mg<br />Dosage </strong><strong>10mg/kg</strong></p>
+</td>
+               <td><strong>Suppositoires 200mg<br />Dosage 10mg/kg</strong></td>
+</tr>
+         </thead>
+<tbody>
+<tr>
+<td style=\"text-align: left;\">2 mois juqu'&agrave; 4 mois (4 &ndash;&lt; 5 kg)</td>
+               <td>1</td>
+               <td>&nbsp;</td>
+            </tr>
+            <tr>
+               <td style=\"text-align: left;\">4 mois jusqu'&agrave; 12 mois (6 &ndash;&lt; 10kg)</td>
+               <td>2</td>
+<td>&nbsp;</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">12 mois&nbsp; jusqu'&agrave; 2 ans (10 &ndash;&lt; 12 kg)</td>
+               <td>2</td>
+               <td>&nbsp;</td>
+            </tr>
+            <tr>
+               <td style=\"text-align: left;\">2 ans jusqu'&agrave; 3 ans (12 &ndash;&lt; 14 kg)</td>
+               <td>3</td>
+<td>1</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">3 ans jusqu'&agrave; 5 ans (14 &ndash;&lt; 19 kg)</td>
+               <td>3</td>
+               <td>1</td>
+            </tr>
+            <tr>
+               <td style=\"text-align: left;\">5 ans jusqu'&agrave; 8 ans (20 &ndash;&lt; 26 kg)</td>
+               <td>4</td>
+<td>1</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">8 ans jusqu'&agrave; 10 ans (26 &ndash;&lt; 30 kg)</td>
+               <td>5</td>
+               <td>1</td>
+            </tr>
+            <tr>
+               <td style=\"text-align: left;\">30 &ndash; 33 kg</td>
+               <td>&nbsp;</td>
+               <td>1</td>
+            </tr>
+            <tr>
+               <td style=\"text-align: left;\">34 &ndash; 50 kg</td>
+               <td>&nbsp;</td>
+               <td>2</td>
+            </tr>
+         </tbody>
+      </table>
+   </li>
+   <li>
+      <p>Quinine IM (si l'artesunate n'est pas disponible)</p>
+      <table style=\"border-collapse: collapse; width: 100%; text-align: center; font-size: 8pt;\" border=\"1\">
+         <thead>
+            <tr>
+               <th rowspan=\"2\"><strong>Age ou poids</strong></th>
+               <th colspan=\"2\"><strong>QUININE INTRAMUSCULAIRE (10mg/kg)<br />Injecter en deux fois sur la partie ant&eacute;ro-lat&eacute;rale de la cuisse</strong></th>
+            </tr>
+            <tr>
+               <td><strong>150mg/ml(dans un flacon de 2ml)</strong></td>
+               <td><strong>300mg/ml(dans un flacon de 2ml)</strong></td>
+            </tr>
+         </thead>
+         <tbody>
+            <tr>
+               <td style=\"text-align: left;\">2 mois jusqu'&agrave; 4 mois (4 &ndash;&lt; 5 kg)</td>
+               <td>0.4&nbsp;ml</td>
+<td>0.2&nbsp;ml</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">4 mois jusqu'&agrave; 12 mois (6 &ndash;&lt; 10kg)</td>
+               <td>0.6&nbsp;ml</td>
+               <td>0.3&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td style=\"text-align: left;\">12 mois jusqu'&agrave; 2 ans (10 &ndash;&lt; 12 kg)</td>
+               <td>0.8&nbsp;ml</td>
+<td>0.4&nbsp;ml</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">2 ans jusqu'&agrave; 3 ans (12 &ndash;&lt; 14 kg)</td>
+               <td>1.0&nbsp;ml</td>
+               <td>0.5&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td style=\"text-align: left;\">3 ans jusqu'&agrave; 5 ans (14 &ndash;&lt; 19 kg)</td>
+               <td>1.2&nbsp;ml</td>
+<td>0.6&nbsp;ml</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">5 ans jusqu'&agrave; 8 ans (20 &ndash;&lt; 26 kg)</td>
+               <td>1.4&nbsp;ml</td>
+               <td>0.7&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td style=\"text-align: left;\">8 ans jusqu'&agrave; 10 ans (26 &ndash;&lt; 30 kg)</td>
+               <td>1.8&nbsp;ml</td>
+<td>0.9&nbsp;ml</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">30&nbsp;&ndash;&nbsp;33&nbsp;kg</td>
+               <td>2.0&nbsp;ml</td>
+<td>1.0&nbsp;ml</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">34&nbsp;&ndash;&nbsp;37&nbsp;kg</td>
+               <td>2.4&nbsp;ml</td>
+<td>1.2&nbsp;ml</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">38&nbsp;&ndash;&nbsp;41&nbsp;kg</td>
+               <td>2.6&nbsp;ml</td>
+<td>1.3&nbsp;ml</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">42&nbsp;&ndash;&nbsp;45&nbsp;kg</td>
+               <td>2.8&nbsp;ml</td>
+<td>1.4&nbsp;ml</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">46&nbsp;&ndash;&nbsp;50&nbsp;kg</td>
+               <td>3.2&nbsp;ml</td>
+<td>1.6&nbsp;ml</td>
+            </tr>
+</tbody>
+      </table>
+</li>
+</ol>
+<h4><a name=\"AntibioticsSpectrum_2_b\"></a>Donner des antibiotiques &agrave; large spectre avant une hospitalisation</h4>
+<ol>
+<li>
+<p>Ceftriaxone IV ou IM</p>
+      <table style=\"border-collapse: collapse; width: 100%; font-size: 8pt;\" border=\"1\">
+         <thead>
+            <tr>
+               <th rowspan=\"2\"><strong>Age ou poids</strong></th>
+               <th colspan=\"2\">
+                  <table style=\"font-size: 8pt;\">
+                     <thead></thead>
+<tbody>
+<tr>
+<td style=\"text-align: center;\">
+<p style=\"text-align: left;\"><strong>CEFTRIAXONE IV ou IM (250mg vial)<br />50 - 100mg/Kg - Traitement pr&eacute;-hospitali&eacute;</strong></p>
+<p style=\"text-align: left;\"><strong>Instructions de pr&eacute;paration:</strong><br />Etape 1: La poudre pour l'injection doit &ecirc;tre dilu&eacute; avec 0.9ml d'eau pour l'injection.<br />Etape 2: Ajouter de l'eau pour l'injection doucement et ensuite, agiter fortement afin d'avoir un m&eacute;lange homog&egrave;ne. Le volume total va &ecirc;tre d'appoximativement 1ml.</p>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </th>
+            </tr>
+            <tr>
+               <td><strong>Dose en g</strong></td>
+               <td><strong>Volume mL (nombre de fioles)</strong></td>
+            </tr>
+         </thead>
+         <tbody>
+            <tr>
+               <td>2 mois jusqu'&agrave; 4 mois (4 - &lt; 5 kg)</td>
+               <td>500&nbsp;mg</td>
+<td>2mL (2 fioles)</td>
+            </tr>
+<tr>
+<td>4 mois jusqu'&agrave; 12 mois (6 - &lt; 10kg)</td>
+               <td>750&nbsp;mg</td>
+               <td>3mL (3 fioles)</td>
+            </tr>
+            <tr>
+               <td>12 mois jusqu'&agrave; 3 ans (10 - &lt; 14 kg)</td>
+               <td>1000&nbsp;mg</td>
+<td>4mL (4 fioles)</td>
+            </tr>
+<tr>
+<td>3 ans jusqu'&agrave; 5 ans (14 - &lt; 20 kg)</td>
+               <td>1500&nbsp;mg</td>
+               <td>6mL (6 fioles)</td>
+            </tr>
+            <tr>
+               <td>&ge; 5 ans (&ge; 20 kg)</td>
+               <td>2000&nbsp;mg</td>
+               <td>8mL (8 fioles)</td>
+            </tr>
+         </tbody>
+      </table>
+   </li>
+   <li>
+      <p>Ampicilline et Gentamicine IM (si la Ceftriaxone n'est pas disponible)</p>
+      <table style=\"border-collapse: collapse; width: 100%; font-size: 8pt;\" border=\"1\">
+         <thead>
+            <tr>
+               <th rowspan=\"2\"><strong>Age ou poids</strong></th>
+               <th colspan=\"2\">
+                  <table style=\"font-size: 8pt;\">
+                     <thead></thead>
+<tbody>
+<tr>
+<td style=\"text-align: center;\">
+<p style=\"text-align: left;\"><strong>AMPICILLINE et GENTAMICINE INTRAMUSCULAIRE<br />Ampicilline 100mg/kg (dosage pour une m&eacute;ningite), gentamicine 7.5mg/kg<br />Traitement pr&eacute;-hospitali&eacute;</strong></p>
+                              <p style=\"text-align: left;\">Pr&eacute;paration de l'Ampicilline : Diluer 500mg avec 2.1ml d'eau st&eacute;rile (500mg/2.5ml)</p>
+                           </td>
+</tr>
+                     </tbody>
+</table>
+               </th>
+</tr>
+            <tr>
+               <td><strong>Ampicilline(500mg/2.5m)</strong></td>
+<td><strong>Gentamicine(40mg/ml dans une fiole de 2ml)</strong></td>
+</tr>
+         </thead>
+<tbody>
+<tr>
+<td>2 mois &agrave; 4 mois (4 - &lt; 5 kg)</td>
+               <td>2&nbsp;mL (400mg)</td>
+<td>0.5&nbsp;&ndash;&nbsp;1.0&nbsp;ml</td>
+            </tr>
+<tr>
+<td>4 mois &agrave; 12 mois (6 - &lt; 10kg)</td>
+               <td>4&nbsp;mL (800mg)</td>
+<td>1.1-1.8&nbsp;ml</td>
+            </tr>
+<tr>
+<td>12 mois &agrave; 3 ans (10 - &lt; 14 kg)</td>
+               <td>6&nbsp;mL (1200mg)</td>
+<td>1.9-2.7&nbsp;ml</td>
+            </tr>
+<tr>
+<td>3 ans &agrave; 5 ans (14 - &lt; 20 kg)</td>
+               <td>8&nbsp;mL (1600mg)</td>
+<td>2.8-3.5&nbsp;ml</td>
+            </tr>
+<tr>
+<td>5 ans jusqu'&agrave; 8 ans (20 &ndash;&lt; 26 kg)</td>
+               <td>11&nbsp;mL (2200mg)</td>
+               <td>3.8-4.7&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td>8 ans jusqu'&agrave; 10 ans (26 &ndash;&lt; 30 kg)</td>
+               <td>13&nbsp;mL (2600mg)</td>
+<td>4.9-5.4&nbsp;ml</td>
+            </tr>
+<tr>
+<td>30&nbsp;&ndash;&nbsp;33&nbsp;kg</td>
+               <td>15&nbsp;mL (3000mg)</td>
+<td>5.6-6.2&nbsp;ml</td>
+            </tr>
+<tr>
+<td>34&nbsp;&ndash;&nbsp;37&nbsp;kg</td>
+               <td>15&nbsp;mL (3000mg)</td>
+<td>6.4-6.9&nbsp;ml</td>
+            </tr>
+<tr>
+<td>38&nbsp;&ndash;&nbsp;41&nbsp;kg</td>
+               <td>15&nbsp;mL (3000mg)</td>
+<td>7.1-7.7&nbsp;ml</td>
+            </tr>
+<tr>
+<td>42&nbsp;&ndash;&nbsp;45&nbsp;kg</td>
+               <td>15&nbsp;mL (3000mg)</td>
+<td>7.9-8.4&nbsp;ml</td>
+            </tr>
+<tr>
+<td>46&nbsp;&ndash;&nbsp;50&nbsp;kg</td>
+               <td>15&nbsp;mL (3000mg)</td>
+<td>8.6-9.4 ml</td>
+            </tr>
+</tbody>
+      </table>
+</li>
+</ol>
+<h4><a name=\"OBkeepWarm_2_b\"></a>Garder l'enfant au chaud et le r&eacute;f&eacute;rer pour un traitement d'urgence</h4>
+<p>Couvrer l'enfant avec un drap pour le garder au chaud, et r&eacute;f&eacute;rer l'enfant pour une prise en charge d'urgence.</p>
+<p style=\"text-align: center;\"><a href=\"#top\">Retour vers le haut</a></p>
+<h2><strong>Circulation</strong></h2>
+<h3><a name=\"coldSkin\"></a>Peau froide avec une recoloration capillaire de plus de 3 secondes ET un pouls faible et rapide :</h3>
+<h4><a name=\"StopBleeding_3\"></a>Stopper tout saignement</h4>
+<p>Si le patient saigne, appliquer une pression directement sur la plaie avec un habit.<br />Chez les patients avec un traumatisme majeur sur un membre, utiliser un tourniquet (un bandage/garrot serr&eacute; qui est plac&eacute; &agrave; proximit&eacute; du site du traumatisme(du c&ocirc;t&eacute; du corps) si une pression directe ne suffit pas &agrave; contr&ocirc;ler un saignement majeur.</p>
+<h4><a name=\"OBGiveOxygen_3\"></a>Administer de l'oxyg&egrave;ne</h4>
+<ul>
+   <li>Si l'oxyg&eacute;noth&eacute;rapie est diponible, mesurer la saturation en oxyg&egrave;ne chez tous les enfants avec un signe d'urgence.</li>
+<li>Quand l'enfant a uniquement une d&eacute;tresse respiratoire, une administration en oxyg&egrave;ne est recommend&eacute;e &agrave; partir d'une saturation en dessous de 90%(SpO2&lt;90%).</li>
+                                                                                                                                                                             <li>Si l'enfant pr&eacute;sente d'autres signes d'urgence +/- d&eacute;tresse respiratoire, l'oxyg&eacute;noth&eacute;rapie est recommend&eacute;e &agrave; une saturation en dessous de 94%(SpO2&lt;94%).</li>
+                                                                                                                                                                                                                                                                                                                                                                      </ul>
+<table style=\"width: 99.4186%; height: 807px;\">
+   <tbody>
+      <tr style=\"height: 49px;\">
+         <td style=\"width: 99.7076%; height: 49px;\" colspan=\"2\"><strong>Charte 5. COMMENT DONNER DE L'OXYGENE</strong></td>
+      </tr>
+<tr style=\"height: 83px;\">
+<td style=\"width: 51.1696%; height: 83px;\" valign=\"top\">Donner de l'oxyg&egrave;ne &agrave; l'aide de lunettes nasales ou d'une sonde nasale.</td>
+         <td style=\"text-align: center; width: 48.538%; height: 203px;\" rowspan=\"2\"><img src=\"blob:https://medalc.unisante.ch/a91eb3ca-fb4e-430b-b471-7e7208656fef\" alt=\"Choking/5 A\" width=\"150\" height=\"138\" /></td>
+      </tr>
+      <tr style=\"height: 120px;\">
+         <td style=\"width: 51.1696%; height: 120px;\">
+            LUNETTES NASALES&nbsp;
+            <ul>
+               <li>Placer les lunettes nasales dans les narines et attacher avec du ruban adh&eacute;sif pour les maintenir en place.</li>
+            </ul>
+         </td>
+      </tr>
+      <tr style=\"height: 303px;\">
+         <td style=\"width: 51.1696%; height: 303px;\">
+            SONDE NASAL<br />
+            <ul>
+               <li>Utiliser une sonde de calibre CHa 8.</li>
+               <li>Mesurer la distance entre le bord de la narine et le bord des sourcils avec la sonde.</li>
+               <li>Introduire la sonde comme indiqu&eacute; sur la figure.</li>
+               <li>Maintenir la sonde avec du ruban adh&eacute;sif.</li>
+            </ul>
+         </td>
+         <td style=\"text-align: center; width: 48.538%; height: 555px;\" rowspan=\"2\"><img src=\"blob:https://medalc.unisante.ch/1476d2f6-847a-4674-84c7-325e87e661a6\" alt=\"Choking/5 B\" width=\"150\" height=\"176\" /></td>
+      </tr>
+      <tr style=\"height: 252px;\">
+         <td style=\"width: 51.1696%; height: 252px;\">
+            Commencer avec un d&eacute;bit d'oxyg&egrave;ne pour atteindre une saturation en oxyg&egrave;ne de &gt;/= 94% &agrave;:<br />
+<ul>
+<li>0.5 - 1L/min pour les nouveaux n&eacute;s</li>
+               <li>1-2 L/min pour les nourrissons</li>
+               <li>2-4 L/min pour les enfants plus &acirc;g&eacute;s</li>
+               <li>&gt;4 L/min seulement avec un masque</li>
+            </ul>
+</td>
+      </tr>
+</tbody>
+</table>
+<h4><a name=\"IVFluids_3\"></a>Si pas de malnutrition s&eacute;v&egrave;re : administer des fluides par IV</h4>
+<p>(<a href=\"#MalnutritionANDUnconsciousChild_3\">D&eacute;filer vers le bas s'il y a une pr&eacute;sence de malnutrition s&eacute;v&egrave;re</a>)</p>
+<p><strong>Charte 7. COMMENT DONNER DES FLUIDES PAR INTRAVEINEUSE A UN ENFANT EN ETAT DE CHOC QUI NE PRSENTE PAS DE MALNUTRITION SEVERE&nbsp;</strong></p>
+<ul>
+   <li>V&eacute;rifer que l'enfant ne pr&eacute;sente pas de malnutrition s&eacute;v&egrave;re, car le volume de liquide et le d&eacute;bit de perfusion sont diff&eacute;rents. (Pour un &eacute;tat de choc chez un enfant atteint de malnutrition s&eacute;v&egrave;re regarder la <a href=\"#charte8\">charte 8</a>).</li>
+<li>Mettre en place une voie veineuse (et pr&eacute;lever du sang pour les examens de laboratoire &agrave; r&eacute;aliser en urgence).</li>
+<li>Placer un flacon de Ringer lactate ou de solut&eacute; isotonique de chlorure de sodium ; s'assurer que la perfusion passe bien.</li>
+   <li>Perfuser 20 ml/kg aussi rapidement que possible.</li>
+</ul>
+<table style=\"border-collapse: collapse; width: 100%; font-size: 8pt;\" border=\"1\">
+   <thead>
+      <tr>
+         <th>Age (poids)</th>
+         <th style=\"text-align: center;\">Volume de Ringer lactate ou un solut&eacute; isotonque de chlorure de sodium (20 ml/kg)</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr>
+         <td>&lt; 2 mois (&lt; 4 kg)</td>
+         <td style=\"text-align: center;\">50&nbsp;ml</td>
+      </tr>
+      <tr>
+         <td>2 -&lt; 4 mois (4 -&lt; 6 kg)</td>
+         <td style=\"text-align: center;\">100&nbsp;ml</td>
+      </tr>
+      <tr>
+         <td>4 -&lt; 12 mois (6 -&lt; 10 kg)</td>
+         <td style=\"text-align: center;\">150&nbsp;ml</td>
+      </tr>
+      <tr>
+         <td>1 -&lt; 3 ans (10 -&lt; 14 kg)</td>
+         <td style=\"text-align: center;\">250&nbsp;ml</td>
+      </tr>
+      <tr>
+         <td>3 -&lt; 5 ans (14 -&lt; 19 kg)</td>
+         <td style=\"text-align: center;\">350&nbsp;ml</td>
+      </tr>
+      <tr>
+         <td>5 ans jusqu'&agrave; 8 ans (20 -&lt; 26 kg)</td>
+         <td style=\"text-align: center;\">450&nbsp;ml</td>
+</tr>
+      <tr>
+         <td>8 ans jusqu'&agrave; 10 ans (26 -&lt; 30kg)</td>
+<td style=\"text-align: center;\">550&nbsp;ml</td>
+      </tr>
+<tr>
+<td>30 jusqu'&agrave; &lt; 36 kg</td>
+         <td style=\"text-align: center;\">650&nbsp;ml</td>
+      </tr>
+      <tr>
+         <td>36 jusqu'&agrave; &lt; 40 kg</td>
+         <td style=\"text-align: center;\">750&nbsp;ml</td>
+</tr>
+      <tr>
+         <td>40 jusqu'&agrave; &lt; 46 kg</td>
+<td style=\"text-align: center;\">850&nbsp;ml</td>
+      </tr>
+<tr>
+<td>46 jusqu'&agrave; 50 kg</td>
+         <td style=\"text-align: center;\">950&nbsp;ml</td>
+      </tr>
+      <tr>
+         <td>&gt;50kg</td>
+         <td style=\"text-align: center;\">1000&nbsp;ml</td>
+      </tr>
+   </tbody>
+</table>
+<p><strong>Faire une nouvelle &eacute;valutation de l'enfant d&egrave;s que le volume indiqu&eacute; est fini.</strong></p>
+<table style=\"border-collapse: collapse; width: 100%; font-size: 8pt;\" border=\"1\">
+   <tbody>
+      <tr>
+         <td style=\"vertical-align: top;\">Faire une nouvelle &eacute;valution apr&egrave;s la premi&egrave;re perfusion :</td>
+<td>
+<ul>
+<li>S'il n'y a pas d'am&eacute;lioration, perfuser &agrave; nouveau 10-20 ml/kg aussi rapidement que possible.</li>
+               <li>En cas de saignement transfuser du sang &agrave; 20 ml/kg en 30 min.</li>
+            </ul>
+         </td>
+      </tr>
+      <tr>
+         <td style=\"vertical-align: top;\">Faire une nouvelle &eacute;valuation apr&egrave;s la deuxi&egrave;me perfusion :</td>
+         <td>
+            <ul>
+               <li>S'il n'y a pas d'am&eacute;lioration et en pr&eacute;sence de signes de d&eacute;shydratation(par exemple en cas de diarrh&eacute; profuse ou de chol&eacute;ra), perfuser &agrave; nouveau 20 ml/kg de Ringer lactate ou de solut&eacute; isotonique de chlorure de sodium.</li>
+                                                                                                                                                                                                                                                                                                             <li>S'il n'y a pas d'am&eacute;lioration et en cas de suspicion de choc septique, perfuser &agrave; nouveau 20 ml/kg et envisager l'administration d'adr&eacute;naline ou de dopamine en fonction des disponibilt&eacute;s (see Annex 2, p. 353).</li>
+               <li>S'il n'y a pas d'am&eacute;lioration appliquer les conduites &agrave; tenir de traitement recommend&eacute;es pour le cas. &agrave; ce stade un diagnostique provisoire doit avoir &eacute;t&eacute; pos&eacute;.</li>
+</ul>
+         </td>
+</tr>
+   </tbody>
+</table>
+<p>D&egrave;s qu'une am&eacute;lioration est constat&eacute;e, <strong>quelle que soit l'&eacute;tape</strong>(pouls plus franc, ralentissement de la fr&eacute;quence cardiaque, augmentation de 10% ou normalisation de la tension art&eacute;rielle, temps de recoloration cutan&eacute;e de moins de 2 secondes), Aller &agrave; la <a href=\"#charte11\">charte 11</a>.</p>
+<p><em><strong>Note:</strong> En casde suspision de malaria ou une an&eacute;mie chez un enfant en &eacute;tat de choc, la perfusion rapide doit &ecirc;tre administrer avec pr&eacute;caution, ou remplac&eacute;e par une transfusion de sang en cas d'an&eacute;mie grave.</em></p>
+<h4><a name=\"MalnutritionANDUnconsciousChild_3\"></a>Si malnutrition s&eacute;v&egrave;re ET l&eacute;thargique ou inconscient : donner du glucose par IV et des liquides par IV</h4>
+<p>(<a href=\"#MalnutritionANDNOTUnconsciousChild_3\">D&eacute;filer vers le bas si l'enfant n'est pas l&eacute;targique ou inconscient</a>)</p>
+<p><strong>Charte 10. COMMENT ADMINISTER DU SUCRE PAR VOIE INTRAVEINEUSE</strong></p>
+<ul>
+   <li>Poser une voie veineuse, et pr&eacute;lever du sang pour les examens de laboratoires &agrave; r&eacute;aliser en urgence.</li>
+<li>V&eacute;rifier la glyc&eacute;mie avec une bandelette. Si la concentration est&lt; 2.5 mmol/litre (45 mg/dl) chez un enfant bien nourri ou&lt; 3 mmol/litre (54 mg/dl) chez un enfant atteint de malnutrition s&eacute;v&egrave;re ou si la glyc&eacute;mie ne peut pas &ecirc;tre mesur&eacute;e, traiter comme une hypoglyc&eacute;mie :</li>
+                                                                                                                                                                                                                                                                                                                                              <li>
+                                                                                                                                                                                                                                                                                                                                                Donner 5 ml/kg d'une solution de 10% de glucose rapidement par la voie veineuse.
+      <table style=\"border-collapse: collapse; width: 100%; font-size: 8pt;\" border=\"1\">
+         <thead>
+            <tr>
+               <th>Age (poids)</th>
+               <th style=\"text-align: center;\">Volume d'une solution de 10% de glucose en bolus(5 ml/kg)</th>
+            </tr>
+</thead>
+         <tbody>
+            <tr>
+               <td>&lt; 2 mois (&lt; 4 kg)</td>
+<td style=\"text-align: center;\">15&nbsp;ml</td>
+            </tr>
+<tr>
+<td>2 -&lt; 4 mois (4 -&lt; 6 kg)</td>
+               <td style=\"text-align: center;\">25&nbsp;ml</td>
+</tr>
+            <tr>
+               <td>4 -&lt; 12 mois (6 -&lt; 10 kg)</td>
+<td style=\"text-align: center;\">40&nbsp;ml</td>
+            </tr>
+<tr>
+<td>1 -&lt; 3 ans (10 -&lt; 14 kg)</td>
+               <td style=\"text-align: center;\">60&nbsp;ml</td>
+</tr>
+            <tr>
+               <td>3 -&lt; 5 ans (14 -&lt; 19 kg)</td>
+<td style=\"text-align: center;\">80&nbsp;ml</td>
+            </tr>
+<tr>
+<td>5 ans jusqu'&agrave; 8 ans (20 -&lt; 26 kg)</td>
+               <td style=\"text-align: center;\">100&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td>8 ans jusqu'&agrave; 10 ans (26 -&lt; 30kg)</td>
+               <td style=\"text-align: center;\">140&nbsp;ml</td>
+</tr>
+            <tr>
+               <td>30 jusqu'&agrave; &lt; 36 kg</td>
+<td style=\"text-align: center;\">160&nbsp;ml</td>
+            </tr>
+<tr>
+<td>36 jusqu'&agrave; &lt; 40 kg</td>
+               <td style=\"text-align: center;\">180&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td>40 jusqu'&agrave; &lt; 46 kg</td>
+               <td style=\"text-align: center;\">200&nbsp;ml</td>
+</tr>
+            <tr>
+               <td>46 jusqu'&agrave; 50 kg</td>
+<td style=\"text-align: center;\">240&nbsp;ml</td>
+            </tr>
+</tbody>
+      </table>
+</li>
+   <li>Au bout de 30 minutes v&eacute;rifier la glyc&eacute;mie. Si la glyc&eacute;mie est toujours basse, donner &agrave; nouveau 5ml/kg d'une solution de 10% de glucose.</li>
+   <li>
+      Nourir l'enfant d&egrave;s qu'il/elle reprend conscience. <br />Si l'enfant ne peur &ecirc;tre nourri sans danger d'aspiration, donner :
+      <ul>
+         <li>Du lait ou du sucre via une sonde nasogastrique(pour faire une solution de sucre, dissoudre 4 cuill&egrave;res &agrave; caf&eacute;(20g) dans 200ml d'eau propre), ou</li>
+         <li>Une solution par voie veineuse de 5-10% de sucre(dextrose) (regarder l'<a href=\"http://apps.who.int/iris/bitstream/handle/10665/187940/9789242548372_fre.pdf#page=459\">annexe 4, p.377</a>).</li>
+</ul>
+   </li>
+</ul>
+<p><em><strong>Note:</strong></em> Une solution de 50% de glucose est la m&ecirc;me qu'une solution de 50% de dextrose. Si il y a uniquement une solution de 50% de glucose disponible : diluer une partie de la solution de 50% de glucose dans 4 partie avec de l'eau st&eacute;rile, ou diluer une partie de la solution de 50% de glucose en 9 parties de 5% de glucose. Par exemple, 10ml d'une solution de 50% de glucose avec 90ml d'une solution de 5% de glucose donne appoximativement une solution de 100ml de 10% de glucose.</p>
+<p><em><strong>Note:</strong></em> Pour l'utilisation des bandelettes de mesure de la glyc&eacute;mie, se r&eacute;f&eacute;rer aux instructions sur la boite. Ces bandelettes doivent en g&eacute;n&eacute;ral &ecirc;tre conserv&eacute;es dans leur boite, &agrave; une temp&eacute;rature avoisiant les 2-3 &deg;C, en &eacute;vitant la lumi&egrave;re du soleil ou une forte humidit&eacute;. D&eacute;poser une goutte sans sur la bandelette(la goutte doit recouvrir toute la surface sur laquelle se trouve le r&eacute;actif). apr&egrave;s 60 secondes, &eacute;liminer d&eacute;licatement le sang &agrave; l'aide de quelques gouttes d'eau froide et comparer la couleur obtenue avec l'echelle figurant sur le flacon ou obtenir le r&eacute;sultat avec un lecteur de glyc&eacute;mie. (La m&eacute;thode exacte varie en fonction des bandelettes utilis&eacute;es.)</p>
+<p><em><strong>Note:</strong> Le sucre en sublinguale peut &ecirc;tre utilis&eacute; comme une aide de \"premier recours\" dans la prise en charge d'une hypoglyc&eacute;mie si la voie veineuse n'est pas accessible ou bien retard&eacute;e. Mettre une petite cuill&egrave;re rase de sucre humidifi&eacute; sous la langue toutes les 10-20 min.</em></p>
+<p><a name=\"charte8\"></a><strong>Charte 8. COMMENT DONNER DES FLUIDES PAR INTRAVEINEUSE A UN ENFANT EN ETAT DE CHOC ET UNE MALNUTRITION SEVERE</strong></p>
+<p>Donner ce traitement que si l'enfant a des signes de de choc (accompagne g&eacute;n&eacute;ralement d'une alt&eacute;ration de la vigilence : l&eacute;thargie ou inconscience) :</p>
+<ul>
+   <li>Mettre en place une voie veineuse (et pr&eacute;lever du sang pour les examens de laboratoire &agrave; r&eacute;aliser en urgence).</li>
+<li>Peser l'enfant (ou estimer son poids) afin de calculer le volume de liquide &agrave; administrer.</li>
+   <li>
+      Perfuser &agrave; 15 ml/kg en 1h. Utiliser pour cela une des suivantes en fonction de la disponibilit&eacute; :
+      <ul>
+         <li>Ringer lactate et glucose 5% (dextrose);</li>
+         <li>Solution de Darow dilu&eacute; de moit&eacute; et glucose 5% (dextrose);</li>
+         <li>NaCl &agrave; 0.45% et glucose 5% (dextrose)</li>
+      </ul>
+   </li>
+</ul>
+<table style=\"border-collapse: collapse; width: 100%; font-size: 8pt;\" border=\"1\">
+   <thead>
+      <tr>
+         <th style=\"text-align: center;\">Poids</th>
+         <th style=\"text-align: center;\">Volume de fluide &agrave; donner par IV en 1h (15 ml/kg)</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr>
+         <td style=\"text-align: center;\">4&nbsp;kg</td>
+         <td style=\"text-align: center;\">60&nbsp;ml</td>
+      </tr>
+      <tr>
+         <td style=\"text-align: center;\">6&nbsp;kg</td>
+         <td style=\"text-align: center;\">90&nbsp;ml</td>
+      </tr>
+      <tr>
+         <td style=\"text-align: center;\">8&nbsp;kg</td>
+         <td style=\"text-align: center;\">120&nbsp;ml</td>
+      </tr>
+      <tr>
+         <td style=\"text-align: center;\">10&nbsp;kg</td>
+         <td style=\"text-align: center;\">150&nbsp;ml</td>
+      </tr>
+      <tr>
+         <td style=\"text-align: center;\">12&nbsp;kg</td>
+         <td style=\"text-align: center;\">180&nbsp;ml</td>
+      </tr>
+      <tr>
+         <td style=\"text-align: center;\">14&nbsp;kg</td>
+         <td style=\"text-align: center;\">210&nbsp;ml</td>
+      </tr>
+      <tr>
+         <td style=\"text-align: center;\">16&nbsp;kg</td>
+         <td style=\"text-align: center;\">240&nbsp;ml</td>
+      </tr>
+      <tr>
+         <td style=\"text-align: center;\">18&nbsp;kg</td>
+         <td style=\"text-align: center;\">270&nbsp;ml</td>
+      </tr>
+      <tr>
+         <td style=\"text-align: center;\">20&nbsp;kg</td>
+         <td style=\"text-align: center;\">300&nbsp;ml</td>
+      </tr>
+      <tr>
+         <td style=\"text-align: center;\">25&nbsp;kg</td>
+         <td style=\"text-align: center;\">375&nbsp;ml</td>
+      </tr>
+      <tr>
+         <td style=\"text-align: center;\">30&nbsp;kg</td>
+         <td style=\"text-align: center;\">450&nbsp;ml</td>
+      </tr>
+      <tr>
+         <td style=\"text-align: center;\">35&nbsp;kg</td>
+         <td style=\"text-align: center;\">525&nbsp;ml</td>
+      </tr>
+      <tr>
+         <td style=\"text-align: center;\">40&nbsp;kg</td>
+         <td style=\"text-align: center;\">600&nbsp;ml</td>
+      </tr>
+      <tr>
+         <td style=\"text-align: center;\">45&nbsp;kg</td>
+         <td style=\"text-align: center;\">675&nbsp;ml</td>
+      </tr>
+      <tr>
+         <td style=\"text-align: center;\">50&nbsp;kg</td>
+         <td style=\"text-align: center;\">750&nbsp;ml</td>
+      </tr>
+   </tbody>
+</table>
+<ul>
+   <li>
+      <p>Mesurer la fr&eacute;quence cardiaque et respiratoire toutes les 5-10 min.</p>
+      <p><em>Si'il y a des signes d'am&eacute;lioration (pouls plus franc et moins rapide ou diminution de la fr&eacute;quence respiratoire) et qu'il n'y a pas de signes d'oed&egrave;me respiratoire :</em></p>
+      <ul>
+         <li>Perfuser &agrave; nouveau &agrave; 15 ml/kg en 1 h; puis</li>
+         <li>Passer &agrave; une r&eacute;hydratation par voie orale ou par sonde nasogastrique au moyen du ReSoMal &agrave; 10ml/kg par h pendant 10 h (<a href=\"http://apps.who.int/iris/bitstream/handle/10665/187940/9789242548372_fre.pdf#page=265\">voir p.204</a>);</li>
+<li>Commencer la r&eacute;alimentation en uilisant de la pr&eacute;paration F-75 (<a href=\"http://apps.who.int/iris/bitstream/handle/10665/187940/9789242548372_fre.pdf#page=275\">voir p.209</a>).</li>
+</ul>
+      <p>Si l'&eacute;tat de l'enfant ne sait pas am&eacute;lior&eacute; apr&egrave;s deux perfusion en bolus de 15 ml/kg,</p>
+      <ul>
+         <li>Perfuser des liquides pour couvrir les besoins de bases (4 ml/kg par h) en attendant de recevoir du sang ;</li>
+         <li>Lorsque le sang est diponible, transfuser lentement en 3 heures &agrave; 10 ml/kg de sang total frais (si l'enfant pr&eacute;sente une insuffisance cardiaque, utiliser des culots globulaires) ;</li>
+         <li>Commencer la r&eacute;alimentation en utilisant de la pr&eacute;paration F-75 (<a href=\"http://apps.who.int/iris/bitstream/handle/10665/187940/9789242548372_fre.pdf#page=275\">voir p.209</a>);</li>
+         <li>Commencer un traitemant antibiotique par IV (<a href=\"http://apps.who.int/iris/bitstream/handle/10665/187940/9789242548372_fre.pdf#page=269\">voir p.207</a>).</li>
+      </ul>
+      <p>Si l'&eacute;tat de l'enfant s'aggrave au cours de la r&eacute;hydratation par IV (augmentation de fr&eacute;quence respiratoire de 5/min ou de la fr&eacute;quence cardiaque de 15/min, apparititon d'une h&eacute;patom&eacute;galie, de r&acirc;les cr&eacute;pitants fins dans l'ensemble des champs pulmonaires, d'une tugescence des veines jugulaires ou d'un bruit de galop cardiaque) arr&ecirc;ter la perfusion, car celle-ci risque d'aggraver l'&eacute;tat de l'enfant en provoquant un oed&egrave;me pulmonaire.</p>
+   </li>
+</ul>
+<h4><a name=\"MalnutritionANDNOTUnconsciousChild_3\"></a>Si malnutrition s&eacute;v&egrave;re ET pas l&eacute;thargique ou inconscient : donner du glucose par voie orale</h4>
+<p><strong>Traiter l'enfant pour emp&ecirc;cher une hypoglyc&eacute;mie</strong></p>
+<ul>
+<li>
+  Si l'enfant est capable d'&ecirc;tre allait&eacute; :
+  <ul>
+  <li>Demandez &agrave; la m&egrave;re d'allaiter l'enfant.</li>
+</ul>
+   </li>
+<li>
+  Si l'enfant n'est pas capable d'&ecirc;tre allait&eacute; mais qu'il peut avaler :
+  <ul>
+  <li>Donner du lait maternel tir&eacute; ou un substitut.</li>
+                                                <li>Si le lait maternel ou un substitut n'est pas disponible, donner de l'eau sucr&eacute;e*.</li>
+  <li>Donner 30 - 50 ml de lait ou de l'eau sucr&eacute;e* avant le d&eacute;part</li>
+      </ul>
+   </li>
+   <li>
+      Si l'enfant n'est pas capable d'avaler :
+  <ul>
+  <li>Donner 50ml de lait ou de l'eau sucr&eacute;e* via une sonde nasogastrique.</li>
+         <li>S'il n'y a pas de sonde nasogastrique disponible, donner une cuill&egrave;re &agrave; caf&eacute; de sucre humidif&eacute;e sous la langue et r&eacute;p&eacute;ter cela toutes les 20 minutes pour &eacute;viter une rechute.</li>
+         <li><em> <span style=\"text-decoration: underline;\">*Faire une eau sucr&eacute;e:</span> Dissoudre 4 cuill&egrave;res &agrave; caf&eacute; de sucre(20 grammes) dans un verre de 200ml d'eau propre.</em></li>
+      </ul>
+</li>
+</ul>
+<h4><a name=\"TestMalaria_3\"></a>Tester et traiter la malaria</h4>
+<p>Faire un test rapide (TDRm) ou un frottis sanguin. Si le r&eacute;sultat est positif, donner un traitement avant une prise en charge ou une administration d'un traitement contre la malaria.</p>
+<ol>
+   <li>
+      <p>Artesuante Intramusculaire (IM) ou Intraveineux (IV)</p>
+      <table style=\"border-collapse: collapse; width: 100%; text-align: center; font-size: 8pt;\" border=\"1\">
+         <thead>
+            <tr>
+               <th rowspan=\"2\"><strong>Age ou poids</strong></th>
+               <th>
+                  <table style=\"font-size: 8pt;\">
+                     <thead></thead>
+                     <tbody>
+                        <tr>
+                           <td style=\"text-align: center;\">
+                              <p><strong>ARTESUNATE INTRAMUSCULAIRE(IM) </strong><strong>L'artesunate 60mg injectable a deux &eacute;tapes de dilution<br /></strong></p>
+                              <p style=\"text-align: left;\">Etape 1: La poudre pour l'injection doit &ecirc;tre dilu&eacute; avec 1ml d'une solution de 5% de bicarbonate de sodium et &ecirc;tre fortement agit&eacute; pendant 2-3 minutes jusqu'&agrave; ce que la solution soit claire.<br />Etape 2: Pour l'injection intramusculaire IM, ajouter 2ml d'une solution de 5% de dextrose ou une solution saline normale pour obtenir une solution d'artesunate &agrave; 20mg/ml. Volume totale pour l'injection IM : 3ml.</p>
+</td>
+                        </tr>
+</tbody>
+                  </table>
+</th>
+               <th>
+                  <table style=\"font-size: 8pt;\">
+                     <thead></thead>
+<tbody>
+<tr>
+<td style=\"text-align: center;\">
+<p style=\"text-align: left;\"><strong>ARTESUNATE INTRAVEINEUX(IV)<br />L'artesunate 60mg injectable a deux &eacute;tapes de dilution</strong></p>
+                              <p style=\"text-align: left;\">Etape 1: La poudre pour l'injection doit &ecirc;tre dilu&eacute; avec 1ml d'une solution de 5% de bicarbonate de sodium et &ecirc;tre bien agit&eacute; pendant 2-3 minutes jusqu'&agrave; ce que la solution soit claire.<br />Etape 2: Pour l'infusion en IV (3&ndash;4 minutes), ajouter 5ml d'une solution de 5% de dextrose ou une solution saline normale, pour obtenir une solution d'artesunate &agrave; 10mg/ml. Volume totale pour l'infusion IV : 6ml.</p>
+</td>
+                        </tr>
+</tbody>
+                  </table>
+</th>
+            </tr>
+<tr>
+<td><strong>Fiole de 60mg (20mg/ml) 2.4 mg/kg<br />Administrer doucement</strong></td>
+               <td><strong>Fiole de 60mg&nbsp; (10mg/ml) 2.4 mg/kg<br />Administrer doucement en bolus 3-4 minutes</strong></td>
+            </tr>
+</thead>
+         <tbody>
+            <tr>
+               <td style=\"text-align: left;\">2 mois jusqu'&agrave; 4 mois (4 - &lt; 5 kg)</td>
+<td>&frac12;&nbsp;ml</td>
+               <td>1&nbsp;ml</td>
+</tr>
+            <tr>
+               <td style=\"text-align: left;\">4 mois jusqu'&agrave; 12 mois (6 - &lt; 10kg)</td>
+<td>1&nbsp;ml</td>
+               <td>2&nbsp;ml</td>
+</tr>
+            <tr>
+               <td style=\"text-align: left;\">12 mois jusqu'&agrave; 2 ans (10 - &lt; 12 kg)</td>
+<td>1.5&nbsp;ml</td>
+               <td>3&nbsp;ml</td>
+</tr>
+            <tr>
+               <td style=\"text-align: left;\">2 ans jusqu'&agrave; 3 ans (12 - &lt; 14 kg)</td>
+<td>1.5&nbsp;ml</td>
+               <td>3&nbsp;ml</td>
+</tr>
+            <tr>
+               <td style=\"text-align: left;\">3 ans jusqu'&agrave; 5 ans (14 &ndash;&lt; 20 kg)</td>
+<td>2&nbsp;ml</td>
+               <td>4&nbsp;ml</td>
+</tr>
+            <tr>
+               <td style=\"text-align: left;\">5 ans jusqu'&agrave; 8 ans (20 &ndash;&lt; 26 kg)</td>
+<td>3&nbsp;ml</td>
+               <td>6&nbsp;ml</td>
+</tr>
+            <tr>
+               <td style=\"text-align: left;\">8 ans jusqu'&agrave; 10 ans (26 &ndash;&lt; 30 kg)</td>
+<td>4&nbsp;ml</td>
+               <td>7&nbsp;ml</td>
+</tr>
+            <tr>
+               <td style=\"text-align: left;\">30&nbsp;&ndash;&nbsp;33&nbsp;kg</td>
+<td>4&nbsp;ml</td>
+               <td>8&nbsp;ml</td>
+</tr>
+            <tr>
+               <td style=\"text-align: left;\">34&nbsp;&ndash;&nbsp;37&nbsp;kg</td>
+<td>5&nbsp;ml</td>
+               <td>9&nbsp;ml</td>
+</tr>
+            <tr>
+               <td style=\"text-align: left;\">38&nbsp;&ndash;&nbsp;41&nbsp;kg</td>
+<td>5&nbsp;ml</td>
+               <td>10&nbsp;ml</td>
+</tr>
+            <tr>
+               <td style=\"text-align: left;\">42&nbsp;&ndash;&nbsp;45&nbsp;kg</td>
+<td>6&nbsp;ml</td>
+               <td>11&nbsp;ml</td>
+</tr>
+            <tr>
+               <td style=\"text-align: left;\">46&nbsp;&ndash;&nbsp;50&nbsp;kg</td>
+<td>6&nbsp;ml</td>
+               <td>12&nbsp;ml</td>
+</tr>
+         </tbody>
+</table>
+   </li>
+<li>
+<p>Artesunate rectal (si l'artesunate IV ou IM n'est pas disponible)</p>
+      <table style=\"border-collapse: collapse; width: 100%; text-align: center; font-size: 8pt;\" border=\"1\">
+         <thead>
+            <tr>
+               <th rowspan=\"2\"><strong>Age or poids</strong></th>
+               <th colspan=\"2\"><strong>ARTESUNATE EN SUPPOSITOIRES</strong></th>
+            </tr>
+<tr>
+<td><strong>suppositoires 50mg&nbsp;<br />Dosage 10mg/kg</strong></td>
+<td><strong>suppositoires 200mg<br />Dosage 10mg/kg</strong></td>
+</tr>
+         </thead>
+<tbody>
+<tr>
+<td style=\"text-align: left;\">2 mois jusqu'&agrave; 4 mois (4 &ndash;&lt; 5 kg)</td>
+               <td>1</td>
+               <td>&nbsp;</td>
+            </tr>
+            <tr>
+               <td style=\"text-align: left;\">4 mois jusqu'&agrave; 12 mois (6 &ndash;&lt; 10kg)</td>
+               <td>2</td>
+<td>&nbsp;</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">12 mois jusqu'&agrave; 2 ans (10 &ndash;&lt; 12 kg)</td>
+               <td>2</td>
+               <td>&nbsp;</td>
+            </tr>
+            <tr>
+               <td style=\"text-align: left;\">2 ans jusqu'&agrave; 3 ans (12 &ndash;&lt; 14 kg)</td>
+               <td>3</td>
+<td>1</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">3 ans jusqu'&agrave; 5 ans (14 &ndash;&lt; 19 kg)</td>
+               <td>3</td>
+               <td>1</td>
+            </tr>
+            <tr>
+               <td style=\"text-align: left;\">5 ans jusqu'&agrave; 8 ans (20 &ndash;&lt; 26 kg)</td>
+               <td>4</td>
+<td>1</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">8 ans jusqu'&agrave; 10 ans (26 &ndash;&lt; 30 kg)</td>
+               <td>5</td>
+               <td>1</td>
+            </tr>
+            <tr>
+               <td style=\"text-align: left;\">30&nbsp;&ndash;&nbsp;33&nbsp;kg)</td>
+               <td>&nbsp;</td>
+               <td>1</td>
+            </tr>
+            <tr>
+               <td style=\"text-align: left;\">34&nbsp;&ndash;&nbsp;50&nbsp;kg)</td>
+               <td>&nbsp;</td>
+               <td>2</td>
+            </tr>
+         </tbody>
+      </table>
+   </li>
+   <li>
+      <p>Quinine IM (si l'artesunate n'est pas disponible)</p>
+      <table style=\"border-collapse: collapse; width: 100%; text-align: center; font-size: 8pt;\" border=\"1\">
+         <thead>
+            <tr>
+               <th rowspan=\"2\"><strong>Age ou poids</strong></th>
+               <th colspan=\"2\"><strong>QUININE INTRAMUSCULAIRE (10mg/kg)<br />Injecter en deux fois sur la partie ant&eacute;ro-lat&eacute;rale de la cuisse</strong></th>
+            </tr>
+            <tr>
+               <td><strong>150mg/ml (dans un flacon de 2ml)</strong></td>
+               <td><strong>300mg/ml (dans un flacon de 2ml)</strong></td>
+            </tr>
+         </thead>
+         <tbody>
+            <tr>
+               <td style=\"text-align: left;\">2 mois jusqu'&agrave; 4 mois (4 &ndash;&lt; 5 kg)</td>
+               <td>0.4&nbsp;ml</td>
+<td>0.2&nbsp;ml</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">4 mois jusqu'&agrave; 12 mois (6 &ndash;&lt; 10kg)</td>
+               <td>0.6&nbsp;ml</td>
+               <td>0.3&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td style=\"text-align: left;\">12 mois jusqu'&agrave; 2 ans (10 &ndash;&lt; 12 kg)</td>
+               <td>0.8&nbsp;ml</td>
+<td>0.4&nbsp;ml</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">2 ans jsuqu'&agrave; 3 ans (12 &ndash;&lt; 14 kg)</td>
+               <td>1.0&nbsp;ml</td>
+               <td>0.5&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td style=\"text-align: left;\">3 ans jusqu'&agrave; 5 ans (14 &ndash;&lt; 19 kg)</td>
+               <td>1.2&nbsp;ml</td>
+<td>0.6&nbsp;ml</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">5 ans jusqu'&agrave; 8 ans (20 &ndash;&lt; 26 kg)</td>
+               <td>1.4&nbsp;ml</td>
+               <td>0.7&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td style=\"text-align: left;\">8 ans jusqu'&agrave; 10 ans (26 &ndash;&lt; 30 kg)</td>
+               <td>1.8&nbsp;ml</td>
+<td>0.9&nbsp;ml</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">30&nbsp;&ndash;&nbsp;33&nbsp;kg</td>
+               <td>2.0&nbsp;ml</td>
+<td>1.0&nbsp;ml</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">34&nbsp;&ndash;&nbsp;37&nbsp;kg</td>
+               <td>2.4&nbsp;ml</td>
+<td>1.2&nbsp;ml</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">38&nbsp;&ndash;&nbsp;41&nbsp;kg</td>
+               <td>2.6&nbsp;ml</td>
+<td>1.3&nbsp;ml</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">42&nbsp;&ndash;&nbsp;45&nbsp;kg</td>
+               <td>2.8&nbsp;ml</td>
+<td>1.4&nbsp;ml</td>
+            </tr>
+<tr>
+<td style=\"text-align: left;\">46&nbsp;&ndash;&nbsp;50&nbsp;kg</td>
+               <td>3.2&nbsp;ml</td>
+<td>1.6&nbsp;ml</td>
+            </tr>
+</tbody>
+      </table>
+</li>
+</ol>
+<h4><a name=\"AntibioticsSpectrum_3\"></a>Donner des antibiotiques &agrave; large spectre avant une hospitalisation</h4>
+<ol>
+<li>
+<p>Ceftriaxone IV ou IM</p>
+      <table style=\"border-collapse: collapse; width: 100%; font-size: 8pt;\" border=\"1\">
+         <thead>
+            <tr>
+               <th rowspan=\"2\"><strong>Age ou poids</strong></th>
+               <th colspan=\"2\">
+                  <table style=\"font-size: 8pt;\">
+                     <thead></thead>
+<tbody>
+<tr>
+<td style=\"text-align: center;\">
+<p style=\"text-align: left;\"><strong>CEFTRIAXONE IV ou IM (250mg vial)<br />50 - 100mg/Kg - Traitement pr&eacute;-hospitali&eacute;</strong></p>
+<p style=\"text-align: left;\"><strong>Instructions de pr&eacute;paration:</strong><br />Etape 1: La poudre pour l'injection doit &ecirc;tre dilu&eacute; avec 0.9ml d'eau pour l'injection.<br />Etape 2: Ajouter de l'eau pour l'injection doucement et ensuite, agiter fortement afin d'avoir un m&eacute;lange homog&egrave;ne. Le volume total va &ecirc;tre d'appoximativement 1ml.</p>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </th>
+            </tr>
+            <tr>
+               <td><strong>Dose en g</strong></td>
+               <td><strong>Volume mL (numbre de fiole)</strong></td>
+            </tr>
+         </thead>
+         <tbody>
+            <tr>
+               <td>2 mois jusqu'&agrave; 4 mois (4 - &lt; 5 kg)</td>
+               <td>500&nbsp;mg</td>
+<td>2mL (2 fioles)</td>
+            </tr>
+<tr>
+<td>4 mois jusqu'&agrave; 12 mois (6 - &lt; 10kg)</td>
+               <td>750&nbsp;mg</td>
+               <td>3mL (3 fioles)</td>
+            </tr>
+            <tr>
+               <td>12 mois jusqu'&agrave; 3 ans (10 - &lt; 14 kg)</td>
+               <td>1000&nbsp;mg</td>
+<td>4mL (4 fioles)</td>
+            </tr>
+<tr>
+<td>3 ans jusqu'&agrave; 5 ans (14 - &lt; 20 kg)</td>
+               <td>1500&nbsp;mg</td>
+               <td>6mL (6 fioles)</td>
+            </tr>
+            <tr>
+               <td>&ge; 5 ans (&ge; 20 kg)</td>
+               <td>2000&nbsp;mg</td>
+               <td>8mL (8 fioles)</td>
+            </tr>
+         </tbody>
+      </table>
+   </li>
+   <li>
+      <p>Ampicilline et Gentamicine IM (si la Ceftriaxone n'est pas disponible)</p>
+      <table style=\"border-collapse: collapse; width: 100%; font-size: 8pt;\" border=\"1\">
+         <thead>
+            <tr>
+               <th rowspan=\"2\"><strong>Age ou poids</strong></th>
+               <th colspan=\"2\">
+                  <table style=\"font-size: 8pt;\">
+                     <thead></thead>
+<tbody>
+<tr>
+<td style=\"text-align: center;\">
+<p style=\"text-align: left;\"><strong>AMPICILLINE et GENTAMICINE INTRAMUSCULAIRE<br />Ampicilline 100mg/kg (dosage pour une m&eacute;ningite), gentamicine 7.5mg/kg<br />Traitement pr&eacute;-hospitali&eacute;</strong></p>
+                              <p style=\"text-align: left;\">Pr&eacute;paration de l'Ampicilline : Diluer 500mg avec 2.1ml d'eau st&eacute;rile (500mg/2.5ml)</p>
+                           </td>
+</tr>
+                     </tbody>
+</table>
+               </th>
+</tr>
+            <tr>
+               <td><strong>Ampicilline(500mg/2.5m)</strong></td>
+<td><strong>Gentamicine(40mg/ml dans une fiole de 2ml)</strong></td>
+</tr>
+         </thead>
+<tbody>
+<tr>
+<td>2 mois jusqu'&agrave; 4 mois (4 - &lt; 5 kg)</td>
+               <td>2&nbsp;mL (400mg)</td>
+               <td>0.5&nbsp;&ndash;&nbsp;1.0&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td>4 mois jusqu'&agrave; 12 mois (6 - &lt; 10kg)</td>
+               <td>4&nbsp;mL (800mg)</td>
+<td>1.1-1.8&nbsp;ml</td>
+            </tr>
+<tr>
+<td>12 mois jusqu'&agrave; 3 ans (10 - &lt; 14 kg)</td>
+               <td>6&nbsp;mL (1200mg)</td>
+               <td>1.9-2.7&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td>3 ans jusqu'&agrave; 5 ans (14 - &lt; 20 kg)</td>
+               <td>8&nbsp;mL (1600mg)</td>
+<td>2.8-3.5&nbsp;ml</td>
+            </tr>
+<tr>
+<td>5 ans jusqu'&agrave; 8 ans (20 &ndash;&lt; 26 kg)</td>
+               <td>11&nbsp;mL (2200mg)</td>
+               <td>3.8-4.7&nbsp;ml</td>
+            </tr>
+            <tr>
+               <td>8 ans jusqu'&agrave; 10 ans (26 &ndash;&lt; 30 kg)</td>
+               <td>13&nbsp;mL (2600mg)</td>
+<td>4.9-5.4&nbsp;ml</td>
+            </tr>
+<tr>
+<td>30&nbsp;&ndash;&nbsp;33&nbsp;kg</td>
+               <td>15&nbsp;mL (3000mg)</td>
+<td>5.6-6.2&nbsp;ml</td>
+            </tr>
+<tr>
+<td>34&nbsp;&ndash;&nbsp;37&nbsp;kg</td>
+               <td>15&nbsp;mL (3000mg)</td>
+<td>6.4-6.9&nbsp;ml</td>
+            </tr>
+<tr>
+<td>38&nbsp;&ndash;&nbsp;41&nbsp;kg</td>
+               <td>15&nbsp;mL (3000mg)</td>
+<td>7.1-7.7&nbsp;ml</td>
+            </tr>
+<tr>
+<td>42&nbsp;&ndash;&nbsp;45&nbsp;kg</td>
+               <td>15&nbsp;mL (3000mg)</td>
+<td>7.9-8.4&nbsp;ml</td>
+            </tr>
+<tr>
+<td>46&nbsp;&ndash;&nbsp;50&nbsp;kg</td>
+               <td>15&nbsp;mL (3000mg)</td>
+<td>8.6-9.4 ml</td>
+            </tr>
+</tbody>
+      </table>
+</li>
+</ol>
+<h4><a name=\"OBkeepWarm_3\"></a>Garder l'enfant au chaud et le r&eacute;f&eacute;rer pour un traitement d'urgence</h4>
+<p>Couvrer l'enfant avec un drap pour le garder au chaud, et r&eacute;f&eacute;rer l'enfant pour une prise en charge d'urgence.</p>
+<p style=\"text-align: center;\"><a href=\"#top\">Retour vers le haut</a></p>
+<h2><strong>Disability</strong></h2>
+<h3><a name=\"majorTrauma\"></a>Traumatisme majeur</h3>
+<h4><a name=\"StabilizeNeck_4\"></a>Si un traumatisme cervical est suspect&eacute;&nbsp;stabiliser la nuque</h4>
+<table>
+   <tbody>
+      <tr>
+         <td colspan=\"2\"><strong>Charte 6. COMMENT POSITIONNER UN ENFANT INCONSCIENT</strong></td>
+      </tr>
+      <tr>
+         <td colspan=\"2\">
+            <ul>
+               <li><strong style=\"font-family: inherit; font-size: inherit; font-style: inherit; font-variant-ligatures: inherit; font-variant-caps: inherit;\">Si un traumatisme cervical est suspect&eacute;</strong></li>
+            </ul>
+            <ul>
+               <li style=\"list-style-type: none;\">
+                  <ul>
+                     <li style=\"list-style-type: none;\">
+                        <ul>
+                           <li>Immobiliser le cou de l'enfant et le maintenir allong&eacute; sur le dos</li>
+                           <li>Placer l'enfant sur un plan dur, et l'immobiliser dans cette position en faisant passer un ruban adh&eacute;sif autour de son front et menton, et en fixant la t&ecirc;te au plan.</li>
+<li>Emp&ecirc;cher tout mouvement du cou en immobilisant la t&ecirc;te de l'enfant&nbsp; (par ex. &agrave; l'aide de sac de liquide de perfudion plac&eacute;s des deux c&ocirc;t&eacute;s de la t&ecirc;te).</li>
+<li>Si l'enfant vomit, tourner l'enfant sur un c&ocirc;t&eacute; tout en gardant la t&ecirc;te allign&eacute; au reste du corps.</li>
+                                                                                                                          </ul>
+                     </li>
+</ul>
+               </li>
+</ul>
+         </td>
+<td style=\"text-align: center;\"><img src=\"blob:https://medalc.unisante.ch/b4b9c39e-679b-4254-b53a-4d400b7fe8f4\" alt=\"Unconscious/3 A\" width=\"150\" height=\"146\" /></td>
+      </tr>
+</tbody>
+</table>
+<h4><a name=\"StopBleeding_4\"></a>Stopper tout saignement</h4>
+<p>Si le patient saigne, appliquer une pression directement sur la plaie avec un habit.<br />Chez les patients avec un traumatisme majeur sur un membre, utiliser un tourniquet (un bandage/garrot serr&eacute; qui est plac&eacute; &agrave; proximit&eacute; du site du traumatisme(du c&ocirc;t&eacute; du corps) si une pression directe ne suffit pas &agrave; contr&ocirc;ler un saignement majeur.</p>
+                                                                                                                                                                                                                                                                                                                                                                                                  <h4><a name=\"OBkeepWarm_4_a\"></a>Garder l'enfant au chaud et le r&eacute;f&eacute;rer pour un traitement d'urgence</h4>
+<p>Couvrer l'enfant avec un drap pour le garder au chaud, et r&eacute;f&eacute;rer l'enfant pour une prise en charge d'urgence.</p>
+<p style=\"text-align: center;\"><a href=\"#top\">Retour vers le haut</a></p>
+<h3><a name=\"majorBurn\"></a>Br&ucirc;lure s&eacute;v&egrave;re</h3>
+<h4><a name=\"SourceOfBurns_4\"></a>Retirer toute source de br&ucirc;lure</h4>
+<p>Retirer touts les habits qui a pu &ecirc;tre br&ucirc;ler, qui est recouvert de substance chimique, ou qui est serr&eacute;.</p>
+<h4><a name=\"CoolInRunningWater_4\"></a>Refroidir avec de l'eau</h4>
+<p>Laisser refroidir la zone br&ucirc;l&eacute; avec de l'eau froide pendant 20-30 minutes.</p>
+<h4><a name=\"IVFluids_4\"></a>Perfuser des liquides (seulement si l'enfant n'est pas s&eacute;v&egrave;rement malnourri et la br&ucirc;lure est &gt;10% de la surface totale du corps)</h4>
+<p>Prodiguer une r&eacute;animation liquidienne en bolus comme recommend&eacute; chez tous les patients compromis.</p>
+                                                                                                        <table style=\"border-collapse: collapse; width: 100%; text-align: center; font-size: 8pt;\" border=\"1\">
+<thead>
+<tr>
+<th style=\"text-align: left;\"><strong>Age(poids)</strong></th>
+<th><strong>Volume de Ringer lactate ou une solution saline normale (20 ml/kg)</strong></th>
+</tr>
+   </thead>
+<tbody>
+<tr>
+<td style=\"text-align: left;\">2 mois (&lt; 4 kg)</td>
+         <td>50&nbsp;ml</td>
+</tr>
+      <tr>
+         <td style=\"text-align: left;\">2 - &lt; 4 mois (4-&lt; 6 kg)</td>
+<td>100&nbsp;ml</td>
+      </tr>
+<tr>
+<td style=\"text-align: left;\">4 - &lt; 12 mois (6-&lt; 10 kg)</td>
+         <td>150ml</td>
+</tr>
+      <tr>
+         <td style=\"text-align: left;\">1 - &lt; 3 ans (10 &ndash;&lt; 14 kg)</td>
+<td>250&nbsp;ml</td>
+      </tr>
+<tr>
+<td style=\"text-align: left;\">3 - &lt; 5 ans (14 - &lt; 20 kg)</td>
+         <td>350&nbsp;ml</td>
+</tr>
+      <tr>
+         <td style=\"text-align: left;\">5 - &lt; 8 ans (20 &ndash;&lt; 26 kg)</td>
+<td>450&nbsp;ml</td>
+      </tr>
+<tr>
+<td style=\"text-align: left;\">8 - &lt; 10 ans (26 &ndash;&lt; 30 kg)</td>
+         <td>550&nbsp;ml</td>
+</tr>
+      <tr>
+         <td style=\"text-align: left;\">30&nbsp;-&nbsp;&lt;&nbsp;36&nbsp;kg</td>
+<td>650&nbsp;ml</td>
+      </tr>
+<tr>
+<td style=\"text-align: left;\">36&nbsp;-&nbsp;&lt;&nbsp;40&nbsp;kg</td>
+         <td>750&nbsp;ml</td>
+</tr>
+      <tr>
+         <td style=\"text-align: left;\">40&nbsp;-&nbsp;&lt;&nbsp;46&nbsp;kg</td>
+<td>850&nbsp;ml</td>
+      </tr>
+<tr>
+<td style=\"text-align: left;\">46&nbsp;-&nbsp;50&nbsp;kg</td>
+         <td>950&nbsp;ml</td>
+</tr>
+      <tr>
+         <td style=\"text-align: left;\">&gt; 50&nbsp;kg</td>
+<td>1000&nbsp;ml</td>
+      </tr>
+</tbody>
+</table>
+<p>Une fois stabilis&eacute; et r&eacute;f&eacute;r&eacute; &agrave; l'h&ocirc;pital, la perfusion continue doit &ecirc;tre calcul&eacute;e en fonction de la surface totale de la br&ucirc;lure (4 mL crystallo&iuml;de x (poids du corps en kg) x (% de la surface totale de la br&ucirc;lure) = mL dans les premi&egrave;res 24 heures).</p>
+<h4><a name=\"CoverWounds_4\"></a>Appliquer de la cr&egrave;me et couvrir la plaie</h4>
+<p>Couvrir la plaie avec un habit propre ou une compresse st&eacute;rile apr&egrave;s l'applicatiob de la cr&egrave;me mupirocine 2% ou de la cr&egrave;me sulfadiazine d'argent 1%</p>
+<h4><a name=\"TetanusVaccination_4\"></a>Vaccination contre le t&eacute;tanos</h4>
+<p>Donner une immnunisation contre le t&eacute;tanos&nbsp;</p>
+<h4><a name=\"OBkeepWarm_4_b\"></a>Garder l'enfant au chaud et le r&eacute;f&eacute;rer pour un traitement d'urgence</h4>
+<p>Couvrer l'enfant avec un drap pour le garder au chaud, et r&eacute;f&eacute;rer l'enfant pour une prise en charge d'urgence.</p>
+<p style=\"text-align: center;\"><a href=\"#top\">Retour vers le haut</a></p>
+<h2>References:</h2>
+<ul>
+   <li>Karpelowsky, J; Wallis, L; Madaree, A; Rode, H. South African Burn Society burn stabilisation protocol; South African Medical Journal Forum; 2007, 97:8.</li>
+<li>Medicines for Malaria Venture. Guidelines for Administration of Injectable Artesunate for Severe Malaria; 2014.</li>
+<li>Ministry of Health CD, Gender, Elderly and Children. Standard Treatment Guidelines and Essential Medicines List for Children and Adolescents. Dar es Salaam, Tanzania; 2018.</li>
+<li>Outwater, A; Braekel, T; Prehospital care of burn injuries in Africa: A review, 1990-2018; Burns; 2020, 46:8</li>
+   <li>Stander, M; Wallis, L; The Emergency Management and Treatment of Severe Burns; Emergency Medicine International, 2011.</li>
+<li>World Health Organization. Emergency triage assessment and treatment (ETAT): World Health Organization; 2005.</li>
+<li>World Health Organization. Integrated Management of Childhood Ilness Chart Booklet. Geneva; 2014.</li>
+<li>World Health Organization. Pocket Book of Hospital Care for Children: Guidelines for the Management of Common Childhood Illnesses. 2nd ed. Geneva: World Health Organization; 2013.</li>
+</ul>"
