@@ -30,7 +30,7 @@ class QuestionDatatable < ApplicationDatatable
         description: record.send("description_#{@default_language}"),
         is_mandatory: record.is_mandatory,
         category: Object.const_get(record.type).display_label,
-        answers: record.answers.map(&:label).join(' / '),
+        answers: record.answers.map{|an| an.send("label_#{@default_language}")}.join(' / '),
         answer_type: record.answer_type.display_name,
         actions: actions,
         is_neonat: record.is_neonat, # is a hidden column in the datatable in question.js

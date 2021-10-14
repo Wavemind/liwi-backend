@@ -12,7 +12,6 @@ languages_codes = Language.all.map(&:code)
 
 
 wb.add_worksheet(name: "General") do |sheet|
-  sheet.sheet_protection.password = 'P@ssw0rd'
   rows = ["ID", "Model", "Field", "en"]
   unlocked_rows_indexes = []
   languages_codes.map do |l|
@@ -36,7 +35,6 @@ end
 
 # Build Diagnosis sheet
 wb.add_worksheet(name: "Diagnoses") do |sheet|
-  sheet.sheet_protection.password = 'P@ssw0rd'
   rows = ["ID", "Model", "Reference", "Label (en)"]
   unlocked_rows_indexes = []
   languages_codes.map do |l|
@@ -78,7 +76,6 @@ end
 
 # Build FinalDiagnosis sheet
 wb.add_worksheet(name: "Final Diagnoses") do |sheet|
-  sheet.sheet_protection.password = 'P@ssw0rd'
   rows = ["ID", "Model", "Reference", "Label (en)"]
   unlocked_rows_indexes = []
   languages_codes.map do |l|
@@ -111,7 +108,6 @@ end
 
 # Build Question sheet
 wb.add_worksheet(name: "Variables") do |sheet|
-  sheet.sheet_protection.password = 'P@ssw0rd'
 
   # Generate columns depending on different languages
   rows = ["ID", "Model", "Reference", "Label (en)"]
@@ -211,7 +207,6 @@ end
 
 # Build Drug sheet
 wb.add_worksheet(name: "Drugs") do |sheet|
-  sheet.sheet_protection.password = 'P@ssw0rd'
 
   rows = ["ID", "Model", "Reference", "Label (en)"]
   unlocked_rows_indexes = []
@@ -274,7 +269,6 @@ wb.add_worksheet(name: "Drugs") do |sheet|
 end
 
 wb.add_worksheet(name: "Drugs in diagnoses") do |sheet|
-  sheet.sheet_protection.password = 'P@ssw0rd'
 
   rows = ["ID", "Drug", "Diagnosis", "Duration (en)"]
 
@@ -310,10 +304,8 @@ wb.add_worksheet(name: "Drugs in diagnoses") do |sheet|
   sheet.add_row rows, style: wrap
 end
 
-
 # Build Management sheet
 wb.add_worksheet(name: "Managements") do |sheet|
-  sheet.sheet_protection.password = 'P@ssw0rd'
 
   rows = ["ID", "Model", "Reference", "Label (en)"]
   unlocked_rows_indexes = []
@@ -330,6 +322,39 @@ wb.add_worksheet(name: "Managements") do |sheet|
 
   managements.map do |node|
     rows = [node.id, "HealthCares::Management", node.full_reference, node.label_en]
+    languages_codes.map do |l|
+      rows.push(node.send("label_#{l}"))
+    end
+    rows.push(node.description_en)
+    languages_codes.map do |l|
+      rows.push(node.send("description_#{l}"))
+    end
+
+    sheet.add_row rows, style: wrap
+  end
+  unlocked_rows_indexes.map do |i|
+    sheet.col_style(i,unlocked,row_offset: 0)
+  end
+end
+
+# Build Questions sequences sheet
+wb.add_worksheet(name: "Questions sequences") do |sheet|
+
+  rows = ["ID", "Model", "Reference", "Label (en)"]
+  unlocked_rows_indexes = []
+  languages_codes.map do |l|
+    unlocked_rows_indexes.push(rows.count)
+    rows.push("Label (#{l})")
+  end
+  rows.push("Description (en)")
+  languages_codes.map do |l|
+    unlocked_rows_indexes.push(rows.count)
+    rows.push("Description (#{l})")
+  end
+  sheet.add_row rows, style: wrap
+
+  questions_sequences.map do |node|
+    rows = [node.id, node.type, node.full_reference, node.label_en]
     languages_codes.map do |l|
       rows.push(node.send("label_#{l}"))
     end

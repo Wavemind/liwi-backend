@@ -1,4 +1,4 @@
-class ManagementExclusionDatatable < AjaxDatatablesRails::ActiveRecord
+class ManagementExclusionDatatable < ApplicationDatatable
   extend Forwardable
 
   def_delegator :@view, :link_to

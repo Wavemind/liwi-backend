@@ -145,6 +145,7 @@ class VersionsController < ApplicationController
   # @params version [Version] version
   # Get an excel export of all translatable labels used in the given version
   def generate_translations
+    # render xlsx: 'export', filename: "#{@version.name}_translations.xlsx"
     respond_to do |format|
       format.xlsx
     end
@@ -178,6 +179,7 @@ class VersionsController < ApplicationController
           update_generic_translations(Formulation, Formulation.get_translatable_params(xl_file.sheet(4)), xl_file.sheet(4))
           update_generic_translations(Instance, Instance.get_translatable_params(xl_file.sheet(5)), xl_file.sheet(5))
           update_generic_translations(HealthCares::Management, Node.get_translatable_params(xl_file.sheet(6)), xl_file.sheet(6))
+          update_generic_translations(QuestionsSequence, Node.get_translatable_params(xl_file.sheet(7)), xl_file.sheet(7))
 
           redirect_to algorithm_version_url(@algorithm, @version, panel: 'translations'), notice: t('flash_message.import_successful')
         rescue => e

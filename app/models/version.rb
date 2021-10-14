@@ -218,8 +218,8 @@ class Version < ApplicationRecord
     order.each do |step|
       step['children'].each do |child|
         if %w(Attribute System).include?(child['subtitle'])
-          child.each do |node|
-            node['title'] = node.reference_label(l)
+          child['children'].each do |node|
+            node['title'] = Node.find(node['id']).reference_label(l)
           end
         else
           if %w(first_name last_name birth_date).include?(child['id'])
@@ -227,7 +227,7 @@ class Version < ApplicationRecord
             child['title'] = I18n.t("questions.basic_questions.#{child['id']}")
             I18n.default_locale = :en
           else
-            child['title'] = child.reference_label(l)
+            child['title'] = Node.find(child['id']).reference_label(l)
           end
         end
       end

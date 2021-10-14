@@ -1,4 +1,4 @@
-class FinalDiagnosisExclusionDatatable < AjaxDatatablesRails::ActiveRecord
+class FinalDiagnosisExclusionDatatable < ApplicationDatatable
   extend Forwardable
 
   def_delegator :@view, :link_to
