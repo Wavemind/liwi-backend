@@ -12,7 +12,7 @@ import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
 import MediaForm from "../MediaForm/mediaForm";
 import SliderComponent from "../components/Slider";
-import { getStudyLanguage } from "../../utils";
+import {getStudyLanguage, getTranslatedText} from "../../utils";
 
 export default class FinalDiagnosisForm extends React.Component {
 
@@ -82,10 +82,12 @@ export default class FinalDiagnosisForm extends React.Component {
     const { finalDiagnosis } = this.props;
     const { language } = this.state;
 
+
+    getTranslatedText(finalDiagnosis?.label_translations, language);
     const initialValues = {
       id: finalDiagnosis?.id || "",
-      label_translations: finalDiagnosis?.label_translations?.send(language) || "",
-      description_translations: finalDiagnosis?.description_translations?.send(language) || "",
+      label_translations: getTranslatedText(finalDiagnosis?.label_translations, language),
+      description_translations: getTranslatedText(finalDiagnosis?.description_translations, language),
       level_of_urgency: finalDiagnosis?.level_of_urgency || 5,
       medias_attributes: []
     };
@@ -94,7 +96,7 @@ export default class FinalDiagnosisForm extends React.Component {
         id: media.id || "",
         url: media.url || "",
       };
-      mediaVals[`label_${language}`] = media.label_translations?.send(language) || "";
+      mediaVals[`label_${language}`] = getTranslatedText(media?.label_translations, language);
       initialValues['medias_attributes'].push(mediaVals)
     });
 

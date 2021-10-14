@@ -10,7 +10,7 @@ import DisplayErrors from "../components/DisplayErrors";
 import { drugInstanceSchema } from "../constants/schema";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
 import { closeModal } from "../../diagram/engine/reducers/creators.actions";
-import { getStudyLanguage } from "../../utils";
+import {getStudyLanguage, getTranslatedText} from "../../utils";
 
 export default class InstanceForm extends React.Component {
   constructor(props) {
@@ -76,8 +76,9 @@ export default class InstanceForm extends React.Component {
     const body = {
       is_pre_referral: method === "create" ? "" : diagramObject.options.dbInstance?.is_pre_referral || false,
     };
-    body[`duration_${language}`] = method === "create" ? "" : diagramObject.options.dbInstance.duration_translations?.send(language) || "",
-    body[`description_${language}`] = method === "create" ? drug?.description_translations?.send(language) : diagramObject.options.dbInstance.description_translations?.send(language) || ""
+
+    body[`duration_${language}`] = method === "create" ? "" : getTranslatedText(diagramObject.options.dbInstance.duration_translations, language);
+    body[`description_${language}`] = method === "create" ? getTranslatedText(drug?.description_translations, language) : getTranslatedText(diagramObject.options.dbInstance.description_translations, language);
 
     return (
       <FadeIn>

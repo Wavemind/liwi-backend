@@ -12,7 +12,7 @@ import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
 import MediaForm from "../MediaForm/mediaForm";
 import SliderComponent from "../components/Slider";
-import { getStudyLanguage } from "../../utils";
+import {getStudyLanguage, getTranslatedText} from "../../utils";
 
 export default class ManagementForm extends React.Component {
   state = {
@@ -107,9 +107,8 @@ export default class ManagementForm extends React.Component {
     const { language } = this.state;
     const initialValues = {
       id: management?.id || "",
-      label_translations: management?.label_translations?.send(language) || "",
-      description_translations:
-        management?.description_translations?.send(language) || "",
+      label_translations: getTranslatedText(management?.label_translations, language),
+      description_translations: getTranslatedText(management?.description_translations, language),
       level_of_urgency: management?.level_of_urgency || 5,
       is_referral: management?.is_referral || false,
       medias_attributes: []
@@ -120,7 +119,8 @@ export default class ManagementForm extends React.Component {
         id: media.id || "",
         url: media.url || "",
       };
-      body[`label_${language}`] = media.label_translations?.send(language) || "";
+
+      body[`label_${language}`] = getTranslatedText( media.label_translations, language);
       initialValues["medias_attributes"].push(body);
     });
 

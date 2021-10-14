@@ -507,10 +507,10 @@ export default class QuestionForm extends React.Component {
                       filterOptions={filterOptions}
                       disabled={deployedMode}
                       onChange={(_, value) => setFieldValue("complaint_categories_attributes", value)}
-                      renderOption={(option) => option.label_translations.send(language)}
+                      renderOption={(option) => getTranslatedText(option.label_translations, language)}
                       renderTags={(value, getTagProps) => (
                         value.map((option, index) => (
-                          <Chip variant="outlined" label={option.label_translations.send(language)} {...getTagProps({index})} />
+                          <Chip variant="outlined" label={getTranslatedText(option.label_translations, language)} {...getTagProps({index})} />
                         ))
                       )}
                       renderInput={params => (
