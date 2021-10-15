@@ -102,10 +102,10 @@ class Instance < ApplicationRecord
     data.row(1).each_with_index do |head, index|
       if head.include?('Duration')
         code = head[/\((.*?)\)/m, 1]
-        fields_to_update["duration_#{code}"] = index unless code == 'en'
+        fields_to_update["duration_#{code}"] = index
       elsif head.include?('Description')
         code = head[/\((.*?)\)/m, 1]
-        fields_to_update["description_#{code}"] = index unless code == 'en'
+        fields_to_update["description_#{code}"] = index
       end
     end
 

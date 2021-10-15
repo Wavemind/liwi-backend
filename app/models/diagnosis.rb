@@ -14,7 +14,7 @@ class Diagnosis < ApplicationRecord
   before_validation :validate_complaint_category
   before_save :adjust_cut_offs
   after_create :generate_reference
-  validates_presence_of :label_en
+  validates_presence_of :label_translations
 
   translates :label
 
@@ -32,7 +32,7 @@ class Diagnosis < ApplicationRecord
     data.row(1).each_with_index do |head, index|
       if head.include?('Label')
         code = head[/\((.*?)\)/m, 1]
-        fields_to_update["label_#{code}"] = index unless code == 'en'
+        fields_to_update["label_#{code}"] = index
       end
     end
 

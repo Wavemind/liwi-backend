@@ -119,7 +119,7 @@ export default class InstanceForm extends React.Component {
                   name={`duration_${language}`}
                   value={values[`duration_${language}`]}
                   onChange={handleChange}
-                  disabled={values[`duration_${language}`]}
+                  disabled={values.is_pre_referral}
                   isInvalid={touched[`duration_${language}`] && !!errors[`duration_${language}`]}
                 />
                 <Form.Control.Feedback type="invalid">

@@ -34,13 +34,13 @@ class Formulation < ApplicationRecord
     data.row(1).each_with_index do |head, index|
       if head.include?('Injection instructions')
         code = head[/\((.*?)\)/m, 1]
-        fields_to_update["injection_instructions_#{code}"] = index unless code == 'en'
+        fields_to_update["injection_instructions_#{code}"] = index
       elsif head.include?('Dispensing description')
         code = head[/\((.*?)\)/m, 1]
-        fields_to_update["dispensing_description_#{code}"] = index unless code == 'en'
+        fields_to_update["dispensing_description_#{code}"] = index
       elsif head.include?('Description')
         code = head[/\((.*?)\)/m, 1]
-        fields_to_update["description_#{code}"] = index unless code == 'en'
+        fields_to_update["description_#{code}"] = index
       end
     end
 

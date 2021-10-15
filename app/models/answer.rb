@@ -53,7 +53,7 @@ class Answer < ApplicationRecord
     data.row(1).each_with_index do |head, index|
       if head.include?('Label')
         code = head[/\((.*?)\)/m, 1]
-        fields_to_update["label_#{code}"] = index unless code == 'en'
+        fields_to_update["label_#{code}"] = index
       end
     end
 
