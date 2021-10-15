@@ -7,7 +7,7 @@ class DiagnosesController < ApplicationController
   layout 'diagram', only: [:diagram]
 
   def index
-    authorize policy_scope(Diagnosis)
+    authorize policy_scope(@version.diagnoses)
     respond_to do |format|
       format.html
       format.js { }
