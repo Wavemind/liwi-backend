@@ -1,6 +1,7 @@
 <%= simple_form_for [@algorithm, @version, @diagnosis], html: { class: 'form-horizontal' }, wrapper: :input_group do |f| %>
 
-  <%= f.input :label_en %>
+  <%= f.input "label_#{@default_language}" %>
+
   <%= f.association :node, collection: @algorithm.questions.where(type: 'Questions::ComplaintCategory'), label_method: :reference_label, prompt: t('select'), disabled: @version.in_prod %>
 
 <!--  TODO disable cut_offs when the migration is over-->
