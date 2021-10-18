@@ -17,10 +17,16 @@ import {getStudyLanguage, getTranslatedText} from "../../utils";
 
 export default class FinalDiagnosisForm extends React.Component {
 
-  state = {
-    toDeleteMedias: [],
-    language: getStudyLanguage()
-  };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      toDeleteMedias: [],
+      language: getStudyLanguage(),
+      deployedMode: props.method === "update" && props.is_deployed,
+    };
+  }
 
   /**
    * Suppress entry in media
@@ -81,7 +87,7 @@ export default class FinalDiagnosisForm extends React.Component {
 
   render() {
     const { finalDiagnosis } = this.props;
-    const { language } = this.state;
+    const { language, deployedMode } = this.state;
 
 
     getTranslatedText(finalDiagnosis?.label_translations, language);

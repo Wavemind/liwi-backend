@@ -16,11 +16,16 @@ import Autocomplete from "../QuestionsSequenceForm";
 import {getStudyLanguage, getTranslatedText} from "../../utils";
 
 export default class ManagementForm extends React.Component {
-  state = {
-    toDeleteMedias: [],
-    language: getStudyLanguage(),
-    deployedMode: props.method === "update" && props.is_deployed,
-  };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      toDeleteMedias: [],
+      language: getStudyLanguage(),
+      deployedMode: props.method === "update" && props.is_deployed,
+    };
+  }
 
   /**
    * Suppress entry in media
