@@ -18,7 +18,8 @@ import {getStudyLanguage, getTranslatedText} from "../../utils";
 export default class ManagementForm extends React.Component {
   state = {
     toDeleteMedias: [],
-    language: getStudyLanguage()
+    language: getStudyLanguage(),
+    deployedMode: props.method === "update" && props.is_deployed,
   };
 
   /**
@@ -105,7 +106,7 @@ export default class ManagementForm extends React.Component {
 
   render() {
     const { management, is_deployed } = this.props;
-    const { language } = this.state;
+    const { language, deployedMode } = this.state;
     const initialValues = {
       id: management?.id || "",
       label_translations: getTranslatedText(management?.label_translations, language),
@@ -169,7 +170,7 @@ export default class ManagementForm extends React.Component {
                   value={values.is_referral}
                   checked={values.is_referral}
                   onChange={handleChange}
-                  disabled={is_deployed}
+                  disabled={deployedMode}
                   isInvalid={touched.is_referral && !!errors.is_referral}
                 />
                 <Form.Control.Feedback type="invalid">
