@@ -13,7 +13,7 @@
         availableNodes: @final_diagnosis.available_nodes_health_cares_json,
         questionCategories: Question.categories('FinalDiagnosis').as_json,
         questionsSequenceCategories: QuestionsSequence.categories.as_json,
-        readOnly: !policy(@final_diagnosis).new?
+        readOnly: @final_diagnosis.diagnosis.version.in_prod
       }
     }) %>
   </div>
