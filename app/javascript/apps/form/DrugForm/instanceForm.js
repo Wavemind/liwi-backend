@@ -92,7 +92,6 @@ export default class InstanceForm extends React.Component {
                   value={values.is_pre_referral}
                   checked={values.is_pre_referral}
                   onChange={handleChange}
-                  disabled={is_deployed}
                   isInvalid={touched.is_pre_referral && !!errors.is_pre_referral}
                 />
                 <Form.Control.Feedback type="invalid">
