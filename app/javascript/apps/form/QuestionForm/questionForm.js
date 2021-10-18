@@ -465,6 +465,7 @@ export default class QuestionForm extends React.Component {
                     name={`label_${language}`}
                     value={values[`label_${language}`]}
                     onChange={handleChange}
+                    disabled={deployedMode}
                     isInvalid={touched[`label_${language}`] && !!errors[`label_${language}`]}
                   />
                   <Form.Control.Feedback type="invalid">
@@ -599,6 +600,7 @@ export default class QuestionForm extends React.Component {
                       name={`placeholder_${language}`}
                       value={values[`placeholder_${language}`]}
                       onChange={handleChange}
+                      disabled={deployedMode}
                       isInvalid={touched[`placeholder_${language}`] && !!errors[`placeholder_${language}`]}
                     />
                     <Form.Control.Feedback type="invalid">
@@ -676,6 +678,7 @@ export default class QuestionForm extends React.Component {
                         name={`min_message_warning_${language}`}
                         value={values[`min_message_warning_${language}`]}
                         onChange={handleChange}
+                        disabled={deployedMode}
                         isInvalid={touched[`min_message_warning_${language}`] && !!errors[`min_message_warning_${language}`]}
                       />
                       <Form.Control.Feedback type="invalid">
@@ -690,6 +693,7 @@ export default class QuestionForm extends React.Component {
                         name={`max_message_warning_${language}`}
                         value={values[`max_message_warning_${language}`]}
                         onChange={handleChange}
+                        disabled={deployedMode}
                         isInvalid={touched[`max_message_warning_${language}`] && !!errors[`max_message_warning_${language}`]}
                       />
                       <Form.Control.Feedback type="invalid">
@@ -704,6 +708,7 @@ export default class QuestionForm extends React.Component {
                         name={`min_message_error_${language}`}
                         value={values[`min_message_error_${language}`]}
                         onChange={handleChange}
+                        disabled={deployedMode}
                         isInvalid={touched[`min_message_error_${language}`] && !!errors[`min_message_error_${language}`]}
                       />
                       <Form.Control.Feedback type="invalid">
@@ -718,6 +723,7 @@ export default class QuestionForm extends React.Component {
                         name={`max_message_error_${language}`}
                         value={values[`max_message_error_${language}`]}
                         onChange={handleChange}
+                        disabled={deployedMode}
                         isInvalid={touched[`max_message_error_${language}`] && !!errors[`max_message_error_${language}`]}
                       />
                       <Form.Control.Feedback type="invalid">
@@ -734,6 +740,7 @@ export default class QuestionForm extends React.Component {
                     name={`description_${language}`}
                     value={values[`description_${language}`]}
                     onChange={handleChange}
+                    disabled={deployedMode}
                     isInvalid={touched[`description_${language}`] && !!errors[`description_${language}`]}
                   />
                   <Form.Control.Feedback type="invalid">

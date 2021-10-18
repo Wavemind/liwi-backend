@@ -98,7 +98,7 @@ export default class InstanceForm extends React.Component {
             }) => (
             <Form noValidate onSubmit={handleSubmit}>
               {status ? <DisplayErrors errors={status}/> : null}
-
+              {/* TODO : Trouver une solution pour savoir si le diagramme est déployé, pas le noeud*/}
               <Form.Group controlId="validationIsPreReferral">
                 <Form.Check
                   name="is_pre_referral"

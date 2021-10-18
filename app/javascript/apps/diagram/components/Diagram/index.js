@@ -143,7 +143,8 @@ export class Diagram extends React.Component {
           engine,
           removeAvailableNode,
           addAvailableNode,
-          positions
+          positions,
+          is_deployed: readOnly
         })
       );
     } else {

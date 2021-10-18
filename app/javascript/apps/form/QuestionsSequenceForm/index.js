@@ -159,6 +159,7 @@ export default class QuestionsSequenceForm extends React.Component {
                     name="label_translations"
                     value={values.label_translations}
                     onChange={handleChange}
+                    disabled={deployedMode}
                     isInvalid={touched.label_translations && !!errors.label_translations}
                   />
                   <Form.Control.Feedback type="invalid">
@@ -219,7 +220,7 @@ export default class QuestionsSequenceForm extends React.Component {
                       name="cut_off_start"
                       value={values.cut_off_start}
                       onChange={handleChange}
-                      // disabled={deployedMode} Temporally not disabled to let cut_offs to be fixed
+                      disabled={deployedMode}
                       isInvalid={touched.cut_off_start && !!errors.cut_off_start}
                     />
                     <Form.Control.Feedback type="invalid">
@@ -233,7 +234,7 @@ export default class QuestionsSequenceForm extends React.Component {
                       name="cut_off_end"
                       value={values.cut_off_end}
                       onChange={handleChange}
-                      // disabled={deployedMode}
+                      disabled={deployedMode}
                       isInvalid={touched.cut_off_end && !!errors.cut_off_end}
                     />
                     <Form.Control.Feedback type="invalid">
@@ -247,7 +248,7 @@ export default class QuestionsSequenceForm extends React.Component {
                       name="cut_off_value_type"
                       value={values.cut_off_value_type}
                       onChange={handleChange}
-                      // disabled={deployedMode}
+                      disabled={deployedMode}
                       isInvalid={touched.cut_off_value_type && !!errors.cut_off_value_type}
                     >
                       <option value="months">{I18n.t("months")}</option>
@@ -265,6 +266,7 @@ export default class QuestionsSequenceForm extends React.Component {
                     name="description_translations"
                     as="textarea"
                     value={values.description_translations}
+                    disabled={deployedMode}
                     onChange={handleChange}
                     isInvalid={touched.description_translations && !!errors.description_translations}
                   />

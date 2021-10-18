@@ -12,6 +12,7 @@ import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
 import MediaForm from "../MediaForm/mediaForm";
 import SliderComponent from "../components/Slider";
+import Autocomplete from "../QuestionsSequenceForm";
 import {getStudyLanguage, getTranslatedText} from "../../utils";
 
 export default class ManagementForm extends React.Component {
@@ -151,6 +152,7 @@ export default class ManagementForm extends React.Component {
                   name="label_translations"
                   value={values.label_translations}
                   onChange={handleChange}
+                  disabled={deployedMode}
                   isInvalid={
                     touched.label_translations && !!errors.label_translations
                   }
@@ -186,6 +188,7 @@ export default class ManagementForm extends React.Component {
                   as="textarea"
                   value={values.description_translations}
                   onChange={handleChange}
+                  disabled={deployedMode}
                   isInvalid={
                     touched.description_translations &&
                     !!errors.description_translations

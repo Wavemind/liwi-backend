@@ -10,6 +10,7 @@ import {
   NO_ANSWERS_ATTACHED_ANSWER_TYPE,
   NO_ANSWERS_ATTACHED_TYPE
 } from "../constants/constants";
+import Autocomplete from "../QuestionsSequenceForm";
 import { getStudyLanguage } from "../../utils";
 
 export default class DrugForm extends React.Component {
@@ -52,6 +53,7 @@ export default class DrugForm extends React.Component {
                   name={`label_${language}`}
                   value={values[`label_${language}`]}
                   onChange={handleChange}
+                  disabled={is_deployed}
                   isInvalid={touched[`label_${language}`] && !!errors[`label_${language}`]}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -70,6 +72,7 @@ export default class DrugForm extends React.Component {
                   as="textarea"
                   value={values[`description_${language}`]}
                   onChange={handleChange}
+                  disabled={is_deployed}
                   isInvalid={touched[`description_${language}`] && !!errors[`description_${language}`]}
                 />
                 <Form.Control.Feedback type="invalid">

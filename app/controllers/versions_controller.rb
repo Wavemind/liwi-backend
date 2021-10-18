@@ -394,6 +394,7 @@ class VersionsController < ApplicationController
       :in_prod,
       :nodes_ids,
       :full_order_json,
+      :in_prod,
       medal_data_config_variables_attributes: [
         :id,
         :label,
