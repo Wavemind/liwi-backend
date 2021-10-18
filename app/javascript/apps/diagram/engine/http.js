@@ -1,4 +1,5 @@
 import * as React from "react";
+import { getStudyLanguage } from "../../utils";
 
 export default class Http {
   url;
@@ -8,10 +9,11 @@ export default class Http {
   version;
   algorithm;
   finalDiagnosis;
+  l;
 
   constructor() {
     let data = document.querySelector(".metadata");
-
+    this.l = getStudyLanguage();
     this.url = window.location.origin;
     this.instanceableId = data.dataset.id;
     this.finalDiagnosis = data.dataset.final_diagnosis;
@@ -46,54 +48,52 @@ export default class Http {
 
   /**
    * Create a final diagnosis
-   * @params [String] label_en
-   * @params [String] description_en
+   * @params [String] label
+   * @params [String] description
    * @params [String] from
    * @return [Object] body of request
    */
   createFinalDiagnosis = async (
-    label_en,
-    description_en,
+    label,
+    description,
     level_of_urgency,
     medias_attributes,
     from
   ) => {
     const url = `${this.url}/algorithms/${this.algorithm}/versions/${this.version}/${this.instanceableType}/${this.instanceableId}/final_diagnoses`;
-    const body = {
+    let body = {
       final_diagnosis: {
-        label_en,
-        description_en,
         level_of_urgency,
         diagnosis_id: this.instanceableId,
         medias_attributes
       },
       from
     };
+    body['final_diagnosis'][`label_${this.l}`] = label;
+    body['final_diagnosis'][`description_${this.l}`] = description;
     const header = await this.setHeaders("POST", body);
     return await fetch(url, header).catch(error => console.log(error));
   };
 
   /**
    * Create a management
-   * @params [String] label_en
-   * @params [String] description_en
+   * @params [String] label
+   * @params [String] description
    * @params [array] medias_attributes
    * @params [String] from
    * @return [Object] body of request
    */
   createManagement = async (
-    label_en,
-    description_en,
+    label,
+    description,
     level_of_urgency,
     is_referral,
     medias_attributes,
     from
   ) => {
     const url = `${this.url}/algorithms/${this.algorithm}/managements`;
-    const body = {
+    let body = {
       health_cares_management: {
-        label_en,
-        description_en,
         level_of_urgency,
         is_referral,
         medias_attributes
@@ -102,6 +102,9 @@ export default class Http {
       final_diagnosis_id: this.finalDiagnosis,
       from
     };
+    body['health_cares_management'][`label_${this.l}`] = label;
+    body['health_cares_management'][`description_${this.l}`] = label;
+
     const header = await this.setHeaders("POST", body);
     return await fetch(url, header).catch(error => console.log(error));
   };
@@ -157,27 +160,25 @@ export default class Http {
 
   /**
    * Update a management
-   * @params [String] label_en
-   * @params [String] description_en
+   * @params [String] label
+   * @params [String] description
    * @params [array] medias_attributes
    * @params [String] from
    * @return [Object] body of request
    */
   updateManagement = async (
     id,
-    label_en,
-    description_en,
+    label,
+    description,
     level_of_urgency,
     is_referral,
     medias_attributes,
     from
   ) => {
     const url = `${this.url}/algorithms/${this.algorithm}/managements/${id}`;
-    const body = {
+    let body = {
       health_cares_management: {
         id,
-        label_en,
-        description_en,
         level_of_urgency,
         is_referral,
         medias_attributes
@@ -186,6 +187,9 @@ export default class Http {
       final_diagnosis_id: this.finalDiagnosis,
       from
     };
+    body['health_cares_management'][`label_${this.l}`] = label;
+    body['health_cares_management'][`description_${this.l}`] = description;
+
     const header = await this.setHeaders("PUT", body);
     return await fetch(url, header).catch(error => console.log(error));
   };
@@ -220,8 +224,8 @@ export default class Http {
     x,
     y,
     is_pre_referral,
-    duration_en = "",
-    description_en = ""
+    duration = "",
+    description = ""
   ) => {
     const url = `${this.url}/${this.instanceableType}/${this.instanceableId}/instances`;
     const body = {
@@ -233,10 +237,11 @@ export default class Http {
         instanceable_type: this.instanceableType,
         final_diagnosis_id: this.finalDiagnosis,
         is_pre_referral,
-        duration_en,
-        description_en
       }
     };
+    body['instance'][`duration_${this.l}`] = duration;
+    body['instance'][`description_${this.l}`] = description;
+
     const header = await this.setHeaders("POST", body);
     return await fetch(url, header).catch(error => console.log(error));
   };
@@ -311,8 +316,6 @@ export default class Http {
     const url = `${this.url}/algorithms/${this.algorithm}/questions_sequences`;
     const body = {
       questions_sequence: {
-        label_en: label,
-        description_en: description,
         type,
         min_score,
         cut_off_start,
@@ -325,6 +328,9 @@ export default class Http {
       final_diagnosis_id: this.finalDiagnosis,
       from
     };
+    body['questions_sequence'][`label_${this.l}`] = label;
+    body['questions_sequence'][`description_${this.l}`] = description;
+
     const header = await this.setHeaders("POST", body);
     return await fetch(url, header).catch(error => console.log(error));
   };
@@ -565,14 +571,14 @@ export default class Http {
    * Update final diagnosis
    * @params [Integer] id
    * @params [Integer] label
-   * @params [Integer] description_en
+   * @params [Integer] description
    * @params [Integer] from
    * @return [Object] body of request
    */
   updateFinalDiagnosis = async (
     id,
-    label_en,
-    description_en,
+    label,
+    description,
     level_of_urgency,
     medias_attributes,
     from,
@@ -582,14 +588,15 @@ export default class Http {
     const body = {
       final_diagnosis: {
         id,
-        label_en,
-        description_en,
         level_of_urgency,
         medias_attributes
       },
       from,
       source
     };
+    body['final_diagnosis'][`label_${this.l}`] = label;
+    body['final_diagnosis'][`description_${this.l}`] = description;
+
     const header = await this.setHeaders("PUT", body);
     return await fetch(url, header).catch(error => console.log(error));
   };
@@ -606,8 +613,8 @@ export default class Http {
     positionX,
     positionY,
     is_pre_referral,
-    duration_en = "",
-    description_en = ""
+    duration = "",
+    description = ""
   ) => {
     const url = `${this.url}/instances/${id}`;
     const body = {
@@ -615,10 +622,10 @@ export default class Http {
         position_x: positionX,
         position_y: positionY,
         is_pre_referral,
-        duration_en,
-        description_en
       }
     };
+    body['instance'][`duration_${this.l}`] = duration;
+    body['instance'][`description_${this.l}`] = description;
 
     const header = await this.setHeaders("PUT", body);
     return await fetch(url, header).catch(error => console.log(error));
@@ -669,8 +676,6 @@ export default class Http {
     const body = {
       questions_sequence: {
         id,
-        label_en: label,
-        description_en: description,
         type,
         min_score,
         cut_off_start,
@@ -680,6 +685,9 @@ export default class Http {
       },
       from
     };
+    body['questions_sequence'][`label_${this.l}`] = label;
+    body['questions_sequence'][`description_${this.l}`] = description;
+
     const header = await this.setHeaders("PUT", body);
     return await fetch(url, header).catch(error => console.log(error));
   };

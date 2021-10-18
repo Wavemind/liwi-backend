@@ -10,6 +10,8 @@ import {
   NO_ANSWERS_ATTACHED_ANSWER_TYPE,
   NO_ANSWERS_ATTACHED_TYPE
 } from "../constants/constants";
+import Autocomplete from "../QuestionsSequenceForm";
+import { getStudyLanguage } from "../../utils";
 
 export default class DrugForm extends React.Component {
   /**
@@ -30,6 +32,7 @@ export default class DrugForm extends React.Component {
 
   render() {
     const { formData, setFormData, nextStep, is_deployed } = this.props;
+    const language = getStudyLanguage();
 
     return (
       <FadeIn>
@@ -47,13 +50,14 @@ export default class DrugForm extends React.Component {
                   {I18n.t("activerecord.attributes.node.label_translations")}
                 </Form.Label>
                 <Form.Control
-                  name="label_en"
-                  value={values.label_en}
+                  name={`label_${language}`}
+                  value={values[`label_${language}`]}
                   onChange={handleChange}
-                  isInvalid={touched.label_en && !!errors.label_en}
+                  disabled={is_deployed}
+                  isInvalid={touched[`label_${language}`] && !!errors[`label_${language}`]}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {errors.label_en}
+                  {errors[`label_${language}`]}
                 </Form.Control.Feedback>
               </Form.Group>
 
@@ -64,14 +68,15 @@ export default class DrugForm extends React.Component {
                   )}
                 </Form.Label>
                 <Form.Control
-                  name="description_en"
+                  name={`description_${language}`}
                   as="textarea"
-                  value={values.description_en}
+                  value={values[`description_${language}`]}
                   onChange={handleChange}
-                  isInvalid={touched.description_en && !!errors.description_en}
+                  disabled={is_deployed}
+                  isInvalid={touched[`description_${language}`] && !!errors[`description_${language}`]}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {errors.description_en}
+                  {errors[`description_${language}`]}
                 </Form.Control.Feedback>
               </Form.Group>
 

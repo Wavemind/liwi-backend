@@ -28,11 +28,10 @@ export default class AnswerForm extends React.Component {
    * Fetch answer operators
    */
   init = async () => {
-    let http = new Http();
-    let httpRequest = {};
+    const http = new Http();
 
-    httpRequest = await http.fetchAnswerOperators();
-    let result = await httpRequest.json();
+    const httpRequest = await http.fetchAnswerOperators();
+    const result = await httpRequest.json();
 
     if (httpRequest.status === 200) {
       this.setState({
@@ -63,7 +62,7 @@ export default class AnswerForm extends React.Component {
 
   removeAnswer = (key, arrayHelpers, values) => {
     // Workaround to delete properly answers in rails TODO : Find a better solution to do it
-    let { toDeleteAnswers } = this.state;
+    const { toDeleteAnswers } = this.state;
     if (values.answers_attributes[key].id !== undefined) {
       toDeleteAnswers.push(values.answers_attributes[key].id);
     }

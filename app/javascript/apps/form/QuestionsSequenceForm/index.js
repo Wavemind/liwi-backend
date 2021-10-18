@@ -15,6 +15,7 @@ import Loader from "../components/Loader";
 import { questionSequencesSchema } from "../constants/schema";
 import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
+import {getTranslatedText, getStudyLanguage} from "../../utils";
 
 
 const filterOptions = createFilterOptions({
@@ -31,7 +32,8 @@ export default class QuestionsSequenceForm extends React.Component {
       deployedMode: props.method === "update" && props.is_deployed,
       categories: [],
       complaintCategories: [],
-      isLoading: true
+      isLoading: true,
+      language: getStudyLanguage()
     };
 
     this.initForm();
@@ -41,11 +43,10 @@ export default class QuestionsSequenceForm extends React.Component {
    * Fetch questions sequence categories
    */
   initForm = async () => {
-    let http = new Http();
-    let httpRequest = {};
+    const http = new Http();
 
-    httpRequest = await http.fetchQuestionsSequenceLists();
-    let result = await httpRequest.json();
+    const httpRequest = await http.fetchQuestionsSequenceLists();
+    const result = await httpRequest.json();
 
     if (httpRequest.status === 200) {
       this.setState({
@@ -63,9 +64,9 @@ export default class QuestionsSequenceForm extends React.Component {
    */
   handleOnSubmit = async (values, actions) => {
     const { method, from, engine, diagramObject, addAvailableNode } = this.props;
-    let http = new Http();
+    const http = new Http();
+    const complaint_category_ids = [];
     let httpRequest = {};
-    let complaint_category_ids = [];
     values.complaint_categories_attributes.map(cc => (complaint_category_ids.push(cc.id)));
 
     if (method === "create") {
@@ -74,14 +75,14 @@ export default class QuestionsSequenceForm extends React.Component {
       httpRequest = await http.updateQuestionsSequence(values.id, values.label_translations, values.description_translations, values.type, values.min_score, values.cut_off_start, values.cut_off_end, values.cut_off_value_type, complaint_category_ids, from);
     }
 
-    let result = await httpRequest.json();
+    const result = await httpRequest.json();
 
     if (httpRequest.status === 200) {
       if (from === "rails") {
         window.location.replace(result.url);
       } else {
         if (method === "create") {
-          let diagramInstance = createNode(result, addAvailableNode, false, result.node.category_name, engine);
+          const diagramInstance = createNode(result, addAvailableNode, false, result.node.category_name, engine);
           engine.getModel().addNode(diagramInstance);
         } else {
           diagramObject.options.dbInstance.node = result;
@@ -100,7 +101,7 @@ export default class QuestionsSequenceForm extends React.Component {
 
   render() {
     const { questionsSequence } = this.props;
-    const { categories, isLoading, complaintCategories, updateMode, deployedMode } = this.state;
+    const { categories, isLoading, complaintCategories, updateMode, deployedMode, language } = this.state;
 
     return (
       isLoading ? <Loader/> :
@@ -110,8 +111,8 @@ export default class QuestionsSequenceForm extends React.Component {
             initialValues={{
               id: questionsSequence?.id || "",
               type: questionsSequence?.type || "",
-              label_translations: questionsSequence?.label_translations?.en || "",
-              description_translations: questionsSequence?.description_translations?.en || "",
+              label_translations: getTranslatedText(questionsSequence?.label_translations, language),
+              description_translations: getTranslatedText(questionsSequence?.description_translations, language),
               min_score: questionsSequence?.min_score || "",
               cut_off_start: questionsSequence?.cut_off_start || "",
               cut_off_end: questionsSequence?.cut_off_end || "",
@@ -158,6 +159,7 @@ export default class QuestionsSequenceForm extends React.Component {
                     name="label_translations"
                     value={values.label_translations}
                     onChange={handleChange}
+                    disabled={deployedMode}
                     isInvalid={touched.label_translations && !!errors.label_translations}
                   />
                   <Form.Control.Feedback type="invalid">
@@ -218,7 +220,7 @@ export default class QuestionsSequenceForm extends React.Component {
                       name="cut_off_start"
                       value={values.cut_off_start}
                       onChange={handleChange}
-                      // disabled={deployedMode} Temporally not disabled to let cut_offs to be fixed
+                      disabled={deployedMode}
                       isInvalid={touched.cut_off_start && !!errors.cut_off_start}
                     />
                     <Form.Control.Feedback type="invalid">
@@ -232,7 +234,7 @@ export default class QuestionsSequenceForm extends React.Component {
                       name="cut_off_end"
                       value={values.cut_off_end}
                       onChange={handleChange}
-                      // disabled={deployedMode}
+                      disabled={deployedMode}
                       isInvalid={touched.cut_off_end && !!errors.cut_off_end}
                     />
                     <Form.Control.Feedback type="invalid">
@@ -246,7 +248,7 @@ export default class QuestionsSequenceForm extends React.Component {
                       name="cut_off_value_type"
                       value={values.cut_off_value_type}
                       onChange={handleChange}
-                      // disabled={deployedMode}
+                      disabled={deployedMode}
                       isInvalid={touched.cut_off_value_type && !!errors.cut_off_value_type}
                     >
                       <option value="months">{I18n.t("months")}</option>
@@ -264,6 +266,7 @@ export default class QuestionsSequenceForm extends React.Component {
                     name="description_translations"
                     as="textarea"
                     value={values.description_translations}
+                    disabled={deployedMode}
                     onChange={handleChange}
                     isInvalid={touched.description_translations && !!errors.description_translations}
                   />

@@ -87,7 +87,10 @@ class HealthCareNodeWidget extends React.Component {
                 </button>
                 <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                   <a className={`dropdown-item ${readOnly ? 'disabled' : null}`} href="#" onClick={() => this.editHealthCare()}>{I18n.t("edit")}</a>
-                  <a className={`dropdown-item ${readOnly ? 'disabled' : null}`} href="#" onClick={() => this.editHealthCareInstance()}>{I18n.t("drugs.edit_instance")}</a>
+                  {(node.options.dbInstance.node.type === "HealthCares::Drug") ? (
+                    <a className={`dropdown-item ${readOnly ? 'disabled' : null}`} href="#" onClick={() => this.editHealthCareInstance()}>{I18n.t("drugs.edit_instance")}</a>
+                  ) : null}
+
                 </div>
               </div>
             ) : null}

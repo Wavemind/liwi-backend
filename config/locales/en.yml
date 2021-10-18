@@ -361,6 +361,7 @@ en:
         one: 1 error prohibited this %{model} from being saved
         other: "%{count} errors prohibited this %{model} from being saved"
   dependencies: "The node you are trying to remove has dependencies"
+  english: "English"
   final_diagnoses:
     confirmation: "You are about to delete a Final Diagnosis instance which will delete all exclusions and instances linked to it. Are you sure ?"
     new:
@@ -638,6 +639,10 @@ en:
       loop: "You are doing a loop using this Questions sequence in this diagram."
   prompt: "Select"
   questions:
+    basic_questions:
+      first_name: "First name"
+      last_name: "Last name"
+      birth_date: "Birth date"
     categories:
       assessment_test:
         label: "Assessment/Test"

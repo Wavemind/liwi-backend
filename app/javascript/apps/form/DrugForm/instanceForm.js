@@ -10,8 +10,17 @@ import DisplayErrors from "../components/DisplayErrors";
 import { drugInstanceSchema } from "../constants/schema";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
 import { closeModal } from "../../diagram/engine/reducers/creators.actions";
+import {getStudyLanguage, getTranslatedText} from "../../utils";
 
 export default class InstanceForm extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      language: getStudyLanguage()
+    };
+
+  }
 
   /**
    * Create or update value in database + update diagram if we're editting from diagram
@@ -19,15 +28,16 @@ export default class InstanceForm extends React.Component {
    * @params [Object] actions
    */
   handleOnSubmit = async (values, actions) => {
+    const l = getStudyLanguage();
     const { method, engine, diagramObject, addAvailableNode, drug, positions, removeAvailableNode, from, isFromAvailableNode } = this.props;
     let http = new Http();
     let httpRequest = {};
 
     if (method === "create") {
-      httpRequest = await http.createInstance(drug.id, positions.x, positions.y, values.is_pre_referral, values.duration_en, values.description_en);
+      httpRequest = await http.createInstance(drug.id, positions.x, positions.y, values.is_pre_referral, values[`duration_${l}`], values[`description_${l}`]);
     } else {
       const drugInstance = diagramObject.options.dbInstance;
-      httpRequest = await http.updateInstance(drugInstance.id, drugInstance.position_x, drugInstance.position_y, values.is_pre_referral, values.duration_en, values.description_en);
+      httpRequest = await http.updateInstance(drugInstance.id, drugInstance.position_x, drugInstance.position_y, values.is_pre_referral, values[`duration_${l}`], values[`description_${l}`]);
     }
 
     let result = await httpRequest.json();
@@ -62,15 +72,19 @@ export default class InstanceForm extends React.Component {
       drug
     } = this.props;
 
+    const { language } = this.state;
+    const body = {
+      is_pre_referral: method === "create" ? "" : diagramObject.options.dbInstance?.is_pre_referral || false,
+    };
+
+    body[`duration_${language}`] = method === "create" ? "" : getTranslatedText(diagramObject.options.dbInstance.duration_translations, language);
+    body[`description_${language}`] = method === "create" ? getTranslatedText(drug?.description_translations, language) : getTranslatedText(diagramObject.options.dbInstance.description_translations, language);
+
     return (
       <FadeIn>
         <Formik
           validationSchema={drugInstanceSchema}
-          initialValues={{
-            is_pre_referral: method === "create" ? "" : diagramObject.options.dbInstance?.is_pre_referral || false,
-            duration_en: method === "create" ? "" : diagramObject.options.dbInstance.duration_translations?.en || "",
-            description_en: method === "create" ? drug?.description_translations?.en : diagramObject.options.dbInstance.description_translations?.en || ""
-          }}
+          initialValues={body}
           onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
         >
           {({
@@ -84,7 +98,7 @@ export default class InstanceForm extends React.Component {
             }) => (
             <Form noValidate onSubmit={handleSubmit}>
               {status ? <DisplayErrors errors={status}/> : null}
-
+              {/* TODO : Trouver une solution pour savoir si le diagramme est déployé, pas le noeud*/}
               <Form.Group controlId="validationIsPreReferral">
                 <Form.Check
                   name="is_pre_referral"
@@ -102,28 +116,28 @@ export default class InstanceForm extends React.Component {
               <Form.Group controlId="validationDuration">
                 <Form.Label>{I18n.t("activerecord.attributes.instance.duration")}</Form.Label>
                 <Form.Control
-                  name="duration_en"
-                  value={values.duration_en}
+                  name={`duration_${language}`}
+                  value={values[`duration_${language}`]}
                   onChange={handleChange}
                   disabled={values.is_pre_referral}
-                  isInvalid={touched.duration_en && !!errors.duration_en}
+                  isInvalid={touched[`duration_${language}`] && !!errors[`duration_${language}`]}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {errors.duration_en}
+                  {errors[`duration_${language}`]}
                 </Form.Control.Feedback>
               </Form.Group>
 
               <Form.Group controlId="validationDescription">
                 <Form.Label>{I18n.t("activerecord.attributes.instance.description")}</Form.Label>
                 <Form.Control
-                  name="description_en"
+                  name={`description_${language}`}
                   as="textarea"
-                  value={values.description_en}
+                  value={values[`description_${language}`]}
                   onChange={handleChange}
-                  isInvalid={touched.description_en && !!errors.description_en}
+                  isInvalid={touched[`description_${language}`] && !!errors[`description_${language}`]}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {errors.description_en}
+                  {errors[`description_${language}`]}
                 </Form.Control.Feedback>
               </Form.Group>
 

@@ -2,14 +2,8 @@
 class Language < ApplicationRecord
 
   # @return [Array] attributes
-  # Return a label attribute per available language
-  def self.label_params
-    Language.pluck(:code).map { |langue| I18n.t('languages.label') + langue }
-  end
-
-  # @return [Array] attributes
-  # Return a description attribute per available language
-  def self.description_params
-    Language.pluck(:code).map { |langue| I18n.t('languages.description') + langue }
+  # Return attributes for hstore in each available language
+  def self.language_params(field)
+    Language.pluck(:code).unshift('en').map{ |language| "#{field}_#{language}"}
   end
 end

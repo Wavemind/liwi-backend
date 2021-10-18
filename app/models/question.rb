@@ -286,19 +286,19 @@ class Question < Node
     data.row(1).each_with_index do |head, index|
       code = head[/\((.*?)\)/m, 1]
       if head.include?('Label')
-        fields_to_update["label_#{code}"] = index unless code == 'en'
+        fields_to_update["label_#{code}"] = index
       elsif head.include?('Description')
-        fields_to_update["description_#{code}"] = index unless code == 'en'
+        fields_to_update["description_#{code}"] = index
       elsif head.include?('Min message warning')
-        fields_to_update["min_message_warning_#{code}"] = index unless code == 'en'
+        fields_to_update["min_message_warning_#{code}"] = index
       elsif head.include?('Max message warning')
-        fields_to_update["max_message_warning_#{code}"] = index unless code == 'en'
+        fields_to_update["max_message_warning_#{code}"] = index
       elsif head.include?('Min message error')
-        fields_to_update["min_message_error_#{code}"] = index unless code == 'en'
+        fields_to_update["min_message_error_#{code}"] = index
       elsif head.include?('Max message error')
-        fields_to_update["max_message_error_#{code}"] = index unless code == 'en'
+        fields_to_update["max_message_error_#{code}"] = index
       elsif head.include?('Placeholder')
-        fields_to_update["placeholder_#{code}"] = index unless code == 'en'
+        fields_to_update["placeholder_#{code}"] = index
       end
     end
 

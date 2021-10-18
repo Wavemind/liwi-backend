@@ -6,6 +6,6 @@
 
 <div class="row justify-content-center mt-5">
   <div class="col-md-8">
-    <%= react_component('form/FinalDiagnosisForm', { finalDiagnosis: @final_diagnosis.as_json(include: :medias), method: 'update', from: 'rails', source: @source }) %>
+    <%= react_component('form/FinalDiagnosisForm', { finalDiagnosis: @final_diagnosis.as_json(include: :medias), method: 'update', from: 'rails', is_deployed: @final_diagnosis.used_in_deployed_version, source: @source }) %>
   </div>
 </div>

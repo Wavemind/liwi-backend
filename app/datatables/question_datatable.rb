@@ -1,16 +1,11 @@
 # Configuration for question datatable display
-class QuestionDatatable < AjaxDatatablesRails::ActiveRecord
+class QuestionDatatable < ApplicationDatatable
   extend Forwardable
 
   # Helpers
   def_delegator :@view, :link_to
   def_delegator :@view, :edit_algorithm_question_url
   def_delegator :@view, :algorithm_question_url
-
-  def initialize(params, opts = {})
-    @view = opts[:view_context]
-    super
-  end
 
   # Column configuration
   def view_columns
@@ -31,11 +26,11 @@ class QuestionDatatable < AjaxDatatablesRails::ActiveRecord
       {
         id: record.id,
         reference: record.full_reference,
-        label: record.label,
-        description: record.description,
+        label: record.send("label_#{@default_language}"),
+        description: record.send("description_#{@default_language}"),
         is_mandatory: record.is_mandatory,
         category: Object.const_get(record.type).display_label,
-        answers: record.answers.map(&:label).join(' / '),
+        answers: record.answers.map{|an| an.send("label_#{@default_language}")}.join(' / '),
         answer_type: record.answer_type.display_name,
         actions: actions,
         is_neonat: record.is_neonat, # is a hidden column in the datatable in question.js

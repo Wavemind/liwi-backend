@@ -328,6 +328,7 @@ ActiveRecord::Schema.define(version: 2021_10_04_133700) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.hstore "description_translations"
+    t.string "default_language", default: "en"
   end
 
   create_table "technical_files", force: :cascade do |t|

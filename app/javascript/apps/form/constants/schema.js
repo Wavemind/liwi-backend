@@ -1,7 +1,9 @@
 import I18n from "i18n-js";
 import { CATEGORIES_DISPLAYING_SYSTEM } from "./constants";
+import { getStudyLanguage } from "../../utils";
 
 let yup = require("yup");
+const language = getStudyLanguage();
 
 export const scoreSchema = yup.object().shape({
   score: yup.number().required(I18n.t("errors.messages.required"))
@@ -13,28 +15,29 @@ export const cutOffSchema = yup.object().shape({
   cut_off_value_type: yup.string().required(I18n.t("errors.messages.required"))
 });
 
+const answerBody = {
+  operator: yup.string().nullable(),
+  value: yup.string().nullable()
+};
+answerBody[`label_${language}`] = yup.string().required(I18n.t("errors.messages.required"));
 export const answerSchema = yup.object().shape({
-  answers_attributes: yup.array().of(yup.object().shape({
-    label_en: yup.string().required(I18n.t("errors.messages.required")),
-    operator: yup.string().nullable(),
-    value: yup.string().nullable()
-  }))
+  answers_attributes: yup.array().of(yup.object().shape(answerBody))
 });
 
-export const drugSchema = yup.object().shape({
-  label_en: yup.string().required(I18n.t("errors.messages.required")),
-  description_en: yup.string(),
+const drugBody = {
   is_anti_malarial : yup.boolean(),
   is_antibiotic: yup.boolean(),
-  is_neonat: yup.boolean(),
-});
+  is_neonat: yup.boolean()
+};
+drugBody[`label_${language}`] = yup.string().required(I18n.t("errors.messages.required"));
+export const drugSchema = yup.object().shape(drugBody);
 
-export const finalDiagnoseschema = yup.object().shape({
+export const finalDiagnosesSchema = yup.object().shape({
   label_translations: yup.string().required(I18n.t("errors.messages.required")),
   description_translations: yup.string()
 });
 
-export const questionSchema = yup.object().shape({
+const questionBody = {
   type: yup.string().required(I18n.t("errors.messages.required")),
   system: yup.string().when("type", {
     is: (type) => CATEGORIES_DISPLAYING_SYSTEM.includes(type),
@@ -54,19 +57,15 @@ export const questionSchema = yup.object().shape({
   max_value_warning: yup.number(),
   min_value_error: yup.number(),
   max_value_error: yup.number(),
-  min_message_warning: yup.string(),
-  max_message_warning: yup.string(),
-  min_message_error: yup.string(),
-  max_message_error: yup.string(),
-  label_en: yup.string().required(I18n.t("errors.messages.required")),
-  description_en: yup.string(),
   snomed: yup.string(),
   formula: yup.string()
     .when("answer_type_id", {
       is: (answer_type_id) => answer_type_id === 5,
       then: yup.string().required(I18n.t("errors.messages.required"))
     })
-});
+};
+questionBody[`label_${language}`] = yup.string().required(I18n.t("errors.messages.required"));
+export const questionSchema = yup.object().shape(questionBody);
 
 export const managementSchema = yup.object().shape({
   label_translations: yup.string().required(I18n.t("errors.messages.required")),
@@ -74,14 +73,13 @@ export const managementSchema = yup.object().shape({
   description_translations: yup.string()
 });
 
-export const drugInstanceSchema = yup.object().shape({
-  duration_en: yup.string()
-    .when("is_pre_referral", {
-      is: (is_pre_referral) => is_pre_referral === false,
-      then: yup.string().required(I18n.t("errors.messages.required"))
-    }),
-  description_en: yup.string()
+const drugInstance = {};
+drugInstance[`duration_${language}`] = yup.string().when("is_pre_referral", {
+  is: (is_pre_referral) => is_pre_referral === false,
+  then: yup.string().required(I18n.t("errors.messages.required"))
 });
+drugInstance[`description_${language}`] = yup.string();
+export const drugInstanceSchema = yup.object().shape(drugInstance);
 
 export const questionSequencesSchema = yup.object().shape({
   type: yup.string().required(I18n.t("errors.messages.required")),

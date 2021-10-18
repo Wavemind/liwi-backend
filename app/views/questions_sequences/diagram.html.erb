@@ -13,7 +13,7 @@
         availableNodes: @questions_sequence.available_nodes_json,
         questionCategories: Question.categories('QuestionsSequence').as_json,
         questionsSequenceCategories: QuestionsSequence.categories.as_json,
-        readOnly: !policy(@questions_sequence).new?
+        readOnly: @questions_sequence.used_in_deployed_version
       }
     }) %>
   </div>

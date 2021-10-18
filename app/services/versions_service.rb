@@ -133,6 +133,7 @@ class VersionsService
     hash['study'] = {
       id: @version.algorithm.study.present? ? @version.algorithm.study.id : nil,
       label: @version.algorithm.study.present? ? @version.algorithm.study.label : nil,
+      default_language: @version.algorithm.study.present? ? @version.algorithm.study.default_language : nil,
       description: @version.algorithm.study.present? ? return_hstore_translated(@version.algorithm.study.description_translations) : nil
     }
 

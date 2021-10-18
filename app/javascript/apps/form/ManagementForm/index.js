@@ -12,11 +12,20 @@ import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
 import MediaForm from "../MediaForm/mediaForm";
 import SliderComponent from "../components/Slider";
+import Autocomplete from "../QuestionsSequenceForm";
+import {getStudyLanguage, getTranslatedText} from "../../utils";
 
 export default class ManagementForm extends React.Component {
-  state = {
-    toDeleteMedias: []
-  };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      toDeleteMedias: [],
+      language: getStudyLanguage(),
+      deployedMode: props.method === "update" && props.is_deployed,
+    };
+  }
 
   /**
    * Suppress entry in media
@@ -102,25 +111,31 @@ export default class ManagementForm extends React.Component {
 
   render() {
     const { management, is_deployed } = this.props;
+    const { language, deployedMode } = this.state;
+    const initialValues = {
+      id: management?.id || "",
+      label_translations: getTranslatedText(management?.label_translations, language),
+      description_translations: getTranslatedText(management?.description_translations, language),
+      level_of_urgency: management?.level_of_urgency || 5,
+      is_referral: management?.is_referral || false,
+      medias_attributes: []
+    };
+
+    management?.medias?.forEach(media => {
+      const body = {
+        id: media.id || "",
+        url: media.url || "",
+      };
+
+      body[`label_${language}`] = getTranslatedText( media.label_translations, language);
+      initialValues["medias_attributes"].push(body);
+    });
 
     return (
       <FadeIn>
         <Formik
           validationSchema={managementSchema}
-          initialValues={{
-            id: management?.id || "",
-            label_translations: management?.label_translations?.en || "",
-            description_translations:
-              management?.description_translations?.en || "",
-            level_of_urgency: management?.level_of_urgency || 5,
-            is_referral: management?.is_referral || false,
-            medias_attributes:
-              management?.medias?.map(media => ({
-                id: media.id || "",
-                url: media.url || "",
-                label_en: media.label_translations?.en || ""
-              })) || []
-          }}
+          initialValues={initialValues}
           onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
         >
           {({
@@ -143,6 +158,7 @@ export default class ManagementForm extends React.Component {
                   name="label_translations"
                   value={values.label_translations}
                   onChange={handleChange}
+                  disabled={deployedMode}
                   isInvalid={
                     touched.label_translations && !!errors.label_translations
                   }
@@ -159,7 +175,7 @@ export default class ManagementForm extends React.Component {
                   value={values.is_referral}
                   checked={values.is_referral}
                   onChange={handleChange}
-                  disabled={is_deployed}
+                  disabled={deployedMode}
                   isInvalid={touched.is_referral && !!errors.is_referral}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -178,6 +194,7 @@ export default class ManagementForm extends React.Component {
                   as="textarea"
                   value={values.description_translations}
                   onChange={handleChange}
+                  disabled={deployedMode}
                   isInvalid={
                     touched.description_translations &&
                     !!errors.description_translations

@@ -7,17 +7,26 @@ import { Formik } from "formik";
 import DisplayErrors from "../components/DisplayErrors";
 import Http from "../../diagram/engine/http";
 import store from "../../diagram/engine/reducers/store";
-import { finalDiagnoseschema } from "../constants/schema";
+import { finalDiagnosesSchema } from "../constants/schema";
 import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
 import MediaForm from "../MediaForm/mediaForm";
 import SliderComponent from "../components/Slider";
+import Autocomplete from "../QuestionsSequenceForm";
+import {getStudyLanguage, getTranslatedText} from "../../utils";
 
 export default class FinalDiagnosisForm extends React.Component {
 
-  state = {
-    toDeleteMedias: [],
-  };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      toDeleteMedias: [],
+      language: getStudyLanguage(),
+      deployedMode: props.method === "update" && props.is_deployed,
+    };
+  }
 
   /**
    * Suppress entry in media
@@ -45,7 +54,7 @@ export default class FinalDiagnosisForm extends React.Component {
       httpRequest = await http.createFinalDiagnosis(values.label_translations, values.description_translations, values.level_of_urgency, values.medias_attributes, from);
     } else {
       if (toDeleteMedias.length > 0) {
-        toDeleteMedias.map(media_id => {
+        toDeleteMedias.forEach(media_id => {
           values.medias_attributes.push({id: media_id, _destroy: true});
         });
       }
@@ -78,22 +87,31 @@ export default class FinalDiagnosisForm extends React.Component {
 
   render() {
     const { finalDiagnosis } = this.props;
+    const { language, deployedMode } = this.state;
+
+
+    getTranslatedText(finalDiagnosis?.label_translations, language);
+    const initialValues = {
+      id: finalDiagnosis?.id || "",
+      label_translations: getTranslatedText(finalDiagnosis?.label_translations, language),
+      description_translations: getTranslatedText(finalDiagnosis?.description_translations, language),
+      level_of_urgency: finalDiagnosis?.level_of_urgency || 5,
+      medias_attributes: []
+    };
+    finalDiagnosis?.medias?.forEach(media => {
+      const mediaVals = {
+        id: media.id || "",
+        url: media.url || "",
+      };
+      mediaVals[`label_${language}`] = getTranslatedText(media?.label_translations, language);
+      initialValues['medias_attributes'].push(mediaVals)
+    });
 
     return (
       <FadeIn>
         <Formik
-          validationSchema={finalDiagnoseschema}
-          initialValues={{
-            id: finalDiagnosis?.id || "",
-            label_translations: finalDiagnosis?.label_translations?.en || "",
-            description_translations: finalDiagnosis?.description_translations?.en || "",
-            level_of_urgency: finalDiagnosis?.level_of_urgency || 5,
-            medias_attributes: finalDiagnosis?.medias?.map((media) => ({
-              id: media.id || "",
-              url: media.url || "",
-              label_en: media.label_translations?.en || "",
-            })) || [],
-          }}
+          validationSchema={finalDiagnosesSchema}
+          initialValues={initialValues}
           onSubmit={(values, actions) => this.handleOnSubmit(values, actions)}
         >
           {({
@@ -114,6 +132,7 @@ export default class FinalDiagnosisForm extends React.Component {
                   name="label_translations"
                   value={values.label_translations}
                   onChange={handleChange}
+                  disabled={deployedMode}
                   isInvalid={touched.label_translations && !!errors.label_translations}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -128,6 +147,7 @@ export default class FinalDiagnosisForm extends React.Component {
                   as="textarea"
                   value={values.description_translations}
                   onChange={handleChange}
+                  disabled={deployedMode}
                   isInvalid={touched.description_translations && !!errors.description_translations}
                 />
                 <Form.Control.Feedback type="invalid">

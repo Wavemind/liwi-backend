@@ -20,7 +20,7 @@ export default class ScoreForm extends React.Component {
    */
   handleOnSubmit = async (values, actions) => {
     const { instanceId, answerId, diagramObject, engine, method } = this.props;
-    let http = new Http();
+    const http = new Http();
     let httpRequest = {};
 
     if (method === "create") {
@@ -29,7 +29,7 @@ export default class ScoreForm extends React.Component {
       httpRequest = await http.updateConditionScore(diagramObject.options.dbConditionId, values.score);
     }
 
-    let result = await httpRequest.json();
+    const result = await httpRequest.json();
 
     // Set score to link + set label with score + reload canvas + close modal
     if (httpRequest.status === 200) {
