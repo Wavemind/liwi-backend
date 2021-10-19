@@ -31,6 +31,7 @@ export default class DiagramProvider extends React.Component {
       orderedNodes.drug = [];
       orderedNodes.management = [];
     } else if (instanceable.type.startsWith("QuestionsSequence")) {
+      orderedNodes.treatmentQuestion = [];
       // If different predefined syndromes scored category
       if (instanceable.category_name !== "scored") {
         orderedNodes.scored = [];

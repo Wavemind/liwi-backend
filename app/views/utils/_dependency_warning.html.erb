@@ -6,8 +6,14 @@
         <ul>
           <% node.dependencies.each do |dependence| %>
             <% if dependence.instanceable_type == 'Diagnosis' %>
-              <%= link_to algorithm_version_diagnosis_url(dependence.instanceable.version.algorithm_id, dependence.instanceable.version, dependence.instanceable) do %>
-                <li><b><%= "#{dependence.instanceable.full_reference} - #{dependence.instanceable.label}" %></b></li>
+              <% if dependence.final_diagnosis_id.present? %>
+                <%= link_to algorithm_version_diagnosis_final_diagnosis_url(dependence.instanceable.version.algorithm_id, dependence.instanceable.version, dependence.instanceable, dependence.final_diagnosis_id) do %>
+                  <li><b><%= "#{dependence.final_diagnosis.full_reference} - #{dependence.final_diagnosis.label}" %></b></li>
+                <% end %>
+              <% else %>
+                <%= link_to algorithm_version_diagnosis_url(dependence.instanceable.version.algorithm_id, dependence.instanceable.version, dependence.instanceable) do %>
+                  <li><b><%= "#{dependence.instanceable.full_reference} - #{dependence.instanceable.label}" %></b></li>
+                <% end %>
               <% end %>
             <% else %>
               <%= link_to algorithm_questions_sequence_url(dependence.instanceable.algorithm_id, dependence.instanceable) do %>
