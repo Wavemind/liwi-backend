@@ -7,23 +7,23 @@
           <% node.dependencies.each do |dependence| %>
             <% if dependence.instanceable_type == 'Diagnosis' %>
               <% if dependence.final_diagnosis_id.present? %>
-                <%= link_to algorithm_version_diagnosis_final_diagnosis_url(dependence.instanceable.version.algorithm_id, dependence.instanceable.version, dependence.instanceable, dependence.final_diagnosis_id) do %>
+                <%= link_to diagram_algorithm_version_diagnosis_final_diagnosis_url(dependence.instanceable.version.algorithm_id, dependence.instanceable.version, dependence.instanceable, dependence.final_diagnosis_id) do %>
                   <li><b><%= "#{dependence.final_diagnosis.full_reference} - #{dependence.final_diagnosis.label}" %></b></li>
                 <% end %>
               <% else %>
-                <%= link_to algorithm_version_diagnosis_url(dependence.instanceable.version.algorithm_id, dependence.instanceable.version, dependence.instanceable) do %>
+                <%= link_to diagram_algorithm_version_diagnosis_url(dependence.instanceable.version.algorithm_id, dependence.instanceable.version, dependence.instanceable) do %>
                   <li><b><%= "#{dependence.instanceable.full_reference} - #{dependence.instanceable.label}" %></b></li>
                 <% end %>
               <% end %>
             <% else %>
-              <%= link_to algorithm_questions_sequence_url(dependence.instanceable.algorithm_id, dependence.instanceable) do %>
+              <%= link_to diagram_algorithm_questions_sequence_url(dependence.instanceable.algorithm_id, dependence.instanceable) do %>
                 <li><b><%= "#{dependence.instanceable.full_reference} - #{dependence.instanceable.label}" %></b></li>
               <% end %>
               <li><b><%= "#{dependence.instanceable.full_reference} - #{dependence.instanceable.label}" %></b></li>
             <% end %>
           <% end %>
           <% node.diagnoses.each do |diagnosis| %>
-            <%= link_to algorithm_version_diagnosis_url(diagnosis.version.algorithm_id, diagnosis.version, diagnosis) do %>
+            <%= link_to diagram_algorithm_version_diagnosis_url(diagnosis.version.algorithm_id, diagnosis.version, diagnosis) do %>
               <li><b><%= "#{diagnosis.full_reference} - #{diagnosis.label}" %></b></li>
             <% end %>
           <% end %>
