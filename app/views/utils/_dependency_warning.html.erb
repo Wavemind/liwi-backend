@@ -16,7 +16,7 @@
                 <% end %>
               <% end %>
             <% else %>
-              <%= link_to diagram_algorithm_questions_sequence_url(dependence.instanceable.algorithm_id, dependence.instanceable) do %>
+              <%= link_to diagram_questions_sequence_url(dependence.instanceable) do %>
                 <li><b><%= "#{dependence.instanceable.full_reference} - #{dependence.instanceable.label}" %></b></li>
               <% end %>
               <li><b><%= "#{dependence.instanceable.full_reference} - #{dependence.instanceable.label}" %></b></li>
