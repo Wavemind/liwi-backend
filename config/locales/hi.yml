@@ -743,23 +743,23 @@ en:
       health_care_questions_step: "Health Care Questions"
       referral_step: "Referral"
     systems:
-      general: सामान्य
-      respiratory_circulation: श्वसन एवं संचार प्रणाली
-      ear_nose_mouth_throat: कान , नाक एवं गला प्रणाली
-      visual: नेत्र प्रणाली
-      integumentary: त्वचा प्रणाली
-      digestive: जठरांत्र प्रणाली
-      urinary_reproductive: मूत्र प्रणाली
-      nervous: तंत्रिका प्रणाली
-      muscular_skeletal: हाड़ पिंजर प्रणाली
-      exposures: जोखिम
-      chronic_conditions: लम्बे समय की बिमारी
-      comorbidities: कोमोर्बिड /  चिकित्सा इतिहास
-      prevention: स्क्रीनिंग / रोकथाम
-      follow_up_questions: अतिरिक्त अनुवर्ती प्रश्न
-      complementary_medical_history: पूरक चिकित्सा इतिहास के प्रश्न
-      vital_sign: वाइटल साइंस
-      priority_sign: खतरे के निशान
+      general: "सामान्य"
+      respiratory_circulation: "श्वसन एवं संचार प्रणाली"
+      ear_nose_mouth_throat: "कान , नाक एवं गला प्रणाली"
+      visual: "नेत्र प्रणाली"
+      integumentary: "त्वचा प्रणाली"
+      digestive: "जठरांत्र प्रणाली"
+      urinary_reproductive: "मूत्र प्रणाली"
+      nervous: "तंत्रिका प्रणाली"
+      muscular_skeletal: "हाड़ पिंजर प्रणाली"
+      exposures: "जोखिम"
+      chronic_conditions: "लम्बे समय की बिमारी"
+      comorbidities: "कोमोर्बिड /  चिकित्सा इतिहास"
+      prevention: "स्क्रीनिंग / रोकथाम"
+      follow_up_questions: "अतिरिक्त अनुवर्ती प्रश्न"
+      complementary_medical_history: "पूरक चिकित्सा इतिहास के प्रश्न"
+      vital_sign: "वाइटल साइंस"
+      priority_sign: "खतरे के निशान"
       feeding: "खिलाना-पिलाना"
     table:
       columns:
