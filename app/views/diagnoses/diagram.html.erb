@@ -4,7 +4,7 @@
 </div>
 <div class="row">
   <div class="col-md-12">
-    <p class="mx-0 my-0 metadata" data-type="<%= @diagnosis.class.name %>" data-id="<%= @diagnosis.id %>" data-version="<%= @diagnosis.version.id %>" data-algorithm="<%= @diagnosis.version.algorithm.id %>"></p>
+    <div class="mx-0 my-0 metadata" data-type="<%= @diagnosis.class.name %>" data-id="<%= @diagnosis.id %>" data-version="<%= @diagnosis.version.id %>" data-algorithm="<%= @diagnosis.version.algorithm.id %>"></div>
     <%= react_component('diagram', {
       context: { 
         user: current_user,
