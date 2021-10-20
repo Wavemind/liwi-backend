@@ -675,7 +675,7 @@ fr:
       formula_wrong_characters: "Incorrect formula format. You can only use numbers, operators and variable references (between square brackets). Eg [BM1] / (([BM3] / 100) * ([BM3] / 100))"
       formula_wrong_reference: "The reference '%{reference}' does not match any variable in this algorithm"
       formula_wrong_type: "The reference prefix you used does not match any variable category"
-      formula_using_function: "You're trying to use a function (%{formula}) which is not allowed anymore"
+      formula_using_function: "You're trying to use a function (%{formula}) as a cut_off from birth_date. This is not allowed anymore."
       formula_reference_not_date: "The variable '%{reference}' is not in date format."
       formula_reference_not_numeric: "The variable '%{reference}' is not in numeric format."
       formula_reference_no_underscore: "The reference must contain an underscore (eg: A_1)"

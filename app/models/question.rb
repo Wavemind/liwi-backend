@@ -204,6 +204,16 @@ class Question < Node
 
     # Extract references and functions from the formula
     formula.scan(/\[.*?\]/).each do |reference|
+      # Check for date functions ToDay() or ToMonth() and remove element if it's correct
+      is_date = false
+      if reference.include?('ToDay')
+        is_date = true
+        reference = reference.sub!('ToDay', '').tr('()', '')
+      elsif reference.include?('ToMonth')
+        is_date = true
+        reference = reference.sub!('ToMonth', '').tr('()', '')
+      end
+
       # Extract type and reference from full reference
       full_reference = reference.gsub(/[\[\]]/, '')
       type, reference = full_reference.match(/([A-Z]*)([0-9]*)/i).captures
@@ -212,7 +222,11 @@ class Question < Node
       if type.present?
         question = algorithm.questions.find_by(type: type.to_s, reference: reference.to_i)
         if question.present?
-          errors.add(:formula, I18n.t('questions.errors.formula_reference_not_numeric', reference: full_reference)) unless %w(Integer Float).include?(question.answer_type.value)
+          if is_date
+            errors.add(:formula, I18n.t('questions.errors.formula_reference_not_date', reference: full_reference)) unless question.answer_type.value == 'Date'
+          else
+            errors.add(:formula, I18n.t('questions.errors.formula_reference_not_numeric', reference: full_reference)) unless %w(Integer Float).include?(question.answer_type.value)
+          end
         else
           errors.add(:formula, I18n.t('questions.errors.formula_wrong_reference', reference: full_reference))
         end
