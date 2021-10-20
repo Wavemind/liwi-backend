@@ -18,6 +18,7 @@ class QuestionsSequencesController < ApplicationController
   end
 
   def edit
+    authorize @questions_sequence
     add_breadcrumb @questions_sequence.label, diagram_questions_sequence_url(@questions_sequence)
     add_breadcrumb t('breadcrumbs.edit')
   end
