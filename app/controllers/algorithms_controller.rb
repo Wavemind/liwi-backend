@@ -156,6 +156,7 @@ class AlgorithmsController < ApplicationController
   # @return json of questions_sequences
   # All questions sequences available for given algorithm
   def questions_sequences
+    authorize @algorithm
     respond_to do |format|
       format.js { }
       format.json { render json: QuestionsSequenceDatatable.new(params, view_context: view_context) }
