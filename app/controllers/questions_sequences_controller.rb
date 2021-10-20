@@ -18,7 +18,7 @@ class QuestionsSequencesController < ApplicationController
   end
 
   def edit
-    authorize @questions_sequence
+    authorize policy_scope(@algorithm.questions_sequences)
     add_breadcrumb @questions_sequence.label, diagram_questions_sequence_url(@questions_sequence)
     add_breadcrumb t('breadcrumbs.edit')
   end
@@ -71,13 +71,13 @@ class QuestionsSequencesController < ApplicationController
   # GET questions_sequences/:id/diagram
   # Render the diagram view
   def diagram
-    authorize policy_scope(QuestionsSequence)
+    authorize @questions_sequence
   end
 
   # GET algorithms/:algorithm_id/questions_sequences/lists
   # Return several attributes of the model QuestionsSequence to build dropdown lists
   def lists
-    authorize policy_scope(QuestionsSequence)
+    authorize policy_scope(@algorithm.questions_sequences)
     render json: {
       categories: QuestionsSequence.categories,
       complaint_categories: @algorithm.questions.where(type: 'Questions::ComplaintCategory')

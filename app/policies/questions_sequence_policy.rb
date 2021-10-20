@@ -34,7 +34,7 @@ class QuestionsSequencePolicy < ApplicationPolicy
   end
 
   def reference_prefix?
-    diagram?
+    new?
   end
 
   def validate?
