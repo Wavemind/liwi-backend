@@ -240,8 +240,8 @@ class VersionsService
     hash['level_of_urgency'] = final_diagnosis.level_of_urgency
     hash['medias'] = extract_medias(final_diagnosis)
     hash['type'] = final_diagnosis.node_type
-    hash['drugs'] = extract_health_cares(final_diagnosis.health_cares.drugs, instance.instanceable.id, final_diagnosis.id)
-    hash['managements'] = extract_health_cares(final_diagnosis.health_cares.managements, instance.instanceable.id, final_diagnosis.id)
+    hash['drugs'] = extract_health_cares(final_diagnosis.components.drugs.map(&:node), instance.instanceable.id, final_diagnosis.id)
+    hash['managements'] = extract_health_cares(final_diagnosis.components.managements.map(&:node), instance.instanceable.id, final_diagnosis.id)
     # Don't mention any exclusions if the version is arm control. Hopefully this is temporary...
     hash['excluding_final_diagnoses'] = @version.is_arm_control ? [] : final_diagnosis.excluding_nodes_ids
     hash['cc'] = final_diagnosis.diagnosis.node_id
