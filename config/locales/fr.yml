@@ -59,6 +59,7 @@ fr:
         is_filterable: "Question is filterable on patient search"
         is_identifiable: "This question can identify a patient"
         is_mandatory: "Mandatory"
+        is_pre_fill: "Value should be reused for a new case"
         emergency_status: "Emergency status"
         is_neonat: "Young infant"
         is_triage: "Ask in triage (if triage available)"

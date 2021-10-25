@@ -345,6 +345,7 @@ class VersionsService
       hash[question.id]['placeholder'] = return_hstore_translated(question.placeholder_translations)
       hash[question.id]['is_mandatory'] = (@version.is_arm_control && !%w(Questions::BasicDemographic Questions::Demographic Questions::Referral).include?(question.type)) ? false : question.is_mandatory
       hash[question.id]['is_neonat'] = question.is_neonat
+      hash[question.id]['is_pre_fill'] = question.is_pre_fill
       hash[question.id]['system'] = question.system unless question.system.nil?
       hash[question.id] = format_formula(hash[question.id], question)
 
