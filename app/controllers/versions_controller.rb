@@ -263,15 +263,6 @@ class VersionsController < ApplicationController
     end
   end
 
-  # GET algorithms/:algorithm_id/versions/:id/registration_triage_questions
-  # @params version [Version] version
-  # Display registration questions view
-  def registration_triage_questions
-    respond_to do |format|
-      format.js { }
-    end
-  end
-
   # DELETE algorithms/:algorithm_id/version/:id/remove_components
   # @params version [Version] version
   # Remove instantiated nodes from the given version

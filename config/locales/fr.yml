@@ -851,6 +851,7 @@ fr:
       subtitle_diagnoses: "Diagnoses"
       subtitle_final_diagnoses: "Final diagnoses"
       subtitle_final_diagnoses_exclusions: "Final diagnoses exclusions"
+      subtitle_full_order: "Full consultation order"
       subtitle_medal_data_config_html: "Config medAL-<i>data</i>"
       subtitle_medal_r_config_html: "Config medAL-<i>reader</i>"
       subtitle_questions_order: "Variables order by step"

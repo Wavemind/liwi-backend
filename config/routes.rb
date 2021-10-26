@@ -43,7 +43,6 @@ Rails.application.routes.draw do
         get 'generate_translations'
         get 'generate_variables'
         get 'final_diagnoses', to: 'versions#final_diagnoses', as: 'final_diagnosis'
-        get 'registration_triage_questions', to: 'versions#registration_triage_questions', as: 'registration_triage_questions'
         get 'full_order', to: 'versions#full_order', as: 'full_order'
         get 'medal_data_config', to: 'versions#medal_data_config', as: 'medal_data_config'
         get 'translations', to: 'versions#translations', as: 'translations'
