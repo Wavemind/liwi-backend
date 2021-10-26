@@ -235,6 +235,7 @@ class Version < ApplicationRecord
     order.to_json
   end
 
+  # @param [String] language to translate the version name
   # @return [String]
   # Return the label of the version
   def reference_label(language = 'en')
