@@ -235,6 +235,12 @@ class Version < ApplicationRecord
     order.to_json
   end
 
+  # @return [String]
+  # Return the label of the version
+  def reference_label(language = 'en')
+    name
+  end
+
   # Validate full_order_json
   def validate_order
     json = JSON.parse(full_order_json)
