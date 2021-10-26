@@ -13,7 +13,7 @@
         availableNodes: @version.available_nodes_json,
         questionCategories: Question.categories('Version').as_json,
         questionsSequenceCategories: QuestionsSequence.categories.as_json,
-        readOnly: !@version.in_prod,
+        readOnly: @version.in_prod,
       }
     }) %>
     <button type="button" class="btn btn-sm btn-info help" data-toggle="popover" data-placement="top" data-html="true" data-content="<%= render 'helps/diagram' %>">
