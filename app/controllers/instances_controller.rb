@@ -126,6 +126,8 @@ class InstancesController < ApplicationController
       @instanceable = Diagnosis.find(params[:diagnosis_id])
     elsif params[:questions_sequence_id].present?
       @instanceable = QuestionsSequence.find(params[:questions_sequence_id])
+    elsif params[:version_id].present?
+      @instanceable = Version.find(params[:version_id])
     else
       raise
     end

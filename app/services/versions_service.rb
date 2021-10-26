@@ -14,11 +14,6 @@ class VersionsService
     hash = {}
     hash['diagnoses'] = {}
 
-    # Add every question instantiated in the version
-    @version.components.includes(:node).each do |instance|
-      assign_node(instance.node)
-    end
-
     # Loop in each diagnoses defined in current algorithm version
     @version.diagnoses.each do |diagnosis|
       @diagnoses_ids << diagnosis.id
@@ -128,6 +123,7 @@ class VersionsService
     hash['description'] = return_hstore_translated(@version.description_translations)
     hash['algorithm_id'] = @version.algorithm.id
     hash['algorithm_name'] = @version.algorithm.name
+    hash['diagram'] = extract_version_diagram
     hash['is_arm_control'] = @version.is_arm_control
     hash['village_json'] = @version.algorithm.village_json
     hash['study'] = {
@@ -222,6 +218,20 @@ class VersionsService
 
       hash['instances'][questions_sequence_instance.node.id] = extract_instances(questions_sequence_instance) if hash['instances'][questions_sequence_instance.node.id].nil? || questions_sequence_instance.final_diagnosis_id.nil?
       hash['final_diagnoses'][questions_sequence_instance.final_diagnosis_id]['instances'][questions_sequence_instance.node.id] = extract_instances(questions_sequence_instance) unless questions_sequence_instance.final_diagnosis_id.nil?
+    end
+
+    hash
+  end
+
+  # @return hash
+  # Set diagram logic of the version
+  def self.extract_version_diagram
+    hash = {}
+    hash['instances'] = {}
+
+    @version.components.includes(:node).each do |instance|
+      assign_node(instance.node)
+      hash['instances'][instance.node_id] = extract_instances(instance)
     end
 
     hash

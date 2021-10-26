@@ -1,0 +1,25 @@
+<div class="row my-1">
+  <div class="col align-items-center flex breadcrumbs"><%= render_breadcrumbs separator: ' <i class="material-icons md-light md-18">chevron_right</i> ' %></div>
+  <div class="col align-self-center text-right text-uppercase font-weight-light"><%= @version.name %></div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="mx-0 my-0 metadata" data-type="<%= @version.class.name %>" data-id="<%= @version.id %>" data-algorithm="<%= @version.algorithm.id %>"></div>
+    <%= react_component('diagram', {
+      context: { 
+        user: current_user,
+        instanceable: @version.version_json,
+        instances: @version.questions_json,
+        availableNodes: @version.available_nodes_json,
+        questionCategories: Question.categories('Version').as_json,
+        questionsSequenceCategories: QuestionsSequence.categories.as_json,
+        readOnly: !@version.in_prod,
+      }
+    }) %>
+    <button type="button" class="btn btn-sm btn-info help" data-toggle="popover" data-placement="top" data-html="true" data-content="<%= render 'helps/diagram' %>">
+      <i class="material-icons">
+        help_outline
+      </i>
+    </button>
+  </div>
+</div>

@@ -1,5 +1,7 @@
 <h1>
-  <%= t('.title', name: @version.algorithm.name, version: @version.name) %><%= link_to(I18n.t('edit'), edit_algorithm_version_url(@version.algorithm, @version), class: 'btn btn-outline-success ml-3') %>
+  <%= t('.title', name: @version.algorithm.name, version: @version.name) %>
+  <%= link_to(I18n.t('edit'), edit_algorithm_version_url(@version.algorithm, @version), class: 'btn btn-outline-success ml-3') %>
+  <%= link_to(I18n.t('open_diagram'), diagram_algorithm_version_url(params[:algorithm_id], params[:id]), class: 'btn btn-dark') %>
 </h1>
 <h4 class="text-warning">
   <%= t('.deployed_version') if @version.is_deployed? %>
