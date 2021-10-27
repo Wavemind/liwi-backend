@@ -17,4 +17,8 @@ class MedicalStaff < ApplicationRecord
   def roles
     MedicalStaff.roles.keys
   end
+
+  def default_language
+    health_facility.study.default_language
+  end
 end
