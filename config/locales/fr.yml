@@ -529,7 +529,7 @@ fr:
     new:
       title: "New language"
   studies:
-    description: "Description"
+    description: "Description for %{language}"
     edit:
       title: "Edit study"
     new:
