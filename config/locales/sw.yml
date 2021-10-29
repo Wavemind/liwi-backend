@@ -344,6 +344,7 @@ sw:
         one: 1 error prohibited this %{model} from being saved
         other: "%{count} errors prohibited this %{model} from being saved"
   dependencies: "The node you are trying to remove has dependencies"
+  english: "English"
   final_diagnoses:
     new:
       title: "Create a new final diagnosis"

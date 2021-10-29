@@ -11,7 +11,7 @@
 
   <!-- Nav tabs -->
   <ul class="nav nav-tabs mt-3" role="tablist">
-    <li class="nav-item active"><a class="nav-link active" href="#en" data-toggle="tab">English</a></li>
+    <li class="nav-item active"><a class="nav-link active" href="#en" data-toggle="tab"><%= t('english') %></a></li>
     <% Language.all.each do |l| %>
       <li class="nav-item"><a class="nav-link" href="<%= "##{l.code}" %>" data-toggle="tab"><%= l.name %></a></li>
     <% end %>
@@ -21,7 +21,7 @@
   <div class="tab-content">
     <div class="tab-pane active" id="en">
       <div class="form-group">
-        <label for="emergency_content_en" class="form-label"><%= t('algorithms.new.emergency', language: 'English') %></label>
+        <label for="emergency_content_en" class="form-label"><%= t('algorithms.new.emergency', language: t('english')) %></label>
         <div class="tinymce-wrapper">
           <%= f.text_area :emergency_content_en, class: 'tinymce-emergency emergency-contents' %>
         </div>
