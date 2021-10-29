@@ -208,11 +208,8 @@ class AlgorithmsController < ApplicationController
       :id,
       :name,
       :description,
-      :age_limit,
-      Language.language_params('age_limit_message'),
       :consent_management,
       :track_referral,
-      :minimum_age,
       :study_id,
       Language.language_params('emergency_content'),
     )

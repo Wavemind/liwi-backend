@@ -2,9 +2,6 @@ hi:
   activerecord:
     attributes:
       algorithm:
-        age_limit: "Age threshold in years for ineligibility (inclusion stops day before birthday)"
-        age_limit_message_html: "Message displayed in medAL-<i>reader</i> if patient above threshold"
-        minimum_age: "Minimum age for consultation (in days)"
         consent_management: "Consent management ?"
         track_referral: "Display referral step ?"
       answer:
@@ -105,8 +102,11 @@ hi:
         roles_html: "medAL-<i>reader</i> accesses"
         studies: "Studies the user will have access to"
       version:
+        age_limit: "Age threshold in years for ineligibility (inclusion stops day before birthday)"
+        age_limit_message_html: "Message displayed in medAL-<i>reader</i> if patient above threshold"
         in_prod: "Is the version in production"
         languages: "Available languages for this version"
+        minimum_age: "Minimum age for consultation (in days)"
   activated: "Activate"
   add: "Add"
   add_file: "Attach new file in description"
@@ -117,7 +117,6 @@ hi:
       - "Parenteral or injectable"
       - "Mucocutaneous"
   algorithms:
-    age_limit_message_default: "This patient is ineligible for the study (age). No clinical data will be collected"
     index:
       columns:
         name: "Name"
@@ -842,6 +841,7 @@ hi:
       title: "Details of %{name}"
   validate: "Validate"
   versions:
+    age_limit_message_default: "This patient is ineligible for the study (age). No clinical data will be collected"
     full_order_tree:
       no_dependency: "This node is not used in any diagram of the current version."
       show_dependencies: "Display variable dependencies"

@@ -29,7 +29,7 @@ class Version < ApplicationRecord
   scope :archived, ->(){ where(archived: true) }
   scope :active, ->(){ where(archived: false) }
 
-  translates :description
+  translates :age_limit_message, :description
 
   before_create :init_config
 
