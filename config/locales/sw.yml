@@ -114,7 +114,7 @@ sw:
       title: "Algorithms"
     new:
       title: "Add an algorithm"
-      emergency: "Emergency content"
+      emergency: "Emergency content for %{language}"
     edit:
       title: "Edit this algorithm"
     show:
