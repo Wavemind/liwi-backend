@@ -10,12 +10,12 @@ class MedicalStaff < ApplicationRecord
   validates_presence_of :role
 
   # Return the default language of the app
-  def app_default_language
+  def app_language
     health_facility.study.default_language
   end
 
   # Return the default language of the algo
-  def algo_default_language
+  def algo_language
     health_facility.study.default_language
   end
 
