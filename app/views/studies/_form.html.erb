@@ -2,11 +2,34 @@
   <%= f.input :label %>
   <%= f.input :default_language, collection: @languages, value_method: :code, label_method: :name, prompt: t('prompt') %>
 
-  <div class="form-group">
-    <label for="description_en" class="form-label"><%= t('studies.description') %></label>
-    <div class="tinymce-wrapper">
-      <%= f.text_area :description_en, class: 'tinymce-description' %>
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs mt-3" role="tablist">
+    <li class="nav-item active"><a class="nav-link active" href="#en" data-toggle="tab"><%= t('english') %></a></li>
+    <% Language.all.each do |l| %>
+      <li class="nav-item"><a class="nav-link" href="<%= "##{l.code}" %>" data-toggle="tab"><%= l.name %></a></li>
+    <% end %>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div class="tab-pane active" id="en">
+      <div class="form-group">
+        <label for="emergency_content_en" class="form-label"><%= t('studies.description', language: t('english')) %></label>
+        <div class="tinymce-wrapper">
+          <%= f.text_area :description_en, class: 'tinymce-description' %>
+        </div>
+      </div>
     </div>
+    <% Language.all.each do |l| %>
+      <div class="tab-pane" id=<%= l.code %>>
+        <div class="form-group">
+          <label for=<%= "description_#{l.code}" %> class="form-label"><%= t('studies.description', language: l.name) %></label>
+          <div class="tinymce-wrapper">
+            <%= f.text_area "description_#{l.code}", class: 'tinymce-description' %>
+          </div>
+        </div>
+      </div>
+    <% end %>
   </div>
 
   <%= link_to t('cancel'), :back, class: 'btn btn-danger my-4 float-left' %>

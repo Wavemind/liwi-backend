@@ -116,7 +116,7 @@ rw:
       title: "Algorithms"
     new:
       title: "Add an algorithm"
-      emergency: "Emergency content"
+      emergency: "Emergency content for %{language}"
     edit:
       title: "Edit this algorithm"
     show:
@@ -346,6 +346,7 @@ rw:
         one: 1 error prohibited this %{model} from being saved
         other: "%{count} errors prohibited this %{model} from being saved"
   dependencies: "The node you are trying to remove has dependencies"
+  english: "English"
   final_diagnoses:
     new:
       title: "Create a new final diagnosis"
@@ -531,7 +532,7 @@ rw:
     new:
       title: "New language"
   studies:
-    description: "Description"
+    description: "Description for %{language}"
     edit:
       title: "Edit study"
     new:

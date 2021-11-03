@@ -8,7 +8,18 @@
 // 6.8 inch X 4.2 inch
 // 650px X 408px
 // HEIGHT AND WIDTH ARE CALCULATED BASED ON THE ABOVE AND THE MARGINS AND PADDINGS
-#algorithm_emergency_content_en_ifr, #study_description_en_ifr {
+
+// TODO Find a way to make this generic.
+#algorithm_emergency_content_en_ifr,
+#algorithm_emergency_content_sw_ifr,
+#algorithm_emergency_content_fr_ifr,
+#algorithm_emergency_content_rw_ifr,
+#algorithm_emergency_content_hi_ifr,
+#study_description_en_ifr,
+#study_description_sw_ifr,
+#study_description_fr_ifr,
+#study_description_rw_ifr,
+#study_description_hi_ifr {
   margin-top: 5px;
   margin-bottom: 5px;
   padding: 65px 12px;

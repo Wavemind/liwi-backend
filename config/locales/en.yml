@@ -130,7 +130,7 @@ en:
       title: "Algorithms"
     new:
       title: "Add an algorithm"
-      emergency: "Emergency content"
+      emergency: "Emergency content for %{language}"
     edit:
       title: "Edit this algorithm"
     show:
@@ -556,7 +556,7 @@ en:
     new:
       title: "New language"
   studies:
-    description: "Description"
+    description: "Description for %{language}"
     edit:
       title: "Edit study"
     new:
