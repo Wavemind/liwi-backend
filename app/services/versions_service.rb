@@ -144,9 +144,9 @@ class VersionsService
       translated_systems[system] = return_intern_label_translated("questions.systems.#{system}")
     end
     hash['config']['systems_translations'] = translated_systems
-    hash['config']['age_limit'] = @version.algorithm.age_limit
-    hash['config']['age_limit_message'] = return_hstore_translated(@version.algorithm.age_limit_message_translations)
-    hash['config']['minimum_age'] = @version.algorithm.minimum_age
+    hash['config']['age_limit'] = @version.age_limit
+    hash['config']['age_limit_message'] = return_hstore_translated(@version.age_limit_message_translations)
+    hash['config']['minimum_age'] = @version.minimum_age
     hash['config']['consent_management'] = @version.algorithm.consent_management
     hash['config']['track_referral'] = @version.algorithm.track_referral
     hash['config']['full_order'] = extract_full_order_json

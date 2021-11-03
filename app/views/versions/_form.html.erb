@@ -2,11 +2,9 @@
 
   <%= f.input :name %>
 
-  <% if @version.id.present? %>
-    <%= f.input :top_left_question_id, collection: @version.components.includes(:node), label_method: :node_label, prompt: t('select')  %>
-    <%= f.input :first_top_right_question_id, collection: @version.components.includes(:node), label_method: :node_label, prompt: t('select')  %>
-    <%= f.input :second_top_right_question_id, collection: @version.components.includes(:node), label_method: :node_label, prompt: t('select')  %>
-  <% end %>
+  <%= f.input :age_limit, as: :numeric %>
+  <%= f.input :age_limit_message_en, as: :text, label: t('activerecord.attributes.version.age_limit_message_html'), input_html: {value: f.object.age_limit_message_en || t('versions.age_limit_message_default')} %>
+  <%= f.input :minimum_age, as: :numeric, label: t('activerecord.attributes.version.minimum_age') %>
 
   <%= f.input :is_arm_control, as: :boolean, label: t('versions.edit.is_arm_control_label') %>
 
