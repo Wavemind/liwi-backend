@@ -5,9 +5,6 @@ class FinalDiagnosis < Node
   belongs_to :diagnosis
   belongs_to :excluded_diagnosis, class_name: 'FinalDiagnosis', foreign_key: :final_diagnosis_id, optional: true
 
-  has_many :final_diagnosis_health_cares, dependent: :destroy
-  has_many :health_cares, through: :final_diagnosis_health_cares
-
   has_many :components, class_name: 'Instance', dependent: :destroy
 
   before_create :link_algorithm
@@ -16,7 +13,6 @@ class FinalDiagnosis < Node
   # https://github.com/amoeba-rb/amoeba#usage
   amoeba do
     enable
-    include_association :final_diagnosis_health_cares
   end
 
   # @return [Json]
@@ -95,7 +91,7 @@ class FinalDiagnosis < Node
   # @return [Json]
   # Return drugs and managements in json format
   def health_cares_json
-    diagnosis.components.drugs.where(node_id: health_cares.map(&:id), final_diagnosis_id: id).as_json(
+    components.drugs.as_json(
       include: [
         node: {
           include: [:formulations],
@@ -109,7 +105,7 @@ class FinalDiagnosis < Node
           ]
         }
       ]
-    ) + diagnosis.components.managements.where(node_id: health_cares.map(&:id), final_diagnosis_id: id).as_json(
+    ) + components.managements.as_json(
       include: [
         node: {
           include: [:medias],

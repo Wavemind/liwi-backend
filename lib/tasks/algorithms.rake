@@ -136,10 +136,6 @@ namespace :algorithms do
                 new_media.duplicate_file(media)
               end
 
-              FinalDiagnosisHealthCare.where(final_diagnosis: fd).map do |link|
-                FinalDiagnosisHealthCare.create!(final_diagnosis: new_fd, node_id: nodes[link.node_id].id)
-              end
-
               nodes[fd.id] = new_fd
             end
 
