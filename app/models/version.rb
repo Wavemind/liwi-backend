@@ -201,7 +201,7 @@ class Version < ApplicationRecord
 
   # Init orders for new version
   def init_config
-    self.full_order_json = generate_nodes_order_tree
+    self.full_order_json = generate_nodes_order_tree unless full_order_json.present?
   end
 
   # Return if the version is currently deployed and can't be updated
