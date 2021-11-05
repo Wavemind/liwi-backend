@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_04_133700) do
+ActiveRecord::Schema.define(version: 2021_11_04_132959) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -134,15 +134,6 @@ ActiveRecord::Schema.define(version: 2021_10_04_133700) do
     t.integer "cut_off_end"
     t.index ["node_id"], name: "index_diagnoses_on_node_id"
     t.index ["version_id"], name: "index_diagnoses_on_version_id"
-  end
-
-  create_table "final_diagnosis_health_cares", force: :cascade do |t|
-    t.bigint "node_id"
-    t.bigint "final_diagnosis_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["final_diagnosis_id"], name: "index_final_diagnosis_health_cares_on_final_diagnosis_id"
-    t.index ["node_id"], name: "index_final_diagnosis_health_cares_on_node_id"
   end
 
   create_table "formulations", force: :cascade do |t|
@@ -308,6 +299,7 @@ ActiveRecord::Schema.define(version: 2021_10_04_133700) do
     t.integer "cut_off_end"
     t.boolean "is_referral", default: false
     t.hstore "placeholder_translations"
+    t.boolean "is_pre_fill", default: false
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
     t.index ["diagnosis_id"], name: "index_nodes_on_diagnosis_id"
@@ -429,6 +421,9 @@ ActiveRecord::Schema.define(version: 2021_10_04_133700) do
     t.hstore "description_translations"
     t.json "full_order_json"
     t.boolean "in_prod", default: false
+    t.integer "minimum_age"
+    t.integer "age_limit"
+    t.hstore "age_limit_message_translations"
     t.index ["algorithm_id"], name: "index_versions_on_algorithm_id"
     t.index ["first_top_right_question_id"], name: "index_versions_on_first_top_right_question_id"
     t.index ["second_top_right_question_id"], name: "index_versions_on_second_top_right_question_id"

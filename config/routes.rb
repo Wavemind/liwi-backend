@@ -83,7 +83,6 @@ Rails.application.routes.draw do
           member do
             get 'diagram'
           end
-          resources :final_diagnosis_health_cares, only: [:create, :destroy]
         end
       end
     end
