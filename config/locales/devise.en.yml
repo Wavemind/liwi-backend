@@ -10,7 +10,7 @@ en:
         title: 'Resend confirmation instructions'
         send: 'Resend confirmation instructions'
     failure:
-      already_authenticated: "You are already signed in."
+      already_authenticated: ""
       inactive: "Your account is not activated yet."
       invalid: "Invalid %{authentication_keys} or password."
       locked: "Your account is locked."
