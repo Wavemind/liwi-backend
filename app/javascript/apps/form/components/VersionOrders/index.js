@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
-import SortableTree from 'react-sortable-tree';
-import 'react-sortable-tree/style.css';
-import DualListBox from "../VersionComponents";
+import React, { Component } from "react";
+import SortableTree from "react-sortable-tree";
+import "react-sortable-tree/style.css";
 import Http from "../../../diagram/engine/http";
 import I18n from "i18n-js";
 
@@ -12,7 +11,7 @@ export default class VersionOrders extends Component {
 
     this.state = {
       http: new Http(),
-      treeData: JSON.parse(tree),
+      treeData: JSON.parse(tree)
     };
   }
 
@@ -22,22 +21,23 @@ export default class VersionOrders extends Component {
   };
 
   // Display the dependencies of the node clicked on
-  alertNodeDependencies = async (rowInfo) => {
+  alertNodeDependencies = async rowInfo => {
     const { http } = this.state;
 
-    let httpRequest = await http.getQuestionDependencies(rowInfo['node']['id']);
+    let httpRequest = await http.getQuestionDependencies(rowInfo["node"]["id"]);
     let result = await httpRequest.json();
-    const message = result.length === 0 ? I18n.t("version.full_order_tree.no_dependency") : result.toString().replaceAll(',', '\n')
+    const message =
+      result.length === 0
+        ? I18n.t("version.full_order_tree.no_dependency")
+        : result.toString().replaceAll(",", "\n");
 
-    global.alert(
-      message
-    );
+    global.alert(message);
   };
 
   render() {
     const { selected } = this.props;
     return (
-      <div style={{height: 1000}}>
+      <div style={{ height: 1000 }}>
         <SortableTree
           treeData={this.state.treeData}
           onChange={treeData => this.setState({ treeData })}
@@ -46,22 +46,31 @@ export default class VersionOrders extends Component {
             return !["attribute", "step"].includes(treeData["node"]["type"]);
           }}
           canDrop={treeData => {
-            return treeData['nextParent'] !== null && treeData['prevParent']['title'] === treeData['nextParent']['title']
+            return (
+              treeData["nextParent"] !== null &&
+              treeData["prevParent"]["title"] ===
+                treeData["nextParent"]["title"]
+            );
           }}
           generateNodeProps={rowInfo => {
             if (["attribute", "step"].includes(rowInfo["node"]["type"])) {
               rowInfo.className = "order-step";
-            } else if (rowInfo["node"]["type"] === "system"){
+            } else if (rowInfo["node"]["type"] === "system") {
               rowInfo.className = "order-system";
             } else {
-              if (selected.includes(rowInfo["node"]["id"]) || typeof rowInfo["node"]["id"] === "string"){ // Check if the id is used in the version OR if it is one of the hardcoded questions
-                if (rowInfo["node"]["is_neonat"]){
+              if (
+                selected.includes(rowInfo["node"]["id"]) ||
+                typeof rowInfo["node"]["id"] === "string"
+              ) {
+                // Check if the id is used in the version OR if it is one of the hardcoded questions
+                if (rowInfo["node"]["is_neonat"]) {
                   rowInfo.className = "order-node-neonat";
                 } else {
                   rowInfo.className = "order-node";
                 }
 
-                if (![0,1,3,8].includes(rowInfo["path"][0])) { // Don't display the dependencies button for the 4 steps in array (registration, fla, bm and referral)
+                if (![0, 1, 3, 8].includes(rowInfo["path"][0])) {
+                  // Don't display the dependencies button for the 4 steps in array (registration, fla, bm and referral)
                   rowInfo.buttons = [
                     <button
                       className="btn btn-outline-success"
@@ -69,7 +78,9 @@ export default class VersionOrders extends Component {
                         verticalAlign: "middle"
                       }}
                       onClick={() => this.alertNodeDependencies(rowInfo)}
-                      placeholder={I18n.t("version.full_order_tree.show_dependencies")}
+                      placeholder={I18n.t(
+                        "version.full_order_tree.show_dependencies"
+                      )}
                     >
                       ℹ
                     </button>
@@ -86,4 +97,4 @@ export default class VersionOrders extends Component {
       </div>
     );
   }
-};
+}
