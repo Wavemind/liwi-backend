@@ -1,7 +1,7 @@
 import * as React from "react";
 import I18n from "i18n-js";
 import FadeIn from "react-fade-in";
-import Autocomplete, { createFilterOptions } from "@material-ui/lab/Autocomplete";
+import Autocomplete, {createFilterOptions} from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
 import {Form, Button} from "react-bootstrap";
 import {Formik} from "formik";
@@ -9,7 +9,7 @@ import {Formik} from "formik";
 import DisplayErrors from "../components/DisplayErrors";
 import Http from "../../diagram/engine/http";
 import Loader from "../QuestionsSequenceForm";
-import { questionSchema } from "../constants/schema";
+import {questionSchema} from "../constants/schema";
 import {
   CATEGORIES_DISPLAYING_SYSTEM,
   CATEGORIES_DISABLING_ANSWER_TYPE,
@@ -41,7 +41,7 @@ export default class QuestionForm extends React.Component {
   constructor(props) {
     super(props);
 
-    const { formData } = this.props;
+    const {formData} = this.props;
 
     this.state = {
       updateMode: props.method === "update",
@@ -64,8 +64,8 @@ export default class QuestionForm extends React.Component {
    * @params [Object] actions
    */
   handleOnSubmit = async (values) => {
-    const { setFormData, save, validate, nextStep, method, is_used, is_deployed } = this.props;
-    const { updateMode, toDeleteMedias } = this.state;
+    const {setFormData, save, validate, nextStep, method, is_used, is_deployed} = this.props;
+    const {updateMode, toDeleteMedias} = this.state;
     setFormData(values);
 
     // Skip answers form if the question type doesn't have any OR if the answers are automatically generated (boolean) or if it is edit mode and the question is already used
@@ -107,7 +107,7 @@ export default class QuestionForm extends React.Component {
    * @returns {Promise<void>}
    */
   setDeletedMedia = async (id) => {
-    const { toDeleteMedias } = this.state;
+    const {toDeleteMedias} = this.state;
     toDeleteMedias.push(id);
     this.setState({toDeleteMedias})
   };
@@ -128,7 +128,7 @@ export default class QuestionForm extends React.Component {
         snomedError: null
       });
     } else {
-      this.setState({ snomedError: { message: I18n.t("questions.errors.snomed_fetch_failed") } });
+      this.setState({snomedError: {message: I18n.t("questions.errors.snomed_fetch_failed")}});
     }
   };
 
@@ -220,16 +220,16 @@ export default class QuestionForm extends React.Component {
 
   // Set status of formula tooltip
   handleFormulaTooltip = (event) => {
-    const { formulaTooltipShow } = this.state;
+    const {formulaTooltipShow} = this.state;
 
     this.setState({
-      formulaTooltipShow : !formulaTooltipShow,
+      formulaTooltipShow: !formulaTooltipShow,
       target: event.target
     });
   };
 
   render() {
-    const { formData, railsErrors } = this.props;
+    const {formData, railsErrors} = this.props;
 
     const {
       answerTypes,
@@ -372,7 +372,8 @@ export default class QuestionForm extends React.Component {
                   >
                     <option value="">{I18n.t("select")}</option>
                     {Object.keys(emergency_statuses).map(key => (
-                      <option key={`stages-${emergency_statuses[key]}`} value={key}>{I18n.t(`activerecord.attributes.question.emergency_statuses.${key}`)}</option>
+                      <option key={`stages-${emergency_statuses[key]}`}
+                              value={key}>{I18n.t(`activerecord.attributes.question.emergency_statuses.${key}`)}</option>
                     ))}
                   </Form.Control>
                   <Form.Control.Feedback type="invalid">
@@ -425,7 +426,24 @@ export default class QuestionForm extends React.Component {
                       {errors.unavailable}
                     </Form.Control.Feedback>
                   </Form.Group>
-                : null}
+                  : null}
+
+                {CATEGORIES_DISPLAYING_FILTERABLE.includes(values.type) ?
+                  <Form.Group controlId="validationIsPreFill">
+                    <Form.Check
+                      name="is_pre_fill"
+                      label={I18n.t("activerecord.attributes.question.is_pre_fill")}
+                      value={values.is_pre_fill}
+                      disabled={deployedMode}
+                      checked={values.is_pre_fill}
+                      onChange={handleChange}
+                      isInvalid={touched.is_pre_fill && !!errors.is_pre_fill}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.is_pre_fill}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                  : null}
 
                 <Form.Group controlId="validationIsIdentifiable">
                   <Form.Check
@@ -457,7 +475,7 @@ export default class QuestionForm extends React.Component {
                       {errors.estimable}
                     </Form.Control.Feedback>
                   </Form.Group>
-                : null}
+                  : null}
 
                 <Form.Group controlId="validationLabel">
                   <Form.Label>{I18n.t("activerecord.attributes.node.label_translations")}</Form.Label>
@@ -511,7 +529,8 @@ export default class QuestionForm extends React.Component {
                       renderOption={(option) => getTranslatedText(option.label_translations, language)}
                       renderTags={(value, getTagProps) => (
                         value.map((option, index) => (
-                          <Chip variant="outlined" label={getTranslatedText(option.label_translations, language)} {...getTagProps({index})} />
+                          <Chip variant="outlined"
+                                label={getTranslatedText(option.label_translations, language)} {...getTagProps({index})} />
                         ))
                       )}
                       renderInput={params => (
@@ -584,7 +603,8 @@ export default class QuestionForm extends React.Component {
                     >
                       <option value="">{I18n.t("select")}</option>
                       {Object.keys(rounds).map(key => (
-                        <option key={`rounds-${rounds[key]}`} value={key}>{I18n.t(`questions.rounds.${key}.label`)}</option>
+                        <option key={`rounds-${rounds[key]}`}
+                                value={key}>{I18n.t(`questions.rounds.${key}.label`)}</option>
                       ))}
                     </Form.Control>
                     <Form.Control.Feedback type="invalid">
@@ -607,7 +627,7 @@ export default class QuestionForm extends React.Component {
                       {errors[`placeholder_${language}`]}
                     </Form.Control.Feedback>
                   </Form.Group>
-                : null}
+                  : null}
 
                 {NUMERIC_ANSWER_TYPES.includes(values.answer_type_id) ?
                   <>
@@ -731,7 +751,7 @@ export default class QuestionForm extends React.Component {
                       </Form.Control.Feedback>
                     </Form.Group>
                   </>
-                : null}
+                  : null}
 
                 <Form.Group controlId="validationDescription">
                   <Form.Label>{I18n.t("activerecord.attributes.node.description_translations")}</Form.Label>

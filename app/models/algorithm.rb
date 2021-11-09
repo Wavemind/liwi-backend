@@ -19,7 +19,7 @@ class Algorithm < ApplicationRecord
   after_create :create_reference_table_questions
   before_update :set_emergency_content_version
 
-  translates :age_limit_message, :emergency_content
+  translates :emergency_content
 
   # Create all hardcoded questions related to reference tables and age.
   # Answer types ids : 3 is Integer, 4 is Decimal, 6 is Date, 9 is String

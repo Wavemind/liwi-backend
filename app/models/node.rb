@@ -11,9 +11,6 @@ class Node < ApplicationRecord
   has_many :medias, as: :fileable, dependent: :destroy
   has_many :diagnoses
 
-  has_many :final_diagnosis_health_cares, dependent: :destroy
-  has_many :final_diagnoses, through: :final_diagnosis_health_cares
-
   accepts_nested_attributes_for :medias, reject_if: :all_blank, allow_destroy: true
 
   validates_presence_of :label_translations

@@ -29,7 +29,7 @@ class Version < ApplicationRecord
   scope :archived, ->(){ where(archived: true) }
   scope :active, ->(){ where(archived: false) }
 
-  translates :description
+  translates :age_limit_message, :description
 
   before_create :init_config
 
@@ -69,11 +69,11 @@ class Version < ApplicationRecord
       diagnoses.each { |diagnosis| diagnosis.update(duplicating: true) }
       duplicated_version = self.amoeba_dup
 
-      if duplicated_version.save
+      if duplicated_version.save!
         duplicated_version.diagnoses.each_with_index { |diagnosis, index| diagnosis.relink_instance }
         diagnoses.each { |diagnosis| diagnosis.update(duplicating: false) }
       else
-        raise ActiveRecord::Rollback, ''
+        raise ActiveRecord::Rollback, duplicated_version.errors.messages
       end
     end
   end
@@ -210,7 +210,7 @@ class Version < ApplicationRecord
 
   # Init orders for new version
   def init_config
-    self.full_order_json = generate_nodes_order_tree
+    self.full_order_json = generate_nodes_order_tree unless full_order_json.present?
   end
 
   # Return if the version is currently deployed and can't be updated
@@ -244,6 +244,7 @@ class Version < ApplicationRecord
     order.to_json
   end
 
+
   # @return [Json]
   # Return questions in json format
   def questions_json
@@ -267,6 +268,12 @@ class Version < ApplicationRecord
           ]
         }
       ])
+
+  # @param [String] language to translate the version name
+  # @return [String]
+  # Return the label of the version
+  def reference_label(language = 'en')
+    name
   end
 
   # Validate full_order_json

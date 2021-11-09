@@ -43,8 +43,6 @@ class InstancesController < ApplicationController
       instance.errors.add(:base, t('questions_sequences.validation.loop'))
       render json: instance.errors.full_messages, status: 422
     elsif instance.save
-      FinalDiagnosisHealthCare.create!(final_diagnosis: FinalDiagnosis.find(instance_params[:final_diagnosis_id]), health_care: instance.node) if instance.node.is_a?(HealthCare)
-
       render json: instance.generate_json
     else
       render json: instance.errors.full_messages, status: 422
@@ -60,10 +58,6 @@ class InstancesController < ApplicationController
   end
 
   def destroy
-    if instance_params[:final_diagnosis_id].present?
-      FinalDiagnosisHealthCare.find_by(final_diagnosis_id: instance_params[:final_diagnosis_id], node_id: @instance.node_id).destroy if @instance.node.is_a?(HealthCare)
-    end
-
     if @instance.destroy
       render json: @instance
     else

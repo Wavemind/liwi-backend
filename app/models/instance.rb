@@ -49,6 +49,11 @@ class Instance < ApplicationRecord
     end
   end
 
+  # Return the diagram where the instance is (so the final diagnosis and not the diagnosis if it's a treatment variable)
+  def diagram
+    final_diagnosis.present? ? final_diagnosis : instanceable
+  end
+
   # Display question with ID
   def display_node_label_id
     "#{node.label_en} (#{node_id})"

@@ -141,6 +141,7 @@ class QuestionsController < ApplicationController
       :snomed_label,
       :is_triage,
       :is_identifiable,
+      :is_pre_fill,
       :min_value_warning,
       :max_value_warning,
       :min_value_error,

@@ -1,19 +1,42 @@
 <%= simple_form_for @algorithm, html: { class: 'form-horizontal' } do |f| %>
 
   <%= f.input :name %>
-  <%= f.input :age_limit, as: :numeric %>
-  <%= f.input :age_limit_message_en, as: :text, label: t('activerecord.attributes.algorithm.age_limit_message_html'), input_html: {value: f.object.age_limit_message_en || t('algorithms.age_limit_message_default')} %>
-  <%= f.input :minimum_age, as: :numeric, label: t('activerecord.attributes.algorithm.minimum_age') %>
   <%= f.input :consent_management, as: :boolean, label: t('activerecord.attributes.algorithm.consent_management') %>
   <%= f.input :track_referral, as: :boolean, label: t('activerecord.attributes.algorithm.track_referral') %>
   <%= f.association :study, collection: Study.all, label_method: :label, prompt: t('select')  %>
   <%= f.input :description, as: :text %>
-  <div class="form-group">
-    <label for="emergency_content_en" class="form-label"><%= t('algorithms.new.emergency') %></label>
-    <div class="tinymce-wrapper">
-      <%= f.text_area :emergency_content_en, class: 'tinymce-emergency' %>
+
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs mt-3" role="tablist">
+    <li class="nav-item active"><a class="nav-link active" href="#en" data-toggle="tab"><%= t('english') %></a></li>
+    <% Language.all.each do |l| %>
+      <li class="nav-item"><a class="nav-link" href="<%= "##{l.code}" %>" data-toggle="tab"><%= l.name %></a></li>
+    <% end %>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div class="tab-pane active" id="en">
+      <div class="form-group">
+        <label for="emergency_content_en" class="form-label"><%= t('algorithms.new.emergency', language: t('english')) %></label>
+        <div class="tinymce-wrapper">
+          <%= f.text_area :emergency_content_en, class: 'tinymce-emergency emergency-contents' %>
+        </div>
+      </div>
     </div>
+    <% Language.all.each do |l| %>
+      <div class="tab-pane" id=<%= l.code %>>
+        <div class="form-group">
+          <label for=<%= "emergency_content_#{l.code}" %> class="form-label"><%= t('algorithms.new.emergency', language: l.name) %></label>
+          <div class="tinymce-wrapper">
+            <%= f.text_area "emergency_content_#{l.code}", class: 'tinymce-emergency emergency-contents' %>
+          </div>
+        </div>
+      </div>
+    <% end %>
   </div>
+
+
 
   <%= link_to t('cancel'), :back, class: 'btn btn-danger my-4 float-left' %>
   <%= f.submit t('save'), class: 'btn btn-primary my-4 float-right' %>

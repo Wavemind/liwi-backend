@@ -14,7 +14,7 @@ class NodeExclusion < ApplicationRecord
   def self.recreate_exclusions_after_duplicate(matching_final_diagnoses)
     matching_final_diagnoses.each do |key, value|
       NodeExclusion.where(excluding_node_id: key).map do |exclusion|
-        NodeExclusion.create(excluding_node_id: value, excluded_node_id: matching_final_diagnoses[exclusion.excluded_node_id])
+        NodeExclusion.create(excluding_node_id: value, excluded_node_id: matching_final_diagnoses[exclusion.excluded_node_id], node_type: exclusion.node_type)
       end
     end
   end

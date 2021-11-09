@@ -9,6 +9,16 @@ class MedicalStaff < ApplicationRecord
   validates_presence_of :last_name
   validates_presence_of :role
 
+  # Return the default language of the app
+  def app_language
+    health_facility.study.default_language
+  end
+
+  # Return the default language of the algo
+  def algo_language
+    health_facility.study.default_language
+  end
+
   def full_name
     "#{first_name} #{last_name}"
   end

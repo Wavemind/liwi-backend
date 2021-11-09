@@ -140,9 +140,9 @@ class VersionsService
       translated_systems[system] = return_intern_label_translated("questions.systems.#{system}")
     end
     hash['config']['systems_translations'] = translated_systems
-    hash['config']['age_limit'] = @version.algorithm.age_limit
-    hash['config']['age_limit_message'] = return_hstore_translated(@version.algorithm.age_limit_message_translations)
-    hash['config']['minimum_age'] = @version.algorithm.minimum_age
+    hash['config']['age_limit'] = @version.age_limit
+    hash['config']['age_limit_message'] = return_hstore_translated(@version.age_limit_message_translations)
+    hash['config']['minimum_age'] = @version.minimum_age
     hash['config']['consent_management'] = @version.algorithm.consent_management
     hash['config']['track_referral'] = @version.algorithm.track_referral
     hash['config']['full_order'] = extract_full_order_json
@@ -250,8 +250,8 @@ class VersionsService
     hash['level_of_urgency'] = final_diagnosis.level_of_urgency
     hash['medias'] = extract_medias(final_diagnosis)
     hash['type'] = final_diagnosis.node_type
-    hash['drugs'] = extract_health_cares(final_diagnosis.health_cares.drugs, instance.instanceable.id, final_diagnosis.id)
-    hash['managements'] = extract_health_cares(final_diagnosis.health_cares.managements, instance.instanceable.id, final_diagnosis.id)
+    hash['drugs'] = extract_health_cares(final_diagnosis.components.drugs.map(&:node), instance.instanceable.id, final_diagnosis.id)
+    hash['managements'] = extract_health_cares(final_diagnosis.components.managements.map(&:node), instance.instanceable.id, final_diagnosis.id)
     # Don't mention any exclusions if the version is arm control. Hopefully this is temporary...
     hash['excluding_final_diagnoses'] = @version.is_arm_control ? [] : final_diagnosis.excluding_nodes_ids
     hash['cc'] = final_diagnosis.diagnosis.node_id
@@ -355,6 +355,7 @@ class VersionsService
       hash[question.id]['placeholder'] = return_hstore_translated(question.placeholder_translations)
       hash[question.id]['is_mandatory'] = (@version.is_arm_control && !%w(Questions::BasicDemographic Questions::Demographic Questions::Referral).include?(question.type)) ? false : question.is_mandatory
       hash[question.id]['is_neonat'] = question.is_neonat
+      hash[question.id]['is_pre_fill'] = question.is_pre_fill
       hash[question.id]['system'] = question.system unless question.system.nil?
       hash[question.id] = format_formula(hash[question.id], question)
 

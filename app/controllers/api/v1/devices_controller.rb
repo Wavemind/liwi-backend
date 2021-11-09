@@ -18,7 +18,7 @@ class Api::V1::DevicesController < ApplicationController
     device = Device.find_by_mac_address(params[:id])
     if device.present?
       if device.health_facility.present?
-        json = device.health_facility.as_json(include: :medical_staffs)
+        json = device.health_facility.as_json(include: {medical_staffs: {methods: [:algo_language, :app_language]}})
         json['medical_staff_roles'] = MedicalStaff.roles.keys
         render json: json
       else
