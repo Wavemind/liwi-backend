@@ -268,6 +268,7 @@ class Version < ApplicationRecord
           ]
         }
       ])
+  end
 
   # @param [String] language to translate the version name
   # @return [String]
