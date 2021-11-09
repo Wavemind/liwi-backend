@@ -43,11 +43,11 @@ Rails.application.routes.draw do
         get 'generate_translations'
         get 'generate_variables'
         get 'final_diagnoses', to: 'versions#final_diagnoses', as: 'final_diagnosis'
-        get 'registration_triage_questions', to: 'versions#registration_triage_questions', as: 'registration_triage_questions'
         get 'full_order', to: 'versions#full_order', as: 'full_order'
         get 'medal_data_config', to: 'versions#medal_data_config', as: 'medal_data_config'
         get 'translations', to: 'versions#translations', as: 'translations'
         get 'job_status'
+        get 'diagram'
         put 'archive', to: 'versions#archive', as: 'archive'
         put 'unarchive', to: 'versions#unarchive', as: 'unarchive'
         post 'duplicate'
@@ -148,6 +148,16 @@ Rails.application.routes.draw do
   end
 
   resources :instances, only: [:update]
+
+  resources :versions, only: [] do
+    resources :instances, only: [:destroy, :create] do
+      member do
+        delete 'remove_link'
+        post 'create_link'
+      end
+      resources :conditions, only: [:destroy]
+    end
+  end
 
   resources :diagnoses, only: [] do
     resources :instances, only: [:show, :destroy, :create] do

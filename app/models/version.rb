@@ -43,6 +43,15 @@ class Version < ApplicationRecord
     append name: I18n.t('duplicated')
   end
 
+  # @return [Json]
+  # Return available nodes in the algorithm in json format
+  def available_nodes_json
+    ids = components.map(&:node_id)
+    nodes = algorithm.questions.where.not(id: ids)
+    nodes += algorithm.questions_sequences.where.not(id: ids)
+    nodes.as_json(methods: [:category_name, :node_type, :get_answers, :type])
+  end
+
   # Return badge if the version is archived
   def display_archive_status
     archived ? '<span class="badge badge-danger">archived</span>' : ''
@@ -235,6 +244,31 @@ class Version < ApplicationRecord
     order.to_json
   end
 
+
+  # @return [Json]
+  # Return questions in json format
+  def questions_json
+    (components.questions + components.questions_sequences).as_json(
+      include: [
+        conditions: {
+          include: [
+            answer: {
+              methods: [
+                :get_node
+              ]
+            },
+          ]
+        },
+        node: {
+          include: [:answers, :complaint_categories, :medias],
+          methods: [
+            :node_type,
+            :category_name,
+            :type
+          ]
+        }
+      ])
+
   # @param [String] language to translate the version name
   # @return [String]
   # Return the label of the version
@@ -261,5 +295,15 @@ class Version < ApplicationRecord
       wrong_steps.push(step) unless algorithm.questions.where(step: step).count == questions_order_count
     end
     wrong_steps
+  end
+
+  # @return [Json]
+  # Return current version in json format
+  def version_json
+    {
+      id: id,
+      type: 'Version',
+      label: name,
+    }
   end
 end

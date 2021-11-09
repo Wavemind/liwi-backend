@@ -45,6 +45,10 @@ class VersionPolicy < ApplicationPolicy
     new?
   end
 
+  def diagram?
+    new?
+  end
+
   def remove_components?
     new?
   end

@@ -1,5 +1,7 @@
 <h1>
-  <%= t('.title', name: @version.algorithm.name, version: @version.name) %><%= link_to(I18n.t('edit'), edit_algorithm_version_url(@version.algorithm, @version), class: 'btn btn-outline-success ml-3') %>
+  <%= t('.title', name: @version.algorithm.name, version: @version.name) %>
+  <%= link_to(I18n.t('edit'), edit_algorithm_version_url(@version.algorithm, @version), class: 'btn btn-outline-success ml-3') %>
+  <%= link_to(I18n.t('open_diagram'), diagram_algorithm_version_url(params[:algorithm_id], params[:id]), class: 'btn btn-dark') %>
 </h1>
 <h4 class="text-warning">
   <%= t('.deployed_version') if @version.is_deployed? %>
@@ -21,9 +23,6 @@
   </li>
   <li class="nav-item">
     <%= link_to  t('.subtitle_final_diagnoses_exclusions'), final_diagnoses_exclusions_algorithm_version_url(@version.algorithm, @version), id: 'nav-link-final_diagnosis_exclusions', class: "nav-link", remote: true %>
-  </li>
-  <li class="nav-item">
-    <%= link_to  t('.subtitle_registration_triage_questions'), registration_triage_questions_algorithm_version_url(@version.algorithm, @version), id: 'nav-link-registration_triage_questions', class: "nav-link", remote: true %>
   </li>
   <li class="nav-item">
     <%= link_to  t('.subtitle_full_order'), full_order_algorithm_version_url(@version.algorithm, @version), id: 'nav-link-full_order', class: "nav-link", remote: true %>
