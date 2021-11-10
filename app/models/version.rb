@@ -47,8 +47,8 @@ class Version < ApplicationRecord
   # Return available nodes in the algorithm in json format
   def available_nodes_json
     ids = components.map(&:node_id)
-    nodes = algorithm.questions.where.not(id: ids)
-    nodes += algorithm.questions_sequences.where.not(id: ids)
+    nodes = algorithm.questions.includes(:answers).where.not(id: ids)
+    nodes += algorithm.questions_sequences.includes(:answers).where.not(id: ids)
     nodes.as_json(methods: [:category_name, :node_type, :get_answers, :type])
   end
 
@@ -248,7 +248,7 @@ class Version < ApplicationRecord
   # @return [Json]
   # Return questions in json format
   def questions_json
-    (components.questions + components.questions_sequences).as_json(
+    (components.includes([conditions: {answer: :node}, nodes: [:answers, :medias, :complaint_categories]]).questions + components.questions_sequences.includes([conditions: {answer: :node}, nodes: [:answers, :medias, :complaint_categories]])).as_json(
       include: [
         conditions: {
           include: [
