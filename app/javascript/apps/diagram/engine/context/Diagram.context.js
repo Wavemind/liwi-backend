@@ -37,6 +37,7 @@ export default class DiagramProvider extends React.Component {
         orderedNodes.scored = [];
       }
     } else if (instanceable.type === "Version"){
+      orderedNodes.referral = [];
       orderedNodes.treatmentQuestion = [];
       orderedNodes.scored = [];
       orderedNodes.basicDemographic = [];
@@ -46,6 +47,7 @@ export default class DiagramProvider extends React.Component {
 
     availableNodes.map(node => {
       let category = getCategoryNode(node);
+      console.log(category);
       orderedNodes[category].push(node);
     });
 
