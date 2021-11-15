@@ -69,7 +69,7 @@ export const MEASUREMENT_CATEGORIES = [
   "Questions::VitalSignAnthropometric",
 ];
 
-export const CATEGORIES_DISPLAYING_FILTERABLE = [
+export const DEMOGRAPHIC_CATEGORIES = [
   "Questions::BasicDemographic",
   "Questions::Demographic",
 ];
