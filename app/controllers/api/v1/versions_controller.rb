@@ -18,7 +18,12 @@ class Api::V1::VersionsController < Api::V1::ApplicationController
   def show
     version = Version.find_by_id(params[:id])
     if version
-      render json: version.as_json(except: [:user_id])
+      medal_r_json_version = params[:json_version]
+      if medal_r_json_version.to_i == version.medal_r_json_version
+        render json: {}, status: 204
+      else
+        render json: version.as_json(except: [:user_id])
+      end
     else
       render json: { errors: t('api.v1.versions.show.invalid_version') }, status: :unprocessable_entity
     end
