@@ -59,7 +59,7 @@ class Version < ApplicationRecord
     ActiveRecord::Base.transaction(requires_new: true) do
       diagnoses.each { |diagnosis| diagnosis.update(duplicating: true) }
       duplicated_version = self.amoeba_dup
-
+    
       if duplicated_version.save
         duplicated_version.diagnoses.each_with_index { |diagnosis, index| diagnosis.relink_instance }
         diagnoses.each { |diagnosis| diagnosis.update(duplicating: false) }
