@@ -51,7 +51,11 @@ class Condition < ApplicationRecord
     new_instance.children.each do |child|
       # Gets child instance for the same instanceable (PS OR Diagnosis)
       child_instance = instance.instanceable.components.includes(:node).select{ |c| c.node == child.node }.first
-      return true if child_instance == instance || (child_instance.present? && child_instance.children.any? && is_child(child_instance))
+      if child_instance.present?
+        return true if child_instance == instance || (child_instance.children.any? && is_child(child_instance))
+      else
+        return false
+      end
     end
     false
   end
