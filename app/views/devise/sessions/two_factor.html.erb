@@ -6,7 +6,7 @@
     </div>
 
     <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name), method: :post) do |f| %>
-      <%= f.input :otp_attempt, label: t('.code') %>
+      <%= f.input :otp_attempt, autofocus: true, label: t('.code') %>
       <div class="actions">
         <%= f.submit t('.login'), class: 'btn btn-succes btn-block btn-primary-light' %>
       </div>
