@@ -12,6 +12,7 @@ class FinalDiagnosis < Node
   # Enable recursive duplicating
   # https://github.com/amoeba-rb/amoeba#usage
   amoeba do
+    include_association :medias
     enable
   end
 

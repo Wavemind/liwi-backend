@@ -57,9 +57,11 @@ class Version < ApplicationRecord
   # Duplicate the version
   def duplicate
     ActiveRecord::Base.transaction(requires_new: true) do
+      Diagnosis.skip_callback(:create, :after, :generate_reference)
+      Node.skip_callback(:create, :after, :generate_reference) # Keep same references than original version for DFs and DDs
       diagnoses.each { |diagnosis| diagnosis.update(duplicating: true) }
       duplicated_version = self.amoeba_dup
-    
+
       if duplicated_version.save
         duplicated_version.diagnoses.each_with_index { |diagnosis, index| diagnosis.relink_instance }
         diagnoses.each { |diagnosis| diagnosis.update(duplicating: false) }
