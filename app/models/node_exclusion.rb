@@ -7,7 +7,7 @@ class NodeExclusion < ApplicationRecord
   belongs_to :excluded_node, class_name: 'Node'
 
   validates_presence_of :excluded_node_id, :excluding_node_id
-  validates :excluded_node_id, uniqueness: { scope: :excluding_node_id, message: I18n.t('errors.final_diagnosis_exclusion_unique') }
+  # validates :excluded_node_id, uniqueness: { scope: :excluding_node_id, message: I18n.t('errors.final_diagnosis_exclusion_unique') }
   after_validation :prevent_loop
 
   # Recreate exclusions from final diagnoses pointing to old version to final diagnoses pointing to duplicated version
@@ -23,7 +23,7 @@ class NodeExclusion < ApplicationRecord
       end
 
       NodeExclusion.where(excluding_node_id: key).map do |exclusion|
-        NodeExclusion.create!(excluding_node_id: value, excluded_node_id: matching_final_diagnoses[exclusion.excluded_node_id], node_type: exclusion.node_type)
+        NodeExclusion.create(excluding_node_id: value, excluded_node_id: matching_final_diagnoses[exclusion.excluded_node_id], node_type: exclusion.node_type)
       end
     end
   end
