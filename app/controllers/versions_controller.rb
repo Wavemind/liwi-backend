@@ -1,8 +1,9 @@
 class VersionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :duplicate, :create_triage_condition, :remove_triage_condition, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnoses, :import_translations, :job_status, :update_full_order, :list]
+  before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :duplicate, :create_triage_condition, :remove_triage_condition, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnoses, :import_translations, :job_status, :update_full_order, :list, :diagram]
   before_action :set_breadcrumb, only: [:show, :new, :edit]
-  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :components, :create_triage_condition, :duplicate, :remove_components, :remove_triage_condition, :update_list, :regenerate_json, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnoses, :import_translations, :job_status, :update_full_order, :registration_triage_questions, :medal_data_config, :full_order, :translations]
+  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :components, :create_triage_condition, :duplicate, :remove_components, :remove_triage_condition, :update_list, :regenerate_json, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnoses, :import_translations, :job_status, :update_full_order, :registration_triage_questions, :medal_data_config, :full_order, :translations, :diagram]
+  layout 'diagram', only: [:diagram]
 
   def index
     authorize policy_scope(Version)
@@ -100,6 +101,15 @@ class VersionsController < ApplicationController
         redirect_to algorithm_version_url(@algorithm, @version, panel: 'triage_conditions'), alert: t('flash_message.create_fail')
       end
     end
+  end
+
+  # GET algorithms/:algorithm_id/versions/:id/diagram
+  # Render the diagram view
+  def diagram
+    add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
+    add_breadcrumb @version.algorithm.name, algorithm_url(@version.algorithm)
+    add_breadcrumb t('breadcrumbs.versions')
+    add_breadcrumb @version.name, algorithm_version_url(@version.algorithm, @version)
   end
 
   # PUT algorithms/:algorithm_id/version/:id/duplicate
@@ -250,15 +260,6 @@ class VersionsController < ApplicationController
         @version.update(job_id: job_id.provider_job_id)
         render json: { success: true, version: @version.reload }
       end
-    end
-  end
-
-  # GET algorithms/:algorithm_id/versions/:id/registration_triage_questions
-  # @params version [Version] version
-  # Display registration questions view
-  def registration_triage_questions
-    respond_to do |format|
-      format.js { }
     end
   end
 

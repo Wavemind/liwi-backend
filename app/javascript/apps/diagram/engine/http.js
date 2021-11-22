@@ -18,12 +18,18 @@ export default class Http {
     this.instanceableId = data.dataset.id;
     this.finalDiagnosis = data.dataset.final_diagnosis;
     this.diagramType = data.dataset.type;
-    this.instanceableType = ["Diagnosis", "FinalDiagnosis"].includes(
-      data.dataset.type
-    )
-      ? "diagnoses"
-      : "questions_sequences";
-    this.version = data.dataset.version;
+    switch (data.dataset.type) {
+      case 'Version':
+        this.instanceableType = "versions";
+        break;
+      case 'Diagnosis':
+      case 'FinalDiagnosis':
+        this.instanceableType = "diagnoses";
+        break;
+      case 'QuestionsSequence':
+        this.instanceableType = "questions_sequences";
+        break;
+    }
     this.algorithm = data.dataset.algorithm;
     this.token = document.querySelector("meta[name='csrf-token']").content;
   }
