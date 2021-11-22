@@ -15,11 +15,11 @@
 development:
   adapter: postgresql
   encoding: utf8
-  database: liwi_dev
+  database: medalc
   pool: 10
   timeout: 4
-  username:  <%= ENV['DEV_DB_USERNAME'] %>
-  password:  <%= ENV['DEV_DB_PASSWORD'] %>
+  username:  
+  password:  
   # url: <%#= ENV['EXTERNAL_TEST_URL'] %>
 
 # Warning: The database defined as "test" will be erased and
