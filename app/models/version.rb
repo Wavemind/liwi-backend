@@ -48,7 +48,7 @@ class Version < ApplicationRecord
     archived ? '<span class="badge badge-danger">archived</span>' : ''
   end
 
-  # Gets all final diagnoses for current
+  # Gets all final diagnoses for current version
   def final_diagnoses
     FinalDiagnosis.includes(diagnosis: [:node]).joins(diagnosis: [:node]).where(diagnosis_id: diagnoses.map(&:id))
   end
