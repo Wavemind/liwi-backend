@@ -31,6 +31,6 @@ class VersionFinalDiagnosisDatatable < ApplicationDatatable
   end
 
   def get_raw_records
-    FinalDiagnosis.includes(diagnosis: [:node]).joins(diagnosis: [:node]).where(diagnosis_id: Version.find(params[:id]).diagnoses.map(&:id))
+    Version.find(params[:id]).final_diagnoses
   end
 end

@@ -48,6 +48,11 @@ class Version < ApplicationRecord
     archived ? '<span class="badge badge-danger">archived</span>' : ''
   end
 
+  # Gets all final diagnoses for current
+  def final_diagnoses
+    FinalDiagnosis.includes(diagnosis: [:node]).joins(diagnosis: [:node]).where(diagnosis_id: diagnoses.map(&:id))
+  end
+
   # @return [String]
   # Return a displayable string for this version
   def display_label
