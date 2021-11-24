@@ -206,6 +206,7 @@ namespace :algorithms do
   
   desc "24.11.2021: Some managements where added after the copy to india was made so we need to retreive those"
   task retreive_missing_managemnts: :environment do
+    Node.skip_callback(:create, :after, :generate_reference)
 
     ActiveRecord::Base.transaction(requires_new: true) do
       begin
