@@ -21,6 +21,7 @@ class NodeExclusion < ApplicationRecord
         new_media = Media.new(label_translations: media.label_translations, fileable: new_diag)
         new_media.duplicate_file(media)
       end
+ 
       NodeExclusion.where(excluding_node_id: key).map do |exclusion|
         NodeExclusion.create(excluding_node_id: value, excluded_node_id: matching_final_diagnoses[exclusion.excluded_node_id], node_type: exclusion.node_type)
       end

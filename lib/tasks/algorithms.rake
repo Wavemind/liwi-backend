@@ -199,6 +199,27 @@ namespace :algorithms do
       end
     end
   end
+  
+  desc "24.11.2021: Some managements where added after the copy to india was made so we need to retreive those"
+  task retreive_missing_managemnts: :environment do
+    Node.skip_callback(:create, :after, :generate_reference)
+
+    ActiveRecord::Base.transaction(requires_new: true) do
+      begin
+        old_algorithm = Algorithm.find(8)
+        new_algorithm = Algorithm.find(29)
+        managements = old_algorithm.nodes.where(type:"HealthCares::Management").where("reference > ?", 241)
+        managements.map do |management|
+          new_node = new_algorithm.nodes.create!(management.attributes.except('id', 'algorithm_id', 'created_at', 'updated_at'))
+        end
+      rescue => e
+        puts e
+        puts e.backtrace
+        raise ActiveRecord::Rollback, ''
+      end
+    end
+  end
+
   def values_from_conditions(conditions)
     values = []
     answers = Answer.find(conditions)
