@@ -232,7 +232,8 @@ class Diagnosis < ApplicationRecord
       old_diagnosis = df_instance.node.diagnosis
       new_df = df_instance.node.amoeba_dup
       new_df.diagnosis_id = id
-      if new_df.save
+      new_df.valid?
+      if new_df.save(validate: false)
         # Relink children
         Child.where(instance_id: components_ids, node: df_instance.node).each do |child|
           child.update!(node: new_df)

@@ -13,6 +13,14 @@ class NodeExclusion < ApplicationRecord
   # Recreate exclusions from final diagnoses pointing to old version to final diagnoses pointing to duplicated version
   def self.recreate_exclusions_after_duplicate(matching_final_diagnoses)
     matching_final_diagnoses.each do |key, value|
+      old_diag = Node.find(key)
+      new_diag = Node.find(value)
+      new_diag.medias.delete_all
+      old_diag.medias.map do |media|
+        new_media = Media.new(label_translations: media.label_translations, fileable: new_diag)
+        new_media.duplicate_file(media)
+      end
+      
       NodeExclusion.where(excluding_node_id: key).map do |exclusion|
         NodeExclusion.create(excluding_node_id: value, excluded_node_id: matching_final_diagnoses[exclusion.excluded_node_id], node_type: exclusion.node_type)
       end

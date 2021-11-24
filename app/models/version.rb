@@ -57,6 +57,11 @@ class Version < ApplicationRecord
     archived ? '<span class="badge badge-danger">archived</span>' : ''
   end
 
+  # Gets all final diagnoses for current version
+  def final_diagnoses
+    FinalDiagnosis.includes(diagnosis: [:node]).joins(diagnosis: [:node]).where(diagnosis_id: diagnoses.map(&:id))
+  end
+
   # @return [String]
   # Return a displayable string for this version
   def display_label
@@ -66,10 +71,12 @@ class Version < ApplicationRecord
   # Duplicate the version
   def duplicate
     ActiveRecord::Base.transaction(requires_new: true) do
+      Diagnosis.skip_callback(:create, :after, :generate_reference)
+      Node.skip_callback(:create, :after, :generate_reference) # Keep same references than original version for DFs and DDs
       diagnoses.each { |diagnosis| diagnosis.update(duplicating: true) }
       duplicated_version = self.amoeba_dup
 
-      if duplicated_version.save!
+      if duplicated_version.save(validate: false)
         duplicated_version.diagnoses.each_with_index { |diagnosis, index| diagnosis.relink_instance }
         diagnoses.each { |diagnosis| diagnosis.update(duplicating: false) }
       else
