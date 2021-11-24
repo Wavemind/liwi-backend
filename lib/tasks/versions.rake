@@ -18,7 +18,6 @@ namespace :versions do
           exclusions.map do |exclusion|
             excluded_node = version_destination.final_diagnoses.find_by(reference: exclusion.excluded_node.reference)
             excluding_node = version_destination.final_diagnoses.find_by(reference: exclusion.excluding_node.reference)
-            a = NodeExclusion.find_by(excluded_node_id: excluded_node.id, excluding_node_id: excluding_node.id, node_type: "final_diagnosis")
             NodeExclusion.create!(excluded_node: excluded_node, excluding_node: excluding_node, node_type: "final_diagnosis")
           end
       rescue => e
