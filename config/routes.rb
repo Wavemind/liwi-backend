@@ -249,7 +249,9 @@ Rails.application.routes.draw do
       get 'is_available', to: 'application#is_available'
       get 'categories', to: 'application#categories'
 
-      resources :health_facilities, only: [:show, :get_from_study]
+      resources :health_facilities, only: [:show] do
+        get 'get_from_study', to: 'health_facilities#get_from_study'
+      end
     end
   end
 end
