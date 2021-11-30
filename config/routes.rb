@@ -250,7 +250,9 @@ Rails.application.routes.draw do
       get 'categories', to: 'application#categories'
 
       resources :health_facilities, only: [:show] do
-        get 'get_from_study', to: 'health_facilities#get_from_study'
+        collection do
+          get 'get_from_study', to: 'health_facilities#get_from_study'
+        end
       end
     end
   end
