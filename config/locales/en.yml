@@ -192,6 +192,8 @@ en:
       algorithms:
         invalid_algorithm: "Invalid algorithm id"
       health_facilities:
+        get_from_study:
+          no_study: "No study exists with the provided label"
         show:
           no_health_facility: "Please provide a valid Health Facility ID"
       versions:
