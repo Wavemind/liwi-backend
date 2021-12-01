@@ -16,6 +16,7 @@ import {
   CATEGORIES_DISPLAYING_UNAVAILABLE_OPTION,
   CATEGORIES_UNAVAILABLE_UNKNOWN,
   CATEGORIES_UNAVAILABLE_NOT_FEASIBLE,
+  DEMOGRAPHIC_CATEGORIES,
   NO_ANSWERS_ATTACHED_TYPE,
   NO_ANSWERS_ATTACHED_ANSWER_TYPE,
   NUMERIC_ANSWER_TYPES,
@@ -428,7 +429,7 @@ export default class QuestionForm extends React.Component {
                   </Form.Group>
                   : null}
 
-                {CATEGORIES_DISPLAYING_FILTERABLE.includes(values.type) ?
+                {DEMOGRAPHIC_CATEGORIES.includes(values.type) ?
                   <Form.Group controlId="validationIsPreFill">
                     <Form.Check
                       name="is_pre_fill"
