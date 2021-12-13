@@ -30,6 +30,7 @@ export default class Http {
         this.instanceableType = "questions_sequences";
         break;
     }
+    this.version = data.dataset.version;
     this.algorithm = data.dataset.algorithm;
     this.token = document.querySelector("meta[name='csrf-token']").content;
   }
