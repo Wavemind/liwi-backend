@@ -20,9 +20,9 @@ wb.add_worksheet(name: "General") do |sheet|
   end
   sheet.add_row rows
 
-  rows = [@version.algorithm_id, 'Algorithm', "Age limit message", @version.algorithm.age_limit_message_en]
+  rows = [@version.id, 'Version', "Age limit message", @version.age_limit_message_en]
   languages_codes.map do |l|
-    rows.push(@version.algorithm.send("age_limit_message_#{l}"))
+    rows.push(@version.send("age_limit_message_#{l}"))
   end
   sheet.add_row rows
 
