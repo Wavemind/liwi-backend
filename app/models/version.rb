@@ -33,8 +33,9 @@ class Version < ApplicationRecord
 
   before_create :init_config
 
-  validates_presence_of :name
-  validates_presence_of :description_en
+  validates_presence_of :name, :description_en, :age_limit, :age_limit_message, :minimum_age
+  validates :age_limit, numericality: { greater_than_or_equal_to: 1 }
+  validates :minimum_age, numericality: { greater_than_or_equal_to: 0 }
 
   amoeba do
     enable
