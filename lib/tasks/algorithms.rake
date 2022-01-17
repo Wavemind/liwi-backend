@@ -4,7 +4,7 @@ namespace :algorithms do
     ActiveRecord::Base.transaction(requires_new: true) do
       begin
         puts "#{Time.zone.now.strftime("%I:%M")} - Copying the Algorithm ..."
-        origin_algorithm = Algorithm.find(8)
+        origin_algorithm = Algorithm.find(1)
         copied_algorithm = Algorithm.new(origin_algorithm.attributes.except('id', 'name', 'created_at', 'updated_at'))
         copied_algorithm.name = "Copy of #{origin_algorithm.name}"
         Algorithm.skip_callback(:create, :after, :create_reference_table_questions)
@@ -199,7 +199,7 @@ namespace :algorithms do
       end
     end
   end
-  
+
   desc "24.11.2021: Some managements where added after the copy to india was made so we need to retreive those"
   task retreive_missing_managemnts: :environment do
     Node.skip_callback(:create, :after, :generate_reference)
@@ -251,7 +251,7 @@ namespace :algorithms do
               i += 1
               next if cut_off_instance.instanceable.is_a?(Version)
               if cut_off_instance.final_diagnosis_id.present? || cut_off_instance.instanceable.is_a?(QuestionsSequences::Scored)
-                    
+
                 impossible_diagram_to_manage.push(cut_off_instance.instanceable)
                 next
               end
