@@ -74,7 +74,7 @@ class Version < ApplicationRecord
     matching_final_diagnoses = {}
     matching_instances = {}
     # Recreate version
-    new_version = Version.create!(self.attributes.except('id', 'user_id', 'name', 'created_at', 'updated_at').merge({'name': "Copy of #{name}"}))
+    new_version = Version.create!(self.attributes.except('id', 'name', 'created_at', 'updated_at').merge({'name': "Copy of #{name}"}))
     # Recreate diagnoses
     diagnoses.each do |diagnosis|
       new_diagnosis = new_version.diagnoses.create!(diagnosis.attributes.except('id', 'version_id', 'created_at', 'updated_at'))

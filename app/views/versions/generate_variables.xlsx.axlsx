@@ -3,6 +3,9 @@ wrap = xlsx_package.workbook.styles.add_style alignment: {wrap_text: true}
 align_top = xlsx_package.workbook.styles.add_style border: { style: :thin, color: "000000" }, alignment: {horizontal: :left, vertical: :top, wrap_text: true}
 align_mid = xlsx_package.workbook.styles.add_style b: true, bg_color: "D9D9D9", border: { style: :thin, color: "000000" }, alignment: {horizontal: :center , vertical: :center, wrap_text: true}
 
+old_language = I18n.default_locale
+I18n.default_locale = @version.algorithm.study.default_language
+
 nodes = @version.algorithm.questions
 drugs = @version.algorithm.health_cares.drugs
 managements = @version.algorithm.health_cares.managements
@@ -22,17 +25,17 @@ wb.add_worksheet(name: "Variables") do |sheet|
 
     complaint_categories = node.complaint_categories.map(&:full_reference).to_s unless node.is_a?(Questions::ComplaintCategory) || node.complaint_categories.empty?
 
-    sheet.add_row [node.id, I18n.t("questions.categories.#{node.class.variable}.label"), node.full_reference, node.label_en, node.is_neonat.to_s,
+    sheet.add_row [node.id, I18n.t("questions.categories.#{node.class.variable}.label"), node.full_reference, node.label, node.is_neonat.to_s,
                    node.system.present? ? I18n.t("questions.systems.#{node.system}") : '', node.is_mandatory.to_s, node.is_identifiable.to_s, node.estimable.to_s,
                    node.emergency_status.present? ? I18n.t("activerecord.attributes.question.emergency_statuses.#{node.emergency_status}") : '', node.round,
-                   node.description_en, complaint_categories, answers, node.instances.map(&:diagram).map(&:reference_label).join("\r")], style: wrap
+                   node.description, complaint_categories, answers, node.instances.map(&:diagram).map(&:reference_label).join("\r")], style: wrap
   end
 end
 
 wb.add_worksheet(name: "Diagnoses") do |sheet|
   sheet.add_row ["ID", "Reference", "Label", "CC", "Cutoff start (days)", "Cutoff end (days)"]
   @version.diagnoses.map do |diag|
-    sheet.add_row [diag.id, diag.full_reference, diag.label_en, diag.node.full_reference, diag.cut_off_start, diag.cut_off_end]
+    sheet.add_row [diag.id, diag.full_reference, diag.label, diag.node.full_reference, diag.cut_off_start, diag.cut_off_end]
 
     diag.final_diagnoses.map do |fd|
       final_diagnoses.push(fd)
@@ -44,7 +47,7 @@ wb.add_worksheet(name: "Final diagnoses") do |sheet|
   sheet.add_row ["ID", "Reference", "Label", "Level of urgency", "Description"]
 
   final_diagnoses.map do |node|
-    sheet.add_row [node.id, node.full_reference, node.label_en, node.level_of_urgency, node.description_en], style: wrap
+    sheet.add_row [node.id, node.full_reference, node.label, node.level_of_urgency, node.description], style: wrap
   end
 end
 
@@ -54,7 +57,7 @@ wb.add_worksheet(name: "Questions sequences") do |sheet|
   questions_sequences.map do |node|
     complaint_categories = node.complaint_categories.map(&:full_reference).to_s unless node.complaint_categories.empty?
 
-    sheet.add_row [node.id, node.full_reference, node.label_en, node.cut_off_start, node.cut_off_end, node.min_score, node.description_en, complaint_categories, node.instances.map(&:diagram).map(&:reference_label).join("\r")], style: wrap
+    sheet.add_row [node.id, node.full_reference, node.label, node.cut_off_start, node.cut_off_end, node.min_score, node.description, complaint_categories, node.instances.map(&:diagram).map(&:reference_label).join("\r")], style: wrap
   end
 end
 
@@ -73,8 +76,8 @@ wb.add_worksheet(name: "Drugs") do |sheet|
     bools += "Antimalarial \r" if node.is_anti_malarial
 
     node.formulations.each_with_index do |formulation, index|
-      row = index == 0 ? [node.id, node.full_reference, node.label_en, node.level_of_urgency, node.description_en, node.instances.map(&:diagram).map(&:reference_label).join("\r"), bools] : ['', '', '', '', '', '', '']
-      row.push("#{formulation.id} | #{formulation.medication_form}", formulation.administration_route.name_en, formulation.doses_per_day, formulation.by_age ? 'Y' : 'N',
+      row = index == 0 ? [node.id, node.full_reference, node.label, node.level_of_urgency, node.description, node.instances.map(&:diagram).map(&:reference_label).join("\r"), bools] : ['', '', '', '', '', '', '']
+      row.push("#{formulation.id} | #{formulation.medication_form}", formulation.administration_route.name, formulation.doses_per_day, formulation.by_age ? 'Y' : 'N',
                formulation.breakable.present? ? I18n.t("formulations.breakables.#{formulation.breakable}.label") : '', formulation.liquid_concentration)
 
       # Logic to display the dose_form in the correct column
@@ -94,8 +97,8 @@ wb.add_worksheet(name: "Drugs") do |sheet|
         row.push('-', '-', '-', '-', formulation.unique_dose)
       end
 
-      row.push(formulation.maximal_dose, formulation.maximal_dose_per_kg, formulation.minimal_dose_per_kg, formulation.description_en,
-               formulation.injection_instructions_en, formulation.dispensing_description_en)
+      row.push(formulation.maximal_dose, formulation.maximal_dose_per_kg, formulation.minimal_dose_per_kg, formulation.description,
+               formulation.injection_instructions, formulation.dispensing_description)
       row = sheet.add_row row, style: align_top
       drug_rows.push(row)
     end
@@ -113,7 +116,7 @@ wb.add_worksheet(name: "Managements") do |sheet|
   sheet.add_row ["ID", "Reference", "Label", "Referral", "Level of urgency", "Description", "Uses"]
 
   managements.map do |node|
-    sheet.add_row [node.id, node.full_reference, node.label_en, node.is_referral.to_s, node.level_of_urgency, node.description_en, node.instances.map(&:diagram).map(&:reference_label).join("\r")], style: wrap
+    sheet.add_row [node.id, node.full_reference, node.label, node.is_referral.to_s, node.level_of_urgency, node.description, node.instances.map(&:diagram).map(&:reference_label).join("\r")], style: wrap
   end
 end
 
@@ -121,6 +124,8 @@ wb.add_worksheet(name: "Media") do |sheet|
   sheet.add_row ["ID", "Node type", "Node label", "Media label", "Link"]
   medias = Media.where(fileable_type: 'Node', fileable_id: (nodes.map(&:id) + managements.map(&:id) + drugs.map(&:id)))
   medias.map do |media|
-    sheet.add_row [media.id, media.fileable.type, media.fileable.reference_label, media.label_en, media.url.url], style: wrap
+    sheet.add_row [media.id, media.fileable.type, media.fileable.reference_label, media.label, media.url.url], style: wrap
   end
 end
+
+I18n.default_locale = old_language
