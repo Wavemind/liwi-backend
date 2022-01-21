@@ -4,7 +4,8 @@ align_top = xlsx_package.workbook.styles.add_style border: { style: :thin, color
 align_mid = xlsx_package.workbook.styles.add_style b: true, bg_color: "D9D9D9", border: { style: :thin, color: "000000" }, alignment: {horizontal: :center , vertical: :center, wrap_text: true}
 
 old_language = I18n.default_locale
-I18n.default_locale = @version.algorithm.study.default_language
+current_language = @version.algorithm.study.default_language
+I18n.default_locale = current_language
 
 nodes = @version.algorithm.questions
 drugs = @version.algorithm.health_cares.drugs
@@ -20,7 +21,7 @@ wb.add_worksheet(name: "Variables") do |sheet|
     answers = ""
     node.answers.each_with_index do |answer, index|
       answers += "\r" unless index == 0
-      answers += "#{answer.id} | #{answer.reference_label}"
+      answers += "#{answer.id} | #{answer.reference_label(current_language)}"
     end
 
     complaint_categories = node.complaint_categories.map(&:full_reference).to_s unless node.is_a?(Questions::ComplaintCategory) || node.complaint_categories.empty?
