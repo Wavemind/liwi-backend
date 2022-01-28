@@ -27,9 +27,7 @@ class ManagementsController < ApplicationController
         render json: { url: algorithm_url(@algorithm, panel: 'managements'), management: @management }
       else
         diagnosis = Diagnosis.find(params[:diagnosis_id])
-        final_diagnosis = FinalDiagnosis.find(params[:final_diagnosis_id])
-        final_diagnosis.health_cares << @management
-        instance = diagnosis.components.create!(node: @management, final_diagnosis: final_diagnosis)
+        instance = diagnosis.components.create!(node: @management, final_diagnosis_id: params[:final_diagnosis_id])
 
         render json: instance.generate_json
       end
@@ -97,7 +95,7 @@ class ManagementsController < ApplicationController
   end
 
   private
-  
+
   def set_breadcrumb
     add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
     add_breadcrumb @algorithm.name, algorithm_url(@algorithm, panel: 'managements')

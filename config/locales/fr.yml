@@ -428,6 +428,24 @@ fr:
     errors:
       minimum_higher_than_maximum: "The minimum dose per kg can't be greater than the maximum dose per kg"
       maximum_per_kg_higher_than_maximum: "The maximum dose per kg can't be greater than the maximum dose per day"
+    medication_forms:
+      tablet: "Comprimé"
+      capsule: "Capsule"
+      syrup: "Syrop"
+      suspension: "Suspension"
+      suppository: "Suppositoire"
+      drops: "Gouttes"
+      solution: "Solution"
+      powder_for_injection: "Poudre pour injection"
+      patch: "Patch"
+      cream: "Crème"
+      ointment: "Onguent"
+      gel: "Gel"
+      spray: "Spray"
+      inhaler: "Inhalateur"
+      pessary: "Pessaire (éponge)"
+      dispersible_tablet: "Comprimé non-dispersible"
+      lotion: "Lotion"
     new:
       title: "New formulations"
     edit:

@@ -29,7 +29,7 @@ wb.add_worksheet(name: "Variables") do |sheet|
     sheet.add_row [node.id, I18n.t("questions.categories.#{node.class.variable}.label"), node.full_reference, node.label, node.is_neonat.to_s,
                    node.system.present? ? I18n.t("questions.systems.#{node.system}") : '', node.is_mandatory.to_s, node.is_identifiable.to_s, node.estimable.to_s,
                    node.emergency_status.present? ? I18n.t("activerecord.attributes.question.emergency_statuses.#{node.emergency_status}") : '', node.round,
-                   node.description, complaint_categories, answers, node.instances.map(&:diagram).map(&:reference_label).join("\r")], style: wrap
+                   node.description, complaint_categories, answers, node.instances.map(&:diagram).map{|diag| diag.reference_label(current_language)}.join("\r")], style: wrap
   end
 end
 
@@ -77,8 +77,8 @@ wb.add_worksheet(name: "Drugs") do |sheet|
     bools += "Antimalarial \r" if node.is_anti_malarial
 
     node.formulations.each_with_index do |formulation, index|
-      row = index == 0 ? [node.id, node.full_reference, node.label, node.level_of_urgency, node.description, node.instances.map(&:diagram).map(&:reference_label).join("\r"), bools] : ['', '', '', '', '', '', '']
-      row.push("#{formulation.id} | #{formulation.medication_form}", formulation.administration_route.name, formulation.doses_per_day, formulation.by_age ? 'Y' : 'N',
+      row = index == 0 ? [node.id, node.full_reference, node.label, node.level_of_urgency, node.description, node.instances.map(&:diagram).map{|diag| diag.reference_label(current_language)}.join("\r"), bools] : ['', '', '', '', '', '', '']
+      row.push("#{formulation.id} | #{I18n.t("formulations.medication_forms.#{formulation.medication_form}")}", formulation.administration_route.name, formulation.doses_per_day, formulation.by_age ? 'Y' : 'N',
                formulation.breakable.present? ? I18n.t("formulations.breakables.#{formulation.breakable}.label") : '', formulation.liquid_concentration)
 
       # Logic to display the dose_form in the correct column
@@ -117,7 +117,7 @@ wb.add_worksheet(name: "Managements") do |sheet|
   sheet.add_row ["ID", "Reference", "Label", "Referral", "Level of urgency", "Description", "Uses"]
 
   managements.map do |node|
-    sheet.add_row [node.id, node.full_reference, node.label, node.is_referral.to_s, node.level_of_urgency, node.description, node.instances.map(&:diagram).map(&:reference_label).join("\r")], style: wrap
+    sheet.add_row [node.id, node.full_reference, node.label, node.is_referral.to_s, node.level_of_urgency, node.description, node.instances.map(&:diagram).map{|diag| diag.reference_label(current_language)}.join("\r")], style: wrap
   end
 end
 
@@ -125,7 +125,7 @@ wb.add_worksheet(name: "Media") do |sheet|
   sheet.add_row ["ID", "Node type", "Node label", "Media label", "Link"]
   medias = Media.where(fileable_type: 'Node', fileable_id: (nodes.map(&:id) + managements.map(&:id) + drugs.map(&:id)))
   medias.map do |media|
-    sheet.add_row [media.id, media.fileable.type, media.fileable.reference_label, media.label, media.url.url], style: wrap
+    sheet.add_row [media.id, media.fileable.type, media.fileable.reference_label(current_language), media.label, media.url.url], style: wrap
   end
 end
 
