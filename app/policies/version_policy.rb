@@ -89,6 +89,10 @@ class VersionPolicy < ApplicationPolicy
     new?
   end
 
+  def reset_job_id?
+    new?
+  end
+
   def medal_data_config?
     new?
   end

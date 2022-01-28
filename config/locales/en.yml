@@ -469,6 +469,8 @@ en:
     edit:
       title: "Edit formulations"
   health_facilities:
+    accesses:
+      reset_job_id: 'Reset generation process'
     add_device:
       success_add_device: "Device successfully added to the Health Facility"
       error_add_device: "An error occurred when adding the device to the Health Facility"

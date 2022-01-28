@@ -1,8 +1,8 @@
 class VersionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :duplicate, :create_triage_condition, :remove_triage_condition, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnoses, :import_translations, :job_status, :update_full_order, :list, :diagram]
+  before_action :set_algorithm, only: [:index, :show, :new, :create, :edit, :update, :archive, :unarchive, :duplicate, :create_triage_condition, :remove_triage_condition, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnoses, :import_translations, :job_status, :update_full_order, :list, :diagram, :reset_job_id]
   before_action :set_breadcrumb, only: [:show, :new, :edit]
-  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :components, :create_triage_condition, :duplicate, :remove_components, :remove_triage_condition, :update_list, :regenerate_json, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnoses, :import_translations, :job_status, :update_full_order, :registration_triage_questions, :medal_data_config, :full_order, :translations, :diagram]
+  before_action :set_version, only: [:show, :edit, :update, :archive, :unarchive, :components, :create_triage_condition, :duplicate, :remove_components, :remove_triage_condition, :update_list, :regenerate_json, :final_diagnoses_exclusions, :generate_translations, :generate_variables, :final_diagnoses, :import_translations, :job_status, :update_full_order, :registration_triage_questions, :medal_data_config, :full_order, :translations, :diagram, :reset_job_id]
   layout 'diagram', only: [:diagram]
 
   def index
@@ -284,6 +284,18 @@ class VersionsController < ApplicationController
     else
       redirect_to algorithm_version_url(@algorithm, @version, panel: 'triage_conditions'), notice: t('flash_message.create_fail')
     end
+  end
+
+  # PUT algorithms/:algorithm_id/versions/:id/reset_job_id
+  # @param version [Version] version
+  # Reset the job id to restart a json generation
+  def reset_job_id
+    if @version.update(job_id: '')
+      flash[:notice] = t('flash_message.success_updated')
+    else
+      flash[:alert] = t('flash_message.update_fail')
+    end
+    redirect_to :back
   end
 
   # GET algorithms/:algorithm_id/versions/:id/translations

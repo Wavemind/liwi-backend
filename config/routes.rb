@@ -59,6 +59,7 @@ Rails.application.routes.draw do
         put 'update_list'
         put 'import_translations'
         put 'update_full_order'
+        put 'reset_job_id'
       end
 
       collection do

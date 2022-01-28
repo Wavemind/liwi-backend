@@ -110,7 +110,7 @@ export default class Http {
       from
     };
     body['health_cares_management'][`label_${this.l}`] = label;
-    body['health_cares_management'][`description_${this.l}`] = label;
+    body['health_cares_management'][`description_${this.l}`] = description;
 
     const header = await this.setHeaders("POST", body);
     return await fetch(url, header).catch(error => console.log(error));
