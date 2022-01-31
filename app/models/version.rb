@@ -99,7 +99,7 @@ class Version < ApplicationRecord
       # Recreate conditions
       matching_instances.each do |instance, new_instance|
         instance.conditions.each do |condition|
-          new_instance.conditions.create!(condition.attributes.only('score', 'cut_off_start', 'cut_of_end', 'answer_id'))
+          new_instance.conditions.create!(condition.attributes.slice('score', 'cut_off_start', 'cut_of_end', 'answer_id'))
         end
       end
     end
