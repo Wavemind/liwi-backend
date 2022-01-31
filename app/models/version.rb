@@ -71,37 +71,40 @@ class Version < ApplicationRecord
 
   # Duplicate the version
   def duplicate
-    matching_final_diagnoses = {}
-    matching_instances = {}
-    # Recreate version
-    new_version = Version.create!(self.attributes.except('id', 'name', 'job_id', 'created_at', 'updated_at').merge({'name': "Copy of #{name}"}))
-    # Recreate diagnoses
-    diagnoses.each do |diagnosis|
-      new_diagnosis = new_version.diagnoses.create!(diagnosis.attributes.except('id', 'version_id', 'created_at', 'updated_at'))
-      # Recreate final diagnoses
-      diagnosis.final_diagnoses.each do |final_diagnosis|
-        new_final_diagnosis = new_diagnosis.final_diagnoses.create!(final_diagnosis.attributes.except('id', 'diagnosis_id', 'created_at', 'updated_at'))
-        # Store matching final diagnoses to recreate exclusions
-        matching_final_diagnoses[final_diagnosis.id] = new_final_diagnosis.id
+    ActiveRecord::Base.transaction(requires_new: true) do
+      matching_final_diagnoses = {}
+      matching_instances = {}
+      # Recreate version
+      new_version = Version.create!(self.attributes.except('id', 'name', 'job_id', 'created_at', 'updated_at').merge({'name': "Copy of #{name}"}))
+      # Recreate diagnoses
+      diagnoses.each do |diagnosis|
+        new_diagnosis = new_version.diagnoses.create!(diagnosis.attributes.except('id', 'version_id', 'created_at', 'updated_at'))
+        # Recreate final diagnoses
+        diagnosis.final_diagnoses.each do |final_diagnosis|
+          new_final_diagnosis = new_diagnosis.final_diagnoses.create!(final_diagnosis.attributes.except('id', 'diagnosis_id', 'created_at', 'updated_at'))
+          # Store matching final diagnoses to recreate exclusions
+          matching_final_diagnoses[final_diagnosis.id] = new_final_diagnosis.id
+        end
+        # Recreate instances
+        diagnosis.components.each do |instance|
+          new_instance = new_diagnosis.components.create!(instance.attributes.except('id', 'final_diagnosis_id', 'created_at', 'updated_at').merge({'final_diagnosis_id': matching_final_diagnoses[instance.final_diagnosis_id]}))
+          # Store matching instances to recreate conditions afterwards
+          matching_instances[instance] = new_instance
+        end
       end
-      # Recreate instances
-      diagnosis.components.each do |instance|
-        new_instance = new_diagnosis.components.create!(instance.attributes.except('id', 'final_diagnosis_id', 'created_at', 'updated_at').merge({'final_diagnosis_id': matching_final_diagnoses[instance.final_diagnosis_id]}))
-        # Store matching instances to recreate conditions afterwards
-        matching_instances[instance] = new_instance
+      # Recreate exclusions
+      NodeExclusion.where(excluding_node_id: matching_final_diagnoses.keys).each do |exclusion|
+        NodeExclusion.create(excluding_node_id: matching_final_diagnoses[exclusion.excluding_node_id], excluded_node_id: matching_final_diagnoses[exclusion.excluded_node_id])
       end
-    end
-    # Recreate exclusions
-    NodeExclusion.where(excluding_node_id: matching_final_diagnoses.keys).each do |exclusion|
-      NodeExclusion.create(excluding_node_id: matching_final_diagnoses[exclusion.excluding_node_id], excluded_node_id: matching_final_diagnoses[exclusion.excluded_node_id])
-    end
-    # Recreate conditions
-    matching_instances.each do |instance, new_instance|
-      instance.conditions.each do |condition|
-        new_instance.conditions.create!(condition.attributes.only('score', 'cut_off_start', 'cut_of_end', 'answer_id'))
+      # Recreate conditions
+      matching_instances.each do |instance, new_instance|
+        instance.conditions.each do |condition|
+          new_instance.conditions.create!(condition.attributes.only('score', 'cut_off_start', 'cut_of_end', 'answer_id'))
+        end
       end
     end
   end
+
 
   # Add nodes that are called by the json service
   def extract_nodes_from_version
