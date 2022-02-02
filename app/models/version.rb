@@ -89,7 +89,7 @@ class Version < ApplicationRecord
         diagnosis.components.each do |instance|
           new_instance = new_diagnosis.components.create!(instance.attributes.except('id', 'final_diagnosis_id', 'created_at', 'updated_at').merge({'final_diagnosis_id': matching_final_diagnoses[instance.final_diagnosis_id]}))
           # Store matching instances to recreate conditions afterwards
-          matching_instances[instance] = new_instance
+          matching_instances[instance.id] = new_instance
         end
       end
       # Recreate exclusions
@@ -97,8 +97,12 @@ class Version < ApplicationRecord
         NodeExclusion.create(excluding_node_id: matching_final_diagnoses[exclusion.excluding_node_id], excluded_node_id: matching_final_diagnoses[exclusion.excluded_node_id])
       end
       # Recreate conditions
-      matching_instances.each do |instance, new_instance|
+      matching_instances.each do |instance_id, new_instance|
+        instance = Instance.find(instance_id)
         instance.conditions.each do |condition|
+          puts '**'
+          puts condition.id
+          puts '**'
           new_instance.conditions.create!(condition.attributes.slice('score', 'cut_off_start', 'cut_of_end', 'answer_id'))
         end
       end

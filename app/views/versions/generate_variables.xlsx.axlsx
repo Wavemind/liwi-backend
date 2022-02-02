@@ -98,7 +98,7 @@ wb.add_worksheet(name: "Drugs") do |sheet|
         row.push('-', '-', '-', '-', formulation.unique_dose)
       end
 
-      row.push(formulation.maximal_dose, formulation.maximal_dose_per_kg, formulation.minimal_dose_per_kg, formulation.description,
+      row.push(formulation.maximal_dose, formulation.minimal_dose_per_kg, formulation.maximal_dose_per_kg, formulation.description,
                formulation.injection_instructions, formulation.dispensing_description)
       row = sheet.add_row row, style: align_top
       drug_rows.push(row)
