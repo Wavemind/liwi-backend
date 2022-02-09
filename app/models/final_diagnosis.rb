@@ -131,7 +131,7 @@ class FinalDiagnosis < Node
   # @return [String]
   # Return the label with the reference formatted for dropdown lists
   def reference_label_dropdown_list(language = 'en')
-    "#{label} (#{diagnosis.send("label_#{language}")})"
+    "#{self.send("label_#{language}")} (#{diagnosis.send("label_#{language}")})"
   end
 
   # Get the reference prefix according to the type
