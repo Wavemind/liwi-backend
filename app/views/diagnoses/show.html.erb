@@ -1,4 +1,4 @@
-<h1><%= t('.title', name: @diagnosis.send("label:#{@default_language}")) %> <%= link_to(I18n.t('open_diagram'), diagram_algorithm_version_diagnosis_url(params[:algorithm_id], params[:version_id], params[:id]), class: 'btn btn-dark') %></h1>
+<h1><%= t('.title', name: @diagnosis.send("label_#{@default_language}")) %> <%= link_to(I18n.t('open_diagram'), diagram_algorithm_version_diagnosis_url(params[:algorithm_id], params[:version_id], params[:id]), class: 'btn btn-dark') %></h1>
 
 <div class="tab-content mt-4 ml-4" id="diagnosis-table">
   <h3 class="mt-5"><%= t('.subtitle_final_diagnoses') %></h3>

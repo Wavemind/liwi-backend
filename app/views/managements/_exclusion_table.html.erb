@@ -3,13 +3,13 @@
 <%= simple_form_for NodeExclusion.new, url: create_exclusion_algorithm_managements_url(@algorithm, format: :html), method: :post do |f| %>
   <div class="row">
     <div class="col">
-      <%= f.input :excluding_node_id, collection: @algorithm.health_cares.managements, value_method: :id, label_method: "reference_label(#{@default_language})", label: false, prompt: t('prompt') %>
+      <%= f.input :excluding_node_id, collection: @algorithm.health_cares.managements, value_method: :id, label_method: lambda { |node| node.reference_label(@default_language) }, label: false, prompt: t('prompt') %>
     </div>
     <div class="col text-center">
       <%= t('.excludes') %>
     </div>
     <div class="col">
-      <%= f.input :excluded_node_id, collection: @algorithm.health_cares.managements, value_method: :id, label_method: "reference_label(#{@default_language})", label: false, prompt: t('prompt') %>
+      <%= f.input :excluded_node_id, collection: @algorithm.health_cares.managements, value_method: :id, label_method: lambda { |node| node.reference_label(@default_language) }, label: false, prompt: t('prompt') %>
     </div>
     <div class="col text-right">
       <%= f.submit t('add'), class: 'btn btn-primary' %>
