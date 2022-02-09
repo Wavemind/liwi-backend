@@ -8,23 +8,23 @@
             <% if dependence.instanceable_type == 'Diagnosis' %>
               <% if dependence.final_diagnosis_id.present? %>
                 <%= link_to diagram_algorithm_version_diagnosis_final_diagnosis_url(dependence.instanceable.version.algorithm_id, dependence.instanceable.version, dependence.instanceable, dependence.final_diagnosis_id) do %>
-                  <li><b><%= "#{dependence.final_diagnosis.full_reference} - #{dependence.final_diagnosis.label}" %></b></li>
+                  <li><b><%= dependence.final_diagnosis.reference_label(@default_language) %></b></li>
                 <% end %>
               <% else %>
                 <%= link_to diagram_algorithm_version_diagnosis_url(dependence.instanceable.version.algorithm_id, dependence.instanceable.version, dependence.instanceable) do %>
-                  <li><b><%= "#{dependence.instanceable.full_reference} - #{dependence.instanceable.label}" %></b></li>
+                  <li><b><%= dependence.instanceable.reference_label(@default_language) %></b></li>
                 <% end %>
               <% end %>
             <% else %>
               <%= link_to diagram_questions_sequence_url(dependence.instanceable) do %>
-                <li><b><%= "#{dependence.instanceable.full_reference} - #{dependence.instanceable.label}" %></b></li>
+                <li><b><%= dependence.instanceable.reference_label(@default_language) %></b></li>
               <% end %>
-              <li><b><%= "#{dependence.instanceable.full_reference} - #{dependence.instanceable.label}" %></b></li>
+              <li><b><%= dependence.instanceable.reference_label(@default_language) %></b></li>
             <% end %>
           <% end %>
           <% node.diagnoses.each do |diagnosis| %>
             <%= link_to diagram_algorithm_version_diagnosis_url(diagnosis.version.algorithm_id, diagnosis.version, diagnosis) do %>
-              <li><b><%= "#{diagnosis.full_reference} - #{diagnosis.label}" %></b></li>
+              <li><b><%= diagnosis.reference_label(@default_language) %></b></li>
             <% end %>
           <% end %>
         </ul>

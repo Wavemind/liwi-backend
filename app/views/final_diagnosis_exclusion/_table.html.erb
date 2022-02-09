@@ -3,13 +3,13 @@
 <%= simple_form_for NodeExclusion.new, url: add_exclusion_algorithm_version_final_diagnoses_url(@version.algorithm, @version, format: :html), method: :post do |f| %>
   <div class="row">
     <div class="col">
-      <%= f.input :excluding_node_id, collection: FinalDiagnosis.where(diagnosis_id: @version.diagnoses.map(&:id)).order('hstore("label_translations")'), value_method: :id, label_method: :reference_label_dropdown_list, label: false, prompt: t('prompt') %>
+      <%= f.input :excluding_node_id, collection: FinalDiagnosis.where(diagnosis_id: @version.diagnoses.map(&:id)).order('hstore("label_translations")'), value_method: :id, label_method: "reference_label_dropdown_list(#{@default_language})", label: false, prompt: t('prompt') %>
     </div>
     <div class="col text-center">
       <%= t('.excludes') %>
     </div>
     <div class="col">
-      <%= f.input :excluded_node_id, collection: FinalDiagnosis.where(diagnosis_id: @version.diagnoses.map(&:id)).order('hstore("label_translations")'), value_method: :id, label_method: :reference_label_dropdown_list, label: false, prompt: t('prompt') %>
+      <%= f.input :excluded_node_id, collection: FinalDiagnosis.where(diagnosis_id: @version.diagnoses.map(&:id)).order('hstore("label_translations")'), value_method: :id, label_method: "reference_label_dropdown_list(#{@default_language})", label: false, prompt: t('prompt') %>
     </div>
     <div class="col text-right">
       <%= f.submit t('add'), class: "btn btn-primary", disabled: @version.in_prod %>
