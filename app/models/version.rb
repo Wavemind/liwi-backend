@@ -80,6 +80,19 @@ class Version < ApplicationRecord
         matching_instances = {}
         # Recreate version
         new_version = Version.create!(self.attributes.except('id', 'name', 'job_id', 'created_at', 'updated_at').merge({'name': "Copy of #{name}"}))
+
+        # Recreate components
+        components.each do |instance|
+          new_instance = new_version.components.create!(instance.attributes.except('id', 'final_diagnosis_id', 'created_at', 'updated_at'))
+          # Store matching instances to recreate conditions afterwards
+          matching_instances[instance.id] = new_instance
+        end
+
+        # Recreate Medal Data variables
+        medal_data_config_variables.each do |config|
+          new_version.medal_data_config_variables.create!(config.attributes.except('id', 'version_id'))
+        end
+
         # Recreate diagnoses
         diagnoses.each do |diagnosis|
           new_diagnosis = new_version.diagnoses.create!(diagnosis.attributes.except('id', 'version_id', 'created_at', 'updated_at'))
