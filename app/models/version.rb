@@ -75,6 +75,7 @@ class Version < ApplicationRecord
       matching_final_diagnoses = {}
       matching_instances = {}
       # Recreate version
+      Version.skip_callback(:create, :before, :init_config)
       new_version = Version.create!(self.attributes.except('id', 'name', 'job_id', 'created_at', 'updated_at').merge({'name': "Copy of #{name}"}))
       # Recreate diagnoses
       diagnoses.each do |diagnosis|
@@ -94,15 +95,12 @@ class Version < ApplicationRecord
       end
       # Recreate exclusions
       NodeExclusion.where(excluding_node_id: matching_final_diagnoses.keys).each do |exclusion|
-        NodeExclusion.create(excluding_node_id: matching_final_diagnoses[exclusion.excluding_node_id], excluded_node_id: matching_final_diagnoses[exclusion.excluded_node_id])
+        NodeExclusion.create(excluding_node_id: matching_final_diagnoses[exclusion.excluding_node_id], excluded_node_id: matching_final_diagnoses[exclusion.excluded_node_id], node_type: 'final_diagnosis')
       end
       # Recreate conditions
       matching_instances.each do |instance_id, new_instance|
         instance = Instance.find(instance_id)
         instance.conditions.each do |condition|
-          puts '**'
-          puts condition.id
-          puts '**'
           new_instance.conditions.create!(condition.attributes.slice('score', 'cut_off_start', 'cut_of_end', 'answer_id'))
         end
       end
