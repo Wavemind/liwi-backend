@@ -71,7 +71,9 @@ class Version < ApplicationRecord
 
   # Duplicate the version
   def duplicate
+    Version.set_callback(:create, :before, :init_config)
     Version.skip_callback(:create, :before, :init_config)
+
     ActiveRecord::Base.transaction(requires_new: true) do
       begin
         matching_final_diagnoses = {}
