@@ -10,8 +10,7 @@ class Condition < ApplicationRecord
 
   before_destroy :remove_children
   before_save :adjust_cut_offs
-  before_validation :prevent_loop, unless: Proc.new {(self.instance.instanceable.is_a?(Diagnosis) && self.instance.instanceable.duplicating) }
-
+  before_validation :prevent_loop, unless: Proc.new { (instance.instanceable.is_a?(Diagnosis) && instance.instanceable.duplicating) }
 
   # Adjust cut offs at creation
   def adjust_cut_offs
@@ -23,7 +22,7 @@ class Condition < ApplicationRecord
   # @return [String]
   # Return a formatted String with the id and type of polymorphic instance
   def conditionable_hash
-    "#{self.id},#{self.class.name}"
+    "#{id},#{self.class.name}"
   end
 
   # Create children from conditions automatically
@@ -50,7 +49,7 @@ class Condition < ApplicationRecord
   def is_child(new_instance)
     new_instance.children.each do |child|
       # Gets child instance for the same instanceable (PS OR Diagnosis)
-      child_instance = instance.instanceable.components.includes(:node).select{ |c| c.node == child.node }.first
+      child_instance = instance.instanceable.components.includes(:node).select { |c| c.node == child.node }.first
       return true if child_instance == instance || (child_instance.present? && child_instance.children.any? && is_child(child_instance))
     end
     false
@@ -61,15 +60,17 @@ class Condition < ApplicationRecord
   # Before creating a condition, verify that it is not doing a loop. Create the Child in the opposite way in the process
   def prevent_loop
     ActiveRecord::Base.transaction(requires_new: true) do
-      self.create_children
+      create_children
       if instance.children.any? && is_child(instance)
         puts '####################################'
         puts 'Answer ID is '
         puts answer_id
         puts 'Diagnosis name is'
         puts instance.instanceable.label_en
+        puts "Node ID "
+        puts instance.node_id
         puts '####################################'
-        self.errors.add(:base, I18n.t('conditions.validation.loop'))
+        errors.add(:base, I18n.t('conditions.validation.loop'))
         raise ActiveRecord::Rollback, I18n.t('conditions.validation.loop')
       end
     end
