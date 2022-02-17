@@ -63,12 +63,6 @@ class Condition < ApplicationRecord
     ActiveRecord::Base.transaction(requires_new: true) do
       self.create_children
       if instance.children.any? && is_child(instance)
-        puts '####################################'
-        puts 'Answer ID is '
-        puts answer_id
-        puts 'Diagnosis name is'
-        puts instance.instanceable.label_en
-        puts '####################################'
         self.errors.add(:base, I18n.t('conditions.validation.loop'))
         raise ActiveRecord::Rollback, I18n.t('conditions.validation.loop')
       end
