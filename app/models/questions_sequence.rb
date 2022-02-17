@@ -108,6 +108,9 @@ class QuestionsSequence < Node
             },
           ]
         },
+        instanceable: {
+          methods: :category_name
+        }
       ]
     ).first
   end
