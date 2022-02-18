@@ -115,7 +115,7 @@ end
 
 wb.add_worksheet(name: "Drugs in diagnoses") do |sheet|
 
-  rows = ["ID", "Drug", "Diagnosis", "Duration"]
+  sheet.add_row ["ID", "Drug", "Diagnosis", "Duration"]
 
   drugs.map(&:instances).flatten.map do |instance|
     sheet.add_row [instance.id, instance.node.reference_label(current_language), instance.final_diagnosis.reference_label(current_language), instance.is_pre_referral ? 'pre referral' : instance.duration]
