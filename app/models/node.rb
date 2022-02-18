@@ -121,6 +121,11 @@ class Node < ApplicationRecord
     "#{full_reference} - #{self.send("label_#{language}")}"
   end
 
+  # Remove exclusions linked to a node that's about to be destroyed
+  def remove_exclusions
+    NodeExclusion.where(excluding_node_id: id).or(NodeExclusion.where(excluded_node_id: id)).map(&:destroy)
+  end
+
   # Check if question is used in a deployed version
   def used_in_deployed_version
     involved_versions_ids = []

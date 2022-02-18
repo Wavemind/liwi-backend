@@ -165,6 +165,7 @@ class VersionsController < ApplicationController
   # @params version [Version] version
   # Get an excel export of variables and final diagnoses used in the given version
   def generate_variables
+    authorize @version
     respond_to do |format|
       format.xlsx
     end

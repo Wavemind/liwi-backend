@@ -62,15 +62,15 @@ class Instance < ApplicationRecord
   # Return json formated of the instance depending on the node type
   def generate_json
     if node.is_a?(Question)
-      self.as_json(include: { node: { include: [:answers, :complaint_categories, :medias], methods: [:node_type, :category_name, :type] } })
+      self.as_json(include: [ node: { include: [:answers, :complaint_categories, :medias], methods: [:node_type, :category_name, :type] }, instanceable: {methods: :category_name}])
     elsif node.is_a?(QuestionsSequence)
-      self.as_json(include: { node: { include: [:answers, :complaint_categories], methods: [:node_type, :category_name, :type] } })
+      self.as_json(include: [ node: { include: [:answers, :complaint_categories], methods: [:node_type, :category_name, :type] }, instanceable: {methods: :category_name} ])
     elsif node.is_a?(HealthCares::Drug)
-      self.as_json(include: { node: { include: [:formulations], methods: [:node_type, :category_name, :type] } })
+      self.as_json(include: [ node: { include: [:formulations], methods: [:node_type, :category_name, :type] }, instanceable: {methods: :category_name} ])
     elsif node.is_a?(HealthCares::Management) || node.is_a?(FinalDiagnosis)
-      self.as_json(include: { node: { methods: [:node_type, :category_name, :type], include: :medias } })
+      self.as_json(include: [ node: { methods: [:node_type, :category_name, :type], include: :medias }, instanceable: {methods: :category_name} ])
     else
-      self.as_json(include: { node: { methods: [:node_type, :category_name, :type] } })
+      self.as_json(include: [ node: { methods: [:node_type, :category_name, :type] }, instanceable: {methods: :category_name} ])
     end
   end
 

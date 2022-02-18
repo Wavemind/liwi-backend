@@ -8,6 +8,7 @@ class FinalDiagnosis < Node
   has_many :components, class_name: 'Instance', dependent: :destroy
 
   before_create :link_algorithm
+  before_destroy :remove_exclusions
 
   # Enable recursive duplicating
   # https://github.com/amoeba-rb/amoeba#usage
