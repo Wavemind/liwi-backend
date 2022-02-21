@@ -61,7 +61,7 @@ class ApplicationController < ActionController::Base
   end
 
   def skip_pundit?
-    devise_controller? || params[:controller] =~ /(^(rails_)?admin)|(^pages$)|^(dashboard$)|^(settings$)|^(api\/v1\/)|^(two_factor_settings$)/
+    devise_controller? || params[:controller] =~ /(^(rails_)?admin)|(^pages$)|^(settings$)|^(api\/v1\/)|^(two_factor_settings$)/
   end
 
   # Whitelists additional parameters for Devise Controllers (default: email, password)

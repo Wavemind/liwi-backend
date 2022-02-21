@@ -7,7 +7,7 @@ Rails.application.routes.draw do
 }
 
   authenticated :user do
-    root to: 'dashboard#index'
+    root to: 'algorithms#index'
   end
   unauthenticated :user do
     devise_scope :user do
