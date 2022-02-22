@@ -65,6 +65,11 @@ class Node < ApplicationRecord
     instances.where.not(instanceable: self).any?
   end
 
+  # Generate table of dependencies to be displayed with its links
+  def dependency_warning_table
+
+  end
+
   # Get every nodes (final_diagnosis, drug or management) excluded by it
   def excluded_nodes_ids
     NodeExclusion.where(excluding_node_id: id).map(&:excluded_node_id)

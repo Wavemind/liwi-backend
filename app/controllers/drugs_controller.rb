@@ -67,7 +67,10 @@ class DrugsController < ApplicationController
     @drug_exclusion = NodeExclusion.new(drug_exclusion_params)
     @drug_exclusion.node_type = :drug
     if @drug_exclusion.save
-      redirect_to algorithm_url(@algorithm, panel: 'drugs_exclusions'), notice: t('flash_message.success_updated')
+      respond_to do |format|
+        format.html { render json: DrugExclusionDatatable.new(params, view_context: view_context) }
+      end
+      # redirect_to algorithm_url(@algorithm, panel: 'drugs_exclusions'), notice: t('flash_message.success_updated')
     else
       redirect_to algorithm_url(@algorithm, panel: 'drugs_exclusions'), alert: @drug_exclusion.errors.full_messages
     end
