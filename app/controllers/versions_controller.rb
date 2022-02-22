@@ -116,9 +116,8 @@ class VersionsController < ApplicationController
   # @params [Version] version to duplicate
   # Ask a job to duplicate a version with every diagnoses and their logic (Instances with their Conditions and Children), the FinalDiagnoses and Conditions attached to it
   def duplicate
-    @version.duplicate
-    # job_id = DuplicateVersionJob.perform_later(@version.id)
-    # @version.update(job_id: job_id.provider_job_id)
+    job_id = DuplicateVersionJob.perform_later(@version.id)
+    @version.update(job_id: job_id.provider_job_id)
     render json: { success: true, job_id: job_id }
   end
 
@@ -166,6 +165,7 @@ class VersionsController < ApplicationController
   # @params version [Version] version
   # Get an excel export of variables and final diagnoses used in the given version
   def generate_variables
+    authorize @version
     respond_to do |format|
       format.xlsx
     end

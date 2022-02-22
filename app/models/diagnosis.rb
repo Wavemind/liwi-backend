@@ -61,6 +61,10 @@ class Diagnosis < ApplicationRecord
     ).as_json(methods: [:category_name, :node_type, :get_answers, :type])
   end
 
+  def category_name
+    self.class.name.underscore
+  end
+
   # @return [Boolean]
   # Control method of destroy to avoid callback issue
   def controlled_destroy

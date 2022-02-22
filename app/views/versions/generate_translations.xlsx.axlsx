@@ -354,7 +354,7 @@ wb.add_worksheet(name: "Questions sequences") do |sheet|
   sheet.add_row rows, style: wrap
 
   questions_sequences.map do |node|
-    rows = [node.id, node.type, node.full_reference, node.label_en]
+    rows = [node.id, 'QuestionsSequence', node.full_reference, node.label_en]
     languages_codes.map do |l|
       rows.push(node.send("label_#{l}"))
     end

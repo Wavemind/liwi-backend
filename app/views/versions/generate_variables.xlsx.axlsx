@@ -113,6 +113,15 @@ wb.add_worksheet(name: "Drugs") do |sheet|
   end
 end
 
+wb.add_worksheet(name: "Drugs in diagnoses") do |sheet|
+
+  sheet.add_row ["ID", "Drug", "Diagnosis", "Duration"]
+
+  drugs.map(&:instances).flatten.map do |instance|
+    sheet.add_row [instance.id, instance.node.reference_label(current_language), instance.final_diagnosis.reference_label(current_language), instance.is_pre_referral ? 'pre referral' : instance.duration]
+  end
+end
+
 wb.add_worksheet(name: "Managements") do |sheet|
   sheet.add_row ["ID", "Reference", "Label", "Referral", "Level of urgency", "Description", "Uses"]
 

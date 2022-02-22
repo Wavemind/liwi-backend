@@ -150,7 +150,7 @@ class VersionsService
 
     hash['author'] = @version.user.full_name
     hash['created_at'] = @version.created_at
-    hash['updated_at'] = @version.updated_at
+    hash['updated_at'] = DateTime.now
     hash
   end
 

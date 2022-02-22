@@ -4,6 +4,8 @@ class HealthCare < Node
   scope :managements, ->() { where('type = ?', 'HealthCares::Management') }
   scope :drugs, ->() { where('type = ?', 'HealthCares::Drug') }
 
+  before_destroy :remove_exclusions
+
   # Preload the children of class Question
   def self.descendants
     [HealthCares::Management, HealthCares::Drug]
