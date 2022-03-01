@@ -15,6 +15,7 @@ class AlgorithmsController < ApplicationController
   def show
     add_breadcrumb t('breadcrumbs.algorithms'), algorithms_url
     add_breadcrumb @algorithm.name
+    @tab = params[:tab]
   end
 
   def new
@@ -84,7 +85,7 @@ class AlgorithmsController < ApplicationController
   def drug_exclusions
     respond_to do |format|
       format.js { }
-      format.json { render json: DrugExclusionDatatable.new(params, view_context: view_context) }
+      format.json { render json: DrugExclusionDatatable.new(params.merge(tab: 'drug_exclusions'), view_context: view_context) }
     end
   end
 

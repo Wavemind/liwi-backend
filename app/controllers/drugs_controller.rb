@@ -24,7 +24,7 @@ class DrugsController < ApplicationController
 
     if drug.save
       if params[:from] === 'rails'
-        render json: { url: algorithm_url(@algorithm, panel: 'drugs') }
+        render json: { url: algorithm_url(@algorithm, tab: 'drugs/table') }
       else
         render json: drug.as_json(include: [:formulations], methods: [:node_type, :type, :category_name])
       end
@@ -36,7 +36,7 @@ class DrugsController < ApplicationController
   def update
     if @drug.update(drug_params)
       if params[:from] == 'rails'
-        render json: { url: algorithm_url(@algorithm, panel: 'drugs') }
+        render json: { url: algorithm_url(@algorithm, tab: 'drugs/table') }
       else
         render json: @drug.as_json(include: [:formulations], methods: [:node_type, :type, :category_name])
       end
@@ -48,17 +48,17 @@ class DrugsController < ApplicationController
   def destroy
     # If user remove 'disabled' css in button, we verify in controller
     if @drug.dependencies?
-      redirect_to algorithm_url(@algorithm, panel: 'drugs'), alert: t('dependencies')
+      redirect_to algorithm_url(@algorithm, tab: 'drugs/table'), alert: t('dependencies')
     else
       if @drug.destroy
-        redirect_to algorithm_url(@algorithm, panel: 'drugs'), notice: t('flash_message.success_updated')
+        redirect_to algorithm_url(@algorithm, tab: 'drugs/table'), notice: t('flash_message.success_updated')
       else
-        redirect_to algorithm_url(@algorithm, panel: 'drugs'), alert: t('error')
+        redirect_to algorithm_url(@algorithm, tab: 'drugs/table'), alert: t('error')
       end
     end
   end
 
-  # POST algorithm/:algorithm_id/drugs/validate
+  # POST algorithm/:algorithm_id/drugs/create_exclusion
   # @params [Integer] excluding_node_id
   # @params [Integer] excluded_node_id
   # Create an exclusion between two drugs
@@ -67,12 +67,10 @@ class DrugsController < ApplicationController
     @drug_exclusion = NodeExclusion.new(drug_exclusion_params)
     @drug_exclusion.node_type = :drug
     if @drug_exclusion.save
-      respond_to do |format|
-        format.html { render json: DrugExclusionDatatable.new(params, view_context: view_context) }
-      end
-      # redirect_to algorithm_url(@algorithm, panel: 'drugs_exclusions'), notice: t('flash_message.success_updated')
+      @tab = 'drugs/exclusion_table'
+      redirect_to algorithm_url(@algorithm, tab: 'drugs/exclusion_table'), notice: t('flash_message.success_updated')
     else
-      redirect_to algorithm_url(@algorithm, panel: 'drugs_exclusions'), alert: @drug_exclusion.errors.full_messages
+      redirect_to algorithm_url(@algorithm, tab: 'drugs/exclusion_table'), alert: @drug_exclusion.errors.full_messages
     end
   end
 
@@ -84,9 +82,9 @@ class DrugsController < ApplicationController
     authorize policy_scope(HealthCares::Drug)
     @drug_exclusion = NodeExclusion.drug.find_by(drug_exclusion_params)
     if @drug_exclusion.destroy
-      redirect_to algorithm_url(@algorithm, panel: 'drugs_exclusions'), notice: t('flash_message.success_updated')
+      redirect_to algorithm_url(@algorithm, tab: 'drugs/exclusion_table'), notice: t('flash_message.success_updated')
     else
-      redirect_to algorithm_url(@algorithm, panel: 'drugs_exclusions'), alert: t('error')
+      redirect_to algorithm_url(@algorithm, tab: 'drugs/exclusion_table'), alert: t('error')
     end
   end
 

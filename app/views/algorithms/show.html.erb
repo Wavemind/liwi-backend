@@ -7,36 +7,36 @@
 
 <ul class="nav nav-tabs mt-3" id="algorithm-tabs" role="tablist">
   <li class="nav-item">
-    <%= link_to  t('.subtitle_versions'), algorithm_versions_url(@algorithm), id: 'nav-link-versions', class: "nav-link active", remote: true %>
+    <%= link_to  t('.subtitle_versions'), algorithm_versions_url(@algorithm), id: 'nav-link-versions', class: "nav-link #{'active' if @tab.nil? || @tab == 'versions/table'}", remote: true %>
   </li>
   <li class="nav-item">
-    <%= link_to  t('.subtitle_questions'), question_algorithm_url(@algorithm), id: 'nav-link-questions', class: "nav-link", remote: true %>
+    <%= link_to  t('.subtitle_questions'), question_algorithm_url(@algorithm), id: 'nav-link-questions', class: "nav-link #{'active' if @tab == 'questions/table'}", remote: true %>
   </li>
   <li class="nav-item">
-    <%= link_to  t('.subtitle_drugs'), drug_algorithm_url(@algorithm), id: 'nav-link-drugs', class: "nav-link", remote: true %>
+    <%= link_to  t('.subtitle_drugs'), drug_algorithm_url(@algorithm), id: 'nav-link-drugs', class: "nav-link #{'active' if @tab == 'drugs/table'}", remote: true %>
   </li>
   <li class="nav-item">
-    <%= link_to  t('.subtitle_managements'), management_algorithm_url(@algorithm), id: 'nav-link-managements', class: "nav-link", remote: true %>
+    <%= link_to  t('.subtitle_managements'), management_algorithm_url(@algorithm), id: 'nav-link-managements', class: "nav-link #{'active' if @tab == 'managements/table'}", remote: true %>
   </li>
   <li class="nav-item">
-    <%= link_to  t('.subtitle_questions_sequences'), questions_sequence_algorithm_url(@algorithm), id: 'nav-link-questions_sequences', class: "nav-link", remote: true %>
+    <%= link_to  t('.subtitle_questions_sequences'), questions_sequence_algorithm_url(@algorithm), id: 'nav-link-questions_sequences', class: "nav-link #{'active' if @tab == 'questions_sequences/table'}", remote: true %>
   </li>
   <li class="nav-item">
-    <%= link_to  t('.subtitle_questions_sequences_scored'), questions_sequence_scored_algorithm_url(@algorithm), id: 'nav-link-questions_sequences_scored', class: "nav-link", remote: true %>
+    <%= link_to  t('.subtitle_questions_sequences_scored'), questions_sequence_scored_algorithm_url(@algorithm), id: 'nav-link-questions_sequences_scored', class: "nav-link #{'active' if @tab == 'questions_sequences/scored_table'}", remote: true %>
   </li>
   <li class="nav-item">
-    <%= link_to  t('.subtitle_drugs_exclusions'), drug_exclusions_algorithm_url(@algorithm), id: 'nav-link-drug_exclusions', class: "nav-link", remote: true %>
+    <%= link_to  t('.subtitle_drugs_exclusions'), drug_exclusions_algorithm_url(@algorithm), id: 'nav-link-drug_exclusions', class: "nav-link #{'active' if @tab == 'drugs/exclusion_table'}", remote: true %>
   </li>
   <li class="nav-item">
-    <%= link_to  t('.subtitle_managements_exclusions'), management_exclusions_algorithm_url(@algorithm), id: 'nav-link-management_exclusions', class: "nav-link", remote: true %>
+    <%= link_to  t('.subtitle_managements_exclusions'), management_exclusions_algorithm_url(@algorithm), id: 'nav-link-management_exclusions', class: "nav-link #{'active' if @tab == 'managements/exclusion_table'}", remote: true %>
   </li>
   <li class="nav-item">
-    <%= link_to  t('.subtitle_villages'), villages_algorithm_url(@algorithm), id: 'nav-link-villages', class: "nav-link", remote: true %>
+    <%= link_to  t('.subtitle_villages'), villages_algorithm_url(@algorithm), id: 'nav-link-villages', class: "nav-link #{'active' if @tab == 'algorithms/villages'}", remote: true %>
   </li>
 </ul>
 
 <div class="tab-content mt-4 ml-4" id="algorithm-table">
   <div id="algorithm-index-content">
-    <%= render 'versions/table' %>
+    <%= render @tab || 'versions/table' %>
   </div>
 </div>
