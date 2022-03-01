@@ -53,14 +53,13 @@ class Version < ApplicationRecord
     nodes.as_json(methods: [:category_name, :node_type, :get_answers, :type])
   end
 
+  def category_name
+    self.class.name.underscore
+  end
+
   # Return badge if the version is archived
   def display_archive_status
     archived ? '<span class="badge badge-danger">archived</span>' : ''
-  end
-
-  # Gets all final diagnoses for current version
-  def final_diagnoses
-    FinalDiagnosis.includes(diagnosis: [:node]).joins(diagnosis: [:node]).where(diagnosis_id: diagnoses.map(&:id))
   end
 
   # @return [String]
@@ -144,6 +143,11 @@ class Version < ApplicationRecord
       end
     end
     nodes.uniq
+  end
+
+  # Gets all final diagnoses for current version
+  def final_diagnoses
+    FinalDiagnosis.includes(diagnosis: [:node]).joins(diagnosis: [:node]).where(diagnosis_id: diagnoses.map(&:id))
   end
 
   # Generate node order tree from version
