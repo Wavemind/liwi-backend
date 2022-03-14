@@ -287,6 +287,7 @@ wb.add_worksheet(name: "Drugs in diagnoses") do |sheet|
 
   final_diagnoses.map(&:components).flatten.each_with_index do |instance, index|
     if instance.node.is_a?(HealthCares::Drug)
+      instance.disable_fallback
       rows = [instance.id, instance.node.reference_label, instance.final_diagnosis.reference_label]
 
       rows.push(instance.duration_en)
@@ -299,6 +300,7 @@ wb.add_worksheet(name: "Drugs in diagnoses") do |sheet|
       end
 
       sheet.add_row rows, style: wrap
+      instance.enable_fallback
     end
   end
 
