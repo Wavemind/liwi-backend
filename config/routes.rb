@@ -7,7 +7,7 @@ Rails.application.routes.draw do
 }
 
   authenticated :user do
-    root to: 'dashboard#index'
+    root to: 'algorithms#index'
   end
   unauthenticated :user do
     devise_scope :user do
@@ -244,7 +244,6 @@ Rails.application.routes.draw do
         end
       end
       resources :devices, only: [:show]
-      mount_devise_token_auth_for 'User', at: 'auth'
       resources :devices, only: [:create]
 
       get 'is_available', to: 'application#is_available'

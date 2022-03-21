@@ -3,16 +3,6 @@ class Api::V1::DevicesController < ApplicationController
 
   before_action :authenticate_user!, only: [:create]
 
-  def create
-    device = Device.find_by_mac_address(device_params[:mac_address])
-
-    if device.blank?
-      device = Device.create(device_params)
-    end
-
-    render json: device
-  end
-
   def show
     # Mac address send instead of device id
     device = Device.find_by_mac_address(params[:id])
