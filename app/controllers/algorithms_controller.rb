@@ -74,7 +74,7 @@ class AlgorithmsController < ApplicationController
   def drugs
     respond_to do |format|
       format.js { }
-      format.json { render json: DrugDatatable.new(params, view_context: view_context) }
+      format.json { render json: DrugDatatable.new(params.merge(tab: 'drugs/table'), view_context: view_context) }
     end
   end
 
@@ -85,7 +85,7 @@ class AlgorithmsController < ApplicationController
   def drug_exclusions
     respond_to do |format|
       format.js { }
-      format.json { render json: DrugExclusionDatatable.new(params.merge(tab: 'drug_exclusions'), view_context: view_context) }
+      format.json { render json: DrugExclusionDatatable.new(params.merge(tab: 'drugs/exclusion_table'), view_context: view_context) }
     end
   end
 
@@ -126,7 +126,7 @@ class AlgorithmsController < ApplicationController
   def managements
     respond_to do |format|
       format.js { }
-      format.json { render json: ManagementDatatable.new(params, view_context: view_context) }
+      format.json { render json: ManagementDatatable.new(params.merge(tab: 'managements/table'), view_context: view_context) }
     end
   end
 
@@ -137,7 +137,7 @@ class AlgorithmsController < ApplicationController
   def management_exclusions
     respond_to do |format|
       format.js { }
-      format.json { render json: ManagementExclusionDatatable.new(params, view_context: view_context) }
+      format.json { render json: ManagementExclusionDatatable.new(params.merge(tab: 'managements/exclusion_table'), view_context: view_context) }
     end
   end
 
@@ -148,7 +148,7 @@ class AlgorithmsController < ApplicationController
   def questions
     respond_to do |format|
       format.js { }
-      format.json { render json: QuestionDatatable.new(params, view_context: view_context) }
+      format.json { render json: QuestionDatatable.new(params.merge(tab: 'questions/table'), view_context: view_context) }
     end
   end
 
@@ -159,7 +159,7 @@ class AlgorithmsController < ApplicationController
   def questions_sequences
     respond_to do |format|
       format.js { }
-      format.json { render json: QuestionsSequenceDatatable.new(params, view_context: view_context) }
+      format.json { render json: QuestionsSequenceDatatable.new(params.merge(tab: 'questions_sequences/table'), view_context: view_context) }
     end
   end
 
@@ -170,7 +170,7 @@ class AlgorithmsController < ApplicationController
   def questions_sequences_scored
     respond_to do |format|
       format.js { }
-      format.json { render json: QuestionsSequenceScoredDatatable.new(params, view_context: view_context) }
+      format.json { render json: QuestionsSequenceScoredDatatable.new(params.merge(tab: 'questions_sequences/scored_table'), view_context: view_context) }
     end
   end
 
