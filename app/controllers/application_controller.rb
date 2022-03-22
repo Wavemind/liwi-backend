@@ -22,6 +22,7 @@ class ApplicationController < ActionController::Base
 
   private
 
+  # Add headers for every query for security reasons
   def add_headers
     response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubdomains'
     response.headers['X-Frame-Options'] = 'SAMEORIGIN'

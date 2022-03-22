@@ -3,6 +3,7 @@ class Api::V1::DevicesController < ApplicationController
 
   before_action :authenticate_user!, only: [:create]
 
+  # TODO : Check if to remove
   def show
     # Mac address send instead of device id
     device = Device.find_by_mac_address(params[:id])
