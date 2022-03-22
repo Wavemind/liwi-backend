@@ -5,9 +5,9 @@
         <%= t('warning_dependency') %>
         <% node.dependencies_by_version.each do |index, category| %>
           <br />
-          <h5><%= category['title'] %></h5>
+          <h5><%= category[:title] %></h5>
           <ul>
-            <% category['dependencies'].each do |dependence|  %>
+            <% category[:dependencies].each do |dependence|  %>
               <%= link_to dependence[:url] do %>
                 <li><b><%= dependence[:label] %></b></li>
               <% end %>

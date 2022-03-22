@@ -69,8 +69,8 @@ class Node < ApplicationRecord
         version = i.instanceable.version
         if hash[version.id].nil?
           hash[version.id] = {}
-          hash[version.id]['title'] = version.name
-          hash[version.id]['dependencies'] = []
+          hash[version.id][:title] = version.name
+          hash[version.id][:dependencies] = []
         end
 
         if i.final_diagnosis.present?
@@ -78,22 +78,22 @@ class Node < ApplicationRecord
         else
           instance_hash = {label: i.instanceable.reference_label(language), url: diagram_algorithm_version_diagnosis_url(version.algorithm_id, version.id, i.instanceable)}
         end
-        hash[version.id]['dependencies'].push(instance_hash)
+        hash[version.id][:dependencies].push(instance_hash)
       elsif i.instanceable_type == 'Node'
         qss.push({label: i.instanceable.reference_label(language), url: diagram_questions_sequence_url(i.instanceable)})
       end
     end
 
     if qss.any?
-      hash['qs'] = {}
-      hash['qs']['title'] = I18n.t('breadcrumbs.questions_sequences')
-      hash['qs']['dependencies'] = qss
+      hash[:qs] = {}
+      hash[:qs][:title] = I18n.t('breadcrumbs.questions_sequences')
+      hash[:qs][:dependencies] = qss
     end
 
     if diagnoses.any?
-      hash['dd'] = {}
-      hash['dd']['title'] = I18n.t('nodes.conditioning_title')
-      hash['dd']['dependencies'] = diagnoses.map{|d|  {label: d.reference_label(language), url: diagram_algorithm_version_diagnosis_url(d.version.algorithm_id, d.version_id, d.id)}}
+      hash[:dd] = {}
+      hash[:dd][:title] = I18n.t('nodes.conditioning_title')
+      hash[:dd][:dependencies] = diagnoses.map {|d| {label: d.reference_label(language), url: diagram_algorithm_version_diagnosis_url(d.version.algorithm_id, d.version_id, d.id)}}
     end
     hash
   end
