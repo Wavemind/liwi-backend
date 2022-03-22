@@ -36,7 +36,7 @@ class MediaUploader < CarrierWave::Uploader::Base
   # Add a white list of extensions which are allowed to be uploaded.
   # For images you might use something like this:
   def extension_whitelist
-    %w(jpg jpeg gif png mp3 mp4 wav mov avi ogg tiff)
+    %w(aac amr flac m4a ts mp3 ogg wav 3gp mp4 mkv webm bmp gif jpg png webp heic heif)
   end
 
   def fog_public

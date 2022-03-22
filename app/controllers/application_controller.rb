@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :set_current_user
   before_action :set_study_language
+  after_action :add_headers
   include Pundit
 
   # Pundit: white-list approach.
@@ -20,6 +21,15 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  # Add headers for every query for security reasons
+  def add_headers
+    response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubdomains'
+    response.headers['X-Frame-Options'] = 'SAMEORIGIN'
+    response.headers['X-Xss-Protection'] = '1; mode=block'
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['Referrer-Policy'] = 'strict-origin'
+  end
 
   def layout_by_resource
     if user_signed_in?

@@ -32,13 +32,18 @@ module AuthenticateWithOtpTwoFactor
     if valid_otp_attempt?(user)
       # Remove any lingering user data from login
       session.delete(:otp_user_id)
-
+      user.failed_attempts = 0
       remember_me(user) if user_params[:remember_me] == '1'
       user.save!
       sign_in(user, event: :authentication)
     else
-      flash.now[:alert] = t('two_factor_settings.flash_messages.incorrect_otp')
-      prompt_for_otp_two_factor(user)
+      if user.failed_attempts > 3
+        redirect_to root_url
+      else
+        user.update(failed_attempts: user.failed_attempts + 1)
+        flash.now[:alert] = t('two_factor_settings.flash_messages.incorrect_otp')
+        prompt_for_otp_two_factor(user)
+      end
     end
   end
 

@@ -1,11 +1,10 @@
 # Manage user
 class User < ApplicationRecord
-  devise :invitable, :recoverable, :lockable, :trackable, :registerable, :timeoutable
-
   devise :two_factor_authenticatable, :two_factor_backupable,
          otp_backup_code_length: 10, otp_number_of_backup_codes: 10,
          :otp_secret_encryption_key => ENV['OTP_SECRET_KEY']
 
+  devise :invitable, :recoverable, :lockable, :trackable, :registerable, :timeoutable
   include DeviseTokenAuth::Concerns::User
 
   enum role: [:admin, :clinician, :deployment_manager, :medal_r_user]
