@@ -613,6 +613,7 @@ hi:
   months: "Months"
   neonat_children: "Neonat children"
   nodes:
+    conditioning_title: 'Diagnoses conditioned by this node'
     validation:
       reference_used: "This reference is already used"
   older_children: "Older children"

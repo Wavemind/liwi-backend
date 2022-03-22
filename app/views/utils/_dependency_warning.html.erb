@@ -3,31 +3,17 @@
     <div class="col-md-6 offset-md-3">
       <div class="alert alert-danger warning_dependencies" role="alert">
         <%= t('warning_dependency') %>
-        <ul>
-          <% node.dependencies.each do |dependence| %>
-            <% if dependence.instanceable_type == 'Diagnosis' %>
-              <% if dependence.final_diagnosis_id.present? %>
-                <%= link_to diagram_algorithm_version_diagnosis_final_diagnosis_url(dependence.instanceable.version.algorithm_id, dependence.instanceable.version, dependence.instanceable, dependence.final_diagnosis_id) do %>
-                  <li><b><%= dependence.final_diagnosis.reference_label(@default_language) %></b></li>
-                <% end %>
-              <% else %>
-                <%= link_to diagram_algorithm_version_diagnosis_url(dependence.instanceable.version.algorithm_id, dependence.instanceable.version, dependence.instanceable) do %>
-                  <li><b><%= dependence.instanceable.reference_label(@default_language) %></b></li>
-                <% end %>
+        <% node.dependencies_by_version.each do |index, category| %>
+          <br />
+          <h5><%= category[:title] %></h5>
+          <ul>
+            <% category[:dependencies].each do |dependence|  %>
+              <%= link_to dependence[:url] do %>
+                <li><b><%= dependence[:label] %></b></li>
               <% end %>
-            <% else %>
-              <%= link_to diagram_questions_sequence_url(dependence.instanceable) do %>
-                <li><b><%= dependence.instanceable.reference_label(@default_language) %></b></li>
-              <% end %>
-              <li><b><%= dependence.instanceable.reference_label(@default_language) %></b></li>
             <% end %>
-          <% end %>
-          <% node.diagnoses.each do |diagnosis| %>
-            <%= link_to diagram_algorithm_version_diagnosis_url(diagnosis.version.algorithm_id, diagnosis.version, diagnosis) do %>
-              <li><b><%= diagnosis.reference_label(@default_language) %></b></li>
-            <% end %>
-          <% end %>
-        </ul>
+          </ul>
+        <% end %>
       </div>
     </div>
   </div>
