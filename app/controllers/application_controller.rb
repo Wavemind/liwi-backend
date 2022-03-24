@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   before_action :set_current_user
   before_action :set_study_language
   after_action :add_headers
-  include Pundit
+  include Pundit::Authorization
 
   # Pundit: white-list approach.
   after_action :verify_authorized, except: :index, unless: :skip_pundit?

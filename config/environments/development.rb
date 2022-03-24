@@ -83,12 +83,12 @@ Rails.application.configure do
     # Bullet.raise = true
 
     # Whitelist
-    Bullet.add_whitelist type: :n_plus_one_query, class_name: 'Answer', association: :node
-    Bullet.add_whitelist type: :unused_eager_loading, class_name: 'Instance', association: :conditions
-    Bullet.add_whitelist type: :unused_eager_loading, class_name: 'Instance', association: :children
-    Bullet.add_whitelist type: :unused_eager_loading, class_name: 'Instance', association: :node
-    Bullet.add_whitelist type: :n_plus_one_query, class_name: 'Condition', association: :first_conditionable
-    Bullet.add_whitelist type: :n_plus_one_query, class_name: 'Condition', association: :second_conditionable
+    Bullet.add_safelist type: :n_plus_one_query, class_name: 'Answer', association: :node
+    Bullet.add_safelist type: :unused_eager_loading, class_name: 'Instance', association: :conditions
+    Bullet.add_safelist type: :unused_eager_loading, class_name: 'Instance', association: :children
+    Bullet.add_safelist type: :unused_eager_loading, class_name: 'Instance', association: :node
+    Bullet.add_safelist type: :n_plus_one_query, class_name: 'Condition', association: :first_conditionable
+    Bullet.add_safelist type: :n_plus_one_query, class_name: 'Condition', association: :second_conditionable
   end
 end
 Rails.application.routes.default_url_options[:host] = 'localhost:3000'
