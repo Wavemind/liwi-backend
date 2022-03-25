@@ -72,6 +72,7 @@ class Version < ApplicationRecord
   def duplicate
     ActiveRecord::Base.transaction(requires_new: true) do
       begin
+        Diagnosis.skip_callback(:create, :after, :generate_reference)
         Node.skip_callback(:create, :after, :generate_reference)
         matching_final_diagnoses = {}
         matching_instances = {}

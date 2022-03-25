@@ -2,7 +2,10 @@ import * as React from "react";
 import I18n from "i18n-js";
 import FadeIn from "react-fade-in";
 import { Form, Col } from "react-bootstrap";
-import { INJECTION_ADMINISTRATION_ROUTES } from "../constants/constants";
+import {
+  FIXED_DOSE_FORMULATIONS,
+  INJECTION_ADMINISTRATION_ROUTES
+} from "../constants/constants";
 import { getStudyLanguage } from "../../utils";
 
 
@@ -144,11 +147,11 @@ export default class FormulationFields extends React.Component {
           <Form.Group as={Col} controlId={`${index}-validationByAge`}>
             <Form.Label>{I18n.t("activerecord.attributes.formulation.by_age")}</Form.Label>
             <Form.Check
-              checked={formulation.by_age}
+              checked={FIXED_DOSE_FORMULATIONS.includes(formulation.medication_form) || formulation.by_age}
               name={`formulations_attributes.${index}.by_age`}
               value={formulation.by_age}
               onChange={handleChange}
-              disabled={is_deployed}
+              disabled={is_deployed || FIXED_DOSE_FORMULATIONS.includes(formulation.medication_form)}
               isInvalid={this.isInvalid("by_age")}
             />
             <Form.Control.Feedback type="invalid">

@@ -147,3 +147,16 @@ export const PHYSICAL_EXAM_SYSTEMS = [
   'integumentary',
   'complementary_medical_history'
 ];
+
+export const FIXED_DOSE_FORMULATIONS = [
+  'suppository',
+  'drops',
+  'patch',
+  'cream',
+  'ointment',
+  'gel',
+  'spray',
+  'inhaler',
+  'pessary',
+  'lotion'
+]
