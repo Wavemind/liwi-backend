@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  include Pundit
+  
   protect_from_forgery prepend: true
   layout :layout_by_resource
   before_action :set_home_breadcrumb
@@ -6,7 +8,7 @@ class ApplicationController < ActionController::Base
   before_action :set_current_user
   before_action :set_study_language
   after_action :add_headers
-  include Pundit::Authorization
+
 
   # Pundit: white-list approach.
   after_action :verify_authorized, except: :index, unless: :skip_pundit?
