@@ -211,7 +211,7 @@ export default class QuestionForm extends React.Component {
     // Set answer type
     if (["Questions::ComplaintCategory", "Questions::Vaccine"].includes(category)) {
       fieldsToSet.push(["answer_type_id", 1]);
-    } else if (["Questions::BasicMeasurement", "Questions::VitalSignAnthropometric"].includes(category)) {
+    } else if (category === "Questions::VitalSignAnthropometric") {
       fieldsToSet.push(["answer_type_id", 4]);
     } else if (category === "Questions::BackgroundCalculation") {
       fieldsToSet.push(["answer_type_id", 5]);
