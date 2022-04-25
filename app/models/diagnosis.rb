@@ -55,10 +55,10 @@ class Diagnosis < ApplicationRecord
     # Exclude the questions that are already used in the diagnosis diagram (it still takes the questions used in the final diagnosis diagram, since it can be used in both diagram)
     excluded_ids += components.not_health_care_conditions.map(&:node_id)
     (
-    version.algorithm.questions.no_treatment_condition.diagrams_included.where.not(id: excluded_ids).includes(:answers) +
-      version.algorithm.questions_sequences.where.not(id: excluded_ids).includes([:answers]) +
+    version.algorithm.questions.no_treatment_condition.diagrams_included.where.not(id: excluded_ids).includes(:answers, :diagnoses) +
+      version.algorithm.questions_sequences.where.not(id: excluded_ids).includes([:answers, :diagnoses]) +
       final_diagnoses.where.not(id: components.select(:node_id))
-    ).as_json(methods: [:category_name, :node_type, :get_answers, :type])
+    ).as_json(methods: [:category_name, :node_type, :get_answers, :type, :dependencies_by_version])
   end
 
   def category_name
@@ -108,7 +108,8 @@ class Diagnosis < ApplicationRecord
     components.final_diagnoses.includes(:node).as_json(
       include: [
         node: {
-          methods: [:node_type, :excluded_nodes_ids, :excluding_nodes_ids]
+          include: [:diagnosis],
+          methods: [:node_type, :excluded_nodes_ids, :excluding_nodes_ids, :dependencies_by_version]
         },
         conditions: {
           include: [
@@ -189,7 +190,7 @@ class Diagnosis < ApplicationRecord
   # @return [Json]
   # Return questions in json format
   def questions_json
-    (components.questions.not_health_care_conditions + components.questions_sequences.not_health_care_conditions).as_json(
+    (components.includes(:node, condition: :answer).questions.not_health_care_conditions + components.includes(:node, condition: :answer).questions_sequences.not_health_care_conditions).as_json(
       include: [
         conditions: {
           include: [
@@ -201,11 +202,12 @@ class Diagnosis < ApplicationRecord
           ]
         },
         node: {
-          include: [:answers, :complaint_categories, :medias],
+          include: [:answers, :complaint_categories, :medias, :diagnoses],
           methods: [
             :node_type,
             :category_name,
-            :type
+            :type,
+            :dependencies_by_version
           ]
         }
       ])

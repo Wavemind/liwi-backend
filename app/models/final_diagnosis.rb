@@ -25,7 +25,7 @@ class FinalDiagnosis < Node
     diagnosis.version.algorithm.questions.diagrams_included.includes([:answers, :medias]).where.not(id: ids) +
       diagnosis.version.algorithm.questions_sequences.includes([:answers]).where.not(id: ids) +
       diagnosis.version.algorithm.health_cares.where.not(id: ids)
-    ).as_json(methods: [:category_name, :node_type, :get_answers, :type], include: :medias)
+    ).as_json(methods: [:category_name, :node_type, :get_answers, :type, :dependencies_by_version], include: :medias)
   end
 
   # Construct diagnosis json
@@ -83,7 +83,8 @@ class FinalDiagnosis < Node
           methods: [
             :node_type,
             :category_name,
-            :type
+            :type,
+            :dependencies_by_version
           ]
         }
       ])
@@ -110,7 +111,7 @@ class FinalDiagnosis < Node
       include: [
         node: {
           include: [:medias],
-          methods: [:node_type, :type]
+          methods: [:node_type, :type, :dependencies_by_version]
         },
         conditions: {
           include: [

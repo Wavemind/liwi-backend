@@ -50,7 +50,7 @@ class Version < ApplicationRecord
     ids = components.map(&:node_id)
     nodes = algorithm.questions.includes(:answers).where.not(id: ids)
     nodes += algorithm.questions_sequences.includes(:answers).where.not(id: ids)
-    nodes.as_json(methods: [:category_name, :node_type, :get_answers, :type])
+    nodes.as_json(methods: [:category_name, :node_type, :get_answers, :type, :dependencies_by_version])
   end
 
   def category_name
@@ -322,7 +322,8 @@ class Version < ApplicationRecord
           methods: [
             :node_type,
             :category_name,
-            :type
+            :type,
+            :dependencies_by_version
           ]
         }
       ])

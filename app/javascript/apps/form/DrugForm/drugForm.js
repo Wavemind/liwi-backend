@@ -12,6 +12,7 @@ import {
 } from "../constants/constants";
 import Autocomplete from "../QuestionsSequenceForm";
 import { getStudyLanguage } from "../../utils";
+import Dependencies from "../components/Dependencies";
 
 export default class DrugForm extends React.Component {
   /**
@@ -31,11 +32,14 @@ export default class DrugForm extends React.Component {
   };
 
   render() {
-    const { formData, setFormData, nextStep, is_deployed } = this.props;
+    const { formData, setFormData, nextStep, is_deployed, from, method, diagramObject } = this.props;
     const language = getStudyLanguage();
 
     return (
       <FadeIn>
+        {(method === 'update' && from !== 'rails') ?
+          <Dependencies dependenciesHash={diagramObject.options.dbInstance.node.dependencies_by_version}/>
+        : null}
         <Formik
           validationSchema={drugSchema}
           initialValues={formData}

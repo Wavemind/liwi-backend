@@ -174,6 +174,8 @@ export default class StepperDrugForm extends React.Component {
               nextStep={this.nextStep}
               save={this.save}
               method={method}
+              from={from}
+              diagramObject={diagramObject}
               is_deployed={is_deployed}
             />
           </>

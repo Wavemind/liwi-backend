@@ -57,7 +57,7 @@ class Node < ApplicationRecord
   # @return [ActiveRecord::Association]
   # List of instances
   def dependencies
-    instances.includes(:instanceable).select{|i| i unless i.instanceable.is_a? Version}
+    instances.includes(:instanceable, :final_diagnosis).where.not(instanceable_type: 'Version')
   end
 
   # Return dependencies separated by version for display

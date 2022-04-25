@@ -16,6 +16,7 @@ import { questionSequencesSchema } from "../constants/schema";
 import { closeModal } from "../../diagram/engine/reducers/creators.actions";
 import { createNode } from "../../diagram/helpers/nodeHelpers";
 import {getTranslatedText, getStudyLanguage} from "../../utils";
+import Dependencies from "../components/Dependencies";
 
 
 const filterOptions = createFilterOptions({
@@ -100,12 +101,15 @@ export default class QuestionsSequenceForm extends React.Component {
   };
 
   render() {
-    const { questionsSequence } = this.props;
+    const { questionsSequence, from } = this.props;
     const { categories, isLoading, complaintCategories, updateMode, deployedMode, language } = this.state;
 
     return (
       isLoading ? <Loader/> :
         <FadeIn>
+          {(updateMode && from !== 'rails') ?
+            <Dependencies dependenciesHash={questionsSequence.dependencies_by_version}/>
+          : null}
           <Formik
             validationSchema={questionSequencesSchema}
             initialValues={{

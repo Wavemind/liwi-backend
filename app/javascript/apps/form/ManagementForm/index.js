@@ -14,6 +14,7 @@ import MediaForm from "../MediaForm/mediaForm";
 import SliderComponent from "../components/Slider";
 import Autocomplete from "../QuestionsSequenceForm";
 import {getStudyLanguage, getTranslatedText} from "../../utils";
+import Dependencies from "../components/Dependencies";
 
 export default class ManagementForm extends React.Component {
 
@@ -110,7 +111,7 @@ export default class ManagementForm extends React.Component {
   };
 
   render() {
-    const { management, is_deployed } = this.props;
+    const { management, is_deployed, method, from } = this.props;
     const { language, deployedMode } = this.state;
     const initialValues = {
       id: management?.id || "",
@@ -133,6 +134,9 @@ export default class ManagementForm extends React.Component {
 
     return (
       <FadeIn>
+        {(method === 'update' && from !== 'rails') ?
+          <Dependencies dependenciesHash={management.dependencies_by_version}/>
+        : null}
         <Formik
           validationSchema={managementSchema}
           initialValues={initialValues}

@@ -9,6 +9,7 @@ import {Formik} from "formik";
 import DisplayErrors from "../components/DisplayErrors";
 import Http from "../../diagram/engine/http";
 import Loader from "../QuestionsSequenceForm";
+import Dependencies from "../components/Dependencies"
 import {questionSchema} from "../constants/schema";
 import {
   CATEGORIES_DISPLAYING_SYSTEM,
@@ -230,7 +231,11 @@ export default class QuestionForm extends React.Component {
   };
 
   render() {
-    const {formData, railsErrors} = this.props;
+    const {
+      formData,
+      railsErrors,
+      diagramObject, from
+    } = this.props;
 
     const {
       answerTypes,
@@ -252,6 +257,9 @@ export default class QuestionForm extends React.Component {
     return (
       isLoading ? <Loader/> :
         <FadeIn>
+          {(updateMode && from !== 'rails') ?
+            <Dependencies dependenciesHash={diagramObject.options.dbInstance.node.dependencies_by_version}/>
+          : null}
           <Formik
             validationSchema={questionSchema}
             initialValues={formData}
@@ -314,7 +322,7 @@ export default class QuestionForm extends React.Component {
                       {errors.system}
                     </Form.Control.Feedback>
                   </Form.Group>
-                  : null}
+                : null}
 
                 <Form.Group controlId="validationAnswerType">
                   <Form.Label>{I18n.t("activerecord.attributes.question.answer_type")}</Form.Label>

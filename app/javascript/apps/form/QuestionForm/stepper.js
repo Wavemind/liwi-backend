@@ -211,7 +211,7 @@ export default class StepperQuestionForm extends React.Component {
 
   render() {
     const { errors, step, question } = this.state;
-    const { method, is_used, is_deployed } = this.props;
+    const { method, is_used, is_deployed, diagramObject, from } = this.props;
     switch (step) {
       case 1:
         return (
@@ -227,6 +227,8 @@ export default class StepperQuestionForm extends React.Component {
             method={method}
             is_used={is_used}
             is_deployed={is_deployed}
+            diagramObject={diagramObject}
+            from={from}
           />
           </>
         );

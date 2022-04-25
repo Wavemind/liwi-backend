@@ -72,7 +72,7 @@ class QuestionsSequence < Node
     ids = components.map(&:node_id)
     nodes = algorithm.questions.diagrams_included.where.not(id: ids)
     nodes += self.is_a?(QuestionsSequences::Scored) ? algorithm.questions_sequences.not_scored.where.not(id: ids) : algorithm.questions_sequences.where.not(id: ids)
-    nodes.as_json(methods: [:category_name, :node_type, :get_answers, :type])
+    nodes.as_json(methods: [:category_name, :node_type, :get_answers, :type, :dependencies_by_version])
   end
 
   def extract_nodes(nodes)
@@ -134,7 +134,8 @@ class QuestionsSequence < Node
           methods: [
             :node_type,
             :category_name,
-            :type
+            :type,
+            :dependencies_by_version
           ]
         }
       ])
