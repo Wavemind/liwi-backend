@@ -8,14 +8,13 @@ export default class Dependencies extends React.Component {
   render() {
     const { dependenciesHash } = this.props;
 
-    console.log(dependenciesHash)
     return (
       <div className="justify-content-center">
         <div>
           <div className="alert alert-danger warning_dependencies" role="alert">
             {I18n.t("warning_dependency")}
             {Object.keys(dependenciesHash).map(key => (
-              <>
+              <div key={dependenciesHash[key]['title']} >
                 <h5>{ dependenciesHash[key]['title'] }</h5>
                 <ul>
                   {dependenciesHash[key]['dependencies'].map((dependence) => (

@@ -37,9 +37,7 @@ export default class DrugForm extends React.Component {
 
     return (
       <FadeIn>
-        {(method === 'update' && from !== 'rails') ?
-          <Dependencies dependenciesHash={diagramObject.options.dbInstance.node.dependencies_by_version}/>
-        : null}
+        {(method === 'update' && from !== 'rails') && <Dependencies dependenciesHash={diagramObject.options.dbInstance.node.dependencies_by_version}/>}
         <Formik
           validationSchema={drugSchema}
           initialValues={formData}

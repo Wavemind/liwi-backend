@@ -134,9 +134,7 @@ export default class ManagementForm extends React.Component {
 
     return (
       <FadeIn>
-        {(method === 'update' && from !== 'rails') ?
-          <Dependencies dependenciesHash={management.dependencies_by_version}/>
-        : null}
+        {(method === 'update' && from !== 'rails') && <Dependencies dependenciesHash={management.dependencies_by_version}/>}
         <Formik
           validationSchema={managementSchema}
           initialValues={initialValues}

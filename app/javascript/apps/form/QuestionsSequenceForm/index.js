@@ -107,9 +107,7 @@ export default class QuestionsSequenceForm extends React.Component {
     return (
       isLoading ? <Loader/> :
         <FadeIn>
-          {(updateMode && from !== 'rails') ?
-            <Dependencies dependenciesHash={questionsSequence.dependencies_by_version}/>
-          : null}
+          {(updateMode && from !== 'rails') && <Dependencies dependenciesHash={questionsSequence.dependencies_by_version}/>}
           <Formik
             validationSchema={questionSequencesSchema}
             initialValues={{

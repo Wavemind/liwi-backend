@@ -257,9 +257,7 @@ export default class QuestionForm extends React.Component {
     return (
       isLoading ? <Loader/> :
         <FadeIn>
-          {(updateMode && from !== 'rails') ?
-            <Dependencies dependenciesHash={diagramObject.options.dbInstance.node.dependencies_by_version}/>
-          : null}
+          {(updateMode && from !== 'rails') && <Dependencies dependenciesHash={diagramObject.options.dbInstance.node.dependencies_by_version}/>}
           <Formik
             validationSchema={questionSchema}
             initialValues={formData}
