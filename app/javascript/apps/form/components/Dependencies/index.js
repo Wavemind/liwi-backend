@@ -21,7 +21,7 @@ export default class Dependencies extends React.Component {
                     <a target="_blank" href={dependence['url']}><li><b>{dependence['label']}</b></li></a>
                   ))}
                 </ul>
-              </>
+              </div>
             ))}
           </div>
         </div>
