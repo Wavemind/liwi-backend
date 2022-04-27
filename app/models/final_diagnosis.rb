@@ -97,7 +97,7 @@ class FinalDiagnosis < Node
       include: [
         node: {
           include: [:formulations],
-          methods: [:node_type, :type]
+          methods: [:node_type, :type, :dependencies_by_version]
         },
         conditions: {
           include: [
