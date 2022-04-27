@@ -190,7 +190,7 @@ class Diagnosis < ApplicationRecord
   # @return [Json]
   # Return questions in json format
   def questions_json
-    (components.includes(:node, condition: :answer).questions.not_health_care_conditions + components.includes(:node, condition: :answer).questions_sequences.not_health_care_conditions).as_json(
+    (components.includes(:node, conditions: :answer).questions.not_health_care_conditions + components.includes(:node, conditions: :answer).questions_sequences.not_health_care_conditions).as_json(
       include: [
         conditions: {
           include: [
