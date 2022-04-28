@@ -9,7 +9,7 @@ final_diagnoses = []
 drugs = []
 managements = []
 languages_codes = Language.all.map(&:code)
-
+current_language = @version.algorithm.study.default_language
 
 wb.add_worksheet(name: "General") do |sheet|
   rows = ["ID", "Model", "Field", "en"]
@@ -288,7 +288,7 @@ wb.add_worksheet(name: "Drugs in diagnoses") do |sheet|
   final_diagnoses.map(&:components).flatten.each_with_index do |instance, index|
     if instance.node.is_a?(HealthCares::Drug)
       instance.disable_fallback
-      rows = [instance.id, instance.node.reference_label(l), instance.final_diagnosis.reference_label(l)]
+      rows = [instance.id, instance.node.reference_label(current_language), instance.final_diagnosis.reference_label(current_language)]
 
       rows.push(instance.duration_en)
       languages_codes.map do |l|
