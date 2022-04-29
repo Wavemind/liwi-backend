@@ -32,6 +32,7 @@ export const DEFAULT_MEDIA_VALUE = JSON.stringify(mediaHash);
 export const CATEGORIES_DISABLING_ANSWER_TYPE = [
   "Questions::ComplaintCategory",
   "Questions::BackgroundCalculation",
+  "Questions::BasicMeasurement",
   "Questions::Vaccine",
   "Questions::VitalSignAnthropometric"
 ];
