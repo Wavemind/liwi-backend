@@ -74,6 +74,7 @@ class Question < Node
   # Preload the children of class Question
   def self.descendants
     [
+      Questions::AnswerableBasicMeasurement,
       Questions::AssessmentTest,
       Questions::BackgroundCalculation,
       Questions::BasicMeasurement,

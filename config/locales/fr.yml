@@ -638,6 +638,9 @@ fr:
       last_name: "Nom de famille"
       birth_date: "Date de naissance"
     categories:
+      answerable_basic_measurement:
+        label: "Basic Measurement available in diagrams"
+        reference_prefix: "AM"
       assessment_test:
         label: "Assessment/Test"
         reference_prefix: "A"

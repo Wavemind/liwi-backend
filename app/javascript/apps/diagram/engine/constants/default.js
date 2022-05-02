@@ -1,4 +1,5 @@
 export const DEFAULT_ORDERED_NODES = {
+  answerableBasicMeasurement: [],
   assessmentTest: [],
   backgroundCalculation: [],
   complaintCategory: [],

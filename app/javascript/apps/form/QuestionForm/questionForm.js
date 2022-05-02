@@ -184,6 +184,7 @@ export default class QuestionForm extends React.Component {
         fieldsToSet.push(["stage", "registration"]);
         break;
       case "Questions::BasicMeasurement":
+      case "Questions::AnswerableBasicMeasurement":
       case "Questions::ComplaintCategory":
       case "Questions::UniqueTriagePhysicalSign":
       case "Questions::UniqueTriageQuestion":

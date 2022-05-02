@@ -665,6 +665,9 @@ hi:
       last_name: "Last name"
       birth_date: "Birth date"
     categories:
+      answerable_basic_measurement:
+        label: "Basic Measurement available in diagrams"
+        reference_prefix: "AM"
       assessment_test:
         label: "Assessment/Test"
         reference_prefix: "A"
