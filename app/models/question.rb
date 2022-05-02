@@ -201,7 +201,7 @@ class Question < Node
       return true
     end
 
-    errors.add(:formula, I18n.t('questions.errors.formula_wrong_characters')) if formula.match(/^(\[(.*?)\]|[ \(\)\*\/\+\-|0-9])*$/).nil?
+    errors.add(:formula, I18n.t('questions.errors.formula_wrong_characters')) if formula.match(/^(\[(.*?)\]|[ \(\)\*\/\+\-\.|0-9])*$/).nil?
 
     # Extract references and functions from the formula
     formula.scan(/\[.*?\]/).each do |reference|
