@@ -1,5 +1,5 @@
-# Category of question concerning basic measurements taken during the triage
-# Reference prefix : BM
+# Category of question to complement basic measurements questions
+# Reference prefix : AM
 class Questions::AnswerableBasicMeasurement < Question
 
   def self.policy_class
