@@ -4,7 +4,7 @@ module QrCodeHelper
         offset: 0,
         color: '000',
         shape_rendering: 'crispEdges',
-        module_size: 5,
+        module_size: 4,
         standalone: true
     ).html_safe
   end

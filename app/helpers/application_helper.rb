@@ -48,7 +48,7 @@ module ApplicationHelper
     require 'barby/barcode/qr_code'
     require 'barby/outputter/png_outputter'
 
-    barcode = Barby::QrCode.new(text, level: :q, size: 18)
+    barcode = Barby::QrCode.new(text, level: :q, size: 20)
     base64_output = Base64.encode64(barcode.to_png({ xdim: 3 }))
     "data:image/png;base64,#{base64_output}"
   end
