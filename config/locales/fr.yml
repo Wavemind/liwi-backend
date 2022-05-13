@@ -748,6 +748,9 @@ fr:
       vital_sign: "Signes vitaux"
       priority_sign: "Signe de danger / priorités"
       feeding: "Alimentation"
+      fever: "Fièvre"
+      dehydration: "Déshydratation"
+      malnutrition_anemia: "Malnutrition & anémie"
     table:
       columns:
         label: "Label"

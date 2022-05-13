@@ -785,6 +785,9 @@ hi:
       vital_sign: "वाइटल साइंस"
       priority_sign: "खतरे के निशान"
       feeding: "खिलाना-पिलाना"
+      fever: "बुखार"
+      dehydration: "निर्जलीकरण"
+      malnutrition_anemia: "कुपोषण और एनीमिया"
     table:
       columns:
         label: "Label"

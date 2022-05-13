@@ -130,8 +130,10 @@ export const MEDICAL_HISTORY_SYSTEMS = [
   'comorbidities',
   'complementary_medical_history',
   'prevention',
-  'follow_up_questions'
-
+  'follow_up_questions',
+  'fever',
+  'dehydration',
+  'malnutrition_anemia'
 ];
 
 export const PHYSICAL_EXAM_SYSTEMS = [
@@ -145,7 +147,10 @@ export const PHYSICAL_EXAM_SYSTEMS = [
   'visual',
   'muscular_skeletal',
   'integumentary',
-  'complementary_medical_history'
+  'complementary_medical_history',
+  'fever',
+  'dehydration',
+  'malnutrition_anemia'
 ];
 
 export const FIXED_DOSE_FORMULATIONS = [

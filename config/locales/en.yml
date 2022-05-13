@@ -787,6 +787,9 @@ en:
       vital_sign: "Vital Signs"
       priority_sign: "Danger / Priority signs"
       feeding: "Feeding"
+      fever: "Fever"
+      dehydration: "Dehydration"
+      malnutrition_anemia: "Malnutrition & anemia"
     table:
       columns:
         label: "Label"

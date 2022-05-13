@@ -748,6 +748,9 @@ sw:
       vital_sign: "Vital Signs"
       priority_sign: "Danger / Priority signs"
       feeding: "Feeding"
+      fever: "Homa"
+      dehydration: "Upungufu wa maji mwilin"
+      malnutrition_anemia: "Utapiamlo na upungufu wa damu"
     table:
       columns:
         label: "Label"

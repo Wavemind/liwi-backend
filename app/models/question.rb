@@ -28,6 +28,9 @@ class Question < Node
     :vital_sign,
     :priority_sign,
     :feeding,
+    :fever,
+    :dehydration,
+    :malnutrition_anemia
   ]
   enum emergency_status: [:standard, :referral, :emergency, :emergency_if_no]
 
