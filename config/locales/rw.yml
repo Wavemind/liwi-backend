@@ -762,7 +762,7 @@ rw:
       feeding: "Feeding"
       fever: "Fever"
       dehydration: "Dehydration"
-      malnutrition_anemia: "Malnutrition & anemia"
+      malnutrition_anemia: "Malnutrition & anaemia"
     table:
       columns:
         label: "Label"
