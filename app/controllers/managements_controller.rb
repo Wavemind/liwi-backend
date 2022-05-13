@@ -113,6 +113,7 @@ class ManagementsController < ApplicationController
       :reference,
       :type,
       :level_of_urgency,
+      :is_neonat,
       :is_referral,
       Language.language_params('label'),
       Language.language_params('description'),
