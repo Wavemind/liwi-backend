@@ -62,6 +62,7 @@ export default class ManagementForm extends React.Component {
         values.description_translations,
         values.level_of_urgency,
         values.is_referral,
+        values.is_neonat,
         values.medias_attributes,
         from
       );
@@ -77,6 +78,7 @@ export default class ManagementForm extends React.Component {
         values.description_translations,
         values.level_of_urgency,
         values.is_referral,
+        values.is_neonat,
         values.medias_attributes,
         from
       );

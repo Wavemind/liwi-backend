@@ -95,6 +95,7 @@ export default class Http {
     description,
     level_of_urgency,
     is_referral,
+    is_neonat,
     medias_attributes,
     from
   ) => {
@@ -103,6 +104,7 @@ export default class Http {
       health_cares_management: {
         level_of_urgency,
         is_referral,
+        is_neonat,
         medias_attributes
       },
       diagnosis_id: this.instanceableId,
@@ -179,6 +181,7 @@ export default class Http {
     description,
     level_of_urgency,
     is_referral,
+    is_neonat,
     medias_attributes,
     from
   ) => {
@@ -188,6 +191,7 @@ export default class Http {
         id,
         level_of_urgency,
         is_referral,
+        is_neonat,
         medias_attributes
       },
       diagnosis_id: this.instanceableId,
