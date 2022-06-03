@@ -102,7 +102,8 @@ class Version < ApplicationRecord
           end
           # Recreate instances
           diagnosis.components.each do |instance|
-            new_instance = new_diagnosis.components.create!(instance.attributes.except('id', 'final_diagnosis_id', 'created_at', 'updated_at').merge({'final_diagnosis_id': matching_final_diagnoses[instance.final_diagnosis_id]}))
+            node_id = instance.node.is_a?(FinalDiagnosis) ? matching_final_diagnoses[instance.node_id] : instance.node_id
+            new_instance = new_diagnosis.components.create!(instance.attributes.except('id', 'final_diagnosis_id', 'created_at', 'updated_at').merge({'final_diagnosis_id': matching_final_diagnoses[instance.final_diagnosis_id], 'node_id': node_id}))
             # Store matching instances to recreate conditions afterwards
             matching_instances[instance.id] = new_instance
           end
