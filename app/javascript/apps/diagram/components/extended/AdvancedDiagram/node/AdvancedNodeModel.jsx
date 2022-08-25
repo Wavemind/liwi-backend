@@ -4,6 +4,8 @@ import { NodeModel } from "@projectstorm/react-diagrams";
 import AdvancedPortModel from "../port/AdvancedPortModel";
 import Http from "../../../../engine/http";
 import { NotificationManager } from "react-notifications";
+import {getStudyLanguage, getTranslatedText} from "../../utils";
+
 
 export default class AdvancedNodeModel extends NodeModel {
 
@@ -56,7 +58,9 @@ export default class AdvancedNodeModel extends NodeModel {
    * @params [Object] event
    */
   setPositionInstance = async (event) => {
-    let httpRequest = await this.http.updateInstance(this.options.dbInstance.id, event.entity.position.x, event.entity.position.y, this.options.dbInstance.is_pre_referral, this.options.dbInstance.duration_translations?.en, this.options.dbInstance.description_translations?.en);
+    const language = getStudyLanguage();
+
+    let httpRequest = await this.http.updateInstance(this.options.dbInstance.id, event.entity.position.x, event.entity.position.y, this.options.dbInstance.is_pre_referral, getTranslatedText(this.options.dbInstance.duration_translations, language), getTranslatedText(this.options.dbInstance.description_translations, language));
     let result = await httpRequest.json();
 
     if (httpRequest.status !== 200) {
