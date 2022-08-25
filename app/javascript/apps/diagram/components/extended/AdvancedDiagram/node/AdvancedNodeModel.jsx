@@ -4,7 +4,7 @@ import { NodeModel } from "@projectstorm/react-diagrams";
 import AdvancedPortModel from "../port/AdvancedPortModel";
 import Http from "../../../../engine/http";
 import { NotificationManager } from "react-notifications";
-import {getStudyLanguage, getTranslatedText} from "../../utils";
+import {getStudyLanguage, getTranslatedText} from "../../../../../utils";
 
 
 export default class AdvancedNodeModel extends NodeModel {
