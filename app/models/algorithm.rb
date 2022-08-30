@@ -36,7 +36,7 @@ class Algorithm < ApplicationRecord
     village = questions.create!(label_en: 'Village', type: 'Questions::BasicDemographic', stage: Question.stages[:registration], answer_type_id: 9, is_mandatory: true, is_identifiable: true, is_default: true)
     kind_of_consultation = questions.create!(label_en: 'What kind of consultation is this?', type: 'Questions::Demographic', stage: Question.stages[:registration], answer_type_id: 2, is_mandatory: true, is_default: true)
 
-    wh = a.questions.create!(label_en: 'How did you measure the child height ?', type: 'Questions::BasicMeasurement', stage: Question.stages[:triage], is_mandatory: true, answer_type_id: 2, is_default: true)
+    wh = questions.create!(label_en: 'How did you measure the child height ?', type: 'Questions::BasicMeasurement', stage: Question.stages[:triage], is_mandatory: true, answer_type_id: 2, is_default: true)
 
     # Configure basic questions into the algorithm to be used in json generation
     self.update(medal_r_config: {
