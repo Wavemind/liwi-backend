@@ -77,7 +77,7 @@ class QuestionsSequencesController < ApplicationController
   # GET algorithms/:algorithm_id/questions_sequences/lists
   # Return several attributes of the model QuestionsSequence to build dropdown lists
   def lists
-    authorize policy_scope(@algorithm.questions_sequences)
+    authorize @algorithm.questions_sequences.new
     render json: {
       categories: QuestionsSequence.categories,
       complaint_categories: @algorithm.questions.where(type: 'Questions::ComplaintCategory')
