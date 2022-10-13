@@ -801,7 +801,7 @@ en:
         answer_type: "Answer type"
         actions: "Actions"
         is_neonat: "Is NeoNat"
-        subtitle_questions: "Variables"
+      subtitle_questions: "Variables"
     edit:
       title: "Edit variable"
   remove: "Remove"
