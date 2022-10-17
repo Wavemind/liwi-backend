@@ -5,6 +5,7 @@ class FinalDiagnosis < Node
   belongs_to :diagnosis
   belongs_to :excluded_diagnosis, class_name: 'FinalDiagnosis', foreign_key: :final_diagnosis_id, optional: true
 
+  has_many :node_exclusions, foreign_key: 'excluding_node_id'
   has_many :components, class_name: 'Instance', dependent: :destroy
 
   before_create :link_algorithm

@@ -1,6 +1,8 @@
 # Define every drugs for a diagnosis
 class HealthCare < Node
 
+  has_many :node_exclusions, foreign_key: 'excluding_node_id'
+
   scope :managements, ->() { where('type = ?', 'HealthCares::Management') }
   scope :drugs, ->() { where('type = ?', 'HealthCares::Drug') }
 

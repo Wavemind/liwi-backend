@@ -9,6 +9,7 @@ class User < ApplicationRecord
 
   enum role: [:admin, :clinician, :deployment_manager, :medal_r_user]
 
+  has_many :algorithms
   has_many :activities
   has_many :devices, through: :activities
   has_many :accesses

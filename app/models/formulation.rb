@@ -6,7 +6,6 @@ class Formulation < ApplicationRecord
 
   translates :description, :injection_instructions, :dispensing_description
 
-
   belongs_to :node, class_name: 'HealthCares::Drug'
   belongs_to :administration_route
 
