@@ -116,7 +116,7 @@ class Version < ApplicationRecord
         matching_instances.each do |instance_id, new_instance|
           instance = Instance.find(instance_id)
           instance.conditions.each do |condition|
-            new_instance.conditions.create!(condition.attributes.slice('score', 'cut_off_start', 'cut_of_end', 'answer_id'))
+            new_instance.conditions.create!(condition.attributes.slice('score', 'cut_off_start', 'cut_off_end', 'answer_id'))
           end
         end
       rescue => e
