@@ -16,20 +16,23 @@ namespace :migrate do
       data['users'].push(hash_user)
     end
 
+    [31, 1, 58, 68, 76, 77]
+
     data['algorithms'] = []
     Algorithm.all.each do |algorithm|
+      next unless algorithm.id == 1
       hash_algorithm = algorithm.as_json
 
       hash_algorithm['users'] = algorithm.study.users
 
       hash_algorithm['questions'] = []
       algorithm.questions.each do |question|
-        hash_algorithm['questions'].push(question.as_json(include: [:answer_type, :answers]).merge(type: question.type))
+        hash_algorithm['questions'].push(question.as_json(include: [:node_complaint_categories, :answer_type, :answers]).merge(type: question.type))
       end
 
       hash_algorithm['questions_sequences'] = []
       algorithm.questions_sequences.each do |qs|
-        hash_algorithm['questions_sequences'].push(qs.as_json(include: [:answers, components: {include: :conditions}]).merge(type: qs.type))
+        hash_algorithm['questions_sequences'].push(qs.as_json(include: [:node_complaint_categories, :answers, components: {include: :conditions}]).merge(type: qs.type))
       end
       # (include: {medical_staffs: {methods: [:algo_language, :app_language]}})
 
@@ -45,6 +48,8 @@ namespace :migrate do
 
       hash_algorithm['versions'] = []
       algorithm.versions.each do |version|
+        next unless [31, 1, 58, 68, 76, 77].include?(version.id)
+
         hash_algorithm['versions'].push(version.as_json(include: [:languages, :medal_data_config_variables, components: {include: :conditions}, diagnoses: {include: [final_diagnoses: {include: :node_exclusions}, components: {include: :conditions}]}]))
       end
       data['algorithms'].push(hash_algorithm)

@@ -44,6 +44,60 @@ class Version < ApplicationRecord
     append name: I18n.t('duplicated')
   end
 
+
+  def self.validate_duplicate(origin_id, duplicate_id)
+    require "json-diff"
+    
+    origin_version = Version.find(origin_id) # 58
+    duplicated_version = Version.find(duplicate_id) # 72
+    origin_json = origin_version.medal_r_json
+    duplicated_json = duplicated_version.medal_r_json
+    origin_fd_ids = origin_version.diagnoses.map(&:final_diagnoses).flatten.map(&:id)
+    errors = []
+
+    # Compare root json keys
+    errors.concat(JsonDiff.diff(Version.first_keys(duplicated_json), Version.first_keys(origin_json)))
+    # Compare questions and qss with out the keys relating to the diagnosis (ids expected to be different) and media (link regenerated)
+    errors.concat(JsonDiff.diff(duplicated_json.slice('nodes'), origin_json.slice('nodes')).select{|node|
+                                                                        node['path'].exclude?('/diagnoses_related_to_cc/') &&
+                                                                        node['path'].exclude?('/dd/') &&
+                                                                        node['path'].exclude?('/medias/') &&
+                                                                        node['path'].exclude?('/df/')})
+    # Compare drugs and managements without media
+    errors.concat(JsonDiff.diff(duplicated_json.slice('health_cares'), origin_json.slice('health_cares')).select{|node| node['path'].exclude?('/medias/')})
+    # Compare final diagnoses without ids and media
+    errors.concat(JsonDiff.diff(Version.format_fd_json(duplicated_json), Version.format_fd_json(origin_json)).select{|final_diagnosis| final_diagnosis['path'].exclude?('/medias/')})
+    # Compare diagnoses without ids and ignoring errors relating to final diagnoses ids (since they got duplicated) and children order (which is not relevant to the functionality)
+    errors.concat(JsonDiff.diff(Version.format_diagnosis_json(duplicated_json), Version.format_diagnosis_json(origin_json)).select{|diagnosis|
+      diagnosis["op"] != "move" &&
+      diagnosis['path'].exclude?('/final_diagnosis_id') &&
+      !(diagnosis["op"] == "remove" && diagnosis['path'].include?('/children/')) &&
+      !(diagnosis["op"] == "add" && diagnosis['path'].include?('/children/') && origin_fd_ids.include?(diagnosis["value"]))
+    })
+
+    errors
+  end
+
+  # Format final diagnoses key to not include final diagnoses and diagnoses ids
+  def self.format_fd_json(json)
+    json['final_diagnoses'].values.map do |dd|
+      dd.except('id', 'diagnosis_id', 'excluding_final_diagnoses')
+    end
+  end
+
+  # Format diagnoses to not include final diagnoses and diagnoses ids
+  def self.format_diagnosis_json(json)
+    json['diagnoses'].values.map do |df|
+      df.except('id', 'final_diagnoses', 'excluding_final_diagnoses')
+    end
+  end
+
+  def self.first_keys(json)
+    json.except('version_id', 'version_name', 'json_version', 'created_at', 'updated_at', 'nodes', 'health_cares',
+                'final_diagnoses', 'diagnoses')
+
+  end
+
   # @return [Json]
   # Return available nodes in the algorithm in json format
   def available_nodes_json
