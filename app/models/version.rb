@@ -47,7 +47,7 @@ class Version < ApplicationRecord
 
   def self.validate_duplicate(origin_id, duplicate_id)
     require "json-diff"
-    
+
     origin_version = Version.find(origin_id) # 58
     duplicated_version = Version.find(duplicate_id) # 72
     origin_json = origin_version.medal_r_json
@@ -75,6 +75,10 @@ class Version < ApplicationRecord
       !(diagnosis["op"] == "add" && diagnosis['path'].include?('/children/') && origin_fd_ids.include?(diagnosis["value"]))
     })
 
+    errors.push("Diagnoses count not equal") if origin_version.diagnoses.count != duplicated_version.diagnoses.count
+    errors.push("Final diagnoses count not equal") if origin_version.diagnoses.includes(:final_diagnoses).map(&:final_diagnoses).flatten.count != duplicated_version.diagnoses.includes(:final_diagnoses).map(&:final_diagnoses).flatten.count
+    errors.push("Instances count not equal") if origin_version.diagnoses.includes(:components).map(&:components).flatten.count != duplicated_version.diagnoses.includes(:components).map(&:components).flatten.count
+    errors.push("Conditions count not equal") if origin_version.diagnoses.includes(components: [:conditions]).map(&:components).flatten.map(&:conditions).flatten.count != duplicated_version.diagnoses.includes(components: [:conditions]).map(&:components).flatten.map(&:conditions).flatten.count
     errors
   end
 
