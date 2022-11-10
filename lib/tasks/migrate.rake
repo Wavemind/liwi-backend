@@ -23,7 +23,7 @@ namespace :migrate do
       next unless algorithm.id == 1
       hash_algorithm = algorithm.as_json
 
-      hash_algorithm['users'] = algorithm.study.users
+      hash_algorithm['study'] = algorithm.study.as_json(include: :users)
 
       hash_algorithm['questions'] = []
       algorithm.questions.each do |question|

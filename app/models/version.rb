@@ -177,6 +177,8 @@ class Version < ApplicationRecord
             new_instance.conditions.create!(condition.attributes.slice('score', 'cut_off_start', 'cut_off_end', 'answer_id'))
           end
         end
+
+        errors = Version.validate_duplicate(self, new_version)
       rescue => e
         puts e
         puts e.backtrace
