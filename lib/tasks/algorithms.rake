@@ -103,13 +103,14 @@ namespace :algorithms do
 
         puts "#{Time.zone.now.strftime("%I:%M")} - Copying Versions and their Diagnoses, along with the Instances in the diagrams..."
         origin_algorithm.versions.active.each do |version|
-          next unless version.id == 58
+
           # TODO : Add left/right top questions
           # Update medal_r_config and medal_data_config instead of reseting it
           new_version = copied_algorithm.versions.new(version.attributes.except('id', 'name', 'algorithm_id', 'medal_r_config', 'medal_data_config', 'medal_r_json', 'medal_r_json_version', 'created_at', 'updated_at'))
           new_version.name = "Copy of #{version.name}"
-          # new_version.init_config
+
           versions[version.id] = new_version
+          new_version.source = version
 
           puts "#{Time.zone.now.strftime("%I:%M")} - Recreating the full ordering of the copied versions..."
           order = JSON.parse(new_version.full_order_json)
@@ -127,6 +128,8 @@ namespace :algorithms do
             end
           end
           new_version.full_order_json = order.to_json
+
+          new_version.save
 
           version.components.each do |instance|
             new_instance = new_version.components.create!(
@@ -146,7 +149,6 @@ namespace :algorithms do
             new_version.medal_data_config_variables.create!(api_key: variable.api_key, label: variable.label, question: nodes[variable.question_id])
           end
 
-          new_version.save
           version.diagnoses.map do |diagnosis|
             new_diagnosis = new_version.diagnoses.create!(
               reference: diagnosis.reference,
@@ -189,7 +191,7 @@ namespace :algorithms do
               instances[instance.id] = new_instance
             end
           end
-          errors.concat(validate_order(order, JSON.parse(version.full_order_json), nodes.keys, nodes.values))
+          errors.concat(validate_order(order, JSON.parse(version.full_order_json), nodes.keys, nodes.values.map(&:id)))
         end
 
         puts "#{Time.zone.now.strftime("%I:%M")} - Recreating links between Instances on the copied diagrams..."
@@ -239,9 +241,14 @@ namespace :algorithms do
         end
         copied_algorithm.medal_r_config = config
         copied_algorithm.save(validate: false)
-        before_test = Time.zone.now
-        errors.concat(validate_algorithm_duplicate(copied_algorithm))
 
+        before_test = Time.zone.now
+
+        errors.concat(validate_algorithm_duplicate(copied_algorithm))
+        ##########################################################
+        # /!\ If only one version is copied adapt tests below  /!\
+        ##########################################################
+        errors.concat(validate_count(origin_algorithm, copied_algorithm))
 
         after_test = Time.zone.now
         if errors.any?
@@ -255,19 +262,44 @@ namespace :algorithms do
         puts e.backtrace
         raise ActiveRecord::Rollback, ''
       end
-      puts("Duplication duration : #{before_test - start}")
-      puts("Test duration         : #{after_test - before_test}")
-      puts("Total duration        : #{after_test - start}")
+      puts("Duplication duration  : #{before_test - start}sec")
+      puts("Test duration         : #{after_test - before_test}sec")
+      puts("Total duration        : #{after_test - start}sec")
     end
+  end
+
+  def validate_count(origin_algorithm, copied_algorithm)
+    errors = []
+    errors.push("Number of nodes differ from a version to another") if copied_algorithm.nodes.count != origin_algorithm.nodes.count
+
+    copied_nodes = copied_algorithm.nodes.map(&:instances).flatten
+    origin_nodes = origin_algorithm.nodes.map(&:instances).flatten
+    errors.push("Number of instance differ from a version to another") if copied_nodes.count != origin_nodes.count
+    errors.push("Number of conditions differ from a version to another") if copied_nodes.map(&:conditions).flatten.count != origin_nodes.map(&:conditions).flatten.count
+    errors.push("Number of diagnosis differ from a version to another") if copied_algorithm.versions.map(&:diagnoses).flatten.count != origin_algorithm.versions.map(&:diagnoses).flatten.count
+
+    copied_excluded_nodes = NodeExclusion.where(excluded_node: copied_nodes)
+    copied_excluding_nodes = NodeExclusion.where(excluding_node: copied_nodes)
+    origin_excluded_nodes = NodeExclusion.where(excluded_node: origin_nodes)
+    origin_excluding_nodes = NodeExclusion.where(excluding_node: origin_nodes)
+    errors.push("Number of nodes exclusion differ from a version to another") if copied_excluded_nodes.count != origin_excluded_nodes.count || copied_excluding_nodes.count != origin_excluding_nodes.count
+
+    # Checking the number of node conditioned by complaint category as conditioned node
+    errors.push("Number of nodes complaint category differ from a version to another") if NodeComplaintCategory.where(node: copied_nodes).count != NodeComplaintCategory.where(node: origin_nodes).count
+    # Checking the number of node conditioned by complaint category from the complatin_category context
+    errors.push("Number of nodes complaint category differ from a version to another") if NodeComplaintCategory.where(complaint_category: copied_nodes).count != NodeComplaintCategory.where(complaint_category: origin_nodes).count
+
+    errors.push("Number of children differ from a version to another") if Child.where(node: copied_nodes).count != Child.where(node: origin_nodes).count
+    errors
   end
 
   # Compare order json from duplicated versions to ensure they only have node id as difference (and not positions or labels)
   # Ensure aswell that the difference in the node id is in the correct scope of before and after version
-  def validate_order(new_order, old_order, new_nodes, old_nodes)
+  def validate_order(new_order, old_order, old_nodes, new_nodes)
     require "json-diff"
     errors = []
-    errors.concat(JsonDiff.diff(new_order, old_order).select{|error| error['op'] == 'replace' && old_nodes.include?(error['value'])})
-    errors.concat(JsonDiff.diff(old_order, new_order).select{|error| error['op'] == 'replace' && new_nodes.include?(error['value'])})
+    errors.concat(JsonDiff.diff(new_order, old_order).select{|error| !(error['op'] == 'replace' && old_nodes.include?(error['value']))})
+    errors.concat(JsonDiff.diff(old_order, new_order).select{|error| !(error['op'] == 'replace' && new_nodes.include?(error['value']))})
     errors
   end
 
@@ -275,21 +307,31 @@ namespace :algorithms do
     errors = []
     new_algorithm.nodes.includes([:source, instances: [:source, conditions: :source]]).each do |node|
 
+      # For each node we are going to compare the values exept the the algorithm id the diagnosis_id (if DF) and reference tables
+      # If it's a final diagnosis we check that they are both related to the same final diagnosis
       if clean_attributes(node).except('algorithm_id', 'diagnosis_id','reference_table_x_id','reference_table_y_id', 'reference_table_z_id') !=
         clean_attributes(node.source).except('algorithm_id', 'diagnosis_id','reference_table_x_id','reference_table_y_id', 'reference_table_z_id') ||
          (node.is_a?(FinalDiagnosis) && node.diagnosis.source_id != node.source.diagnosis_id)
         errors.push("Missing match between nodes #{node.id} and #{node.source_id}")
       end
 
+      # If the current node is a question we are going to check if it's related to a reference table,
+      # if yes we check that the related node are the same (but from original algorithm)
       if node.is_a?(Question)
-        # Test if reference table are well copied
-        if (node.reference_table_x_id.nil? && node.source.reference_table_x_id.present?) || (node.reference_table_x_id.present? && node.reference_table_x.source_id != node.source.reference_table_x_id) || # table X
-           (node.reference_table_y_id.nil? && node.source.reference_table_y_id.present?) || (node.reference_table_y_id.present? && node.reference_table_y.source_id != node.source.reference_table_y_id) || # table Y
-           (node.reference_table_z_id.nil? && node.source.reference_table_z_id.present?) || (node.reference_table_z_id.present? && node.reference_table_z.source_id != node.source.reference_table_z_id)    # table Z
+
+        if (node.reference_table_x_id.nil? && node.source.reference_table_x_id.present?) ||
+              (node.reference_table_x_id.present? && node.reference_table_x.source_id != node.source.reference_table_x_id) || # table X
+           (node.reference_table_y_id.nil? && node.source.reference_table_y_id.present?) ||
+              (node.reference_table_y_id.present? && node.reference_table_y.source_id != node.source.reference_table_y_id) || # table Y
+           (node.reference_table_z_id.nil? && node.source.reference_table_z_id.present?) ||
+              (node.reference_table_z_id.present? && node.reference_table_z.source_id != node.source.reference_table_z_id)    # table Z
           errors.push("Missing match between reference tables #{node.id} and #{node.source_id}")
         end
       end
 
+      # If the current node is a Question or a QuestionSequence, we are checking that the freshly created answer have the same attributes as
+      # the answers from the original algorithm.
+      # We also check that the new answer is related to the same question (but from original algorithm)
       if node.is_a?(Question) || node.is_a?(QuestionsSequence)
         node.answers.each do |answer|
           if clean_attributes(answer).except('node_id') != clean_attributes(answer.source).except('node_id') || answer.source.node_id != answer.node.source_id
@@ -298,25 +340,31 @@ namespace :algorithms do
         end
       end
 
+      # We check that the newly created media have the same label as the one from the original
+      # We also check that the new media is related to the same fileable (but from original algorithm)
       node.medias.each do |media|
         if media.label_translations != media.label_translations || media.source.fileable_id != media.fileable.source_id
           errors.push("Missing match between medias #{media.id} and #{media.source_id}")
         end
       end
 
+      # If the node is a Drug, we compare all the values for the formulations between the new and the original formulations except for the node_id
+      # We also check that the drug related the formulation are the same drug (but from original algorithm)
       if node.is_a?(HealthCares::Drug)
         node.formulations.each do |formulation|
-          if clean_attributes(formulation).except('node_id') != clean_attributes(formulation.source).except('node_id') ||
-            formulation.node.source_id != formulation.source.node_id
-            errors.push("Missing match between formulations #{formulation.id} and #{formulation.source_id}")
+          if clean_attributes(formulation).except('node_id') != clean_attributes(formulation.source).except('node_id') || formulation.node.source_id != formulation.source.node_id
+            errors.push("Missing match between Version formulations #{formulation.id} and #{formulation.source_id}")
           end
         end
       end
 
+      # For each node we are going to go through each instance and we are going to compare the values of the original object and the newly created one.
       node.instances.each do |instance|
         if clean_attributes(instance).except('node_id', 'instanceable_id', 'final_diagnosis_id') != clean_attributes(instance.source).except('node_id', 'instanceable_id', 'final_diagnosis_id') ||
-          instance.source.instanceable_id != instance.instanceable.source_id || (instance.final_diagnosis_id.nil? && instance.source.final_diagnosis_id.present?) ||
-          (instance.final_diagnosis_id.present? && instance.final_diagnosis.source_id != instance.source.final_diagnosis_id) || instance.source.node_id != instance.node.source_id
+          instance.source.instanceable_id != instance.instanceable.source_id || # We check that the instance is related to the same instanceable (Version, Diagnosis, Node)
+          (instance.final_diagnosis_id.nil? && instance.source.final_diagnosis_id.present?) || # If the original instance is related to a final diagnosis we make sure that the copy also is
+          (instance.final_diagnosis_id.present? && instance.final_diagnosis.source_id != instance.source.final_diagnosis_id) || # If the origianl instance is related to a final diagnosis we make sure that it's the same (but from original algorithm)
+          instance.source.node_id != instance.node.source_id # We make sure that the node related to the instance is the same (but from original algorithm)
           errors.push("Missing match between instances #{instance.id} and #{instance.source_id}")
         end
 

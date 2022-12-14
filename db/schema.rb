@@ -438,9 +438,11 @@ ActiveRecord::Schema.define(version: 2022_12_14_084145) do
     t.integer "minimum_age"
     t.integer "age_limit"
     t.hstore "age_limit_message_translations"
+    t.bigint "source_id"
     t.index ["algorithm_id"], name: "index_versions_on_algorithm_id"
     t.index ["first_top_right_question_id"], name: "index_versions_on_first_top_right_question_id"
     t.index ["second_top_right_question_id"], name: "index_versions_on_second_top_right_question_id"
+    t.index ["source_id"], name: "index_versions_on_source_id"
     t.index ["top_left_question_id"], name: "index_versions_on_top_left_question_id"
     t.index ["user_id"], name: "index_versions_on_user_id"
   end
@@ -471,4 +473,5 @@ ActiveRecord::Schema.define(version: 2022_12_14_084145) do
   add_foreign_key "technical_files", "users"
   add_foreign_key "versions", "algorithms"
   add_foreign_key "versions", "users"
+  add_foreign_key "versions", "versions", column: "source_id"
 end

@@ -20,5 +20,8 @@ class AddSourceIdToDuplicatedModels < ActiveRecord::Migration[6.0]
 
     add_reference :formulations, :source, index: true
     add_foreign_key :formulations, :formulations, column: :source_id
+
+    add_reference :versions, :source, index: true
+    add_foreign_key :versions, :versions, column: :source_id
   end
 end
