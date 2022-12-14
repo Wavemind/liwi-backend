@@ -48,18 +48,21 @@ namespace :algorithms do
 
             node.medias.map do |media|
               new_media = Media.new(label_translations: media.label_translations, fileable: new_node)
+              new_media.source = media
               new_media.duplicate_file(media)
             end
 
             if node.is_a?(Question)
               node.answers.each do |answer|
                 new_answer = new_node.answers.new(answer.attributes.except('id', 'node_id', 'created_at', 'updated_at'))
+                new_answer.source = answer
                 new_answer.save(validate: false)
                 answers[answer.id] = new_answer
               end
             elsif node.is_a?(QuestionsSequence)
               node.answers.each do |answer|
                 new_answer = new_node.answers.new(answer.attributes.except('id', 'node_id', 'created_at', 'updated_at'))
+                new_answer.source = answer
                 new_answer.save(validate: false)
                 answers[answer.id] = new_answer
               end
@@ -67,6 +70,7 @@ namespace :algorithms do
             elsif node.is_a?(HealthCares::Drug)
               node.formulations.each do |formulation|
                 new_formulation = new_node.formulations.new(formulation.attributes.except('id', 'node_id', 'created_at', 'updated_at'))
+                new_formulation.source = formulation
                 new_formulation.save(validate: false)
               end
             end
@@ -87,7 +91,8 @@ namespace :algorithms do
               position_x: instance.position_x,
               position_y: instance.position_y,
               duration: instance.duration,
-              description: instance.description
+              description: instance.description,
+              source: instance
             )
             instances[instance.id] = new_instance
           end
@@ -95,7 +100,7 @@ namespace :algorithms do
 
         puts "#{Time.zone.now.strftime("%I:%M")} - Copying Versions and their Diagnoses, along with the Instances in the diagrams..."
         origin_algorithm.versions.active.each do |version|
-          next unless version.id == 58
+          # next unless version.id == 58
           # TODO : Add left/right top questions
           # Update medal_r_config and medal_data_config instead of reseting it
           new_version = copied_algorithm.versions.new(version.attributes.except('id', 'name', 'algorithm_id', 'medal_r_config', 'medal_data_config', 'medal_r_json', 'medal_r_json_version', 'created_at', 'updated_at'))
@@ -122,18 +127,27 @@ namespace :algorithms do
 
           new_version.save
           version.diagnoses.map do |diagnosis|
-            new_diagnosis = new_version.diagnoses.create!(reference: diagnosis.reference, label_translations: diagnosis.label_translations, node: nodes[diagnosis.node_id])
+            new_diagnosis = new_version.diagnoses.create!(
+              reference: diagnosis.reference,
+              label_translations: diagnosis.label_translations,
+              node: nodes[diagnosis.node_id],
+              source: diagnosis,
+              cut_off_start: diagnosis.cut_off_start,
+              cut_off_end: diagnosis .cut_off_end
+            )
             diagnoses[diagnosis.id] = new_diagnosis
 
             diagnosis.final_diagnoses.map do |fd|
               puts "Final diagnosis being copied : #{fd.id}"
 
               new_fd = copied_algorithm.nodes.new(fd.attributes.except('id', 'algorithm_id', 'diagnosis_id', 'created_at', 'updated_at'))
+              new_fd.source = fd
               new_fd.diagnosis_id = new_diagnosis.id
               new_fd.save(validate: false)
 
               fd.medias.map do |media|
                 new_media = Media.new(label_translations: media.label_translations, fileable: new_fd)
+                new_media.source = media
                 new_media.duplicate_file(media)
               end
 
@@ -147,7 +161,8 @@ namespace :algorithms do
                 position_x: instance.position_x,
                 position_y: instance.position_y,
                 duration: instance.duration,
-                description: instance.description
+                description: instance.description,
+                source: instance
               )
               instances[instance.id] = new_instance
             end
@@ -163,7 +178,14 @@ namespace :algorithms do
           end
 
           old_instance.conditions.map do |condition|
-            Condition.create!(instance: new_instance, answer: answers[condition.answer_id], score: condition.score)
+            Condition.create!(
+              instance: new_instance,
+              answer: answers[condition.answer_id],
+              score: condition.score,
+              cut_off_start: condition.cut_off_start,
+              cut_off_end: condition.cut_off_end,
+              source: condition
+            )
           end
         end
 
@@ -193,12 +215,71 @@ namespace :algorithms do
         copied_algorithm.medal_r_config = config
         copied_algorithm.save(validate: false)
 
+        if validate_algorithm_duplicate(copied_algorithm)
+          puts "#######################################"
+          puts errors
+          puts "#######################################"
+          raise ActiveRecord::Rollback, ''
+        end
       rescue => e
         puts e
         puts e.backtrace
         raise ActiveRecord::Rollback, ''
       end
     end
+  end
+
+  def validate_algorithm_duplicate(new_algorithm)
+    errors = []
+    new_algorithm.nodes.includes([:source, answers: :source, instances: [:source, conditions: :source]]).each do |node|
+      errors.push("Missing match between nodes #{node.id} and #{node.source_id}") if clean_attributes(node).except('algorithm_id') != clean_attributes(node.source).except('algorithm_id')
+      node.answers.each do |answer|
+        if clean_attributes(answer).except('node_id') != clean_attributes(answer.source).except('node_id') || answer.source.node_id != answer.node.source_id
+          errors.push("Missing match between answers #{answer.id} and #{answer.source_id}")
+        end
+      end
+
+      node.medias.each do |media|
+        if media.label_translations != media.label_translations || media.source.fileable_id != media.fileable.source_id
+          errors.push("Missing match between medias #{media.id} and #{media.source_id}")
+        end
+      end
+
+      if node.is_a?(HealthCares::Drug)
+        node.formulations.each do |formulation|
+          if clean_attributes(formulation).except('node_id') != clean_attributes(formulation.source).except('node_id') ||
+            formulation.node.source_id != formulation.source.node_id
+            errors.push("Missing match between formulations #{formulation.id} and #{formulation.source_id}")
+          end
+        end
+      end
+
+      node.instances.each do |instance|
+        if clean_attributes(instance).except('node_id', 'instanceable_id', 'final_diagnosis_id') != clean_attributes(instance.source).except('node_id', 'instanceable_id', 'final_diagnosis_id') ||
+          instance.source.instanceable_id == instance.instanceable.source_id || (instance.final_diagnosis_id.nil? && instance.source.final_diagnosis_id.present?) ||
+          (instance.final_diagnosis_id.present? && instance.final_diagnosis.source_id != instance.source.final_diagnosis_id) || instance.source.node_id != instance.node.source_id
+          errors.push("Missing match between instances #{instance.id} and #{instance.source_id}")
+        end
+
+        instance.conditions.each do |condition|
+          if clean_attributes(condition).except('answer_id', 'instance_id', 'referenceable_id', 'first_conditionable_id') != clean_attributes(condition.source).except('answer_id', 'instance_id', 'referenceable_id', 'first_conditionable_id') ||
+            condition.instance.source_id != condition.source.instance_id || condition.answer.source_id != condition.source.answer_id
+            errors.push("Missing match between conditions #{condition.id} and #{condition.source_id}")
+          end
+        end
+      end
+    end
+
+    new_algorithm.versions.map(&:diagnoses).flatten.each do |diagnosis|
+      if clean_attributes(diagnosis).except('version_id', 'node_id') != clean_attributes(diagnosis.source).except('version_id', 'node_id') ||
+        diagnosis.node.source_id != diagnosis.source.node_id
+        errors.push("Missing match between diagnosiss #{diagnosis.id} and #{diagnosis.source_id}")
+      end
+    end
+    errors
+  end
+  def clean_attributes(object)
+    object.attributes.except('id', 'source_id', 'created_at', 'updated_at')
   end
 
   desc "24.11.2021: Some managements where added after the copy to india was made so we need to retreive those"

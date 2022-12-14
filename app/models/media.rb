@@ -4,6 +4,7 @@ class Media < ApplicationRecord
   mount_uploader :url, MediaUploader
 
   belongs_to :fileable, polymorphic: true
+  belongs_to :source, class_name: 'Media', optional: true
 
   validates_presence_of :label_translations
   validates_presence_of :url
