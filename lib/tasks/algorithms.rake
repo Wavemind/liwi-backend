@@ -103,12 +103,12 @@ namespace :algorithms do
 
         puts "#{Time.zone.now.strftime("%I:%M")} - Copying Versions and their Diagnoses, along with the Instances in the diagrams..."
         origin_algorithm.versions.active.each do |version|
-          
+
           # TODO : Add left/right top questions
           # Update medal_r_config and medal_data_config instead of reseting it
           new_version = copied_algorithm.versions.new(version.attributes.except('id', 'name', 'algorithm_id', 'medal_r_config', 'medal_data_config', 'medal_r_json', 'medal_r_json_version', 'created_at', 'updated_at'))
           new_version.name = "Copy of #{version.name}"
-         
+
           versions[version.id] = new_version
           new_version.source = version
 
@@ -128,7 +128,7 @@ namespace :algorithms do
             end
           end
           new_version.full_order_json = order.to_json
-         
+
           new_version.save
 
           version.components.each do |instance|
@@ -244,11 +244,9 @@ namespace :algorithms do
 
         before_test = Time.zone.now
 
-
-     
         errors.concat(validate_algorithm_duplicate(copied_algorithm))
         ##########################################################
-        # /!\ If only one version is copied adapt tests below  /!\ 
+        # /!\ If only one version is copied adapt tests below  /!\
         ##########################################################
         errors.concat(validate_count(origin_algorithm, copied_algorithm))
 
@@ -295,6 +293,8 @@ namespace :algorithms do
     errors
   end
 
+  # Compare order json from duplicated versions to ensure they only have node id as difference (and not positions or labels)
+  # Ensure aswell that the difference in the node id is in the correct scope of before and after version
   def validate_order(new_order, old_order, old_nodes, new_nodes)
     require "json-diff"
     errors = []
@@ -315,10 +315,10 @@ namespace :algorithms do
         errors.push("Missing match between nodes #{node.id} and #{node.source_id}")
       end
 
-      # If the current node is a question we are going to check if it's related to a reference table, 
+      # If the current node is a question we are going to check if it's related to a reference table,
       # if yes we check that the related node are the same (but from original algorithm)
       if node.is_a?(Question)
-        
+
         if (node.reference_table_x_id.nil? && node.source.reference_table_x_id.present?) ||
               (node.reference_table_x_id.present? && node.reference_table_x.source_id != node.source.reference_table_x_id) || # table X
            (node.reference_table_y_id.nil? && node.source.reference_table_y_id.present?) ||
@@ -340,7 +340,7 @@ namespace :algorithms do
         end
       end
 
-      # We check that the newly created media have the same label as the one from the original 
+      # We check that the newly created media have the same label as the one from the original
       # We also check that the new media is related to the same fileable (but from original algorithm)
       node.medias.each do |media|
         if media.label_translations != media.label_translations || media.source.fileable_id != media.fileable.source_id
