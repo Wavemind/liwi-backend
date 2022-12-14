@@ -219,8 +219,31 @@ namespace :algorithms do
         end
         copied_algorithm.medal_r_config = config
         copied_algorithm.save(validate: false)
+
         before_test = Time.zone.now
+
         errors = validate_algorithm_duplicate(copied_algorithm)
+        errors.push("Number of nodes differ from a version to another ") if copied_algorithm.nodes.count != origin_algorithm.nodes.count
+
+        copied_nodes = copied_algorithm.nodes.map(&:instances).flatten
+        origin_nodes = origin_algorithm.nodes.map(&:instances).flatten
+        errors.push("Number of instance differ from a version to another ") if copied_nodes.count != origin_nodes.count
+        errors.push("Number of conditions differ from a version to another ") if copied_nodes.map(&:conditions).flatten.count != origin_nodes.map(&:conditions).flatten.count
+        errors.push("Number of diagnosis differ from a version to another ") if copied_algorithm.versions.map(&:diagnoses).flatten.count != origin_algorithm.versions.map(&:diagnoses).flatten.count
+        
+        copied_excluded_nodes = NodeExclusion.where(excluded_node: copied_nodes)
+        copied_excluding_nodes = NodeExclusion.where(excluding_node: copied_nodes)
+        origin_excluded_nodes = NodeExclusion.where(excluded_node: origin_nodes)
+        origin_excluding_nodes = NodeExclusion.where(excluding_node: origin_nodes)
+        errors.push("Number of nodes exclusion differ from a version to another ") if copied_excluded_nodes.count != origin_excluded_nodes.count || copied_excluding_nodes.count != origin_excluding_nodes.count
+
+        # Checking the number of node conditioned by complaint category as conditioned node
+        errors.push("Number of nodes complaint category differ from a version to another ") if NodeComplaintCategory.where(node: copied_nodes).count != NodeComplaintCategory.where(node: origin_nodes).count
+        # Checking the number of node conditioned by complaint category from the complatin_category context
+        errors.push("Number of nodes complaint category differ from a version to another ") if NodeComplaintCategory.where(complaint_category: copied_nodes).count != NodeComplaintCategory.where(complaint_category: origin_nodes).count
+        
+        errors.push("Number of children differ from a version to another ") if Child.where(node: copied_nodes).count != Child.where(node: origin_nodes).count
+
         after_test = Time.zone.now
         if errors.any?
           puts "#######################################"
@@ -233,7 +256,7 @@ namespace :algorithms do
         puts e.backtrace
         raise ActiveRecord::Rollback, ''
       end
-      puts("Duplication duration : #{before_test - start}")
+      puts("Duplication duration  : #{before_test - start}")
       puts("Test duration         : #{after_test - before_test}")
       puts("Total duration        : #{after_test - start}")
     end
