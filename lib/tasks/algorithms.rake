@@ -1,10 +1,10 @@
 namespace :algorithms do
   desc "Create copy of questions, treatments and managements of an algorithm to a new one. ENV : PROD"
-  task copy_algo: :environment do
+  task :copy_algo, [:algorithm_id] => :environment do |t, args|
     ActiveRecord::Base.transaction(requires_new: true) do
       begin
         puts "#{Time.zone.now.strftime("%I:%M")} - Copying the Algorithm ..."
-        origin_algorithm = Algorithm.find(1)
+        origin_algorithm = Algorithm.find(args[:algorithm_id])
         copied_algorithm = Algorithm.new(origin_algorithm.attributes.except('id', 'name', 'created_at', 'updated_at'))
         copied_algorithm.name = "Copy of #{origin_algorithm.name}"
         Algorithm.skip_callback(:create, :after, :create_reference_table_questions)
@@ -235,9 +235,7 @@ namespace :algorithms do
     values
   end
 
-
   task update_cut_offs: :environment do
-
     ActiveRecord::Base.transaction(requires_new: true) do
       begin
         impossible_diagram_to_manage = []
