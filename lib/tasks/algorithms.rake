@@ -189,7 +189,7 @@ namespace :algorithms do
               instances[instance.id] = new_instance
             end
           end
-          errors.concat(validate_order(order, JSON.parse(new_version.full_order_json), nodes.keys, nodes.values))
+          errors.concat(validate_order(order, JSON.parse(version.full_order_json), nodes.keys, nodes.values))
         end
 
         puts "#{Time.zone.now.strftime("%I:%M")} - Recreating links between Instances on the copied diagrams..."
@@ -261,6 +261,8 @@ namespace :algorithms do
     end
   end
 
+  # Compare order json from duplicated versions to ensure they only have node id as difference (and not positions or labels)
+  # Ensure aswell that the difference in the node id is in the correct scope of before and after version
   def validate_order(new_order, old_order, new_nodes, old_nodes)
     require "json-diff"
     errors = []
