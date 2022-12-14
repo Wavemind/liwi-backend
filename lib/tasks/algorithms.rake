@@ -4,6 +4,7 @@ namespace :algorithms do
     start = Time.zone.now
     ActiveRecord::Base.transaction(requires_new: true) do
       begin
+        errors = []
         puts "#{Time.zone.now.strftime("%I:%M")} - Copying the Algorithm ..."
         origin_algorithm = Algorithm.find(args[:algorithm_id])
         copied_algorithm = Algorithm.new(origin_algorithm.attributes.except('id', 'name', 'created_at', 'updated_at'))
@@ -127,6 +128,24 @@ namespace :algorithms do
           end
           new_version.full_order_json = order.to_json
 
+          version.components.each do |instance|
+            new_instance = new_version.components.create!(
+              node: nodes[instance.node_id],
+              final_diagnosis: nodes[instance.final_diagnosis_id],
+              position_x: instance.position_x,
+              position_y: instance.position_y,
+              duration_translations: instance.duration_translations,
+              description_translations: instance.description_translations,
+              source: instance,
+              is_pre_referral: instance.is_pre_referral
+            )
+            instances[instance.id] = new_instance
+          end
+
+          version.medal_data_config_variables.each do |variable|
+            new_version.medal_data_config_variables.create!(api_key: variable.api_key, label: variable.label, question: nodes[variable.question_id])
+          end
+
           new_version.save
           version.diagnoses.map do |diagnosis|
             new_diagnosis = new_version.diagnoses.create!(
@@ -170,6 +189,7 @@ namespace :algorithms do
               instances[instance.id] = new_instance
             end
           end
+          errors.concat(validate_order(order, JSON.parse(new_version.full_order_json), nodes.keys, nodes.values))
         end
 
         puts "#{Time.zone.now.strftime("%I:%M")} - Recreating links between Instances on the copied diagrams..."
@@ -222,7 +242,6 @@ namespace :algorithms do
 
         before_test = Time.zone.now
 
-        errors = validate_algorithm_duplicate(copied_algorithm)
         errors.push("Number of nodes differ from a version to another ") if copied_algorithm.nodes.count != origin_algorithm.nodes.count
 
         copied_nodes = copied_algorithm.nodes.map(&:instances).flatten
@@ -242,7 +261,8 @@ namespace :algorithms do
         # Checking the number of node conditioned by complaint category from the complatin_category context
         errors.push("Number of nodes complaint category differ from a version to another ") if NodeComplaintCategory.where(complaint_category: copied_nodes).count != NodeComplaintCategory.where(complaint_category: origin_nodes).count
         
-        errors.push("Number of children differ from a version to another ") if Child.where(node: copied_nodes).count != Child.where(node: origin_nodes).count
+        errors.push("Number of children differ from a version to another") if Child.where(node: copied_nodes).count != Child.where(node: origin_nodes).count
+        errors.concat(validate_algorithm_duplicate(copied_algorithm))
 
         after_test = Time.zone.now
         if errors.any?
@@ -262,14 +282,22 @@ namespace :algorithms do
     end
   end
 
+  def validate_order(new_order, old_order, new_nodes, old_nodes)
+    require "json-diff"
+    errors = []
+    errors.concat(JsonDiff.diff(new_order, old_order).select{|error| error['op'] == 'replace' && old_nodes.include?(error['value'])})
+    errors.concat(JsonDiff.diff(old_order, new_order).select{|error| error['op'] == 'replace' && new_nodes.include?(error['value'])})
+    errors
+  end
+
   def validate_algorithm_duplicate(new_algorithm)
     errors = []
     new_algorithm.nodes.includes([:source, instances: [:source, conditions: :source]]).each do |node|
-      
-      if clean_attributes(node).except('algorithm_id', 'diagnosis_id','reference_table_x_id','reference_table_y_id', 'reference_table_z_id') != 
-        clean_attributes(node.source).except('algorithm_id', 'diagnosis_id','reference_table_x_id','reference_table_y_id', 'reference_table_z_id') || 
+
+      if clean_attributes(node).except('algorithm_id', 'diagnosis_id','reference_table_x_id','reference_table_y_id', 'reference_table_z_id') !=
+        clean_attributes(node.source).except('algorithm_id', 'diagnosis_id','reference_table_x_id','reference_table_y_id', 'reference_table_z_id') ||
          (node.is_a?(FinalDiagnosis) && node.diagnosis.source_id != node.source.diagnosis_id)
-        errors.push("Missing match between nodes #{node.id} and #{node.source_id}") 
+        errors.push("Missing match between nodes #{node.id} and #{node.source_id}")
       end
 
       if node.is_a?(Question)
@@ -277,7 +305,7 @@ namespace :algorithms do
         if (node.reference_table_x_id.nil? && node.source.reference_table_x_id.present?) || (node.reference_table_x_id.present? && node.reference_table_x.source_id != node.source.reference_table_x_id) || # table X
            (node.reference_table_y_id.nil? && node.source.reference_table_y_id.present?) || (node.reference_table_y_id.present? && node.reference_table_y.source_id != node.source.reference_table_y_id) || # table Y
            (node.reference_table_z_id.nil? && node.source.reference_table_z_id.present?) || (node.reference_table_z_id.present? && node.reference_table_z.source_id != node.source.reference_table_z_id)    # table Z
-          errors.push("Missing match between reference tables #{node.id} and #{node.source_id}") 
+          errors.push("Missing match between reference tables #{node.id} and #{node.source_id}")
         end
       end
 
@@ -286,7 +314,7 @@ namespace :algorithms do
           if clean_attributes(answer).except('node_id') != clean_attributes(answer.source).except('node_id') || answer.source.node_id != answer.node.source_id
             errors.push("Missing match between answers #{answer.id} and #{answer.source_id}")
           end
-        end 
+        end
       end
 
       node.medias.each do |media|
@@ -323,7 +351,7 @@ namespace :algorithms do
     new_algorithm.versions.map(&:diagnoses).flatten.each do |diagnosis|
       if clean_attributes(diagnosis).except('version_id', 'node_id') != clean_attributes(diagnosis.source).except('version_id', 'node_id') ||
         diagnosis.node.source_id != diagnosis.source.node_id
-        errors.push("Missing match between diagnosiss #{diagnosis.id} and #{diagnosis.source_id}")
+        errors.push("Missing match between diagnosis #{diagnosis.id} and #{diagnosis.source_id}")
       end
     end
     errors
