@@ -14,5 +14,8 @@ class AddSourceIdToDuplicatedModels < ActiveRecord::Migration[6.0]
 
     add_reference :conditions, :source, index: true
     add_foreign_key :conditions, :conditions, column: :source_id
+
+    add_reference :medias, :source, index: true
+    add_foreign_key :medias, :medias, column: :source_id
   end
 end

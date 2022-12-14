@@ -43,6 +43,7 @@ namespace :algorithms do
         origin_algorithm.nodes.each do |node|
           unless node.is_a?(FinalDiagnosis)
             new_node = copied_algorithm.nodes.new(node.attributes.except('id', 'algorithm_id', 'created_at', 'updated_at'))
+            new_node.source = node
             new_node.save(validate: false)
 
             node.medias.map do |media|
