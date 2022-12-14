@@ -1,6 +1,7 @@
 namespace :algorithms do
   desc "Create copy of questions, treatments and managements of an algorithm to a new one. ENV : PROD"
   task :copy_algo, [:algorithm_id] => :environment do |t, args|
+    start = Time.zone.now
     ActiveRecord::Base.transaction(requires_new: true) do
       begin
         puts "#{Time.zone.now.strftime("%I:%M")} - Copying the Algorithm ..."
@@ -90,9 +91,10 @@ namespace :algorithms do
               final_diagnosis: nodes[instance.final_diagnosis_id],
               position_x: instance.position_x,
               position_y: instance.position_y,
-              duration: instance.duration,
-              description: instance.description,
-              source: instance
+              duration_translations: instance.duration_translations,
+              description_translations: instance.description_translations,
+              source: instance,
+              is_pre_referral: instance.is_pre_referral
             )
             instances[instance.id] = new_instance
           end
@@ -100,7 +102,7 @@ namespace :algorithms do
 
         puts "#{Time.zone.now.strftime("%I:%M")} - Copying Versions and their Diagnoses, along with the Instances in the diagrams..."
         origin_algorithm.versions.active.each do |version|
-          # next unless version.id == 58
+          next unless version.id == 58
           # TODO : Add left/right top questions
           # Update medal_r_config and medal_data_config instead of reseting it
           new_version = copied_algorithm.versions.new(version.attributes.except('id', 'name', 'algorithm_id', 'medal_r_config', 'medal_data_config', 'medal_r_json', 'medal_r_json_version', 'created_at', 'updated_at'))
@@ -160,9 +162,10 @@ namespace :algorithms do
                 final_diagnosis: nodes[instance.final_diagnosis_id],
                 position_x: instance.position_x,
                 position_y: instance.position_y,
-                duration: instance.duration,
-                description: instance.description,
-                source: instance
+                duration_translations: instance.duration_translations,
+                description_translations: instance.description_translations,
+                source: instance,
+                is_pre_referral: instance.is_pre_referral
               )
               instances[instance.id] = new_instance
             end
@@ -179,6 +182,8 @@ namespace :algorithms do
 
           old_instance.conditions.map do |condition|
             Condition.create!(
+              first_conditionable_type: condition.first_conditionable_type,
+              referenceable_type: condition.referenceable_type,
               instance: new_instance,
               answer: answers[condition.answer_id],
               score: condition.score,
@@ -214,8 +219,10 @@ namespace :algorithms do
         end
         copied_algorithm.medal_r_config = config
         copied_algorithm.save(validate: false)
-
-        if validate_algorithm_duplicate(copied_algorithm)
+        before_test = Time.zone.now
+        errors = validate_algorithm_duplicate(copied_algorithm)
+        after_test = Time.zone.now
+        if errors.any?
           puts "#######################################"
           puts errors
           puts "#######################################"
@@ -226,17 +233,37 @@ namespace :algorithms do
         puts e.backtrace
         raise ActiveRecord::Rollback, ''
       end
+      puts("Duplication duration : #{before_test - start}")
+      puts("Test duration         : #{after_test - before_test}")
+      puts("Total duration        : #{after_test - start}")
     end
   end
 
   def validate_algorithm_duplicate(new_algorithm)
     errors = []
-    new_algorithm.nodes.includes([:source, answers: :source, instances: [:source, conditions: :source]]).each do |node|
-      errors.push("Missing match between nodes #{node.id} and #{node.source_id}") if clean_attributes(node).except('algorithm_id') != clean_attributes(node.source).except('algorithm_id')
-      node.answers.each do |answer|
-        if clean_attributes(answer).except('node_id') != clean_attributes(answer.source).except('node_id') || answer.source.node_id != answer.node.source_id
-          errors.push("Missing match between answers #{answer.id} and #{answer.source_id}")
+    new_algorithm.nodes.includes([:source, instances: [:source, conditions: :source]]).each do |node|
+      
+      if clean_attributes(node).except('algorithm_id', 'diagnosis_id','reference_table_x_id','reference_table_y_id', 'reference_table_z_id') != 
+        clean_attributes(node.source).except('algorithm_id', 'diagnosis_id','reference_table_x_id','reference_table_y_id', 'reference_table_z_id') || 
+         (node.is_a?(FinalDiagnosis) && node.diagnosis.source_id != node.source.diagnosis_id)
+        errors.push("Missing match between nodes #{node.id} and #{node.source_id}") 
+      end
+
+      if node.is_a?(Question)
+        # Test if reference table are well copied
+        if (node.reference_table_x_id.nil? && node.source.reference_table_x_id.present?) || (node.reference_table_x_id.present? && node.reference_table_x.source_id != node.source.reference_table_x_id) || # table X
+           (node.reference_table_y_id.nil? && node.source.reference_table_y_id.present?) || (node.reference_table_y_id.present? && node.reference_table_y.source_id != node.source.reference_table_y_id) || # table Y
+           (node.reference_table_z_id.nil? && node.source.reference_table_z_id.present?) || (node.reference_table_z_id.present? && node.reference_table_z.source_id != node.source.reference_table_z_id)    # table Z
+          errors.push("Missing match between reference tables #{node.id} and #{node.source_id}") 
         end
+      end
+
+      if node.is_a?(Question) || node.is_a?(QuestionsSequence)
+        node.answers.each do |answer|
+          if clean_attributes(answer).except('node_id') != clean_attributes(answer.source).except('node_id') || answer.source.node_id != answer.node.source_id
+            errors.push("Missing match between answers #{answer.id} and #{answer.source_id}")
+          end
+        end 
       end
 
       node.medias.each do |media|
@@ -256,7 +283,7 @@ namespace :algorithms do
 
       node.instances.each do |instance|
         if clean_attributes(instance).except('node_id', 'instanceable_id', 'final_diagnosis_id') != clean_attributes(instance.source).except('node_id', 'instanceable_id', 'final_diagnosis_id') ||
-          instance.source.instanceable_id == instance.instanceable.source_id || (instance.final_diagnosis_id.nil? && instance.source.final_diagnosis_id.present?) ||
+          instance.source.instanceable_id != instance.instanceable.source_id || (instance.final_diagnosis_id.nil? && instance.source.final_diagnosis_id.present?) ||
           (instance.final_diagnosis_id.present? && instance.final_diagnosis.source_id != instance.source.final_diagnosis_id) || instance.source.node_id != instance.node.source_id
           errors.push("Missing match between instances #{instance.id} and #{instance.source_id}")
         end
@@ -278,6 +305,7 @@ namespace :algorithms do
     end
     errors
   end
+
   def clean_attributes(object)
     object.attributes.except('id', 'source_id', 'created_at', 'updated_at')
   end

@@ -4,7 +4,7 @@ class Answer < ApplicationRecord
   enum operator: [:less, :between, :more_or_equal]
 
   belongs_to :node
-  belongs_to :source, class_name: 'Node', optional: true
+  belongs_to :source, class_name: 'Answer', optional: true
 
   has_many :children
 

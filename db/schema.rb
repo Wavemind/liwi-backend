@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_04_132959) do
+ActiveRecord::Schema.define(version: 2022_12_14_084145) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -78,7 +78,9 @@ ActiveRecord::Schema.define(version: 2021_11_04_132959) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "unavailable", default: false
+    t.bigint "source_id"
     t.index ["node_id"], name: "index_answers_on_node_id"
+    t.index ["source_id"], name: "index_answers_on_source_id"
   end
 
   create_table "children", force: :cascade do |t|
@@ -103,10 +105,12 @@ ActiveRecord::Schema.define(version: 2021_11_04_132959) do
     t.integer "cut_off_end"
     t.bigint "instance_id"
     t.bigint "answer_id"
+    t.bigint "source_id"
     t.index ["answer_id"], name: "index_conditions_on_answer_id"
     t.index ["first_conditionable_type", "first_conditionable_id"], name: "index_first_conditionable_id"
     t.index ["instance_id"], name: "index_conditions_on_instance_id"
     t.index ["referenceable_type", "referenceable_id"], name: "index_referenceable_id"
+    t.index ["source_id"], name: "index_conditions_on_source_id"
   end
 
   create_table "devices", force: :cascade do |t|
@@ -132,7 +136,9 @@ ActiveRecord::Schema.define(version: 2021_11_04_132959) do
     t.bigint "node_id"
     t.integer "cut_off_start"
     t.integer "cut_off_end"
+    t.bigint "source_id"
     t.index ["node_id"], name: "index_diagnoses_on_node_id"
+    t.index ["source_id"], name: "index_diagnoses_on_source_id"
     t.index ["version_id"], name: "index_diagnoses_on_version_id"
   end
 
@@ -149,13 +155,13 @@ ActiveRecord::Schema.define(version: 2021_11_04_132959) do
     t.boolean "by_age", default: false
     t.bigint "node_id"
     t.bigint "administration_route_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.hstore "description_translations"
     t.hstore "injection_instructions_translations"
     t.hstore "dispensing_description_translations"
+    t.bigint "source_id"
     t.index ["administration_route_id"], name: "index_formulations_on_administration_route_id"
     t.index ["node_id"], name: "index_formulations_on_node_id"
+    t.index ["source_id"], name: "index_formulations_on_source_id"
   end
 
   create_table "health_facilities", force: :cascade do |t|
@@ -198,9 +204,11 @@ ActiveRecord::Schema.define(version: 2021_11_04_132959) do
     t.hstore "duration_translations"
     t.hstore "description_translations"
     t.boolean "is_pre_referral", default: false
+    t.bigint "source_id"
     t.index ["final_diagnosis_id"], name: "index_instances_on_final_diagnosis_id"
     t.index ["instanceable_type", "instanceable_id"], name: "index_instances_on_instanceable_type_and_instanceable_id"
     t.index ["node_id"], name: "index_instances_on_node_id"
+    t.index ["source_id"], name: "index_instances_on_source_id"
   end
 
   create_table "languages", force: :cascade do |t|
@@ -224,7 +232,9 @@ ActiveRecord::Schema.define(version: 2021_11_04_132959) do
     t.bigint "fileable_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "source_id"
     t.index ["fileable_type", "fileable_id"], name: "index_medias_on_fileable_type_and_fileable_id"
+    t.index ["source_id"], name: "index_medias_on_source_id"
   end
 
   create_table "medical_staffs", force: :cascade do |t|
@@ -274,6 +284,7 @@ ActiveRecord::Schema.define(version: 2021_11_04_132959) do
     t.string "snomed_label"
     t.integer "system"
     t.boolean "is_mandatory", default: false
+    t.bigint "node_id"
     t.boolean "is_anti_malarial", default: false
     t.boolean "is_antibiotic", default: false
     t.boolean "is_triage", default: false
@@ -286,8 +297,8 @@ ActiveRecord::Schema.define(version: 2021_11_04_132959) do
     t.bigint "reference_table_z_id"
     t.boolean "is_neonat", default: false
     t.boolean "is_danger_sign", default: false
-    t.integer "emergency_status", default: 0
     t.boolean "unavailable", default: false
+    t.integer "emergency_status", default: 0
     t.integer "level_of_urgency", default: 5
     t.integer "step"
     t.hstore "min_message_error_translations"
@@ -300,12 +311,15 @@ ActiveRecord::Schema.define(version: 2021_11_04_132959) do
     t.boolean "is_referral", default: false
     t.hstore "placeholder_translations"
     t.boolean "is_pre_fill", default: false
+    t.bigint "source_id"
     t.index ["algorithm_id"], name: "index_nodes_on_algorithm_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
     t.index ["diagnosis_id"], name: "index_nodes_on_diagnosis_id"
+    t.index ["node_id"], name: "index_nodes_on_node_id"
     t.index ["reference_table_x_id"], name: "index_nodes_on_reference_table_x_id"
     t.index ["reference_table_y_id"], name: "index_nodes_on_reference_table_y_id"
     t.index ["reference_table_z_id"], name: "index_nodes_on_reference_table_z_id"
+    t.index ["source_id"], name: "index_nodes_on_source_id"
   end
 
   create_table "roles", force: :cascade do |t|
@@ -434,18 +448,26 @@ ActiveRecord::Schema.define(version: 2021_11_04_132959) do
   add_foreign_key "activities", "devices"
   add_foreign_key "activities", "users"
   add_foreign_key "algorithms", "users"
+  add_foreign_key "answers", "answers", column: "source_id"
+  add_foreign_key "conditions", "conditions", column: "source_id"
   add_foreign_key "devices", "health_facilities"
+  add_foreign_key "diagnoses", "diagnoses", column: "source_id"
   add_foreign_key "diagnoses", "nodes"
   add_foreign_key "diagnoses", "versions"
+  add_foreign_key "formulations", "formulations", column: "source_id"
   add_foreign_key "health_facilities", "studies"
   add_foreign_key "health_facility_accesses", "health_facilities"
   add_foreign_key "health_facility_accesses", "versions"
+  add_foreign_key "instances", "instances", column: "source_id"
   add_foreign_key "medal_data_config_variables", "versions"
+  add_foreign_key "medias", "medias", column: "source_id"
   add_foreign_key "node_exclusions", "nodes", column: "excluded_node_id"
   add_foreign_key "node_exclusions", "nodes", column: "excluding_node_id"
   add_foreign_key "nodes", "algorithms"
   add_foreign_key "nodes", "answer_types"
+  add_foreign_key "nodes", "nodes"
   add_foreign_key "nodes", "nodes", column: "reference_table_z_id"
+  add_foreign_key "nodes", "nodes", column: "source_id"
   add_foreign_key "technical_files", "users"
   add_foreign_key "versions", "algorithms"
   add_foreign_key "versions", "users"
