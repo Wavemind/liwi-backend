@@ -372,20 +372,21 @@ namespace :algorithms do
           errors.push("Missing match between instances #{instance.id} and #{instance.source_id}")
         end
 
-        # Ensure the matching condition exist and the new condition is pointing to a new instance
+        # For each instance we check the newly created and compare them with the old algortithm
         instance.conditions.each do |condition|
           if clean_attributes(condition).except('answer_id', 'instance_id', 'referenceable_id', 'first_conditionable_id') != clean_attributes(condition.source).except('answer_id', 'instance_id', 'referenceable_id', 'first_conditionable_id') ||
-            condition.instance.source_id != condition.source.instance_id || condition.answer.source_id != condition.source.answer_id
+            condition.instance.source_id != condition.source.instance_id || # We make sure that the sintace related to the condition is the same (but from original algorithm)
+            condition.answer.source_id != condition.source.answer_id # We make sure that the answer set in the condition is the same (but from original algorithm)
             errors.push("Missing match between conditions #{condition.id} and #{condition.source_id}")
           end
         end
       end
     end
 
-    # Go through every diagnoses and ensure that every metadata is the same as origin diagnoses
+    # We retreive all the diagnoses from the different versions
     new_algorithm.versions.map(&:diagnoses).flatten.each do |diagnosis|
       if clean_attributes(diagnosis).except('version_id', 'node_id') != clean_attributes(diagnosis.source).except('version_id', 'node_id') ||
-        diagnosis.node.source_id != diagnosis.source.node_id
+        diagnosis.node.source_id != diagnosis.source.node_id # we make sure that the diagosis is related to the same +
         errors.push("Missing match between diagnosis #{diagnosis.id} and #{diagnosis.source_id}")
       end
     end
