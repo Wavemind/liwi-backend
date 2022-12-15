@@ -103,12 +103,11 @@ namespace :algorithms do
 
         puts "#{Time.zone.now.strftime("%I:%M")} - Copying Versions and their Diagnoses, along with the Instances in the diagrams..."
         origin_algorithm.versions.active.each do |version|
-          # next unless version.id == 58
+          next unless version.id == 58
           # TODO : Add left/right top questions
           # Update medal_r_config and medal_data_config instead of reseting it
           new_version = copied_algorithm.versions.new(version.attributes.except('id', 'name', 'algorithm_id', 'medal_r_config', 'medal_data_config', 'medal_r_json', 'medal_r_json_version', 'created_at', 'updated_at'))
           new_version.name = "Copy of #{version.name}"
-
           versions[version.id] = new_version
           new_version.source = version
 
