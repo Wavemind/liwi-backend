@@ -20,5 +20,4 @@ class Media < ApplicationRecord
       self.save!
     end
   end
-
 end

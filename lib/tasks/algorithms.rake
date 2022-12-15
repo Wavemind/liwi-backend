@@ -396,7 +396,7 @@ namespace :algorithms do
     # We retreive all the diagnoses from the different versions
     new_algorithm.versions.map(&:diagnoses).flatten.each do |diagnosis|
       if clean_attributes(diagnosis).except('version_id', 'node_id') != clean_attributes(diagnosis.source).except('version_id', 'node_id') ||
-        diagnosis.node.source_id != diagnosis.source.node_id # we make sure that the diagosis is related to the same 
+        diagnosis.node.source_id != diagnosis.source.node_id # we make sure that the diagosis is related to the same CC
         errors.push("Missing match between diagnosis #{diagnosis.id} and #{diagnosis.source_id}")
       end
     end
