@@ -4,6 +4,7 @@ class Condition < ApplicationRecord
 
   belongs_to :instance
   belongs_to :answer
+  belongs_to :source, class_name: 'Condition', optional: true
 
   # belongs_to :referenceable, polymorphic: true #TODO : Remove after data migration
   # belongs_to :first_conditionable, polymorphic: true #TODO : Remove after data migration

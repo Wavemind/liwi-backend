@@ -6,6 +6,7 @@ class Node < ApplicationRecord
 
   # DF are not linked to algorithm this way, but through diagnosis > version
   belongs_to :algorithm, optional: true
+  belongs_to :source, class_name: 'Node', optional: true
 
   has_many :children
   has_many :instances, dependent: :destroy

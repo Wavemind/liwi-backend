@@ -6,6 +6,7 @@ class Version < ApplicationRecord
 
   belongs_to :algorithm
   belongs_to :user
+  belongs_to :source, class_name: 'Version', optional: true
 
   has_many :diagnoses, dependent: :destroy
 
