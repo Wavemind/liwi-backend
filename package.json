@@ -22,7 +22,7 @@
     "@projectstorm/react-diagrams": "^6.0.1-beta.7",
     "@projectstorm/react-diagrams-defaults": "^6.0.1-beta.7",
     "@rails/actiontext": "^6.0.3-4",
-    "@rails/webpacker": "4.0.7",
+    "@rails/webpacker": "4.3.0",
     "@tarekraafat/autocomplete.js": "^7.0.1",
     "@types/node": "^11.11.6",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
