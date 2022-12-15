@@ -268,6 +268,8 @@ namespace :algorithms do
     end
   end
 
+  # Run model counts with every models impacted with the duplication
+  # /!\ This should not be called if we're scoping the versions to be duplicated /!\
   def validate_count(origin_algorithm, copied_algorithm)
     errors = []
     errors.push("Number of nodes differ from a version to another") if copied_algorithm.nodes.count != origin_algorithm.nodes.count
@@ -277,6 +279,7 @@ namespace :algorithms do
     errors.push("Number of instance differ from a version to another") if copied_nodes.count != origin_nodes.count
     errors.push("Number of conditions differ from a version to another") if copied_nodes.map(&:conditions).flatten.count != origin_nodes.map(&:conditions).flatten.count
     errors.push("Number of diagnosis differ from a version to another") if copied_algorithm.versions.map(&:diagnoses).flatten.count != origin_algorithm.versions.map(&:diagnoses).flatten.count
+    errors.push("Number of medal data variables differ from a version to another") if copied_algorithm.versions.map(&:medal_data_config_variables).flatten.count != origin_algorithm.versions.map(&:medal_data_config_variables).flatten.count
 
     copied_excluded_nodes = NodeExclusion.where(excluded_node: copied_nodes)
     copied_excluding_nodes = NodeExclusion.where(excluding_node: copied_nodes)
@@ -303,6 +306,7 @@ namespace :algorithms do
     errors
   end
 
+  # Execute multiple comparison between the 2 algorithms and log errors if there is any difference
   def validate_algorithm_duplicate(new_algorithm)
     errors = []
     new_algorithm.nodes.includes([:source, instances: [:source, conditions: :source]]).each do |node|
@@ -368,6 +372,7 @@ namespace :algorithms do
           errors.push("Missing match between instances #{instance.id} and #{instance.source_id}")
         end
 
+        # Ensure the matching condition exist and the new condition is pointing to a new instance
         instance.conditions.each do |condition|
           if clean_attributes(condition).except('answer_id', 'instance_id', 'referenceable_id', 'first_conditionable_id') != clean_attributes(condition.source).except('answer_id', 'instance_id', 'referenceable_id', 'first_conditionable_id') ||
             condition.instance.source_id != condition.source.instance_id || condition.answer.source_id != condition.source.answer_id
@@ -377,6 +382,7 @@ namespace :algorithms do
       end
     end
 
+    # Go through every diagnoses and ensure that every metadata is the same as origin diagnoses
     new_algorithm.versions.map(&:diagnoses).flatten.each do |diagnosis|
       if clean_attributes(diagnosis).except('version_id', 'node_id') != clean_attributes(diagnosis.source).except('version_id', 'node_id') ||
         diagnosis.node.source_id != diagnosis.source.node_id
@@ -386,6 +392,7 @@ namespace :algorithms do
     errors
   end
 
+  # Remove fields not to compare between new and origin models since we are not expecting them to be the same ever
   def clean_attributes(object)
     object.attributes.except('id', 'source_id', 'created_at', 'updated_at')
   end
