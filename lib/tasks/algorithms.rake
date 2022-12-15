@@ -103,7 +103,7 @@ namespace :algorithms do
 
         puts "#{Time.zone.now.strftime("%I:%M")} - Copying Versions and their Diagnoses, along with the Instances in the diagrams..."
         origin_algorithm.versions.active.each do |version|
-
+          # next unless version.id == 58
           # TODO : Add left/right top questions
           # Update medal_r_config and medal_data_config instead of reseting it
           new_version = copied_algorithm.versions.new(version.attributes.except('id', 'name', 'algorithm_id', 'medal_r_config', 'medal_data_config', 'medal_r_json', 'medal_r_json_version', 'created_at', 'updated_at'))
@@ -161,8 +161,9 @@ namespace :algorithms do
             diagnoses[diagnosis.id] = new_diagnosis
 
             diagnosis.final_diagnoses.map do |fd|
-              puts "Final diagnosis being copied : #{fd.id}"
 
+              puts "Final diagnosis being copied : #{fd.id}"
+              
               new_fd = copied_algorithm.nodes.new(fd.attributes.except('id', 'algorithm_id', 'diagnosis_id', 'created_at', 'updated_at'))
               new_fd.source = fd
               new_fd.diagnosis_id = new_diagnosis.id
@@ -272,27 +273,36 @@ namespace :algorithms do
   # /!\ This should not be called if we're scoping the versions to be duplicated /!\
   def validate_count(origin_algorithm, copied_algorithm)
     errors = []
+    puts "Copied nodes : #{copied_algorithm.nodes.count}"
     errors.push("Number of nodes differ from a version to another") if copied_algorithm.nodes.count != origin_algorithm.nodes.count
 
-    copied_nodes = copied_algorithm.nodes.map(&:instances).flatten
-    origin_nodes = origin_algorithm.nodes.map(&:instances).flatten
-    errors.push("Number of instance differ from a version to another") if copied_nodes.count != origin_nodes.count
-    errors.push("Number of conditions differ from a version to another") if copied_nodes.map(&:conditions).flatten.count != origin_nodes.map(&:conditions).flatten.count
+    copied_instances = copied_algorithm.nodes.map(&:instances).flatten
+    origin_instances = origin_algorithm.nodes.map(&:instances).flatten
+    puts "Copied instances : #{copied_instances.count}"
+    errors.push("Number of instance differ from a version to another") if copied_instances.count != origin_instances.count
+    puts "Copied conditions : #{copied_instances.map(&:conditions).flatten.count}"
+    errors.push("Number of conditions differ from a version to another") if copied_instances.map(&:conditions).flatten.count != origin_instances.map(&:conditions).flatten.count
+    puts "Copied diagnoses : #{copied_algorithm.versions.map(&:diagnoses).flatten.count}"
     errors.push("Number of diagnosis differ from a version to another") if copied_algorithm.versions.map(&:diagnoses).flatten.count != origin_algorithm.versions.map(&:diagnoses).flatten.count
+    puts "Copied medal data config variables : #{copied_algorithm.versions.map(&:medal_data_config_variables).flatten.count}"
     errors.push("Number of medal data variables differ from a version to another") if copied_algorithm.versions.map(&:medal_data_config_variables).flatten.count != origin_algorithm.versions.map(&:medal_data_config_variables).flatten.count
 
-    copied_excluded_nodes = NodeExclusion.where(excluded_node: copied_nodes)
-    copied_excluding_nodes = NodeExclusion.where(excluding_node: copied_nodes)
-    origin_excluded_nodes = NodeExclusion.where(excluded_node: origin_nodes)
-    origin_excluding_nodes = NodeExclusion.where(excluding_node: origin_nodes)
+    copied_excluded_nodes = NodeExclusion.where(excluded_node: copied_algorithm.nodes)
+    copied_excluding_nodes = NodeExclusion.where(excluding_node: copied_algorithm.nodes)
+    origin_excluded_nodes = NodeExclusion.where(excluded_node: origin_algorithm.nodes)
+    origin_excluding_nodes = NodeExclusion.where(excluding_node: origin_algorithm.nodes)
+
+    puts "Copied nodes exclusion : #{copied_excluded_nodes.count}"
     errors.push("Number of nodes exclusion differ from a version to another") if copied_excluded_nodes.count != origin_excluded_nodes.count || copied_excluding_nodes.count != origin_excluding_nodes.count
 
+    puts "Copied complaint category exclusion : #{NodeComplaintCategory.where(node: copied_algorithm.nodes).count}"
     # Checking the number of node conditioned by complaint category as conditioned node
-    errors.push("Number of nodes complaint category differ from a version to another") if NodeComplaintCategory.where(node: copied_nodes).count != NodeComplaintCategory.where(node: origin_nodes).count
+    errors.push("Number of nodes complaint category differ from a version to another") if NodeComplaintCategory.where(node: copied_algorithm.nodes).count != NodeComplaintCategory.where(node: origin_algorithm.nodes).count
     # Checking the number of node conditioned by complaint category from the complatin_category context
-    errors.push("Number of nodes complaint category differ from a version to another") if NodeComplaintCategory.where(complaint_category: copied_nodes).count != NodeComplaintCategory.where(complaint_category: origin_nodes).count
+    errors.push("Number of nodes complaint category differ from a version to another") if NodeComplaintCategory.where(complaint_category: copied_algorithm.nodes).count != NodeComplaintCategory.where(complaint_category: origin_algorithm.nodes).count
 
-    errors.push("Number of children differ from a version to another") if Child.where(node: copied_nodes).count != Child.where(node: origin_nodes).count
+    puts "Copied children : #{Child.where(node: copied_algorithm.nodes).count}"
+    errors.push("Number of children differ from a version to another") if Child.where(node: copied_algorithm.nodes).count != Child.where(node: origin_algorithm.nodes).count
     errors
   end
 
