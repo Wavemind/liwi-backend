@@ -248,7 +248,7 @@ namespace :algorithms do
         ##########################################################
         # /!\ If only one version is copied adapt tests below  /!\
         ##########################################################
-        errors.concat(validate_count(origin_algorithm, copied_algorithm))
+        #errors.concat(validate_count(origin_algorithm, copied_algorithm))
 
         after_test = Time.zone.now
         if errors.any?
