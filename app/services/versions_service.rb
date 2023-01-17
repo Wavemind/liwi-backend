@@ -245,6 +245,7 @@ class VersionsService
     hash = extract_conditions(instance.conditions)
     hash['diagnosis_id'] = final_diagnosis.diagnosis.id
     hash['id'] = final_diagnosis.id
+    hash['reference'] = final_diagnosis.reference
     hash['label'] = return_hstore_translated(final_diagnosis.label_translations)
     hash['description'] = return_hstore_translated(final_diagnosis.description_translations)
     hash['level_of_urgency'] = final_diagnosis.level_of_urgency
