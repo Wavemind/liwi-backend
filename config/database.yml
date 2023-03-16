@@ -1,12 +1,12 @@
 development:
   adapter: postgresql
   encoding: utf8
-  database: <%= ENV['DEV_DB_NAME'] %>
+  # database: <%= ENV['DEV_DB_NAME'] %>
   pool: 10
   timeout: 4
-  username:  <%= ENV['DEV_DB_USERNAME'] %>
-  password:  <%= ENV['DEV_DB_PASSWORD'] %>
-#  url: <%#= ENV['EXTERNAL_TEST_URL'] %>
+  # username:  <%= ENV['DEV_DB_USERNAME'] %>
+  # password:  <%= ENV['DEV_DB_PASSWORD'] %>
+  url: <%= ENV['EXTERNAL_TEST_URL'] %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
