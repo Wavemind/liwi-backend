@@ -39,10 +39,6 @@ class MediaUploader < CarrierWave::Uploader::Base
     %w(aac amr flac m4a ts mp3 ogg wav 3gp mp4 mkv webm bmp gif jpg png webp heic heif)
   end
 
-  def fog_public
-    false
-  end
-
   # define some uploader specific configurations in the initializer
   # to override the global configuration
   def initialize(*)
