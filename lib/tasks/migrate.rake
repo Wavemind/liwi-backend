@@ -27,34 +27,43 @@ namespace :migrate do
 
       hash_algorithm['questions'] = []
       algorithm.questions.each do |question|
-        hash_algorithm['questions'].push(question.as_json(include: [:node_complaint_categories, :answer_type, :answers]).merge(type: question.type))
+        hash_algorithm['questions'].push(question.as_json(include: [:node_complaint_categories, :answer_type, :answers, :medias]).merge(type: question.type))
       end
 
       hash_algorithm['questions_sequences'] = []
       algorithm.questions_sequences.each do |qs|
-        hash_algorithm['questions_sequences'].push(qs.as_json(include: [:node_complaint_categories, :answers, components: {include: :conditions}]).merge(type: qs.type))
+        hash_algorithm['questions_sequences'].push(qs.as_json(include: [:node_complaint_categories, :answers, :medias, components: {include: :conditions}]).merge(type: qs.type))
       end
       # (include: {medical_staffs: {methods: [:algo_language, :app_language]}})
 
       hash_algorithm['drugs'] = []
       algorithm.health_cares.drugs.each do |drug|
-        hash_algorithm['drugs'].push(drug.as_json(include: [:node_exclusions, formulations: {include: :administration_route}]).merge(type: drug.type))
+        hash_algorithm['drugs'].push(drug.as_json(include: [:node_exclusions, :medias, formulations: {include: :administration_route}]).merge(type: drug.type))
       end
 
       hash_algorithm['managements'] = []
       algorithm.health_cares.managements.each do |management|
-        hash_algorithm['managements'].push(management.as_json(include: :node_exclusions).merge(type: management.type))
+        hash_algorithm['managements'].push(management.as_json(include: [:node_exclusions, :medias]).merge(type: management.type))
       end
 
       hash_algorithm['versions'] = []
       algorithm.versions.each do |version|
         next unless [31, 1, 58, 68, 76, 77].include?(version.id)
 
-        hash_algorithm['versions'].push(version.as_json(include: [:languages, :medal_data_config_variables, components: {include: :conditions}, diagnoses: {include: [final_diagnoses: {include: :node_exclusions}, components: {include: :conditions}]}]))
+        hash_algorithm['versions'].push(version.as_json(include: [:languages, :medal_data_config_variables, components: {include: :conditions}, diagnoses: {include: [final_diagnoses: {include: [:node_exclusions, :medias]}, components: {include: :conditions}]}]))
       end
       data['algorithms'].push(hash_algorithm)
     end
     out_file = File.new("old_data.json", "w")
     out_file.puts(data.to_json)
+  end
+
+  task medias: :environment do
+    medias = {}
+    Media.all.each do |media|
+      medias[media.id] = media.url.url
+    end
+    out_file = File.new("old_medias.json", "w")
+    out_file.puts(medias.to_json)
   end
 end
