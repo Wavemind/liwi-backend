@@ -22,9 +22,9 @@ class TechnicalFileUploader < CarrierWave::Uploader::Base
     super
     self.fog_credentials = {
       provider:              'AWS',
-      aws_access_key_id:     'AKIARGDHLEABIW5PPSNA',
-      aws_secret_access_key: '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',
-      region:                'eu-central-1',
+      aws_access_key_id:     ENV['AWS_ACCESS_KEY_ID'],
+      aws_secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
+      region:                ENV['AWS_REGION'],
       endpoint:              'https://s3.eu-central-1.amazonaws.com/'
     }
     self.fog_directory = 'liwi'
