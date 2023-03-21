@@ -1,9 +1,9 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.7.0'
+ruby '3.0.4'
 
-gem 'rails', '6.0.3.4'
+gem 'rails', '6.0.4.8'
 gem 'pg'
 gem 'puma'
 gem 'sass-rails'
@@ -39,6 +39,7 @@ gem 'hstore_translate'
 gem 'nilify_blanks'
 gem 'rails-controller-testing'
 gem 'react-rails'
+gem 'mini_portile2'
 gem 'webpacker', '~> 4.x'
 gem 'rqrcode'
 gem 'barby'

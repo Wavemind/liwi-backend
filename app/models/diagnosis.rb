@@ -8,6 +8,8 @@ class Diagnosis < ApplicationRecord
 
   belongs_to :version
   belongs_to :node # Complaint Category
+  belongs_to :source, class_name: 'Diagnosis', optional: true
+
   has_many :final_diagnoses, dependent: :destroy
   has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy
 

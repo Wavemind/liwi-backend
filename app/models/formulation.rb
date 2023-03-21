@@ -8,6 +8,7 @@ class Formulation < ApplicationRecord
 
   belongs_to :node, class_name: 'HealthCares::Drug'
   belongs_to :administration_route
+  belongs_to :source, class_name: 'Formulation', optional: true
 
   validates_presence_of :medication_form, :doses_per_day
   # Validate presence of fields needed to calculate dosage for tablets, capsules, syrup, solution, powder_for_injection and suspension (unless the condition is based on the age)

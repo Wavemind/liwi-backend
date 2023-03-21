@@ -6,6 +6,7 @@ class Version < ApplicationRecord
 
   belongs_to :algorithm
   belongs_to :user
+  belongs_to :source, class_name: 'Version', optional: true
 
   has_many :diagnoses, dependent: :destroy
 
@@ -44,7 +45,6 @@ class Version < ApplicationRecord
     append name: I18n.t('duplicated')
   end
 
-
   def self.validate_duplicate(origin_id, duplicate_id)
     require "json-diff"
 
@@ -59,10 +59,10 @@ class Version < ApplicationRecord
     errors.concat(JsonDiff.diff(Version.first_keys(duplicated_json), Version.first_keys(origin_json)))
     # Compare questions and qss with out the keys relating to the diagnosis (ids expected to be different) and media (link regenerated)
     errors.concat(JsonDiff.diff(duplicated_json.slice('nodes'), origin_json.slice('nodes')).select{|node|
-                                                                        node['path'].exclude?('/diagnoses_related_to_cc/') &&
-                                                                        node['path'].exclude?('/dd/') &&
-                                                                        node['path'].exclude?('/medias/') &&
-                                                                        node['path'].exclude?('/df/')})
+      node['path'].exclude?('/diagnoses_related_to_cc/') &&
+        node['path'].exclude?('/dd/') &&
+        node['path'].exclude?('/medias/') &&
+        node['path'].exclude?('/df/')})
     # Compare drugs and managements without media
     errors.concat(JsonDiff.diff(duplicated_json.slice('health_cares'), origin_json.slice('health_cares')).select{|node| node['path'].exclude?('/medias/')})
     # Compare final diagnoses without ids and media
@@ -70,9 +70,9 @@ class Version < ApplicationRecord
     # Compare diagnoses without ids and ignoring errors relating to final diagnoses ids (since they got duplicated) and children order (which is not relevant to the functionality)
     errors.concat(JsonDiff.diff(Version.format_diagnosis_json(duplicated_json), Version.format_diagnosis_json(origin_json)).select{|diagnosis|
       diagnosis["op"] != "move" &&
-      diagnosis['path'].exclude?('/final_diagnosis_id') &&
-      !(diagnosis["op"] == "remove" && diagnosis['path'].include?('/children/')) &&
-      !(diagnosis["op"] == "add" && diagnosis['path'].include?('/children/') && origin_fd_ids.include?(diagnosis["value"]))
+        diagnosis['path'].exclude?('/final_diagnosis_id') &&
+        !(diagnosis["op"] == "remove" && diagnosis['path'].include?('/children/')) &&
+        !(diagnosis["op"] == "add" && diagnosis['path'].include?('/children/') && origin_fd_ids.include?(diagnosis["value"]))
     })
 
     errors.push("Diagnoses count not equal") if origin_version.diagnoses.count != duplicated_version.diagnoses.count

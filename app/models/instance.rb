@@ -4,6 +4,7 @@ class Instance < ApplicationRecord
   belongs_to :node
   belongs_to :instanceable, polymorphic: true
   belongs_to :final_diagnosis, optional: true
+  belongs_to :source, class_name: 'Instance', optional: true
 
   has_one :top_left_question, foreign_key: 'top_left_question_id', class_name: 'Version', dependent: :nullify
   has_one :first_top_right_question, foreign_key: 'first_top_right_question_id', class_name: 'Version', dependent: :nullify

@@ -54,5 +54,5 @@ yarn-debug.log*
 .yarn-integrity
 .env
 
-../medal-creator/api/db/old_data.json
+old_data.json
 old_data.zip

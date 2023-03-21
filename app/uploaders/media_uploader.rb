@@ -39,19 +39,15 @@ class MediaUploader < CarrierWave::Uploader::Base
     %w(aac amr flac m4a ts mp3 ogg wav 3gp mp4 mkv webm bmp gif jpg png webp heic heif)
   end
 
-  def fog_public
-    false
-  end
-
   # define some uploader specific configurations in the initializer
   # to override the global configuration
   def initialize(*)
     super
     self.fog_credentials = {
       provider:              'AWS',
-      aws_access_key_id:     'AKIARGDHLEABIW5PPSNA',
-      aws_secret_access_key: ENV['AWS_KEY'],
-      region:                'eu-central-1',
+      aws_access_key_id:     ENV['AWS_ACCESS_KEY_ID'],
+      aws_secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
+      region:                ENV['AWS_REGION'],
       endpoint:              'https://s3.eu-central-1.amazonaws.com/'
     }
     self.fog_directory = 'liwi-medias'
