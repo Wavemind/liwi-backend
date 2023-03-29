@@ -135,7 +135,12 @@ class Version < ApplicationRecord
         matching_final_diagnoses = {}
         matching_instances = {}
         # Recreate version
-        new_version = Version.create!(self.attributes.except('id', 'name', 'job_id', 'created_at', 'updated_at').merge({'name': "Copy of #{name}"}))
+        new_version = Version.create!(self.attributes.except('id', 'name', 'job_id', 'in_prod', 'created_at', 'updated_at').merge({'name': "Copy of #{name}"}))
+
+        # Recreate version languages
+        version_languages.each do |version_language|
+          new_version.version_languages.create!(language: version_language.language)
+        end
 
         # Recreate components
         components.each do |instance|
