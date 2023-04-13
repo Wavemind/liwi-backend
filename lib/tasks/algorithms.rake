@@ -103,7 +103,7 @@ namespace :algorithms do
 
         puts "#{Time.zone.now.strftime("%I:%M")} - Copying Versions and their Diagnoses, along with the Instances in the diagrams..."
         origin_algorithm.versions.active.each do |version|
-          next unless version.id == 83 || version.id == 85
+          next unless version.id == 83
           # TODO : Add left/right top questions
           # Update medal_r_config and medal_data_config instead of reseting it
           new_version = copied_algorithm.versions.new(version.attributes.except('id', 'name', 'algorithm_id', 'medal_r_config', 'medal_data_config', 'medal_r_json', 'medal_r_json_version', 'created_at', 'updated_at'))
@@ -162,7 +162,7 @@ namespace :algorithms do
             diagnosis.final_diagnoses.map do |fd|
 
               puts "Final diagnosis being copied : #{fd.id}"
-              
+
               new_fd = copied_algorithm.nodes.new(fd.attributes.except('id', 'algorithm_id', 'diagnosis_id', 'created_at', 'updated_at'))
               new_fd.source = fd
               new_fd.diagnosis_id = new_diagnosis.id
