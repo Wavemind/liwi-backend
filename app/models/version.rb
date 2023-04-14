@@ -160,6 +160,14 @@ class Version < ApplicationRecord
           # Recreate final diagnoses
           diagnosis.final_diagnoses.each do |final_diagnosis|
             new_final_diagnosis = new_diagnosis.final_diagnoses.create!(final_diagnosis.attributes.except('id', 'diagnosis_id', 'created_at', 'updated_at'))
+
+            # Duplicate medias for final diagnoses 
+            final_diagnosis.medias.map do |media|
+              new_media = Media.new(label_translations: media.label_translations, fileable: new_final_diagnosis)
+              new_media.source = media
+              new_media.duplicate_file(media)
+            end
+
             # Store matching final diagnoses to recreate exclusions
             matching_final_diagnoses[final_diagnosis.id] = new_final_diagnosis.id
           end
