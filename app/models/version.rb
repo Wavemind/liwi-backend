@@ -27,8 +27,8 @@ class Version < ApplicationRecord
   belongs_to :first_top_right_question, class_name: 'Instance', optional: true
   belongs_to :second_top_right_question, class_name: 'Instance', optional: true
 
-  scope :archived, ->(){ where(archived: true) }
-  scope :active, ->(){ where(archived: false) }
+  scope :archived, ->() { where(archived: true) }
+  scope :active, ->() { where(archived: false) }
 
   translates :age_limit_message, :description
 
@@ -58,17 +58,17 @@ class Version < ApplicationRecord
     # Compare root json keys
     errors.concat(JsonDiff.diff(Version.first_keys(duplicated_json), Version.first_keys(origin_json)))
     # Compare questions and qss with out the keys relating to the diagnosis (ids expected to be different) and media (link regenerated)
-    errors.concat(JsonDiff.diff(duplicated_json.slice('nodes'), origin_json.slice('nodes')).select{|node|
+    errors.concat(JsonDiff.diff(duplicated_json.slice('nodes'), origin_json.slice('nodes')).select { |node|
       node['path'].exclude?('/diagnoses_related_to_cc/') &&
         node['path'].exclude?('/dd/') &&
         node['path'].exclude?('/medias/') &&
-        node['path'].exclude?('/df/')})
+        node['path'].exclude?('/df/') })
     # Compare drugs and managements without media
-    errors.concat(JsonDiff.diff(duplicated_json.slice('health_cares'), origin_json.slice('health_cares')).select{|node| node['path'].exclude?('/medias/')})
+    errors.concat(JsonDiff.diff(duplicated_json.slice('health_cares'), origin_json.slice('health_cares')).select { |node| node['path'].exclude?('/medias/') })
     # Compare final diagnoses without ids and media
-    errors.concat(JsonDiff.diff(Version.format_fd_json(duplicated_json), Version.format_fd_json(origin_json)).select{|final_diagnosis| final_diagnosis['path'].exclude?('/medias/')})
+    errors.concat(JsonDiff.diff(Version.format_fd_json(duplicated_json), Version.format_fd_json(origin_json)).select { |final_diagnosis| final_diagnosis['path'].exclude?('/medias/') })
     # Compare diagnoses without ids and ignoring errors relating to final diagnoses ids (since they got duplicated) and children order (which is not relevant to the functionality)
-    errors.concat(JsonDiff.diff(Version.format_diagnosis_json(duplicated_json), Version.format_diagnosis_json(origin_json)).select{|diagnosis|
+    errors.concat(JsonDiff.diff(Version.format_diagnosis_json(duplicated_json), Version.format_diagnosis_json(origin_json)).select { |diagnosis|
       diagnosis["op"] != "move" &&
         diagnosis['path'].exclude?('/final_diagnosis_id') &&
         !(diagnosis["op"] == "remove" && diagnosis['path'].include?('/children/')) &&
@@ -135,7 +135,7 @@ class Version < ApplicationRecord
         matching_final_diagnoses = {}
         matching_instances = {}
         # Recreate version
-        new_version = Version.create!(self.attributes.except('id', 'name', 'job_id', 'in_prod', 'created_at', 'updated_at').merge({'name': "Copy of #{name}"}))
+        new_version = Version.create!(self.attributes.except('id', 'name', 'job_id', 'in_prod', 'created_at', 'updated_at').merge({ 'name': "Copy of #{name}" }))
 
         # Recreate version languages
         version_languages.each do |version_language|
@@ -161,7 +161,7 @@ class Version < ApplicationRecord
           diagnosis.final_diagnoses.each do |final_diagnosis|
             new_final_diagnosis = new_diagnosis.final_diagnoses.create!(final_diagnosis.attributes.except('id', 'diagnosis_id', 'created_at', 'updated_at'))
 
-            # Duplicate medias for final diagnoses 
+            # Duplicate medias for final diagnoses
             final_diagnosis.medias.map do |media|
               new_media = Media.new(label_translations: media.label_translations, fileable: new_final_diagnosis)
               new_media.source = media
@@ -174,7 +174,7 @@ class Version < ApplicationRecord
           # Recreate instances
           diagnosis.components.each do |instance|
             node_id = instance.node.is_a?(FinalDiagnosis) ? matching_final_diagnoses[instance.node_id] : instance.node_id
-            new_instance = new_diagnosis.components.create!(instance.attributes.except('id', 'final_diagnosis_id', 'created_at', 'updated_at').merge({'final_diagnosis_id': matching_final_diagnoses[instance.final_diagnosis_id], 'node_id': node_id}))
+            new_instance = new_diagnosis.components.create!(instance.attributes.except('id', 'final_diagnosis_id', 'created_at', 'updated_at').merge({ 'final_diagnosis_id': matching_final_diagnoses[instance.final_diagnosis_id], 'node_id': node_id }))
             # Store matching instances to recreate conditions afterwards
             matching_instances[instance.id] = new_instance
           end
@@ -223,20 +223,126 @@ class Version < ApplicationRecord
     FinalDiagnosis.includes(diagnosis: [:node]).joins(diagnosis: [:node]).where(diagnosis_id: diagnoses.map(&:id))
   end
 
+  def generate_all_conditions
+    require 'csv'
+    file = "my_file.csv"
+    dds = diagnoses.map(&:id)
+    CSV.open(file, 'w') do |writer|
+      writer << %w[ID Label Conditions Formula]
+      algorithm.nodes.includes([instances: [:instanceable, conditions: [answer: :node]]]).each do |node|
+        conditions_str = Version.generate_node_conditions(node, dds, self.id)
+        writer << [node.id, node.label_en, conditions_str, node.formula]
+      end
+    end
+  end
+
+  def self.generate_conditions(instance)
+    conditions_str = []
+    instance.conditions.each do |condition|
+      parent_node = condition.answer.node
+
+      if parent_node.is_a? QuestionsSequence
+        self_instance = parent_node.instances.find_by(instanceable: parent_node)
+        cond_str = "#{Version.generate_conditions(self_instance)}"
+      else
+        cond_str = "#{parent_node.id} = #{condition.answer_id}"
+      end
+
+      parent_instance = instance.instanceable.components.find_by(node_id: parent_node.id, final_diagnosis_id: instance.final_diagnosis_id)
+      parent_cond = Version.generate_conditions(parent_instance)
+      cond_str += " AND #{parent_cond}" if parent_cond.present?
+      conditions_str.push("(#{cond_str})")
+    end
+    conditions_str.join(" OR ")
+  end
+
+  def self.generate_node_conditions(node, dds, version_id)
+    conditions_str = []
+    node.instances.each do |instance|
+
+      diagram = instance.instanceable
+      # Exclude instances from another version
+      if diagram.is_a? Diagnosis
+        next unless dds.include?(diagram.id)
+      elsif diagram.is_a? Version
+        next unless diagram.id == version_id
+      else
+        next if instance.node == diagram # Ignore self diagram if node is a QS
+      end
+
+      conditions = Version.generate_conditions(instance)
+      if diagram.is_a? Diagnosis
+        diagnosis_cond = "(#{diagram.node_id} = #{diagram.node.answers.find_by(reference: 1).id}"
+        diagnosis_cond += " AND AGE > #{diagram.cut_off_start}" if diagram.cut_off_start.present?
+        diagnosis_cond += " AND AGE < #{diagram.cut_off_end}" if diagram.cut_off_end.present?
+        diagnosis_cond += ")"
+        diagnosis_cond += " AND (#{conditions})" if conditions.present?
+        conditions_str.push(diagnosis_cond)
+      elsif diagram.is_a? Node
+        conditions_str.push("(#{conditions}) AND (#{Version.generate_node_conditions(diagram, dds, version_id)})") if conditions.present?
+      else
+        conditions_str.push(conditions) if conditions.present?
+      end
+    end
+    conditions_str.join(" OR ")
+  end
+
+  "
+(40815 = 42589 AND AGE > 60 AND AGE < 5479) AND ((40934 = 42851 AND (41180 = 43365 AND (40910 = 42803))) OR (40933 = 42849 AND (41180 = 43365 AND (40910 = 42803)))) OR
+(40933 = 42849 AND (41499 = 43632)) OR
+(40934 = 42851 AND (41499 = 43632)) OR
+(40933 = 42849) OR
+(40934 = 42851) OR
+
+(41169 = 43341 AND (40934 = 42851)) OR
+(40596 = 42251 AND (41139 = 43275 AND (40933 = 42849) OR (40934 = 42851)) OR (41170 = 43343 AND (40587 = 42235 AND (40934 = 42851) OR (40933 = 42849)))) OR
+(41171 = 43345 AND (40934 = 42851)) OR
+
+(41547 = 43713 AND AGE > 365 AND AGE < 5479) AND ((41514 = 43646 AND (41140 = 43278 AND (40587 = 42235 AND (40934 = 42851) OR (40933 = 42849)) OR (41139 = 43275 AND (40934 = 42851) OR (40933 = 42849))))) OR
+(41547 = 43713 AND AGE > 60 AND AGE < 5479) OR
+(40815 = 42589 AND AGE > 60 AND AGE < 5479) AND ((40934 = 42851 AND (41180 = 43365 AND (40910 = 42803) OR (40910 = 42803))) OR
+(40933 = 42849 AND (41180 = 43365 AND (40910 = 42803) OR (40910 = 42803)))) OR
+(40764 = 42500 AND AGE > 60 AND AGE < 5479) AND ((41234 = 43476 AND (40716 = 42388))) OR
+(40764 = 42500 AND AGE > 60 AND AGE < 5479) AND ((41230 = 43469 AND (40716 = 42388) OR (40890 = 42775))) OR
+(40764 = 42500 AND AGE > 60 AND AGE < 5479) AND ((40998 = 42981 AND (40716 = 42388))) OR
+(41547 = 43713 AND AGE > 60 AND AGE < 5479) AND ((40934 = 42851) OR (40933 = 42849)) OR
+(41547 = 43713 AND AGE > 365 AND AGE < 5479) AND ((41514 = 43646 AND (41140 = 43278 AND (40587 = 42235 AND (40934 = 42851) OR (40933 = 42849)) OR (41139 = 43275 AND (40934 = 42851) OR (40933 = 42849))))) OR
+(41547 = 43713 AND AGE > 60 AND AGE < 5479) OR
+(40764 = 42500 AND AGE > 60 AND AGE < 5479) AND ((41234 = 43476 AND (40716 = 42388))) OR
+(40764 = 42500 AND AGE > 60 AND AGE < 5479) AND ((41230 = 43469 AND (40716 = 42388) OR (40890 = 42775))) OR
+(40764 = 42500 AND AGE > 60 AND AGE < 5479) AND ((40998 = 42981 AND (40716 = 42388))) OR
+(41547 = 43713 AND AGE > 60 AND AGE < 5479) AND ((40934 = 42851) OR (40933 = 42849))
+"
+
+  def generate_answers
+    require 'csv'
+    file = "answers.csv"
+
+    CSV.open(file, 'w') do |writer|
+      algorithm.questions.includes(:answers).each do |question|
+        question.answers.each do |answer|
+          writer << [answer.id, answer.label_en, answer.node_id]
+        end
+      end
+    end
+  end
+
+
+
   # Generate node order tree from version
   def generate_nodes_order_tree
     tree = []
     Question.steps.each do |step_name, step_index|
       hash = {}
       hash['title'] = I18n.t("questions.steps.#{step_name}")
-      hash['subtitle'] =  I18n.t('versions.full_order_tree.subtitles.step')
+      hash['subtitle'] = I18n.t('versions.full_order_tree.subtitles.step')
       hash['type'] = 'step'
       hash['children'] = []
       if %w(medical_history_step physical_exam_step).include?(step_name)
         Question.systems.each do |system_name, system_index|
           system_hash = {}
           system_hash['title'] = I18n.t("questions.systems.#{system_name}")
-          system_hash['subtitle'] =  I18n.t('versions.full_order_tree.subtitles.system')
+          system_hash['subtitle'] = I18n.t('versions.full_order_tree.subtitles.system')
           system_hash['subtitle_name'] = system_name
           system_hash['type'] = 'system'
           system_hash['children'] = []
@@ -269,9 +375,9 @@ class Version < ApplicationRecord
         hash['children'].push(neonat_hash)
       else
         if step_name == 'registration_step' # Add the 3 hard coded questions in the order
-          hash['children'].push({"id"=>'first_name', "title"=>I18n.t('questions.basic_questions.first_name'), "is_neonat"=>false, "expanded"=>false})
-          hash['children'].push({"id"=>'last_name', "title"=>I18n.t('questions.basic_questions.last_name'), "is_neonat"=>false, "expanded"=>false})
-          hash['children'].push({"id"=>'birth_date', "title"=>I18n.t('questions.basic_questions.birth_date'), "is_neonat"=>false, "expanded"=>false})
+          hash['children'].push({ "id" => 'first_name', "title" => I18n.t('questions.basic_questions.first_name'), "is_neonat" => false, "expanded" => false })
+          hash['children'].push({ "id" => 'last_name', "title" => I18n.t('questions.basic_questions.last_name'), "is_neonat" => false, "expanded" => false })
+          hash['children'].push({ "id" => 'birth_date', "title" => I18n.t('questions.basic_questions.birth_date'), "is_neonat" => false, "expanded" => false })
         end
         algorithm.questions.where(step: step_index).each do |question|
           hash['children'].push(question.generate_node_tree_hash)
@@ -328,7 +434,7 @@ class Version < ApplicationRecord
 
     questions_json = []
     questions.map do |question|
-      questions_json.push({value: question.id, label: question.reference_label(l)})
+      questions_json.push({ value: question.id, label: question.reference_label(l) })
     end
     questions_json
   end
@@ -373,11 +479,10 @@ class Version < ApplicationRecord
     order.to_json
   end
 
-
   # @return [Json]
   # Return questions in json format
   def questions_json
-    (components.includes([conditions: {answer: :node}, nodes: [:answers, :medias, :complaint_categories]]).questions + components.questions_sequences.includes([conditions: {answer: :node}, nodes: [:answers, :medias, :complaint_categories]])).as_json(
+    (components.includes([conditions: { answer: :node }, nodes: [:answers, :medias, :complaint_categories]]).questions + components.questions_sequences.includes([conditions: { answer: :node }, nodes: [:answers, :medias, :complaint_categories]])).as_json(
       include: [
         conditions: {
           include: [
