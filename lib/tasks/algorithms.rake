@@ -239,6 +239,9 @@ namespace :algorithms do
         config['basic_questions'].map do |k, v|
           config['basic_questions'][k] = nodes[v].id
         end
+        config['optional_basic_questions'].map do |k, v|
+          config['optional_basic_questions'][k] = nodes[v].id
+        end
         copied_algorithm.medal_r_config = config
         copied_algorithm.save(validate: false)
 
