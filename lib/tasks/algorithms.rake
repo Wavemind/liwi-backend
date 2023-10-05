@@ -7,7 +7,8 @@ namespace :algorithms do
         errors = []
         puts "#{Time.zone.now.strftime("%I:%M")} - Copying the Algorithm ..."
         origin_algorithm = Algorithm.find(args[:algorithm_id])
-        copied_algorithm = Algorithm.new(origin_algorithm.attributes.except('id', 'name', 'created_at', 'updated_at'))
+        copied_algorithm = Algorithm.new(origin_algorithm.attributes.except('id', 'name',
+'created_at', 'updated_at'))
         copied_algorithm.name = "Copy of #{origin_algorithm.name}"
         Algorithm.skip_callback(:create, :after, :create_reference_table_questions)
         copied_algorithm.save(validate: false)
@@ -44,26 +45,30 @@ namespace :algorithms do
         puts "#{Time.zone.now.strftime("%I:%M")} - Copying the Nodes ..."
         origin_algorithm.nodes.each do |node|
           unless node.is_a?(FinalDiagnosis)
-            new_node = copied_algorithm.nodes.new(node.attributes.except('id', 'algorithm_id', 'created_at', 'updated_at'))
+            new_node = copied_algorithm.nodes.new(node.attributes.except('id', 'algorithm_id',
+'created_at', 'updated_at'))
             new_node.source = node
             new_node.save(validate: false)
 
             node.medias.map do |media|
-              new_media = Media.new(label_translations: media.label_translations, fileable: new_node)
+              new_media = Media.new(label_translations: media.label_translations,
+                                    fileable: new_node)
               new_media.source = media
               new_media.duplicate_file(media)
             end
 
             if node.is_a?(Question)
               node.answers.each do |answer|
-                new_answer = new_node.answers.new(answer.attributes.except('id', 'node_id', 'created_at', 'updated_at'))
+                new_answer = new_node.answers.new(answer.attributes.except('id', 'node_id',
+'created_at', 'updated_at'))
                 new_answer.source = answer
                 new_answer.save(validate: false)
                 answers[answer.id] = new_answer
               end
             elsif node.is_a?(QuestionsSequence)
               node.answers.each do |answer|
-                new_answer = new_node.answers.new(answer.attributes.except('id', 'node_id', 'created_at', 'updated_at'))
+                new_answer = new_node.answers.new(answer.attributes.except('id', 'node_id',
+'created_at', 'updated_at'))
                 new_answer.source = answer
                 new_answer.save(validate: false)
                 answers[answer.id] = new_answer
@@ -71,7 +76,8 @@ namespace :algorithms do
               qss[node.id] = new_node
             elsif node.is_a?(HealthCares::Drug)
               node.formulations.each do |formulation|
-                new_formulation = new_node.formulations.new(formulation.attributes.except('id', 'node_id', 'created_at', 'updated_at'))
+                new_formulation = new_node.formulations.new(formulation.attributes.except('id',
+'node_id', 'created_at', 'updated_at'))
                 new_formulation.source = formulation
                 new_formulation.save(validate: false)
               end
@@ -103,10 +109,11 @@ namespace :algorithms do
 
         puts "#{Time.zone.now.strftime("%I:%M")} - Copying Versions and their Diagnoses, along with the Instances in the diagrams..."
         origin_algorithm.versions.active.each do |version|
-          next unless version.id == 83
+          # next unless version.id == 83
           # TODO : Add left/right top questions
           # Update medal_r_config and medal_data_config instead of reseting it
-          new_version = copied_algorithm.versions.new(version.attributes.except('id', 'name', 'algorithm_id', 'medal_r_config', 'medal_data_config', 'medal_r_json', 'medal_r_json_version', 'created_at', 'updated_at'))
+          new_version = copied_algorithm.versions.new(version.attributes.except('id', 'name',
+'algorithm_id', 'medal_r_config', 'medal_data_config', 'medal_r_json', 'medal_r_json_version', 'created_at', 'updated_at'))
           new_version.name = "Copy of #{version.name}"
           versions[version.id] = new_version
           new_version.source = version
@@ -122,7 +129,10 @@ namespace :algorithms do
               end
             else
               step['children'].each do |node|
-                node['id'] = nodes[node['id']].id unless %w(first_name last_name birth_date).include?(node['id'])
+                node['id'] = nodes[node['id']].id unless %w(
+                  first_name last_name
+                  birth_date
+                ).include?(node['id'])
               end
             end
           end
@@ -145,7 +155,8 @@ namespace :algorithms do
           end
 
           version.medal_data_config_variables.each do |variable|
-            new_version.medal_data_config_variables.create!(api_key: variable.api_key, label: variable.label, question: nodes[variable.question_id])
+            new_version.medal_data_config_variables.create!(api_key: variable.api_key,
+                                                            label: variable.label, question: nodes[variable.question_id])
           end
 
           version.diagnoses.map do |diagnosis|
@@ -160,16 +171,17 @@ namespace :algorithms do
             diagnoses[diagnosis.id] = new_diagnosis
 
             diagnosis.final_diagnoses.map do |fd|
-
               puts "Final diagnosis being copied : #{fd.id}"
 
-              new_fd = copied_algorithm.nodes.new(fd.attributes.except('id', 'algorithm_id', 'diagnosis_id', 'created_at', 'updated_at'))
+              new_fd = copied_algorithm.nodes.new(fd.attributes.except('id', 'algorithm_id',
+'diagnosis_id', 'created_at', 'updated_at'))
               new_fd.source = fd
               new_fd.diagnosis_id = new_diagnosis.id
               new_fd.save(validate: false)
 
               fd.medias.map do |media|
-                new_media = Media.new(label_translations: media.label_translations, fileable: new_fd)
+                new_media = Media.new(label_translations: media.label_translations,
+                                      fileable: new_fd)
                 new_media.source = media
                 new_media.duplicate_file(media)
               end
@@ -191,7 +203,8 @@ namespace :algorithms do
               instances[instance.id] = new_instance
             end
           end
-          errors.concat(validate_order(order, JSON.parse(version.full_order_json), nodes.keys, nodes.values.map(&:id)))
+          errors.concat(validate_order(order, JSON.parse(version.full_order_json), nodes.keys,
+nodes.values.map(&:id)))
         end
 
         puts "#{Time.zone.now.strftime("%I:%M")} - Recreating links between Instances on the copied diagrams..."
@@ -218,12 +231,14 @@ namespace :algorithms do
 
         puts "#{Time.zone.now.strftime("%I:%M")} - Recreating Exclusions on the copied Nodes..."
         NodeExclusion.where(excluding_node_id: nodes.keys).map do |exclusion|
-          NodeExclusion.create!(node_type: exclusion.node_type, excluding_node: nodes[exclusion.excluding_node_id], excluded_node: nodes[exclusion.excluded_node_id])
+          NodeExclusion.create!(node_type: exclusion.node_type,
+                                excluding_node: nodes[exclusion.excluding_node_id], excluded_node: nodes[exclusion.excluded_node_id])
         end
 
         puts "#{Time.zone.now.strftime("%I:%M")} - Recreating Complaint Category restrictions on the copied nodes..."
         NodeComplaintCategory.where(node_id: nodes.keys).map do |association|
-          NodeComplaintCategory.create!(node: nodes[association.node_id], complaint_category: nodes[association.complaint_category_id])
+          NodeComplaintCategory.create!(node: nodes[association.node_id],
+                                        complaint_category: nodes[association.complaint_category_id])
         end
 
         puts "#{Time.zone.now.strftime("%I:%M")} - Relinking the reference tables to the copied Nodes..."
@@ -251,7 +266,7 @@ namespace :algorithms do
         ##########################################################
         # /!\ If only one version is copied adapt tests below  /!\
         ##########################################################
-        #errors.concat(validate_count(origin_algorithm, copied_algorithm))
+        errors.concat(validate_count(origin_algorithm, copied_algorithm))
 
         after_test = Time.zone.now
         if errors.any?
@@ -313,20 +328,28 @@ namespace :algorithms do
   def validate_order(new_order, old_order, old_nodes, new_nodes)
     require "json-diff"
     errors = []
-    errors.concat(JsonDiff.diff(new_order, old_order).select{|error| !(error['op'] == 'replace' && old_nodes.include?(error['value']))})
-    errors.concat(JsonDiff.diff(old_order, new_order).select{|error| !(error['op'] == 'replace' && new_nodes.include?(error['value']))})
+    errors.concat(JsonDiff.diff(new_order, old_order).select do |error|
+                    !(error['op'] == 'replace' && old_nodes.include?(error['value']))
+                  end)
+    errors.concat(JsonDiff.diff(old_order, new_order).select do |error|
+                    !(error['op'] == 'replace' && new_nodes.include?(error['value']))
+                  end)
     errors
   end
 
   # Execute multiple comparison between the 2 algorithms and log errors if there is any difference
   def validate_algorithm_duplicate(new_algorithm)
     errors = []
-    new_algorithm.nodes.includes([:source, instances: [:source, conditions: :source]]).each do |node|
-
+    new_algorithm.nodes.includes([
+      :source,
+      instances: [:source, conditions: :source],
+    ]).each do |node|
       # For each node we are going to compare the values exept the the algorithm id the diagnosis_id (if DF) and reference tables
       # If it's a final diagnosis we check that they are both related to the same final diagnosis
-      if clean_attributes(node).except('algorithm_id', 'diagnosis_id','reference_table_x_id','reference_table_y_id', 'reference_table_z_id') !=
-        clean_attributes(node.source).except('algorithm_id', 'diagnosis_id','reference_table_x_id','reference_table_y_id', 'reference_table_z_id') ||
+      if clean_attributes(node).except('algorithm_id', 'diagnosis_id', 'reference_table_x_id',
+'reference_table_y_id', 'reference_table_z_id') !=
+        clean_attributes(node.source).except('algorithm_id', 'diagnosis_id', 'reference_table_x_id',
+'reference_table_y_id', 'reference_table_z_id') ||
          (node.is_a?(FinalDiagnosis) && node.diagnosis.source_id != node.source.diagnosis_id)
         errors.push("Missing match between nodes #{node.id} and #{node.source_id}")
       end
@@ -376,7 +399,9 @@ namespace :algorithms do
 
       # For each node we are going to go through each instance and we are going to compare the values of the original object and the newly created one.
       node.instances.each do |instance|
-        if clean_attributes(instance).except('node_id', 'instanceable_id', 'final_diagnosis_id') != clean_attributes(instance.source).except('node_id', 'instanceable_id', 'final_diagnosis_id') ||
+        if clean_attributes(instance).except('node_id', 'instanceable_id',
+'final_diagnosis_id') != clean_attributes(instance.source).except('node_id', 'instanceable_id',
+'final_diagnosis_id') ||
           instance.source.instanceable_id != instance.instanceable.source_id || # We check that the instance is related to the same instanceable (Version, Diagnosis, Node)
           (instance.final_diagnosis_id.nil? && instance.source.final_diagnosis_id.present?) || # If the original instance is related to a final diagnosis we make sure that the copy also is
           (instance.final_diagnosis_id.present? && instance.final_diagnosis.source_id != instance.source.final_diagnosis_id) || # If the origianl instance is related to a final diagnosis we make sure that it's the same (but from original algorithm)
@@ -386,7 +411,9 @@ namespace :algorithms do
 
         # For each instance we check the newly created and compare them with the old algortithm
         instance.conditions.each do |condition|
-          if clean_attributes(condition).except('answer_id', 'instance_id', 'referenceable_id', 'first_conditionable_id') != clean_attributes(condition.source).except('answer_id', 'instance_id', 'referenceable_id', 'first_conditionable_id') ||
+          if clean_attributes(condition).except('answer_id', 'instance_id', 'referenceable_id',
+'first_conditionable_id') != clean_attributes(condition.source).except('answer_id', 'instance_id',
+'referenceable_id', 'first_conditionable_id') ||
             condition.instance.source_id != condition.source.instance_id || # We make sure that the sintace related to the condition is the same (but from original algorithm)
             condition.answer.source_id != condition.source.answer_id # We make sure that the answer set in the condition is the same (but from original algorithm)
             errors.push("Missing match between conditions #{condition.id} and #{condition.source_id}")
@@ -397,7 +424,8 @@ namespace :algorithms do
 
     # We retreive all the diagnoses from the different versions
     new_algorithm.versions.map(&:diagnoses).flatten.each do |diagnosis|
-      if clean_attributes(diagnosis).except('version_id', 'node_id') != clean_attributes(diagnosis.source).except('version_id', 'node_id') ||
+      if clean_attributes(diagnosis).except('version_id',
+'node_id') != clean_attributes(diagnosis.source).except('version_id', 'node_id') ||
         diagnosis.node.source_id != diagnosis.source.node_id # we make sure that the diagosis is related to the same CC
         errors.push("Missing match between diagnosis #{diagnosis.id} and #{diagnosis.source_id}")
       end
@@ -415,18 +443,19 @@ namespace :algorithms do
     Node.skip_callback(:create, :after, :generate_reference)
 
     ActiveRecord::Base.transaction(requires_new: true) do
-      begin
-        old_algorithm = Algorithm.find(8)
-        new_algorithm = Algorithm.find(29)
-        managements = old_algorithm.nodes.where(type:"HealthCares::Management").where("reference > ?", 241)
-        managements.map do |management|
-          new_node = new_algorithm.nodes.create!(management.attributes.except('id', 'algorithm_id', 'created_at', 'updated_at'))
-        end
-      rescue => e
-        puts e
-        puts e.backtrace
-        raise ActiveRecord::Rollback, ''
+      old_algorithm = Algorithm.find(8)
+      new_algorithm = Algorithm.find(29)
+      managements = old_algorithm.nodes.where(type: "HealthCares::Management").where(
+        "reference > ?", 241
+      )
+      managements.map do |management|
+        new_node = new_algorithm.nodes.create!(management.attributes.except('id', 'algorithm_id',
+'created_at', 'updated_at'))
       end
+    rescue => e
+      puts e
+      puts e.backtrace
+      raise ActiveRecord::Rollback, ''
     end
   end
 
@@ -440,84 +469,90 @@ namespace :algorithms do
     end
     values.sort!
     values.push(values.first) if values.count == 1
-    values.insert(0,nil) if answers.select{|a|a.less?}.any?
-    values.push(nil) if answers.select{|a|a.more_or_equal?}.any?
+    values.insert(0, nil) if answers.select { |a| a.less? }.any?
+    values.push(nil) if answers.select { |a| a.more_or_equal? }.any?
     values
   end
 
   task update_cut_offs: :environment do
     ActiveRecord::Base.transaction(requires_new: true) do
-      begin
-        impossible_diagram_to_manage = []
-        i = 0
-        Algorithm.all.each do |algorithm|
-          puts '#######################################'
-          puts algorithm.name
-          puts '#######################################'
-          algorithm.questions.where('formula LIKE ?', '%To%').each do |cut_off_question|
-            cut_off_question.instances.each do |cut_off_instance|
-              i += 1
-              next if cut_off_instance.instanceable.is_a?(Version)
-              if cut_off_instance.final_diagnosis_id.present? || cut_off_instance.instanceable.is_a?(QuestionsSequences::Scored)
+      impossible_diagram_to_manage = []
+      i = 0
+      Algorithm.all.each do |algorithm|
+        puts '#######################################'
+        puts algorithm.name
+        puts '#######################################'
+        algorithm.questions.where('formula LIKE ?', '%To%').each do |cut_off_question|
+          cut_off_question.instances.each do |cut_off_instance|
+            i += 1
+            next if cut_off_instance.instanceable.is_a?(Version)
+            if cut_off_instance.final_diagnosis_id.present? || cut_off_instance.instanceable.is_a?(QuestionsSequences::Scored)
 
-                impossible_diagram_to_manage.push(cut_off_instance.instanceable)
-                next
-              end
+              impossible_diagram_to_manage.push(cut_off_instance.instanceable)
+              next
+            end
 
-              if cut_off_instance.conditions.any? # Cut off to put in conditions (because not in the top)
-                next
-                cut_off_instance.children.each do |child|
-                  child_instance = cut_off_instance.instanceable.components.where(node: child.node, final_diagnosis_id: nil).first
-                  conditions = []
-                  child_instance.conditions.each do |cond|
-                    if cond.answer.node == cut_off_question
-                      conditions.push(cond)
-                    end
-                  end
-                  values = values_from_conditions(conditions.map(&:answer_id))
-                  cut_off_instance.conditions.each do |parent_cond|
-                    if parent_cond.answer.node.formula.present? && parent_cond.answer.node.formula.include?('To')
-                      impossible_diagram_to_manage.push(cut_off_instance.instanceable)
-                    else
-                      child_instance.conditions.create(answer_id: parent_cond.answer_id, cut_off_start: values.first, cut_off_end: values.last, cut_off_value_type: 'months')
-                    end
+            if cut_off_instance.conditions.any? # Cut off to put in conditions (because not in the top)
+              next
+              cut_off_instance.children.each do |child|
+                child_instance = cut_off_instance.instanceable.components.where(node: child.node,
+                                                                                final_diagnosis_id: nil).first
+                conditions = []
+                child_instance.conditions.each do |cond|
+                  if cond.answer.node == cut_off_question
+                    conditions.push(cond)
                   end
                 end
-              else
-                if cut_off_instance.instanceable.components.select {|component| component.conditions.empty? && component.final_diagnosis_id.nil?}.count > 1
-                  impossible_diagram_to_manage.push(cut_off_instance.instanceable)
-                else
-                  first_child_conditions = cut_off_instance.instanceable.components.where(node: cut_off_instance.children.first.node, final_diagnosis_id: nil).first.conditions.map(&:answer_id).sort
-
-                  impossible_to_manage = false
-                  cut_off_instance.children.each do |child|
-                    impossible_to_manage = true if child.node.formula.present? && child.node.formula.include?('To')
-                    impossible_to_manage = true unless first_child_conditions == cut_off_instance.instanceable.components.where(node: child.node, final_diagnosis_id: nil).first.conditions.map(&:answer_id).sort
-                  end
-                  if impossible_to_manage
+                values = values_from_conditions(conditions.map(&:answer_id))
+                cut_off_instance.conditions.each do |parent_cond|
+                  if parent_cond.answer.node.formula.present? && parent_cond.answer.node.formula.include?('To')
                     impossible_diagram_to_manage.push(cut_off_instance.instanceable)
                   else
-                    values = values_from_conditions(first_child_conditions)
-                    cut_off_instance.instanceable.update!(cut_off_start: values.first, cut_off_end: values.last, cut_off_value_type: 'months')
-                    # cut_off_instance.destroy
+                    child_instance.conditions.create(answer_id: parent_cond.answer_id,
+                                                     cut_off_start: values.first, cut_off_end: values.last, cut_off_value_type: 'months')
                   end
+                end
+              end
+            else
+              if cut_off_instance.instanceable.components.select do |component|
+                   component.conditions.empty? && component.final_diagnosis_id.nil?
+                 end .count > 1
+                impossible_diagram_to_manage.push(cut_off_instance.instanceable)
+              else
+                first_child_conditions = cut_off_instance.instanceable.components.where(
+                  node: cut_off_instance.children.first.node, final_diagnosis_id: nil
+                ).first.conditions.map(&:answer_id).sort
+
+                impossible_to_manage = false
+                cut_off_instance.children.each do |child|
+                  impossible_to_manage = true if child.node.formula.present? && child.node.formula.include?('To')
+                  impossible_to_manage = true unless first_child_conditions == cut_off_instance.instanceable.components.where(
+                    node: child.node, final_diagnosis_id: nil
+                  ).first.conditions.map(&:answer_id).sort
+                end
+                if impossible_to_manage
+                  impossible_diagram_to_manage.push(cut_off_instance.instanceable)
+                else
+                  values = values_from_conditions(first_child_conditions)
+                  cut_off_instance.instanceable.update!(cut_off_start: values.first,
+                                                        cut_off_end: values.last, cut_off_value_type: 'months')
+                  # cut_off_instance.destroy
                 end
               end
             end
           end
         end
-        puts '##################################'
-        puts 'Diagrams that were impossible to automatically process and need to be handled : '
-        impossible_diagram_to_manage.uniq.each do |diagram|
-          puts "#{diagram.id} #{diagram.reference_label}"
-        end
-        puts '##################################'
-      rescue => e
-        puts e
-        puts e.backtrace
-        raise ActiveRecord::Rollback, ''
       end
+      puts '##################################'
+      puts 'Diagrams that were impossible to automatically process and need to be handled : '
+      impossible_diagram_to_manage.uniq.each do |diagram|
+        puts "#{diagram.id} #{diagram.reference_label}"
+      end
+      puts '##################################'
+    rescue => e
+      puts e
+      puts e.backtrace
+      raise ActiveRecord::Rollback, ''
     end
   end
 end
-
