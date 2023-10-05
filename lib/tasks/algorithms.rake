@@ -319,7 +319,11 @@ nodes.values.map(&:id)))
     errors.push("Number of nodes complaint category differ from a version to another") if NodeComplaintCategory.where(complaint_category: copied_algorithm.nodes).count != NodeComplaintCategory.where(complaint_category: origin_algorithm.nodes).count
 
     puts "Copied children : #{Child.where(node: copied_algorithm.nodes).count}"
-    errors.push("Number of children differ from a version to another") if Child.where(node: copied_algorithm.nodes).count != Child.where(node: origin_algorithm.nodes).count
+
+    origin_count = Child.where(node: origin_algorithm.nodes).count
+    copied_count = Child.where(node: copied_algorithm.nodes).count
+    diff = Child.where(node: copied_algorithm.nodes).map{|c| c.node.source.id} - Child.where(node: origin_algorithm.nodes).map{|c| c.node.id}
+    errors.push("Number of children differ from a version to another, origin_count: #{origin_count} | copied_count: #{copied_count} | diff: #{diff}") if Child.where(node: copied_algorithm.nodes).count != Child.where(node: origin_algorithm.nodes).count
     errors
   end
 
