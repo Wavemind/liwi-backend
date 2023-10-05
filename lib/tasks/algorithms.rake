@@ -322,7 +322,11 @@ nodes.values.map(&:id)))
 
     origin_count = Child.where(node: origin_algorithm.nodes).count
     copied_count = Child.where(node: copied_algorithm.nodes).count
-    diff = Child.where(node: copied_algorithm.nodes).map{|c| c.node.source.id} - Child.where(node: origin_algorithm.nodes).map{|c| c.node.id}
+    diff = Child.where(node: origin_algorithm.nodes).map do |c|
+      c.node.id
+    end - Child.where(node: copied_algorithm.nodes).map do |c|
+            c.node.source.id
+          end
     errors.push("Number of children differ from a version to another, origin_count: #{origin_count} | copied_count: #{copied_count} | diff: #{diff}") if Child.where(node: copied_algorithm.nodes).count != Child.where(node: origin_algorithm.nodes).count
     errors
   end
