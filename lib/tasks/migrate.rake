@@ -27,7 +27,7 @@ namespace :migrate do
 
       hash_algorithm['questions'] = []
       algorithm.questions.each do |question|
-        hash_algorithm['questions'].push(question.as_json(include: [:node_complaint_categories, :answer_type, :answers, :medias]).merge(type: question.type))
+        hash_algorithm['questions'].push(question.as_json(include: [:node_complaint_categories, :answer_type, :answers, :medias], methods: :formatted_formula).merge(type: question.type))
       end
 
       hash_algorithm['questions_sequences'] = []

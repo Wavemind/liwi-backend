@@ -55,4 +55,8 @@ yarn-debug.log*
 .env
 
 old_data.json
+old_medias.json
 old_data.zip
+
+answers.csv
+my_file.csv
