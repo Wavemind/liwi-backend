@@ -163,26 +163,6 @@ class Question < Node
     "#{label_en} (#{id})"
   end
 
-  def formatted_formula
-    return nil unless formula?
-    new_formula = formula
-    new_formula.scan(/\[.*?\]/).each do |reference|
-      reference = reference.tr('[]', '')
-
-      # Remove temporary the function
-      reference = reference.sub!('ToDay', '').tr('()', '') if reference.include?('ToDay')
-      reference = reference.sub!('ToMonth', '').tr('()', '') if reference.include?('ToMonth')
-
-      prefix_type, db_reference = reference.match(/([A-Z]*)([0-9]*)/i).captures
-      type = Question.get_type_from_prefix(prefix_type)
-      if type.present?
-        question = algorithm.questions.find_by(type: type, reference: db_reference)
-        new_formula.sub!(reference, question.id.to_s) if question.present?
-      end
-    end
-    new_formula
-  end
-
   def process(a_i, v_i)
     order = get_order(a_i, v_i);
     order[3]['children'].push(get_bmi(a_i).generate_node_tree_hash);
