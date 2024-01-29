@@ -632,7 +632,6 @@ class VersionsService
 
       # Loop in each instance for defined condition
       questions_sequence.components.questions.includes(:conditions, :children, :nodes, node:[:answer_type, :answers]).each do |instance|
-        # assign_node(instance.node)
         hash[questions_sequence.id]['instances'][instance.node.id] = extract_instances(instance)
       end
 

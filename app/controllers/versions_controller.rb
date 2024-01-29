@@ -203,7 +203,6 @@ class VersionsController < ApplicationController
     else
       redirect_to algorithm_version_url(@algorithm, @version, panel: 'translations'), alert: t('flash_message.import_xl_wrong_file')
     end
-
   end
 
   # GET algorithms/:algorithm_id/version/:id/job_status

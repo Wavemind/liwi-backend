@@ -16,11 +16,9 @@ namespace :migrate do
       data['users'].push(hash_user)
     end
 
-    [31, 1, 58, 68, 76, 77]
-
     data['algorithms'] = []
     Algorithm.all.each do |algorithm|
-      next unless algorithm.id == 1
+      puts "Extracting Algorithm #{algorithm.name}"
       hash_algorithm = algorithm.as_json
 
       hash_algorithm['study'] = algorithm.study.as_json(include: :users)
@@ -48,8 +46,6 @@ namespace :migrate do
 
       hash_algorithm['versions'] = []
       algorithm.versions.each do |version|
-        next unless [31, 1, 58, 68, 76, 77].include?(version.id)
-
         hash_algorithm['versions'].push(version.as_json(include: [:languages, :medal_data_config_variables, components: {include: :conditions}, diagnoses: {include: [final_diagnoses: {include: [:node_exclusions, :medias]}, components: {include: :conditions}]}]))
       end
       data['algorithms'].push(hash_algorithm)
@@ -59,9 +55,13 @@ namespace :migrate do
   end
 
   task medias: :environment do
-    medias = {}
+    medias = []
     Media.all.each do |media|
-      medias[media.id] = media.url.url
+      medias.push({
+                    record_id: media.fileable_id,
+                    record_type: media.fileable_type,
+                    url: media.url.url,
+      })
     end
     out_file = File.new("old_medias.json", "w")
     out_file.puts(medias.to_json)
