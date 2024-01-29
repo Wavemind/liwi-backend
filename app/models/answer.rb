@@ -1,5 +1,6 @@
 # Every answers to every questions
 class Answer < ApplicationRecord
+  include Sourceable
 
   enum operator: [:less, :between, :more_or_equal]
 

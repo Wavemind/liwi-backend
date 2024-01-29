@@ -1,6 +1,8 @@
 # Can be gif or images and stock in server with carrierwave
 class Media < ApplicationRecord
   include CopyCarrierwaveFile
+  include Sourceable
+
   mount_uploader :url, MediaUploader
 
   belongs_to :fileable, polymorphic: true

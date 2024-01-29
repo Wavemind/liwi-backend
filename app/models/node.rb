@@ -1,6 +1,7 @@
 # Every component of an algorithm
 include Rails.application.routes.url_helpers
 class Node < ApplicationRecord
+  include Sourceable
 
   attr_accessor :cut_off_value_type
 

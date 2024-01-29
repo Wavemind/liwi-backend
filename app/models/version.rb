@@ -1,5 +1,6 @@
 # Version of an algorithm with its logic
 class Version < ApplicationRecord
+  include Sourceable
 
   attr_accessor :triage_id
   attr_accessor :cc_id

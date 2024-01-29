@@ -1,5 +1,6 @@
 # Define the instance of a node in a diagnosis
 class Instance < ApplicationRecord
+  include Sourceable
 
   belongs_to :node
   belongs_to :instanceable, polymorphic: true

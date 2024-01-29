@@ -3,6 +3,8 @@
 # Reference prefix : DD
 include Rails.application.routes.url_helpers
 class Diagnosis < ApplicationRecord
+  include Sourceable
+
   attr_accessor :duplicating
   attr_accessor :cut_off_value_type
 
