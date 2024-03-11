@@ -6,7 +6,7 @@ development:
   timeout: 4
   username:  <%= ENV['DEV_DB_USERNAME'] %>
   password:  <%= ENV['DEV_DB_PASSWORD'] %>
-  url: <%= ENV['EXTERNAL_PROD_URL'] %>
+#  url: <%#= ENV['EXTERNAL_PROD_URL'] %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
