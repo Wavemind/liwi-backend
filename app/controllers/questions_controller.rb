@@ -48,7 +48,7 @@ class QuestionsController < ApplicationController
         if params[:from] == 'rails'
           render json: {url: algorithm_url(@algorithm, panel: 'questions')}
         else
-          render json: @question.as_json(include: [:answers, :complaint_categories, :medias], methods: [:node_type, :category_name, :type])
+          render json: @question.as_json(include: [:answers, :complaint_categories, :medias], methods: [:node_type, :category_name, :type, :dependencies_by_version])
         end
 
       else
