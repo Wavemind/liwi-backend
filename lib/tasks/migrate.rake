@@ -16,8 +16,12 @@ namespace :migrate do
       data['users'].push(hash_user)
     end
 
+    a_to_keep = [5, 7, 8, 1, 6, 46, 49, 56, 45, 57, 47]
+    v_to_keep = [34, 41, 75, 44, 68, 58, 96, 108, 86, 94, 105, 83, 107, 88]
+
     data['algorithms'] = []
     Algorithm.all.each do |algorithm|
+      next unless a_to_keep.include?(algorithm.id)
       puts "Extracting Algorithm #{algorithm.name}"
       hash_algorithm = algorithm.as_json
 
@@ -46,6 +50,7 @@ namespace :migrate do
 
       hash_algorithm['versions'] = []
       algorithm.versions.each do |version|
+        next unless v_to_keep.include?(version.id)
         hash_algorithm['versions'].push(version.as_json(include: [:languages, :medal_data_config_variables, components: {include: :conditions}, diagnoses: {include: [final_diagnoses: {include: [:node_exclusions, :medias]}, components: {include: :conditions}]}]))
       end
       data['algorithms'].push(hash_algorithm)
