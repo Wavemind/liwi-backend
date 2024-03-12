@@ -35,16 +35,16 @@ export default class MediaForm extends React.Component {
     }
     arrayHelpers.remove(key);
   };
-
+  
   render() {
     const { values, setFieldValue } = this.props;
-
+    
     return (
       <FieldArray
         name="medias_attributes"
         render={arrayHelpers => (
           <>
-            {values.medias_attributes.map((answer, key) => (
+            {values.medias_attributes.filter((media) => !media._destroy).map((media, key) => (
               <Form.Row key={key}>
                 <Col lg="9">
                   <MediaFields
@@ -54,7 +54,7 @@ export default class MediaForm extends React.Component {
                   />
                 </Col>
                 <Col className="align-self-center">
-                  {values.medias_attributes[key].url.url !== undefined ? (
+                  {media.url.url !== undefined ? (
                     <a className="float-right btn btn-link" target="_blank" href={values.medias_attributes[key].url.url}>{I18n.t("questions.medias.current_file")}</a>
                   ) : null }
                 </Col>

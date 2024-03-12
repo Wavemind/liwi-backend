@@ -142,7 +142,6 @@ export default class StepperQuestionForm extends React.Component {
           let diagramInstance = createNode(result, addAvailableNode, false, result.node.category_name, engine);
           engine.getModel().addNode(diagramInstance);
         } else {
-          console.log(result)
           diagramObject.options.dbInstance.node = result;
         }
 

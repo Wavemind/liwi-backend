@@ -12,7 +12,6 @@ export default class Dependencies extends React.Component {
       <div className="justify-content-center">
         <div>
           <div className="alert alert-danger warning_dependencies" role="alert">
-            {console.log(dependenciesHash)}
             {I18n.t("warning_dependency")}
             {Object.keys(dependenciesHash).map(key => (
               <div key={dependenciesHash[key]['title']} >
